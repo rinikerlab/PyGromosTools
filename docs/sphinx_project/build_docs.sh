@@ -12,3 +12,5 @@ python conf.py
 
 ##execute making docu
 make html
+
+cp -r _build/html * ../
