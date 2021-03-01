@@ -15,7 +15,7 @@
 # Incase the project was not installed
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 import pygromos
 
@@ -70,7 +70,7 @@ nbsphinx_allow_errors = True
 
 #README - MD->rst:
 from m2r import parse_from_file
-output = parse_from_file('../README.md')
+output = parse_from_file('../../README.md')
 print(output)
 out_rst_file = open(os.getcwd()+"/introduction.rst", "w")
 out_rst_file.writelines(output)
