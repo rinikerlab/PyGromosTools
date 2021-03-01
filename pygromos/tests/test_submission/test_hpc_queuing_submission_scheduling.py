@@ -28,4 +28,3 @@ class test_MD_scheduler(unittest.TestCase):
                                  nmpi=1, nomp=1, duration_per_job="00:01",
                                  submission_system=submission_system,
                                  simulation_run_num=2, verbose= True)
-

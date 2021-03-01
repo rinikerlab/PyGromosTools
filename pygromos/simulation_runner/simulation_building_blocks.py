@@ -26,23 +26,10 @@ def emin(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "em
          submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
          previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
 
-    template_emin_control_dict = OrderedDict({
-        "concat": {"do": True,
-                   "sub": {
-                       "cp_cnf": True,
-                       "cat_trc": False,
-                       "cat_tre": False,
-                       "convert_trcs": False,
-                   }
-                   },
-        "simulation_folder": {
-            "do": True,
-            "sub": {
-                "tar": True,
-                "remove": False
-            }
-        }
-    })
+    template_emin_control_dict = simulation_analysis.template_control_dict
+    template_emin_control_dict['concat']['cat_trc'] = False
+    template_emin_control_dict['concat']['cat_tre'] = False
+    template_emin_control_dict['concat']['cat_trg'] = False
 
 
     return simulation(in_gromos_system=in_gromos_system, project_dir=project_dir,  previous_simulation_run=previous_simulation_run,
@@ -70,8 +57,7 @@ def sd(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "sd",
     Free Energy
 """
 def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="lambda_sampling",
-                lambda_values: List[float] = np.arange(0, 1.1, 0.1), write_coordinates: int = 100,
-                write_energies: int = 100, simulation_steps: int = 500, subSystem: _SubmissionSystem = LOCAL(),
+                lambda_values: List[float] = np.arange(0, 1.1, 0.1), subSystem: _SubmissionSystem = LOCAL(),
                 n_simulation_repetitions: int = 3, n_equilibrations: int = 1):
 
     work_dir = bash.make_folder(project_dir + "/" + step_name)
@@ -98,12 +84,6 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
         if(not hasattr(lam_system, "PRECALCLAM")):
             precalc_lam_block = PRECALCLAM(NRLAM=2, MINLAM=0, MAXLAM=1)
             lam_system.imd.add_block(block=precalc_lam_block)
-
-        ## write out trajs:
-        write_traj = WRITETRAJ(NTWX=write_coordinates, NTWE=write_energies, NTWG=write_energies)
-        lam_system.imd.add_block(block=write_traj)
-
-        lam_system.imd.STEP.NSTLIM = simulation_steps
 
         # Submit
         out_gromos_system, jobID = _TI_lam_step(in_gromos_system=lam_system, project_dir=work_dir,
@@ -201,7 +181,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             "in_simulation_dir": out_simulation_dir,
             "sim_prefix": in_gromos_system.name,
             "out_analysis_dir": out_analysis_dir,
-            "gromosPP_bin_dir": in_gromos_system.gromosPP.bin,
+            "gromosPP_bin_dir": in_gromos_system.gromosPP._bin,
             "control_dict": analysis_control_dict,
             "n_processes": n_analysis_processors,
             "verbose": verbose,

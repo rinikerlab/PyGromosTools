@@ -9,6 +9,7 @@ Author: Benjamin Schroeder
 import os
 import datetime
 import time
+from typing import Union
 
 from pygromos.utils import bash
 
@@ -23,7 +24,7 @@ class _Gromos:
     bin :   str, optional
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
-    bin: str = ""
+    _bin: str = ""
 
     def __init__(self, gromosXX_bin_dir: str = None):
         """
@@ -39,15 +40,21 @@ class _Gromos:
         self.__doc__ = self.__doc__+functions_text
 
         if (isinstance(gromosXX_bin_dir, type(None)) or gromosXX_bin_dir == "None"):
-            self.bin = ""
+            self._bin = ""
         else:
-            self.bin = gromosXX_bin_dir + "/"
+            self._bin = gromosXX_bin_dir + "/"
 
     def __str__(self):
         return self.__doc__
     def __repr__(self):
         return self.__str__()
 
+    @property
+    def bin(self)->Union[str, None]:
+        if(self._bin == "" or hasattr(self, "_bin")):
+            return None
+        else:
+            return self._bin
 
     def md_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
                    in_pert_topo_path:str=None, in_disres_path:str=None, in_posresspec_path:str=None, in_refpos_path:str=None,
@@ -129,12 +136,12 @@ class _Gromos:
             raise ValueError("There are no Hybrid NMPI and NOMP jobs possible with gromos!")
         elif(nmpi > 1):
             command += ["mpirun -n " + str(nmpi) + " --loadbalance --cpus-per-proc " + str(nomp) + " "]
-            command += [self.bin + "md_mpi"]
+            command += [self._bin + "md_mpi"]
         elif(nomp > 1):
             command += ["export OMP_NUM_THREADS=" + str(nomp) + "  && "]
-            command += [self.bin + "md"]
+            command += [self._bin + "md"]
         else:
-            command += [self.bin + "md"]
+            command += [self._bin + "md"]
 
         command += ["@topo", str(in_topo_path)]
         command += ["@conf", str(in_coord_path)]
@@ -282,7 +289,7 @@ class _Gromos:
         else:
             command = ["mpirun", "-n ", str(nmpi)]
 
-        command.append(self.bin + "repex_mpi")
+        command.append(self._bin + "repex_mpi")
 
         # input params check
         if in_topo_path:

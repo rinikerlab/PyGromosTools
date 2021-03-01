@@ -15,7 +15,6 @@ from pygromos.utils import bash as bash
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
 
-warnings.warn("Module topo-files is under Development and not entirely implemented!")
 
 #functions
 def make_topolog(input_arg, build, param, seq, solve="H2O"):

@@ -69,7 +69,6 @@ def chain_submission(simSystem:Gromos_System,
 
     Parameters
     ----------
-    gromosXX_bin_dir
     simSystem
     out_dir_path
     out_prefix

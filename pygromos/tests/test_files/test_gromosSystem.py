@@ -21,7 +21,6 @@ class test_gromos_system(unittest.TestCase):
         subSys = self.file_class(work_folder=tmp_test_dir, system_name="Testing1")
         print(subSys)
 
-
     def test_construct_files(self):
         subSys_files = self.file_class(work_folder=tmp_test_dir, system_name="Testing1",
                                  in_cnf_path=self.input_cnf_path, in_top_path=self.input_top_path)
@@ -33,14 +32,27 @@ class test_gromos_system(unittest.TestCase):
 
         print(subSys_files2)
 
-
     def setUp(self) -> None:
         self.subSys_files = self.file_class(work_folder=tmp_test_dir, system_name="Testing",
                                  in_cnf_path=self.input_cnf_path, in_top_path=self.input_top_path,
                                  in_imd_path=template_md)
 
-
     def test_rebase(self):
         new_base = bash.make_folder(tmp_test_dir+"/rebase")
         self.subSys_files.work_folder = new_base
         self.subSys_files.rebase_files()
+
+    def test_write(self):
+        subSys_files2 = self.file_class(work_folder=tmp_test_dir, system_name="Testing2",
+                                 in_cnf_path=self.input_cnf_path, in_top_path=self.input_top_path,
+                                 in_imd_path=template_md)
+        subSys_files2.save(tmp_test_dir+"/out_gromSystem.obj")
+
+    def test_load(self):
+        subSys_files2 = self.file_class(work_folder=tmp_test_dir, system_name="Testing2",
+                                 in_cnf_path=self.input_cnf_path, in_top_path=self.input_top_path,
+                                 in_imd_path=template_md)
+        load_path = subSys_files2.save(tmp_test_dir+"/out_gromSystem2.obj")
+
+        grom_sys = self.file_class.load(load_path)
+        print(grom_sys)
