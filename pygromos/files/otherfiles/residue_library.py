@@ -33,8 +33,6 @@ class residue_library(_general_gromos_file._general_gromos_file):
             self.TITLE = titleBlock.TITLE(content="New empyt resn_lib-file\n\tgenerated with PyGromosTools.\n")
             self.RESIDUENAMELIB = blocks.RESIDUENAMELIB({})
             self.ATOMNAMELIB = blocks.ATOMNAMELIB({})
-
-
         else:
             raise IOError("pertubation_topology class got "+str(type(path))+" as input. Unknown input type for disres.")
 

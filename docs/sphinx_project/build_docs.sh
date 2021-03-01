@@ -5,12 +5,10 @@ make clean;
 ##configurations
 sphinx-apidoc -o _source ../../pygromos
 
-cp ../../examples/*ipynb ./Examples
+cp ../../examples/ex*ipynb ./Examples
+cp ../../examples/t*ipynb ./Tutorials
 
 python conf.py
 
 ##execute making docu
 make html
-make latex
-
-ln ../index.html /_build/html/index.html

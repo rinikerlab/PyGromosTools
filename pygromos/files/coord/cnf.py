@@ -15,7 +15,7 @@ from typing import TypeVar
 Reference_Position = TypeVar("refpos.Reference_Position")
 Position_Restraints = TypeVar("posres.Position_Restraints")
 # Constructs describing the system
-ligand_infos = namedtuple("ligands_info", ["names", "number", "positions", "number_of_atoms"])
+solute_infos = namedtuple("solute_info", ["names", "number", "positions", "number_of_atoms"])
 protein_infos = namedtuple("protein_info",
                            ["name", "residues", "number_of_residues", "position", "start_position", "end_position",
                             "number_of_atoms"])
@@ -164,7 +164,7 @@ class Cnf(_general_gromos_file):
         number_of_ligands_atoms = sum([sum(list(clean_residues[res].values())) for res in ligand_names])
         number_of_ligands = len(ligand_names)
         ligand_positions = [min(clean_residues[res]) for res in ligand_names]
-        ligands = ligand_infos(names=ligand_names, number=number_of_ligands, positions=ligand_positions,
+        ligands = solute_infos(names=ligand_names, number=number_of_ligands, positions=ligand_positions,
                                number_of_atoms=number_of_ligands_atoms)
 
         ## get protein parameters if present

@@ -6,7 +6,8 @@ Author: Benjamin Schroeder
 """
 
 import os, glob
-from pygromos.files.topology import top
+from typing import Union
+
 import pandas as pd
 from typing import List
 from numbers import Number
@@ -28,7 +29,7 @@ class _gromosPPbase:
         This is the path to the folder containing the binaries of gromosPP. If None, the bash enviroment variables  will be used.
     """
 
-    bin: str = ""
+    _bin: str = ""
 
     def __init__(self, gromosPP_bin_dir:str=None):
         """
@@ -44,14 +45,23 @@ class _gromosPPbase:
         self.__doc__ = self.__doc__+functions_text
 
         if(isinstance(gromosPP_bin_dir, str) and not "None" == gromosPP_bin_dir):
-            self.bin = gromosPP_bin_dir + "/"
+            self._bin = gromosPP_bin_dir + "/"
         else:
-            self.bin = ""
+            self._bin = ""
 
     def __str__(self):
         return self.__doc__
+
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def bin(self)->Union[str, None]:
+        if(self._bin == "" ):
+            return None
+        else:
+            return self._bin
+
 
     def pdb2gromos(self, in_pdb_path:str, in_top_path:str, out_cnf_path:str=None, in_lib_path:str=pdb_lib, _binary_name:str= "pdb2g96", verbose:bool = False)->str:
         """
@@ -83,7 +93,7 @@ class _gromosPPbase:
             out_cnf_path += ".cnf"
 
 
-        command = self.bin + _binary_name + " @pdb " + in_pdb_path + " @topo " + in_top_path + " @out " + out_cnf_path
+        command = self._bin + _binary_name + " @pdb " + in_pdb_path + " @topo " + in_top_path + " @out " + out_cnf_path
         if(in_lib_path!=None):
             command += " @lib " + in_lib_path
         command +="\n"
@@ -131,7 +141,7 @@ class _gromosPPbase:
         """
         if(out_path== ""):
             out_path = os.path.dirname(in_pdb_path) + "/" + str(os.path.splitext(os.path.basename(in_pdb_path))[0]) + ".seq"
-        command = self.bin + _binary + " @develop @pdb " + in_pdb_path + " @pH " + str(pH) + " @select " + select + " @gff " + gff
+        command = self._bin + _binary + " @develop @pdb " + in_pdb_path + " @pH " + str(pH) + " @select " + select + " @gff " + gff
         if(add_head != ""):
             command += " @head "+add_head
         if(add_tail != ""):
@@ -176,7 +186,7 @@ class _gromosPPbase:
         arg_file.write("\n".join(args))
         arg_file.close()
 
-        command = self.bin +"make_top @f " + arg_path
+        command = self._bin +"make_top @f " + arg_path
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
@@ -213,7 +223,7 @@ class _gromosPPbase:
 
         topo_argument = gromosBashSyntaxParser.multiplyArgumentParser(in_topo_paths, topo_multiplier)
 
-        command = self.bin + _binary_name + " @topo " + topo_argument + " @param " + str(take_topology_params_of_file) + " @solv " + str(take_solvent_parameters_of_file)
+        command = self._bin + _binary_name + " @topo " + topo_argument + " @param " + str(take_topology_params_of_file) + " @solv " + str(take_solvent_parameters_of_file)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
@@ -246,7 +256,7 @@ class _gromosPPbase:
 
         #formulate command
         if(verbose): print(" ".join(in_endstate_file_paths))
-        command = self.bin + _binary_name + " @stateR " + in_reference_state_file_path + " @temp " + str(temperature) + " @endstates " + " ".join(in_endstate_file_paths) + " > " + out_file_path + "\n"
+        command = self._bin + _binary_name + " @stateR " + in_reference_state_file_path + " @temp " + str(temperature) + " @endstates " + " ".join(in_endstate_file_paths) + " > " + out_file_path + "\n"
         if(verbose): print(command)
         #do
         ret = bash.execute_os(command,  verbose=verbose)
@@ -340,7 +350,7 @@ class _gromosPPbase:
             else:
                 out_file_path = os.path.dirname(in_coord_path) + "/FRAME_00001."+in_coord_path.split(".")[-1]
 
-        command = self.bin + _binary_name + " @topo " + str(in_top_path) + " @traj " + str(in_coord_path) + " " + periodic_boundary_condition + " " + options
+        command = self._bin + _binary_name + " @topo " + str(in_top_path) + " @traj " + str(in_coord_path) + " " + periodic_boundary_condition + " " + options
         if verbose: print("gromosPP.frameout: command:\n" +command)
 
         #DO
@@ -449,7 +459,7 @@ class _gromosPPbase:
             in_file_form = "@en_files"
 
         ##ene_ana command and log deletion if ene_ana was successfull.:
-        command = self.bin + _binary_name + " @library " + str(in_ene_ana_library_path) + " " + in_file_form + " " + str(
+        command = self._bin + _binary_name + " @library " + str(in_ene_ana_library_path) + " " + in_file_form + " " + str(
             in_en_file_paths) + " @prop " + in_properties + " " + additional_options
 
         if (verbose): print("Isolate_energies")
@@ -550,7 +560,7 @@ class _gromosPPbase:
             out_cnf_path
 
         """
-        command = self.bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @tol " + str(tolerance) + "  " \
+        command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @tol " + str(tolerance) + "  " \
                                   "@pbc " + periodic_boundary_condition +" " + gathering
 
         bash.execute(command, catch_STD=out_cnf_path)
@@ -596,7 +606,7 @@ class _gromosPPbase:
             command_suffix+= " @thresh "+str(threshold)
 
 
-        command= self.bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @solvent " + in_solvent_cnf_file_path + " @minwall " + str(minwall) + " " + command_suffix
+        command= self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @solvent " + in_solvent_cnf_file_path + " @minwall " + str(minwall) + " " + command_suffix
         print(command)
         p = bash.execute(command, verbose=verbose, catch_STD=out_cnf_path)
         return out_cnf_path
@@ -620,7 +630,7 @@ class _gromosPPbase:
             command_suffix+= " @seed " + str(seed)
 
 
-        command= self.bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " " + command_suffix + " > " + out_cnf_path + " \n"
+        command= self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " " + command_suffix + " > " + out_cnf_path + " \n"
         if not return_command_only:
             print(command)
             std_out = bash.execute_os(command, verbose=verbose)
@@ -635,7 +645,7 @@ class _gromosPPbase:
         if(out_cnf_path== ""):
             out_cnf_path = os.path.dirname(in_cnf_path) + "/" + str(os.path.splitext(os.path.basename(in_cnf_path))[0]) + "_ran-box.cnf"
 
-        command= self.bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " > " + out_cnf_path + " \n"
+        command= self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " > " + out_cnf_path + " \n"
         if not return_command_only:
             print(command)
             std_out = bash.execute_os(command, verbose=verbose)
@@ -686,7 +696,7 @@ class _gromosPPbase:
         if(isinstance(solvent, type(None))):
             optional_string += " @solv "+str(solvent)+" "
 
-        command = self.bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @traj " + in_trc_path + " @prop \"" + str(property) + "\" " + optional_string + " > " + out_csv_path +" \n"
+        command = self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @traj " + in_trc_path + " @prop \"" + str(property) + "\" " + optional_string + " > " + out_csv_path +" \n"
         bash.execute(command)
         return out_csv_path
 
@@ -706,7 +716,7 @@ class _gromosPPbase:
             out_top_path
         """
 
-        command =  [self.bin + _binary_name, " @topo ", in_top_path, " @atoms", "'" + atom_selection + "'", "> " + out_top_path + " \n"]
+        command =  [self._bin + _binary_name, " @topo ", in_top_path, " @atoms", "'" + atom_selection + "'", "> " + out_top_path + " \n"]
         bash.execute(command)
         return out_top_path
 
@@ -738,7 +748,7 @@ class _gromosPPbase:
         if(len(in_top_paths) == 0):
             raise ValueError("no topos were passed to function. please provide at least two")
 
-        command = self.bin + _binary_name + " @topo " + " ".join(in_top_paths) + " @numstat " + str(number_of_eds_states) + " @param " + str(param_top_index) + " @solv " + str(solv_top_index)
+        command = self._bin + _binary_name + " @topo " + " ".join(in_top_paths) + " @numstat " + str(number_of_eds_states) + " @param " + str(param_top_index) + " @solv " + str(solv_top_index)
         if(verbose):
             print(command)
         ret = bash.execute(command)
@@ -800,7 +810,7 @@ class _gromosPPbase:
         if(isinstance(in_correction_path, str)):
             additional_options += "@correction "+in_correction_path+" "
 
-        command = self.bin + _binary_name + " @topo " + in_top_path + " @title " + title +" @noe " + in_noe_path +" @lib " + in_library_path + " " \
+        command = self._bin + _binary_name + " @topo " + in_top_path + " @title " + title +" @noe " + in_noe_path +" @lib " + in_library_path + " " \
                  " @dish " + str(dish) +" @disc " + str(disc) +" " + additional_options +" &> " + out_path
 
         if (verbose): print(command)
@@ -846,7 +856,7 @@ class _gromosPPbase:
         ---------------
         time: float, float (time, dt)
         """
-        command =  self.bin + _binary_name + " @topo " + in_top_path + " @traj "+in_traj_path+" @noe "+in_noe_path+" @pbc "+str(pbc)+" "+str(gathering)+" > "+out_path
+        command =  self._bin + _binary_name + " @topo " + in_top_path + " @traj "+in_traj_path+" @noe "+in_noe_path+" @pbc "+str(pbc)+" "+str(gathering)+" > "+out_path
 
         if (verbose): print(command)
         ret = bash.execute(command)
@@ -909,7 +919,7 @@ class _gromosPPbase:
         if(isinstance(in_traj_path, List)):
             in_traj_path = "\n".join(in_traj_path)
 
-        command =  self.bin + _binary_name + " @topo " + in_top_path + " @traj "+in_traj_path+" @jval "+in_jval_path+" @pbc "+str(pbc)+" "+str(gathering)+" "+additional_options+" &> "+out_path
+        command =  self._bin + _binary_name + " @topo " + in_top_path + " @traj "+in_traj_path+" @jval "+in_jval_path+" @pbc "+str(pbc)+" "+str(gathering)+" "+additional_options+" &> "+out_path
 
         if (verbose): print(command)
         ret = bash.execute(command)
@@ -931,7 +941,7 @@ class _gromosPPbase:
             opt = "@negative "+" ".join(map(str, negative))
             optional_args.append(opt)
 
-        command = self.bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @pbc " + periodic_boundary_condition+" "
+        command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @pbc " + periodic_boundary_condition+" "
         command+= "@potential "+str(potential)+" @mindist "+str(mindist)+" "+" ".join(optional_args)
 
         if(verbose): print(command)

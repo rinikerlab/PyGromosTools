@@ -577,18 +577,19 @@ class MULTIBATH(_generic_imd_block):
             self.ALGORITHM = algorithm
 
         # TODO implementation not correct with com_bath and irbath! Works for super simple cases though
-        # print(last_atoms_bath)
-        # print("\n")
-        # print(last_atoms_bath.values())
-        # print("\n")
-        # print(set(last_atoms_bath.values()))
+        #print("MBATH")
+        #print(last_atoms_bath)
+        #print("\n")
+        #print(last_atoms_bath.values())
+        #print("\n")
+        #print(set(last_atoms_bath.values()))
         self.NBATHS = len(set(last_atoms_bath.values()))
         self.DOFSET = len(last_atoms_bath)
         self.LAST = [last_atom for last_atom in last_atoms_bath]
         self.COMBATH = [last_atoms_bath[last_atom] for last_atom in last_atoms_bath]
         self.IRBATH = [last_atoms_bath[last_atom] for last_atom in last_atoms_bath]
 
-        if (self.NBATHS > len(self.TEMP0)):
+        if (self.NBATHS != len(self.TEMP0)):
             self.TEMP0 = [self.TEMP0[0] for x in range(self.NBATHS)]
             self.TAU = [self.TAU[0] for x in range(self.NBATHS)]
 
