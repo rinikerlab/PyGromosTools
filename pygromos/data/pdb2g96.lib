@@ -1,0 +1,35 @@
+TITLE
+  Library file to specify residue and atom names
+  that are to be considered similar
+END
+RESIDUENAMELIB
+# name in my pdb   name in topology
+	LYS	   LYSH
+	CYS        CYSH
+        GLU        GLUH
+        ASP        ASPH
+        HIS        HISA
+        HIS        HISB
+        HIS        HISH
+        HIS        HIS1
+        HIS        HIS2
+        CYS        CYS1
+        CYS        CYS2
+        HOH        SOLV
+END
+ATOMNAMELIB
+#    residue in topology	atom in pdb	atom in topology
+        GLN                     1HE2             HE21
+        GLN                     2HE2             HE22
+        ASN                     1HD2             HD21
+        ASN                     2HD2             HD22
+        ILE                     CD1              CD
+        LYSH                    1HZ              HZ1
+        LYSH                    2HZ              HZ2
+        LYSH                    3HZ              HZ3
+        ARG                     1HH1             HH11
+        ARG                     2HH1             HH12
+        ARG                     1HH2             HH21
+        ARG                     2HH2             HH22
+        SOLV                    O                OW
+END
