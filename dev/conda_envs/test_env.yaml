@@ -7,22 +7,17 @@ dependencies:
   # Base depends
   - python
   - pip
-
   # Testing
   - pytest
   - pytest-cov
   - codecov
-
   - typing
-
   - pandas
   - numpy
   - sympy
   - scipy
   - matplotlib
-
   - tqdm
   - ipywidgets
-
   - rdkit
 
