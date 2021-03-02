@@ -7,10 +7,9 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   pygromos.data.ene_ana_libs
    pygromos.data.ff
-   pygromos.data.simulation_parameters_templates
-   pygromos.data.solvent_coordinates
+   pygromos.data.imd_templates
+   pygromos.data.solvents
    pygromos.data.topology_templates
 
 Module contents

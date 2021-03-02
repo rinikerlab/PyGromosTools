@@ -8,10 +8,9 @@ Subpackages
    :maxdepth: 4
 
    pygromos.data
+   pygromos.euler_submissions
    pygromos.files
    pygromos.gromos
-   pygromos.hpc_queuing
-   pygromos.simulation_runner
    pygromos.tests
    pygromos.utils
 
@@ -25,6 +24,7 @@ pygromos.pygromos module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 Module contents
 ---------------

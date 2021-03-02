@@ -4,14 +4,6 @@ pygromos.files.topology package
 Submodules
 ----------
 
-pygromos.files.topology.disres module
--------------------------------------
-
-.. automodule:: pygromos.files.topology.disres
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pygromos.files.topology.ifp module
 ----------------------------------
 
@@ -28,14 +20,6 @@ pygromos.files.topology.mtb module
    :undoc-members:
    :show-inheritance:
 
-pygromos.files.topology.ptp module
-----------------------------------
-
-.. automodule:: pygromos.files.topology.ptp
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pygromos.files.topology.top module
 ----------------------------------
 
@@ -43,6 +27,7 @@ pygromos.files.topology.top module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 Module contents
 ---------------

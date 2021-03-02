@@ -28,14 +28,6 @@ pygromos.files.blocks.imd\_blocks module
    :undoc-members:
    :show-inheritance:
 
-pygromos.files.blocks.miscBlocks module
----------------------------------------
-
-.. automodule:: pygromos.files.blocks.miscBlocks
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pygromos.files.blocks.replica\_exchange\_blocks module
 ------------------------------------------------------
 
@@ -51,6 +43,7 @@ pygromos.files.blocks.topology\_blocks module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 Module contents
 ---------------

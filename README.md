@@ -73,7 +73,7 @@ P.s.: I can recommend Pycharm or VisualStuudioCode from dstar, for exploring the
 
 ### Copyright
 
-Copyright (c) 2020, Benjamin Ries, Salome Rieder, Marc Lehner 
+Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder  
 
 
 #### Acknowledgements

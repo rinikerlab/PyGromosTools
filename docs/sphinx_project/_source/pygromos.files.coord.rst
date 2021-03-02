@@ -12,21 +12,14 @@ pygromos.files.coord.cnf module
    :undoc-members:
    :show-inheritance:
 
-pygromos.files.coord.posres module
-----------------------------------
+pygromos.files.coord.trc module
+-------------------------------
 
-.. automodule:: pygromos.files.coord.posres
+.. automodule:: pygromos.files.coord.trc
    :members:
    :undoc-members:
    :show-inheritance:
 
-pygromos.files.coord.refpos module
-----------------------------------
-
-.. automodule:: pygromos.files.coord.refpos
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Module contents
 ---------------
