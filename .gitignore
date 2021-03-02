@@ -112,8 +112,4 @@ ENV/
 **.idea
 
 #test output
-pygromos/tests/out_testresults/*
-pygromos/tests/in_testfiles/**out*
-*.h5
-*.dat
-*.ptp
+pygromos/tests/testfiles/*/out*
