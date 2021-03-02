@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pygromos.files.gromos_system.gromos_system &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.gromos_system.gromos_system</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.gromos_system.gromos_system</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">File:            gromos++ system folder managment</span>
+<span class="sd">Warnings: this class is WIP!</span>
+<span class="sd">TODO:REWORK</span>
+<span class="sd">Description:</span>
+<span class="sd">    This is a super class for the collection of all gromos files used inside a project</span>
+<span class="sd">Author: Marc Lehner</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#imports</span>
+<span class="kn">import</span> <span class="nn">warnings</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">importlib</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files.topology</span> <span class="kn">import</span> <span class="n">top</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.topology_blocks</span> <span class="kn">import</span> <span class="n">FORCEFIELD</span>
+<span class="kn">from</span> <span class="nn">pygromos.gromos</span> <span class="kn">import</span> <span class="n">gromosPP</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.ff</span> <span class="kn">import</span> <span class="n">Gromos54A7</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.ff</span> <span class="kn">import</span> <span class="n">Gromos2016H66</span>
+<span class="kn">from</span> <span class="nn">pygromos</span> <span class="kn">import</span> <span class="n">files</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.ifp</span> <span class="kn">import</span> <span class="n">ifp</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.imd</span> <span class="kn">import</span> <span class="n">Imd</span>
+<span class="kn">from</span> <span class="nn">pygromos.data</span> <span class="kn">import</span> <span class="n">ff</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.ff</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;openforcefield&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">openforcefield.topology</span> <span class="kn">import</span> <span class="n">Molecule</span><span class="p">,</span> <span class="n">Topology</span>
+    <span class="kn">from</span> <span class="nn">openforcefield.typing.engines</span> <span class="kn">import</span> <span class="n">smirnoff</span>
+    <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">openforcefield2gromos</span>
+    <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">serenityff</span>
+    <span class="n">has_openff</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">has_openff</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="gromos_system"><a class="viewcode-back" href="../../../../_source/pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.gromos_system">[docs]</a><span class="k">class</span> <span class="nc">gromos_system</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">smiles</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rdkitMol</span><span class="p">:</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">readIn</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">Forcefield</span> <span class="o">=</span> <span class="s2">&quot;2016H66&quot;</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasData</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="n">folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smiles</span> <span class="o">=</span> <span class="n">smiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">Mol</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">_orig_file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.top&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">_orig_file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">_orig_file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.imd&quot;</span>
+
+        <span class="k">if</span> <span class="n">smiles</span><span class="o">==</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">rdkitMol</span><span class="o">==</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">readIn</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No data provided to gromos_system</span><span class="se">\n</span><span class="s2">manual work needed&quot;</span><span class="p">)</span>
+            
+
+        <span class="c1">#import molecule from smiles using rdkit</span>
+        <span class="k">if</span> <span class="n">smiles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+            <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">)</span>
+            <span class="n">AllChem</span><span class="o">.</span><span class="n">EmbedMolecule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hasData</span><span class="o">=</span><span class="kc">True</span>        
+
+        <span class="c1">#import  molecule from RDKit</span>
+        <span class="k">if</span> <span class="n">rdkitMol</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">rdkitMol</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">smiles</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hasData</span><span class="o">=</span><span class="kc">True</span>
+
+        <span class="c1">#try to read existing files in</span>
+        <span class="k">if</span> <span class="n">readIn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_files</span><span class="p">()</span>
+            <span class="k">if</span> <span class="kc">True</span><span class="p">:</span> <span class="c1">#TODO: make sanity check on import</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hasData</span><span class="o">=</span><span class="kc">True</span>
+
+        <span class="c1">#set forcefield</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_Forcefield</span><span class="p">(</span><span class="n">Forcefield</span><span class="o">=</span><span class="n">Forcefield</span><span class="p">)</span>
+
+        <span class="c1"># automate all conversions if possible</span>
+        <span class="k">if</span> <span class="n">auto_convert</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasData</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;2016H66&quot;</span> <span class="ow">or</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;54A7&quot;</span><span class="p">:</span>
+                <span class="k">pass</span> <span class="c1">#TODO: make_top()</span>
+            <span class="k">if</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;smirnoff&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">has_openff</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import smirnoff FF as openFF toolkit was missing! &quot;</span>
+                                      <span class="s2">&quot;Please install the package for this feature!&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">openforcefield2gromos</span><span class="p">(</span><span class="n">Molecule</span><span class="o">.</span><span class="n">from_rdkit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="n">forcefield_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="p">)</span><span class="o">.</span><span class="n">convert_return</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;serenityff&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">has_openff</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import smirnoff FF as openFF toolkit was missing! &quot;</span>
+                                      <span class="s2">&quot;Please install the package for this feature!&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">serenityff</span> <span class="o">=</span> <span class="n">serenityff</span><span class="p">()</span>
+
+    
+        
+<div class="viewcode-block" id="gromos_system.import_Forcefield"><a class="viewcode-back" href="../../../../_source/pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.gromos_system.import_Forcefield">[docs]</a>    <span class="k">def</span> <span class="nf">import_Forcefield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Forcefield</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2016H66&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;2016H66&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span> <span class="o">=</span> <span class="n">Gromos2016H66</span><span class="o">.</span><span class="n">ifp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ifp</span> <span class="o">=</span> <span class="n">ifp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;54A7&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span> <span class="o">=</span> <span class="n">Gromos54A7</span><span class="o">.</span><span class="n">ifp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ifp</span> <span class="o">=</span> <span class="n">ifp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;smirnoff&quot;</span><span class="p">:</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">has_openff</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import smirnoff FF as openFF toolkit was missing! &quot;</span>
+                                  <span class="s2">&quot;Please install the package for this feature!&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">ff</span><span class="o">.</span><span class="n">data_ff_SMIRNOFF</span> <span class="o">+</span> <span class="s1">&#39;/*.xml&#39;</span><span class="p">)</span>
+                <span class="n">filelist</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">smirnoff</span><span class="o">.</span><span class="n">ForceField</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span> <span class="o">=</span> <span class="n">f</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">Forcefield</span> <span class="o">==</span> <span class="s2">&quot;serenityff&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">has_openff</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import smirnoff FF as openFF toolkit was missing! &quot;</span>
+                                  <span class="s2">&quot;Please install the package for this feature!&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="s2">&quot;WIP&quot;</span></div>
+        
+
+<div class="viewcode-block" id="gromos_system.read_files"><a class="viewcode-back" href="../../../../_source/pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.gromos_system.read_files">[docs]</a>    <span class="k">def</span> <span class="nf">read_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">read_file</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no topology found&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">read_file</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no conformation found&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">read_file</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no GROMOS input file found&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="gromos_system.write_files"><a class="viewcode-back" href="../../../../_source/pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.gromos_system.write_files">[docs]</a>    <span class="k">def</span> <span class="nf">write_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Cnf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Imd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Mol</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">Top</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">_orig_file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Cnf</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">_orig_file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Imd</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">_orig_file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Mol</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToMolBlock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">),</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.mol&quot;</span><span class="p">,</span><span class="s1">&#39;w+&#39;</span><span class="p">))</span></div>
+            
+            
+
+<div class="viewcode-block" id="gromos_system.rdkitImport"><a class="viewcode-back" href="../../../../_source/pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.gromos_system.rdkitImport">[docs]</a>    <span class="k">def</span> <span class="nf">rdkitImport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputMol</span><span class="p">:</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">inputMol</span></div>
+
+<div class="viewcode-block" id="gromos_system.rdkit2Gromos"><a class="viewcode-back" href="../../../../_source/pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.gromos_system.rdkit2Gromos">[docs]</a>    <span class="k">def</span> <span class="nf">rdkit2Gromos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># generate top</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;topology generated with PyGromos from RDKit molecule: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)],</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;PHYSICALCONSTANTS&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TOPVERSION&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;2.0&quot;</span><span class="p">]])</span></div></div>
+        
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

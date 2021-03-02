@@ -1,0 +1,1164 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pygromos.files package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.files.blocks package" href="pygromos.files.blocks.html" />
+    <link rel="prev" title="pygromos.euler_submissions.FileManager package" href="pygromos.euler_submissions.FileManager.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.euler_submissions.html">pygromos.euler_submissions package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+      <li>pygromos.files package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/_source/pygromos.files.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="pygromos-files-package">
+<h1>pygromos.files package<a class="headerlink" href="#pygromos-files-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.files.blocks.html">pygromos.files.blocks package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#module-pygromos.files.blocks.coord_blocks">pygromos.files.blocks.coord_blocks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#module-pygromos.files.blocks.energy_blocks">pygromos.files.blocks.energy_blocks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#module-pygromos.files.blocks.imd_blocks">pygromos.files.blocks.imd_blocks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#module-pygromos.files.blocks.replica_exchange_blocks">pygromos.files.blocks.replica_exchange_blocks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#module-pygromos.files.blocks.topology_blocks">pygromos.files.blocks.topology_blocks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.blocks.html#module-pygromos.files.blocks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.files.coord.html">pygromos.files.coord package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.coord.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.coord.html#module-pygromos.files.coord.cnf">pygromos.files.coord.cnf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.coord.html#module-pygromos.files.coord.trc">pygromos.files.coord.trc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.coord.html#module-pygromos.files.coord">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.files.energy.html">pygromos.files.energy package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.energy.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.energy.html#module-pygromos.files.energy.ene_ana_libs">pygromos.files.energy.ene_ana_libs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.energy.html#module-pygromos.files.energy.ene_ana_traj">pygromos.files.energy.ene_ana_traj module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.energy.html#module-pygromos.files.energy.tre">pygromos.files.energy.tre module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.energy.html#module-pygromos.files.energy">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.files.gromos_system.html">pygromos.files.gromos_system package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.gromos_system.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.gromos_system.html#module-pygromos.files.gromos_system.gromos_system">pygromos.files.gromos_system.gromos_system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.gromos_system.html#pygromos-files-gromos-system-openforcefield2gromos-module">pygromos.files.gromos_system.openforcefield2gromos module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.gromos_system.html#module-pygromos.files.gromos_system">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.files.topology.html">pygromos.files.topology package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.topology.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.topology.html#module-pygromos.files.topology.ifp">pygromos.files.topology.ifp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.topology.html#module-pygromos.files.topology.mtb">pygromos.files.topology.mtb module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.topology.html#module-pygromos.files.topology.top">pygromos.files.topology.top module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.topology.html#module-pygromos.files.topology">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pygromos.files.imd">
+<span id="pygromos-files-imd-module"></span><h2>pygromos.files.imd module<a class="headerlink" href="#module-pygromos.files.imd" title="Permalink to this headline">¶</a></h2>
+<p>FUNCTIONLIB:            gromos++ input file functions
+Description:</p>
+<blockquote>
+<div><p>in this lib, gromosXX input file mainpulating functions are gathered</p>
+</div></blockquote>
+<p>Author: Kay Schaller &amp; Benjamin Schroeder</p>
+<dl class="py class">
+<dt id="pygromos.files.imd.Imd">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.imd.</span></code><code class="sig-name descname"><span class="pre">Imd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#Imd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.Imd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.BOUNDCOND">
+<code class="sig-name descname"><span class="pre">BOUNDCOND</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.BOUNDCOND" title="pygromos.files.blocks.imd_blocks.BOUNDCOND"><span class="pre">pygromos.files.blocks.imd_blocks.BOUNDCOND</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.BOUNDCOND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.COMTRANSROT">
+<code class="sig-name descname"><span class="pre">COMTRANSROT</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.COMTRANSROT" title="pygromos.files.blocks.imd_blocks.COMTRANSROT"><span class="pre">pygromos.files.blocks.imd_blocks.COMTRANSROT</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.COMTRANSROT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.CONSTRAINT">
+<code class="sig-name descname"><span class="pre">CONSTRAINT</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.CONSTRAINT" title="pygromos.files.blocks.imd_blocks.CONSTRAINT"><span class="pre">pygromos.files.blocks.imd_blocks.CONSTRAINT</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.CONSTRAINT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.DISTANCERES">
+<code class="sig-name descname"><span class="pre">DISTANCERES</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.DISTANCERES" title="pygromos.files.blocks.imd_blocks.DISTANCERES"><span class="pre">pygromos.files.blocks.imd_blocks.DISTANCERES</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.DISTANCERES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.EDS">
+<code class="sig-name descname"><span class="pre">EDS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.EDS" title="pygromos.files.blocks.imd_blocks.EDS"><span class="pre">pygromos.files.blocks.imd_blocks.EDS</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.EDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.ENERGYMIN">
+<code class="sig-name descname"><span class="pre">ENERGYMIN</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.ENERGYMIN" title="pygromos.files.blocks.imd_blocks.ENERGYMIN"><span class="pre">pygromos.files.blocks.imd_blocks.ENERGYMIN</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.ENERGYMIN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.FORCE">
+<code class="sig-name descname"><span class="pre">FORCE</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.FORCE" title="pygromos.files.blocks.imd_blocks.FORCE"><span class="pre">pygromos.files.blocks.imd_blocks.FORCE</span></a></em><a class="headerlink" href="#pygromos.files.imd.Imd.FORCE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.INITIALISE">
+<code class="sig-name descname"><span class="pre">INITIALISE</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.INITIALISE" title="pygromos.files.blocks.imd_blocks.INITIALISE"><span class="pre">pygromos.files.blocks.imd_blocks.INITIALISE</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.INITIALISE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.MULTIBATH">
+<code class="sig-name descname"><span class="pre">MULTIBATH</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.MULTIBATH" title="pygromos.files.blocks.imd_blocks.MULTIBATH"><span class="pre">pygromos.files.blocks.imd_blocks.MULTIBATH</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.MULTIBATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.NEW_REPLICA_EDS">
+<code class="sig-name descname"><span class="pre">NEW_REPLICA_EDS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.NEW_REPLICA_EDS" title="pygromos.files.blocks.imd_blocks.NEW_REPLICA_EDS"><span class="pre">pygromos.files.blocks.imd_blocks.NEW_REPLICA_EDS</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.NEW_REPLICA_EDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.NONBONDED">
+<code class="sig-name descname"><span class="pre">NONBONDED</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.NONBONDED" title="pygromos.files.blocks.imd_blocks.NONBONDED"><span class="pre">pygromos.files.blocks.imd_blocks.NONBONDED</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.NONBONDED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.OLD_REPLICA_EDS">
+<code class="sig-name descname"><span class="pre">OLD_REPLICA_EDS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.OLD_REPLICA_EDS" title="pygromos.files.blocks.imd_blocks.OLD_REPLICA_EDS"><span class="pre">pygromos.files.blocks.imd_blocks.OLD_REPLICA_EDS</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.OLD_REPLICA_EDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.PAIRLIST">
+<code class="sig-name descname"><span class="pre">PAIRLIST</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.PAIRLIST" title="pygromos.files.blocks.imd_blocks.PAIRLIST"><span class="pre">pygromos.files.blocks.imd_blocks.PAIRLIST</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.PAIRLIST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.POSITIONRES">
+<code class="sig-name descname"><span class="pre">POSITIONRES</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.POSITIONRES" title="pygromos.files.blocks.imd_blocks.POSITIONRES"><span class="pre">pygromos.files.blocks.imd_blocks.POSITIONRES</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.POSITIONRES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.PRESSURESCALE">
+<code class="sig-name descname"><span class="pre">PRESSURESCALE</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.PRESSURESCALE" title="pygromos.files.blocks.imd_blocks.PRESSURESCALE"><span class="pre">pygromos.files.blocks.imd_blocks.PRESSURESCALE</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.PRESSURESCALE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.PRINTOUT">
+<code class="sig-name descname"><span class="pre">PRINTOUT</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.PRINTOUT" title="pygromos.files.blocks.imd_blocks.PRINTOUT"><span class="pre">pygromos.files.blocks.imd_blocks.PRINTOUT</span></a></em><a class="headerlink" href="#pygromos.files.imd.Imd.PRINTOUT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.REPLICA_EDS">
+<code class="sig-name descname"><span class="pre">REPLICA_EDS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.REPLICA_EDS" title="pygromos.files.blocks.imd_blocks.REPLICA_EDS"><span class="pre">pygromos.files.blocks.imd_blocks.REPLICA_EDS</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.REPLICA_EDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.STEP">
+<code class="sig-name descname"><span class="pre">STEP</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.STEP" title="pygromos.files.blocks.imd_blocks.STEP"><span class="pre">pygromos.files.blocks.imd_blocks.STEP</span></a></em><a class="headerlink" href="#pygromos.files.imd.Imd.STEP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.SYSTEM">
+<code class="sig-name descname"><span class="pre">SYSTEM</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.SYSTEM" title="pygromos.files.blocks.imd_blocks.SYSTEM"><span class="pre">pygromos.files.blocks.imd_blocks.SYSTEM</span></a></em><a class="headerlink" href="#pygromos.files.imd.Imd.SYSTEM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.TITLE">
+<code class="sig-name descname"><span class="pre">TITLE</span></code><em class="property"><span class="pre">:</span> <span class="pre">pygromos.files.blocks._general_blocks.TITLE</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.TITLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.WRITETRAJ">
+<code class="sig-name descname"><span class="pre">WRITETRAJ</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.imd_blocks.WRITETRAJ" title="pygromos.files.blocks.imd_blocks.WRITETRAJ"><span class="pre">pygromos.files.blocks.imd_blocks.WRITETRAJ</span></a></em><a class="headerlink" href="#pygromos.files.imd.Imd.WRITETRAJ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.imd.Imd.clean_residue_list_for_imd">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">clean_residue_list_for_imd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">residues:</span> <span class="pre">Dict[str,</span> <span class="pre">Dict[int,</span> <span class="pre">int]],</span> <span class="pre">not_ligand_residues:</span> <span class="pre">List[str]</span> <span class="pre">=</span> <span class="pre">[],</span> <span class="pre">ligand_resn_prefix:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None)</span> <span class="pre">-&gt;</span> <span class="pre">(typing.Dict[str,</span> <span class="pre">typing.Dict[int,</span> <span class="pre">int]],</span> <span class="pre">&lt;class</span> <span class="pre">'typing.NamedTuple'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'typing.NamedTuple'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'typing.NamedTuple'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#Imd.clean_residue_list_for_imd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.Imd.clean_residue_list_for_imd" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function utilizes a dictionary containing all residues and atom numbers (e.g. cnf.get_residues()) and modifies them such, that the result can be used to set up a standard REEDS gromos_simulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residues</strong> (<em>Dict[str, Dict[int,int]]</em>) – input a cnf.residues:dict that shall be cleaned and return a reduced form for parameter file.</p></li>
+<li><p><strong>not_ligand_residues</strong> (<em>List[str]</em>) – here all molecules, that are not considered as ligand or protein.</p></li>
+<li><p><strong>ligand_resn_prefix</strong> (<em>List[str]</em>) – here all molecules, that are considered as ligand are listed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Dict[str, Dict[int,int]]</em> – cleaned_residue dict</p></li>
+<li><p><em>NamedTuple</em> – ligands</p></li>
+<li><p><em>NamedTuple</em> – protein</p></li>
+<li><p><em>NamedTuple</em> – non_ligands</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.imd.Imd.edit_EDS">
+<code class="sig-name descname"><span class="pre">edit_EDS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NUMSTATES</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EIR</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EDS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ALPHLJ</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ALPHC</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FUNCTIONAL</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#Imd.edit_EDS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.Imd.edit_EDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.imd.Imd.edit_REEDS">
+<code class="sig-name descname"><span class="pre">edit_REEDS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">REEDS:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">NUMSTATES:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">SVALS:</span> <span class="pre">(&lt;class</span> <span class="pre">'numbers.Number'&gt;</span></em>, <em class="sig-param"><span class="pre">typing.List[numbers.Number])</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">EIR:</span> <span class="pre">numbers.Number</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">NRETRIAL:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">NREQUIL:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">CONT:</span> <span class="pre">(&lt;class</span> <span class="pre">'bool'&gt;</span></em>, <em class="sig-param"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;)</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">EDS_STAT_OUT:</span> <span class="pre">(&lt;class</span> <span class="pre">'bool'&gt;</span></em>, <em class="sig-param"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;)</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">RETS:</span> <span class="pre">List[float]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">RET:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">NATOM:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#Imd.edit_REEDS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.Imd.edit_REEDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.Imd.path">
+<code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.imd.Imd.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.imd.Imd.randomize_seed">
+<code class="sig-name descname"><span class="pre">randomize_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#Imd.randomize_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.Imd.randomize_seed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.imd.Imd.read_file">
+<code class="sig-name descname"><span class="pre">read_file</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#Imd.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.Imd.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>give back the content. WARNING DEAPRECEATED.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DEAPRECEATED</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>key is the block name of the gromos file, any is the content of a block</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.ligand_infos">
+<code class="sig-prename descclassname"><span class="pre">pygromos.files.imd.</span></code><code class="sig-name descname"><span class="pre">ligand_infos</span></code><a class="headerlink" href="#pygromos.files.imd.ligand_infos" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.imd.ligands_info</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pygromos.files.imd.nice_s_vals">
+<code class="sig-prename descclassname"><span class="pre">pygromos.files.imd.</span></code><code class="sig-name descname"><span class="pre">nice_s_vals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svals</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base10</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pygromos/files/imd.html#nice_s_vals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.imd.nice_s_vals" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>svals</strong></p></li>
+<li><p><strong>base10</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.non_ligand_infos">
+<code class="sig-prename descclassname"><span class="pre">pygromos.files.imd.</span></code><code class="sig-name descname"><span class="pre">non_ligand_infos</span></code><a class="headerlink" href="#pygromos.files.imd.non_ligand_infos" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.imd.ligands_info</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.imd.protein_infos">
+<code class="sig-prename descclassname"><span class="pre">pygromos.files.imd.</span></code><code class="sig-name descname"><span class="pre">protein_infos</span></code><a class="headerlink" href="#pygromos.files.imd.protein_infos" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.imd.protein_info</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pygromos.files.new_repdat">
+<span id="pygromos-files-new-repdat-module"></span><h2>pygromos.files.new_repdat module<a class="headerlink" href="#module-pygromos.files.new_repdat" title="Permalink to this headline">¶</a></h2>
+<p>FUNCTIONLIB:            Repdat File
+Description:</p>
+<blockquote>
+<div><p>From a Replica-Exchange simulation a repdat file will be created, that gives insight on the replica exchanges of the simulation</p>
+</div></blockquote>
+<p>Author: Benjamin Schroeder</p>
+<dl class="py class">
+<dt id="pygromos.files.new_repdat.Repdat">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.new_repdat.</span></code><code class="sig-name descname"><span class="pre">Repdat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
+<p>Replica exchange statistic file
+This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.</p>
+<dl class="py attribute">
+<dt id="pygromos.files.new_repdat.Repdat.DATA">
+<code class="sig-name descname"><span class="pre">DATA</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.DATA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.new_repdat.Repdat.SYSTEM">
+<code class="sig-name descname"><span class="pre">SYSTEM</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.replica_exchange_blocks.repex_system" title="pygromos.files.blocks.replica_exchange_blocks.repex_system"><span class="pre">pygromos.files.blocks.replica_exchange_blocks.repex_system</span></a></em><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.SYSTEM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repdat_Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_path</strong> (<em>str</em>) – path to gromos repdadat file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat._caculate_transition_traces">
+<code class="sig-name descname"><span class="pre">_caculate_transition_traces</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat._caculate_transition_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat._caculate_transition_traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: refactor code!
+..autofunction: _caculate_transition_traces</p>
+<blockquote>
+<div><p>calculates the transition traces for all replicas from raw data and stores them in self.transition_traces.
+In the end you recieve the trace a replica coord system moved through s dist
+format: {replicaID: {[trials…], [position…], [PotE…]}}</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat._calculate_ndowns_nups_for_each_state">
+<code class="sig-name descname"><span class="pre">_calculate_ndowns_nups_for_each_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_stride</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_state_potential_treshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat._calculate_ndowns_nups_for_each_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat._calculate_ndowns_nups_for_each_state" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><blockquote>
+<div><p>calculates the visit counts for each replicaID position (Temperature or s_value).</p>
+</div></blockquote>
+<p>It splits into substates depending on the state potentials, to destinguish which state passed by.
+Up and Downs are counted from top to bottom.
+Additionally also a time dependend series is generated. This can be binned by the  argument time_window.
+If the min_state_potential_treshold is given, than a minimal state is also dependent on the other states, if they are below the threshold, the state is undefined.</p>
+<p>In the end you recieve the position state visit counts in a dict:
+format: {{replicaposition:{“tot_nup”:[], “tot_ndown”:[], “dt”:float, “dt_nup”:[], “dt_ndown”:[]}}</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_stride</strong> (<em>int, optional</em>) – determines the window bin size of flow trajectory for each replicaID. This there are total_transitions/time_window bins containing time_window many flow values. default -1 counts all frames</p></li>
+<li><p><strong>min_state_potential_treshold</strong> (<em>float, optional</em>) – a threshold, defining if a state is governing a system at a time point t</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat._calculate_replica_roundtrips">
+<code class="sig-name descname"><span class="pre">_calculate_replica_roundtrips</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat._calculate_replica_roundtrips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat._calculate_replica_roundtrips" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>..autofunction: _calculate_replica_roundtrips</dt><dd><p>This function is calculating the roundtrips over all replica positions for each replica.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat._clean_replica_round_trips">
+<code class="sig-name descname"><span class="pre">_clean_replica_round_trips</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replica_round_trips</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat._clean_replica_round_trips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat._clean_replica_round_trips" title="Permalink to this definition">¶</a></dt>
+<dd><p>_clean_replica_round_trips - privat</p>
+<blockquote>
+<div><p>This function cleans up so that the minimal rountrip number in a roundtrip dict is 0</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>replica_round_trips</strong> (<em>Dict[int:int]</em>) – a dictionary containing all replica roundtrip counts</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Dict[int</strong> – a dictionary containing all replica roundtrip counts with lowest value 0</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.new_repdat.Repdat.added_property">
+<code class="sig-name descname"><span class="pre">added_property</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.added_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.append">
+<code class="sig-name descname"><span class="pre">append</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repdat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pygromos.files.new_repdat.Repdat" title="pygromos.files.new_repdat.Repdat"><span class="pre">pygromos.files.new_repdat.Repdat</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.append" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function concatenates two repdat files into the executing obj.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>repdat</strong> (<em>List[Repdat] or Repdat</em>) – one or multiple Repdat files.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.clean_file_runs">
+<code class="sig-name descname"><span class="pre">clean_file_runs</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.clean_file_runs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.clean_file_runs" title="Permalink to this definition">¶</a></dt>
+<dd><p>clean_file
+DEAPRECEATED - ABOUT TO BE REMOVED!</p>
+<blockquote>
+<div><p>Updates the run numbers to be continous sequential. (for example needed for concatenation)</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.new_repdat.Repdat.count_state_per_position">
+<code class="sig-name descname"><span class="pre">count_state_per_position</span></code><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.count_state_per_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.get_replicaPosition_dependend_nup_ndown">
+<code class="sig-name descname"><span class="pre">get_replicaPosition_dependend_nup_ndown</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_window_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_treshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.get_replicaPosition_dependend_nup_ndown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.get_replicaPosition_dependend_nup_ndown" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>..autofunction: get_replicaPosition_dependend_nup_ndown</dt><dd><p>This function is returning the replica position visit counts by all simulation state.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_window_size</strong> (<em>int</em>) – how many timesteps shall be binned</p></li>
+<li><p><strong>potential_treshold</strong> (<em>float</em>) – if defined, and there is a time window, in which multiple states are below this threshold, the count is in an undefined state.</p></li>
+<li><p><strong>recalculate</strong> (<em>bool</em>) – shall the dict be recalculated?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dict for all replica positions and the visit counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, Dict[str, Union[List or float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state">
+<code class="sig-name descname"><span class="pre">get_replicaPosition_dependend_nup_ndown_for_each_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_window_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_treshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>..autofunction: get_replicaPosition_dependend_nup_ndown_for_each_state</dt><dd><p>This function is returning the replica position visit counts by each simulation state, per state.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_window_size</strong> (<em>int</em>) – how many timesteps shall be binned</p></li>
+<li><p><strong>potential_treshold</strong> (<em>float</em>) – if defined, and there is a time window, in which multiple states are below this threshold, the count is in an undefined state.</p></li>
+<li><p><strong>recalculate</strong> (<em>bool</em>) – shall the dict be recalculated?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dict for all replica positions and their state visit counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, Dict[str, Union[List or float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.get_replica_roundtrips">
+<code class="sig-name descname"><span class="pre">get_replica_roundtrips</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.get_replica_roundtrips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.get_replica_roundtrips" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>..autofunction: get_replica_roundtrips</dt><dd><p>This function is returning the count of rountrips (RT) for each replica.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recalculate</strong> (<em>bool</em>) – shall the dict be recalculated?</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dict for all replica and their rountrip counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int,int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.get_replica_traces">
+<code class="sig-name descname"><span class="pre">get_replica_traces</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.get_replica_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.get_replica_traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a replica_traces dictionary.
+:Parameters: <strong>recalculate</strong> (<em>bool, optional</em>) – shall the dict be recalculated, if already present?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dictionary containing all individual replica_traces</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[int, Dict[str,List[float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.new_repdat.Repdat.replica_round_trips">
+<code class="sig-name descname"><span class="pre">replica_round_trips</span></code><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.replica_round_trips" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.new_repdat.Repdat.transition_traces">
+<code class="sig-name descname"><span class="pre">transition_traces</span></code><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.transition_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.new_repdat.Repdat.write">
+<code class="sig-name descname"><span class="pre">write</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/new_repdat.html#Repdat.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.new_repdat.Repdat.write" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>..autofunction:</dt><dd><p>Write out a repdat file to the outpath.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>out_path</strong> (<em>str</em>) – determines the output path</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>out_path</p>
+</dd>
+</dl>
+<p>:rtype:str</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pygromos.files.noe_output">
+<span id="pygromos-files-noe-output-module"></span><h2>pygromos.files.noe_output module<a class="headerlink" href="#module-pygromos.files.noe_output" title="Permalink to this headline">¶</a></h2>
+<p>FUNCTIONLIB:            gromos++ input file functions
+Description:</p>
+<blockquote>
+<div><p>in this lib, gromosXX input file mainpulating functions are gathered</p>
+</div></blockquote>
+<p>Author: Benjamin Schroeder</p>
+<dl class="py class">
+<dt id="pygromos.files.noe_output.JVAL">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.noe_output.</span></code><code class="sig-name descname"><span class="pre">JVAL</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/noe_output.html#JVAL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.noe_output.JVAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py attribute">
+<dt id="pygromos.files.noe_output.JVAL.content">
+<code class="sig-name descname"><span class="pre">content</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.noe_output.JVAL.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.noe_output.JVAL.read_file">
+<code class="sig-name descname"><span class="pre">read_file</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/noe_output.html#JVAL.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.noe_output.JVAL.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>give back the content. WARNING DEAPRECEATED.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DEAPRECEATED</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>key is the block name of the gromos file, any is the content of a block</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.noe_output.JVAL.write">
+<code class="sig-name descname"><span class="pre">write</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/noe_output.html#JVAL.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.noe_output.JVAL.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes a general Gromos File out</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>out_path</strong> (<em>str</em>) – out path where the file should be.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>out_path</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pygromos.files.noe_output.NOE">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.noe_output.</span></code><code class="sig-name descname"><span class="pre">NOE</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/noe_output.html#NOE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.noe_output.NOE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py attribute">
+<dt id="pygromos.files.noe_output.NOE.AVERAGE_NOE">
+<code class="sig-name descname"><span class="pre">AVERAGE_NOE</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.noe_output.NOE.AVERAGE_NOE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.noe_output.NOE.NOE_VIOLATIONS">
+<code class="sig-name descname"><span class="pre">NOE_VIOLATIONS</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.noe_output.NOE.NOE_VIOLATIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.noe_output.NOE.RESTRAINT_LEGEND">
+<code class="sig-name descname"><span class="pre">RESTRAINT_LEGEND</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.noe_output.NOE.RESTRAINT_LEGEND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.noe_output.NOE.TITLE">
+<code class="sig-name descname"><span class="pre">TITLE</span></code><em class="property"><span class="pre">:</span> <span class="pre">pygromos.files.blocks._general_blocks.TITLE</span></em><a class="headerlink" href="#pygromos.files.noe_output.NOE.TITLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.noe_output.NOE.read_file">
+<code class="sig-name descname"><span class="pre">read_file</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/noe_output.html#NOE.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.noe_output.NOE.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>give back the content. WARNING DEAPRECEATED.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DEAPRECEATED</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>key is the block name of the gromos file, any is the content of a block</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pygromos.files.repdat">
+<span id="pygromos-files-repdat-module"></span><h2>pygromos.files.repdat module<a class="headerlink" href="#module-pygromos.files.repdat" title="Permalink to this headline">¶</a></h2>
+<p>FUNCTIONLIB:            Repdat File
+Description:</p>
+<blockquote>
+<div><p>From a Replica-Exchange simulation a repdat file will be created, that gives insight on the replica exchanges of the simulation</p>
+</div></blockquote>
+<p>Author: Benjamin Schroeder</p>
+<dl class="py class">
+<dt id="pygromos.files.repdat.Repdat">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.repdat.</span></code><code class="sig-name descname"><span class="pre">Repdat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<p>Replica exchange statistic file
+This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.</p>
+<dl class="py attribute">
+<dt id="pygromos.files.repdat.Repdat.DATA">
+<code class="sig-name descname"><span class="pre">DATA</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.repdat.Repdat.DATA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.repdat.Repdat.SYSTEM">
+<code class="sig-name descname"><span class="pre">SYSTEM</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.replica_exchange_blocks.repex_system" title="pygromos.files.blocks.replica_exchange_blocks.repex_system"><span class="pre">pygromos.files.blocks.replica_exchange_blocks.repex_system</span></a></em><a class="headerlink" href="#pygromos.files.repdat.Repdat.SYSTEM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repdat_Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_path</strong> (<em>str</em>) – path to gromos repdadat file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat._caculate_transition_traces">
+<code class="sig-name descname"><span class="pre">_caculate_transition_traces</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat._caculate_transition_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat._caculate_transition_traces" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>calculates the transition traces for all replicas from raw data and stores them in self.transition_traces.</dt><dd><p>In the end you recieve the trace a replica coord system moved through s dist
+format: {replicaID: {[trials…], [position…], [PotE…]}}</p>
+</dd>
+</dl>
+<p>TODO: refactor code!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat._calculate_ndowns_nups_for_each_state">
+<code class="sig-name descname"><span class="pre">_calculate_ndowns_nups_for_each_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_stride</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_state_potential_treshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat._calculate_ndowns_nups_for_each_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat._calculate_ndowns_nups_for_each_state" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><blockquote>
+<div><p>calculates the visit counts for each replicaID position (Temperature or s_value).</p>
+</div></blockquote>
+<p>It splits into substates depending on the state potentials, to destinguish which state passed by.
+Up and Downs are counted from top to bottom.
+Additionally also a time dependend series is generated. This can be binned by the  argument time_window.
+If the min_state_potential_treshold is given, than a minimal state is also dependent on the other states, if they are below the threshold, the state is undefined.</p>
+<p>In the end you recieve the position state visit counts in a dict:
+format: {{replicaposition:{“tot_nup”:[], “tot_ndown”:[], “dt”:float, “dt_nup”:[], “dt_ndown”:[]}}</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_stride</strong> (<em>int, optional</em>) – determines the window bin size of flow trajectory for each replicaID. This there are total_transitions/time_window bins containing time_window many flow values. default -1 counts all frames</p></li>
+<li><p><strong>min_state_potential_treshold</strong> (<em>float, optional</em>) – a threshold, defining if a state is governing a system at a time point t</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat._calculate_replica_roundtrips">
+<code class="sig-name descname"><span class="pre">_calculate_replica_roundtrips</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat._calculate_replica_roundtrips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat._calculate_replica_roundtrips" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is calculating the roundtrips over all replica positions for each replica.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat._clean_replica_round_trips">
+<code class="sig-name descname"><span class="pre">_clean_replica_round_trips</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replica_round_trips</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat._clean_replica_round_trips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat._clean_replica_round_trips" title="Permalink to this definition">¶</a></dt>
+<dd><p>_clean_replica_round_trips - privat</p>
+<blockquote>
+<div><p>This function cleans up so that the minimal rountrip number in a roundtrip dict is 0</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>replica_round_trips</strong> (<em>Dict[int:int]</em>) – a dictionary containing all replica roundtrip counts</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Dict[int</strong> – a dictionary containing all replica roundtrip counts with lowest value 0</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.append">
+<code class="sig-name descname"><span class="pre">append</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repdat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pygromos.files.repdat.Repdat" title="pygromos.files.repdat.Repdat"><span class="pre">pygromos.files.repdat.Repdat</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.append" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function concatenates two repdat files into the executing obj.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>repdat</strong> (<em>List[Repdat] or Repdat</em>) – one or multiple Repdat files.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.clean_file_runs">
+<code class="sig-name descname"><span class="pre">clean_file_runs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_trial</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.clean_file_runs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.clean_file_runs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>clean_file</dt><dd><p>Updates the run numbers to be continous sequential. (for example needed for concatenation)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>starting_trial</strong> (<em>int, optional</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.repdat.Repdat.count_state_per_position">
+<code class="sig-name descname"><span class="pre">count_state_per_position</span></code><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.repdat.Repdat.count_state_per_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.get_replicaPosition_dependend_nup_ndown">
+<code class="sig-name descname"><span class="pre">get_replicaPosition_dependend_nup_ndown</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_window_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_treshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.get_replicaPosition_dependend_nup_ndown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.get_replicaPosition_dependend_nup_ndown" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is returning the replica position visit counts by all simulation state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_window_size</strong> (<em>int,optional</em>) – how many timesteps shall be binned into one bin?</p></li>
+<li><p><strong>potential_treshold</strong> (<em>float</em>) – if defined, and there is a time window, in which multiple states are below this threshold, the count is in an undefined state.</p></li>
+<li><p><strong>recalculate</strong> (<em>bool</em>) – shall the dict be recalculated?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dict for all replica positions and the visit counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, Dict[str, Union[List or float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state">
+<code class="sig-name descname"><span class="pre">get_replicaPosition_dependend_nup_ndown_for_each_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_window_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_treshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is returning the replica position visit counts by each simulation state, per state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_window_size</strong> (<em>int, optional</em>) – how many timesteps shall be binned into one bin?</p></li>
+<li><p><strong>potential_treshold</strong> (<em>float, optional</em>) – if defined, and there is a time window, in which multiple states are below this threshold, the count is in an undefined state.</p></li>
+<li><p><strong>recalculate</strong> (<em>bool, optional</em>) – shall the dict be recalculated?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dict for all replica positions and their state visit counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, Dict[str, Union[List or float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.get_replica_roundtrips">
+<code class="sig-name descname"><span class="pre">get_replica_roundtrips</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.get_replica_roundtrips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.get_replica_roundtrips" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is returning the count of rountrips (RT) for each replica.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recalculate</strong> (<em>bool</em>) – shall the dict be recalculated?</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dict for all replica and their rountrip counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.get_replica_traces">
+<code class="sig-name descname"><span class="pre">get_replica_traces</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalculate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.get_replica_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.get_replica_traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a replica_traces dictionary.
+:Parameters: <strong>recalculate</strong> (<em>bool, optional</em>) – shall the dict be recalculated, if already present?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dictionary containing all individual replica_traces</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[int, Dict[str,List[float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.repdat.Repdat.replica_round_trips">
+<code class="sig-name descname"><span class="pre">replica_round_trips</span></code><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.repdat.Repdat.replica_round_trips" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.repdat.Repdat.transition_traces">
+<code class="sig-name descname"><span class="pre">transition_traces</span></code><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.repdat.Repdat.transition_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.repdat.Repdat.write">
+<code class="sig-name descname"><span class="pre">write</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/repdat.html#Repdat.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.repdat.Repdat.write" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>out_path</strong> (<em>str</em>) – determines the output path for repdat file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>out_path</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pygromos.files">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.files" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pygromos.files.blocks.html" class="btn btn-neutral float-right" title="pygromos.files.blocks package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pygromos.euler_submissions.FileManager.html" class="btn btn-neutral float-left" title="pygromos.euler_submissions.FileManager package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,448 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pygromos.euler_submissions.gen_Euler_LSF_jobarray &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.euler_submissions.gen_Euler_LSF_jobarray</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.euler_submissions.gen_Euler_LSF_jobarray</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.euler_submissions.FileManager</span> <span class="kn">import</span> <span class="n">Simulation_System</span> <span class="k">as</span> <span class="n">sys</span>
+
+
+<div class="viewcode-block" id="build_jobarray"><a class="viewcode-back" href="../../../_source/pygromos.euler_submissions.html#pygromos.euler_submissions.gen_Euler_LSF_jobarray.build_jobarray">[docs]</a><span class="k">def</span> <span class="nf">build_jobarray</span><span class="p">(</span><span class="n">script_out_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">run_script</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">array_length</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">array_name</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">previous_ID</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">analysis_script</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;8:00&quot;</span><span class="p">,</span> <span class="n">analysis_duration</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;4:00&quot;</span> <span class="p">,</span> <span class="n">analysis_processors</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">start_pos</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>  <span class="n">job_throttle</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">cpu_per_job</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">noFailInChain</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">memory</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noFail</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">previous_job</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">previous_ID</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">noFail</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">previous_job</span> <span class="o">=</span> <span class="s2">&quot; -w </span><span class="se">\&quot;</span><span class="s2">done(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">previous_ID</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)</span><span class="se">\&quot;</span><span class="s2"> &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">previous_job</span> <span class="o">=</span> <span class="s2">&quot; -w </span><span class="se">\&quot;</span><span class="s2">exit(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">previous_ID</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)</span><span class="se">\&quot;</span><span class="s2"> &quot;</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">noFailInChain</span><span class="p">):</span>
+        <span class="n">chaining_prefix</span><span class="o">=</span><span class="s2">&quot;done&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">chaining_prefix</span><span class="o">=</span><span class="s2">&quot;exit&quot;</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">memory</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">r_opt</span> <span class="o">=</span> <span class="s2">&quot;-R </span><span class="se">\&quot;</span><span class="s2">rusage[mem=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]</span><span class="se">\&quot;</span><span class="s2"> &quot;</span>
+        <span class="c1">#if(memory!=None):</span>
+            <span class="c1">#memory_opt = &quot; rusage[mem=1000] &quot;</span>
+            <span class="c1">#r_opt += str(memory)</span>
+
+        <span class="c1">#r_opt += &quot;\&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">r_opt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">script_text</span> <span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;# !/usr/bin/env bash</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;JOBNAME=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">array_name</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;SSTART=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">start_pos</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;SEND=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">array_length</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;JOBS=$(($((SEND - SSTART)) + 1 ))</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;JOBLIM=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">job_throttle</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;CPUPERJOB=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">cpu_per_job</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;BASEDIR=&quot;</span><span class="o">+</span><span class="n">output_dir</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;RUNSCRIPT=&quot;</span><span class="o">+</span><span class="n">run_script</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;    </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# do</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;mkdir -p $</span><span class="si">{BASEDIR}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;cd $BASEDIR</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;echo </span><span class="se">\&quot;</span><span class="s2">Array: $</span><span class="si">{JOBNAME}</span><span class="s2">[$SSTART-$SEND]</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;echo </span><span class="se">\&quot;</span><span class="s2">reserve $CPUPERJOB CPUS per sopt_job</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;jobID=$(bsub  &quot;</span><span class="o">+</span><span class="n">r_opt</span><span class="o">+</span><span class="s2">&quot;-n $CPUPERJOB -W &quot;</span><span class="o">+</span><span class="n">duration</span><span class="o">+</span><span class="s2">&quot; -e $</span><span class="si">{BASEDIR}</span><span class="s2">/$</span><span class="si">{JOBNAME}</span><span class="s2">.err -o $</span><span class="si">{BASEDIR}</span><span class="s2">/$</span><span class="si">{JOBNAME}</span><span class="s2">.out &quot;</span><span class="o">+</span><span class="n">previous_job</span><span class="o">+</span><span class="s2">&quot; -J </span><span class="se">\&quot;</span><span class="s2">$</span><span class="si">{JOBNAME}</span><span class="s2">[$SSTART-$SEND]%$</span><span class="si">{JOBLIM}</span><span class="se">\&quot;</span><span class="s2"> &lt; $RUNSCRIPT  | cut -d </span><span class="se">\&quot;</span><span class="s2">&lt;</span><span class="se">\&quot;</span><span class="s2"> -f2 | cut -d </span><span class="se">\&quot;</span><span class="s2">&gt;</span><span class="se">\&quot;</span><span class="s2"> -f1)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;echo </span><span class="se">\&quot;</span><span class="s2">$jobID</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;cd .. </span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">analysis_script</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">script_text</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">echo </span><span class="se">\&quot;</span><span class="s2">start ANA</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;ANASCRIPT=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">analysis_script</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;jobID=$(bsub  -w </span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">chaining_prefix</span><span class="o">+</span><span class="s2">&quot;($</span><span class="si">{jobID}</span><span class="s2">)</span><span class="se">\&quot;</span><span class="s2"> -n &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">analysis_processors</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; -W &quot;</span><span class="o">+</span><span class="n">analysis_duration</span><span class="o">+</span><span class="s2">&quot; -e $</span><span class="si">{BASEDIR}</span><span class="s2">/$</span><span class="si">{JOBNAME}</span><span class="s2">_ana.err -o $</span><span class="si">{BASEDIR}</span><span class="s2">/$</span><span class="si">{JOBNAME}</span><span class="s2">_ana.out -J </span><span class="se">\&quot;</span><span class="s2">$</span><span class="si">{JOBNAME}</span><span class="s2">_ana</span><span class="se">\&quot;</span><span class="s2"> &lt; $</span><span class="si">{ANASCRIPT}</span><span class="s2"> | cut -d </span><span class="se">\&quot;</span><span class="s2">&lt;</span><span class="se">\&quot;</span><span class="s2"> -f2 | cut -d </span><span class="se">\&quot;</span><span class="s2">&gt;</span><span class="se">\&quot;</span><span class="s2"> -f1)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;echo </span><span class="se">\&quot;</span><span class="s2">$jobID</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">script_out_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">script_text</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">script_out_path</span></div>
+
+<div class="viewcode-block" id="build_worker_script_multImds"><a class="viewcode-back" href="../../../_source/pygromos.euler_submissions.html#pygromos.euler_submissions.gen_Euler_LSF_jobarray.build_worker_script_multImds">[docs]</a><span class="k">def</span> <span class="nf">build_worker_script_multImds</span><span class="p">(</span><span class="n">out_script_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_system</span><span class="p">:</span><span class="n">sys</span><span class="o">.</span><span class="n">System</span><span class="p">,</span> <span class="n">in_imd_prefix</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                                 <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                 <span class="n">out_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                 <span class="n">gromosXX_bin</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cores</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;build_worker_script_multImds</span>
+
+<span class="sd">        This function writes out a job script, that is a worker_scripts for a scheduled a jobarray for gromos simulations.</span>
+<span class="sd">            So it acts as a thread for a single task. In this jobarray always the .imd Files  (e.g.: path/to/imd_prefix_[num].imd) are different.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    out_script_path :   str</span>
+<span class="sd">        output path, where the script sould be located</span>
+<span class="sd">    in_system : fM.System</span>
+<span class="sd">        System obj. containing all the managed files.</span>
+<span class="sd">    in_imd_prefix : str</span>
+<span class="sd">        prefix of the imd files, that differ (e.g.: path/to/imd_prefix_[num].imd)</span>
+<span class="sd">    job_name :  str</span>
+<span class="sd">        name of the scheduled job.</span>
+<span class="sd">    out_dir :   str</span>
+<span class="sd">        output direcotry for the simulations</span>
+<span class="sd">    gromosXX_bin :  str</span>
+<span class="sd">        path to gromos binary folder</span>
+<span class="sd">    cores : int</span>
+<span class="sd">        number of cores for this job</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        out_script_path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">in_imd</span> <span class="o">=</span> <span class="n">in_imd_prefix</span>
+    <span class="n">in_cnf</span><span class="o">=</span><span class="n">in_system</span><span class="o">.</span><span class="n">coordinates</span>
+    <span class="n">in_top</span> <span class="o">=</span> <span class="n">in_system</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">top_path</span>
+    <span class="n">in_ptp</span> <span class="o">=</span> <span class="n">in_system</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">pertubation_path</span>
+    <span class="n">in_disres</span> <span class="o">=</span> <span class="n">in_system</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">disres_path</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">gromosXX_bin</span><span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">gromosXX_bin</span><span class="o">=</span><span class="s2">&quot;md_mpi&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gromosXX_bin</span><span class="o">+=</span><span class="s2">&quot;/md_mpi&quot;</span>
+
+    <span class="n">script_text</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;# !/usr/bin/env bash&quot;</span>
+    <span class="s2">&quot;#RUN this script only with arry submission!</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;SPACE=</span><span class="se">\&quot;</span><span class="s2">/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">$SPACE </span><span class="se">\n</span><span class="s2"> START Script index.rst: $</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;# first we set svome variables</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;NAME=</span><span class="se">\&quot;</span><span class="s2">benjamin</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;OUTPREFIX=&quot;</span> <span class="o">+</span> <span class="n">job_name</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;CORES=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;RUNID=$LSB_JOBINDEX&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="s2">&quot;#DIR</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;PROGRAM=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gromosXX_bin</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;OUTDIR=$</span><span class="si">{PWD}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="s2">&quot;#INPUT FILES</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;TOPO=&quot;</span> <span class="o">+</span> <span class="n">in_top</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;DISRES=&quot;</span> <span class="o">+</span> <span class="n">in_disres</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;PTTOPO=&quot;</span> <span class="o">+</span> <span class="n">in_ptp</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;INIMD=&quot;</span> <span class="o">+</span> <span class="n">in_imd</span> <span class="o">+</span><span class="s2">&quot;_$</span><span class="si">{RUNID}</span><span class="s2">.imd</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;INPUTCRD=&quot;</span> <span class="o">+</span> <span class="n">in_cnf</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    
+    <span class="s2">&quot;#PREPROCESSING</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;# create temporary directory</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">Let&#39;s go to work! </span><span class="se">\n</span><span class="s2"> </span><span class="se">\t</span><span class="s2">JOBID: $</span><span class="si">{LSB_JOBID}</span><span class="s2"> </span><span class="se">\n\t</span><span class="s2">Processors: $</span><span class="si">{PROCLIMIT}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;WORKDIR=&quot;</span> <span class="o">+</span> <span class="n">out_dir</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;mkdir -p $</span><span class="si">{WORKDIR}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;cd       $</span><span class="si">{WORKDIR}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    
+    <span class="s2">&quot;#RUN:</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">OUTPUT PREFIX: $OUTPREFIX</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span> 
+    <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">$SPACE</span><span class="se">\n</span><span class="s2"> STARTING SImulation executed by $NAME </span><span class="se">\n</span><span class="s2"> $(date)</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;TMPOUTPREFIXEQ=$</span><span class="si">{OUTPREFIX}</span><span class="s2">_1_$</span><span class="si">{RUNID}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    
+    <span class="s2">&quot;#Short_Equilibraton</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;mpirun -n $</span><span class="si">{CORES}</span><span class="s2"> $</span><span class="si">{PROGRAM}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @topo        $</span><span class="si">{TOPO}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @conf        $</span><span class="si">{INPUTCRD}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @input       $</span><span class="si">{INIMD}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @pttopo      $</span><span class="si">{PTTOPO}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @distrest    $</span><span class="si">{DISRES}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @fin         $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.cnf </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @trc         $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.trc </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;        @tre         $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.tre </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;         &gt;  $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.omd</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_script_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">script_text</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span>  <span class="n">out_script_path</span></div>
+
+
+<div class="viewcode-block" id="build_worker_script_mult_cnfs"><a class="viewcode-back" href="../../../_source/pygromos.euler_submissions.html#pygromos.euler_submissions.gen_Euler_LSF_jobarray.build_worker_script_mult_cnfs">[docs]</a><span class="k">def</span> <span class="nf">build_worker_script_mult_cnfs</span><span class="p">(</span><span class="n">script_out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">system</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">System</span><span class="p">,</span> <span class="n">in_protocol_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                  <span class="n">gromosXX_bin</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">job_name</span>
+    <span class="n">in_imd</span> <span class="o">=</span> <span class="n">in_protocol_prefix</span>
+    <span class="n">in_cnf</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;0001&quot;</span><span class="p">,</span> <span class="s2">&quot;$</span><span class="si">{RUNID}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;0.cnf&quot;</span><span class="p">,</span> <span class="s2">&quot;$</span><span class="si">{RUNID}</span><span class="s2">.cnf&quot;</span><span class="p">)</span>
+    <span class="n">in_top</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">top</span>
+    <span class="n">out_dir</span> <span class="o">=</span> <span class="n">out_dir</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">gromosXX_bin</span><span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">md_mpi</span><span class="o">=</span><span class="s2">&quot;md_mpi&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">md_mpi</span><span class="o">=</span> <span class="n">gromosXX_bin</span><span class="o">+</span><span class="s2">&quot;/md_mpi&quot;</span>
+
+    <span class="n">script_text</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;# !/usr/bin/env bash&quot;</span>
+            <span class="s2">&quot;#RUN this script only with arry submission!</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;SPACE=</span><span class="se">\&quot;</span><span class="s2">/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">$SPACE </span><span class="se">\n</span><span class="s2"> START Script index.rst: $</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;# first we set svome variables</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;NAME=</span><span class="se">\&quot;</span><span class="s2">benjamin</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;OUTPREFIX=&quot;</span> <span class="o">+</span> <span class="n">job_name</span> <span class="o">+</span> <span class="s2">&quot;_$</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;CORES=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;RUNID=$LSB_JOBINDEX&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="s2">&quot;#DIR</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;PROGRAM=&quot;</span> <span class="o">+</span> <span class="n">md_mpi</span> <span class="o">+</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;OUTDIR=$</span><span class="si">{PWD}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="s2">&quot;#INPUT FILES</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;TOPO=&quot;</span> <span class="o">+</span> <span class="n">in_top</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;INIMD=&quot;</span> <span class="o">+</span> <span class="n">in_imd</span> <span class="o">+</span> <span class="s2">&quot;$</span><span class="si">{RUNID}</span><span class="s2">.imd</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;if [  $</span><span class="si">{LSB_JOBINDEX}</span><span class="s2"> -gt 999 ];</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;then&quot;</span>
+            <span class="s2">&quot;        RUNID=</span><span class="se">\&quot;</span><span class="s2">$</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;else</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  if [ $</span><span class="si">{LSB_JOBINDEX}</span><span class="s2"> -gt 99 ];</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  then</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;        RUNID=</span><span class="se">\&quot;</span><span class="s2">0$</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  else</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;    if [ $</span><span class="si">{LSB_JOBINDEX}</span><span class="s2"> -gt 9 ];</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;    then</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;        RUNID=</span><span class="se">\&quot;</span><span class="s2">00$</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;    else</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;        RUNID=</span><span class="se">\&quot;</span><span class="s2">000$</span><span class="si">{LSB_JOBINDEX}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;    fi</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  fi</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;fi</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;INPUTCRD=&quot;</span> <span class="o">+</span> <span class="n">in_cnf</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;#PREPROCESSING</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;# create temporary directory</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">Let&#39;s go to work! </span><span class="se">\n</span><span class="s2"> </span><span class="se">\t</span><span class="s2">JOBID: $</span><span class="si">{LSB_JOBID}</span><span class="s2"> </span><span class="se">\n\t</span><span class="s2">Processors: $</span><span class="si">{PROCLIMIT}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;WORKDIR=&quot;</span> <span class="o">+</span> <span class="n">out_dir</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;mkdir -p $</span><span class="si">{WORKDIR}</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;cd       $</span><span class="si">{WORKDIR}</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;#RUN:</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">OUTPUT PREFIX: $OUTPREFIX</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;echo -e </span><span class="se">\&quot;</span><span class="s2">$SPACE</span><span class="se">\n</span><span class="s2"> STARTING SImulation executed by $NAME </span><span class="se">\n</span><span class="s2"> $(date)</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;TMPOUTPREFIXEQ=</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">out_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_$</span><span class="si">{RUNID}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+             <span class="s2">&quot;#Short_Equilibraton</span><span class="se">\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;mpirun -n $</span><span class="si">{CORES}</span><span class="s2"> $</span><span class="si">{PROGRAM}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @topo        $</span><span class="si">{TOPO}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @conf        $</span><span class="si">{INPUTCRD}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @input       $</span><span class="si">{INIMD}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @pttopo      $</span><span class="si">{PTTOPO}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @distrest    $</span><span class="si">{DISRES}</span><span class="s2"> </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @fin         $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.cnf </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @trc         $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.out_trc </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;        @tre         $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.out_tre </span><span class="se">\\\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;         &gt;  $</span><span class="si">{TMPOUTPREFIXEQ}</span><span class="s2">.omd</span><span class="se">\n</span><span class="s2">&quot;</span>
+                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">script_out_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">script_text</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">script_out_path</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

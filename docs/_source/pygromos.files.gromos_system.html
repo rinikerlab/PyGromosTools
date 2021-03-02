@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pygromos.files.gromos_system package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.files.topology package" href="pygromos.files.topology.html" />
+    <link rel="prev" title="pygromos.files.energy package" href="pygromos.files.energy.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.euler_submissions.html">pygromos.euler_submissions package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+          <li><a href="pygromos.files.html">pygromos.files package</a> &raquo;</li>
+        
+      <li>pygromos.files.gromos_system package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/_source/pygromos.files.gromos_system.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="pygromos-files-gromos-system-package">
+<h1>pygromos.files.gromos_system package<a class="headerlink" href="#pygromos-files-gromos-system-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pygromos.files.gromos_system.gromos_system">
+<span id="pygromos-files-gromos-system-gromos-system-module"></span><h2>pygromos.files.gromos_system.gromos_system module<a class="headerlink" href="#module-pygromos.files.gromos_system.gromos_system" title="Permalink to this headline">¶</a></h2>
+<p>File:            gromos++ system folder managment
+Warnings: this class is WIP!
+TODO:REWORK
+Description:</p>
+<blockquote>
+<div><p>This is a super class for the collection of all gromos files used inside a project</p>
+</div></blockquote>
+<p>Author: Marc Lehner</p>
+<dl class="py class">
+<dt id="pygromos.files.gromos_system.gromos_system.gromos_system">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.gromos_system.gromos_system.</span></code><code class="sig-name descname"><span class="pre">gromos_system</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdkitMol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">rdkit.Chem.rdchem.Mol</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readIn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Forcefield</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2016H66'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_convert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#gromos_system"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.gromos_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.gromos_system.gromos_system.import_Forcefield">
+<code class="sig-name descname"><span class="pre">import_Forcefield</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Forcefield</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'2016H66'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#gromos_system.import_Forcefield"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.gromos_system.import_Forcefield" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.gromos_system.gromos_system.rdkit2Gromos">
+<code class="sig-name descname"><span class="pre">rdkit2Gromos</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#gromos_system.rdkit2Gromos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.gromos_system.rdkit2Gromos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.gromos_system.gromos_system.rdkitImport">
+<code class="sig-name descname"><span class="pre">rdkitImport</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputMol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">rdkit.Chem.rdchem.Mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#gromos_system.rdkitImport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.gromos_system.rdkitImport" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.gromos_system.gromos_system.read_files">
+<code class="sig-name descname"><span class="pre">read_files</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#gromos_system.read_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.gromos_system.read_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.gromos_system.gromos_system.write_files">
+<code class="sig-name descname"><span class="pre">write_files</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cnf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Imd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#gromos_system.write_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.gromos_system.write_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pygromos-files-gromos-system-openforcefield2gromos-module">
+<h2>pygromos.files.gromos_system.openforcefield2gromos module<a class="headerlink" href="#pygromos-files-gromos-system-openforcefield2gromos-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pygromos.files.gromos_system">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.files.gromos_system" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pygromos.files.topology.html" class="btn btn-neutral float-right" title="pygromos.files.topology package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pygromos.files.energy.html" class="btn btn-neutral float-left" title="pygromos.files.energy package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
