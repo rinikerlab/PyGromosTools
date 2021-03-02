@@ -1,5 +1,6 @@
 name: test
 channels:
+  rdkit
 dependencies:
   # Base depends
   - python
@@ -11,15 +12,15 @@ dependencies:
   - codecov
 
   - typing
+
   - pandas
   - numpy
   - sympy
   - scipy
-  - tqdm
-  - ipywidgets
   - matplotlib
 
-  # Pip-only installs
-  #- pip:
-  #  - codecov
+  - tqdm
+  - ipywidgets
+
+  -rdkit
 
