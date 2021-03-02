@@ -1,6 +1,6 @@
 name: test
 channels:
-  rdkit
+  - rdkit
 dependencies:
   # Base depends
   - python
