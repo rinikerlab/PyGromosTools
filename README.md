@@ -1,7 +1,7 @@
 Welcome to PyGromosTools
 ==============================
 [//]: # (Badges)
-
+[![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://schroederb.github.io/PyGromosTools/)
 
 General
 -------------
