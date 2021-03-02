@@ -64,18 +64,10 @@ jobs:
       run: |
         pytest -v --cov=pygromos --cov-report=xml --color=yes pygromos/tests/
         
-        
-     - name: CodeCov
-        uses: codecov/codecov-action@v1
-        with:
-          file: ./coverage.xml
-          flags: unittests
-          name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
-
-
     - name: CodeCov
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+    
