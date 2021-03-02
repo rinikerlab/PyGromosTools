@@ -13,6 +13,7 @@ out_red_path = root_out+"/out_cnf1_reduced.cnf"
 
 class test_cnf(unittest.TestCase):
     def test_parse(self):
+        print("\n", in_file_path, "\n")
         cnf_file = cnf.Cnf(in_file_path)
         self.assertEqual(type(cnf_file), cnf.Cnf)
 
