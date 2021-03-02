@@ -1,6 +1,4 @@
-import copy
-from typing import Iterable, Callable
-from numbers import Number
+from typing import Iterable
 
 # FIELDS
 class _generic_field():
@@ -25,19 +23,7 @@ class _generic_gromos_block:
         self.name = name
         self.line_seperator = "\n"
         self.field_seperator = " \t "
-        self.comment_char = "#"
         self._check_import_method(content=content)
-
-
-    def __str__(self):
-        return self.block_to_string()
-
-    def __repr__(self):
-        return str(self)
-
-    def __iter__(self):
-        return iter(self.content)
-
 
     def _check_import_method(self, content:str = None):
         if(not content is None):
@@ -46,7 +32,7 @@ class _generic_gromos_block:
             elif type(content) == self.__class__:
                 self.content = content
             else:
-                raise Exception("Generic Block did not understand the type of content")
+                raise "Generic Block did not understand the type of content"
         else:
             self.content = []
 
@@ -60,23 +46,28 @@ class _generic_gromos_block:
             if (not field.strip().startswith("#") and not len(field.strip()) == 0):
                 self.content.append(field.strip().split())
 
+    def __repr__(self):
+        return str(self)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        if(isinstance(self.content, list) and len(self.content) > 0 and all([isinstance(x, str) for x in self.content])):
+        if(len(self.content) > 0 and all([isinstance(x, str) for x in self.content])):
             result += self.field_seperator.join(self.content) + self.line_seperator
-        elif(isinstance(self.content, list) and  len(self.content) > 0 and all([isinstance(x, list) and all([isinstance(y, str) for y in x]) for x in self.content])):
+        elif(len(self.content) > 0 and all([isinstance(x, list) and all([isinstance(y, str) for y in x]) for x in self.content])):
              result += self.line_seperator.join(map(lambda x: self.field_seperator.join(x), self.content))
-        elif(isinstance(self.content, (str, Number))):
-            result+= self.field_seperator+str(self.content)+self.line_seperator
         else:
-            result += self.field_seperator + "EMPTY"+self.line_seperator
+            result += " " + "EMPTY"+self.line_seperator
         result += self.line_seperator + "END" + self.line_seperator
         return result
 
     def get_name(self):
         return self.name
 
+    def __str__(self):
+        return self.block_to_string()
+
+    def __iter__(self):
+        return iter(self.content)
 
 class _iterable_gromos_block(_generic_gromos_block):
     table_header = [""]
@@ -149,8 +140,7 @@ class TITLE(_generic_gromos_block):
         if ("\t >>> Generated with python lib function_libs utilities. (riniker group)\n" not in self.content):
             result += "\n\t >>> Generated with python lib function_libs utilities. (riniker group)\n"
             result += "\t >>> line_seperator: " + repr(self.line_seperator) + "\t field_seperator: " + repr(
-                self.field_seperator) +"\t comments_char: " + repr(
-                self.comment_char) + "\n"
+                self.field_seperator) + "\n"
         result += "END\n"#double
         return result
 
@@ -163,6 +153,3 @@ class TRAJ(_iterable_gromos_block):
 
     def block_to_string(self) -> str:
         return self.name + " contains \t" + str(len(self.content))
-
-
-

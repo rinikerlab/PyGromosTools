@@ -10,8 +10,8 @@ from typing import Union
 
 class ifp(_general_gromos_file._general_gromos_file):
 
-    def __init__(self, in_value:Union[str, dict]):
-        super().__init__(in_value=in_value)
+    def __init__(self, input:Union[str, dict]):
+        super().__init__(input=input)
 
     def read_file(self):
         #Read blocks to string

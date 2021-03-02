@@ -5,9 +5,7 @@ Description:
 Author: Benjamin Schroeder
 """
 import os
-import copy
-from typing import List, Dict, Callable
-
+from typing import List, Dict
 from pygromos.files.blocks import _all_blocks as blocks
 
 
@@ -24,23 +22,18 @@ class _general_gromos_file():
     #private
     _blocks:Dict[str, blocks._generic_gromos_block]
     _block_order: List[str] = []
-    _future_file : bool
 
-    def __init__(self, in_value:(str or dict or None or __class__), _future_file:bool=False):
-        self._future_file = _future_file
-        if(isinstance(in_value, str)):
-            self.path = self._orig_file_path = in_value
-            if(self._future_file):
-                pass
-            elif (os.path.exists(in_value)):
-                self.read_blocks()
-            else:
-                raise IOError("Could not find File: ", in_value)
+    def __init__(self, input:(str or dict or None or __class__)):
+        if(isinstance(input, str)):
+            if (not os.path.exists(input)):
+                raise IOError("Could not find File: ", input)
 
-        elif(isinstance(type(in_value), __class__)):
+            self.file_path = self._orig_file_path = input
+            self.read_blocks()
+        elif(isinstance(type(input), __class__)):
             raise NotImplementedError("This variant is not implemented")
-        elif(in_value is None):
-            self.path = None
+        elif(input is None):
+            self.file_path = None
             self._orig_file_path = None
             #print("Empty class")
         else:
@@ -68,33 +61,6 @@ class _general_gromos_file():
                 out_text += getattr(self, block).block_to_string()
 
         return out_text
-
-    def __repr__(self):
-        return str(self)
-
-    def __getstate__(self):
-        """
-        preperation for pickling:
-        remove the non trivial pickling parts
-        """
-        skip = []
-        attribute_dict = self.__dict__
-        new_dict ={}
-        for key in attribute_dict.keys():
-            if (not isinstance(attribute_dict[key], Callable) and not key in skip):
-                new_dict.update({key:attribute_dict[key]})
-
-        return new_dict
-
-    def __setstate__(self, state):
-        self.__dict__ = state
-
-    def __deepcopy__(self, memo):
-        print(self.__class__.__name__)
-        copy_obj = self.__class__(in_value=None)
-        copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
-        return copy_obj
-
 
     def get_block_names(self)->List[str]:
         """get_block_names
@@ -130,11 +96,14 @@ class _general_gromos_file():
         None
 
         """
+        #"todo: rework"
         if(block and not (blocktitle or content)):
             if verbose:
                 print("import block from " + block.name)
             blocktitle = block.name
+            content = {}
             setattr(self, blocktitle, block)  #modern way
+            
 
         elif(blocktitle != None and content != None):
             #if blocktitle in self._block_names:
@@ -148,7 +117,7 @@ class _general_gromos_file():
                         content = {k.split(" ")[0]: v for k, v in content.items()}
                         # Required for add_block
                         ##For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
-                        from pygromos.files.simulation_parameters.imd import Imd
+                        from pygromos.files.imd import Imd
                         from pygromos.files.topology.top import Top
                         from pygromos.files.blocks import imd_blocks, topology_blocks
 
@@ -222,3 +191,36 @@ class _general_gromos_file():
         self.path = out_path
 
         return out_path
+
+
+class _general_gromos_trajectory_file():
+
+    def __init__(self, input:str, every_step:int=1):
+        if isinstance(input, str):
+            if (not os.path.exists(input)):
+                raise IOError("Could not find File: ", input)
+
+            self._orig_file_path = input
+
+            self._blocks = self.read_file(every_step)
+            self._blocksset_names = list(self._blocks.keys())
+            [setattr(self, key, value) for key, value in self._blocks.items()]
+            del self._blocks
+        else:
+            raise ValueError("The given type of input could not be translated in "+str(__class__)+".__init__")
+
+        def read_file(self, every_step: int = 1) -> Dict[str, any]:
+            """read_file
+
+                give back the content. WARNING DEAPRECEATED.
+            Warnings
+            --------
+                DEAPRECEATED
+
+            Returns
+            -------
+            Dict[str, any]
+                key is the block name of the gromos file, any is the content of a block
+            """
+            print("Begin read in of file: " + self._orig_file_path)
+            raise NotImplementedError("The read in parser function for general gromos Files is not implemented yet!")

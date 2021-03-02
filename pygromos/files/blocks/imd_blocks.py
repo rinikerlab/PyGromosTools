@@ -2,14 +2,14 @@ import warnings
 from numbers import Number
 from typing import List, Dict
 
-from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
+from pygromos.files.blocks._general_blocks import TITLE, TIMESTEP
 
 # forward declarations
-TITLE: TITLE = TITLE
-
+TITLE:TITLE = TITLE
 
 class _generic_imd_block(_generic_gromos_block):
+
     name = "genericBlock"
     _order: List[List[str]]  # contains the ordering of all fields in a block
 
@@ -31,36 +31,29 @@ class _generic_imd_block(_generic_gromos_block):
                     attribute = self.__getattribute__(element)
 
                     try:
-                        if isinstance(attribute, (str, Number, bool)):  # One element field
-                            if(isinstance(attribute, bool)):
-                                attribute = int(attribute)
-                            elif (isinstance(attribute, float)):  # supress scientific notation for floats!
+                        if isinstance(attribute, (str, Number)):  # One element field
+                            if (isinstance(attribute, float)):  # supress scientific notation for floats!
                                 attribute = format(attribute, "f")
                             result += str(attribute) + self.field_seperator
-                        elif isinstance(attribute, List) and all(
-                                [isinstance(x, (str, Number)) for x in attribute]):  # list content
+                        elif isinstance(attribute, List) and all([isinstance(x, (str, Number)) for x in attribute]):  # list content
                             if (all([isinstance(x, str) for x in attribute])):
                                 result += self.field_seperator.join(attribute) + self.field_seperator
                             elif (all([isinstance(x, Number) for x in attribute])):
                                 if (isinstance(attribute[0], float)):
-                                    result += self.field_seperator.join(
-                                        map(lambda x: format(x, "f"), attribute)) + self.field_seperator
+                                    result += self.field_seperator.join(map(lambda x: format(x, "f"), attribute)) + self.field_seperator
                                 else:
                                     result += self.field_seperator.join(map(str, attribute)) + self.field_seperator
                             else:
-                                raise ValueError(
-                                    "could not Interpret list:  " + str(element) + "\t\n" + str(attribute) + "\nEOF\n")
+                                raise ValueError("could not Interpret list:  " + str(element) + "\t\n" + str(attribute) + "\nEOF\n")
                         elif isinstance(attribute, List) and all([isinstance(x, List) for x in attribute]):  # matrices
                             pre_parsed_rows = map(lambda x: self.field_seperator.join(map(str, x)), attribute)
-                            result += (self.line_seperator + self.field_seperator).join(
-                                pre_parsed_rows) + self.field_seperator
+                            result += (self.line_seperator + self.field_seperator).join(pre_parsed_rows) + self.field_seperator
                         else:
                             result += (self.line_seperator + self.field_seperator).join(
                                 map(self.field_seperator.join, attribute)) + self.field_seperator
                     except:
                         raise ValueError(
-                            "Could not convert attribute " + str(
-                                element) + " to string!\n value of attribute was: \n" + str(attribute) + "\nEOF\n")
+                            "Could not convert attribute " + str(element) + " to string!\n value of attribute was: \n" + str(attribute) + "\nEOF\n")
 
                 result += self.line_seperator
         result += "END\n"
@@ -85,15 +78,15 @@ class SYSTEM(_generic_imd_block):
     name: str = "SYSTEM"
 
     # fields
-    NPM: int  # number of Solute Molecules
-    NSM: int  # number of Solvent Molecules
+    NPM: int = 0  # number of Solute Molecules
+    NSM: int = 0  # number of Solvent Molecules
 
     _order = [[["NPM", "NSM"]]]
 
-    def __init__(self, NPM:int, NSM:int):
+    def __init__(self, NPM, NSM):
         super().__init__(used=True)
-        self.NPM = int(NPM)
-        self.NSM = int(NSM)
+        self.NPM = NPM
+        self.NSM = NSM
 
 
 class STEP(_generic_imd_block):
@@ -121,12 +114,11 @@ class STEP(_generic_imd_block):
 
     _order = [[["NSTLIM", "T", "DT"]]]
 
-    def __init__(self, NSTLIM:int, T:float, DT:float):
+    def __init__(self, NSTLIM, T, DT):
         super().__init__(used=True)
-        self.NSTLIM = int(NSTLIM)
-        self.T = float(T)
-        self.DT = float(DT)
-
+        self.NSTLIM = NSTLIM
+        self.T = T
+        self.DT = DT
 
 class NEW_REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
@@ -160,7 +152,7 @@ class NEW_REPLICA_EDS(_generic_imd_block):
     REEDS: bool
 
     NRES: int
-    NEOFF: int
+    NEOFF:int
     NUMSTATES: int
 
     RES: List[float]
@@ -170,29 +162,28 @@ class NEW_REPLICA_EDS(_generic_imd_block):
     NREQUIL: int
     EDS_STAT_OUT: int
     CONT: bool
-    PERIODIC: int
+    PERIODIC:int
 
     _order = [[["REEDS"], ["NRES", "NUMSTATES", "NEOFF"], ["RES(1 ... NRES)"],
                ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT", "PERIODIC"]]]
 
-    def __init__(self, REEDS: bool, NRES: int, NUMSTATES: int, NEOFF: int, RES: List[float], EIR: List[List[float]],
-                 NRETRIAL: int, NREQUIL: int,
-                 EDS_STAT_OUT: int, CONT: bool, PERIODIC: int):
+    def __init__(self, REEDS: bool, NRES: int, NUMSTATES: int, NEOFF:int, RES: List[float], EIR: List[List[float]], NRETRIAL: int, NREQUIL: int,
+                 EDS_STAT_OUT: int, CONT: bool, PERIODIC:int):
         super().__init__(used=True)
-        self.REEDS = bool(REEDS)
+        self.REEDS = REEDS
 
-        self.NRES = int(NRES)
-        self.NEOFF = int(NEOFF)
-        self.NUMSTATES = int(NUMSTATES)
+        self.NRES = NRES
+        self.NEOFF = NEOFF
+        self.NUMSTATES = NUMSTATES
 
-        self.RES = list(RES)
-        self.EIR = list(EIR)
+        self.RES = RES
+        self.EIR = EIR
 
-        self.NRETRIAL = int(NRETRIAL)
-        self.NREQUIL = int(NREQUIL)
-        self.CONT = bool(CONT)
-        self.EDS_STAT_OUT = int(EDS_STAT_OUT)
-        self.PERIODIC = int(PERIODIC)
+        self.NRETRIAL = NRETRIAL
+        self.NREQUIL = NREQUIL
+        self.CONT = CONT
+        self.EDS_STAT_OUT = EDS_STAT_OUT
+        self.PERIODIC = PERIODIC
 
 
 class REPLICA_EDS(_generic_imd_block):
@@ -214,8 +205,7 @@ class REPLICA_EDS(_generic_imd_block):
     _order = [[["REEDS"], ["NRES", "NUMSTATES"], ["RES(1 ... NRES)"],
                ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT"]]]
 
-    def __init__(self, REEDS: bool, NRES: int, NUMSTATES: int, RES: List[float], EIR: List[List[float]], NRETRIAL: int,
-                 NREQUIL: int,
+    def __init__(self, REEDS: bool, NRES: int, NUMSTATES: int, RES: List[float], EIR: List[List[float]], NRETRIAL: int, NREQUIL: int,
                  EDS_STAT_OUT: int, CONT: bool):
         """REPLICA_EDS Block
 
@@ -270,6 +260,7 @@ class OLD_REPLICA_EDS(_generic_imd_block):
                ["RES(1 ... NRES)"], ["RETS(1 ... NRES)"], ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
 
     def __init__(self, NATOM, NRES, RET, ALPHLJ, ALPHCRF, NUMSTATES, RES, RETS, EIR, NRETRIAL, NREQUIL, CONT):
+
         super().__init__(used=True)
         self.name = "REPLICA_EDS"
         self.NATOM = NATOM
@@ -307,9 +298,8 @@ class BOUNDCOND(_generic_imd_block):
 
     def __init__(self, NTB: int, NDFMIN: int):
         super().__init__(used=True)
-        self.NTB = int(NTB)
-        self.NDFMIN = int(NDFMIN)
-
+        self.NTB = NTB
+        self.NDFMIN = NDFMIN
 
 class STOCHDYN(_generic_imd_block):
     """Stochastic Dynamics block
@@ -331,33 +321,60 @@ class STOCHDYN(_generic_imd_block):
 
     name: str = "STOCHDYN"
 
-    NTSD: int
-    NTFR: int
-    NSFR: int
-    NBREF: int
-    RCUTF: float
-    CFRIC: float
-    TEMPSD: float
+    NTSD:    int
+    NTFR:    int
+    NSFR:    int
+    NBREF:   int
+    RCUTF:   float
+    CFRIC:   float
+    TEMPSD:  float
 
     _order = [[["NTSD", "NTFR", "NSFR", "NBREF", "RCUTF", "CFRIC", "TEMPSD"]]]
 
-    def __init__(self,
-                 NTSD: int,
-                 NTFR: int,
-                 NSFR: int,
-                 NBREF: int,
-                 RCUTF: float,
-                 CFRIC: float,
-                 TEMPSD: float):
+    def __init__(self, 
+                NTSD:    int,
+                NTFR:    int,
+                NSFR:    int,
+                NBREF:   int,
+                RCUTF:   float,
+                CFRIC:   float,
+                TEMPSD:  float):
         super().__init__(used=True)
-        self.NTSD = int(NTSD)
-        self.NTFR = int(NTFR)
-        self.NSFR =int(NSFR)
-        self.NBREF = int(NBREF)
-        self.RCUTF = float(RCUTF)
-        self.CFRIC = float(CFRIC)
-        self.TEMPSD = float(TEMPSD)
+        self.NTSD = NTSD
+        self.NTFR = NTFR
+        self.NSFR = NSFR
+        self.NBREF = NBREF
+        self.RCUTF = RCUTF
+        self.CFRIC = CFRIC
+        self.TEMPSD = TEMPSD
 
+class ROTTRANS(_generic_imd_block):
+    """Roto-translational block
+
+        This block is for roto-translational constraints.
+        Note: use either centre of mass removal or roto-translational constraints but not both!
+
+    Attributes
+    ----------
+    RTC: int
+        turn roto-translational constraints on (1)
+    RTCLAST: int
+        last atom of subset to be roto-translationally constrained
+    """
+
+    name: str = "ROTTRANS"
+
+    RTC:     int
+    RTCLAST: int
+
+    _order = [[["RTC", "RTCLAST"]]]
+
+    def __init__(self, 
+                RTC:     int,
+                RTCLAST: int):
+        super().__init__(used=True)
+        self.RTC = RTC
+        self.RTCLAST = RTCLAST
 
 class PERTURBATION(_generic_imd_block):
     """Pertubation Block
@@ -414,8 +431,7 @@ class PERTURBATION(_generic_imd_block):
     _order = [[["NTG", "NRDGL", "RLAM", "DLAMT"],
                ["ALPHLJ", "ALPHC", "NLAM", "NSCALE"]]]
 
-    def __init__(self, NTG: int, NRDGL: int, RLAM: float, DLAMT: float, ALPHLJ: float, ALPHC: float, NLAM: int,
-                 NSCALE: int):
+    def __init__(self, NTG: int, NRDGL: int, RLAM:float, DLAMT:float, ALPHLJ:float, ALPHC:float, NLAM:int, NSCALE:int):
         super().__init__(used=True)
         self.NTG = int(NTG)
         self.NRDGL = int(NRDGL)
@@ -446,24 +462,11 @@ class PRECALCLAM(_generic_imd_block):
 
     _order = [[["NRLAM", "MINLAM", "MAXLAM"]]]
 
-    def __init__(self, NRLAM: int, MINLAM: float, MAXLAM: float):
-        """
-            Can be used to caluclate multiple extra lambda values
-        Parameters
-        ----------
-        NRLAM: int
-                0  : off
-                >1 : precalculating energies for NRLAM extra lambda values
-        MINLAM
-              between 0 and 1: minimum lambda value to precalculate energies
-        MAXLAM
-            between MINLAM and 1: maximum lambda value to precalculate energies
-        """
+    def __init__(self, NRLAM: int,MINLAM:float, MAXLAM:float):
         super().__init__(used=True)
-        self.NRLAM = int(NRLAM)
-        self.MINLAM = float(MINLAM)
-        self.MAXLAM = float(MAXLAM)
-
+        self.NRLAM = NRLAM
+        self.MINLAM = MINLAM
+        self.MAXLAM = MAXLAM
 
 class MULTIBATH(_generic_imd_block):
     """MULTIBATH Block
@@ -507,20 +510,19 @@ class MULTIBATH(_generic_imd_block):
     _order: List[List[str]] = [[["ALGORITHM"], ["NBATHS"], ["TEMP0(1 ... NBATHS)", "TAU(1 ... NBATHS)"],
                                 ["DOFSET"], ["LAST(1 ... DOFSET)", "COMBATH(1 ... DOFSET)", "IRBATH(1 ... DOFSET)"]]]
 
-    def __init__(self, ALGORITHM: int, NBATHS: int, TEMP0: List[float], TAU: List[float], DOFSET: int, LAST: List[int],
-                 COMBATH: List[int],
+    def __init__(self, ALGORITHM: int, NBATHS: int, TEMP0: List[float], TAU: List[float], DOFSET: int, LAST: List[int], COMBATH: List[int],
                  IRBATH: List[int]):
 
         super().__init__(used=True)
-        self.ALGORITHM = int(ALGORITHM)
-        self.NBATHS = int(NBATHS)
-        self.TEMP0 = list(TEMP0)
-        self.TAU = list(TAU)
-        self.DOFSET = int(DOFSET)
-        self.LAST = list(LAST)
-        self.COMBATH = list(COMBATH)
-        self.IRBATH = list(IRBATH)
-
+        self.ALGORITHM = ALGORITHM
+        self.NBATHS = NBATHS
+        self.TEMP0 = TEMP0
+        self.TAU = TAU
+        self.DOFSET = DOFSET
+        self.LAST = LAST
+        self.COMBATH = COMBATH
+        self.IRBATH = IRBATH
+        
         if not len(TEMP0) == len(TAU):
             warnings.warn("Warning in MULTIBATH block. There must be the same number of TEMP0 and TAU parameters")
         if not len(TEMP0) == int(NBATHS):
@@ -534,8 +536,7 @@ class MULTIBATH(_generic_imd_block):
         if not len(LAST) == len(IRBATH):
             warnings.warn("Warning in MULTIBATH block. There must be the same number of IRBATH and LAST parameters")
 
-    def adapt_multibath(self, last_atoms_bath: Dict[int, int], algorithm: int = None, T: (float, List[float]) = None,
-                        TAU: float = None) -> None:
+    def adapt_multibath(self, last_atoms_bath: Dict[int, int], algorithm: int = None, T: (float, List[float]) = None, TAU: float = None) -> None:
         """ adapt_multibath
                 This function is adding each atom set into a single multibath.
                 #TODO implementation not correct with com_bath and irbath! Works for super simple cases though
@@ -577,19 +578,18 @@ class MULTIBATH(_generic_imd_block):
             self.ALGORITHM = algorithm
 
         # TODO implementation not correct with com_bath and irbath! Works for super simple cases though
-        #print("MBATH")
-        #print(last_atoms_bath)
-        #print("\n")
-        #print(last_atoms_bath.values())
-        #print("\n")
-        #print(set(last_atoms_bath.values()))
+        print(last_atoms_bath)
+        print("\n")
+        print(last_atoms_bath.values())
+        print("\n")
+        print(set(last_atoms_bath.values()))
         self.NBATHS = len(set(last_atoms_bath.values()))
         self.DOFSET = len(last_atoms_bath)
         self.LAST = [last_atom for last_atom in last_atoms_bath]
         self.COMBATH = [last_atoms_bath[last_atom] for last_atom in last_atoms_bath]
         self.IRBATH = [last_atoms_bath[last_atom] for last_atom in last_atoms_bath]
 
-        if (self.NBATHS != len(self.TEMP0)):
+        if (self.NBATHS > len(self.TEMP0)):
             self.TEMP0 = [self.TEMP0[0] for x in range(self.NBATHS)]
             self.TAU = [self.TAU[0] for x in range(self.NBATHS)]
 
@@ -607,8 +607,7 @@ class MULTIBATH(_generic_imd_block):
         result += "  " + str(self.DOFSET) + "\n"
         result += "# " + "\t".join(map(str, self._order[0][4])) + "\n"
         for index in range(len(self.LAST)):
-            result += "  " + str(self.LAST[index]) + "\t\t" + str(self.COMBATH[index]) + "\t" + str(
-                self.IRBATH[index]) + "\n"
+            result += "  " + str(self.LAST[index]) + "\t\t" + str(self.COMBATH[index]) + "\t" + str(self.IRBATH[index]) + "\n"
         result += "END\n"
         return result
 
@@ -638,19 +637,17 @@ class PRESSURESCALE(_generic_imd_block):
     SEMIANISOTROPIC: List[int]
     PRES0: List[List[float]]
 
-    _order = [
-        [["COUPLE", "SCALE", "COMP", "TAUP", "VIRIAL"], ["SEMIANISOTROPIC COUPLINGS(X, Y, Z)"], ["PRES0(1...3,1...3)"]]]
+    _order = [[["COUPLE", "SCALE", "COMP", "TAUP", "VIRIAL"], ["SEMIANISOTROPIC COUPLINGS(X, Y, Z)"], ["PRES0(1...3,1...3)"]]]
 
-    def __init__(self, COUPLE: int, SCALE: int, COMP: float, TAUP: float, VIRIAL: int, SEMIANISOTROPIC: List[int],
-                 PRES0: List[List[float]]):
+    def __init__(self, COUPLE:int, SCALE:int, COMP:float, TAUP:float, VIRIAL:int, SEMIANISOTROPIC:List[int], PRES0:List[List[float]]):
         super().__init__(used=True)
-        self.COUPLE = int(COUPLE)
-        self.SCALE = int(SCALE)
-        self.COMP = float(COMP)
-        self.TAUP = float(TAUP)
-        self.VIRIAL = int(VIRIAL)
-        self.SEMIANISOTROPIC = list(SEMIANISOTROPIC)
-        self.PRES0 = list(PRES0)
+        self.COUPLE = COUPLE
+        self.SCALE = SCALE
+        self.COMP = COMP
+        self.TAUP = TAUP
+        self.VIRIAL = VIRIAL
+        self.SEMIANISOTROPIC = SEMIANISOTROPIC
+        self.PRES0 = PRES0
 
 
 class FORCE(_generic_imd_block):
@@ -684,8 +681,7 @@ class FORCE(_generic_imd_block):
 
     _order = [[["BONDS", "ANGLES", "IMPROPER", "DIHEDRAL", "ELECTROSTATIC", "VDW"], ["NEGR", "NRE"]]]
 
-    def __init__(self, BONDS: bool, ANGLES: bool, IMPROPER: bool, DIHEDRAL: bool, ELECTROSTATIC: bool, VDW: bool,
-                 NEGR: int, NRE: List[int]):
+    def __init__(self, BONDS: bool, ANGLES: bool, IMPROPER: bool, DIHEDRAL: bool, ELECTROSTATIC: bool, VDW: bool, NEGR: int, NRE: List[int]):
         """
         Args:
             BONDS:
@@ -698,19 +694,14 @@ class FORCE(_generic_imd_block):
             NRE (list):
         """
         super().__init__(used=True)
-        self.BONDS = bool(BONDS)
-        self.ANGLES = bool(ANGLES)
-        self.IMPROPER = bool(IMPROPER)
-        self.DIHEDRAL = bool(DIHEDRAL)
-        self.ELECTROSTATIC = bool(ELECTROSTATIC)
-        self.VDW = bool(VDW)
-        #dirty hack:
-        if(isinstance(NEGR, list)):
-            self.NEGR = int(NEGR[0])
-            self.NRE = list(map(int, NEGR[1:]+NRE))
-        else:
-            self.NEGR = int(NEGR)
-            self.NRE = NRE
+        self.BONDS = BONDS
+        self.ANGLES = ANGLES
+        self.IMPROPER = IMPROPER
+        self.DIHEDRAL = DIHEDRAL
+        self.ELECTROSTATIC = ELECTROSTATIC
+        self.VDW = VDW
+        self.NEGR = NEGR
+        self.NRE = NRE
 
     def adapt_energy_groups(self, residues: Dict[str, Dict[int, int]]):
         """adapt_energy_groups
@@ -727,16 +718,23 @@ class FORCE(_generic_imd_block):
 
         """
 
+        print(residues)
+
         # set Energy Group ammount
         self.NEGR = len(residues)  # total ammount of Engergy groups
-        if ("SOLV" in residues and len(residues["SOLV"]) == 0):
+        if("SOLV" in residues and residues["SOLV"] == 0):
             self.NEGR -= 1
+        # if("WAT" in residues):
+        #     wat_key = list(residues["WAT"].keys())[0]
+        #     if(len(residues["WAT"]) == 1):
+        #         self.NEGR += (int)(residues["WAT"][wat_key] / 3) -1
+        #     else:
+        #         self.NEGR += len(residues["WAT"]) -1
 
         # make residues sortable,
         dict_m = {}
-        solvent_names = ["WAT", "SOLV"]
         for x in sorted(residues):
-            if (type(residues[x]) == dict and not x in dict_m and not x in solvent_names):
+            if (type(residues[x]) == dict and not x in dict_m and not x =="WAT"):
                 dict_m.update(residues[x])
             elif (x in dict_m and not x == "SOLV" and not x == "SOL"):
                 raise Exception("Found mutliple residues for the same residue id!")
@@ -750,12 +748,17 @@ class FORCE(_generic_imd_block):
             self.NRE.append(count)
 
         # add solvents to NRE, but only if there are solvents
-        present_solvents = [x for x in residues if (x in solvent_names)]
-        if (len(present_solvents) > 0):
-            if ([isinstance(residues[x], dict) and residues[x] != 0 for x in present_solvents]):
-                self.NRE.append(sum(residues["SOLV"].values()) + count)
-            elif ([isinstance(residues[x], int) and residues[x] != 0 for x in present_solvents]):
-                self.NRE.append(residues["SOLV"] + count)
+        if ("SOLV" in residues and residues["SOLV"] != 0):
+            self.NRE.append(residues["SOLV"] + count)
+
+        if ("WAT" in residues and residues["WAT"] != 0):
+            self.NRE.append(sum(list(residues["WAT"].values()))+ count)
+
+        # if("WAT" in residues and residues["WAT"][wat_key] != 0):
+        #     self.NRE = self.NRE[:-1]
+        #     lim = self.NRE[len(self.NRE)-1] + residues["WAT"][wat_key]+1
+        #     for i in range(self.NRE[len(self.NRE)-1]+3, lim, 3):
+        #         self.NRE.append(i)
 
 
 class CONSTRAINT(_generic_imd_block):
@@ -777,13 +780,13 @@ class CONSTRAINT(_generic_imd_block):
 
     NTC: int
     NTCP: int
-    NTCP0: float
+    NTCP0: int
     NTCS: int
-    NTCS0: float
+    NTCS0: int
 
     _order = [[["NTC"], ["NTCP", "NTCP0(1)"], ["NTCS", "NTCS0(1)"]]]
 
-    def __init__(self, NTC:int, NTCP:int, NTCP0:float, NTCS:int, NTCS0:float):
+    def __init__(self, NTC, NTCP, NTCP0, NTCS, NTCS0):
         """
         Args:
             NTC:
@@ -793,11 +796,11 @@ class CONSTRAINT(_generic_imd_block):
             NTCS0:
         """
         super().__init__(used=True)
-        self.NTC = int(NTC)
-        self.NTCP = int(NTCP)
-        self.NTCP0 = float(NTCP0)
-        self.NTCS = int(NTCS)
-        self.NTCS0 = float(NTCS0)
+        self.NTC = NTC
+        self.NTCP = NTCP
+        self.NTCP0 = NTCP0
+        self.NTCS = NTCS
+        self.NTCS0 = NTCS0
 
 
 class PAIRLIST(_generic_imd_block):
@@ -837,8 +840,7 @@ class PAIRLIST(_generic_imd_block):
 
     _order = [[["ALGORITHM", "NSNB", "RCUTP", "RCUTL", "SIZE", "TYPE"]]]
 
-    def __init__(self, ALGORITHM: int, NSNB: int, RCUTP: float, RCUTL: float, SIZE: (str or float),
-                 TYPE: (str or bool)):
+    def __init__(self, ALGORITHM: int, NSNB: int, RCUTP: float, RCUTL: float, SIZE: (str or float), TYPE: (str or bool)):
         """
         Args:
             ALGORITHM:
@@ -849,10 +851,10 @@ class PAIRLIST(_generic_imd_block):
             TYPE:
         """
         super().__init__(used=True)
-        self.ALGORITHM = int(ALGORITHM)
-        self.NSNB = int(NSNB)
-        self.RCUTP = float(RCUTP)
-        self.RCUTL = float(RCUTL)
+        self.ALGORITHM = ALGORITHM
+        self.NSNB = NSNB
+        self.RCUTP = RCUTP
+        self.RCUTL = RCUTL
         self.SIZE = SIZE
         self.TYPE = TYPE
 
@@ -968,12 +970,40 @@ class NONBONDED(_generic_imd_block):
                ["NKX", "NKY", "NKZ", "KCUT"], ["NGX", "NGY", "NGZ", "NASORD", "NFDORD", "NALIAS", "NSPORD"],
                ["NQEVAL", "FACCUR", "NRDGRD", "NWRGRD"], ["NLRLJ", "SLVDNS"]]]
 
-    def __init__(self, NLRELE: int, APPAK: float, RCRF: float, EPSRF: float, NSLFEXCL: bool, NSHAPE: float,
-                 ASHAPE: float, NA2CLC: int, TOLA2: float,
+    def __init__(self, NLRELE: int, APPAK: float, RCRF: float, EPSRF: float, NSLFEXCL: bool, NSHAPE: float, ASHAPE: float, NA2CLC: int, TOLA2: float,
                  EPSLS: float,
                  NKX: float, NKY: float, NKZ: float, KCUT: float, NGX: float, NGY: float, NGZ: float, NASORD: int,
-                 NFDORD: int, NALIAS: float, NSPORD: float, NQEVAL: float, FACCUR: float, NRDGRD: bool, NWRGRD: bool,
-                 NLRLJ: bool, SLVDNS: float):
+                 NFDORD: int, NALIAS: float, NSPORD: float, NQEVAL: float, FACCUR: float, NRDGRD: bool, NWRGRD: bool, NLRLJ: bool, SLVDNS: float):
+        """
+        Args:
+            NLRELE:
+            APPAK:
+            RCRF:
+            EPSRF:
+            NSLFEXCL:
+            NSHAPE:
+            ASHAPE:
+            NA2CLC:
+            TOLA2:
+            EPSLS:
+            NKX:
+            NKY:
+            NKZ:
+            KCUT:
+            NGX:
+            NGY:
+            NGZ:
+            NASORD:
+            NFDORD:
+            NALIAS:
+            NSPORD:
+            NQEVAL:
+            FACCUR:
+            NRDGRD:
+            NWRGRD:
+            NLRLJ:
+            SLVDNS:
+        """
         super().__init__(used=True)
         self.NLRELE = NLRELE
         self.APPAK = APPAK
@@ -1067,8 +1097,7 @@ class INITIALISE(_generic_imd_block):
 
     _order = [[["NTIVEL", "NTISHK", "NTINHT", "NTINHB"], ["NTISHI", "NTIRTC", "NTICOM"], ["NTISTI"], ["IG", "TEMPI"]]]
 
-    def __init__(self, NTIVEL: bool, NTISHK: int, NTINHT: bool, NTINHB: bool, NTISHI: bool, NTIRTC: bool, NTICOM: int,
-                 NTISTI: bool, IG: int,
+    def __init__(self, NTIVEL: bool, NTISHK: int, NTINHT: bool, NTINHB: bool, NTISHI: bool, NTIRTC: bool, NTICOM: int, NTISTI: bool, IG: int,
                  TEMPI: float):
         """
         Args:
@@ -1146,8 +1175,7 @@ class EDS(_generic_imd_block):
 
     _order = [[["EDS"], ["ALPHLJ", "ALPHC"], ["FUNCTIONAL FORM"], ["NUMSTATES"], ["S"], ["EIR"]]]
 
-    def __init__(self, NUMSTATES: int, S: float, EIR: List[float], EDS: bool = 1, ALPHLJ: float = 0.0,
-                 ALPHC: float = 0.0, FUNCTIONAL: int = 1):
+    def __init__(self, NUMSTATES: int, S: float, EIR: List[float], EDS: bool = 1, ALPHLJ: float = 0.0, ALPHC: float = 0.0, FUNCTIONAL: int = 1):
         super().__init__(used=True)
         self.name = "EDS"
         self.EDS = EDS
@@ -1176,8 +1204,7 @@ class DISTANCERES(_generic_imd_block):
 
     _order = [[["NTDIR", "NTDIRA", "CDIR", "DIR0", "TAUDIR", "FORCESCALE", "VDIR", "NTWDIR"]]]
 
-    def __init__(self, NTDIR: int, NTDIRA: int, CDIR: int, DIR0: int, TAUDIR: int, FORCESCALE: int, VDIR: int,
-                 NTWDIR: int):
+    def __init__(self, NTDIR: int, NTDIRA: int, CDIR: int, DIR0: int, TAUDIR: int, FORCESCALE: int, VDIR: int, NTWDIR: int):
         """
         Args:
             NTDIR:
@@ -1313,8 +1340,7 @@ class WRITETRAJ(_generic_imd_block):
 
     _order = [[["NTWX", "NTWSE", "NTWV", "NTWF", "NTWE", "NTWG", "NTWB"]]]
 
-    def __init__(self, NTWX: int = 0, NTWSE: int = 0, NTWV: int = 0, NTWF: int = 0, NTWE: int = 0, NTWG: int = 0,
-                 NTWB: int = 0):
+    def __init__(self, NTWX: int = 0, NTWSE: int = 0, NTWV: int = 0, NTWF: int = 0, NTWE: int = 0, NTWG: int = 0, NTWB: int = 0):
         """
         Args:
             NTWX:
@@ -1326,13 +1352,13 @@ class WRITETRAJ(_generic_imd_block):
             NTWB:
         """
         super().__init__(used=True)
-        self.NTWX = int(NTWX)
-        self.NTWSE = int(NTWSE)
-        self.NTWV = int(NTWV)
-        self.NTWF = int(NTWF)
-        self.NTWE = int(NTWE)
-        self.NTWG = int(NTWG)
-        self.NTWB = int(NTWB)
+        self.NTWX = NTWX
+        self.NTWSE = NTWSE
+        self.NTWV = NTWV
+        self.NTWF = NTWF
+        self.NTWE = NTWE
+        self.NTWG = NTWG
+        self.NTWB = NTWB
 
 
 class AMBER(_generic_imd_block):
@@ -1430,21 +1456,19 @@ class LAMBDA(_generic_imd_block):
     """
     name: str = "LAMBDA"
 
-    NTIL: int
-    NTLI: List[int]
-    NILG1: List[int]
-    NILG2: List[int]
-    ALI: List[float]
-    BLI: List[float]
-    CLI: List[float]
-    DLI: List[float]
-    ELI: List[float]
+    NTIL:   int
+    NTLI:   List[int]
+    NILG1:  List[int]
+    NILG2:  List[int]
+    ALI:    List[float]
+    BLI:    List[float]
+    CLI:    List[float]
+    DLI:    List[float]
+    ELI:    List[float]
 
-    _order: List[List[str]] = [[["NTIL"], ["NTLI(1..)", "NILG1(1..)", "NILG2(1..)", "ALI(1..)", "BLI(1;;)", "CLI(1;;)",
-                                           "DLI(1;;)", "ELI(1;;)"]]]
+    _order: List[List[str]] = [[["NTIL"], ["NTLI(1..)", "NILG1(1..)", "NILG2(1..)", "ALI(1..)", "BLI(1;;)", "CLI(1;;)", "DLI(1;;)", "ELI(1;;)"]]]
 
-    def __init__(self, NTIL: int, NTLI: List[int], NILG1: List[int], NILG2: List[int], ALI: List[float],
-                 BLI: List[float], CLI: List[float], DLI: List[float], ELI: List[float]):
+    def __init__(self, NTIL: int, NTLI: List[int], NILG1: List[int], NILG2: List[int], ALI: List[float], BLI: List[float], CLI: List[float], DLI: List[float], ELI: List[float]):
         super().__init__(used=True)
         self.NTIL = NTIL
         self.NTLI = NTLI
@@ -1470,32 +1494,3 @@ class LAMBDA(_generic_imd_block):
             warnings.warn("Warning in LAMBDA Block. There must be the same number of NTLI and DLI parameters.")
         if not len(NTLI) == len(ELI):
             warnings.warn("Warning in LAMBDA Block. There must be the same number of NTLI and ELI parameters.")
-
-class ROTTRANS(_generic_imd_block):
-    """Roto-translational block
-
-        This block is for roto-translational constraints.
-        Note: use either centre of mass removal or roto-translational constraints but not both!
-
-    Attributes
-    ----------
-    RTC: int
-        turn roto-translational constraints on (1)
-    RTCLAST: int
-        last atom of subset to be roto-translationally constrained
-    """
-
-    name: str = "ROTTRANS"
-
-    RTC:     int
-    RTCLAST: int
-
-    _order = [[["RTC", "RTCLAST"]]]
-
-    def __init__(self,
-                RTC:     int,
-                RTCLAST: int):
-        super().__init__(used=True)
-        self.RTC = RTC
-        self.RTCLAST = RTCLAST
-

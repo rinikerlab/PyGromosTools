@@ -110,19 +110,6 @@ class POSITION(_iterable_gromos_block):
         super().__init__(used=True, name="POSITION")
         self.content = content
 
-class POSRESSPEC(_iterable_gromos_block):
-    """
-        POSITION
-
-        Parameters
-        ----------
-        content: List[atomP]
-            every element in this list is of atom position obj
-
-    """
-    def __init__(self, content: List[atomP]):
-        super().__init__(used=True, name="POSRESSPEC")
-        self.content = content
 
 class VELOCITY(_iterable_gromos_block):
     """
@@ -225,7 +212,7 @@ class GENBOX(_generic_gromos_block):
 
     '''
 
-    def __init__(self, pbc: Pbc=Pbc(0), length: List[float] = [0.0,0.0,0.0], angles: List[float] = [0.0,0.0,0.0], euler: List[float] = [0.0,0.0,0.0], origin: List[float] = [0.0,0.0,0.0]):
+    def __init__(self, pbc: Pbc, length: List[float], angles: List[float], euler: List[float], origin: List[float]):
         '''
 
         Parameters
@@ -239,7 +226,7 @@ class GENBOX(_generic_gromos_block):
         '''
 
         super().__init__(used=True, name="GENBOX")
-        self._pbc = Pbc(pbc)
+        self._pbc = pbc
         self._length = length
         self._angles = angles
         self._euler = euler
@@ -308,26 +295,3 @@ class GENBOX(_generic_gromos_block):
         else:
             raise ValueError("origin must be List[float]")
 
-
-class PERTDATA(_generic_gromos_block):
-
-    content: float
-    def __init__(self, lam: float):
-        """
-           This block is used for lambda-sampling and gives the lambda value of the current coordinates.
-
-        Parameters
-        ----------
-        lambda_value: float
-            current lambda value
-        """
-        super(PERTDATA, self).__init__(name=__class__.__name__, used=True)
-        self.content = float(lam)
-        
-    @property
-    def lam(self)->float:
-        return self.content
-
-    @lam.setter
-    def lam(self, lam:float):
-        self.content = float(lam)

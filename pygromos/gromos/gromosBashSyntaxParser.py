@@ -31,7 +31,7 @@ class gromosBashSyntaxParser:
                     raise "multiplier does not match the number of arguments provided!"
                 else:
                     for mult, topo in zip(multiplier, args):
-                        command+= str(mult) + ":" + topo+" "
+                        command.append(str(mult) + ":" + topo)
             else:
                 command = str(multiplier) + ":" + args
         else:

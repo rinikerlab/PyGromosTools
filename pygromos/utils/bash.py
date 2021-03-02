@@ -17,7 +17,7 @@ from typing import List, Dict, Union
 #################################
 #   General functions:
 
-def wait_for_fileSystem(check_paths: (str, List[str]), regex_mode:bool=False, max_waiting_iterations: int = 1000, verbose: bool = False) -> bool:
+def wait_for_fileSystem(check_paths: (str, List[str]), regex_mode:bool=False, max_waiting_iterations: int = 100, verbose: bool = False) -> bool:
     """
     This function can be used to circumvent lsf lag times.
 
@@ -674,13 +674,6 @@ def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
 
     """
 
-    class dummyProcess:
-
-        def __init__(self, stdout, stderr, ret):
-            self.stdout = stdout
-            self.stderr = stderr
-            self.poll = lambda x: int(ret)
-
     if (type(command) == list):
         command = " ".join(command)
 
@@ -688,49 +681,16 @@ def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
 
     try:
         ret = os.popen(command)
-        print(ret)
     except Exception as err:
         raise OSError("could not execute bash command:\n  error: " + "\n\t".join(err.args) + "\n\t" + str(command) + "\n\tCommand returned: \t" + str(
             ret.read()))
 
     if (verbose): print("\t" + "\n\t".join(ret.readlines()) + "\n")
 
-    return dummyProcess(stdout=ret, stderr=[], ret=0)
-
-def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False):
-    #if(isinstance(command, str))
-    #    command = command.split(" ")
-    #if(verbose): print("submitting command: \n\t"+" ".join(command))
-
-    if(isinstance(command, list)):
-        command = " ".join(command)
-    if(verbose): print("\texecute command: \n\t"+command)
-
-    kwargs={}
-    if(isinstance(catch_STD, bool)):
-        kwargs.update({"stdout": sub.PIPE})
-    elif(isinstance(catch_STD, str)):
-        kwargs.update({"stdout": open(catch_STD, "w")})
+    return ret
 
 
-    p = sub.Popen(args = command, shell=True, stderr=sub.PIPE, env=os.environ.copy(), **kwargs)
-
-    #print(p, vars(p))
-    p.wait() # Wait for process to finish
-    p.terminate() # Make sure its terminated
-    r = p.poll()
-    if(r):   # Did an Error occure?
-        msg = "SubProcess Failed due to returncode: "+str(r)+"\n COMMAND: \n\t"+str(command)
-        msg += "\nSTDOUT:\n\t"
-        msg +=  "NONE" if(p.stdout is None) else "\n\t".join(map(str, p.stdout.readlines()))
-        msg += "\nSTDERR:\n\t"
-        msg += "NONE" if(p.stdout is None) else "\n\t".join(map(str, p.stderr.readlines()))
-        raise ChildProcessError(msg)
-    if(verbose): print("RETURN: ", r)
-
-    return p
-
-def execute_old(command: (str or List[str]), verbose: bool = False, ignore_return_code:bool=False, wait_fail=False, out_cnf_path:str=None) -> io.FileIO:
+def execute(command: (str or List[str]), verbose: bool = False, ignore_return_code:bool=False, wait_fail=False, out_cnf_path:str=None) -> io.FileIO:
     """execute
         this command executes a command on the os-layer. (e.g.: on linux a bash command)
 
@@ -800,6 +760,3 @@ def execute_old(command: (str or List[str]), verbose: bool = False, ignore_retur
     p.terminate()
     del p
     return ret_stdout
-
-def execute(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False):
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD)

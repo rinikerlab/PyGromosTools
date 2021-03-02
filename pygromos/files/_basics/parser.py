@@ -12,7 +12,6 @@ from typing import List, Dict
 from pygromos.files import blocks
 from pygromos.files.blocks import topology_blocks as tb
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
-import re
 
 blocks.TITLE("FUN")
 
@@ -310,41 +309,6 @@ def read_ptp(in_path:str)->Dict:
         for block in blocks:
             if (block == "TITLE"):
                 result_data.update({block:blocks[block]})
-            elif(block == "PERTATOMPARAM"):
-                field=0
-                comment = ""
-                subcontent = {}
-                perturbance_atoms = []
-                current_block = blocks[block]
-
-                for line in current_block:
-                    if("#" in line):
-                        comment = line
-                        continue
-                    else:
-                        if(field>0):
-                            if("" not in subcontent):
-                                header = ["NR", "RES", "NAME"]
-                                [header.extend(["IAC"+str(x), "MASS"+str(x), "CHARGE"+str(x)]) for x in range(1,3)]
-                                header += ["ALPHLJ", "ALPHCRF"]
-                                subcontent.update({"STATEATOMHEADER": header})
-                            state_line = {key:value for key, value in zip(header, line.split())}
-                            final_state_line = {key: state_line[key] for key in state_line if(not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
-
-                            states = {x:tb.pertubation_lam_state(IAC=int(state_line["IAC" + str(x)]),MASS=float(state_line["MASS" + str(x)]), CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
-
-                            final_state_line.update({"STATES":states})
-                            perturbance_atoms.append(final_state_line)
-
-                        elif(field==0):
-                            NJLA = int(line.strip())
-                            subcontent.update({"NJLA": NJLA,})
-                        elif(field==1):
-                            state_identifiers = line.split()
-                            subcontent.update({"STATEIDENTIFIERS":state_identifiers})
-                        field+=1
-                subcontent.update({"STATEATOMS":perturbance_atoms})
-                result_data.update({block:subcontent})
             elif(block == "MPERTATOM"):
                 field=0
                 comment = ""
@@ -366,7 +330,7 @@ def read_ptp(in_path:str)->Dict:
                             state_line = {key:value for key, value in zip(header, line.split())}
                             final_state_line = {key: state_line[key] for key in state_line if(not "IAC" in key and not "CHARGE" in key)}
 
-                            states = {x:tb.pertubation_eds_state(IAC=int(state_line["IAC" + str(x)]), CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 1 + subcontent["NPTB"])}
+                            states = {x:tb.pertubation_state(IAC=int(state_line["IAC"+str(x)]), CHARGE=float(state_line["CHARGE"+str(x)])) for x in range(1, 1+subcontent["NPTB"])}
 
                             final_state_line.update({"STATES":states})
 
@@ -415,8 +379,7 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
 
     """
 
-    known_blocks = {"TITLE", "TIMESTEP", "POSITION", "LATTICESHIFTS", "VELOCITY", "POSRESSPEC", "REFPOSITION", "GENBOX",
-                    "PERTDATA", "STOCHINT"}
+    known_blocks = {"TITLE", "TIMESTEP", "POSITION", "LATTICESHIFTS", "VELOCITY", "REFPOSITION", "GENBOX", "STOCHINT"}
     file = open(in_file_path, "r")
 
 
@@ -470,13 +433,23 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
             block = line.strip().split()[0]
         elif("END" == line.strip()):
             if(block in known_blocks):
-                if (block == "POSITION" or block == "POSRESSPEC" or block == "REFPOSITION"):
+                if (block == "POSITION"):
                     subblock = list(filter(lambda x: not "#" in x, map(lambda x: x.strip().split(), subblock)))
                     if (all(len(x) == 7 for x in subblock)):
                         field = [
                             blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]), yp=float(x[5]), zp=float(x[6])) for x in subblock]
-                        atom_P_block = getattr(blocks.coords, block)(field)
-                        data.update({block: atom_P_block})
+                        atom_P_block = blocks.coords.POSITION(field)
+                        data.update({"POSITION": atom_P_block})
+                    else:
+                        short_lines = [x for x in subblock if (len(x) != 7)]
+                        raise IOError("inconsistent Atom Position line lenghts (have to be =7 fields!). Problem in line: " + "\n\t".join(short_lines))
+                elif(block == "REFPOSITION"):
+                    subblock = list(filter(lambda x: not "#" in x, map(lambda x: x.strip().split(), subblock)))
+                    if (all(len(x) == 7 for x in subblock)):
+                        field = [
+                            blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]), yp=float(x[5]), zp=float(x[6])) for x in subblock]
+                        atom_P_block = blocks.coords.POSITION(field)
+                        data.update({"REFPOSITION": atom_P_block})
                     else:
                         short_lines = [x for x in subblock if (len(x) != 7)]
                         raise IOError("inconsistent Atom Position line lenghts (have to be =7 fields!). Problem in line: " + "\n\t".join(short_lines))
@@ -491,24 +464,12 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
                         short_lines = [x[0] for x in subblock if(len(x) != 7 )]
                         raise IOError("inconsistent Atom Velocities line lenghts (have to be =7 fields!). Problem in line: "+"\n\t".join(short_lines))
                 elif(block == "LATTICESHIFTS"):
-                    #inefficient and stupid... but necessary
-                    subblock1 = list(map(lambda x: re.findall(r"[\w]+",x.strip()), subblock))
-                    subblock2 = list(map(lambda x: [x.strip() for x in re.findall(r"[\W]+",x.strip())], subblock))
-                    subblock = []
-                    for number,sign in zip(subblock1, subblock2):
-                        if(len(sign) == 2):
-                            row = [number[0], sign[0]+number[1], sign[1]+number[2]]
-                        elif(len(sign)==3):
-                            row = [sign[0]+number[0], sign[1]+number[1], sign[2]+number[2]]
-                        else:
-                            raise Exception("This does not work! \n SIGN: "+ str(sign)+"\n Number: "+str(number))
-                        subblock.append(row)
-
+                    subblock = list(map(lambda x: x.strip().split(), subblock))
                     if(all(len(x) == 3 for x in subblock)):
                         content= list(map(lambda c: blocks.coords.lattice_shift(atomID=int(c[0]), x=int(c[1][0]), y=int(c[1][1]), z=int(c[1][2])), enumerate(subblock)))
                         data.update({"LATTICESHIFTS": blocks.coords.LATTICESHIFTS(content)})
                     else:
-                        short_lines = [str(x) for x in subblock if(len(x) != 3 )]
+                        short_lines = [x for x in subblock if(len(x) != 3 )]
                         raise IOError("inconsistent Atom LatticeShifts line lenghts (have to be =3 fields!). Problem in line: "+"\n\t".join(short_lines))
                 elif (block == "GENBOX"):
                     data.update({"GENBOX": _parse_GENBOX_block(subblock)})
@@ -531,8 +492,7 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
                         short_lines = [x[0] for x in subblock if(len(x) != 7 )]
                         raise IOError("inconsistent STOCHINT line lenghts (have to be =7 fields!). Problem in line: "+"\n\t".join(short_lines))
                
-                elif(block == "PERTDATA"):
-                    data.update({"PERTDATA": blocks.coords.PERTDATA(lam="\n".join(subblock).strip())})
+
                 elif(block == "TITLE"):
                     data.update({"TITLE": blocks.TITLE(content="\n".join(subblock))})
             else:
@@ -1015,6 +975,7 @@ def read_simple_trx(in_file_path:str, every_step:int=1, verbose:bool=True)->Dict
         data["TIMESTEP"][timestep].update(subblock)
     infile.close()
     return data
+
 
 def read_tre(in_file_path: str, every_step: int = 1, verbose: bool = True) -> Dict:
     """

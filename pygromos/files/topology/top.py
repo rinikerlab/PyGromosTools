@@ -4,17 +4,20 @@ Warnings: this CLASS IS NOT IMPLEMENTED!
 TODO:REWORK
 Description:
     in this lib, gromos topo file mainpulating functions are gathered
-Author: Marc Lehner, Benjamin Ries
+Author: Benjamin Schroeder
 """
 
 #imports
+from inspect import istraceback
 import warnings
+from typing import Dict, List, NamedTuple
 import math
 
 from pygromos.utils import bash as bash
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
 
+warnings.warn("Module topo-files is under Development and not entirely implemented!")
 
 #functions
 def make_topolog(input_arg, build, param, seq, solve="H2O"):
@@ -39,17 +42,15 @@ def check_top():
 
 #file Classes
 class Top(_general_gromos_file._general_gromos_file):
-    gromos_file_ending:str = "top"
-
-    def __init__(self, in_value:(str or dict or None or __class__), _future_file:bool=False):
-        if type(in_value) is str:
-            super().__init__(in_value=in_value, _future_file=_future_file)
-        elif(in_value == None):
+    def __init__(self, input:(str or dict or None or __class__)):
+        if type(input) is str:
+            self.path = input
+            super().__init__(input=input)
+        elif(input==None):
             self.path = ""
             self.block_names = {}
-            super().__init__(in_value=None)
-
-        elif(type(in_value) is __class__):
+            super().__init__(input=None)
+        elif(type(input) is __class__):
             raise Exception('not implemented yet!')
         else:
             raise Exception('not implemented yet!')
@@ -61,7 +62,7 @@ class Top(_general_gromos_file._general_gromos_file):
         #translate the string subblocks
         blocks = {}
         for block_title in data:
-            #print(block_title)
+            print(block_title)
             self.add_block(blocktitle=block_title, content=data[block_title])
             blocks.update({block_title: self.__getattribute__(block_title)})
         return blocks
@@ -235,7 +236,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 self.add_block(blocktitle="IMPDIHEDRAL", content=[], verbose=verbose)
         
         # find the IMPDIHEDRALTYPE number or create new IMPDIHEDRALTYPE
-        impdihedral_type_number = 1
+        impdihedral_type_number = 0
         iterator = 1
         for imp_type in self.IMPDIHEDRALTYPE.content:
             if imp_type.CQ == CQ and imp_type.Q0 == Q0:
@@ -378,3 +379,61 @@ class Top(_general_gromos_file._general_gromos_file):
 
         
 
+class distance_restraints(_general_gromos_file._general_gromos_file):
+    required_blocks = ["TITLE", "DISTANCERESPEC"]
+    def __init__(self, path:(str or dict)=None):
+
+        self.blocksset = []
+        self.block_names = {"TITLE": "title_block", "DISTANCERESSPEC":"distance_res_spec_block"}
+
+        if(type(path) is str):
+            self.path = path
+            self.read_disres(path)
+
+        elif(path==None):
+            print("Warning!: generated empty disres obj!")
+        else:
+            raise IOError("disres class got "+str(type(path))+" as input. Unknown input type for disres.")
+
+    def read_disres(self, path:str):
+        #parse file into dicts
+        data = parser.read_disres(path)
+        #convert distance_res lines to objects
+        data["DISTANCERESSPEC"]["RESTRAINTS"] = list(map(lambda x: blocks.atom_pair_distanceRes(**x), data["DISTANCERESSPEC"]["RESTRAINTS"]))
+        #add _blocks as attribute to objects
+        for key, sub_content in data.items():
+            print(sub_content)
+            self.add_block(blocktitle=key, content=sub_content)
+
+class disres(distance_restraints):
+    pass
+
+class Pertubation_topology(_general_gromos_file._general_gromos_file):
+    required_blocks = ["TITLE", "MPERTATOM"]
+
+    def __init__(self, path:(str or dict)=None):
+
+        self.blocksset = []
+        if(type(path) is str):
+            self.path = path
+            self.read_ptp(path)
+
+        elif(path==None):
+            print("Warning!: generated empty ptp obj!")
+            self.TITLE = blocks.TITLE(content="New empyt ptp-file")
+            self.MPERTATOM = blocks.MPERTATOM(NJLA=0, NPTB=0)
+
+        else:
+            raise IOError("pertubation_topology class got "+str(type(path))+" as input. Unknown input type for disres.")
+
+    def read_ptp(self, path:str):
+        #parse file into dicts
+        data = parser.read_ptp(path)
+        #convert distance_res lines to objects
+        data["MPERTATOM"]["STATEATOMS"] = list(map(lambda x: blocks.atom_pertubation_state(**x), data["MPERTATOM"]["STATEATOMS"]))
+        #add _blocks as attribute to objects
+        for key, sub_content in data.items():
+            self.add_block(blocktitle=key, content=sub_content)
+
+class Ptp(Pertubation_topology):
+    pass
