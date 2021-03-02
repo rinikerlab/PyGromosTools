@@ -62,7 +62,8 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        pytest -v  --color=yes pygromos/tests/ #--cov=pygromos --cov-report=xml
+        pip install pytest-cov
+        pytest -v --cov=pygromos --cov-report=xml --color=yes pygromos/tests/ #
         
     - name: CodeCov
       uses: codecov/codecov-action@v1
