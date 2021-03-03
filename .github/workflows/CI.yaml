@@ -21,8 +21,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ macOS-latest, ubuntu-latest] #
-        python-version: [3.7]
+        os: [macOS-latest, ubuntu-latest] #, windows-latest
+        python-version: [3.7] #
 
     steps:
     - uses: actions/checkout@v1
@@ -33,14 +33,13 @@ jobs:
         uname -a
         df -h
         ulimit -a
-    # More info on options: https://github.com/goanpeca/setup-miniconda
     - uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
         environment-file:  dev/conda_envs/test_env.yaml
         channels: conda-forge,defaults
         
-        activate-environment: dev
+        activate-environment: test
         auto-update-conda: true
         auto-activate-base: false
         show-channel-urls: true
@@ -58,6 +57,11 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        pytest -v  --color=yes pygromos/tests/ #--cov=pygromos --cov-report=xml
-
-    
+        pytest -v --color=yes pygromos/tests/ #--cov=pygromos --cov-report=xml 
+        
+    - name: CodeCov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
