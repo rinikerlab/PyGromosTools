@@ -21,6 +21,9 @@ dependencies:
   - tqdm
   - ipywidgets
   - matplotlib
-  - tables
+
+  # Pip-only installs
+  - pip:
+    - tables
 
 
