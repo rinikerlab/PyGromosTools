@@ -11,13 +11,16 @@ dependencies:
   - pytest
   - pytest-cov
   - codecov
+  #meta
   - typing
+  - tqdm
+  - ipywidgets
+  #science
   - pandas
   - numpy
   - sympy
   - scipy
   - matplotlib
-  - tqdm
-  - ipywidgets
+  - tables
   - rdkit
 
