@@ -3,11 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - "PyGromosTools_V2"
+      - "main"
       - "PyGromosTools_V1"
   pull_request:
     branches:
-      - "PyGromosTools_V2"
+      - "main"
       - "PyGromosTools_V1"
   schedule:
     # Nightly tests run on master by default:
