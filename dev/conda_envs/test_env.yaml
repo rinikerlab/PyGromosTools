@@ -21,6 +21,8 @@ dependencies:
   - sympy
   - scipy
   - matplotlib
-  - tables
   - rdkit
 
+  # Pip-only installs
+  - pip:
+    - tables
