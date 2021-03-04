@@ -193,7 +193,8 @@ class Gromos_System():
         msg += "WORKDIR: " + self._work_folder + "\n"
         msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
         msg += "\n"
-
+        msg += "GromosXX_bin: " + str(self._gromosXX.bin) + "\n"
+        msg += "GromosPP_bin: " + str(self._gromosPP.bin) + "\n"
         msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
         msg += "FUTURE PROMISE: "+str(self._future_promise)+"\n"
         if(hasattr(self, "solute_info")
@@ -375,7 +376,7 @@ class Gromos_System():
                 if (adapt_imd_automatically
                     and not (self.cnf._future_file
                         and (self.residue_list is None
-                            or self.solute_info is None))):
+                             or self.solute_info is None))):
                     self.adapt_imd()
             elif(self._future_promise):
                 self._imd = Imd(in_value=input_value, _future_file=self._future_promise)
