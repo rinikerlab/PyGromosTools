@@ -138,7 +138,7 @@ class Gromos_System():
 
         ##System Information:
         if(not self._cnf._future_file):
-            self.residue_list, self.ligand_info, self.solute_info, self.non_ligand_info, self.solvent_info = self._cnf.get_system_information(
+            self.residue_list, self.solute_info, self.protein_info, self.non_ligand_info, self.solvent_info = self._cnf.get_system_information(
                 not_ligand_residues=[])
         else:
             self.residue_list = None
@@ -196,7 +196,7 @@ class Gromos_System():
 
         msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
         msg += "FUTURE PROMISE: "+str(self._future_promise)+"\n"
-        if(hasattr(self, "ligand_info")
+        if(hasattr(self, "solute_info")
             or hasattr(self, "protein_info")
             or hasattr(self, "non_ligand_info")
             or hasattr(self, "solvent_info")):
@@ -205,7 +205,7 @@ class Gromos_System():
                 if(hasattr(self, "protein_info")  and not self.protein_info is None):
                     #+" resIDs: "+str(self.protein_info.residues[0])+"-"+str(self.protein_info.residues[-1])
                     msg += "\tPROTEIN:\t"+str(self.protein_info.name)+"  nresidues: "+str(self.protein_info.number_of_residues)+" natoms: "+str(self.protein_info.number_of_atoms)+"\n"
-                if(hasattr(self, "ligand_info") and not self.solute_info is None):
+                if(hasattr(self, "solute_info") and not self.solute_info is None):
                     msg += "\tLIGANDS:\t" + str(self.solute_info.names) + "  resID: " + str(self.solute_info.positions) + "  natoms: " + str(self.solute_info.number_of_atoms) + "\n"
                 if (hasattr(self, "non_ligand_info")  and not self.non_ligand_info is None):
                     #+"  resID: "+str(self.non_ligand_info.positions)
@@ -221,7 +221,7 @@ class Gromos_System():
                 if (hasattr(self, "solvent_info") and not self.solvent_info is None):
                     # " resIDs: "+str(self.solvent_info.positions[0])+"-"+str(self.solvent_info.positions[-1])+
                     msg += "\tSOLVENT:\t" + str(self.solvent_info.name) + "  nmolecules: " + str(
-                        self.solvent_info.number) + "  natoms: " + str(self.solvent_info.number_of_atoms)
+                        self.solvent_info.number) + "  natoms: " + str(self.solvent_info.number_of_atoms) + "\n"
 
         msg +="\n\n"
         return msg
@@ -375,7 +375,7 @@ class Gromos_System():
                 if (adapt_imd_automatically
                     and not (self.cnf._future_file
                         and (self.residue_list is None
-                        or self.solute_info is None))):
+                            or self.solute_info is None))):
                     self.adapt_imd()
             elif(self._future_promise):
                 self._imd = Imd(in_value=input_value, _future_file=self._future_promise)
@@ -603,15 +603,15 @@ class Gromos_System():
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
         #Get residues
         if(self.cnf._future_file and self.residue_list is None
-            and self.ligand_info is None
+            and self.solute_info is None
             and self.protein_info is None
             and self.non_ligand_info is None):
-            raise ValueError("The residue_list, ligand_info, protein_info adn non_ligand_info are required for automatic imd-adaptation.")
+            raise ValueError("The residue_list, solute_info, protein_info adn non_ligand_info are required for automatic imd-adaptation.")
         else:
             if(not self.cnf._future_file):
                 cres, lig, prot, nonLig, solvent = self.cnf.get_system_information(not_ligand_residues=not_ligand_residues)
                 self.residue_list = cres
-                self.ligand_info = lig
+                self.solute_info = lig
                 self.protein_info = prot
                 self.non_ligand_info = nonLig
                 self.solvent_info = solvent
@@ -636,10 +636,10 @@ class Gromos_System():
         if (hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None):
             last_atoms_baths = {}
             if(self._single_multibath):
-                sorted_last_atoms_baths = { self.ligand_info.number_of_atoms+self.protein_info.number_of_atoms+self.non_ligand_info.number_of_atoms+ self.solvent_info.number_of_atoms:1}
+                sorted_last_atoms_baths = { self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
             else:
-                if(self.ligand_info.number_of_atoms>0):
-                    last_atoms_baths.update({self.ligand_info.positions[0]: self.ligand_info.number_of_atoms})
+                if(self.solute_info.number_of_atoms>0):
+                    last_atoms_baths.update({self.solute_info.positions[0]: self.solute_info.number_of_atoms})
                 if (self.protein_info.number_of_atoms > 0):
                     last_atoms_baths.update({self.protein_info.start_position: self.protein_info.number_of_atoms})
                 if (self.non_ligand_info.number_of_atoms > 0):
@@ -781,6 +781,6 @@ class Gromos_System():
 
         bufferedReader.close()
         if(hasattr(obj, "cnf") and hasattr(obj.cnf, "POSITION")):
-            obj.residue_list, obj.ligand_info, obj.protein_info, obj.non_ligand_info, obj.solvent_info = obj._cnf.get_system_information()
+            obj.residue_list, obj.solute_info, obj.protein_info, obj.non_ligand_info, obj.solvent_info = obj._cnf.get_system_information()
         obj.checkpoint_path = path
         return obj
