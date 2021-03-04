@@ -12,12 +12,9 @@ import glob
 import copy
 import importlib
 import warnings
+import os
 from typing import Dict, Union, List, Callable
 
-from pygromos.data import ff
-from pygromos.data.ff import *
-from pygromos.data.ff import Gromos2016H66
-from pygromos.data.ff import Gromos54A7
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.coord.refpos import Reference_Position
 from pygromos.files.coord.posres import Position_Restraints
@@ -29,6 +26,7 @@ from pygromos.files.topology.ifp import ifp
 from pygromos.files.topology.top import Top
 from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
+from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
@@ -46,12 +44,13 @@ if (importlib.util.find_spec("openforcefield") != None):
     from openforcefield.topology import Molecule
     from openforcefield.typing.engines import smirnoff
     from pygromos.files.gromos_system.ff import openforcefield2gromos
-    from pygromos.files.gromos_system.ff import serenityff
+    from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
+
     has_openff = True
 else:
     has_openff = False
 
-skip = {"solute_info":cnf.solute_infos,
+skip = {"ligand_info":cnf.ligand_infos,
         "protein_info":cnf.protein_infos,
         "non_ligand_info": cnf.non_ligand_infos,
         "solvent_info": cnf.solvent_infos}
@@ -67,7 +66,7 @@ class Gromos_System():
                       "refpos": Reference_Position}
 
     residue_list:Dict
-    solute_info:cnf.solute_infos
+    ligand_info:cnf.ligand_infos
     protein_info:cnf.protein_infos
     non_ligand_info:cnf.non_ligand_infos
     solvent_info:cnf.solvent_infos
@@ -85,7 +84,7 @@ class Gromos_System():
                  in_top_path: str = None, in_cnf_path: str = None, in_imd_path: str = None,
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
-                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield="2016H66", auto_convert:bool=False, adapt_imd_automatically:bool=True):
+                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), auto_convert:bool=False, adapt_imd_automatically:bool=True):
         """
 
         Parameters
@@ -113,7 +112,7 @@ class Gromos_System():
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
-        self.Forcefield = None
+        self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.checkpoint_path = None
 
@@ -139,11 +138,11 @@ class Gromos_System():
 
         ##System Information:
         if(not self._cnf._future_file):
-            self.residue_list, self.solute_info, self.protein_info, self.non_ligand_info, self.solvent_info = self._cnf.get_system_information(
+            self.residue_list, self.ligand_info, self.protein_info, self.non_ligand_info, self.solvent_info = self._cnf.get_system_information(
                 not_ligand_residues=[])
         else:
             self.residue_list = None
-            self.solute_info = None
+            self.ligand_info = None
             self.protein_info = None
             self.non_ligand_info = None
 
@@ -175,13 +174,11 @@ class Gromos_System():
             self.hasData = True
 
         # automate all conversions for rdkit mols if possible
-        if auto_convert and self.hasData:
-            # set forcefield
-            self.import_Forcefield(forcefield=Forcefield) # Actually I want it everytime, if I can somehow Identify which ff was used from top?
-            self.auto_convert_rdkitMol(Forcefield)
-        else: #safety measure, so that not the wrong ffs are combined
-            self.Forcefield = None
-            self.ifp = None
+        if auto_convert:
+            if self.hasData:
+                self.auto_convert_rdkitMol()
+            else:
+                raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
 
         #misc
         self._all_files_key = list(map(lambda x: "_"+x, self.required_files.keys()))
@@ -195,40 +192,25 @@ class Gromos_System():
         msg += utils.spacer
         msg += "WORKDIR: " + self._work_folder + "\n"
         msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
-        msg += "\n"
-
 
         msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
-        msg += "GromosXX_bin: " + str(self._gromosXX.bin) + "\n"
-        msg += "GromosPP_bin: " + str(self._gromosPP.bin) + "\n"
         msg += "FUTURE PROMISE: "+str(self._future_promise)+"\n"
-        msg += "\n"
         if(hasattr(self, "ligand_info")
             or hasattr(self, "protein_info")
             or hasattr(self, "non_ligand_info")
             or hasattr(self, "solvent_info")):
             msg += "SYSTEM: \n"
-            if(hasattr(self, "protein_info")  and not self.protein_info is None and self.protein_info.number_of_residues > 0):
-                if(hasattr(self, "protein_info")  and not self.protein_info is None):
-                    #+" resIDs: "+str(self.protein_info.residues[0])+"-"+str(self.protein_info.residues[-1])
-                    msg += "\tPROTEIN:\t"+str(self.protein_info.name)+"  nresidues: "+str(self.protein_info.number_of_residues)+" natoms: "+str(self.protein_info.number_of_atoms)+"\n"
-                if(hasattr(self, "ligand_info") and not self.solute_info is None):
-                    msg += "\tLIGANDS:\t" + str(self.solute_info.names) + "  resID: " + str(self.solute_info.positions) + "  natoms: " + str(self.solute_info.number_of_atoms) + "\n"
-                if (hasattr(self, "non_ligand_info")  and not self.non_ligand_info is None):
-                    #+"  resID: "+str(self.non_ligand_info.positions)
-                    msg += "\tNon-LIGANDS:\t"+str(self.non_ligand_info.names)+"  nmolecules: "+str(self.non_ligand_info.number)+"  natoms: "+str(self.non_ligand_info.number_of_atoms)+"\n"
-                if (hasattr(self, "solvent_info")  and not self.solvent_info is None):
-                    #" resIDs: "+str(self.solvent_info.positions[0])+"-"+str(self.solvent_info.positions[-1])+
-                    msg += "\tSOLVENT:\t"+str(self.solvent_info.name)+"  nmolecules: "+str(self.solvent_info.number)+"  natoms: "+str(self.solvent_info.number_of_atoms)+"\n"
-            else:
-                if (hasattr(self, "solute_info") and not self.solute_info is None):
-                    msg += "\tSolute:\t" + str(self.solute_info.names) + "  resID: " + str(
-                        self.solute_info.positions) + "  natoms: " + str(
-                        self.solute_info.number_of_atoms) + "\n"
-                if (hasattr(self, "solvent_info") and not self.solvent_info is None):
-                    # " resIDs: "+str(self.solvent_info.positions[0])+"-"+str(self.solvent_info.positions[-1])+
-                    msg += "\tSOLVENT:\t" + str(self.solvent_info.name) + "  nmolecules: " + str(
-                        self.solvent_info.number) + "  natoms: " + str(self.solvent_info.number_of_atoms) + "\n"
+            if(hasattr(self, "ligand_info") and not self.ligand_info is None):
+                msg += "\tLIGANDS:\t"+str(self.ligand_info.names)+"  resID: "+str(self.ligand_info.positions)+"  natoms: "+str(self.ligand_info.number_of_atoms)+"\n"
+            if(hasattr(self, "protein_info")  and not self.protein_info is None):
+                #+" resIDs: "+str(self.protein_info.residues[0])+"-"+str(self.protein_info.residues[-1])
+                msg += "\tPROTEIN:\t"+str(self.protein_info.name)+"  nresidues: "+str(self.protein_info.number_of_residues)+" natoms: "+str(self.protein_info.number_of_atoms)+"\n"
+            if (hasattr(self, "non_ligand_info")  and not self.non_ligand_info is None):
+                #+"  resID: "+str(self.non_ligand_info.positions)
+                msg += "\tNon-LIGANDS:\t"+str(self.non_ligand_info.names)+"  nmolecules: "+str(self.non_ligand_info.number)+"  natoms: "+str(self.non_ligand_info.number_of_atoms)+"\n"
+            if (hasattr(self, "solvent_info")  and not self.solvent_info is None):
+                #" resIDs: "+str(self.solvent_info.positions[0])+"-"+str(self.solvent_info.positions[-1])+
+                msg += "\tSOLVENT:\t"+str(self.solvent_info.name)+"  nmolecules: "+str(self.solvent_info.number)+"  natoms: "+str(self.solvent_info.number_of_atoms)+"\n"
 
         msg +="\n\n"
         return msg
@@ -355,7 +337,7 @@ class Gromos_System():
             if(os.path.exists(input_value)):
                 self._cnf = Cnf(in_value=input_value, _future_file=False)
                 self.residue_list = self._cnf.get_residues()
-                self.residue_list, self.solute_info, self.protein_info, self.non_ligand_info, self.solvent_info = self._cnf.get_system_information(not_ligand_residues=[])
+                self.residue_list, self.ligand_info, self.protein_info, self.non_ligand_info, self.solvent_info = self._cnf.get_system_information(not_ligand_residues=[])
 
             elif(self._future_promise):
                 self._cnf = Cnf(in_value=input_value, _future_file=self._future_promise)
@@ -382,7 +364,7 @@ class Gromos_System():
                 if (adapt_imd_automatically
                     and not (self.cnf._future_file
                         and (self.residue_list is None
-                             or self.solute_info is None))):
+                        or self.ligand_info is None))):
                     self.adapt_imd()
             elif(self._future_promise):
                 self._imd = Imd(in_value=input_value, _future_file=self._future_promise)
@@ -580,29 +562,37 @@ class Gromos_System():
         if(len(self._future_promised_files) == 0):
             self._future_promise = False
 
-    def auto_convert_rdkitMol(self, forcefield:str):
-        if forcefield == "2016H66" or forcefield == "54A7":
+    def auto_convert_rdkitMol(self):
+        if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
             pass  # TODO: make_top()
-        elif forcefield == "smirnoff":
-            if (has_openff):
+        elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
+            if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
                 self.top = openforcefield2gromos(Molecule.from_rdkit(self.mol), self.top,
                                                  forcefield_name=self.Forcefield).convert_return()
-        elif forcefield == "serenityff":
-            if (has_openff):
+        elif self.Forcefield.name == "serenityff" or self.Forcefield.name == "sff":
+            if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
-                self.serenityff = serenityff()
+                path = self.Forcefield.path
+                top = self.Forcefield.top
+                mol_name = self.Forcefield.mol_name
+                develop = self.Forcefield.develop
+                self.serenityff = serenityff(mol=self.mol, forcefield=path, top=top, mol_name=mol_name, develop=develop)
+                self.serenityff.create_top(C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges)
+                self.serenityff.top.make_ordered()
+                self.top = self.serenityff.top
+
         else:
-            raise ValueError("I don't know this forcefield: " + forcefield)
+            raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
 
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
         #Get residues
         if(self.cnf._future_file and self.residue_list is None
-            and self.solute_info is None
+            and self.ligand_info is None
             and self.protein_info is None
             and self.non_ligand_info is None):
             raise ValueError("The residue_list, ligand_info, protein_info adn non_ligand_info are required for automatic imd-adaptation.")
@@ -610,7 +600,7 @@ class Gromos_System():
             if(not self.cnf._future_file):
                 cres, lig, prot, nonLig, solvent = self.cnf.get_system_information(not_ligand_residues=not_ligand_residues)
                 self.residue_list = cres
-                self.solute_info = lig
+                self.ligand_info = lig
                 self.protein_info = prot
                 self.non_ligand_info = nonLig
                 self.solvent_info = solvent
@@ -635,10 +625,10 @@ class Gromos_System():
         if (hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None):
             last_atoms_baths = {}
             if(self._single_multibath):
-                sorted_last_atoms_baths = {self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
+                sorted_last_atoms_baths = { self.ligand_info.number_of_atoms+self.protein_info.number_of_atoms+self.non_ligand_info.number_of_atoms+ self.solvent_info.number_of_atoms:1}
             else:
-                if(self.solute_info.number_of_atoms>0):
-                    last_atoms_baths.update({self.solute_info.positions[0]: self.solute_info.number_of_atoms})
+                if(self.ligand_info.number_of_atoms>0):
+                    last_atoms_baths.update({self.ligand_info.positions[0]: self.ligand_info.number_of_atoms})
                 if (self.protein_info.number_of_atoms > 0):
                     last_atoms_baths.update({self.protein_info.start_position: self.protein_info.number_of_atoms})
                 if (self.non_ligand_info.number_of_atoms > 0):
@@ -657,44 +647,12 @@ class Gromos_System():
                     value = last_atoms_baths[key]+last_atom_count
                     sorted_last_atoms_baths.update({value:1+ind})
                     last_atom_count=value
-
+            
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
         self.refpos = self.cnf.gen_refpos()
-
-
-    """
-        ForceField
-    """
-    def import_Forcefield(self, forcefield: str = "2016H66"):
-        if forcefield == "2016H66":
-            self.Forcefield = Gromos2016H66.ifp
-            self.ifp = ifp(self.Forcefield)
-        elif forcefield == "54A7":
-            self.Forcefield = Gromos54A7.ifp
-            self.ifp = ifp(self.Forcefield)
-        elif forcefield == "smirnoff":
-            if (has_openff):
-                raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
-                                  "Please install the package for this feature!")
-            else:
-                filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.xml')
-                filelist.sort()
-                for f in filelist:
-                    try:
-                        smirnoff.ForceField(f)
-                        self.Forcefield = f
-                        break
-                    except:
-                        pass
-        elif forcefield == "serenityff":
-            if (has_openff):
-                raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
-                                  "Please install the package for this feature!")
-            else:
-                raise NotImplemented("WIP")
 
 
     """
@@ -812,6 +770,6 @@ class Gromos_System():
 
         bufferedReader.close()
         if(hasattr(obj, "cnf") and hasattr(obj.cnf, "POSITION")):
-            obj.residue_list, obj.solute_info, obj.protein_info, obj.non_ligand_info, obj.solvent_info = obj._cnf.get_system_information()
+            obj.residue_list, obj.ligand_info, obj.protein_info, obj.non_ligand_info, obj.solvent_info = obj._cnf.get_system_information()
         obj.checkpoint_path = path
         return obj
