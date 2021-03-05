@@ -8,7 +8,6 @@ Author: Marc Lehner, Benjamin Ries
 """
 
 # imports
-import glob
 import copy
 import importlib
 import warnings
@@ -22,7 +21,6 @@ from pygromos.files.coord.posres import Position_Restraints
 from pygromos.files.coord import cnf
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
-from pygromos.files.topology.ifp import ifp
 from pygromos.files.topology.top import Top
 from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
@@ -42,7 +40,6 @@ else:
 
 if (importlib.util.find_spec("openforcefield") != None):
     from openforcefield.topology import Molecule
-    from openforcefield.typing.engines import smirnoff
     from pygromos.files.gromos_system.ff import openforcefield2gromos
     from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
 
