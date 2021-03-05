@@ -24,7 +24,7 @@ if(importlib.util.find_spec("openforcefield") == None):
 else:
     from openforcefield.topology import Molecule
     from openforcefield.typing.engines import smirnoff
-    from pygromos.files.gromos_system import openforcefield2gromos
+    from pygromos.files.gromos_system.ff import openforcefield2gromos
 
 
 class serenityff():
