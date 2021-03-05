@@ -18,7 +18,6 @@ TODO: add ene_ana functions
 #imports
 import pandas as pd
 import numpy as np
-from simtk import unit
 
 import pygromos.files.trajectory._general_trajectory as traj
 
@@ -97,6 +96,6 @@ class Tre(traj._General_Trajectory):
         liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
 
         # calculate heat of vaporization
-        rt_constant = unit.MOLAR_GAS_CONSTANT_R.value_in_unit(unit.kilojoule_per_mole/unit.kelvin) * temperature
+        rt_constant = 0.008314462618153239 * temperature # R in kilojoule_per_mole/kelvin * T
         self.heat_vap = gas_nonbonded_energy - liquid_nonbonded_energyself/nMolecules + rt_constant
         return self.heat_vap
