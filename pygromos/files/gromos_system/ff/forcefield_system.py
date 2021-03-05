@@ -73,5 +73,5 @@ class forcefield_system():
                     self.off = smirnoff.ForceField(f)
                     self.path = f
                     break
-                except:
+                except Exception as err:
                     pass
