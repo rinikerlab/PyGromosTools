@@ -22,6 +22,7 @@ dependencies:
   - scipy
   - matplotlib
   - rdkit
+  - simtk
   
   # Pip-only installs
   - pip:
