@@ -20,9 +20,7 @@ else:
     #from openforcefield.typing.engines import smirnoff
     #from openforcefield.typing.engines.smirnoff import forcefield
 
-from pygromos.data import ff
 from pygromos.data import topology_templates
-import glob
 import os
 import collections
 from simtk.unit import *

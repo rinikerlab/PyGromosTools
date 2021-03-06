@@ -160,7 +160,7 @@ class Gromos_System():
         # import molecule from smiles using rdkit
         if in_smiles:
             self.mol = Chem.MolFromSmiles(in_smiles)
-            Chem.AddHs(self.mol)
+            self.mol = Chem.AddHs(self.mol)
             AllChem.EmbedMolecule(self.mol)
             self.hasData = True
 
