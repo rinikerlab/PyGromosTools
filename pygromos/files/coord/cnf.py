@@ -815,7 +815,7 @@ class Cnf(_general_gromos_file):
         out_file.close()
         return out_path
 
-def cnf2trc(self) -> Trc:
+    def cnf2trc(self) -> Trc:
         """This function converts a cnf to a trajectory with a single frame
 
         Returns
@@ -849,5 +849,5 @@ def cnf2trc(self) -> Trc:
         #TODO: Maybe add othe blocks to translate?
 
         #build dataframe and return
-        trc.database = pd.DataFrame(dict)
+        trc.database = pd.DataFrame([dict])
         return trc

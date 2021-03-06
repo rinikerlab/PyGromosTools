@@ -21,11 +21,6 @@ import sys
 from typing import TypeVar, Union
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
-try:
-    from pygromos.files.coord.cnf import Cnf
-except ImportError:
-    Cnf = sys.modules[__package__ + '.Cnf']
-
 
 TrcType = TypeVar("Trc")
 
@@ -202,7 +197,7 @@ class Trc(traj._General_Trajectory):
 
     
 
-    def rmsd(self, ref_cnf: Union[int, TrcType, Cnf]) -> pd.DataFrame:
+    def rmsd(self, ref_cnf: Union[int, TrcType]) -> pd.DataFrame:
         """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
 
         Parameters
@@ -215,6 +210,10 @@ class Trc(traj._General_Trajectory):
         pd.DataFrame
             RMSD for every frame
         """
+        try:
+            from pygromos.files.coord.cnf import Cnf
+        except ImportError:
+            Cnf = sys.modules[__package__ + '.Cnf']
         #convert input if a Cnf is provided
         if type(ref_cnf) == Cnf:
             ref_cnf = ref_cnf.cnf2trc()
