@@ -17,10 +17,15 @@ TODO: add support for rdkit conformers
 import os
 import pandas as pd
 import numpy as np
+import sys
 from typing import TypeVar, Union
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
-from pygromos.files.coord.cnf import Cnf
+try:
+    from pygromos.files.coord.cnf import Cnf
+except ImportError:
+    Cnf = sys.modules[__package__ + '.Cnf']
+
 
 TrcType = TypeVar("Trc")
 
@@ -194,6 +199,8 @@ class Trc(traj._General_Trajectory):
         for i in in_values:
             sum += np.sum(i**2)
         return np.sqrt(sum/len(in_values))
+
+    
 
     def rmsd(self, ref_cnf: Union[int, TrcType, Cnf]) -> pd.DataFrame:
         """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
