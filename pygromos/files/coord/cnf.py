@@ -649,7 +649,7 @@ class Cnf(_general_gromos_file):
 
         """
         possrespec = self.write_possrespec(out_path=out_path_prefix + ".por", residues=residues, verbose=verbose)
-        refpos = self.write_refpos(path=out_path_prefix + ".rpf")
+        refpos = self.write_refpos(out_path=out_path_prefix + ".rpf")
 
         return possrespec, refpos
 

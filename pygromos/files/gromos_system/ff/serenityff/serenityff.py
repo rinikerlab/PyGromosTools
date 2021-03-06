@@ -10,7 +10,7 @@ Author: Marc Lehner
 # general imports
 import collections, importlib
 from simtk import unit
-import math
+#import math
 
 #rdkit imports
 from rdkit import Chem
@@ -24,7 +24,6 @@ if(importlib.util.find_spec("openforcefield") == None):
     raise ImportError("SerenityFF is not enabled without openFF toolkit package! Please install openFF toolkit.")
 else:
     from openforcefield.topology import Molecule
-    from openforcefield.typing.engines import smirnoff
     from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
 
 
@@ -103,7 +102,7 @@ class serenityff():
             for element in contained_elements_set:
                 return_dict.update(self._pattern_matching_for_one_element(element=element)) 
         else:
-            raise "WIP"
+            raise NotImplementedError("WIP")
         return return_dict
 
     def create_serenityff_nonBonded(self, C12_input={'H':0.0,'C':0.0}, partial_charges=collections.defaultdict(float)):
@@ -153,7 +152,7 @@ class serenityff():
                     self.off.gromosTop.add_new_SOLUTEATOM(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=CS6, CS12=CS12, IACname=IACname)
                 moleculeItr += 1
         else:
-            raise "WIP"
+            raise NotImplementedError("WIP")
 
     def create_top(self, C12_input={'H':0.0,'C':0.0}, partial_charges=collections.defaultdict(float)):
         self.off.convertResname()

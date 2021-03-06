@@ -43,7 +43,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
         elif subsubblock_number_code == "temp":
             num_subsubblocks = _general_pandas_energy_trajectory_subblock_numerated.num_temp_groups
         else:
-            raise "subblock number coder does not corresponde to variable"
+            raise KeyError("subblock number coder does not corresponde to variable")
         
         # get the number of baths
         if num_subsubblocks == 0:
@@ -52,7 +52,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
             except:
                 print("no good value found for the number of subsubblocks")
             if num_subsubblocks <= 0:
-                raise "invalid iterator with value: "+str(num_subsubblocks)
+                raise KeyError("invalid iterator with value: "+str(num_subsubblocks))
             
             # set value to static varibale for all futer values
             if subsubblock_number_code == "energy":

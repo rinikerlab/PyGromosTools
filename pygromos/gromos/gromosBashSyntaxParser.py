@@ -28,7 +28,7 @@ class gromosBashSyntaxParser:
         if multiplier != 1:
             if type(args) == list and  len(args) >= 1:
                 if (len(args) != len(multiplier)):
-                    raise "multiplier does not match the number of arguments provided!"
+                    raise ValueError("multiplier does not match the number of arguments provided!")
                 else:
                     for mult, topo in zip(multiplier, args):
                         command+= str(mult) + ":" + topo+" "
@@ -43,8 +43,8 @@ class gromosBashSyntaxParser:
 
     @staticmethod
     def atomSliceParser():
-        raise "WIP"
+        raise NotImplementedError("WIP")
 
     @staticmethod
     def moleculeSliceParser():
-        raise "WIP"
+        raise NotImplementedError("WIP")

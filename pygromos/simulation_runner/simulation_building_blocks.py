@@ -171,7 +171,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             # IN args
             in_analysis_control_dict = analysis_control_dict
             n_analysis_processors = 1 #Maybe in the future: 5 if(nmpi>5) else 1
-            verbose = verbose
+            #verbose = verbose
         except Exception as err:
             raise Exception("Could not prepare the gromos System\n\t" + "\n\t".join(map(str, err.args)))
         # do

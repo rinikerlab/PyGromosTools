@@ -20,8 +20,7 @@ TODO: MTL: implement, check, test
 """
 
 #imports
-import warnings, glob, importlib, collections, os, re
-import numpy
+import collections, os, re
 import pandas
 import pathlib
 
