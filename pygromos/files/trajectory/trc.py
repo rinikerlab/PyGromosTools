@@ -210,14 +210,6 @@ class Trc(traj._General_Trajectory):
         pd.DataFrame
             RMSD for every frame
         """
-        try:
-            from pygromos.files.coord.cnf import Cnf
-        except ImportError:
-            Cnf = sys.modules[__package__ + '.Cnf']
-        #convert input if a Cnf is provided
-        if type(ref_cnf) == Cnf:
-            ref_cnf = ref_cnf.cnf2trc()
-
         if type(ref_cnf) == pd.DataFrame or type(ref_cnf) == pd.Series:
             if ref_cnf.ndim == 1:
                 pos_mask=self.database.columns.str.startswith("POS_")
