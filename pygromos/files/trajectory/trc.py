@@ -17,7 +17,6 @@ TODO: add support for rdkit conformers
 import os
 import pandas as pd
 import numpy as np
-import sys
 from typing import TypeVar, Union
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
