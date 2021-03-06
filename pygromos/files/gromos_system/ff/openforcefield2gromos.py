@@ -10,6 +10,7 @@ Author: Marc Lehner
 #imports
 import importlib
 from pygromos.files.topology.top import Top
+from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 
 if(importlib.util.find_spec("openforcefield") == None):
@@ -27,7 +28,7 @@ import collections
 from simtk.unit import *
 
 class openforcefield2gromos():
-    def __init__(self, openFFmolecule:Molecule, gromosTop:Top=None, forcefield_name=None):
+    def __init__(self, openFFmolecule:Molecule, gromosTop:Top=None, forcefield:forcefield_system=None):
         self.atomic_number_dict = collections.defaultdict(str)
         # get openmm atom type code / periodic table
         self.atomic_number_dict[1] = "H"
@@ -64,27 +65,15 @@ class openforcefield2gromos():
         self.openFFTop = Topology.from_molecules(openFFmolecule)
 
         #import the openforcfield forcefield-file
-        self.forcefield = None
-        if forcefield_name != None:
-            try:
-                self.forcefield = smirnoff.ForceField(forcefield_name)
-            except:
-                raise "provided forcfield could not be imported"
+        if forcefield != None:
+            self.forcefield = forcefield
         else:
-            filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.xml')
-            filelist.sort()
-            for f in filelist:
-                try:
-                    self.forcefield = smirnoff.ForceField(f)
-                    break
-                except:
-                    pass
-        if self.forcefield == None:
-            raise "Forcefield could not be found"
+            self.forcefield = forcefield_system(name="off")
+        self.off = self.forcefield.off
 
         #create list of all forces
         self.molecule_force_list = []
-        self.molecule_force_list = self.forcefield.label_molecules(self.openFFTop)
+        self.molecule_force_list = self.off.label_molecules(self.openFFTop)
 
         # 1-3 / 1-4 exclusion lists
         self.exclusionList13 = dict()

@@ -17,7 +17,6 @@ from pygromos.files.topology.top import Top
 
 from pygromos.data import topology_templates
 from pygromos.data import ff
-from pygromos.data.ff import *
 from pygromos.data.ff import Gromos2016H66
 from pygromos.data.ff import Gromos54A7
 
@@ -68,6 +67,7 @@ class forcefield_system():
         else:
             filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.offxml')
             filelist.sort()
+            print(filelist)
             for f in filelist:
                 try:
                     self.off = smirnoff.ForceField(f)
@@ -75,3 +75,4 @@ class forcefield_system():
                     break
                 except Exception as err:
                     pass
+        print("Found off: "+str(self.path))

@@ -17,28 +17,36 @@ from rdkit import Chem
 
 #pygromos imports
 from pygromos.files.topology.top import Top
-from pygromos.files.gromos_system.ff.serenityff.seremityff_data import *
+from pygromos.files.gromos_system.ff.serenityff.serenityff_data import serenityff_C12, serenityff_C6
+from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 if(importlib.util.find_spec("openforcefield") == None):
     raise ImportError("SerenityFF is not enabled without openFF toolkit package! Please install openFF toolkit.")
 else:
     from openforcefield.topology import Molecule
     from openforcefield.typing.engines import smirnoff
-    from pygromos.files.gromos_system.ff import openforcefield2gromos
+    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
 
 
 class serenityff():
-    def __init__(self, mol:Chem.rdchem.Mol, forcefield:smirnoff.ForceField = None, top:Top = None, mol_name=None, develop=False):
+    def __init__(self, mol:Chem.rdchem.Mol, forcefield:forcefield_system or str = None, top:Top = None, mol_name=None, develop=False):
         self.serenityFFelements = ["H", "C", "N", "O", "F", "S", "Br", "I"]
         self.C6_pattern = collections.defaultdict(list)
         self.C12_pattern = collections.defaultdict(list)
         self.mol = mol
-        self.top = top
         self.offmol = Molecule.from_rdkit(self.mol)
-        if mol_name != None:
-            self.offmol.name = mol_name
-        self.off = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield_name=forcefield)
-        self.develop = develop
+
+        if isinstance(forcefield, forcefield_system):
+            self.top = forcefield.top
+            self.offmol.name = forcefield.mol_name
+            self.develop = forcefield.develop
+            self.off = forcefield.off
+        else:
+            self.top = top
+            if mol_name != None:
+                self.offmol.name = mol_name
+            self.off = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
+            self.develop = develop
 
     def read_pattern(self, C6orC12:str = "C6"):
         for element in self.serenityFFelements:

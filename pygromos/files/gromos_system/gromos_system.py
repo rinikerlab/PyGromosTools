@@ -40,7 +40,7 @@ else:
 
 if (importlib.util.find_spec("openforcefield") != None):
     from openforcefield.topology import Molecule
-    from pygromos.files.gromos_system.ff import openforcefield2gromos
+    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
     from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
 
     has_openff = True
@@ -580,17 +580,13 @@ class Gromos_System():
                                   "Please install the package for this feature!")
             else:
                 self.top = openforcefield2gromos(Molecule.from_rdkit(self.mol), self.top,
-                                                 forcefield_name=self.Forcefield).convert_return()
+                                                 forcefield=self.Forcefield).convert_return()
         elif self.Forcefield.name == "serenityff" or self.Forcefield.name == "sff":
             if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
-                path = self.Forcefield.path
-                top = self.Forcefield.top
-                mol_name = self.Forcefield.mol_name
-                develop = self.Forcefield.develop
-                self.serenityff = serenityff(mol=self.mol, forcefield=path, top=top, mol_name=mol_name, develop=develop)
+                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield)
                 self.serenityff.create_top(C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges)
                 self.serenityff.top.make_ordered()
                 self.top = self.serenityff.top
