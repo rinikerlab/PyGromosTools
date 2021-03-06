@@ -4,13 +4,17 @@ import __main__
 
 from collections import namedtuple
 from typing import Dict, List, Tuple, Union
+from typing import TypeVar
+import numpy as np
+import pandas as pd
 
 from pygromos.files._basics import parser
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import coord_blocks as blocks
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
-from typing import TypeVar
+from pygromos.files.trajectory.trc import Trc
+
 
 Reference_Position = TypeVar("refpos.Reference_Position")
 Position_Restraints = TypeVar("posres.Position_Restraints")
@@ -810,4 +814,41 @@ class Cnf(_general_gromos_file):
         out_file.write('\nEND')
         out_file.close()
         return out_path
+
+    def cnf2trc(self) -> Trc:
+        """This function converts a cnf to a trajectory with a single frame
+
+        Returns
+        -------
+        Trc
+            Trc with informations from Cnf(self)
+        """
+        
+        #create empty Trc
+        trc = Trc(input_value=None)
+
+        #set normal blocks
+        trc.TITLE = self.TITLE
+
+        #create dict for pd DataFrame
+        dict = {}
+
+        if hasattr(self,"TIMESTEP"):
+            dict["TIMESTEP_step"] = self.TIMESTEP.step
+            dict["TIMESTEP_time"] = self.TIMESTEP.t
+        else:
+            dict["TIMESTEP_step"] = 0
+            dict["TIMESTEP_time"] = 0
+        
+        if hasattr(self,"POSITION"):
+            for pos in self.POSITION:
+                dict["POS_"+str(pos.atomID)] = np.array([pos.xp,pos.yp,pos.zp]).astype(np.float)
+        else:
+            raise ValueError("Cnf has no POSITION data")
+
+        #TODO: Maybe add othe blocks to translate?
+
+        #build dataframe and return
+        trc.database = pd.DataFrame(dict)
+        return trc
 
