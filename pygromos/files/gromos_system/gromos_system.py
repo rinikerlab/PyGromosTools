@@ -10,7 +10,6 @@ Author: Marc Lehner, Benjamin Ries
 # imports
 import copy
 import importlib
-from pygromos.files.topology.ifp import ifp
 import warnings
 import os
 from typing import Dict, Union, List, Callable
@@ -580,12 +579,12 @@ class Gromos_System():
             if hasattr(self.Forcefield, "mtb_orga_path"):
                 mtb_temp += " " + self.Forcefield.mtb_orga_path
             ifp_temp = self.Forcefield.path
-            if self.Forcefield.mol_name == None:
+            if self.Forcefield.mol_name is None:
                 name = self.rdkit2GromosName()
             else:
                 name = self.Forcefield.mol_name
             # make top
-            if self._gromosPP == None or self.gromosPP.bin == None or self.gromosPP.bin == "":
+            if self._gromosPP is None or self.gromosPP.bin is None or self.gromosPP.bin == "":
                warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
             else:
                 self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
