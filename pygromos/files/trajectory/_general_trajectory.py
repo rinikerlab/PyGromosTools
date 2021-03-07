@@ -87,13 +87,13 @@ class _General_Trajectory():
         return self.add_traj(traj, skip_new_0=True)
 
     def __copy__(self):
-        traj = type(self)()
+        traj = type(self)(input_value=None)
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=False)
 
     def __deepcopy__(self):
-        traj = type(self)()
+        traj = type(self)(input_value=None)
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=True)
