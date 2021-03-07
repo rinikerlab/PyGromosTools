@@ -10,6 +10,7 @@ Author: Marc Lehner, Benjamin Ries
 # imports
 import copy
 import importlib
+from pygromos.files.topology.ifp import ifp
 import warnings
 import os
 from typing import Dict, Union, List, Callable
@@ -173,7 +174,7 @@ class Gromos_System():
         # automate all conversions for rdkit mols if possible
         if auto_convert:
             if self.hasData:
-                self.auto_convert_rdkitMol()
+                self.auto_convert()
             else:
                 raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
 
@@ -571,9 +572,24 @@ class Gromos_System():
         if(len(self._future_promised_files) == 0):
             self._future_promise = False
 
-    def auto_convert_rdkitMol(self):
+    def auto_convert(self):
         if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-            pass  # TODO: make_top()
+            # set parameters for make_top
+            out=self.work_folder+"/make_top.top"
+            mtb_temp = self.Forcefield.mtb_path
+            if hasattr(self.Forcefield, "mtb_orga_path"):
+                mtb_temp += " " + self.Forcefield.mtb_orga_path
+            ifp_temp = self.Forcefield.path
+            if self.Forcefield.mol_name == None:
+                name = self.rdkit2GromosName()
+            else:
+                name = self.Forcefield.mol_name
+            # make top
+            if self._gromosPP == None or self.gromosPP.bin == None or self.gromosPP.bin == "":
+               warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
+            else:
+                self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
+                self.top = Top(in_value=out)
         elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
             if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
@@ -593,6 +609,9 @@ class Gromos_System():
 
         else:
             raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
+
+    def rdkit2GromosName(self) -> str:
+        raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
 
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
         #Get residues

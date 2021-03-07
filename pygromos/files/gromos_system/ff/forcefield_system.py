@@ -32,6 +32,7 @@ class forcefield_system():
     def __init__(self, name:str="2016H66", path:str=None, auto_import:bool = True):
         self.name = name
         self.path = path
+        self.mol_name=None
         if auto_import:
             self.auto_import_ff()
 
@@ -39,10 +40,13 @@ class forcefield_system():
         if self.name == "2016H66":
             self.path = Gromos2016H66.ifp
             self.ifp = ifp(self.path)
+            self.mtb_path = Gromos2016H66.mtb
+            self.mtb_orga_path = Gromos2016H66.mtb_orga
 
         elif self.name == "54A7":
             self.path = Gromos54A7.ifp
             self.ifp = ifp(self.path)
+            self.mtb_path = Gromos54A7.mtb
 
         elif self.name == "openforcefield" or self.name == "smirnoff" or self.name == "off":
             self.import_off()
@@ -50,7 +54,6 @@ class forcefield_system():
         elif self.name == "serenityff":
             self.import_off()
             self.top = Top(in_value=topology_templates.topology_template_dir + "/blank_template+spc.top")
-            self.mol_name=None
             self.develop = False
             self.C12_input={}
             self.partial_charges = collections.defaultdict(float)
