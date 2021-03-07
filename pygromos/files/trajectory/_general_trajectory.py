@@ -86,6 +86,18 @@ class _General_Trajectory():
     def __add__(self, traj):
         return self.add_traj(traj, skip_new_0=True)
 
+    def __copy__(self):
+        traj = type(self)()
+        for attr in vars(self):
+            setattr(traj, attr, getattr(self, attr))
+        traj.database = self.database.copy(deep=False)
+
+    def __deepcopy__(self):
+        traj = type(self)()
+        for attr in vars(self):
+            setattr(traj, attr, getattr(self, attr))
+        traj.database = self.database.copy(deep=True)
+
     def add_traj(self, traj, skip_new_0=True):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 
