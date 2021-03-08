@@ -259,7 +259,7 @@ class Top(_general_gromos_file._general_gromos_file):
 
     #TODO: add implementation
     def add_new_crossdihedral(self, verbose=False):
-        raise "Who needs this???? Could you plox implement it. UwU"
+        raise NotImplementedError("Who needs this???? Could you plox implement it. UwU")
 
     def add_new_LJparameter(self, C6:float, C12:float, CS6:float=0, CS12:float=0, combination_rule:str="geometric", verbose=False, AddATOMTYPENAME:str=None):
         if not hasattr(self, "LJPARAMETERS"):
@@ -275,7 +275,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 cs6 = math.sqrt(float(CS6 * self.LJPARAMETERS.content[num].CS6))
                 cs12 = math.sqrt(float(CS12 * self.LJPARAMETERS.content[num].CS12))
             else:
-                raise "Error in add_new_LJparameter: desired combination rule not implemented"
+                raise NotImplementedError("Error in add_new_LJparameter: desired combination rule not implemented")
             add = blocks.ljparameters_type(IAC=i+1, JAC=nratt+1, C6=c6, C12=c12, CS12=cs12, CS6=cs6)
             self.LJPARAMETERS.append(add)
             num += i+2
@@ -290,7 +290,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 self.LJPARAMETERS.NRATT = 0
             self.add_new_atomtype(AddATOMTYPENAME)
             if(int(self.ATOMTYPENAME.content[0][0]) != self.LJPARAMETERS.content[-1].IAC):
-                raise "Missmatch between number of ATOMTYPNAMEs and LJPARAMETERS"
+                raise IndexError("Missmatch between number of ATOMTYPNAMEs and LJPARAMETERS")
 
 
     def find_LJparameterNumber(self, C12:float, C6:float) -> int:

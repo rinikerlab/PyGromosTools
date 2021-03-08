@@ -18,6 +18,7 @@ TODO: add ene_ana functions
 #imports
 import pandas as pd
 import numpy as np
+
 import pygromos.files.trajectory._general_trajectory as traj
 
 class gromos_2020_tre_block_names_table():
@@ -29,6 +30,34 @@ class Tre(traj._General_Trajectory):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
         self.tre_block_name_table = gromos_2020_tre_block_names_table
 
+
+    """--------------------------------------------------------------
+    Basic getters for Subblocks and Subsubblocks
+    -----------------------------------------------------------------
+    """
+
+    def get_totals(self) -> pd.DataFrame:
+        self.totals = pd.DataFrame(data = np.stack(self.database["totals"].to_numpy()), columns=self.tre_block_name_table.totals_subblock_names)
+        return self.totals
+
+    def get_totals_total(self) -> pd.DataFrame:
+        self.totals_total = self.database["totals"].apply(lambda x: x[0])
+        return self.totals_total
+
+    def get_totals_bonded(self) -> pd.DataFrame:
+        self.totals_bonded = self.database["totals"].apply(lambda x: x[1])
+        return self.totals_bonded
+
+    def get_totals_nonbonded(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[2])
+        return self.totals_nonbonded
+
+
+
+    """--------------------------------------------------------------
+    Additional predefined function for common analysis
+    -----------------------------------------------------------------
+    """
 
     def get_density(self) -> pd.DataFrame:
         """
@@ -53,6 +82,20 @@ class Tre(traj._General_Trajectory):
         """
         return self.database["temperature"].apply(lambda x: x[:,0])
 
-    def get_totals(self) -> pd.DataFrame:
-        self.totals = pd.DataFrame(data = np.stack(self.database["totals"].to_numpy()), columns=self.tre_block_name_table.totals_subblock_names)
-        return self.totals
+    def get_Hvap(self, gas, nMolecules=1, temperature=None):
+        #get gas nonbonded energy from multiple different gas arguments
+        gas_nonbonded_energy = 0
+        if type(gas) == type(self):
+            gas_nonbonded_energy = gas.get_totals_nonbonded().mean()
+        elif type(gas) == float:
+            gas_nonbonded_energy = gas
+        else:
+            raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
+
+        # get liquid nonbonded energy
+        liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
+
+        # calculate heat of vaporization
+        rt_constant = 0.008314462618153239 * temperature # R in kilojoule_per_mole/kelvin * T
+        self.heat_vap = gas_nonbonded_energy - liquid_nonbonded_energyself/nMolecules + rt_constant
+        return self.heat_vap

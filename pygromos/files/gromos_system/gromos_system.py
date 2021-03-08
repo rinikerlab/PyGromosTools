@@ -8,16 +8,12 @@ Author: Marc Lehner, Benjamin Ries
 """
 
 # imports
-import glob
 import copy
 import importlib
 import warnings
+import os
 from typing import Dict, Union, List, Callable
 
-from pygromos.data import ff
-from pygromos.data.ff import *
-from pygromos.data.ff import Gromos2016H66
-from pygromos.data.ff import Gromos54A7
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.coord.refpos import Reference_Position
 from pygromos.files.coord.posres import Position_Restraints
@@ -25,10 +21,10 @@ from pygromos.files.coord.posres import Position_Restraints
 from pygromos.files.coord import cnf
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
-from pygromos.files.topology.ifp import ifp
 from pygromos.files.topology.top import Top
 from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
+from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
@@ -44,9 +40,9 @@ else:
 
 if (importlib.util.find_spec("openforcefield") != None):
     from openforcefield.topology import Molecule
-    from openforcefield.typing.engines import smirnoff
-    from pygromos.files.gromos_system.ff import openforcefield2gromos
-    from pygromos.files.gromos_system.ff import serenityff
+    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
+    from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
+
     has_openff = True
 else:
     has_openff = False
@@ -85,7 +81,7 @@ class Gromos_System():
                  in_top_path: str = None, in_cnf_path: str = None, in_imd_path: str = None,
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
-                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield="2016H66", auto_convert:bool=False, adapt_imd_automatically:bool=True):
+                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), auto_convert:bool=False, adapt_imd_automatically:bool=True):
         """
 
         Parameters
@@ -113,7 +109,7 @@ class Gromos_System():
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
-        self.Forcefield = None
+        self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.checkpoint_path = None
 
@@ -164,7 +160,7 @@ class Gromos_System():
         # import molecule from smiles using rdkit
         if in_smiles:
             self.mol = Chem.MolFromSmiles(in_smiles)
-            Chem.AddHs(self.mol)
+            self.mol = Chem.AddHs(self.mol)
             AllChem.EmbedMolecule(self.mol)
             self.hasData = True
 
@@ -175,13 +171,11 @@ class Gromos_System():
             self.hasData = True
 
         # automate all conversions for rdkit mols if possible
-        if auto_convert and self.hasData:
-            # set forcefield
-            self.import_Forcefield(forcefield=Forcefield) # Actually I want it everytime, if I can somehow Identify which ff was used from top?
-            self.auto_convert_rdkitMol(Forcefield)
-        else: #safety measure, so that not the wrong ffs are combined
-            self.Forcefield = None
-            self.ifp = None
+        if auto_convert:
+            if self.hasData:
+                self.auto_convert()
+            else:
+                raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
 
         #misc
         self._all_files_key = list(map(lambda x: "_"+x, self.required_files.keys()))
@@ -196,14 +190,11 @@ class Gromos_System():
         msg += "WORKDIR: " + self._work_folder + "\n"
         msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
         msg += "\n"
-
-
-        msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
         msg += "GromosXX_bin: " + str(self._gromosXX.bin) + "\n"
         msg += "GromosPP_bin: " + str(self._gromosPP.bin) + "\n"
+        msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
         msg += "FUTURE PROMISE: "+str(self._future_promise)+"\n"
-        msg += "\n"
-        if(hasattr(self, "ligand_info")
+        if(hasattr(self, "solute_info")
             or hasattr(self, "protein_info")
             or hasattr(self, "non_ligand_info")
             or hasattr(self, "solvent_info")):
@@ -212,7 +203,7 @@ class Gromos_System():
                 if(hasattr(self, "protein_info")  and not self.protein_info is None):
                     #+" resIDs: "+str(self.protein_info.residues[0])+"-"+str(self.protein_info.residues[-1])
                     msg += "\tPROTEIN:\t"+str(self.protein_info.name)+"  nresidues: "+str(self.protein_info.number_of_residues)+" natoms: "+str(self.protein_info.number_of_atoms)+"\n"
-                if(hasattr(self, "ligand_info") and not self.solute_info is None):
+                if(hasattr(self, "solute_info") and not self.solute_info is None):
                     msg += "\tLIGANDS:\t" + str(self.solute_info.names) + "  resID: " + str(self.solute_info.positions) + "  natoms: " + str(self.solute_info.number_of_atoms) + "\n"
                 if (hasattr(self, "non_ligand_info")  and not self.non_ligand_info is None):
                     #+"  resID: "+str(self.non_ligand_info.positions)
@@ -580,24 +571,46 @@ class Gromos_System():
         if(len(self._future_promised_files) == 0):
             self._future_promise = False
 
-    def auto_convert_rdkitMol(self, forcefield:str):
-        if forcefield == "2016H66" or forcefield == "54A7":
-            pass  # TODO: make_top()
-        elif forcefield == "smirnoff":
-            if (has_openff):
+    def auto_convert(self):
+        if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
+            # set parameters for make_top
+            out=self.work_folder+"/make_top.top"
+            mtb_temp = self.Forcefield.mtb_path
+            if hasattr(self.Forcefield, "mtb_orga_path"):
+                mtb_temp += " " + self.Forcefield.mtb_orga_path
+            ifp_temp = self.Forcefield.path
+            if self.Forcefield.mol_name is None:
+                name = self.rdkit2GromosName()
+            else:
+                name = self.Forcefield.mol_name
+            # make top
+            if self._gromosPP is None or self.gromosPP.bin is None or self.gromosPP.bin == "":
+               warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
+            else:
+                self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
+                self.top = Top(in_value=out)
+        elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
+            if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
                 self.top = openforcefield2gromos(Molecule.from_rdkit(self.mol), self.top,
-                                                 forcefield_name=self.Forcefield).convert_return()
-        elif forcefield == "serenityff":
-            if (has_openff):
+                                                 forcefield=self.Forcefield).convert_return()
+        elif self.Forcefield.name == "serenityff" or self.Forcefield.name == "sff":
+            if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
-                self.serenityff = serenityff()
+                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield)
+                self.serenityff.create_top(C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges)
+                self.serenityff.top.make_ordered()
+                self.top = self.serenityff.top
+
         else:
-            raise ValueError("I don't know this forcefield: " + forcefield)
+            raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
+
+    def rdkit2GromosName(self) -> str:
+        raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
 
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
         #Get residues
@@ -605,7 +618,7 @@ class Gromos_System():
             and self.solute_info is None
             and self.protein_info is None
             and self.non_ligand_info is None):
-            raise ValueError("The residue_list, ligand_info, protein_info adn non_ligand_info are required for automatic imd-adaptation.")
+            raise ValueError("The residue_list, solute_info, protein_info adn non_ligand_info are required for automatic imd-adaptation.")
         else:
             if(not self.cnf._future_file):
                 cres, lig, prot, nonLig, solvent = self.cnf.get_system_information(not_ligand_residues=not_ligand_residues)
@@ -635,7 +648,7 @@ class Gromos_System():
         if (hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None):
             last_atoms_baths = {}
             if(self._single_multibath):
-                sorted_last_atoms_baths = {self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
+                sorted_last_atoms_baths = { self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
             else:
                 if(self.solute_info.number_of_atoms>0):
                     last_atoms_baths.update({self.solute_info.positions[0]: self.solute_info.number_of_atoms})
@@ -657,44 +670,12 @@ class Gromos_System():
                     value = last_atoms_baths[key]+last_atom_count
                     sorted_last_atoms_baths.update({value:1+ind})
                     last_atom_count=value
-
+            
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
         self.refpos = self.cnf.gen_refpos()
-
-
-    """
-        ForceField
-    """
-    def import_Forcefield(self, forcefield: str = "2016H66"):
-        if forcefield == "2016H66":
-            self.Forcefield = Gromos2016H66.ifp
-            self.ifp = ifp(self.Forcefield)
-        elif forcefield == "54A7":
-            self.Forcefield = Gromos54A7.ifp
-            self.ifp = ifp(self.Forcefield)
-        elif forcefield == "smirnoff":
-            if (has_openff):
-                raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
-                                  "Please install the package for this feature!")
-            else:
-                filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.xml')
-                filelist.sort()
-                for f in filelist:
-                    try:
-                        smirnoff.ForceField(f)
-                        self.Forcefield = f
-                        break
-                    except:
-                        pass
-        elif forcefield == "serenityff":
-            if (has_openff):
-                raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
-                                  "Please install the package for this feature!")
-            else:
-                raise NotImplemented("WIP")
 
 
     """

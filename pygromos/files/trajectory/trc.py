@@ -194,6 +194,8 @@ class Trc(traj._General_Trajectory):
             sum += np.sum(i**2)
         return np.sqrt(sum/len(in_values))
 
+    
+
     def rmsd(self, ref_cnf: Union[int, TrcType]) -> pd.DataFrame:
         """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
 
