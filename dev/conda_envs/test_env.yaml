@@ -16,6 +16,7 @@ dependencies:
   - tqdm
   - ipywidgets
   #science
+  - openforcefield
   - pandas
   - numpy
   - sympy
