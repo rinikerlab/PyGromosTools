@@ -101,7 +101,7 @@ def chain_submission(simSystem:Gromos_System,
 
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
-
+    job_submission_system.job_duration = job_queue_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)
@@ -179,7 +179,6 @@ def chain_submission(simSystem:Gromos_System,
                 outLog = tmp_outdir + "/" + out_prefix + "_md.out"
                 errLog = tmp_outdir + "/" + out_prefix + "_md.err"
                 previous_job_ID = job_submission_system.submit_to_queue(command=md_script_command, jobName=tmp_jobname,
-                                                                        duration=job_queue_duration,
                                                                         submit_from_dir=tmp_outdir,
                                                                         queue_after_jobID=previous_job_ID,
                                                                         outLog=outLog, errLog=errLog, sumbit_from_file=True,
