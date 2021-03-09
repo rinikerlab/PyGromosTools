@@ -51,7 +51,7 @@ class _Gromos:
 
     @property
     def bin(self)->Union[str, None]:
-        if(self._bin == "" or hasattr(self, "_bin")):
+        if(not hasattr(self, "_bin") or self._bin == ""):
             return None
         else:
             return self._bin
