@@ -27,7 +27,7 @@ class _SubmissionSystem:
 
     def __init__(self, submission: bool = False,
                  nmpi: int = 1, nomp: int = 1, max_storage: float = 1000, job_duration: str = "24:00",
-                 verbose: bool = False):
+                 verbose: bool = False, enviroment=None):
         self.verbose = verbose
         self.submission = submission
 
@@ -35,6 +35,7 @@ class _SubmissionSystem:
         self._nmpi = nmpi
         self._nomp = nomp
         self._max_storage = max_storage
+        self._enviroment = enviroment
 
     def submit_to_queue(self, **kargs) -> Union[int, None]:
         raise NotImplemented("Do is not implemented for: " + self.__class__.__name__)
@@ -499,8 +500,8 @@ class LOCAL(_SubmissionSystem):
     """
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
-                 verbose: bool = False):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission)
+                 verbose: bool = False, enviroment=None):
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str, jobName: str = "local", submit_from_dir: str = None,
                         sumbit_from_file: bool = False, **kwargs) -> Union[int, None]:
@@ -555,7 +556,7 @@ class LOCAL(_SubmissionSystem):
         if (self.verbose): print("Submission Command: \t", " ".join(command))
         if (self.submission):
             try:
-                process = bash.execute(command=command, catch_STD=True)
+                process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
                 std_out_buff = map(str, process.stdout.readlines())
                 std_out = "\t" + "\n\t".join(std_out_buff)
 
