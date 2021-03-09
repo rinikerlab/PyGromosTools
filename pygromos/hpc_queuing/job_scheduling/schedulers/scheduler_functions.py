@@ -102,6 +102,8 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
+    simSystem.job_duration = job_queue_duration
+
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)
@@ -179,11 +181,10 @@ def chain_submission(simSystem:Gromos_System,
                 outLog = tmp_outdir + "/" + out_prefix + "_md.out"
                 errLog = tmp_outdir + "/" + out_prefix + "_md.err"
                 previous_job_ID = job_submission_system.submit_to_queue(command=md_script_command, jobName=tmp_jobname,
-                                                                        duration=job_queue_duration,
                                                                         submit_from_dir=tmp_outdir,
                                                                         queue_after_jobID=previous_job_ID,
                                                                         outLog=outLog, errLog=errLog, sumbit_from_file=True,
-                                                                        nmpi=nmpi, end_mail=True, verbose=verbose)
+                                                                        end_mail=True, verbose=verbose)
                 print("SIMULATION ID: ", previous_job_ID)
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
@@ -197,7 +198,7 @@ def chain_submission(simSystem:Gromos_System,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
                                                                  outLog=outLog, errLog=errLog,
-                                                                 nmpi=nmpi, verbose=verbose)
+                                                                 verbose=verbose)
                 print("CLEANING ID: ", previous_job_ID)
 
             except ValueError as err:  # job already in the queue
@@ -217,7 +218,7 @@ def chain_submission(simSystem:Gromos_System,
                     ana_id = job_submission_system.submit_to_queue(command=in_analysis_script_path,
                                                                    jobName=tmp_ana_jobname,
                                                                    outLog=outLog, errLog=errLog,
-                                                                   maxStorage=20000, queue_after_jobID=clean_id, nmpi=5,
+                                                                   queue_after_jobID=clean_id,
                                                                    verbose=verbose)
                     if (verbose): print("\n")
                 except ValueError as err:  # job already in the queue
