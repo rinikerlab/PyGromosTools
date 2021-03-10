@@ -128,8 +128,8 @@ class LSF(_SubmissionSystem):
     """
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
-                 verbose: bool = False):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission)
+                 verbose: bool = False, enviroment=None):
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str,
                         jobName: str, outLog=None, errLog=None,
@@ -255,7 +255,7 @@ class LSF(_SubmissionSystem):
             command_file.close()
             command = command_file_path
 
-            bash.execute("chmod +x " + command_file_path)
+            bash.execute("chmod +x " + command_file_path, env=self._enviroment)
 
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
@@ -263,7 +263,7 @@ class LSF(_SubmissionSystem):
         if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
         if (self.submission):
             try:
-                out_process = bash.execute(command=submission_string, catch_STD=True)
+                out_process = bash.execute(command=submission_string, catch_STD=True, env=self._enviroment)
                 std_out = "\n".join(map(str, out_process.stdout.readlines()))
 
                 # next sopt_job is queued with id:
@@ -422,7 +422,7 @@ class LSF(_SubmissionSystem):
         if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
         if (self.submission):
             try:
-                std_out_buff = bash.execute(command=submission_string)
+                std_out_buff = bash.execute(command=submission_string, env=self._enviroment)
                 std_out = "\n".join(std_out_buff.readlines())
 
                 # next sopt_job is queued with id:
@@ -484,7 +484,7 @@ class LSF(_SubmissionSystem):
             if (dummyTesting):
                 out_job_lines = ["123 TEST", "456 TEST2"]
             else:
-                out_process = bash.execute("bjobs -w", catch_STD=True)
+                out_process = bash.execute("bjobs -w", catch_STD=True, env=self._enviroment)
                 stdout = list(map(str, out_process.stdout.readlines()))
                 out_job_lines = list(filter(lambda line: re.search(job_name, line), stdout))
 
@@ -549,7 +549,7 @@ class LOCAL(_SubmissionSystem):
             command_file.write(command.replace("&& ", ";\n") + ";\n")
             command_file.close()
             command = command_file_path
-            bash.execute("chmod +x " + command_file_path)
+            bash.execute("chmod +x " + command_file_path, env=self._enviroment)
 
         ##finalize string
 
@@ -618,7 +618,7 @@ class LOCAL(_SubmissionSystem):
         if (self.submission):
             try:
                 for jobID in range(start_Job, end_job + 1):
-                    std_out_buff = bash.execute(command="export JOBID=" + str(jobID) + " && " + command)
+                    std_out_buff = bash.execute(command="export JOBID=" + str(jobID) + " && " + command, env=self._enviroment)
                     std_out = "\n".join(std_out_buff.readlines())
                     if self.verbose: print("sdtout : " + str(std_out))
                 return 0
@@ -673,8 +673,8 @@ class DUMMY(_SubmissionSystem):
     """
 
     def __init__(self, verbose: bool = False, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
-                 submission: bool = True):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission)
+                 submission: bool = True, enviroment=None):
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str, **kwargs) -> Union[int, None]:
         if (self.submission):
