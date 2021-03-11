@@ -7,6 +7,9 @@ import numpy as np
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.coord import cnf
+from pygromos.files.trajectory.trc import Trc
+from pygromos.files.trajectory.tre import Tre
+from pygromos.files.trajectory.trg import Trg
 from pygromos.files.blocks.imd_blocks import PERTURBATION, PRECALCLAM, WRITETRAJ
 
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
@@ -238,6 +241,25 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
         in_gromos_system.cnf = cnf.Cnf(in_value=None)
         in_gromos_system.cnf._future_file = True
         in_gromos_system.cnf.path = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
+    
+    # Return trajectories if available 
+    final_trc_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trc"
+    if os.path.exists(final_trc_file+".h5"):
+        in_gromos_system.trc = Trc(input_value=final_trc_file+".h5")
+    elif os.path.exists(final_trc_file):
+        in_gromos_system.trc = Trc(input_value=final_trc_file)
+
+    final_tre_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".tre"
+    if os.path.exists(final_tre_file+".h5"):
+        in_gromos_system.tre = Tre(input_value=final_tre_file+".h5")
+    elif os.path.exists(final_tre_file):
+        in_gromos_system.tre = Tre(input_value=final_tre_file)
+
+    final_trg_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trg"
+    if os.path.exists(final_trg_file+".h5"):
+        in_gromos_system.trg = Trg(input_value=final_trg_file+".h5")
+    elif os.path.exists(final_trg_file):
+        in_gromos_system.trg = Trg(input_value=final_trg_file)
 
     return in_gromos_system, last_jobID
 
