@@ -48,7 +48,8 @@ class _SubmissionSystem:
         gen_cmd = "#Generate " + name + "\n"
         gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
         gen_cmd += var_name + " = " + name + "_obj(submission=" + str(self.submission) + ", verbose=" + str(
-            self.verbose) + ")\n\n"
+            self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", max_storage="+str(
+            self.max_storage)+", job_duration="+str(self.job_duration)+")\n\n"
         return gen_cmd
 
     def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:

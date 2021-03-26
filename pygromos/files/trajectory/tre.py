@@ -22,7 +22,10 @@ import numpy as np
 import pygromos.files.trajectory._general_trajectory as traj
 
 class gromos_2020_tre_block_names_table():
-    totals_subblock_names = ["totene","totkin","totpot","totcov","totbond","totangle","totimproper","totdihedral","totcrossdihedral","totnonbonded","totlj","totcrf","totls","totlspair","totlsreal","totlsk","totlsa","totlsself","totlssurf","totpolself","totspecial","totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle","totorder","totsymm","eds_vr,entropy","totqm","totbsleus","totrdc","wip1","wip2","wip3","wip4","wip5","wip6"]
+    totals_subblock_names = ["totene","totkin","totpot","totcov","totbond","totangle","totimproper","totdihedral","totcrossdihedral","totnonbonded",
+                             "totlj","totcrf","totls","totlspair","totlsreal","totlsk","totlsa","totlsself","totlssurf","totpolself","totspecial",
+                             "totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle",
+                             "totorder","totsymm","eds_vr,entropy","totqm","totbsleus","totrdc","wip1","wip2","wip3","wip4","wip5","wip6"]
 
 
 class Tre(traj._General_Trajectory):
