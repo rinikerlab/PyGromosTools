@@ -17,8 +17,7 @@ Description:
 Author: Marc Lehner
 """
 
-from copy import copy, deepcopy
-from warnings import WarningMessage
+from copy import deepcopy
 from rdkit import Chem
 import os
 import warnings
@@ -34,9 +33,6 @@ from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulat
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
-
-from pygromos.gromos import GromosXX, GromosPP
-from pygromos.utils import bash, utils
 
 class Hvap_calculation():
     def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy") -> None:

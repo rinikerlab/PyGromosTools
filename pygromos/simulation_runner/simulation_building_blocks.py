@@ -5,7 +5,6 @@ import traceback
 from typing import List
 from collections import OrderedDict
 import numpy as np
-from pygromos.files import gromos_system
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.coord import cnf
