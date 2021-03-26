@@ -15,7 +15,7 @@ COVALENTFORM
 END
 STEP
 #   NSTLIM         T        DT
-   2000000         0     0.002
+     20000         0     0.002
 END
 BOUNDCOND
 #      NTB    NDFMIN
@@ -71,10 +71,10 @@ COMTRANSROT
 #     NSCM
       1000
 END
-AMBER
-# AMBER AMBSCAL
-      1       1.2
-END
+#AMBER
+## AMBER AMBSCAL
+#      1       1.2
+#END
 PRINTOUT
 #NTPR: print out energies, etc. every NTPR steps
 #NTPP: =1 perform dihedral angle transition monitoring

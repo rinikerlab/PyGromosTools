@@ -22,6 +22,7 @@ from warnings import WarningMessage
 from rdkit import Chem
 import os
 import warnings
+import time
 
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.files.gromos_system.hvap_calculation import hvap_input_files
@@ -63,10 +64,15 @@ class Hvap_calculation():
         except:
             warnings.warn("Folder does already exist")
         self.groSys_gas.work_folder = work_folder + "/" + system_name +"_gas"
+        self.groSys_gas.rebase_files()
         self.groSys_liq = deepcopy(self.groSys_gas)
         self.groSys_liq.work_folder = work_folder + "/" + system_name +"_liq"
+        self.groSys_liq.rebase_files()
 
         self.submissonSystem = subSys()
+
+        self.gromosXX = self.groSys_gas.gromosXX
+        self.gromosPP = self.groSys_gas.gromosPP
 
         # define template imd files (overwritte for specific systems) 
         # made for small molecule Hvap calculation
@@ -82,25 +88,44 @@ class Hvap_calculation():
         # made for small molecule Hvap calculation
         self.num_molecules = 512
         self.density = 1000
+        self.temperature = 298.15
+
+        self.groSys_gas_final = None
+        self.groSys_liq_final = None
 
     def run(self) -> int:
+        self.create_liq()
         self.run_gas()
         self.run_liq()
         return self.calc_hvap()
+
+    def create_liq(self):
+        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder+"/temp.top")
+        tempTop = Top(in_value=self.work_folder+"/temp.top")
+        tempTop.write(out_path=self.work_folder+"temp.top")
+        time.sleep(1)
+        self.groSys_liq.top = tempTop
+        if self.groSys_liq.cnf is None:
+            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+            time.sleep(1)
+            self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
+        self.groSys_liq.rebase_files()
 
     def run_gas(self):
         self.groSys_gas.rebase_files()
 
         #min
-        simulation(in_gromos_system=self.groSys_gas, 
+        print(self.groSys_gas.work_folder)
+        sys_emin_gas, jobID = simulation(in_gromos_system=self.groSys_gas, 
                     project_dir=self.groSys_gas.work_folder,
                     step_name="1_emin", 
                     in_imd_path=self.imd_gas_min,
                     submission_system=self.submissonSystem,
                     analysis_script=simulation_analysis.do)
+        print(self.groSys_gas.work_folder)
 
         #eq
-        simulation(in_gromos_system=self.groSys_gas, 
+        sys_eq_gas, jobID = simulation(in_gromos_system=sys_emin_gas, 
                     project_dir=self.groSys_gas.work_folder,
                     step_name="2_eq", 
                     in_imd_path=self.imd_gas_eq,
@@ -108,19 +133,21 @@ class Hvap_calculation():
                     analysis_script=simulation_analysis.do)
 
         #sd
-        simulation(in_gromos_system=self.groSys_gas, 
+        sys_sd_gas, jobID = simulation(in_gromos_system=sys_eq_gas, 
                     project_dir=self.groSys_gas.work_folder,
                     step_name="3_sd", 
                     in_imd_path=self.imd_gas_sd,
                     submission_system=self.submissonSystem,
                     analysis_script=simulation_analysis.do)
 
+        self.groSys_gas_final = sys_sd_gas
+
 
     def run_liq(self):
         self.groSys_liq.rebase_files()
 
-        #min
-        simulation(in_gromos_system=self.groSys_liq, 
+        #minsys_emin_liq, jobID
+        sys_emin_liq, jobID = simulation(in_gromos_system=self.groSys_liq, 
                     project_dir=self.groSys_liq.work_folder,
                     step_name="1_emin", 
                     in_imd_path=self.imd_liq_min,
@@ -128,7 +155,7 @@ class Hvap_calculation():
                     analysis_script=simulation_analysis.do)
 
         #eq
-        simulation(in_gromos_system=self.groSys_liq, 
+        sys_eq_liq, jobID = simulation(in_gromos_system=sys_emin_liq, 
                     project_dir=self.groSys_liq.work_folder,
                     step_name="2_eq", 
                     in_imd_path=self.imd_liq_eq,
@@ -136,12 +163,15 @@ class Hvap_calculation():
                     analysis_script=simulation_analysis.do)
 
         #md
-        simulation(in_gromos_system=self.groSys_liq, 
+        sys_md_liq, jobID = simulation(in_gromos_system=sys_eq_liq, 
                     project_dir=self.groSys_liq.work_folder,
                     step_name="3_sd", 
                     in_imd_path=self.imd_liq_md,
                     submission_system=self.submissonSystem,
                     analysis_script=simulation_analysis.do)
 
-    def calc_hvap(self) -> int:
-        return 0
+        self.groSys_liq_final = sys_md_liq
+
+    def calc_hvap(self) -> float:
+        h_vap = self.groSys_liq_final.tre.get_Hvap(gas=self.groSys_gas_final.tre, nMolecules=self.num_molecules, temperature=self.temperature)
+        return h_vap

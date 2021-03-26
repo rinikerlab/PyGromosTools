@@ -1,9 +1,11 @@
+from copy import deepcopy
 import os, sys
 import warnings
 import traceback
 from typing import List
 from collections import OrderedDict
 import numpy as np
+from pygromos.files import gromos_system
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.coord import cnf
@@ -149,6 +151,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             bash.make_folder(out_input_dir)
 
             ##Prepare gromos system:
+            in_gromos_system = deepcopy(in_gromos_system)
             in_gromos_system.work_folder = out_input_dir
             in_gromos_system.name = step_name
             if in_imd_path is None:
@@ -261,5 +264,6 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
     elif os.path.exists(final_trg_file):
         in_gromos_system.trg = Trg(input_value=final_trg_file)
 
+    in_gromos_system.work_folder = step_dir
     return in_gromos_system, last_jobID
 

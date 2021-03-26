@@ -96,7 +96,7 @@ COMTRANSROT
 #     NSCM
       1000
 END
-AMBER
+#AMBER
 # AMBER 0..1 use AMBER topology
 # 0: GROMOS topology
 # 1: AMBER topology
@@ -104,8 +104,8 @@ AMBER
 # ( will be directly inverted when reading in)
 # Default : 1.2
 # AMBER AMBSCAL
-      1      1.2
-END 
+#      1      1.2
+#END 
 PRINTOUT
 #NTPR: print out energies, etc. every NTPR steps
 #NTPP: =1 perform dihedral angle transition monitoring
@@ -114,5 +114,5 @@ PRINTOUT
 END
 WRITETRAJ
 #    NTWX     NTWSE      NTWV      NTWF      NTWE      NTWG      NTWB
-      100         0         0         0       100         0         0
+     1000         0         0         0      1000         0         0
 END

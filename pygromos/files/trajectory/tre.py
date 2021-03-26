@@ -82,7 +82,7 @@ class Tre(traj._General_Trajectory):
         """
         return self.database["temperature"].apply(lambda x: x[:,0])
 
-    def get_Hvap(self, gas, nMolecules=1, temperature=None):
+    def get_Hvap(self, gas, nMolecules=1, temperature=None) -> float:
         #get gas nonbonded energy from multiple different gas arguments
         gas_nonbonded_energy = 0
         if type(gas) == type(self):
