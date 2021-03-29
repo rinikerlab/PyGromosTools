@@ -24,7 +24,7 @@ import warnings
 import time
 
 from pygromos.files.gromos_system.gromos_system import Gromos_System
-from pygromos.files.gromos_system.hvap_calculation import hvap_input_files
+from pygromos.simulation_runner.hvap_calculation import hvap_input_files
 
 from pygromos.hpc_queuing.submission_systems.Submission_Systems import LOCAL as subSys
 from pygromos.simulation_runner.simulation_building_blocks import simulation
