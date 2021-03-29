@@ -216,6 +216,7 @@ class _general_gromos_file():
         str
             out_path
         """
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
         file = open(out_path, "w")
         file.write(str(self))
         file.close()
