@@ -92,7 +92,7 @@ class _General_Trajectory():
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=False)
 
-    def __deepcopy__(self):
+    def __deepcopy__(self, memo):
         traj = type(self)(input_value=None)
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))

@@ -634,7 +634,7 @@ class _gromosPPbase:
         command= self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " " + command_suffix + " > " + out_cnf_path + " \n"
         if not return_command_only:
             print(command)
-            std_out = bash.execute_os(command, verbose=verbose)
+            std_out = bash.execute(command, verbose=verbose)
             return out_cnf_path
         else:
             return command
@@ -649,7 +649,7 @@ class _gromosPPbase:
         command= self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " > " + out_cnf_path + " \n"
         if not return_command_only:
             print(command)
-            std_out = bash.execute_os(command, verbose=verbose)
+            std_out = bash.execute(command, verbose=verbose)
             return out_cnf_path
         else:
             return command
