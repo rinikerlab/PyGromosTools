@@ -70,7 +70,6 @@ class forcefield_system():
         else:
             filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.offxml')
             filelist.sort()
-            print(filelist)
             for f in filelist:
                 try:
                     self.off = smirnoff.ForceField(f)
