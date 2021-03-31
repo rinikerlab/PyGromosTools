@@ -148,10 +148,10 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             ##Prepare gromos system:
             in_gromos_system.work_folder = out_input_dir
             in_gromos_system.name = step_name
-            if(not in_imd_path is None and in_gromos_system.imd.path is None):
+            if in_imd_path is None:
+                in_gromos_system.adapt_imd()  
+            else:
                 in_gromos_system.imd = in_imd_path
-                in_gromos_system.adapt_imd()
-            elif(not (in_gromos_system.cnf._future_file or in_gromos_system.imd._future_file)):
                 in_gromos_system.adapt_imd()
 
             out_analysis_cnf = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"

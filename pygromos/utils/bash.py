@@ -697,7 +697,7 @@ def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
 
     return dummyProcess(stdout=ret, stderr=[], ret=0)
 
-def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False):
+def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False, env=None):
     #if(isinstance(command, str))
     #    command = command.split(" ")
     #if(verbose): print("submitting command: \n\t"+" ".join(command))
@@ -711,9 +711,11 @@ def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch
         kwargs.update({"stdout": sub.PIPE})
     elif(isinstance(catch_STD, str)):
         kwargs.update({"stdout": open(catch_STD, "w")})
+    
+    if env is None:
+        env=os.environ.copy()
 
-
-    p = sub.Popen(args = command, shell=True, stderr=sub.PIPE, env=os.environ.copy(), **kwargs)
+    p = sub.Popen(args = command, shell=True, stderr=sub.PIPE, env=env, **kwargs)
 
     #print(p, vars(p))
     try: 

@@ -1032,7 +1032,7 @@ class MASSATOMTYPECODE(_iterable_topology_block):
             mass_atom_type_code, mass, mass_atom_name = field.strip().split()
             self.content.append(atom_mass_type(int(mass_atom_type_code), float(mass), str(mass_atom_name)))
 
-        print(self.content)
+        #print(self.content)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
