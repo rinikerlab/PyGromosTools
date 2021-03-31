@@ -102,8 +102,7 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
-    simSystem.job_duration = job_queue_duration
-
+    job_submission_system.job_duration = job_queue_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)

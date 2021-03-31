@@ -2,6 +2,7 @@ import os
 import re
 import socket
 import warnings
+import time
 from typing import List, Union
 
 from pygromos.utils import bash
@@ -480,9 +481,11 @@ class LSF(_SubmissionSystem):
             if (not regex):
                 job_name = " " + job_name + " "
             if (verbose): print("getting job data")
-            if (dummyTesting):
-                out_job_lines = ["123 TEST", "456 TEST2"]
+            if (True or dummyTesting):
+                out_job_lines = []
+                #out_job_lines = ["123 TEST", "456 TEST2"]
             else:
+                time.sleep(5)
                 out_process = bash.execute("bjobs -w", catch_STD=True)
                 stdout = list(map(str, out_process.stdout.readlines()))
                 out_job_lines = list(filter(lambda line: re.search(job_name, line), stdout))

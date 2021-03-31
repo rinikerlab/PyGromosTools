@@ -253,6 +253,10 @@ class Gromos_System():
         self._all_files_key.extend(list(map(lambda x: "_"+x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
+       
+        #@bschroed remove this !
+        self._gromosPP = GromosPP(gromosPP_bin_dir=None)
+        self._gromosXX =GromosXX(gromosXX_bin_dir=None)
 
         #are promised files now present?
         self._check_promises()

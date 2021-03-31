@@ -716,7 +716,11 @@ def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch
     p = sub.Popen(args = command, shell=True, stderr=sub.PIPE, env=os.environ.copy(), **kwargs)
 
     #print(p, vars(p))
-    p.wait() # Wait for process to finish
+    try: 
+        p.wait(120) # Wait for process to finish
+    except:
+        warnings.warn("TIME OUT WITH: "+str(command))
+        p.wait() # Wait for process to finish
     p.terminate() # Make sure its terminated
     r = p.poll()
     if(r):   # Did an Error occure?
