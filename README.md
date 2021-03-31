@@ -1,3 +1,5 @@
+![](.img/PyGromosToolsBanner.png)
+
 Welcome to PyGromosTools
 ==============================
 [//]: # (Badges)
