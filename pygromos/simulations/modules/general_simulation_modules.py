@@ -1,134 +1,19 @@
-from copy import deepcopy
-import os, sys
-import warnings
+import os
+import sys
 import traceback
-from typing import List
 from collections import OrderedDict
-import numpy as np
+from copy import deepcopy
 
-from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.coord import cnf
+from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.trajectory.trc import Trc
 from pygromos.files.trajectory.tre import Tre
 from pygromos.files.trajectory.trg import Trg
-from pygromos.files.blocks.imd_blocks import PERTURBATION, PRECALCLAM, WRITETRAJ
-
-from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
-
-from pygromos.utils import bash
-from pygromos.utils import utils
-from pygromos.utils.utils import spacer as spacer
-
 from pygromos.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
 from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import LOCAL, _SubmissionSystem
-
-"""
-    Simulations
-"""
-def emin(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "emin", in_imd_path=template_emin,
-         submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
-         previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
-
-    template_emin_control_dict = simulation_analysis.template_control_dict
-    template_emin_control_dict['concat']['cat_trc'] = False
-    template_emin_control_dict['concat']['cat_tre'] = False
-    template_emin_control_dict['concat']['cat_trg'] = False
-
-
-    return simulation(in_gromos_system=in_gromos_system, project_dir=project_dir,  previous_simulation_run=previous_simulation_run,
-                      step_name=step_name, in_imd_path=in_imd_path, submission_system=submission_system,
-                      simulation_runs=simulation_runs, equilibration_runs=equilibration_runs, analysis_control_dict = template_emin_control_dict,
-                      analysis_script=analysis_script)
-
-def md(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "md", in_imd_path=template_md,
-       submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
-       previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
-    return simulation(in_gromos_system=in_gromos_system, project_dir=project_dir,  previous_simulation_run=previous_simulation_run,
-                      step_name=step_name, in_imd_path=in_imd_path, submission_system=submission_system,
-                      simulation_runs=simulation_runs, equilibration_runs=equilibration_runs,
-                      analysis_script=analysis_script)
-
-def sd(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "sd", in_imd_path=template_sd,
-       submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
-       previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
-    return simulation(in_gromos_system=in_gromos_system, project_dir=project_dir, previous_simulation_run=previous_simulation_run,
-                      step_name=step_name, in_imd_path=in_imd_path, submission_system=submission_system,
-                      simulation_runs=simulation_runs, equilibration_runs=equilibration_runs,
-                      analysis_script=analysis_script)
-
-"""
-    Free Energy
-"""
-def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="lambda_sampling",
-                lambda_values: List[float] = np.arange(0, 1.1, 0.1), subSystem: _SubmissionSystem = LOCAL(),
-                n_simulation_repetitions: int = 3, n_equilibrations: int = 1):
-
-    work_dir = bash.make_folder(project_dir + "/" + step_name)
-    in_gromos_system.save(work_dir)
-    sys_path = in_gromos_system.save(work_dir+"/"+step_name+"_input.obj") #Ugly workaround for deepcopy
-    general_system_name_prefix = in_gromos_system.name
-
-    lam_systems = []
-    for lam in lambda_values:
-        lam = np.round(lam, 2)
-
-        lam_system = Gromos_System.load(sys_path)
-        lam_system.name = general_system_name_prefix+"_l_" + str(lam)
-        lam_system.work_folder = work_dir
-
-        # IMD
-        ## Pertubation
-        ###Pertubation of system.
-        pert_block = PERTURBATION(NTG=1, NRDGL=0, RLAM=lam, DLAMT=0,
-                                  ALPHC=0.5, ALPHLJ=0.5, NLAM=2, NSCALE=0)
-        lam_system.imd.add_block(block=pert_block)
-
-        ###Calculate additional lambda points for end-states
-        if(not hasattr(lam_system, "PRECALCLAM")):
-            precalc_lam_block = PRECALCLAM(NRLAM=2, MINLAM=0, MAXLAM=1)
-            lam_system.imd.add_block(block=precalc_lam_block)
-
-        # Submit
-        out_gromos_system, jobID = _TI_lam_step(in_gromos_system=lam_system, project_dir=work_dir,
-                                                step_name=lam_system.name, submission_system=subSystem,
-                                                simulation_runs=n_simulation_repetitions,
-                                                equilibration_runs=n_equilibrations)
-
-        out_gromos_system.save(out_gromos_system.work_folder + "/sd_out_system.obj")
-        lam_systems.append(out_gromos_system)
-
-    return lam_system, jobID
-
-
-
-def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=template_sd,
-                 submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
-                 previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
-    template_emin_control_dict = OrderedDict({
-        "concat": {"do": True,
-                   "sub": {
-                       "cp_cnf": True,
-                       "cat_trc": True,
-                       "cat_tre": True,
-                       "cat_trg": True,
-                       "convert_trcs": False,
-                   }
-                   },
-        "simulation_folder": {
-            "do": False,
-            "sub": {
-                "tar": False,
-                "remove": False
-            }
-        }
-    })
-
-    return simulation(in_gromos_system=in_gromos_system, project_dir=project_dir, previous_simulation_run=previous_simulation_run,
-                      step_name=step_name, in_imd_path=in_imd_path, submission_system=submission_system,
-                      simulation_runs=simulation_runs, equilibration_runs=equilibration_runs, analysis_control_dict=template_emin_control_dict,
-                      analysis_script=analysis_script)
-
+from pygromos.hpc_queuing.submission_systems.Submission_Systems import _SubmissionSystem, LOCAL
+from pygromos.utils import bash, utils
+from pygromos.utils.utils import spacer as spacer
 
 
 def simulation(in_gromos_system:Gromos_System, project_dir:str,
@@ -154,7 +39,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system.work_folder = out_input_dir
             in_gromos_system.name = step_name
             if in_imd_path is None:
-                in_gromos_system.adapt_imd()  
+                in_gromos_system.adapt_imd()
             else:
                 in_gromos_system.imd = in_imd_path
                 in_gromos_system.adapt_imd()
@@ -243,8 +128,8 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
         in_gromos_system.cnf = cnf.Cnf(in_value=None)
         in_gromos_system.cnf._future_file = True
         in_gromos_system.cnf.path = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
-    
-    # Return trajectories if available 
+
+    # Return trajectories if available
     final_trc_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trc"
     if os.path.exists(final_trc_file+".h5"):
         in_gromos_system.trc = Trc(input_value=final_trc_file+".h5")
@@ -265,4 +150,3 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
 
     in_gromos_system.work_folder = step_dir
     return in_gromos_system, last_jobID
-

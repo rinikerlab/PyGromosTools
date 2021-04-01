@@ -24,10 +24,10 @@ import warnings
 import time
 
 from pygromos.files.gromos_system.gromos_system import Gromos_System
-from pygromos.simulation_runner.hvap_calculation import hvap_input_files
+from pygromos.simulations.hvap_calculation import hvap_input_files
 
 from pygromos.hpc_queuing.submission_systems.Submission_Systems import LOCAL as subSys
-from pygromos.simulation_runner.simulation_building_blocks import simulation
+from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
 from pygromos.files.coord.cnf import Cnf
