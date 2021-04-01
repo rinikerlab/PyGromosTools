@@ -4,5 +4,5 @@
         * property analysis
         * default analysis for emin ? eq?
 
-    Start with local submission!
+    Start with local submission system first. :)
 """
