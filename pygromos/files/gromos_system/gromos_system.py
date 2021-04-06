@@ -237,8 +237,10 @@ class Gromos_System():
         for key in attribute_dict.keys():
             if (not isinstance(attribute_dict[key], Callable) and not key in skip):
                 new_dict.update({key:attribute_dict[key]})
-            elif(key in skip):
+            elif(not attribute_dict[key] is None and key in skip):
                 new_dict.update({key: attribute_dict[key]._asdict()})
+            else:
+                new_dict.update({key: None})
 
         return new_dict
 
@@ -263,7 +265,7 @@ class Gromos_System():
 
 
     def __deepcopy__(self, memo):
-        copy_obj = self.__class__(system_name="Test", work_folder="Test")
+        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder+"/test", readIn=False)
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
