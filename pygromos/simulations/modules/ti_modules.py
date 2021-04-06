@@ -4,6 +4,7 @@
 
 from collections import OrderedDict
 from typing import List
+import numpy as np
 
 from pygromos.data.simulation_parameters_templates import template_sd
 from pygromos.files.blocks.imd_blocks import PERTURBATION, PRECALCLAM
@@ -46,6 +47,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
         # Submit
         out_gromos_system, jobID = _TI_lam_step(in_gromos_system=lam_system, project_dir=work_dir,
                                                 step_name=lam_system.name, submission_system=subSystem,
+                                                in_imd_path=None,
                                                 simulation_runs=n_simulation_repetitions,
                                                 equilibration_runs=n_equilibrations)
 
