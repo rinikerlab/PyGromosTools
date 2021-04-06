@@ -222,6 +222,15 @@ class Top(_general_gromos_file._general_gromos_file):
             self.DIHEDRAL.content.append(blocks.top_dihedral_type(IP=atomI, JP=atomJ, KP=atomK, LP=atomL, ICP=torsion_type_number))
             self.DIHEDRAL.NPHI += 1
 
+    
+    def add_new_impdihedral_type(self, CQ:float, Q0:float, verbose=False):
+        #check if all classes are ready, if not create
+        if not hasattr(self, "IMPDIHEDRALTYPE"):
+            self.add_block(blocktitle="IMPDIHEDRALTYPE", content=[], verbose=verbose)
+        newIMPDIHEDRALTYPE = blocks.impdihedraltype_type(CQ=CQ, Q0=Q0)
+        self.IMPDIHEDRALTYPE.content.append(newIMPDIHEDRALTYPE)
+        self.IMPDIHEDRALTYPE.NQTY += 1
+
 
     def add_new_impdihedral(self, CQ:float, Q0:float, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
         #check if all classes are ready, if not create
@@ -244,9 +253,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 iterator += 1
             impdihedral_type_number = iterator #found the torsion
         if iterator > len(self.IMPDIHEDRALTYPE.content):#torsion type was not found -> add new bondtype
-            newIMPDIHEDRALTYPE = blocks.impdihedraltype_type(CQ=CQ, Q0=Q0)
-            self.IMPDIHEDRALTYPE.content.append(newIMPDIHEDRALTYPE)
-            self.IMPDIHEDRALTYPE.NQTY += 1
+            self.add_new_impdihedral_type(CQ=CQ, Q0=Q0)
         
         #check if we are adding a bond to IMPDIHEDRALH or IMPDIHEDRALH
         if includesH:
