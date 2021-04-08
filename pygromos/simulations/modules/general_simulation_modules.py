@@ -92,7 +92,6 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             "equilibration_run_num": equilibration_runs,
             "submission_system": submission_system,
             "analysis_script_path": in_analysis_script_path,
-            "nmpi" : nmpi,
         })
         try:
             in_scheduler_script_path = utils.write_job_script(out_script_path=step_dir + "/schedule_MD_job.py",
@@ -115,7 +114,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             last_jobID = simulation_scheduler.do(in_simSystem=in_gromos_system, out_dir_path=out_simulation_dir,
                                                     simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
                                                     submission_system=submission_system, previous_job_ID=previous_simulation_run,
-                                                    analysis_script_path=in_analysis_script_path, nmpi=nmpi)
+                                                    analysis_script_path=in_analysis_script_path)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not submit the commands\n\t"+"\n\t".join(map(str, err.args)))
