@@ -123,6 +123,16 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     gromosXX = mdGromosXX.GromosXX(gromosXX_bin_dir=gromosXX_bin_dir)
     try:
         print(spacer + "\n start MD " + str(os.path.basename(tmp_imd_path)) + "\n")
+
+        #TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!
+        from pygromos.files.coord import cnf
+        import math
+        cnf_file = cnf.Cnf(in_cnf_path)
+        if(any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
+            cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
+            cnf_file.write(in_cnf_path)
+
+
         out_prefix = out_dir+"/"+tmp_prefix
         try:
             omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
