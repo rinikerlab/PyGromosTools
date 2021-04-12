@@ -18,10 +18,10 @@ def do(in_simSystem: Gromos_System,
        out_dir_path: str,
        simulation_run_num: int,
        equilibration_run_num: int = 0,
-       nmpi: int = 1, nomp: int = 1, work_dir: str = None,
+       work_dir: str = None,
        analysis_script_path: str = None,
        submission_system:_SubmissionSystem = LSF(),
-       previous_job_ID: int = None, duration_per_job: str = "24:00", no_double_submit:bool=True,
+       previous_job_ID: int = None, no_double_submit:bool=True,
        verbose: bool = True, verbose_lv:int=1):
     """
 
@@ -31,14 +31,11 @@ def do(in_simSystem: Gromos_System,
     out_dir_path
     simulation_run_num
     equilibration_run_num
-    nmpi
-    nomp
     gromos_bin_dir
     work_dir
     analysis_script_path
     submission_system
     previous_job_ID
-    duration_per_job
     no_double_submit
     verbose
     verbose_lv:
@@ -127,7 +124,7 @@ def do(in_simSystem: Gromos_System,
                              out_dir_path= out_dir_path, out_prefix=tmp_outprefix,
                              jobname=tmp_jobname,
                              chain_job_repetitions=equilibration_run_num, worker_script=workerScript.__file__,
-                             job_submission_system=submission_system,job_queue_duration=duration_per_job, nmpi=nmpi,
+                             job_submission_system=submission_system,
                              do_not_doubly_submit_to_queue=no_double_submit, start_run_index = 1,
                              prefix_command =  "", previous_job_ID = previous_job_ID, work_dir = work_dir,
                              initialize_first_run = True, reinitialize = False,
@@ -142,7 +139,7 @@ def do(in_simSystem: Gromos_System,
                          jobname=tmp_jobname,
                          chain_job_repetitions=equilibration_run_num + simulation_run_num, start_run_index = equilibration_run_num+1,
                          worker_script=workerScript.__file__,
-                         job_submission_system=submission_system, job_queue_duration=duration_per_job, nmpi=nmpi,
+                         job_submission_system=submission_system,
                          do_not_doubly_submit_to_queue=no_double_submit,
                          prefix_command =  "", previous_job_ID = previous_job_ID, work_dir = None,
                          initialize_first_run= False, reinitialize= False,
@@ -160,8 +157,7 @@ def do(in_simSystem: Gromos_System,
 
 
             ana_previous_job_ID = submission_system.submit_to_queue("python "+analysis_script_path, jobName=tmp_jobname,
-                                                                outLog=ana_log, queue_after_jobID=previous_job_ID,
-                                                                nmpi=nmpi, nomp=nomp, verbose=True)
+                                                                outLog=ana_log, queue_after_jobID=previous_job_ID, verbose=True)
 
             if (verbose): print("ANA jobID: " + str(previous_job_ID))
 
