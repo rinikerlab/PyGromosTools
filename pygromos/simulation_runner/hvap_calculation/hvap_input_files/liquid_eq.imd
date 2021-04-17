@@ -7,7 +7,7 @@ SYSTEM
 END
 STEP
 #   NSTLIM         T        DT
-     10000         0     0.002
+     50000         0     0.002
 END
 COVALENTFORM
 #    NTBBH    NTBAH     NTBDN

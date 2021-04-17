@@ -268,10 +268,19 @@ class Top(_general_gromos_file._general_gromos_file):
     def add_new_crossdihedral(self, verbose=False):
         raise NotImplementedError("Who needs this???? Could you plox implement it. UwU")
 
-    def add_new_LJparameter(self, C6:float, C12:float, CS6:float=0, CS12:float=0, combination_rule:str="geometric", verbose=False, AddATOMTYPENAME:str=None):
+    def add_new_LJparameter(self, C6:float, C12:float, CS6:float=0, CS12:float=0, combination_rule:str="geometric", verbose=False, AddATOMTYPENAME:str=None, lowerBound:float=1e-100):
         if not hasattr(self, "LJPARAMETERS"):
             self.add_block(blocktitle="LJPARAMETERS", content=[], verbose=verbose)
             self.LJPARAMETERS.NRATT2 = 0
+        #safety
+        if C6 < lowerBound:
+            C6 = lowerBound
+        if C12 < lowerBound:
+            C12 = lowerBound
+        if CS6 < lowerBound:
+            CS6 = lowerBound
+        if CS12 < lowerBound:
+            CS12 = lowerBound
         # add LJ parameter for all existing combinations
         num=0
         nratt=int((math.sqrt(8*self.LJPARAMETERS.NRATT2+1)-1)/2)

@@ -9,6 +9,7 @@ Author: Marc Lehner
 
 # general imports
 import collections, importlib
+from openforcefield.typing.engines.smirnoff.parameters import NotEnoughPointsForInterpolationError
 from simtk import unit
 #import math
 
@@ -37,6 +38,8 @@ class serenityff():
 
         if isinstance(forcefield, forcefield_system):
             self.top = forcefield.top
+            if top != None:
+                self.top = top
             self.offmol.name = forcefield.mol_name
             self.develop = forcefield.develop
             self.off = forcefield.off

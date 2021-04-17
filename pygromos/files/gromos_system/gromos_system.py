@@ -70,7 +70,7 @@ class Gromos_System():
     checkpoint_path:str
     _future_promise:bool #for interest if multiple jobs shall be chained.
     _future_promised_files:list
-    verbose: bool=False
+    verbose: bool=True
 
     _single_multibath:bool  = False
 
@@ -104,6 +104,7 @@ class Gromos_System():
         auto_convert
         adapt_imd_automatically
         """
+        print(in_top_path)
 
         self.hasData = False
         self._name = system_name
@@ -131,7 +132,9 @@ class Gromos_System():
                         "disres": in_disres_path,
                         "posres": in_posres_path, "refpos": in_refpos_path,
                         }
+        print(self._name, self._work_folder)
         self.parse_attribute_files(file_mapping, readIn=readIn)
+        print("after readin groSys: ", self.top.path)
 
         ##System Information:
         if(not self._cnf._future_file):
@@ -603,7 +606,7 @@ class Gromos_System():
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
-                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield)
+                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield, top=self.top)
                 self.serenityff.create_top(C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges)
                 self.serenityff.top.make_ordered()
                 self.top = self.serenityff.top
