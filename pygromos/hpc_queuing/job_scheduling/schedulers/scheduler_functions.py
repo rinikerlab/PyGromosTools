@@ -58,8 +58,7 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
 def chain_submission(simSystem:Gromos_System,
                      out_dir_path: str, out_prefix: str,
                      chain_job_repetitions: int, worker_script: str,
-                     job_submission_system: _SubmissionSystem, jobname: str, nmpi: int=1, nomp:int=1,
-                     job_queue_duration: str = "24:00",
+                     job_submission_system: _SubmissionSystem, jobname: str,
                      run_analysis_script_every_x_runs: int = 0, in_analysis_script_path: str = "",
                      do_not_doubly_submit_to_queue: bool = True, start_run_index: int = 1,
                      prefix_command: str = "", previous_job_ID: int = None, work_dir: str = None,
@@ -144,8 +143,8 @@ def chain_submission(simSystem:Gromos_System,
 
             #if(out_trg)
 
-            md_script_command += "-nmpi " + str(nmpi) + " "
-            md_script_command += "-nomp " + str(nomp) + " "
+            md_script_command += "-nmpi " + str(job_submission_system.nmpi) + " "
+            md_script_command += "-nomp " + str(job_submission_system.nomp) + " "
             md_script_command += "-initialize_first_run "+str(initialize_first_run)+ " "
             md_script_command += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + " "
             if(not work_dir is None):
@@ -166,7 +165,7 @@ def chain_submission(simSystem:Gromos_System,
             if(verbose): print("COMMAND: ", md_script_command)
 
             ## POST COMMAND
-            clean_up_processes = nomp if (nomp > nmpi) else nmpi
+            clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
             clean_up_command = "python " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
                 tmp_outdir) + " -n_processes " + str(clean_up_processes)
 
@@ -179,11 +178,10 @@ def chain_submission(simSystem:Gromos_System,
                 outLog = tmp_outdir + "/" + out_prefix + "_md.out"
                 errLog = tmp_outdir + "/" + out_prefix + "_md.err"
                 previous_job_ID = job_submission_system.submit_to_queue(command=md_script_command, jobName=tmp_jobname,
-                                                                        duration=job_queue_duration,
                                                                         submit_from_dir=tmp_outdir,
                                                                         queue_after_jobID=previous_job_ID,
-                                                                        outLog=outLog, errLog=errLog, sumbit_from_file=True,
-                                                                        nmpi=nmpi, end_mail=True, verbose=verbose)
+                                                                        outLog=outLog, errLog=errLog,
+                                                                        sumbit_from_file=True, verbose=verbose)
                 print("SIMULATION ID: ", previous_job_ID)
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
@@ -197,7 +195,7 @@ def chain_submission(simSystem:Gromos_System,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
                                                                  outLog=outLog, errLog=errLog,
-                                                                 nmpi=nmpi, verbose=verbose)
+                                                                 verbose=verbose)
                 print("CLEANING ID: ", previous_job_ID)
 
             except ValueError as err:  # job already in the queue
@@ -217,7 +215,7 @@ def chain_submission(simSystem:Gromos_System,
                     ana_id = job_submission_system.submit_to_queue(command=in_analysis_script_path,
                                                                    jobName=tmp_ana_jobname,
                                                                    outLog=outLog, errLog=errLog,
-                                                                   maxStorage=20000, queue_after_jobID=clean_id, nmpi=5,
+                                                                   queue_after_jobID=clean_id,
                                                                    verbose=verbose)
                     if (verbose): print("\n")
                 except ValueError as err:  # job already in the queue

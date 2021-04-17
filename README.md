@@ -1,9 +1,11 @@
+![](.img/PyGromosToolsBanner.png)
+
 Welcome to PyGromosTools
 ==============================
 [//]: # (Badges)
 [![CI](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python)
 [![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://rinikerlab.github.io/PyGromosTools/)
-
 
 General
 -------------

@@ -48,8 +48,7 @@ class _SubmissionSystem:
         gen_cmd = "#Generate " + name + "\n"
         gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
         gen_cmd += var_name + " = " + name + "_obj(submission=" + str(self.submission) + ", verbose=" + str(
-            self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", max_storage="+str(
-            self.max_storage)+", job_duration="+str(self.job_duration)+")\n\n"
+            self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", job_duration=\""+str(self.job_duration)+"\")\n\n"
         return gen_cmd
 
     def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
@@ -128,9 +127,9 @@ class LSF(_SubmissionSystem):
         This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.
     """
 
-    def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
+    def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
                  verbose: bool = False, enviroment=None):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str,
                         jobName: str, outLog=None, errLog=None,
@@ -438,6 +437,18 @@ class LSF(_SubmissionSystem):
         else:
             job_id = 0
         return int(job_id)
+
+    def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
+        name = self.__class__.__name__
+        if (var_name is None):
+            var_name = var_prefixes + name
+
+        gen_cmd = "#Generate " + name + "\n"
+        gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
+        gen_cmd += var_name + " = " + name + "_obj(submission=" + str(self.submission) + ", verbose=" + str(
+            self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", max_storage="+str(
+            self.max_storage)+", job_duration=\""+str(self.job_duration)+"\")\n\n"
+        return gen_cmd
 
     def get_jobs_from_queue(self, job_text: str, regex: bool = False,
                             dummyTesting: bool = False, verbose: bool = False) -> List[int]:
