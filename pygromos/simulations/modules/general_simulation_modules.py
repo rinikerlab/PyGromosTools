@@ -3,6 +3,7 @@ import sys
 import traceback
 from collections import OrderedDict
 from copy import deepcopy
+from typing import Union
 
 from pygromos.files.coord import cnf
 from pygromos.files.gromos_system import Gromos_System
@@ -22,7 +23,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
                previous_simulation_run:int=None, nmpi:int = 1,
                force_simulation:bool=False,
                analysis_script:callable = simulation_analysis.do, analysis_control_dict:dict = None,
-               verbose:bool = False) ->(Gromos_System, int):
+               verbose:bool = True, verbose_lvl:int=1) -> Union[Gromos_System, int]:
     #PREPERATIONS
     try:
         try:
@@ -46,9 +47,10 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
 
             out_analysis_cnf = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
 
-            print(spacer)
-            print(step_name)
-            print(spacer)
+            if verbose:
+                print(spacer)
+                print(step_name)
+                print(spacer)
 
             #Write out, all non promised files
             #TODO: REMOVE - print(in_gromos_system.all_file_paths)
@@ -56,12 +58,9 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system.write_files()
             #TODO: REMOVE - print(in_gromos_system.all_file_paths)
 
-            # %%
-            ##Write Out Ana Script
-            # IN args
+            #Write Out Ana Script
             in_analysis_control_dict = analysis_control_dict
             n_analysis_processors = 1 #Maybe in the future: 5 if(nmpi>5) else 1
-            #verbose = verbose
         except Exception as err:
             raise Exception("Could not prepare the gromos System\n\t" + "\n\t".join(map(str, err.args)))
         # do
@@ -75,6 +74,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             "control_dict": analysis_control_dict,
             "n_processes": n_analysis_processors,
             "verbose": verbose,
+            "verbose_lvl": verbose_lvl
         })
         try:
             in_analysis_script_path = utils.write_job_script(out_script_path=step_dir + "/job_analysis.py",
@@ -92,6 +92,8 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             "equilibration_run_num": equilibration_runs,
             "submission_system": submission_system,
             "analysis_script_path": in_analysis_script_path,
+            "verbose": verbose,
+            "verbose_lvl": verbose_lvl
         })
         try:
             in_scheduler_script_path = utils.write_job_script(out_script_path=step_dir + "/schedule_MD_job.py",
@@ -103,18 +105,18 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not prepare the command block\n\t"+"\n\t".join(map(str, err.args)))
 
-    # %%
     ##schedule
     try:
         if((os.path.exists(out_analysis_cnf) and os.path.exists(out_simulation_dir+".tar")) and not force_simulation):
-            print(utils.spacer2+"FOUND RESULT: "+out_analysis_cnf+"\n GOING TO SKIPT THIS SUBMISSION!")
+            if verbose:
+                print(utils.spacer2+"FOUND RESULT: "+out_analysis_cnf+"\n GOING TO SKIPT THIS SUBMISSION!")
             #warnings.warn("Skipping active submission, as result CNF was found: \n"+out_analysis_cnf)
             last_jobID = None
         else:
             last_jobID = simulation_scheduler.do(in_simSystem=in_gromos_system, out_dir_path=out_simulation_dir,
                                                     simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
                                                     submission_system=submission_system, previous_job_ID=previous_simulation_run,
-                                                    analysis_script_path=in_analysis_script_path)
+                                                    analysis_script_path=in_analysis_script_path, verbose=verbose, verbose_lvl=verbose_lvl)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not submit the commands\n\t"+"\n\t".join(map(str, err.args)))

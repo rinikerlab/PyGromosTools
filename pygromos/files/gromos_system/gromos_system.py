@@ -70,7 +70,6 @@ class Gromos_System():
     checkpoint_path:str
     _future_promise:bool #for interest if multiple jobs shall be chained.
     _future_promised_files:list
-    verbose: bool=True
 
     _single_multibath:bool  = False
 
@@ -81,7 +80,8 @@ class Gromos_System():
                  in_top_path: str = None, in_cnf_path: str = None, in_imd_path: str = None,
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
-                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), auto_convert:bool=False, adapt_imd_automatically:bool=True):
+                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
+                 auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=False):
         """
 
         Parameters
@@ -104,8 +104,6 @@ class Gromos_System():
         auto_convert
         adapt_imd_automatically
         """
-        print(in_top_path)
-
         self.hasData = False
         self._name = system_name
         self._work_folder = work_folder
@@ -113,6 +111,7 @@ class Gromos_System():
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.checkpoint_path = None
+        self.verbose = verbose
 
         #GromosFunctionality
         self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
@@ -132,9 +131,7 @@ class Gromos_System():
                         "disres": in_disres_path,
                         "posres": in_posres_path, "refpos": in_refpos_path,
                         }
-        print(self._name, self._work_folder)
-        self.parse_attribute_files(file_mapping, readIn=readIn)
-        print("after readin groSys: ", self.top.path)
+        self.parse_attribute_files(file_mapping, readIn=readIn, verbose=verbose)
 
         ##System Information:
         if(not self._cnf._future_file):
@@ -551,7 +548,6 @@ class Gromos_System():
                     if(self.verbose or True): warnings.warn("Did not change file path as its only promised "+str(file_obj.path))
                 else:
                     file_obj.path = self._work_folder + "/" + self.name + "." + getattr(self, file_name).gromos_file_ending
-                    #print(file_obj.path)
 
     def rebase_files(self):
         if(not os.path.exists(self.work_folder) and os.path.exists(os.path.dirname(self.work_folder))):
@@ -568,7 +564,8 @@ class Gromos_System():
         for promised_file_key in self._future_promised_files:
             promised_file = getattr(self, promised_file_key)
             if(os.path.exists(promised_file.path)):
-                print("READING FILE")
+                if (self.verbose):
+                    print("READING FILE")
                 setattr(self, "_"+promised_file_key, self._all_files[promised_file_key](promised_file.path))
                 self._future_promised_files.remove(promised_file_key)
             else:

@@ -22,7 +22,7 @@ def do(in_simSystem: Gromos_System,
        analysis_script_path: str = None,
        submission_system:_SubmissionSystem = LSF(),
        previous_job_ID: int = None, no_double_submit:bool=True,
-       verbose: bool = True, verbose_lv:int=1):
+       verbose: bool = True, verbose_lvl:int=1):
     """
 
     Parameters
@@ -47,7 +47,7 @@ def do(in_simSystem: Gromos_System,
     -------
 
     """
-    job_verb = True if (verbose and verbose_lv > 2) else False
+    job_verb = True if (verbose and verbose_lvl > 2) else False
 
     # prepare
     try:
@@ -60,12 +60,12 @@ def do(in_simSystem: Gromos_System,
 
         # workdir:
         if (not isinstance(work_dir, type(None)) and work_dir != "None"):
-            if (verbose and verbose_lv>2): print("\t -> Generating given workdir: " + work_dir)
+            if (verbose and verbose_lvl>2): print("\t -> Generating given workdir: " + work_dir)
             bash.make_folder(work_dir, "-p")
             os.chdir(work_dir)
             prepared_imd = work_dir + "/" + os.path.basename(in_simSystem.imd.path)
         else:
-            if (verbose and verbose_lv>2): print("\t -> Using on node workdir")
+            if (verbose and verbose_lvl>2): print("\t -> Using on node workdir")
             prepared_imd = out_dir_path + "/" + os.path.basename(in_simSystem.imd.path)
 
         # sim vars logs
