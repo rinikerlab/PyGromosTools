@@ -390,6 +390,21 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BONDSTRETCHTYPE.NBTY += 1
         self.CONSTRAINT.content.append(blocks.constraint_type(IC=IC, JC=JC, ICC=bond_type_number))
         self.CONSTRAINT.NCON += 1
+
+    def get_mass(self) -> float:
+        """
+        Calculates the total mass of the solute molecule
+
+        Returns
+        -------
+        float
+            total mass in a.u.
+        """
+        mass = 0
+        if hasattr(self, "SOLUTEATOM"):
+            for i in self.SOLUTEATOM.content:
+                mass += i.MASS
+        return mass
         
 
         
