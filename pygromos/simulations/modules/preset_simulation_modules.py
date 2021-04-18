@@ -1,4 +1,4 @@
-import Union
+from typing import Union
 from pygromos.files.gromos_system import Gromos_System
 
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
