@@ -81,7 +81,7 @@ class Gromos_System():
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
                  rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
-                 auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=False):
+                 auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=True):
         """
 
         Parameters
@@ -122,14 +122,15 @@ class Gromos_System():
         self._future_promised_files = []
 
         if in_smiles == None and rdkitMol == None and readIn == False:
-            warnings.warn("No data provided to gromos_system\nmanual work needed")
+            if verbose: warnings.warn("No data provided to gromos_system\nmanual work needed")
 
         # import files:
         file_mapping = {"imd": in_imd_path,
                         "top": in_top_path, "ptp": in_ptp_path,
                         "cnf": in_cnf_path,
                         "disres": in_disres_path,
-                        "posres": in_posres_path, "refpos": in_refpos_path,
+                        "posres": in_posres_path, 
+                        "refpos": in_refpos_path,
                         }
         self.parse_attribute_files(file_mapping, readIn=readIn, verbose=verbose)
 
@@ -261,7 +262,7 @@ class Gromos_System():
 
 
     def __deepcopy__(self, memo):
-        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder+"/test", readIn=False)
+        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder+"/test", readIn=False, verbose=self.verbose)
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 

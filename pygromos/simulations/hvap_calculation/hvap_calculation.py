@@ -58,7 +58,10 @@ class Hvap_calculation():
         try:
             os.mkdir(path=work_folder)
         except:
-            warnings.warn("Folder does already exist")
+            if verbose:
+                warnings.warn("Folder does already exist")
+            else:
+                pass
         self.groSys_gas.work_folder = work_folder + "/" + system_name +"_gas"
         self.groSys_gas.rebase_files()
         self.groSys_liq = deepcopy(self.groSys_gas)
