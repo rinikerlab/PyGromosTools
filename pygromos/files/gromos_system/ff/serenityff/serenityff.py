@@ -9,7 +9,6 @@ Author: Marc Lehner
 
 # general imports
 import collections, importlib
-from openforcefield.typing.engines.smirnoff.parameters import NotEnoughPointsForInterpolationError
 from simtk import unit
 #import math
 
