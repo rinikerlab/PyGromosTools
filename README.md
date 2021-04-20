@@ -9,22 +9,23 @@ Welcome to PyGromosTools
 
 General
 -------------
-   The aim of the module is to bring Gromos to the Python3 World!
-   This repository should make it easier to work with gromos in python and should enable you to write cleaner, more reliable and adapteble code.
+   The aim of the module is to bring GROMOS to the Python3 World!
+   This repository should make it easier to work with GROMOS in Python and should enable the user to write cleaner, more reliable and adaptable code.
 
    General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.
+
 
 Content
 
 -------------
 
-* Gromos wrappers
+* GROMOS wrappers
   * GromosXX wrapper: for simulation execution
-  * GromosPP wrapper: for gromosPP-tool useage
+  * GromosPP wrapper: for GROMOS++ program usage
 
-* File handing of all gromos file types for automated creation/modifications/analysis :
-  * coordinatte files CNF:
-    * read and analysie CNF files
+* File handling of all GROMOS file types for automated creation/modification/analysis :
+  * coordinate files CNF:
+    * read and analyse CNF files
     * generate CNF files from RDKit
     * generate CNF files from SDF
 
@@ -35,7 +36,7 @@ Content
 
   * topology files:
     * create topologies from a forcefield
-      * Gromos 2016H66 / 54A7
+      * GROMOS 2016H66 / 54A7
       * OpenForceField
       * SerenityForceField
     * modify topologies
@@ -59,8 +60,8 @@ Content
     ```
 
   * trajectories (tre, trc, trg, ...)
-    * analyse trajectories with pandas dataframes
-    * standart analysis like RSMD, RDF, ... for trc
+    * analyse trajectories with Pandas data frames
+    * standard analysis like RSMD, RDF, ... for trc
     * auto saving of results for later use as hdf5
     * ene_ana like tools for tre
     * easy to add costume analysis tools
@@ -74,11 +75,11 @@ Content
         repdat.dat
   * classes for single blocks of each of these files.
 
-* Automatin and file managment system `gromos_system`
-  * offers clean file managment for simulations
+* Automation and file management system `gromos_system`
+  * offers clean file management for simulations
   * offers a high level of automation
   * equiped with simulation queuing system
-  * includes many forcefields
+  * includes many force fields
 
   ```python
   ff=forcefield_system(name="openforcefield")
@@ -86,15 +87,15 @@ Content
   print(gsys)
   ```
 
-* Other Utilities:
+* Other utilities:
   * Automated queueing and submission for:
     * Local calculation
     * Cluster calculation (LSF system)
     * Dummy
   * Bash wrappers for GROMOS
-  * amino acid library
+  * Amino acid library
 
-General Informations
+General Information
 -------------
 
 ### Specifications
