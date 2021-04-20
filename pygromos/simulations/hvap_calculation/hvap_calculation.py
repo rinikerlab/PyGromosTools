@@ -35,7 +35,7 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 
 class Hvap_calculation():
-    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy") -> None:
+    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", verbose:bool=True) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
 
         Parameters
@@ -58,7 +58,10 @@ class Hvap_calculation():
         try:
             os.mkdir(path=work_folder)
         except:
-            warnings.warn("Folder does already exist")
+            if verbose:
+                warnings.warn("Folder does already exist")
+            else:
+                pass
         self.groSys_gas.work_folder = work_folder + "/" + system_name +"_gas"
         self.groSys_gas.rebase_files()
         self.groSys_liq = deepcopy(self.groSys_gas)
@@ -89,6 +92,8 @@ class Hvap_calculation():
         self.groSys_gas_final = None
         self.groSys_liq_final = None
 
+        self.verbose = verbose
+
     def run(self) -> int:
         self.create_liq()
         self.run_gas()
@@ -117,7 +122,8 @@ class Hvap_calculation():
                     step_name="1_emin", 
                     in_imd_path=self.imd_gas_min,
                     submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do)
+                    analysis_script=simulation_analysis.do,
+                    verbose=self.verbose)
         print(self.groSys_gas.work_folder)
 
         #eq
@@ -126,7 +132,8 @@ class Hvap_calculation():
                     step_name="2_eq", 
                     in_imd_path=self.imd_gas_eq,
                     submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do)
+                    analysis_script=simulation_analysis.do,
+                    verbose=self.verbose)
 
         #sd
         sys_sd_gas, jobID = simulation(in_gromos_system=sys_eq_gas, 
@@ -134,7 +141,8 @@ class Hvap_calculation():
                     step_name="3_sd", 
                     in_imd_path=self.imd_gas_sd,
                     submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do)
+                    analysis_script=simulation_analysis.do,
+                    verbose=self.verbose)
 
         self.groSys_gas_final = sys_sd_gas
 
@@ -148,7 +156,8 @@ class Hvap_calculation():
                     step_name="1_emin", 
                     in_imd_path=self.imd_liq_min,
                     submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do)
+                    analysis_script=simulation_analysis.do,
+                    verbose=self.verbose)
 
         #eq
         sys_eq_liq, jobID = simulation(in_gromos_system=sys_emin_liq, 
@@ -156,7 +165,8 @@ class Hvap_calculation():
                     step_name="2_eq", 
                     in_imd_path=self.imd_liq_eq,
                     submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do)
+                    analysis_script=simulation_analysis.do,
+                    verbose=self.verbose)
 
         #md
         sys_md_liq, jobID = simulation(in_gromos_system=sys_eq_liq, 
@@ -164,7 +174,8 @@ class Hvap_calculation():
                     step_name="3_sd", 
                     in_imd_path=self.imd_liq_md,
                     submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do)
+                    analysis_script=simulation_analysis.do,
+                    verbose=self.verbose)
 
         self.groSys_liq_final = sys_md_liq
 

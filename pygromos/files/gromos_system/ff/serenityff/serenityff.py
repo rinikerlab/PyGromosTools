@@ -37,6 +37,8 @@ class serenityff():
 
         if isinstance(forcefield, forcefield_system):
             self.top = forcefield.top
+            if top != None:
+                self.top = top
             self.offmol.name = forcefield.mol_name
             self.develop = forcefield.develop
             self.off = forcefield.off

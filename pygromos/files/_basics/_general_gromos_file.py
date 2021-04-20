@@ -90,7 +90,7 @@ class _general_gromos_file():
         self.__dict__ = state
 
     def __deepcopy__(self, memo):
-        print(self.__class__.__name__)
+        #print(self.__class__.__name__)
         copy_obj = self.__class__(in_value=None)
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
