@@ -106,7 +106,7 @@ General Information
 
 ### SETUP
 
-see INSTALLATION.md file for more informations
+see INSTALL.md file for more informations
 
 ### Copyright
 
