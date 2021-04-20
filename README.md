@@ -12,7 +12,7 @@ General
    The aim of the module is to bring Gromos to the Python3 World!
    This repository should make it easier to work with gromos in python and should enable you to write cleaner, more reliable and adapteble code.
 
-   General informations about functions can be found in our wimi and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.
+   General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.
 
 Content
 
@@ -66,7 +66,7 @@ Content
     * easy to add costume analysis tools
 
     ```python
-    trc = Trc(inpout_value="file_path")
+    trc = Trc(input_value="file_path")
     print(trc.rmsd().mean())
     ```
 
@@ -81,8 +81,8 @@ Content
   * includes many forcefields
 
   ```python
-  ff=forcefield_system(name="off")
-  gsys = Gromos_System(work_folder="dir", in_smiles="c1ccccc1", auto_convert=True, Forcefield=ff)
+  ff=forcefield_system(name="openforcefield")
+  gsys = Gromos_System(work_folder="dir", in_smiles="C1CCCCC1", auto_convert=True, Forcefield=ff)
   print(gsys)
   ```
 
@@ -106,7 +106,7 @@ General Informations
 
 ### SETUP
 
-see INSTALLATION.md file for more informations
+see INSTALL.md file for more informations
 
 ### Copyright
 
