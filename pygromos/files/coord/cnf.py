@@ -7,6 +7,7 @@ from typing import Dict, List, Tuple, Union
 from typing import TypeVar
 import numpy as np
 import pandas as pd
+from scipy.spatial.transform import Rotation
 
 from pygromos.files._basics import parser
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
@@ -626,6 +627,59 @@ class Cnf(_general_gromos_file):
                     "Combination of given parameters for get_atoms_distance in cnf class is unknown!\n Please give: int int or int list or list")
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
+
+    def center_of_geometry(self, selectedAtoms:list=None) -> list:
+        """calculates the center of geometry for asingle molecule or the selected Atoms
+
+        Returns
+        -------
+        list
+            cog
+        """
+        if ("POSITION" in dir(self)):
+            cogx = 0.0
+            cogy = 0.0
+            cogz = 0.0
+            if selectedAtoms is None:
+                iterator = self.POSITION.content
+            else:
+                iterator = []
+                for i in selectedAtoms:
+                    iterator.append(self.POSITION.content[i])
+            for i in iterator:
+                cogx += i.xp
+                cogy += i.yp
+                cogz += i.zp
+            n = len(self.POSITION.content)
+            return [cogx/n, cogy/n, cogz/n]
+        else:
+            raise ValueError("NO POSITION block in cnf-Object: " + self.path)
+
+    def rotate(self, rotationCenter:np.array=None, selectedAtoms=None, alpha=0, beta=0, gamma=0):
+        #define rotation center
+        if rotationCenter is None:
+            rotationCenter = np.array(self.center_of_geometry())
+        
+        #select atoms to rotate
+        if selectedAtoms is None:
+            iterator = range(len(self.POSITION.content))
+
+        #define Rotation
+        rotation = Rotation.from_euler('XYZ', [alpha, beta, gamma], degrees=True).as_matrix()
+
+        #apply rotation
+        for i in iterator:
+            #get atom
+            atom = self.POSITION.content[i]
+            vector = np.array([atom.xp, atom.yp, atom.zp])
+            #do rotation around rotation center
+            new_vec = np.dot((vector-rotationCenter), rotation)+rotationCenter
+            #rewrite atom
+            atom.xp, atom.yp, atom.zp = new_vec
+            self.POSITION.content[i] = atom
+
+
+        
 
     def write(self, out_path: str) -> str:
         # write out
