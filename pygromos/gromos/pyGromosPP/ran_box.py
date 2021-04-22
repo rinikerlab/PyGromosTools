@@ -41,7 +41,17 @@ def ran_box(in_top_path:str,
     box_length = volume**(1./3.)
     divider = int(np.ceil(nmolecule**(1./3.)))
     distance = box_length/float(divider)
-    scale=0.1
+
+    #calculate maxRandShift
+    scale = 0.5 #scale can be manually decreased
+    maxDist = 0
+    for atom in copy.deepcopy(cnf).POSITION.content:
+        pos = np.array([atom.xp, atom.yp, atom.zp])
+        dis = np.linalg.norm(pos-cog)
+        if dis > maxDist:
+            maxDist = dis
+    maxRandShift = (scale * distance) -maxDist
+
 
     #create new cnf for return and set some attributes
     ret_cnf = copy.deepcopy(cnf)
@@ -58,10 +68,9 @@ def ran_box(in_top_path:str,
     # add positions
     points = list(it.product(range(8), range(8), range(8)))
     for ind, (xi, yi, zi) in enumerate(random.sample(points, nmolecule)):
-        print(xi,yi,zi)
         shift = np.array([xi*distance, yi*distance, zi*distance])
         cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
-        randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
+        randomShift = np.array([random.uniform(-maxRandShift,maxRandShift),random.uniform(-maxRandShift,maxRandShift),random.uniform(-maxRandShift,maxRandShift)])
 
         for atom in copy.deepcopy(cnf).POSITION.content:
             pos = np.array([atom.xp, atom.yp, atom.zp])
