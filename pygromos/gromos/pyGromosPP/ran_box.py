@@ -59,11 +59,12 @@ def ran_box(in_top_path:str,
                 if counter <= nmolecule:
                     shift = np.array([xi*distance, yi*distance, zi*distance])
                     cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
+                    randomShift = np.array([0,0,0])
+                    if True:
+                            randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
+
                     for atom in copy.deepcopy(cnf).POSITION.content:
                         pos = np.array([atom.xp, atom.yp, atom.zp])
-                        randomShift = np.array([0,0,0])
-                        if True:
-                            randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
                         atom.xp, atom.yp, atom.zp = pos - cog + shift + randomShift
                         atom.resID = counter
                         atom.atomID += ((counter-1) * cnf.POSITION.content[-1].atomID)
