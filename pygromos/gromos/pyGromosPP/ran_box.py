@@ -19,7 +19,7 @@ def ran_box(in_top_path:str,
                     periodic_boundary_condition: str = "r", 
                     nmolecule:int = 1, 
                     dens:float = 1.0, 
-                    threshold:float=None, 
+                    threshold:float=None,
                     layer:bool = False, 
                     boxsize:float=None, 
                     fixfirst:bool = False, 
@@ -32,11 +32,14 @@ def ran_box(in_top_path:str,
     cnf = Cnf(in_value=in_cnf_path)
     cog = np.array(cnf.center_of_geometry())
 
+    if(sum([len(cnf.residues[x]) for x in cnf.residues])>1):
+        raise Exception("ran_box works only with one residue in the .cnf file!\nFound: "+str(cnf.get_residues()))
+
     #get volume and box length
     mol_mass = top.get_mass()
     volume = 1.66056 * nmolecule * mol_mass / dens
     box_length = volume**(1./3.)
-    divider = int(-(-(nmolecule**(1./3.))//1))
+    divider = int(np.ceil(nmolecule**(1./3.)))
     distance = box_length/float(divider)
 
     #calculate maxRandShift

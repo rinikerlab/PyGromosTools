@@ -55,12 +55,12 @@ class Cnf(_general_gromos_file):
     TITLE: blocks.TITLE  # required
     POSITION: blocks.POSITION  # required
 
-    TIMESTEP: blocks.TIMESTEP = None
-    LATTICESHIFTS: blocks.LATTICESHIFTS = None
-    VELOCITY: blocks.VELOCITY = None
-    GENBOX: blocks.GENBOX = None
+    TIMESTEP: blocks.TIMESTEP
+    LATTICESHIFTS: blocks.LATTICESHIFTS
+    VELOCITY: blocks.VELOCITY
+    GENBOX: blocks.GENBOX
     PERTDATA: blocks.PERTDATA
-    atom_ref_pos_block: blocks.REFPOSITION = None
+    atom_ref_pos_block: blocks.REFPOSITION
 
     # private
     _block_order: List[str] = ["TITLE", "TIMESTEP", "POSITION", "LATTICESHIFTS", "VELOCITY", "REFPOSITION"]
@@ -890,13 +890,13 @@ class Cnf(_general_gromos_file):
 
         # 2) CONSTUCT PDB BLOCKS
         # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = "ATOM  {:>5d}  {:<2}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f}{:>7.3f}{:>7.3f}{:>5}{:>6}{:<3}{:>2} {:>2d}"
+        pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
         dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
         dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
 
         # 3) CONVERT FILE
         # TODO: Inefficient!
-        out_file.write("TITLE " + str(self.TITLE) + "\n")
+        out_file.write("TITLE " + str(self.TITLE).replace("END", "") + "\n")
         frame_positions = []
         for ind, atom in enumerate(self.POSITION):
             frame_positions.append(
