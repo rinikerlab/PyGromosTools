@@ -4,6 +4,7 @@
 
     Author: Marc Lehner
 """
+import warnings
 import numpy as np
 import copy
 import random
@@ -25,7 +26,7 @@ def ran_box(in_top_path:str,
                     fixfirst:bool = False, 
                     seed:float=None, 
                     _binary_name="ran_box", 
-                    verbose=False, 
+                    verbose=True, 
                     return_command_only=False)->str:
 
     top = Top(in_value=in_top_path)
@@ -51,6 +52,10 @@ def ran_box(in_top_path:str,
         if dis > maxDist:
             maxDist = dis
     maxRandShift = (scale * distance) -maxDist
+    if maxRandShift < 0:
+        maxRandShift = 0
+        if verbose:
+            warnings.warn("Molecules might overlap! Check cnf manually or decrease the density")
 
 
     #create new cnf for return and set some attributes

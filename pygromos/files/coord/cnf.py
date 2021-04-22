@@ -1,7 +1,6 @@
 import copy
 import os
 
-import rdkit
 import __main__
 
 from collections import namedtuple
