@@ -102,7 +102,11 @@ class Cnf(_general_gromos_file):
         mol : Chem.rdchem.Mol
             Molecule, possibly with a conformation
         """
-        name=Chem.MolToInchi(mol).split("/")[1]
+        inchi=Chem.MolToInchi(mol).split("/")
+        if len(inchi) >= 2:
+            name=inchi[1]
+        else:
+            name="XXX"
         self.__setattr__("TITLE", TITLE("\t"+ name +" created from RDKit"))
 
         #check if conformations exist else create a new one
