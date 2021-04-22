@@ -148,16 +148,6 @@ class Gromos_System():
         if(adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
             self.adapt_imd()
 
-        """
-        #TODO: translate cnf->pdb_block->rdkit test
-        if(self.cnf is None):
-            pdb_block = self.cnf.get_pdb()
-            
-            self.mol = Chem.Mol(pdb_block)
-            self.smile = self.mol.smileString
-            
-        """
-
         # import molecule from smiles using rdkit
         if in_smiles:
             self.mol = Chem.MolFromSmiles(in_smiles)
@@ -177,6 +167,9 @@ class Gromos_System():
                 self.auto_convert()
             else:
                 raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
+
+        if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
+            self.cnf = Cnf(in_value=self.mol)
 
         #misc
         self._all_files_key = list(map(lambda x: "_"+x, self.required_files.keys()))
@@ -575,6 +568,7 @@ class Gromos_System():
             self._future_promise = False
 
     def auto_convert(self):
+        #create topology
         if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
             # set parameters for make_top
             out=self.work_folder+"/make_top.top"
