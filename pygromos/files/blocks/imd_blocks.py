@@ -473,6 +473,8 @@ class MULTIBATH(_generic_imd_block):
     Attributes
     ----------
     ALGORITHM:  int
+    NUM: int, optional
+        Mumber of chains in Nosé Hoover chains scheme [only specify when needed]
     NBATHS: int
         Number of temperature baths
     TEMP0:  List[float]
@@ -496,6 +498,7 @@ class MULTIBATH(_generic_imd_block):
     name: str = "MULTIBATH"
 
     ALGORITHM: int
+    NUM: int
     NBATHS: int
     TEMP0: List[float]
     TAU: List[float]
@@ -504,15 +507,16 @@ class MULTIBATH(_generic_imd_block):
     COMBATH: List[int]
     IRBATH: List[int]
 
-    _order: List[List[str]] = [[["ALGORITHM"], ["NBATHS"], ["TEMP0(1 ... NBATHS)", "TAU(1 ... NBATHS)"],
+    _order: List[List[str]] = [[["ALGORITHM"], ["NUM"], ["NBATHS"], ["TEMP0(1 ... NBATHS)", "TAU(1 ... NBATHS)"],
                                 ["DOFSET"], ["LAST(1 ... DOFSET)", "COMBATH(1 ... DOFSET)", "IRBATH(1 ... DOFSET)"]]]
 
     def __init__(self, ALGORITHM: int, NBATHS: int, TEMP0: List[float], TAU: List[float], DOFSET: int, LAST: List[int],
                  COMBATH: List[int],
-                 IRBATH: List[int]):
+                 IRBATH: List[int], NUM: int = None):
 
         super().__init__(used=True)
         self.ALGORITHM = int(ALGORITHM)
+        self.NUM = NUM
         self.NBATHS = int(NBATHS)
         self.TEMP0 = list(TEMP0)
         self.TAU = list(TAU)
@@ -534,7 +538,7 @@ class MULTIBATH(_generic_imd_block):
         if not len(LAST) == len(IRBATH):
             warnings.warn("Warning in MULTIBATH block. There must be the same number of IRBATH and LAST parameters")
 
-    def adapt_multibath(self, last_atoms_bath: Dict[int, int], algorithm: int = None, T: (float, List[float]) = None,
+    def adapt_multibath(self, last_atoms_bath: Dict[int, int], algorithm: int = None, num: int = None, T: (float, List[float]) = None,
                         TAU: float = None) -> None:
         """ adapt_multibath
                 This function is adding each atom set into a single multibath.
@@ -575,6 +579,9 @@ class MULTIBATH(_generic_imd_block):
             pass
         else:
             self.ALGORITHM = algorithm
+            
+        if (num != None):
+            self.NUM = num
 
         # TODO implementation not correct with com_bath and irbath! Works for super simple cases though
         #print("MBATH")
@@ -598,14 +605,22 @@ class MULTIBATH(_generic_imd_block):
         result += str(self.name) + "\n"
         result += "# " + "\t".join(self._order[0][0]) + "\n"
         result += "  " + str(self.ALGORITHM) + "\n"
-        result += "# " + "\t".join(self._order[0][1]) + "\n"
-        result += "  " + str(self.NBATHS) + "\n"
+        
+        if(self.ALGORITHM == "2"):
+            if(self.NUM is None):
+                raise Exception("You need to specify the NUM parameter for MULTIBATH if ALGORITHM is 2!")
+               
+            result += "# " + "\t".join(self._order[0][1]) + "\n"
+            result += "  " + str(self.NUM) + "\n"
+            
         result += "# " + "\t".join(self._order[0][2]) + "\n"
+        result += "  " + str(self.NBATHS) + "\n"
+        result += "# " + "\t".join(self._order[0][3]) + "\n"
         for index in range(len(self.TEMP0)):
             result += "  " + str(self.TEMP0[index]) + "\t" + str(self.TAU[index]) + "\n"
-        result += "# " + "\t".join(map(str, self._order[0][3])) + "\n"
-        result += "  " + str(self.DOFSET) + "\n"
         result += "# " + "\t".join(map(str, self._order[0][4])) + "\n"
+        result += "  " + str(self.DOFSET) + "\n"
+        result += "# " + "\t".join(map(str, self._order[0][5])) + "\n"
         for index in range(len(self.LAST)):
             result += "  " + str(self.LAST[index]) + "\t\t" + str(self.COMBATH[index]) + "\t" + str(
                 self.IRBATH[index]) + "\n"
