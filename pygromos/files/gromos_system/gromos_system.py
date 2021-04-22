@@ -168,7 +168,7 @@ class Gromos_System():
             else:
                 raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
 
-        if in_cnf_path is None and self.mol != None:
+        if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
 
         #misc
