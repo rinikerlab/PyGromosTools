@@ -1,5 +1,7 @@
 import copy
 import os
+
+import rdkit
 import __main__
 
 from collections import namedtuple
@@ -8,10 +10,13 @@ from typing import TypeVar
 import numpy as np
 import pandas as pd
 from scipy.spatial.transform import Rotation
+from rdkit import Chem
+from rdkit.Chem import AllChem
 
 from pygromos.files._basics import parser
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import coord_blocks as blocks
+from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
 from pygromos.files.trajectory.trc import Trc
@@ -65,11 +70,17 @@ class Cnf(_general_gromos_file):
     def __init__(self, in_value: (str or dict or None or __class__),
                  clean_resiNumbers_by_Name=False,
                  verbose: bool = False, _future_file: bool = False):
-        super().__init__(in_value=in_value, _future_file=_future_file)
+        #import for rdkit molecules
+        if type(in_value) == Chem.rdchem.Mol:
+            super().__init__(in_value=None, _future_file=_future_file)
+            self.createRDKITconf(mol=in_value)
+        #general import
+        else:
+            super().__init__(in_value=in_value, _future_file=_future_file)
 
-        if (hasattr(self, "POSITION")):
-            if clean_resiNumbers_by_Name: self.clean_posiResNums()  # carefull! if two resis same name after an another than, here is  a problem.
-            self.residues = self.get_residues(verbose=verbose)
+            if (hasattr(self, "POSITION")):
+                if clean_resiNumbers_by_Name: self.clean_posiResNums()  # carefull! if two resis same name after an another than, here is  a problem.
+                self.residues = self.get_residues(verbose=verbose)
 
     def read_file(self) -> Dict[str, any]:
         """
@@ -83,6 +94,34 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
+
+    def createRDKITconf(self, mol:Chem.rdchem.Mol):
+        """creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.
+
+        Parameters
+        ----------
+        mol : Chem.rdchem.Mol
+            Molecule, possibly with a conformation
+        """
+        name=Chem.MolToInchi(mol).split("/")[1]
+        self.__setattr__("TITLE", TITLE("\t"+ name +" created from RDKit"))
+
+        #check if conformations exist else create a new one
+        if mol.GetNumConformers() < 1:
+            AllChem.EmbedMolecule(mol)
+        conf = mol.GetConformer(0)
+
+        #fill a list with atomP types from RDKit data
+        atomList=[]
+        for i in range(mol.GetNumAtoms()):
+            x = conf.GetAtomPosition(i).x
+            y = conf.GetAtomPosition(i).y
+            z = conf.GetAtomPosition(i).z
+            atomType = mol.GetAtomWithIdx(0).GetSymbol()
+            atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
+
+        # set POSITION attribute
+        self.__setattr__("POSITION", blocks.POSITION(atomList))
 
     def add_residue_positions(self, coords: object):
         """This function adds all residues of an coords file to @DEVELOP
