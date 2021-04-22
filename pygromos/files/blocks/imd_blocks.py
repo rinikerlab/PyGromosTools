@@ -607,6 +607,9 @@ class MULTIBATH(_generic_imd_block):
         result += "  " + str(self.ALGORITHM) + "\n"
 
         if(self.ALGORITHM == "2"):
+            if(self.NUM is None):
+                raise Exception("You need to specify the NUM parameter for MULTIBATH if ALGORITHM is 2!")
+               
             result += "# " + "\t".join(self._order[0][1]) + "\n"
             result += "  " + str(self.NUM) + "\n"
 
