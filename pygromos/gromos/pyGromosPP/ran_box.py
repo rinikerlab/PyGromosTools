@@ -17,7 +17,7 @@ def ran_box(in_top_path:str,
                     periodic_boundary_condition: str = "r", 
                     nmolecule:int = 1, 
                     dens:float = 1.0, 
-                    threshold:float=None, 
+                    threshold:float=None,
                     layer:bool = False, 
                     boxsize:float=None, 
                     fixfirst:bool = False, 
@@ -30,11 +30,14 @@ def ran_box(in_top_path:str,
     cnf = Cnf(in_value=in_cnf_path)
     cog = np.array(cnf.center_of_geometry())
 
+    if(sum([len(cnf.residues[x]) for x in cnf.residues])>1):
+        raise Exception("ran_box works only with one residue in the .cnf file!\nFound: "+str(cnf.get_residues()))
+
     #get volume and box length
     mol_mass = top.get_mass()
     volume = 1.66056 * nmolecule * mol_mass / dens
     box_length = volume**(1./3.)
-    divider = int(-(-(nmolecule**(1./3.))//1))
+    divider = int(np.ceil(nmolecule**(1./3.)))
     distance = box_length/float(divider)
     scale=0.1
 
@@ -61,9 +64,7 @@ def ran_box(in_top_path:str,
                     cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
                     for atom in copy.deepcopy(cnf).POSITION.content:
                         pos = np.array([atom.xp, atom.yp, atom.zp])
-                        randomShift = np.array([0,0,0])
-                        if True:
-                            randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
+                        randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
                         atom.xp, atom.yp, atom.zp = pos - cog + shift + randomShift
                         atom.resID = counter
                         atom.atomID += ((counter-1) * cnf.POSITION.content[-1].atomID)
