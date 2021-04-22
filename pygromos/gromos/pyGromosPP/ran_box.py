@@ -73,4 +73,4 @@ def ran_box(in_top_path:str,
     
     ret_cnf.write(out_path=out_cnf_path)
 
-    return "done"
+    return out_cnf_path
