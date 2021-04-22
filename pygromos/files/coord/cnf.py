@@ -108,6 +108,7 @@ class Cnf(_general_gromos_file):
 
         #check if conformations exist else create a new one
         if mol.GetNumConformers() < 1:
+            mol = Chem.AddHs(mol)
             AllChem.EmbedMolecule(mol)
         conf = mol.GetConformer(0)
 
@@ -117,7 +118,7 @@ class Cnf(_general_gromos_file):
             x = conf.GetAtomPosition(i).x
             y = conf.GetAtomPosition(i).y
             z = conf.GetAtomPosition(i).z
-            atomType = mol.GetAtomWithIdx(0).GetSymbol()
+            atomType = mol.GetAtomWithIdx(i).GetSymbol()
             atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
 
         # set POSITION attribute
