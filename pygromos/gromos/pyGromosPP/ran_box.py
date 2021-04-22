@@ -7,6 +7,8 @@
 import numpy as np
 import copy
 import random
+import itertools as it
+
 
 from pygromos.files.topology.top import Top
 from pygromos.files.coord.cnf import Cnf
@@ -54,23 +56,18 @@ def ran_box(in_top_path:str,
     ret_cnf.TITLE.content = str(nmolecule) + " * " + cnf.POSITION.content[0].resName
 
     # add positions
-    counter = 0 
-    for xi in range(divider):
-        for yi in range(divider):
-            for zi in range(divider):
-                counter += 1
-                if counter <= nmolecule:
-                    shift = np.array([xi*distance, yi*distance, zi*distance])
-                    cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
-                    for atom in copy.deepcopy(cnf).POSITION.content:
-                        pos = np.array([atom.xp, atom.yp, atom.zp])
-                        randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
-                        atom.xp, atom.yp, atom.zp = pos - cog + shift + randomShift
-                        atom.resID = counter
-                        atom.atomID += ((counter-1) * cnf.POSITION.content[-1].atomID)
-                        ret_cnf.POSITION.content.append(atom)         
-                else:
-                    pass #already all molecules are added
+    points = it.combinations(range(divider),3) 
+    for ind, (xi, yi, zi) in enumerate(random.sample(points, nmolecule)):
+        shift = np.array([xi*distance, yi*distance, zi*distance])
+        cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
+        randomShift = np.array([random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale),random.uniform(-distance*scale,distance*scale)])
+
+        for atom in copy.deepcopy(cnf).POSITION.content:
+            pos = np.array([atom.xp, atom.yp, atom.zp])
+            atom.xp, atom.yp, atom.zp = pos - cog + shift + randomShift
+            atom.resID = ind+1
+            atom.atomID += (ind * cnf.POSITION.content[-1].atomID)
+            ret_cnf.POSITION.content.append(atom)
     
     ret_cnf.write(out_path=out_cnf_path)
 
