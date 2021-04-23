@@ -114,6 +114,9 @@ class Gromos_System():
         self.verbose = verbose
 
         #GromosFunctionality
+        self._gromosPP_bin_dir = in_gromosPP_bin_dir
+        self._gromosXX_bin_dir = in_gromosXX_bin_dir
+
         self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
         self._gromosXX = GromosXX(gromosXX_bin_dir=in_gromosXX_bin_dir)
 
@@ -249,10 +252,11 @@ class Gromos_System():
         self._all_files_key.extend(list(map(lambda x: "_"+x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
-       
+
+
         #@bschroed remove this !
-        self._gromosPP = GromosPP(gromosPP_bin_dir=None)
-        self._gromosXX =GromosXX(gromosXX_bin_dir=None)
+        self._gromosPP = GromosPP(gromosPP_bin_dir=self._gromosPP_bin_dir)
+        self._gromosXX =GromosXX(gromosXX_bin_dir=self._gromosXX_bin_dir)
 
         #are promised files now present?
         self._check_promises()

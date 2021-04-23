@@ -2,7 +2,8 @@ import glob
 import os
 
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import _SubmissionSystem, LOCAL
+from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
 from pygromos.utils import bash
 from pygromos.utils.utils import spacer, spacer3
