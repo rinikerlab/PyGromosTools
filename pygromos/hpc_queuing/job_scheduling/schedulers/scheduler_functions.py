@@ -102,7 +102,6 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
-    job_submission_system.job_duration = job_queue_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         if verbose: print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)
@@ -196,7 +195,8 @@ def chain_submission(simSystem:Gromos_System,
                 clean_id = job_submission_system.submit_to_queue(command=clean_up_command,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
-                                                                 outLog=outLog, errLog=errLog,
+                                                                 outLog=outLog,
+                                                                 errLog=errLog,)
 
                 if verbose: print("CLEANING ID: ", previous_job_ID)
 
