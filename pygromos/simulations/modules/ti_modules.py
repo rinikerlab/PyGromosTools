@@ -58,7 +58,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
     return lam_system, jobID
 
 
-def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=template_sd,
+def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=None,
                  submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
                  previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
     template_emin_control_dict = OrderedDict({
