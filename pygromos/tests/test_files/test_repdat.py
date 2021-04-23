@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from pygromos.files.otherfiles import repdat
+from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 from pygromos.tests.in_testfiles import in_test_file_path
 in_dir = in_test_file_path + "/repdat"
@@ -15,22 +16,26 @@ out_plot1 = root_out+"/out_REEDS_repdat2_transitions.png"
 out_plot2 = root_out+"/out_REEDS_repdat2_transitions2.png"
 
 
-class test_repdat(unittest.TestCase):
+class test_repdat(unittest.TestCase): #general_file_tests): #Todo: make copy and deepcopy + pickable
+    __test__ = True
+    class_type = repdat.Repdat
+    in_file_path = in_path
+    root_out = root_out
+
     def test_parsing_test_file(self):
-        repdat_file = repdat.Repdat(in_path)
+        repdat_file = self.class_type(self.in_file_path)
         return 0
 
     def test_parsing_new_file(self):
-        repdat_file = repdat.Repdat(in_path2)
-
+        repdat_file = self.class_type(in_path2)
 
     def test_write_out(self):
-        repdat_file = repdat.Repdat(in_path)
+        repdat_file = self.class_type(self.in_file_path)
         repdat_file.write(out_path=out_path)
 
 
     def test_cleaning_concat(self):
-        repdat_file = repdat.Repdat(in_path)
+        repdat_file = self.class_type(self.in_file_path)
         tmp_size1 = repdat_file.DATA.shape[0]
         tmp_run1 = int(repdat_file.DATA.run[tmp_size1 - 1])
 
@@ -55,11 +60,10 @@ class test_repdat(unittest.TestCase):
         self.assertEqual(2*tmp_run1, tmp_run2)
 
     def test_get_transitions(self):
-        repdat_file = repdat.Repdat(in_path)
+        repdat_file = self.class_type(self.in_file_path)
         transitions = repdat_file.get_replica_traces()
 
     def test_test_transitions(self):
-
-        repdat_file = repdat.Repdat(in_path)
+        repdat_file = self.class_type(self.in_file_path)
         transitions = repdat_file.get_replica_traces()
 
