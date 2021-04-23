@@ -697,10 +697,27 @@ def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
 
     return dummyProcess(stdout=ret, stderr=[], ret=0)
 
-def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False, env=None):
-    #if(isinstance(command, str))
-    #    command = command.split(" ")
-    #if(verbose): print("submitting command: \n\t"+" ".join(command))
+def execute_subprocess(command: (str or List[str]), catch_STD:Union[bool,str]=False, env:dict=None, verbose: bool = False)->sub.CompletedProcess:
+    """execute_subprocess
+        This command starts a subprocess, that is executing the str command in bash.
+
+    Parameters
+    ----------
+    command : str
+        bash command
+    catch_STD :
+        if bool: catch the output and past it into the command line
+        if str: catch output and write it into this file
+    env: dict
+        environment
+    verbose : bool
+        verbosity
+
+    Returns
+    -------
+    CompletedProcess
+        return the executed process obj. (from subprocess)
+    """
 
     if(isinstance(command, list)):
         command = " ".join(command)
@@ -722,6 +739,7 @@ def execute_subprocess(command: (str or List[str]), verbose: bool = False, catch
         p.wait(120) # Wait for process to finish
     except:
         warnings.warn("TIME OUT WITH: "+str(command))
+        print("Continue Waiting: ")
         p.wait() # Wait for process to finish
     p.terminate() # Make sure its terminated
     r = p.poll()

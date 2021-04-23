@@ -239,7 +239,7 @@ class Trc(traj._General_Trajectory):
                  pdb strings of that molecule
             """
             # 1) INPUT PARSING
-            from pygromos.files.coord.cnf import Cnf
+            from pygromos.files.coord.cnf import Cnf # avoid circular import
             if(isinstance(cnf_file, str)):
                 cnf = Cnf(cnf_file)
             elif(isinstance(cnf_file, Cnf)):
