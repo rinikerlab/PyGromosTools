@@ -25,6 +25,5 @@ class test_MD_scheduler(unittest.TestCase):
        submission_system = self.submissionSystem()
 
        simulation_scheduler.do(in_simSystem=in_simSystem, out_dir_path=out_dir_path,
-                                 nmpi=1, nomp=1, duration_per_job="00:01",
                                  submission_system=submission_system,
                                  simulation_run_num=2, verbose= True)

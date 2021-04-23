@@ -222,6 +222,15 @@ class Top(_general_gromos_file._general_gromos_file):
             self.DIHEDRAL.content.append(blocks.top_dihedral_type(IP=atomI, JP=atomJ, KP=atomK, LP=atomL, ICP=torsion_type_number))
             self.DIHEDRAL.NPHI += 1
 
+    
+    def add_new_impdihedral_type(self, CQ:float, Q0:float, verbose=False):
+        #check if all classes are ready, if not create
+        if not hasattr(self, "IMPDIHEDRALTYPE"):
+            self.add_block(blocktitle="IMPDIHEDRALTYPE", content=[], verbose=verbose)
+        newIMPDIHEDRALTYPE = blocks.impdihedraltype_type(CQ=CQ, Q0=Q0)
+        self.IMPDIHEDRALTYPE.content.append(newIMPDIHEDRALTYPE)
+        self.IMPDIHEDRALTYPE.NQTY += 1
+
 
     def add_new_impdihedral(self, CQ:float, Q0:float, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
         #check if all classes are ready, if not create
@@ -244,9 +253,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 iterator += 1
             impdihedral_type_number = iterator #found the torsion
         if iterator > len(self.IMPDIHEDRALTYPE.content):#torsion type was not found -> add new bondtype
-            newIMPDIHEDRALTYPE = blocks.impdihedraltype_type(CQ=CQ, Q0=Q0)
-            self.IMPDIHEDRALTYPE.content.append(newIMPDIHEDRALTYPE)
-            self.IMPDIHEDRALTYPE.NQTY += 1
+            self.add_new_impdihedral_type(CQ=CQ, Q0=Q0)
         
         #check if we are adding a bond to IMPDIHEDRALH or IMPDIHEDRALH
         if includesH:
@@ -261,10 +268,19 @@ class Top(_general_gromos_file._general_gromos_file):
     def add_new_crossdihedral(self, verbose=False):
         raise NotImplementedError("Who needs this???? Could you plox implement it. UwU")
 
-    def add_new_LJparameter(self, C6:float, C12:float, CS6:float=0, CS12:float=0, combination_rule:str="geometric", verbose=False, AddATOMTYPENAME:str=None):
+    def add_new_LJparameter(self, C6:float, C12:float, CS6:float=0, CS12:float=0, combination_rule:str="geometric", verbose=False, AddATOMTYPENAME:str=None, lowerBound:float=1e-100):
         if not hasattr(self, "LJPARAMETERS"):
             self.add_block(blocktitle="LJPARAMETERS", content=[], verbose=verbose)
             self.LJPARAMETERS.NRATT2 = 0
+        #safety
+        if C6 < lowerBound:
+            C6 = lowerBound
+        if C12 < lowerBound:
+            C12 = lowerBound
+        if CS6 < lowerBound:
+            CS6 = lowerBound
+        if CS12 < lowerBound:
+            CS12 = lowerBound
         # add LJ parameter for all existing combinations
         num=0
         nratt=int((math.sqrt(8*self.LJPARAMETERS.NRATT2+1)-1)/2)
@@ -374,6 +390,21 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BONDSTRETCHTYPE.NBTY += 1
         self.CONSTRAINT.content.append(blocks.constraint_type(IC=IC, JC=JC, ICC=bond_type_number))
         self.CONSTRAINT.NCON += 1
+
+    def get_mass(self) -> float:
+        """
+        Calculates the total mass of the solute molecule
+
+        Returns
+        -------
+        float
+            total mass in a.u.
+        """
+        mass = 0
+        if hasattr(self, "SOLUTEATOM"):
+            for i in self.SOLUTEATOM.content:
+                mass += i.MASS
+        return mass
         
 
         

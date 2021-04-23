@@ -37,14 +37,17 @@ class serenityff():
 
         if isinstance(forcefield, forcefield_system):
             self.top = forcefield.top
+            if top != None:
+                self.top = top
             self.offmol.name = forcefield.mol_name
             self.develop = forcefield.develop
             self.off = forcefield.off
+            self.off2g = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
         else:
             self.top = top
             if mol_name != None:
                 self.offmol.name = mol_name
-            self.off = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
+            self.off2g = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
             self.develop = develop
 
     def read_pattern(self, C6orC12:str = "C6"):
@@ -110,9 +113,9 @@ class serenityff():
             self.read_pattern()
         c6dict = self.get_LJ_parameters()
         if self.develop:
-            self.off.createVdWexclusionList()
+            self.off2g.createVdWexclusionList()
             moleculeItr = 1
-            for molecule in self.off.molecule_force_list:
+            for molecule in self.off2g.molecule_force_list:
                 panm_dict = collections.defaultdict(int)
                 for key in molecule["vdW"]:
                     force = molecule["vdW"][key]
@@ -122,7 +125,7 @@ class serenityff():
                     panm_dict[element_symbol] += 1
                     PANM = element_symbol + str(panm_dict[element_symbol])
                     IAC = 0 #will not be used if we use automatic
-                    MASS = self.off.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(unit.dalton)
+                    MASS = self.off2g.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(unit.dalton)
                     CG = 0
                     if self.develop:
                         CG = partial_charges[int(key[0])]
@@ -130,13 +133,13 @@ class serenityff():
                         CGC = 1
                     else: 
                         CGC = 0
-                    if str(key[0]) in self.off.exclusionList13:
-                        openFFexList13 = list(self.off.exclusionList13[str(key[0])])
+                    if str(key[0]) in self.off2g.exclusionList13:
+                        openFFexList13 = list(self.off2g.exclusionList13[str(key[0])])
                         INE = [int(x)+1 for x in openFFexList13]
                     else:
                         INE = list()
-                    if str(key[0]) in self.off.exclusionList14:
-                        openFFexList14 = list(self.off.exclusionList14[str(key[0])])
+                    if str(key[0]) in self.off2g.exclusionList14:
+                        openFFexList14 = list(self.off2g.exclusionList14[str(key[0])])
                         INE14 = [int(x)+1 for x in openFFexList14]
                     else:
                         INE14 = list()
@@ -149,18 +152,18 @@ class serenityff():
                         C12 = C12_input[(c6dict[key[0]][0])]
                     CS12 = 0.5 * C12
                     IACname = c6dict[key[0]][0]
-                    self.off.gromosTop.add_new_SOLUTEATOM(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=CS6, CS12=CS12, IACname=IACname)
+                    self.off2g.gromosTop.add_new_SOLUTEATOM(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=CS6, CS12=CS12, IACname=IACname)
                 moleculeItr += 1
         else:
             raise NotImplementedError("WIP")
 
     def create_top(self, C12_input={'H':0.0,'C':0.0}, partial_charges=collections.defaultdict(float)):
-        self.off.convertResname()
-        self.off.convertBonds()
-        self.off.convertAngles()
-        self.off.convertTosions()
-        self.off.convertImproper()
-        self.off.convert_other_stuff()
+        self.off2g.convertResname()
+        self.off2g.convertBonds()
+        self.off2g.convertAngles()
+        self.off2g.convertTosions()
+        self.off2g.convertImproper()
+        self.off2g.convert_other_stuff()
         self.create_serenityff_nonBonded(C12_input=C12_input, partial_charges=partial_charges)
-        self.top = self.off.gromosTop
+        self.top = self.off2g.gromosTop
         

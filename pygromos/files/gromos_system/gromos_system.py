@@ -70,7 +70,6 @@ class Gromos_System():
     checkpoint_path:str
     _future_promise:bool #for interest if multiple jobs shall be chained.
     _future_promised_files:list
-    verbose: bool=False
 
     _single_multibath:bool  = False
 
@@ -81,7 +80,8 @@ class Gromos_System():
                  in_top_path: str = None, in_cnf_path: str = None, in_imd_path: str = None,
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
-                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), auto_convert:bool=False, adapt_imd_automatically:bool=True):
+                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
+                 auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=True):
         """
 
         Parameters
@@ -104,7 +104,6 @@ class Gromos_System():
         auto_convert
         adapt_imd_automatically
         """
-
         self.hasData = False
         self._name = system_name
         self._work_folder = work_folder
@@ -112,6 +111,7 @@ class Gromos_System():
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.checkpoint_path = None
+        self.verbose = verbose
 
         #GromosFunctionality
         self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
@@ -122,16 +122,17 @@ class Gromos_System():
         self._future_promised_files = []
 
         if in_smiles == None and rdkitMol == None and readIn == False:
-            warnings.warn("No data provided to gromos_system\nmanual work needed")
+            if verbose: warnings.warn("No data provided to gromos_system\nmanual work needed")
 
         # import files:
         file_mapping = {"imd": in_imd_path,
                         "top": in_top_path, "ptp": in_ptp_path,
                         "cnf": in_cnf_path,
                         "disres": in_disres_path,
-                        "posres": in_posres_path, "refpos": in_refpos_path,
+                        "posres": in_posres_path, 
+                        "refpos": in_refpos_path,
                         }
-        self.parse_attribute_files(file_mapping, readIn=readIn)
+        self.parse_attribute_files(file_mapping, readIn=readIn, verbose=verbose)
 
         ##System Information:
         if(not self._cnf._future_file):
@@ -146,16 +147,6 @@ class Gromos_System():
 
         if(adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
             self.adapt_imd()
-
-        """
-        #TODO: translate cnf->pdb_block->rdkit test
-        if(self.cnf is None):
-            pdb_block = self.cnf.get_pdb()
-            
-            self.mol = Chem.Mol(pdb_block)
-            self.smile = self.mol.smileString
-            
-        """
 
         # import molecule from smiles using rdkit
         if in_smiles:
@@ -176,6 +167,9 @@ class Gromos_System():
                 self.auto_convert()
             else:
                 raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
+
+        if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
+            self.cnf = Cnf(in_value=self.mol)
 
         #misc
         self._all_files_key = list(map(lambda x: "_"+x, self.required_files.keys()))
@@ -237,8 +231,10 @@ class Gromos_System():
         for key in attribute_dict.keys():
             if (not isinstance(attribute_dict[key], Callable) and not key in skip):
                 new_dict.update({key:attribute_dict[key]})
-            elif(key in skip):
+            elif(not attribute_dict[key] is None and key in skip):
                 new_dict.update({key: attribute_dict[key]._asdict()})
+            else:
+                new_dict.update({key: None})
 
         return new_dict
 
@@ -263,7 +259,7 @@ class Gromos_System():
 
 
     def __deepcopy__(self, memo):
-        copy_obj = self.__class__(system_name="Test", work_folder="Test")
+        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder+"/test", readIn=False, verbose=self.verbose)
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
@@ -550,7 +546,6 @@ class Gromos_System():
                     if(self.verbose or True): warnings.warn("Did not change file path as its only promised "+str(file_obj.path))
                 else:
                     file_obj.path = self._work_folder + "/" + self.name + "." + getattr(self, file_name).gromos_file_ending
-                    #print(file_obj.path)
 
     def rebase_files(self):
         if(not os.path.exists(self.work_folder) and os.path.exists(os.path.dirname(self.work_folder))):
@@ -567,7 +562,8 @@ class Gromos_System():
         for promised_file_key in self._future_promised_files:
             promised_file = getattr(self, promised_file_key)
             if(os.path.exists(promised_file.path)):
-                print("READING FILE")
+                if (self.verbose):
+                    print("READING FILE")
                 setattr(self, "_"+promised_file_key, self._all_files[promised_file_key](promised_file.path))
                 self._future_promised_files.remove(promised_file_key)
             else:
@@ -576,6 +572,7 @@ class Gromos_System():
             self._future_promise = False
 
     def auto_convert(self):
+        #create topology
         if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
             # set parameters for make_top
             out=self.work_folder+"/make_top.top"
@@ -605,7 +602,7 @@ class Gromos_System():
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
                                   "Please install the package for this feature!")
             else:
-                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield)
+                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield, top=self.top)
                 self.serenityff.create_top(C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges)
                 self.serenityff.top.make_ordered()
                 self.top = self.serenityff.top
