@@ -22,7 +22,7 @@ import pygromos.files.trajectory._general_trajectory as traj
 
 class gromos_2020_trg_block_names_table():
     totals_subblock_names = ["dHdl", "dKdl", "dVdl",] + ["WIP" for x in range(40)]
-    precalclam_subblock = ["nr_lambdas", "A_e_lj", "B_e_lj", "A_e_crf", "B_e_crf", "AB_kinetic", "AB_bond", "AB_angle", "AB_improper", "AB_disres", "AB_dihres", "AB_disfld"]
+    precalclam_subblock = ["nr_lambdas", "A_e_lj", "B_e_lj", "A_e_crf", "B_e_crf", "AB_kinetic", "AB_bond", "AB_angle", "AB_improper", "AB_disres", "AB_dihres", "AB_disfld",]
 
 class Trg(traj._General_Trajectory):
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0):
@@ -43,6 +43,7 @@ class Trg(traj._General_Trajectory):
         adapted_cols = [self.block_name_table.precalclam_subblock[0]]
         for i in range(1,int(groups)+1):
             adapted_cols.extend(list(map(lambda x: str(x)+"_"+str(i), self.block_name_table.precalclam_subblock[1:])))
+        adapted_cols.extend(["A_dihedral", "B_dihedral"])
 
         self.totals = pd.DataFrame(data = np.stack(self.database["precalclam"].to_numpy()), columns=adapted_cols)
         return self.totals

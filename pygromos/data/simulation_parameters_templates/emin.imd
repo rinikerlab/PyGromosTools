@@ -16,20 +16,6 @@ CONSTRAINT
 # 	 NTCS 	 NTCS0(1)
  	 1 	 0.000100 	 
 END
-EDS
-# 	 EDS
- 	 1 	 
-# 	 ALPHLJ 	 ALPHC
- 	 0.000000 	 0.000000 	 
-# 	 FUNCTIONAL FORM
- 	 1 	 
-# 	 NUMSTATES
- 	 0 	 
-# 	 S
- 	 1.000000 	 
-# 	 EIR
- 	 0.000000 	 0.000000 	 
-END
 ENERGYMIN
 # 	 NTEM 	 NCYC 	 DELE 	 DX0 	 DXM 	 NMIN 	 FLIM
  	 1 	 0 	 0.1 	 0.01 	 0.05 	 2000 	 0.0 	 
@@ -38,7 +24,7 @@ FORCE
 # 	 BONDS 	 ANGLES 	 IMPROPER 	 DIHEDRAL 	 ELECTROSTATIC 	 VDW
  	 1 	 1 	 1 	 1 	 1 	 1 	 
 # 	 NEGR 	 NRE
- 	 1 	 16152 	 
+ 	 4 	 71 	 72 	 73 	 2863 	 
 END
 INITIALISE
 # 	 NTIVEL 	 NTISHK 	 NTINHT 	 NTINHB
@@ -80,5 +66,5 @@ STEP
 END
 SYSTEM
 # 	 NPM 	 NSM
- 	 1 	 5384 	 
+ 	 1 	 930 	 
 END

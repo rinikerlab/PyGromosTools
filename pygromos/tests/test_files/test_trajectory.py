@@ -26,7 +26,7 @@ class traj_standard_tests(unittest.TestCase):
         print(t.database.head())
 
     def test_constructor_trg_h5_file_path(self):
-        t = self.class_name(input_value=self.in_file_h5_path)
+        t = self.class_name(input_value=self.in_file_path)
         print(t)
 
     def test_write(self):
@@ -36,7 +36,7 @@ class traj_standard_tests(unittest.TestCase):
             pass
 
     def setUp(self) -> None:
-        self.t1 = self.class_name(input_value=self.in_file_h5_path)
+        self.t1 = self.class_name(input_value=self.in_file_path)
 
     def test_add(self):
         if("traj_standard_tests" == self.__class__.__name__):
@@ -51,10 +51,6 @@ class traj_standard_tests(unittest.TestCase):
 class test_trc(traj_standard_tests):
     class_name = trc.Trc
     in_file_path = in_test_file_path+ "/trc/in_test.trc"
-    in_file_lam_path = in_test_file_path+ "/trc/RAFE_TI_l0_5.trc"
-    in_file_eds_path = in_test_file_path+ "/trc/PNMT_eds_Pipeline_energies.trc"
-
-
     in_file_h5_path =  in_test_file_path+ "/trc/in_test.trc.h5"
     outpath = root_out + "/out_trc1.trc.h5"
 
@@ -88,7 +84,7 @@ class test_tre(traj_standard_tests):
         lam_ene = t.get_precalclam()
         print(lam_ene, lam_ene.shape)
         self.assertEqual(lam_ene.nr_lambdas[0], 2, msg="Number of lambdas should be two")
-        self.assertEqual(lam_ene.shape, (500,23), msg="The traj should have 500 timesteps and 23 fields for precalclam")
+        self.assertEqual(lam_ene.shape, (500,25), msg="The traj should have 500 timesteps and 23 fields for precalclam")
 
 
 class test_trg(traj_standard_tests):
@@ -108,5 +104,6 @@ class test_trg(traj_standard_tests):
         print(lambdas)
 
     def test_get_precalclam(self):
-        precalclam = self.t1.get_precalclam()
+        t = self.class_name(input_value=self.in_file_path)
+        precalclam = t.get_precalclam()
         print(precalclam)
