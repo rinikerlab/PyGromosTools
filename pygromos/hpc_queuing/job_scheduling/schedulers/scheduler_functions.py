@@ -196,7 +196,7 @@ def chain_submission(simSystem:Gromos_System,
                 clean_id = job_submission_system.submit_to_queue(command=clean_up_command,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
-                                                                 outLog=outLog, errLog=errLog,
+                                                                 outLog=outLog, errLog=errLog)
 
                 if verbose: print("CLEANING ID: ", previous_job_ID)
 
