@@ -321,7 +321,7 @@ class Gromos_System():
         """
         self._all_files_key = list(self.required_files.keys())
         self._all_files_key.extend(list(self.optional_files.keys()))
-        self._all_file_paths = {key: getattr(self, key).path for key in self._all_files_key if
+        self._all_file_paths = {key: getattr(self, key).in_path for key in self._all_files_key if
                                 (hasattr(self, key) and (not getattr(self, key) is None))}
         return self._all_file_paths
 
@@ -538,7 +538,7 @@ class Gromos_System():
             elif(attribute_name in self.required_files):
                 if (verbose): print("Generate Empty: ", attribute_name)
                 obj = all_files[attribute_name](None, _future_file = True)
-                obj.path = file_path
+                obj.in_path = file_path
                 if(not file_path is None):
                     self._future_promise = True
                     self._future_promised_files.append(attribute_name)
@@ -553,9 +553,9 @@ class Gromos_System():
             if(hasattr(self,  file_name) and not getattr(self, file_name) is None):
                 file_obj = getattr(self, file_name,)
                 if(file_obj._future_file):
-                    if(self.verbose or True): warnings.warn("Did not change file path as its only promised "+str(file_obj.path))
+                    if(self.verbose or True): warnings.warn("Did not change file path as its only promised " + str(file_obj.in_path))
                 else:
-                    file_obj.path = self._work_folder + "/" + self.name + "." + getattr(self, file_name).gromos_file_ending
+                    file_obj.in_path = self._work_folder + "/" + self.name + "." + getattr(self, file_name).gromos_file_ending
 
     def rebase_files(self):
         if(not os.path.exists(self.work_folder) and os.path.exists(os.path.dirname(self.work_folder))):
@@ -571,10 +571,10 @@ class Gromos_System():
 
         for promised_file_key in self._future_promised_files:
             promised_file = getattr(self, promised_file_key)
-            if(os.path.exists(promised_file.path)):
+            if(os.path.exists(promised_file.in_path)):
                 if (self.verbose):
                     print("READING FILE")
-                setattr(self, "_"+promised_file_key, self._all_files[promised_file_key](promised_file.path))
+                setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.in_path))
                 self._future_promised_files.remove(promised_file_key)
             else:
                 warnings.warn("Promised file was not found: "+promised_file_key)
@@ -721,13 +721,13 @@ class Gromos_System():
         for file_name in control:
             if (control[file_name] and hasattr(self, file_name) and (not getattr(self, file_name) is None)):
                 file_obj = getattr(self, file_name)
-                if(file_obj.path is None):
+                if(file_obj.in_path is None):
                     print("File "+str(file_name)+" is empty , can not be written!")
                 elif(file_obj._future_file):
-                    print("File "+str(file_name)+" is promised , can not be written: "+ str(file_obj.path))
+                    print("File " + str(file_name) +" is promised , can not be written: " + str(file_obj.in_path))
                 else:
-                    if(verbose): print("Write out: "+str(file_name)+"\t"+file_obj.path)
-                    file_obj.write(file_obj.path)
+                    if(verbose): print("Write out: " + str(file_name) +"\t" + file_obj.in_path)
+                    file_obj.write(file_obj.in_path)
             else:
                 if(file_name in self.required_files):
                     warnings.warn("did not find the required " + file_name + " found")
