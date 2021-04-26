@@ -38,7 +38,10 @@ class _general_pandas_tre_block(_general_pandas_trajectory_block):
             elif("nr_lambdas" == subblocktitle):
                 subblocktitle = "precalclam"
                 tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)
-            elif("precalclam"== subblocktitle):
+            elif("numstates" == subblocktitle):
+                subblocktitle = "eds"
+                tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)
+            elif("precalclam"== subblocktitle or "eds" == subblocktitle):
                 continue
             else:
                 tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)
