@@ -64,9 +64,11 @@ class Tre(traj._General_Trajectory):
         num_states = self.database["eds"][0][0]
         if(num_states>0):
             state_strings =[[column+"_"+str(state_row) for column in self.tre_block_name_table.eds_subblock_names_singleState] for state_row in range(1, 1+int(num_states))]
-            self.tre_block_name_table.eds_subblock_names = ["numstates"] + list(np.concatenate(state_strings))
+            self.tre_block_name_table.eds_subblock_names = ["numstates"]
+            self.tre_block_name_table.eds_subblock_names.extend(list(np.concatenate(state_strings)))
         else:
             self.tre_block_name_table.eds_subblock_names = ["numstates"]
+
         self.eds = pd.DataFrame(data=np.stack(self.database["eds"].to_numpy()), columns=self.tre_block_name_table.eds_subblock_names)
         return self.eds
 
@@ -74,9 +76,12 @@ class Tre(traj._General_Trajectory):
         num_lam = self.database["precalclam"][0][0]
         if(num_lam>0):
             state_strings =[[column+"_"+str(state_row) for column in self.tre_block_name_table.lam_subblock_names_singleLam] for state_row in range(1, 1+int(num_lam))]
-            self.tre_block_name_table.lam_subblock_names = ["nr_lambdas"] + list(np.concatenate(state_strings))
-        else:
             self.tre_block_name_table.lam_subblock_names = ["nr_lambdas"]
+            self.tre_block_name_table.lam_subblock_names.extend(list(np.concatenate(state_strings)))
+            self.tre_block_name_table.lam_subblock_names.extend(["A_dihedral", "B_dihedral"])
+        else:
+            self.tre_block_name_table.lam_subblock_names = ["nr_lambdas", "A_dihedral", "B_dihedral"]
+
         self.precalclam = pd.DataFrame(data=np.stack(self.database["precalclam"].to_numpy()), columns=self.tre_block_name_table.lam_subblock_names)
         return self.precalclam
 
