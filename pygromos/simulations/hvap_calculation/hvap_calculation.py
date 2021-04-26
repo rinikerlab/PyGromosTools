@@ -101,13 +101,13 @@ class Hvap_calculation():
         return self.calc_hvap()
 
     def create_liq(self):
-        self.gromosPP.com_top(self.groSys_gas.top.in_path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
+        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
         tempTop = Top(in_value=self.work_folder+"/temp.top")
         tempTop.write(out_path=self.work_folder+"temp.top")
         time.sleep(1)
         self.groSys_liq.top = tempTop
         if self.groSys_liq.cnf is None:
-            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.in_path, out_cnf_path=self.work_folder + "/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder + "/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
             time.sleep(1)
             self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
         self.groSys_liq.rebase_files()
