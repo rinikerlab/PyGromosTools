@@ -109,20 +109,24 @@ class Cnf(_general_gromos_file):
             name="XXX"
         self.__setattr__("TITLE", TITLE("\t"+ name +" created from RDKit"))
 
-        #check if conformations exist else create a new one
-        if mol.GetNumConformers() < 1:
-            mol = Chem.AddHs(mol)
-            AllChem.EmbedMolecule(mol)
-        conf = mol.GetConformer(0)
-
-        #fill a list with atomP types from RDKit data
         atomList=[]
-        for i in range(mol.GetNumAtoms()):
-            x = conf.GetAtomPosition(i).x
-            y = conf.GetAtomPosition(i).y
-            z = conf.GetAtomPosition(i).z
-            atomType = mol.GetAtomWithIdx(i).GetSymbol()
-            atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
+
+        #check if mol is not empty. Else creates an empty position block
+        if mol.GetNumAtoms() >= 1:
+            #check if conformations exist else create a new one
+            if mol.GetNumConformers() < 1:
+                mol = Chem.AddHs(mol)
+                AllChem.EmbedMolecule(mol)
+            conf = mol.GetConformer(0)
+
+            #fill a list with atomP types from RDKit data
+            
+            for i in range(mol.GetNumAtoms()):
+                x = conf.GetAtomPosition(i).x
+                y = conf.GetAtomPosition(i).y
+                z = conf.GetAtomPosition(i).z
+                atomType = mol.GetAtomWithIdx(i).GetSymbol()
+                atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
 
         # set POSITION attribute
         self.__setattr__("POSITION", blocks.POSITION(atomList))

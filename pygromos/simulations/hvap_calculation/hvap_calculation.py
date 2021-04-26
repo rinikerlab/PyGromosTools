@@ -23,8 +23,10 @@ import os
 import warnings
 import time
 
+from pygromos.gromos.pyGromosPP.ran_box import ran_box
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.hvap_calculation import hvap_input_files
+from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.hpc_queuing.submission_systems.Submission_Systems import LOCAL as subSys
 from pygromos.simulations.modules.general_simulation_modules import simulation
@@ -35,7 +37,7 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 
 class Hvap_calculation():
-    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", verbose:bool=True) -> None:
+    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="off"), gromosXX:str=None, gromosPP:str=None, verbose:bool=True) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
 
         Parameters
@@ -46,10 +48,9 @@ class Hvap_calculation():
         # system variables
         if type(input_system) is Gromos_System:
             self.groSys_gas = input_system
-        elif type(input_system) is str:
-            raise NotImplementedError("WIP use Gromos_System")
-        elif type(input_system) is Chem.rdchem.Mol:
-            raise NotImplementedError("WIP use Gromos_System")
+        elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
+            self.groSys_gas = Gromos_System(work_folder=work_folder, system_name=system_name, in_smiles=input_system, Forcefield=forcefield, in_imd_path=hvap_input_files.imd_hvap_gas_sd, verbose=verbose)
+            
 
         self.work_folder = work_folder
         self.system_name = system_name
@@ -107,7 +108,7 @@ class Hvap_calculation():
         time.sleep(1)
         self.groSys_liq.top = tempTop
         if self.groSys_liq.cnf is None:
-            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+            ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
             time.sleep(1)
             self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
         self.groSys_liq.rebase_files()

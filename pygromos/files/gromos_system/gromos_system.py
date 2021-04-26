@@ -241,7 +241,7 @@ class Gromos_System():
     def __setstate__(self, state):
         self.__dict__ = state
         for key in skip:
-            if(key in self.__dict__ ):
+            if(key in self.__dict__ ) and not self.__dict__[key] is None:
                 setattr(self, key, skip[key](**self.__dict__[key]))
 
         #misc
