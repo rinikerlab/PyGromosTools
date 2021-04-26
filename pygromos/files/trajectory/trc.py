@@ -239,10 +239,10 @@ class Trc(traj._General_Trajectory):
                  pdb strings of that molecule
             """
             # 1) INPUT PARSING
-            from pygromos.files.coord.cnf import Cnf
+            from pygromos.files.coord.cnf import Cnf # avoid circular import
             if(isinstance(cnf_file, str)):
                 cnf = Cnf(cnf_file)
-            elif(isinstance(cnf_file, cnf_file)):
+            elif(isinstance(cnf_file, Cnf)):
                 cnf = cnf_file
             else:
                 raise ValueError("Did not understand the Value of cnf_file. Must be str to a cnf file or a cnf_file.")
@@ -265,11 +265,11 @@ class Trc(traj._General_Trajectory):
             # TODO: Inefficient!
             out_file.write( "TITLE " + self.TITLE + "\n")
             pos_cols = [col for col in self.database.columns if("POS" in col)]
-            for time_step in self.database.iloc:
+            for ind, time_step in self.database.iterrows():
                 pos_lines = time_step[pos_cols]
                 remark_line="REMARK\t"+str(time_step["TIMESTEP_step"])+"\t"+str(time_step["TIMESTEP_time"])+"\nMODEL\n"
                 frame_positions = []
-                for ind,coord_set in enumerate(pos_lines.iloc):
+                for ind ,coord_set in enumerate(pos_lines):
                     atom =cnf.POSITION[ind]
                     frame_positions.append(
                         pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(

@@ -453,7 +453,7 @@ class _gromosPPbase:
         if (not workdir):
             os.chdir(out_energy_folder_path)
 
-        if (in_en_file_paths.strip().endswith("trg")):
+        if (in_en_file_paths.strip().endswith("trg") or in_en_file_paths.strip().endswith("trg.gz")):
             in_file_form = "@fr_files"
         else:
             in_file_form = "@en_files"

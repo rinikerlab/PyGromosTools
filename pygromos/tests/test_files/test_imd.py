@@ -1,5 +1,7 @@
 import unittest, os, tempfile
 from pygromos.files.simulation_parameters import imd
+from pygromos.tests.test_files.general_file_functions import general_file_tests
+
 from pygromos.utils import bash
 
 
@@ -12,19 +14,24 @@ root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="imd_")
 out_path = root_out+"/out_imd_REEDS1.imd"
 
 
-class test_imd(unittest.TestCase):
+class test_imd(general_file_tests):
+    __test__ = True
+    class_type = imd.Imd
+    in_file_path = in_path
+    root_out = root_out
+
     def test_parsing_test_file(self):
-        imd_file = imd.Imd(in_path) #"./testfiles/BRD4_alternat_test_file.imd")
+        imd_file = self.class_type(self.in_file_path)
         return 0
 
     def test_to_string(self):
-        imd_file = imd.Imd(in_path)
-        #print(imd_file)
+        imd_file = self.class_type(self.in_file_path)
+        print(imd_file)
         return 0
 
 
     def test_edit_REEDS(self):
-        imd_file = imd.Imd(in_path)
+        imd_file = self.class_type(self.in_file_path)
         svals = "1.0 1.0 1.0 1.0".split()
         EIR = 0.0 # #
         EIR_VECTOR =  [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]   #write dev cases!
@@ -38,7 +45,7 @@ class test_imd(unittest.TestCase):
 
 
     def test_write_out(self):
-        imd_file = imd.Imd(in_path)
+        imd_file = self.class_type(self.in_file_path)
         imd_file.TITLE.content = "NEW TEST!"
         imd_file.write(out_path)
         return 0

@@ -10,7 +10,8 @@ from pygromos.data.simulation_parameters_templates import template_sd
 from pygromos.files.blocks.imd_blocks import PERTURBATION, PRECALCLAM
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import _SubmissionSystem, LOCAL
+from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.utils import bash
 
@@ -57,7 +58,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
     return lam_system, jobID
 
 
-def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=template_sd,
+def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=None,
                  submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
                  previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
     template_emin_control_dict = OrderedDict({

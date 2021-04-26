@@ -5,9 +5,11 @@ import os
 from itertools import combinations
 from pygromos.files.blocks.topology_blocks import atom_eds_pertubation_state, pertubation_eds_state
 from pygromos.files.topology.ptp import Pertubation_topology as ptp
+from pygromos.tests.test_files.general_file_functions import general_file_tests
+
 
 from pygromos.tests.in_testfiles import in_test_file_path
-path= in_test_file_path+"/ptp/eds.ptp"
+in_path= in_test_file_path + "/ptp/eds.ptp"
 
 from pygromos.tests.test_files import out_test_root_dir
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="ptp_")
@@ -18,23 +20,26 @@ outpath_new_atom=root_out+"/out_ptp_newAtoms.ptp"
 outpath_new_build=root_out+"/out_ptp_newBuild.ptp"
 outpath_new_build_complex=root_out+"/out_ptp_newBuild_complex.ptp"
 
-class test_ptp(unittest.TestCase):
-    file_class = ptp
+class test_ptp(general_file_tests):
+    __test__ = True
+    class_type = ptp
+    in_file_path = in_path
+    root_out = root_out
 
     def test_IO(self):
-        ptp = self.file_class(path)
+        ptp = self.class_type(in_path)
         print(ptp)
         ptp.write(outpath)
 
     def test_get_states(self):
-        ptp = self.file_class(path)
+        ptp = self.class_type(in_path)
         states = ptp.MPERTATOM.states
         print(states)
 
 
     def test_add_state(self):
         from pygromos.files.blocks.topology_blocks import  atom_eds_pertubation_state, pertubation_eds_state
-        ptp = self.file_class(path)
+        ptp = self.class_type(in_path)
 
         on_state = pertubation_eds_state(IAC=16, CHARGE=-1.0)
         new_atoms_state = [atom_eds_pertubation_state(NR=x, NAME="H", STATES={7:on_state, 13:on_state}) if x == 1 else atom_eds_pertubation_state(NR=x, NAME="H", STATES={7:on_state}) for x in range(1, 4)]
@@ -45,19 +50,19 @@ class test_ptp(unittest.TestCase):
 
 
     def test_delete_state(self):
-        ptp = self.file_class(path)
+        ptp = self.class_type(in_path)
         ptp.MPERTATOM.delete_state(stateIDs=6)
         ptp.MPERTATOM.delete_state(stateNames="state3")
         ptp.write(outpath_less_state)
 
     def test_remove_atoms(self):
-        ptp = self.file_class(path)
+        ptp = self.class_type(in_path)
         ptp.MPERTATOM.delete_atom(atomNR=[3, 4, 5, 6])
         ptp.write(outpath_less_atom)
 
     def test_new_ptp_from_scratch(self):
         from pygromos.files.blocks.topology_blocks import atom_eds_pertubation_state, pertubation_eds_state, MPERTATOM
-        ptp = self.file_class()
+        ptp = self.class_type()
         on_state = pertubation_eds_state(IAC=16, CHARGE=-1.0)
 
         new_atoms_state = [atom_eds_pertubation_state(NR=x, NAME="H", STATES={x: on_state}) for x in range(1, 4)]
@@ -115,7 +120,7 @@ class test_ptp(unittest.TestCase):
         new_atoms_state = np.concatenate(list(new_atoms_state_dict.values()))
 
         # BUILD PTP
-        ptp = self.file_class(path)
+        ptp = self.class_type(in_path)
         ptp.MPERTATOM.add_state_atoms(state_atoms=new_atoms_state)
         print(ptp)
         ptp.write(outpath_new_build_complex)

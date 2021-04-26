@@ -1,5 +1,6 @@
 import unittest, os, tempfile
 from pygromos.files import coord as cnf
+from pygromos.tests.test_files.general_file_functions import general_file_tests
 from pygromos.utils import bash
 
 from pygromos.tests.in_testfiles import in_test_file_path
@@ -11,9 +12,15 @@ root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="cnf_")
 out_path = root_out+"/out_cnf1.cnf"
 out_red_path = root_out+"/out_cnf1_reduced.cnf"
 
-class test_cnf(unittest.TestCase):
+class test_cnf(general_file_tests):
+    __test__ = True
+
+    in_file_path = in_test_file_path + "/cnf/in_cnf1.cnf"
+    root_out = root_out
+    class_type = cnf.Cnf
+
     def test_parse(self):
-        cnf_file = cnf.Cnf(in_file_path)
+        cnf_file = self.class_type(self.in_file_path)
         self.assertEqual(type(cnf_file), cnf.Cnf)
 
     def test_delete_res(self):
