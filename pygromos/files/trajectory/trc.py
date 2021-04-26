@@ -225,6 +225,31 @@ class Trc(traj._General_Trajectory):
             raise ValueError("ref_cnf type not supported")
         return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: self._rms(x), axis=1)
 
+
+    def get_pdb(self, cnf:str)->str:
+        pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+
+        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
+        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
+
+        # 3) CONVERT FILE
+        pdb_str = "TITLE " + self.TITLE + "\n"
+        pos_cols = [col for col in self.database.columns if ("POS" in col)]
+        for ind, time_step in self.database.iterrows():
+            pos_lines = time_step[pos_cols]
+            remark_line = "REMARK\t" + str(time_step["TIMESTEP_step"]) + "\t" + str(
+                time_step["TIMESTEP_time"]) + "\nMODEL\n"
+            frame_positions = []
+            for ind, coord_set in enumerate(pos_lines):
+                atom = cnf.POSITION[ind]
+                frame_positions.append(
+                    pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(
+                        atom.resID), dummy_insertion_code, coord_set[0] * 10, coord_set[1] * 10, coord_set[2] * 10,
+                                      dummy_occupancy, dummy_bfactor,
+                                      dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
+            pdb_str+= remark_line + "\n".join(frame_positions) + '\nENDMDL\n'
+        return pdb_str
+
     def write_pdb(self, out_path:str, cnf_file:str):
             """
                 This function converts the atom POS db of the traj into a pdb traj.

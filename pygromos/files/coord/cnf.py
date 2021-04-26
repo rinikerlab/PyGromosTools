@@ -19,7 +19,7 @@ from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
 from pygromos.files.trajectory.trc import Trc
-
+from pygromos.files.blocks.coord_blocks import GENBOX
 
 Reference_Position = TypeVar("refpos.Reference_Position")
 Position_Restraints = TypeVar("posres.Position_Restraints")
@@ -721,8 +721,8 @@ class Cnf(_general_gromos_file):
             atom.xp, atom.yp, atom.zp = new_vec
             self.POSITION.content[i] = atom
 
-
-        
+    def add_empty_box(self):
+        self.add_block(block=GENBOX())
 
     def write(self, out_path: str) -> str:
         # write out
@@ -830,7 +830,6 @@ class Cnf(_general_gromos_file):
 
         return posres.Position_Restraints(cnf)
 
-
     def write_possrespec(self, out_path: str, residues: dict or list, verbose: bool = False) -> str:
         """write_possrespec
                 This function writes out a gromos file, containing a atom list. that is to be position restrained!
@@ -869,20 +868,70 @@ class Cnf(_general_gromos_file):
         refpos_class.write(out_path)
         return out_path
 
-    def write_pdb(self, out_path: str):
-        """
-            This function converts the atom POS db of the traj into a pdb traj.
+    """
+    convert file: 
+    """
 
-        Parameters
-        ----------
-        atoms : t.List[Atom]
-            List of atoms
+    def get_pdb(self)->str:
+        """
+            translate cnf to pdb.
+
         Returns
         -------
-        t.List[str]
-             pdb strings of that molecule
+        str
+            pdb str.
+
         """
-        # 1) INPUT PARSING
+
+        # 2) CONSTUCT PDB BLOCKS
+        # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
+        pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
+        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
+
+        frame_positions = []
+        for ind, atom in enumerate(self.POSITION):
+            frame_positions.append(
+                pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(
+                    atom.resID), dummy_insertion_code, atom.xp * 10, atom.yp * 10, atom.zp * 10, dummy_occupancy,
+                                  dummy_bfactor,
+                                  dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
+
+        pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
+        pdb_str += "\n".join(frame_positions) + '\n'
+        pdb_str += '\nEND'
+
+        return pdb_str
+
+    def get_xyz(self)->str:
+        """
+            translate cnf to xyz
+
+        Returns
+        -------
+        str
+            in xyz format
+        """
+        xyz_str = str(len(self.POSITION)) + "\n"
+        xyz_str += "# "+str(self.TITLE.content.split("\n")[0])+"\n"
+        xyz_str += "# exported wit PyGromosTools\n"
+
+        xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
+
+        for position in self.POSITION:
+            xyz_line = xyz_format.format(position.atomType[0], position.xp * 10, position.yp * 10, position.zp * 10)
+            xyz_str += xyz_line
+
+        return xyz_str
+
+    def _write_mol_to_file(self, out_path:str, mol_str:str)->str:
+        """
+            write to file
+        Returns
+        -------
+
+        """
+        # 1) OpenFile
         if (isinstance(out_path, str)):
             if (os.path.exists(os.path.dirname(out_path))):
                 out_file = open(out_path, "w")
@@ -891,26 +940,44 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("Did not understand the Value of out_path. Must be str.")
 
-        # 2) CONSTUCT PDB BLOCKS
-        # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
-        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
-        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
-
-        # 3) CONVERT FILE
-        # TODO: Inefficient!
-        out_file.write("TITLE " + str(self.TITLE).replace("END", "") + "\n")
-        frame_positions = []
-        for ind, atom in enumerate(self.POSITION):
-            frame_positions.append(
-                pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(
-                    atom.resID), dummy_insertion_code, atom.xp * 10, atom.yp * 10, atom.zp * 10, dummy_occupancy,
-                                  dummy_bfactor,
-                                  dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
-        out_file.write("\n".join(frame_positions) + '\n')
-        out_file.write('\nEND')
+        # 3) Write File
+        out_file.write(mol_str)
         out_file.close()
         return out_path
+
+    def write_xyz(self, out_path: str)->str:
+        """
+            This function converts the atom POS db of the traj into a xyz structure.
+
+        Parameters
+        ----------
+        out_path : str
+            path, were the file should be written to.
+
+        Returns
+        -------
+        str
+            outpath of the file
+
+        """
+        return self._write_mol_to_file(out_path=out_path, mol_str=self.get_xyz())
+
+    def write_pdb(self, out_path: str)->str:
+        """
+            This function converts the atom POS db of the traj into a pdb traj.
+
+        Parameters
+        ----------
+        out_path : str
+            path, were the file should be written to.
+
+        Returns
+        -------
+        str
+            outpath of the file
+
+        """
+        return self._write_mol_to_file(out_path=out_path, mol_str=self.get_pdb())
 
     def cnf2trc(self) -> Trc:
         """This function converts a cnf to a trajectory with a single frame

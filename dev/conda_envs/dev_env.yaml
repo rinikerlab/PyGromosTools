@@ -1,4 +1,4 @@
-name: test
+name: pygromosDev
 channels:
   - rdkit
   - conda-forge
@@ -8,14 +8,17 @@ dependencies:
   # Base depends
   - python
   - pip
+  -
   # Testing
   - pytest
   - pytest-cov
   - codecov
+  -
   #meta
   - typing
   - tqdm
   - ipywidgets
+  -
   #science
   - openforcefield = 0.8.3
   - pandas
@@ -25,5 +28,4 @@ dependencies:
   - scipy
   - matplotlib
   - rdkit
-
-
+  - test_env.yaml
