@@ -181,12 +181,12 @@ class _gromosPPbase:
                 "@param " + in_parameter_lib_path,
                 "@seq " + in_sequence,
                 "@solv " + in_solvent]
-        arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
-        arg_file = open(arg_path, "w")
-        arg_file.write("\n".join(args))
-        arg_file.close()
-
-        command = self._bin +"make_top @f " + arg_path
+        #arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
+        #arg_file = open(arg_path, "w")
+        #arg_file.write("\n".join(args))
+        #arg_file.close()
+        #"@f " + arg_path
+        command = self._bin +"make_top "+" ".join(args)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
