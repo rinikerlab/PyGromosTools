@@ -26,6 +26,8 @@ dependencies:
   - numpy
   - sympy
   - scipy
-  - matplotlib
   - rdkit
   - test_env.yaml
+ ##Visualization
+  - matplotlib
+  - py3dmol

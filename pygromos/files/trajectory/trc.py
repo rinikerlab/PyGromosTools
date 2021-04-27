@@ -22,6 +22,7 @@ from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
 
 TrcType = TypeVar("Trc")
+CnfType = TypeVar("Cnf")
 
 
 class Trc(traj._General_Trajectory):
@@ -194,8 +195,6 @@ class Trc(traj._General_Trajectory):
             sum += np.sum(i**2)
         return np.sqrt(sum/len(in_values))
 
-    
-
     def rmsd(self, ref_cnf: Union[int, TrcType]) -> pd.DataFrame:
         """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
 
@@ -249,6 +248,7 @@ class Trc(traj._General_Trajectory):
                                       dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
             pdb_str+= remark_line + "\n".join(frame_positions) + '\nENDMDL\n'
         return pdb_str
+
 
     def write_pdb(self, out_path:str, cnf_file:str):
             """
@@ -304,6 +304,10 @@ class Trc(traj._General_Trajectory):
             out_file.write('\nEND')
             out_file.close()
             return out_path
+
+    def visualize(self, cnf:CnfType):
+        from pygromos.visualization.coordinates_visualization import show_coordinate_traj
+        return show_coordinate_traj(self, cnf=cnf)
 
 """
     @classmethod

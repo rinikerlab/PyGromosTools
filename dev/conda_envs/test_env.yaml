@@ -23,7 +23,10 @@ dependencies:
   - numpy
   - sympy
   - scipy
-  - matplotlib
   - rdkit
+ ##Visualization
+  - matplotlib
+  - py3dmol
+
 
 

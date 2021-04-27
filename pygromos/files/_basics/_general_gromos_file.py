@@ -223,3 +223,24 @@ class _general_gromos_file():
         self.path = out_path
 
         return out_path
+
+    def _write_to_file(self, out_path:str, content_str:str)->str:
+        """
+            write to file
+        Returns
+        -------
+
+        """
+        # 1) OpenFile
+        if (isinstance(out_path, str)):
+            if (os.path.exists(os.path.dirname(out_path))):
+                out_file = open(out_path, "w")
+            else:
+                raise IOError("Could not find directory to write to: " + str(os.path.dirname(out_path)))
+        else:
+            raise ValueError("Did not understand the Value of out_path. Must be str.")
+
+        # 3) Write File
+        out_file.write(content_str)
+        out_file.close()
+        return out_path
