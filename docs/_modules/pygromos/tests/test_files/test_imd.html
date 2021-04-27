@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -156,6 +156,8 @@
   <h1>Source code for pygromos.tests.test_files.test_imd</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">unittest</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.simulation_parameters</span> <span class="kn">import</span> <span class="n">imd</span>
+<span class="kn">from</span> <span class="nn">pygromos.tests.test_files.general_file_functions</span> <span class="kn">import</span> <span class="n">general_file_tests</span>
+
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
 
 
@@ -168,19 +170,24 @@
 <span class="n">out_path</span> <span class="o">=</span> <span class="n">root_out</span><span class="o">+</span><span class="s2">&quot;/out_imd_REEDS1.imd&quot;</span>
 
 
-<div class="viewcode-block" id="test_imd"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_imd.test_imd">[docs]</a><span class="k">class</span> <span class="nc">test_imd</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="test_imd"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_imd.test_imd">[docs]</a><span class="k">class</span> <span class="nc">test_imd</span><span class="p">(</span><span class="n">general_file_tests</span><span class="p">):</span>
+    <span class="n">__test__</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">imd</span><span class="o">.</span><span class="n">Imd</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_path</span>
+    <span class="n">root_out</span> <span class="o">=</span> <span class="n">root_out</span>
+
 <div class="viewcode-block" id="test_imd.test_parsing_test_file"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_imd.test_imd.test_parsing_test_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_parsing_test_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">imd_file</span> <span class="o">=</span> <span class="n">imd</span><span class="o">.</span><span class="n">Imd</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span> <span class="c1">#&quot;./testfiles/BRD4_alternat_test_file.imd&quot;)</span>
+        <span class="n">imd_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="test_imd.test_to_string"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_imd.test_imd.test_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">imd_file</span> <span class="o">=</span> <span class="n">imd</span><span class="o">.</span><span class="n">Imd</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
-        <span class="c1">#print(imd_file)</span>
+        <span class="n">imd_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">imd_file</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="test_imd.test_edit_REEDS"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_imd.test_imd.test_edit_REEDS">[docs]</a>    <span class="k">def</span> <span class="nf">test_edit_REEDS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">imd_file</span> <span class="o">=</span> <span class="n">imd</span><span class="o">.</span><span class="n">Imd</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">imd_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">svals</span> <span class="o">=</span> <span class="s2">&quot;1.0 1.0 1.0 1.0&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">EIR</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c1"># #</span>
         <span class="n">EIR_VECTOR</span> <span class="o">=</span>  <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">]</span>   <span class="c1">#write dev cases!</span>
@@ -194,7 +201,7 @@
 
 
 <div class="viewcode-block" id="test_imd.test_write_out"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_imd.test_imd.test_write_out">[docs]</a>    <span class="k">def</span> <span class="nf">test_write_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">imd_file</span> <span class="o">=</span> <span class="n">imd</span><span class="o">.</span><span class="n">Imd</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">imd_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">imd_file</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;NEW TEST!&quot;</span>
         <span class="n">imd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span></div></div>

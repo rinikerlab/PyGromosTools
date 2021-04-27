@@ -87,7 +87,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -180,58 +180,110 @@
     text-align: unset;
 }
 </style>
+<a class="reference external image-reference" href=".img/PyGromosToolsBanner.png"><img alt="" src=".img/PyGromosToolsBanner.png" /></a>
 <div class="section" id="welcome-to-pygromostools">
 <h1>Welcome to PyGromosTools<a class="headerlink" href="#welcome-to-pygromostools" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml"><img alt="CI" src="https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python"><img alt="Language grade: Python" src="https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&amp;logoWidth=18" /></a>
+<a class="reference external image-reference" href="https://rinikerlab.github.io/PyGromosTools/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-here-white.svg" /></a>
 <div class="section" id="general">
 <h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>The aim of the module is to bring Gromos to the Python3 World!
-This repository should make it easier to work with gromos in python and should enable you to write cleaner code.
-Checkout the examples in the example folder.</p>
+<div><p>The aim of the module is to bring GROMOS to the Python3 World!
+This repository should make it easier to work with GROMOS in Python and should enable the user to write cleaner, more reliable and adaptable code.</p>
+<p>General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.</p>
 </div></blockquote>
-</div>
-<div class="section" id="content">
-<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Gromos</p>
+<p>Content</p>
+<hr class="docutils" />
 <ul>
+<li><p>GROMOS wrappers</p>
+<ul class="simple">
 <li><p>GromosXX wrapper: for simulation execution</p></li>
-<li><p>GromosPP wrapper: for gromosPP-tool useage</p></li>
+<li><p>GromosPP wrapper: for GROMOS++ program usage</p></li>
 </ul>
 </li>
-<li><p>File handing of following gromos files:</p>
+<li><p>File handling of all GROMOS file types for automated creation/modification/analysis :</p>
 <ul>
-<li><dl class="simple">
-<dt>coordinatte files:</dt><dd><p>.cnf, .trc</p>
-</dd>
-</dl>
+<li><p>coordinate files CNF:</p>
+<ul class="simple">
+<li><p>read and analyse CNF files</p></li>
+<li><p>generate CNF files from RDKit</p></li>
+<li><p>generate CNF files from SDF</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;file_name&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="p">)</span>
+</pre></div>
+</div>
 </li>
-<li><dl class="simple">
-<dt>energy files:</dt><dd><p>.tre</p>
-</dd>
-</dl>
+<li><p>topology files:</p>
+<ul class="simple">
+<li><p>create topologies from a forcefield</p>
+<ul>
+<li><p>GROMOS 2016H66 / 54A7</p></li>
+<li><p>OpenForceField</p></li>
+<li><p>SerenityForceField</p></li>
+</ul>
 </li>
-<li><dl class="simple">
-<dt>parameter files:</dt><dd><p>.imd</p>
-</dd>
-</dl>
+<li><p>modify topologies</p>
+<ul>
+<li><p>add new atoms</p></li>
+<li><p>modify force parameters</p></li>
+</ul>
 </li>
-<li><dl class="simple">
-<dt>replica exchange files:</dt><dd><p>repdat.dat</p>
-</dd>
-</dl>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">top</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;file_path&quot;</span><span class="p">)</span>
+<span class="n">top</span><span class="o">.</span><span class="n">add_new_SOLUTEATOM</span><span class="p">(</span><span class="n">ATNM</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+</pre></div>
+</div>
 </li>
-<li><dl class="simple">
-<dt>topology<span class="raw-html-m2r"><br></span></dt><dd><p>top, mtb, ifp -&gt; under development</p>
-</dd>
-</dl>
+<li><p>simulation parameter files IMD</p>
+<ul class="simple">
+<li><p>a wide option of templates provided</p></li>
+<li><p>modify IMD files to fit your simulation</p></li>
+</ul>
+<div class="highlight-pythons notranslate"><div class="highlight"><pre><span></span>imd = Imd(input_value=&quot;file_path&quot;)
+imd.INITIALISE.TEMPI = 137
+print(imd)
+</pre></div>
+</div>
+</li>
+<li><p>trajectories (tre, trc, trg, …)</p>
+<ul class="simple">
+<li><p>analyse trajectories with Pandas data frames</p></li>
+<li><p>standard analysis like RSMD, RDF, … for trc</p></li>
+<li><p>auto saving of results for later use as hdf5</p></li>
+<li><p>ene_ana like tools for tre</p></li>
+<li><p>easy to add costume analysis tools</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span> <span class="o">=</span> <span class="n">Trc</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;file_path&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trc</span><span class="o">.</span><span class="n">rmsd</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+<li><p>replica exchange files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">repdat</span><span class="o">.</span><span class="n">dat</span>
+</pre></div>
+</div>
 </li>
 <li><p>classes for single blocks of each of these files.</p></li>
 </ul>
 </li>
-<li><p>Other Utilities:</p>
-<ul>
-<li><p>Automated and system creation (from RDKit or topos)</p></li>
+<li><p>Automation and file management system <code class="docutils literal notranslate"><span class="pre">gromos_system</span></code></p>
+<ul class="simple">
+<li><p>offers clean file management for simulations</p></li>
+<li><p>offers a high level of automation</p></li>
+<li><p>equiped with simulation queuing system</p></li>
+<li><p>includes many force fields</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ff</span><span class="o">=</span><span class="n">forcefield_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;openforcefield&quot;</span><span class="p">)</span>
+<span class="n">gsys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="s2">&quot;dir&quot;</span><span class="p">,</span> <span class="n">in_smiles</span><span class="o">=</span><span class="s2">&quot;C1CCCCC1&quot;</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gsys</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Other utilities:</p>
+<ul class="simple">
 <li><p>Automated queueing and submission for:</p>
 <ul>
 <li><p>Local calculation</p></li>
@@ -240,84 +292,49 @@ Checkout the examples in the example folder.</p>
 </ul>
 </li>
 <li><p>Bash wrappers for GROMOS</p></li>
-<li><p>amino acid library</p></li>
+<li><p>Amino acid library</p></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="general-information">
+<h2>General Information<a class="headerlink" href="#general-information" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="specifications">
-<h2>Specifications<a class="headerlink" href="#specifications" title="Permalink to this headline">¶</a></h2>
+<h3>Specifications<a class="headerlink" href="#specifications" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Python &gt;=3.7:</p></li>
 <li><p>requires: numpy, scipy, pandas, rdkit</p></li>
-<li><p>optional: openforcefield for off and serenityff functions</p></li>
+<li><p>optional: openforcefield for OpenForceField and Serenityff functions</p></li>
 </ul>
 </div>
 <div class="section" id="setup">
-<h2>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="installing-the-package-under-developmten">
-<h3>Installing the package - <em>UNDER Developmten</em><a class="headerlink" href="#installing-the-package-under-developmten" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pygromos</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="package-development">
-<h3>Package Development<a class="headerlink" href="#package-development" title="Permalink to this headline">¶</a></h3>
-<p>For using this repository and developing it, clone it into a directory on your machine and add the path to the repo to your python path.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>PYTHONPATH=${PYTHONPATH}:/path/to/pygromos/containint/folder/pygromos
-</pre></div>
-</div>
-<p>If you are using Anaconda, you might need to use to this instead:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">develop</span> <span class="o">-</span><span class="n">n</span> <span class="o">&lt;</span><span class="n">EnvironmentName</span><span class="o">&gt;</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">pygromos</span><span class="o">/</span><span class="n">containint</span><span class="o">/</span><span class="n">folder</span><span class="o">/</span><span class="n">pygromos</span>
-</pre></div>
-</div>
-<p>Please if your writing code for this repository, first develop it on an own branch.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">branch</span> <span class="o">&lt;</span><span class="n">MyBranch</span><span class="o">&gt;</span>    <span class="c1">#generate your branch</span>
-<span class="n">git</span> <span class="n">checkout</span> <span class="o">&lt;</span><span class="n">MyBranch</span><span class="o">&gt;</span>  <span class="c1">#switch to your branch</span>
-<span class="n">git</span> <span class="n">merge</span> <span class="n">master</span>   <span class="c1">#for adding new features from master to your branch</span>
-</pre></div>
-</div>
-<p>If you implemented in your branch features, that you would like to share, just issue a merge/pull request with the master branch on gitlab.
-If you find a bug or have an feature request, please raise an Issue.</p>
-<p>P.s.: I can recommend Pycharm or VisualStuudioCode from dstar, for exploring the repository.</p>
+<h3>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
+<p>see INSTALL.md file for more informations</p>
 </div>
 <div class="section" id="copyright">
 <h3>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h3>
-<p>Copyright (c) 2020, Benjamin Ries, Salome Rieder, Marc Lehner</p>
+<p>Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder</p>
+</div>
 <div class="section" id="acknowledgements">
-<h4>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h4>
+<h3>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h3>
 <p>Project based on the
 <a class="reference external" href="https://github.com/molssi/cookiecutter-cms">Computational Molecular Science Python Cookiecutter</a> version 1.3.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Welcome to PyGromosTools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#general">General</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#content">Content</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#specifications">Specifications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#setup">SETUP</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="introduction.html#installing-the-package-under-developmten">Installing the package - <em>UNDER Developmten</em></a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction.html#package-development">Package Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#general-information">General Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#specifications">Specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#setup">SETUP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="introduction.html#copyright">Copyright</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#acknowledgements">Acknowledgements</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Examples/example_MD_gromos_simulation.html">MD Simulations with Submission System</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_MD_gromos_simulation.html#Imports">Imports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_MD_gromos_simulation.html#Input-files">Input files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_MD_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_MD_gromos_simulation.html#RUN-MD-Simulation">RUN MD Simulation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_MD_gromos_simulation.html#Further-Analysis:">Further Analysis:</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="Examples/example_SD_gromos_simulation.html">SD Simulations with Submission System</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_SD_gromos_simulation.html#Imports">Imports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_SD_gromos_simulation.html#Input-files">Input files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_SD_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_SD_gromos_simulation.html#RUN-SD-Simulation">RUN SD Simulation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Examples/example_SD_gromos_simulation.html#Further-Analysis:">Further Analysis:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/example_PyGromosPP.html">Demonstartion of the PyGromosTools implementation of the Gromos++ programs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Examples/example_PyGromosPP.html#Ran_Box">Ran_Box</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Examples/example_TI_gromos_simulation.html">TI Calculation</a><ul>
@@ -339,6 +356,14 @@ If you find a bug or have an feature request, please raise an Issue.</p>
 <li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_files.html#PTP-Files-in-PyGromos">PTP-Files in PyGromos</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/example_gromos_simulation.html">SD Simulations with Submission System</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_simulation.html#Imports">Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_simulation.html#Input-files">Input files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_simulation.html#RUN-SD-Simulation">RUN SD Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_simulation.html#Further-Analysis:">Further Analysis:</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="Examples/example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_trajectories.html#Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos">Example file for the evaluation of GROMOS trajectory files in pygromos</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Examples/example_gromos_trajectories.html#1)-TRC">1) TRC</a></li>
@@ -348,12 +373,12 @@ If you find a bug or have an feature request, please raise an Issue.</p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorials/index.html">Turtorials</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Tutorials/talk_pygromos_and_oop.html">Pygromos: OOP in python 3</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Tutorials/talk_pygromos_and_oop.html#Implementations-of-OOP-in-Python3">Implementations of OOP in Python3</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Tutorials/talk_pygromos_and_oop.html#Using-Pygromos">Using Pygromos</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Tutorials/talk_pygromos_and_oop.html#PyGromos-Files:">PyGromos Files:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Tutorials/talk_pygromos_and_oop.html#Additional:-functional-programming">Additional: functional programming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/talk_pygromos_and_oop.html#Additional:-functional-programming---BONUS">Additional: functional programming - BONUS</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Tutorials/tutorial_gromos_pipeline.html">Gromos Tutorial Pipeline</a><ul>
@@ -376,7 +401,6 @@ If you find a bug or have an feature request, please raise an Issue.</p>
 </ul>
 </li>
 </ul>
-</div>
 </div>
 </div>
 </div>

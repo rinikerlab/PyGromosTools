@@ -4,7 +4,6 @@ import warnings
 from typing import Dict, Union, List
 from collections import OrderedDict
 from pygromos.gromos import gromosPP
-#from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.files.coord import cnf
 from pygromos.files.trajectory import trc,tre, trg
 from pygromos.utils import bash

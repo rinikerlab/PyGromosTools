@@ -114,6 +114,9 @@ class Gromos_System():
         self.verbose = verbose
 
         #GromosFunctionality
+        self._gromosPP_bin_dir = in_gromosPP_bin_dir
+        self._gromosXX_bin_dir = in_gromosXX_bin_dir
+
         self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
         self._gromosXX = GromosXX(gromosXX_bin_dir=in_gromosXX_bin_dir)
 
@@ -249,6 +252,11 @@ class Gromos_System():
         self._all_files_key.extend(list(map(lambda x: "_"+x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
+
+
+        #@bschroed remove this !
+        self._gromosPP = GromosPP(gromosPP_bin_dir=self._gromosPP_bin_dir)
+        self._gromosXX =GromosXX(gromosXX_bin_dir=self._gromosXX_bin_dir)
 
         #are promised files now present?
         self._check_promises()
@@ -539,7 +547,7 @@ class Gromos_System():
             if(hasattr(self,  file_name) and not getattr(self, file_name) is None):
                 file_obj = getattr(self, file_name,)
                 if(file_obj._future_file):
-                    if(self.verbose or True): warnings.warn("Did not change file path as its only promised "+str(file_obj.path))
+                    if(self.verbose or True): warnings.warn("Did not change file path as its only promised " + str(file_obj.path))
                 else:
                     file_obj.path = self._work_folder + "/" + self.name + "." + getattr(self, file_name).gromos_file_ending
 
@@ -560,7 +568,7 @@ class Gromos_System():
             if(os.path.exists(promised_file.path)):
                 if (self.verbose):
                     print("READING FILE")
-                setattr(self, "_"+promised_file_key, self._all_files[promised_file_key](promised_file.path))
+                setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
                 self._future_promised_files.remove(promised_file_key)
             else:
                 warnings.warn("Promised file was not found: "+promised_file_key)
@@ -710,9 +718,9 @@ class Gromos_System():
                 if(file_obj.path is None):
                     print("File "+str(file_name)+" is empty , can not be written!")
                 elif(file_obj._future_file):
-                    print("File "+str(file_name)+" is promised , can not be written: "+ str(file_obj.path))
+                    print("File " + str(file_name) +" is promised , can not be written: " + str(file_obj.path))
                 else:
-                    if(verbose): print("Write out: "+str(file_name)+"\t"+file_obj.path)
+                    if(verbose): print("Write out: " + str(file_name) +"\t" + file_obj.path)
                     file_obj.write(file_obj.path)
             else:
                 if(file_name in self.required_files):

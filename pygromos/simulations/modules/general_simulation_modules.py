@@ -12,7 +12,8 @@ from pygromos.files.trajectory.tre import Tre
 from pygromos.files.trajectory.trg import Trg
 from pygromos.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
 from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import _SubmissionSystem, LOCAL
+from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.utils import bash, utils
 from pygromos.utils.utils import spacer as spacer
 

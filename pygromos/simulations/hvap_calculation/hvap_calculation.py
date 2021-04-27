@@ -26,7 +26,7 @@ import time
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.hvap_calculation import hvap_input_files
 
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import LOCAL as subSys
+from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSys
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
@@ -101,13 +101,13 @@ class Hvap_calculation():
         return self.calc_hvap()
 
     def create_liq(self):
-        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder+"/temp.top")
+        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
         tempTop = Top(in_value=self.work_folder+"/temp.top")
         tempTop.write(out_path=self.work_folder+"temp.top")
         time.sleep(1)
         self.groSys_liq.top = tempTop
         if self.groSys_liq.cnf is None:
-            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder + "/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
             time.sleep(1)
             self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
         self.groSys_liq.rebase_files()

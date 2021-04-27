@@ -41,7 +41,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pygromos.hpc_queuing package" href="pygromos.hpc_queuing.html" />
+    <link rel="next" title="pygromos.gromos.pyGromosPP package" href="pygromos.gromos.pyGromosPP.html" />
     <link rel="prev" title="pygromos.files.trajectory.blocks package" href="pygromos.files.trajectory.blocks.html" /> 
 </head>
 
@@ -90,17 +90,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -207,6 +209,19 @@
 </style>
 <div class="section" id="pygromos-gromos-package">
 <h1>pygromos.gromos package<a class="headerlink" href="#pygromos-gromos-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.gromos.pyGromosPP.html">pygromos.gromos.pyGromosPP package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.gromos.pyGromosPP.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.gromos.pyGromosPP.html#module-pygromos.gromos.pyGromosPP.ran_box">pygromos.gromos.pyGromosPP.ran_box module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.gromos.pyGromosPP.html#module-pygromos.gromos.pyGromosPP">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -296,6 +311,32 @@ This should be inherited by a concrete class that might reimplement some new fea
 <dt id="pygromos.gromos.gromosPP._gromosPPbase.build_box">
 <code class="sig-name descname"><span class="pre">build_box</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_cnf_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_cnf_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic_boundary_condition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmolecule</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dens</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'build_box'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_command_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.build_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.build_box" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.gromos.gromosPP._gromosPPbase.cog">
+<code class="sig-name descname"><span class="pre">cog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_trcs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_selection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r</span> <span class="pre">cog'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rmsd'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.cog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.cog" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;topo   &lt;molecular topology file&gt;
+&#64;pbc      &lt;boundary conditions&gt; [&lt;gather method&gt;]
+&#64;traj     &lt;input trajectory files&gt;
+[&#64;nthframe &lt;write every nth frame&gt; (default: 1)]
+[&#64;outformat   &lt;output coordinates format&gt;]
+[&#64;atomspec &lt;atomspecifier(s) for which to calculate cog/com&gt; ]
+[&#64;cog_com  &lt;calculate centre of geometry (cog) or mass (com); default: cog&gt;]
+[&#64;add_repl &lt;add (add) the cog/com or replace (repl) the solutes; default: repl&gt;]
+[&#64;solv &lt;include solvent in outcoordinates&gt;]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_top_path</strong></p></li>
+<li><p><strong>in_trcs</strong></p></li>
+<li><p><strong>atom_selection</strong></p></li>
+<li><p><strong>out_top_path</strong></p></li>
+<li><p><strong>pbc</strong></p></li>
+<li><p><strong>_binary_name</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.gromos.gromosPP._gromosPPbase.com_top">
@@ -516,7 +557,7 @@ com - center of mass</p>
 
 <dl class="py method">
 <dt id="pygromos.gromos.gromosPP._gromosPPbase.noe">
-<code class="sig-name descname"><span class="pre">noe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_noe_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_traj_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'v'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gathering</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'cog'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'noe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.noe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.noe" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">noe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_noe_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_traj_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'v'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gathering</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'cog'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'noe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.noe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.noe" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
@@ -554,7 +595,7 @@ com - center of mass</p>
 
 <dl class="py method">
 <dt id="pygromos.gromos.gromosPP._gromosPPbase.pdb2gromos">
-<code class="sig-name descname"><span class="pre">pdb2gromos</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_pdb_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_cnf_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_lib_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/data/pdb2g96.lib'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'pdb2g96'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.pdb2gromos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.pdb2gromos" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">pdb2gromos</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_pdb_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_cnf_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_lib_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/data/pdb2g96.lib'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'pdb2g96'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.pdb2gromos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.pdb2gromos" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a wrapper for pdb2gromos. It executes the gromosPP binary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -716,6 +757,49 @@ com - center of mass</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>out_top_path</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.gromos.gromosPP._gromosPPbase.rmsd">
+<code class="sig-name descname"><span class="pre">rmsd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_trcs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_selection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r</span> <span class="pre">cog'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rmsd'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.rmsd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.rmsd" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_top_path</strong></p></li>
+<li><p><strong>in_trcs</strong></p></li>
+<li><p><strong>atom_selection</strong></p></li>
+<li><p><strong>out_file_path</strong></p></li>
+<li><p><strong>pbc</strong></p></li>
+<li><p><strong>_binary_name</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.gromos.gromosPP._gromosPPbase.rmsf">
+<code class="sig-name descname"><span class="pre">rmsf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_top_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_trcs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_selection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r</span> <span class="pre">cog'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_binary_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rmsf'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/gromos/gromosPP.html#_gromosPPbase.rmsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.gromos.gromosPP._gromosPPbase.rmsf" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>this is a wrapper for gromosPP rmsf programm. (Root mean square fluctuation</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_top_path</strong> (<em>str</em>) – path to topology file</p></li>
+<li><p><strong>in_trcs</strong> (<em>Union[str, List[str]]</em>) – Path OR paths to trc coordinate files</p></li>
+<li><p><strong>atom_selection</strong> (<em>str</em>) – selection of atoms</p></li>
+<li><p><strong>out_file_path</strong> – out path.</p></li>
+<li><p><strong>pbc</strong> (<em>str</em>) – periodic boundary condition of trc files</p></li>
+<li><p><strong>_binary_name</strong> (<em>str</em>) – binary name of gromos file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>outpath of the traj</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
@@ -941,7 +1025,7 @@ If OMP should be used, I suggest the md_run - function.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="pygromos.hpc_queuing.html" class="btn btn-neutral float-right" title="pygromos.hpc_queuing package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pygromos.gromos.pyGromosPP.html" class="btn btn-neutral float-right" title="pygromos.gromos.pyGromosPP package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="pygromos.files.trajectory.blocks.html" class="btn btn-neutral float-left" title="pygromos.files.trajectory.blocks package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -156,17 +156,26 @@
   <h1>Source code for pygromos.files.coord.cnf</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">import</span> <span class="nn">__main__</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.transform</span> <span class="kn">import</span> <span class="n">Rotation</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.files._basics</span> <span class="kn">import</span> <span class="n">parser</span>
 <span class="kn">from</span> <span class="nn">pygromos.files._basics._general_gromos_file</span> <span class="kn">import</span> <span class="n">_general_gromos_file</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">coord_blocks</span> <span class="k">as</span> <span class="n">blocks</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">TITLE</span>
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">amino_acids</span> <span class="k">as</span> <span class="n">aa</span>
 <span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">_cartesian_distance</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="kn">import</span> <span class="n">Trc</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.coord_blocks</span> <span class="kn">import</span> <span class="n">GENBOX</span>
 
 <span class="n">Reference_Position</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;refpos.Reference_Position&quot;</span><span class="p">)</span>
 <span class="n">Position_Restraints</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;posres.Position_Restraints&quot;</span><span class="p">)</span>
@@ -201,12 +210,12 @@
     <span class="n">TITLE</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">TITLE</span>  <span class="c1"># required</span>
     <span class="n">POSITION</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">POSITION</span>  <span class="c1"># required</span>
 
-    <span class="n">TIMESTEP</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">TIMESTEP</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">LATTICESHIFTS</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">LATTICESHIFTS</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">VELOCITY</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">VELOCITY</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">GENBOX</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">GENBOX</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">TIMESTEP</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">TIMESTEP</span>
+    <span class="n">LATTICESHIFTS</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">LATTICESHIFTS</span>
+    <span class="n">VELOCITY</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">VELOCITY</span>
+    <span class="n">GENBOX</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">GENBOX</span>
     <span class="n">PERTDATA</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">PERTDATA</span>
-    <span class="n">atom_ref_pos_block</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REFPOSITION</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">atom_ref_pos_block</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REFPOSITION</span>
 
     <span class="c1"># private</span>
     <span class="n">_block_order</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="s2">&quot;TIMESTEP&quot;</span><span class="p">,</span> <span class="s2">&quot;POSITION&quot;</span><span class="p">,</span> <span class="s2">&quot;LATTICESHIFTS&quot;</span><span class="p">,</span> <span class="s2">&quot;VELOCITY&quot;</span><span class="p">,</span> <span class="s2">&quot;REFPOSITION&quot;</span><span class="p">]</span>
@@ -216,11 +225,27 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_value</span><span class="p">:</span> <span class="p">(</span><span class="nb">str</span> <span class="ow">or</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="kc">None</span> <span class="ow">or</span> <span class="vm">__class__</span><span class="p">),</span>
                  <span class="n">clean_resiNumbers_by_Name</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">_future_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="n">in_value</span><span class="p">,</span> <span class="n">_future_file</span><span class="o">=</span><span class="n">_future_file</span><span class="p">)</span>
+        <span class="c1">#import for rdkit molecules</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">in_value</span><span class="p">)</span> <span class="o">==</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_future_file</span><span class="o">=</span><span class="n">_future_file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">createRDKITconf</span><span class="p">(</span><span class="n">mol</span><span class="o">=</span><span class="n">in_value</span><span class="p">)</span>
+        <span class="c1">#general import</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="n">in_value</span><span class="p">,</span> <span class="n">_future_file</span><span class="o">=</span><span class="n">_future_file</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;POSITION&quot;</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">clean_resiNumbers_by_Name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_posiResNums</span><span class="p">()</span>  <span class="c1"># carefull! if two resis same name after an another than, here is  a problem.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_residues</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;POSITION&quot;</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">clean_resiNumbers_by_Name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_posiResNums</span><span class="p">()</span>  <span class="c1"># carefull! if two resis same name after an another than, here is  a problem.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_residues</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Manage coordinates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Cnf.delete_block"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.delete_block">[docs]</a>    <span class="k">def</span> <span class="nf">delete_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockName</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_blocksset_names</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">blockName</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockName</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cnf.add_empty_box"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.add_empty_box">[docs]</a>    <span class="k">def</span> <span class="nf">add_empty_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">GENBOX</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="Cnf.read_file"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -235,6 +260,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">read_cnf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_orig_file_path</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Cnf.write"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># write out</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
+        <span class="n">out_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_path</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        manipulate/analysis of coordinates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Cnf.add_residue_positions"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.add_residue_positions">[docs]</a>    <span class="k">def</span> <span class="nf">add_residue_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This function adds all residues of an coords file to @DEVELOP</span>
 
@@ -367,62 +403,6 @@
 
         <span class="k">return</span> <span class="n">clean_residues</span><span class="p">,</span> <span class="n">ligands</span><span class="p">,</span> <span class="n">protein</span><span class="p">,</span> <span class="n">non_ligands</span><span class="p">,</span> <span class="n">solvent</span></div>
 
-<div class="viewcode-block" id="Cnf.clean_posiResNums"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.clean_posiResNums">[docs]</a>    <span class="k">def</span> <span class="nf">clean_posiResNums</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;clean_posiResNums</span>
-<span class="sd">            This function recount the Residue number with respect to residue name and residue number.</span>
-
-<span class="sd">        Warnings</span>
-<span class="sd">        --------</span>
-<span class="sd">        only in &quot;Position_BLOCK!@development</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">position_copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">position_copy</span><span class="o">.</span><span class="n">content</span>
-        <span class="n">tmpN</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">tmpID</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">tmpOldID</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resID</span>
-
-        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">:</span>
-            <span class="c1"># print(p)</span>
-            <span class="c1"># print(tmpN,tmpID)</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">resName</span> <span class="o">==</span> <span class="n">tmpN</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">==</span> <span class="n">tmpOldID</span><span class="p">:</span>  <span class="c1"># same residue as before</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">=</span> <span class="n">tmpID</span>
-            <span class="k">elif</span> <span class="p">(</span>
-                    <span class="n">p</span><span class="o">.</span><span class="n">resName</span> <span class="o">==</span> <span class="n">tmpN</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">!=</span> <span class="n">tmpOldID</span><span class="p">):</span>  <span class="c1"># same resiname but diff ID (double? - this is a problem!)</span>
-                <span class="n">tmpOldID</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span>
-                <span class="n">tmpID</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">=</span> <span class="n">tmpID</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># next name and residue id</span>
-                <span class="n">tmpID</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">tmpN</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resName</span>
-                <span class="n">tmpOldID</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">=</span> <span class="n">tmpID</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">pos</span></div>
-
-<div class="viewcode-block" id="Cnf.supress_atomPosition_singulrarities"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.supress_atomPosition_singulrarities">[docs]</a>    <span class="k">def</span> <span class="nf">supress_atomPosition_singulrarities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;supress_atomPosition_singulrarities</span>
-<span class="sd">        This function adds a very small deviation to the position of an atom, dependent on the atom number.</span>
-<span class="sd">        This might be needed to avoid singularities in gromosXX.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;POSITION&quot;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">):</span>
-                <span class="n">atom</span><span class="o">.</span><span class="n">xp</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">xp</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">ind</span>
-                <span class="n">atom</span><span class="o">.</span><span class="n">yp</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">yp</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">ind</span>
-                <span class="n">atom</span><span class="o">.</span><span class="n">zp</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">zp</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">ind</span></div>
-
-<div class="viewcode-block" id="Cnf.delete_block"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.delete_block">[docs]</a>    <span class="k">def</span> <span class="nf">delete_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockName</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_blocksset_names</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">blockName</span><span class="p">)</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockName</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="Cnf.rename_residue"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.rename_residue">[docs]</a>    <span class="k">def</span> <span class="nf">rename_residue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_resName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resID</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">resName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; rename_residue</span>
 
@@ -473,6 +453,42 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;No residue number or resName given.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Cnf.clean_posiResNums"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.clean_posiResNums">[docs]</a>    <span class="k">def</span> <span class="nf">clean_posiResNums</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;clean_posiResNums</span>
+<span class="sd">            This function recount the Residue number with respect to residue name and residue number.</span>
+
+<span class="sd">        Warnings</span>
+<span class="sd">        --------</span>
+<span class="sd">        only in &quot;Position_BLOCK!@development</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">position_copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">position_copy</span><span class="o">.</span><span class="n">content</span>
+        <span class="n">tmpN</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">tmpID</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tmpOldID</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resID</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">:</span>
+            <span class="c1"># print(p)</span>
+            <span class="c1"># print(tmpN,tmpID)</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">resName</span> <span class="o">==</span> <span class="n">tmpN</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">==</span> <span class="n">tmpOldID</span><span class="p">:</span>  <span class="c1"># same residue as before</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">=</span> <span class="n">tmpID</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">resName</span> <span class="o">==</span> <span class="n">tmpN</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">!=</span> <span class="n">tmpOldID</span><span class="p">):</span>  <span class="c1"># same resiname but diff ID (double? - this is a problem!)</span>
+                <span class="n">tmpOldID</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span>
+                <span class="n">tmpID</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">=</span> <span class="n">tmpID</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># next name and residue id</span>
+                <span class="n">tmpID</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">tmpN</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resName</span>
+                <span class="n">tmpOldID</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resID</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">resID</span> <span class="o">=</span> <span class="n">tmpID</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">pos</span></div>
 
 <div class="viewcode-block" id="Cnf.delete_residue"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.delete_residue">[docs]</a>    <span class="k">def</span> <span class="nf">delete_residue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resID</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">resName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;delete_residue</span>
@@ -779,14 +795,77 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NO POSITION block in cnf-Object: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Cnf.write"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="c1"># write out</span>
-        <span class="n">out_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
-        <span class="n">out_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">out_path</span></div>
+<div class="viewcode-block" id="Cnf.center_of_geometry"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.center_of_geometry">[docs]</a>    <span class="k">def</span> <span class="nf">center_of_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selectedAtoms</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;calculates the center of geometry for asingle molecule or the selected Atoms</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            cog</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;POSITION&quot;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="n">cogx</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">cogy</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">cogz</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">if</span> <span class="n">selectedAtoms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">iterator</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selectedAtoms</span><span class="p">:</span>
+                    <span class="n">iterator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+                <span class="n">cogx</span> <span class="o">+=</span> <span class="n">i</span><span class="o">.</span><span class="n">xp</span>
+                <span class="n">cogy</span> <span class="o">+=</span> <span class="n">i</span><span class="o">.</span><span class="n">yp</span>
+                <span class="n">cogz</span> <span class="o">+=</span> <span class="n">i</span><span class="o">.</span><span class="n">zp</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cogx</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="n">cogy</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="n">cogz</span><span class="o">/</span><span class="n">n</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NO POSITION block in cnf-Object: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cnf.rotate"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotationCenter</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selectedAtoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1">#define rotation center</span>
+        <span class="k">if</span> <span class="n">rotationCenter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rotationCenter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">center_of_geometry</span><span class="p">())</span>
+        
+        <span class="c1">#select atoms to rotate</span>
+        <span class="k">if</span> <span class="n">selectedAtoms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">iterator</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">))</span>
+
+        <span class="c1">#define Rotation</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_euler</span><span class="p">(</span><span class="s1">&#39;XYZ&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">],</span> <span class="n">degrees</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+
+        <span class="c1">#apply rotation</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+            <span class="c1">#get atom</span>
+            <span class="n">atom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">atom</span><span class="o">.</span><span class="n">xp</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">yp</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">zp</span><span class="p">])</span>
+            <span class="c1">#do rotation around rotation center</span>
+            <span class="n">new_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">vector</span><span class="o">-</span><span class="n">rotationCenter</span><span class="p">),</span> <span class="n">rotation</span><span class="p">)</span><span class="o">+</span><span class="n">rotationCenter</span>
+            <span class="c1">#rewrite atom</span>
+            <span class="n">atom</span><span class="o">.</span><span class="n">xp</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">yp</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">zp</span> <span class="o">=</span> <span class="n">new_vec</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">atom</span></div>
+
+<div class="viewcode-block" id="Cnf.supress_atomPosition_singulrarities"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.supress_atomPosition_singulrarities">[docs]</a>    <span class="k">def</span> <span class="nf">supress_atomPosition_singulrarities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;supress_atomPosition_singulrarities</span>
+<span class="sd">        This function adds a very small deviation to the position of an atom, dependent on the atom number.</span>
+<span class="sd">        This might be needed to avoid singularities in gromosXX.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;POSITION&quot;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">):</span>
+                <span class="n">atom</span><span class="o">.</span><span class="n">xp</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">xp</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">ind</span>
+                <span class="n">atom</span><span class="o">.</span><span class="n">yp</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">yp</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">ind</span>
+                <span class="n">atom</span><span class="o">.</span><span class="n">zp</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">zp</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">ind</span></div>
+
+
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generate further file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Cnf.generate_position_restraints"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.generate_position_restraints">[docs]</a>    <span class="k">def</span> <span class="nf">generate_position_restraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">residues</span><span class="p">:</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> \
     <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -805,7 +884,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">possrespec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_possrespec</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="n">out_path_prefix</span> <span class="o">+</span> <span class="s2">&quot;.por&quot;</span><span class="p">,</span> <span class="n">residues</span><span class="o">=</span><span class="n">residues</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        <span class="n">refpos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_refpos</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">out_path_prefix</span> <span class="o">+</span> <span class="s2">&quot;.rpf&quot;</span><span class="p">)</span>
+        <span class="n">refpos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_refpos</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="n">out_path_prefix</span> <span class="o">+</span> <span class="s2">&quot;.rpf&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">possrespec</span><span class="p">,</span> <span class="n">refpos</span></div>
 
@@ -885,7 +964,6 @@
 
         <span class="k">return</span> <span class="n">posres</span><span class="o">.</span><span class="n">Position_Restraints</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="Cnf.write_possrespec"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.write_possrespec">[docs]</a>    <span class="k">def</span> <span class="nf">write_possrespec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">residues</span><span class="p">:</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;write_possrespec</span>
 <span class="sd">                This function writes out a gromos file, containing a atom list. that is to be position restrained!</span>
@@ -924,37 +1002,59 @@
         <span class="n">refpos_class</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out_path</span></div>
 
-<div class="viewcode-block" id="Cnf.write_pdb"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.write_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">write_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            This function converts the atom POS db of the traj into a pdb traj.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        convert file: </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Cnf.createRDKITconf"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.createRDKITconf">[docs]</a>    <span class="k">def</span> <span class="nf">createRDKITconf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">:</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        atoms : t.List[Atom]</span>
-<span class="sd">            List of atoms</span>
+<span class="sd">        mol : Chem.rdchem.Mol</span>
+<span class="sd">            Molecule, possibly with a conformation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inchi</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToInchi</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inchi</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">inchi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;XXX&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="n">TITLE</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">+</span> <span class="n">name</span> <span class="o">+</span><span class="s2">&quot; created from RDKit&quot;</span><span class="p">))</span>
+
+        <span class="c1">#check if conformations exist else create a new one</span>
+        <span class="k">if</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumConformers</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+            <span class="n">AllChem</span><span class="o">.</span><span class="n">EmbedMolecule</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetConformer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1">#fill a list with atomP types from RDKit data</span>
+        <span class="n">atomList</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">GetAtomPosition</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">GetAtomPosition</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">GetAtomPosition</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">z</span>
+            <span class="n">atomType</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()</span>
+            <span class="n">atomList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">atomP</span><span class="p">(</span><span class="n">resID</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">resName</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">atomType</span><span class="o">=</span><span class="n">atomType</span><span class="p">,</span> <span class="n">atomID</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">xp</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">yp</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">zp</span><span class="o">=</span><span class="n">z</span><span class="p">))</span>
+
+        <span class="c1"># set POSITION attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="s2">&quot;POSITION&quot;</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">POSITION</span><span class="p">(</span><span class="n">atomList</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Cnf.get_pdb"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.get_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">get_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            translate cnf to pdb.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        t.List[str]</span>
-<span class="sd">             pdb strings of that molecule</span>
+<span class="sd">        str</span>
+<span class="sd">            pdb str.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># 1) INPUT PARSING</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_path</span><span class="p">))):</span>
-                <span class="n">out_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Could not find directory to write to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_path</span><span class="p">)))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not understand the Value of out_path. Must be str.&quot;</span><span class="p">)</span>
 
         <span class="c1"># 2) CONSTUCT PDB BLOCKS</span>
         <span class="c1"># ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html</span>
-        <span class="n">pdb_format</span> <span class="o">=</span> <span class="s2">&quot;ATOM  </span><span class="si">{:&gt;5d}</span><span class="s2">  </span><span class="si">{:&lt;2}{:1}{:&gt;3}</span><span class="s2">  </span><span class="si">{:1}{:&gt;3d}{:1}</span><span class="s2">   </span><span class="si">{:&gt;7.3f}{:&gt;7.3f}{:&gt;7.3f}{:&gt;5}{:&gt;6}{:&lt;3}{:&gt;2}</span><span class="s2"> </span><span class="si">{:&gt;2d}</span><span class="s2">&quot;</span>
+        <span class="n">pdb_format</span> <span class="o">=</span> <span class="s2">&quot;ATOM  </span><span class="si">{:&gt;5d}</span><span class="s2">  </span><span class="si">{:&lt;3}{:1}{:&gt;3}</span><span class="s2">  </span><span class="si">{:1}{:&gt;3d}{:1}</span><span class="s2">   </span><span class="si">{:&gt;7.3f}</span><span class="s2"> </span><span class="si">{:&gt;7.3f}</span><span class="s2"> </span><span class="si">{:&gt;7.3f}</span><span class="s2"> </span><span class="si">{:&gt;5}{:&gt;6}{:&lt;3}{:&gt;2}</span><span class="s2"> </span><span class="si">{:&gt;2d}</span><span class="s2">&quot;</span>
         <span class="n">dummy_occupancy</span> <span class="o">=</span> <span class="n">dummy_bfactor</span> <span class="o">=</span> <span class="n">dummy_charge</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">dummy_alt_location</span> <span class="o">=</span> <span class="n">dummy_chain</span> <span class="o">=</span> <span class="n">dummy_insertion_code</span> <span class="o">=</span> <span class="n">dummy_segment</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="c1"># 3) CONVERT FILE</span>
-        <span class="c1"># TODO: Inefficient!</span>
-        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;TITLE &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">frame_positions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="p">):</span>
             <span class="n">frame_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -962,11 +1062,115 @@
                     <span class="n">atom</span><span class="o">.</span><span class="n">resID</span><span class="p">),</span> <span class="n">dummy_insertion_code</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">xp</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">yp</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">zp</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dummy_occupancy</span><span class="p">,</span>
                                   <span class="n">dummy_bfactor</span><span class="p">,</span>
                                   <span class="n">dummy_segment</span><span class="p">,</span> <span class="n">atom</span><span class="o">.</span><span class="n">atomType</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">dummy_charge</span><span class="p">)))</span>  <span class="c1"># times *10 because pdb is in A</span>
-        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frame_positions</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">END&#39;</span><span class="p">)</span>
-        <span class="n">out_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">out_path</span></div></div>
 
+        <span class="n">pdb_str</span> <span class="o">=</span> <span class="s2">&quot;TITLE &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;END&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">pdb_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frame_positions</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">pdb_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">END&#39;</span>
+
+        <span class="c1">#future:</span>
+        <span class="c1">##add bond block with top optionally</span>
+
+        <span class="k">return</span> <span class="n">pdb_str</span></div>
+
+<div class="viewcode-block" id="Cnf.get_xyz"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.get_xyz">[docs]</a>    <span class="k">def</span> <span class="nf">get_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            translate cnf to xyz</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            in xyz format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xyz_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">xyz_str</span> <span class="o">+=</span> <span class="s2">&quot;# &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">xyz_str</span> <span class="o">+=</span> <span class="s2">&quot;# exported wit PyGromosTools</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="n">xyz_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&lt;3}</span><span class="se">\t</span><span class="si">{:&gt; 3.9f}</span><span class="s2">   </span><span class="si">{:&gt; 3.9f}</span><span class="s2">   </span><span class="si">{:&gt; 3.9f}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="p">:</span>
+            <span class="n">xyz_line</span> <span class="o">=</span> <span class="n">xyz_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">atomType</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">position</span><span class="o">.</span><span class="n">xp</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">yp</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">zp</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">xyz_str</span> <span class="o">+=</span> <span class="n">xyz_line</span>
+
+        <span class="k">return</span> <span class="n">xyz_str</span></div>
+
+<div class="viewcode-block" id="Cnf.write_xyz"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.write_xyz">[docs]</a>    <span class="k">def</span> <span class="nf">write_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function converts the atom POS db of the traj into a xyz structure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_path : str</span>
+<span class="sd">            path, were the file should be written to.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            outpath of the file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_file</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span> <span class="n">content_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_xyz</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Cnf.write_pdb"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.write_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">write_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function converts the atom POS db of the traj into a pdb traj.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_path : str</span>
+<span class="sd">            path, were the file should be written to.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            outpath of the file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_file</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span> <span class="n">content_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Cnf.cnf2trc"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.cnf2trc">[docs]</a>    <span class="k">def</span> <span class="nf">cnf2trc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Trc</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This function converts a cnf to a trajectory with a single frame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Trc</span>
+<span class="sd">            Trc with informations from Cnf(self)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">#create empty Trc</span>
+        <span class="n">trc</span> <span class="o">=</span> <span class="n">Trc</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1">#set normal blocks</span>
+        <span class="n">trc</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span>
+
+        <span class="c1">#create dict for pd DataFrame</span>
+        <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;TIMESTEP&quot;</span><span class="p">):</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;TIMESTEP_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIMESTEP</span><span class="o">.</span><span class="n">step</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;TIMESTEP_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIMESTEP</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;TIMESTEP_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;TIMESTEP_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;POSITION&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITION</span><span class="p">:</span>
+                <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;POS_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">atomID</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pos</span><span class="o">.</span><span class="n">xp</span><span class="p">,</span><span class="n">pos</span><span class="o">.</span><span class="n">yp</span><span class="p">,</span><span class="n">pos</span><span class="o">.</span><span class="n">zp</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cnf has no POSITION data&quot;</span><span class="p">)</span>
+
+        <span class="c1">#TODO: Maybe add othe blocks to translate?</span>
+
+        <span class="c1">#build dataframe and return</span>
+        <span class="n">trc</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="nb">dict</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">trc</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        visualize</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Cnf.visualize"><a class="viewcode-back" href="../../../../_source/pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf.visualize">[docs]</a>    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pygromos.visualization.coordinates_visualization</span> <span class="kn">import</span> <span class="n">show_cnf</span>
+        <span class="k">return</span>  <span class="n">show_cnf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

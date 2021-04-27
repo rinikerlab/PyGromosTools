@@ -3,7 +3,7 @@ import unittest, numpy as np
 import pygromos.simulations.modules.general_simulation_modules
 import pygromos.simulations.modules.ti_modules
 from pygromos.simulations.modules import preset_simulation_modules
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import DUMMY
+from pygromos.hpc_queuing.submission_systems.dummy import DUMMY
 
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.files.gromos_system.gromos_system import Gromos_System
@@ -42,7 +42,9 @@ class test_simulation_blocks(unittest.TestCase):
                                      submission_system=self.submissionSystem)
 
     def test_lam_window(self):
-        pygromos.simulations.modules.ti_modules._TI_lam_step(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
+        from pygromos.data import simulation_parameters_templates as imd_templates
+
+        pygromos.simulations.modules.ti_modules._TI_lam_step(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir, in_imd_path=imd_templates.template_md,
                                                              submission_system=self.submissionSystem)
 
     def test_ti_sampling(self):

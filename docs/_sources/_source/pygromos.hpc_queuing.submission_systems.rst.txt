@@ -4,10 +4,26 @@ pygromos.hpc\_queuing.submission\_systems package
 Submodules
 ----------
 
-pygromos.hpc\_queuing.submission\_systems.Submission\_Systems module
---------------------------------------------------------------------
+pygromos.hpc\_queuing.submission\_systems.dummy module
+------------------------------------------------------
 
-.. automodule:: pygromos.hpc_queuing.submission_systems.Submission_Systems
+.. automodule:: pygromos.hpc_queuing.submission_systems.dummy
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pygromos.hpc\_queuing.submission\_systems.local module
+------------------------------------------------------
+
+.. automodule:: pygromos.hpc_queuing.submission_systems.local
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pygromos.hpc\_queuing.submission\_systems.lsf module
+----------------------------------------------------
+
+.. automodule:: pygromos.hpc_queuing.submission_systems.lsf
    :members:
    :undoc-members:
    :show-inheritance:

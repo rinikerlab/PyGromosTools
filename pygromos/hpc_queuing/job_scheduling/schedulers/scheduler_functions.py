@@ -2,7 +2,8 @@ import glob
 import os
 
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import _SubmissionSystem, LOCAL
+from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
 from pygromos.utils import bash
 from pygromos.utils.utils import spacer, spacer3
@@ -101,6 +102,7 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
+    job_submission_system.job_duration = job_submission_system.job_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         if verbose: print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)
@@ -194,8 +196,8 @@ def chain_submission(simSystem:Gromos_System,
                 clean_id = job_submission_system.submit_to_queue(command=clean_up_command,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
-                                                                 outLog=outLog, errLog=errLog,
-                                                                 verbose=verbose)
+                                                                 outLog=outLog, errLog=errLog)
+
                 if verbose: print("CLEANING ID: ", previous_job_ID)
 
             except ValueError as err:  # job already in the queue

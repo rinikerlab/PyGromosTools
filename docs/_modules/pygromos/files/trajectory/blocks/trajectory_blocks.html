@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -191,10 +191,17 @@
         <span class="k">for</span> <span class="n">subblocktitle</span><span class="p">,</span> <span class="n">subblock</span> <span class="ow">in</span> <span class="n">subblock_content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span><span class="p">(</span><span class="s2">&quot;lambda&quot;</span> <span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>  <span class="c1">#Exceptions for TRG</span>
                 <span class="n">tmp_sub_block</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ene_sub_block</span><span class="p">,</span> <span class="s2">&quot;lam&quot;</span><span class="p">)(</span><span class="n">subblock</span><span class="p">)</span> <span class="c1">#stupid block naming.... but they couldn&#39;t have known</span>
-            <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;nr_lambdas&quot;</span> <span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>
+            <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;ABdih&quot;</span> <span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>
                 <span class="n">subblocktitle</span> <span class="o">=</span> <span class="s2">&quot;precalclam&quot;</span>
+                <span class="n">tmp_sub2</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subblock</span><span class="p">)</span>
+                <span class="n">tmp_sub_block</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ene_sub_block</span><span class="p">,</span> <span class="n">subblocktitle</span><span class="p">)(</span><span class="n">tmp_sub2</span><span class="p">)</span>
+            <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;numstates&quot;</span> <span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>
+                <span class="n">subblocktitle</span> <span class="o">=</span> <span class="s2">&quot;eds&quot;</span>
                 <span class="n">tmp_sub_block</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ene_sub_block</span><span class="p">,</span> <span class="n">subblocktitle</span><span class="p">)(</span><span class="n">subblock</span><span class="p">)</span>
-            <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;precalclam&quot;</span><span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>
+            <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;precalclam&quot;</span><span class="o">==</span> <span class="n">subblocktitle</span> <span class="ow">or</span> <span class="s2">&quot;eds&quot;</span> <span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;nr_lambdas&quot;</span> <span class="o">==</span> <span class="n">subblocktitle</span><span class="p">):</span>
+                <span class="n">tmp_sub2</span> <span class="o">=</span> <span class="n">subblock</span>
                 <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">tmp_sub_block</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ene_sub_block</span><span class="p">,</span> <span class="n">subblocktitle</span><span class="p">)(</span><span class="n">subblock</span><span class="p">)</span>

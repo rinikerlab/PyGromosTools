@@ -19,7 +19,7 @@ from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
 from pygromos.files.trajectory.trc import Trc
-
+from pygromos.files.blocks.coord_blocks import GENBOX
 
 Reference_Position = TypeVar("refpos.Reference_Position")
 Position_Restraints = TypeVar("posres.Position_Restraints")
@@ -81,6 +81,16 @@ class Cnf(_general_gromos_file):
                 if clean_resiNumbers_by_Name: self.clean_posiResNums()  # carefull! if two resis same name after an another than, here is  a problem.
                 self.residues = self.get_residues(verbose=verbose)
 
+    """
+        Manage coordinates
+    """
+    def delete_block(self, blockName: str):
+        self._blocksset_names.remove(blockName)
+        setattr(self, blockName, None)
+
+    def add_empty_box(self):
+        self.add_block(block=GENBOX())
+
     def read_file(self) -> Dict[str, any]:
         """
 
@@ -94,39 +104,17 @@ class Cnf(_general_gromos_file):
         """
         return parser.read_cnf(self._orig_file_path)
 
-    def createRDKITconf(self, mol:Chem.rdchem.Mol):
-        """creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.
+    def write(self, out_path: str) -> str:
+        # write out
+        out_file = open(out_path, "w")
+        out_file.write(self.__str__())
+        out_file.close()
+        self.path = os.path.abspath(out_path)
+        return out_path
 
-        Parameters
-        ----------
-        mol : Chem.rdchem.Mol
-            Molecule, possibly with a conformation
-        """
-        inchi=Chem.MolToInchi(mol).split("/")
-        if len(inchi) >= 2:
-            name=inchi[1]
-        else:
-            name="XXX"
-        self.__setattr__("TITLE", TITLE("\t"+ name +" created from RDKit"))
-
-        #check if conformations exist else create a new one
-        if mol.GetNumConformers() < 1:
-            mol = Chem.AddHs(mol)
-            AllChem.EmbedMolecule(mol)
-        conf = mol.GetConformer(0)
-
-        #fill a list with atomP types from RDKit data
-        atomList=[]
-        for i in range(mol.GetNumAtoms()):
-            x = conf.GetAtomPosition(i).x
-            y = conf.GetAtomPosition(i).y
-            z = conf.GetAtomPosition(i).z
-            atomType = mol.GetAtomWithIdx(i).GetSymbol()
-            atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
-
-        # set POSITION attribute
-        self.__setattr__("POSITION", blocks.POSITION(atomList))
-
+    """
+        manipulate/analysis of coordinates
+    """
     def add_residue_positions(self, coords: object):
         """This function adds all residues of an coords file to @DEVELOP
 
@@ -259,62 +247,6 @@ class Cnf(_general_gromos_file):
 
         return clean_residues, ligands, protein, non_ligands, solvent
 
-    def clean_posiResNums(self) -> None:
-        """clean_posiResNums
-            This function recount the Residue number with respect to residue name and residue number.
-
-        Warnings
-        --------
-        only in "Position_BLOCK!@development
-
-        Returns
-        -------
-        None
-        """
-        position_copy = self.POSITION
-        pos = position_copy.content
-        tmpN = ""
-        tmpID = 0
-        tmpOldID = pos[0].resID
-
-        for p in pos:
-            # print(p)
-            # print(tmpN,tmpID)
-            if p.resName == tmpN and p.resID == tmpOldID:  # same residue as before
-                p.resID = tmpID
-            elif (
-                    p.resName == tmpN and p.resID != tmpOldID):  # same resiname but diff ID (double? - this is a problem!)
-                tmpOldID = p.resID
-                tmpID += 1
-                p.resID = tmpID
-            else:  # next name and residue id
-                tmpID += 1
-                tmpN = p.resName
-                tmpOldID = p.resID
-                p.resID = tmpID
-
-        self.POSITION.content = pos
-
-    def supress_atomPosition_singulrarities(self) -> None:
-        """supress_atomPosition_singulrarities
-        This function adds a very small deviation to the position of an atom, dependent on the atom number.
-        This might be needed to avoid singularities in gromosXX.
-
-        Returns
-        -------
-        None
-        """
-
-        if ("POSITION" in dir(self)):
-            for ind, atom in enumerate(self.POSITION.content):
-                atom.xp = atom.xp + 10 ** (-7) * ind
-                atom.yp = atom.yp - 10 ** (-7) * ind
-                atom.zp = atom.zp - 10 ** (-7) * ind
-
-    def delete_block(self, blockName: str):
-        self._blocksset_names.remove(blockName)
-        setattr(self, blockName, None)
-
     def rename_residue(self, new_resName: str, resID: int = False, resName: str = False, verbose=False) -> int:
         """ rename_residue
 
@@ -365,6 +297,42 @@ class Cnf(_general_gromos_file):
         else:
             raise IOError("No residue number or resName given.")
         return 0
+
+    def clean_posiResNums(self) -> None:
+        """clean_posiResNums
+            This function recount the Residue number with respect to residue name and residue number.
+
+        Warnings
+        --------
+        only in "Position_BLOCK!@development
+
+        Returns
+        -------
+        None
+        """
+        position_copy = self.POSITION
+        pos = position_copy.content
+        tmpN = ""
+        tmpID = 0
+        tmpOldID = pos[0].resID
+
+        for p in pos:
+            # print(p)
+            # print(tmpN,tmpID)
+            if p.resName == tmpN and p.resID == tmpOldID:  # same residue as before
+                p.resID = tmpID
+            elif (
+                    p.resName == tmpN and p.resID != tmpOldID):  # same resiname but diff ID (double? - this is a problem!)
+                tmpOldID = p.resID
+                tmpID += 1
+                p.resID = tmpID
+            else:  # next name and residue id
+                tmpID += 1
+                tmpN = p.resName
+                tmpOldID = p.resID
+                p.resID = tmpID
+
+        self.POSITION.content = pos
 
     def delete_residue(self, resID: int = False, resName: str = False, verbose=False) -> int:
         """delete_residue
@@ -721,17 +689,27 @@ class Cnf(_general_gromos_file):
             atom.xp, atom.yp, atom.zp = new_vec
             self.POSITION.content[i] = atom
 
+    def supress_atomPosition_singulrarities(self) -> None:
+        """supress_atomPosition_singulrarities
+        This function adds a very small deviation to the position of an atom, dependent on the atom number.
+        This might be needed to avoid singularities in gromosXX.
 
-        
+        Returns
+        -------
+        None
+        """
 
-    def write(self, out_path: str) -> str:
-        # write out
-        out_file = open(out_path, "w")
-        out_file.write(self.__str__())
-        out_file.close()
-        self.path = os.path.abspath(out_path)
-        return out_path
+        if ("POSITION" in dir(self)):
+            for ind, atom in enumerate(self.POSITION.content):
+                atom.xp = atom.xp + 10 ** (-7) * ind
+                atom.yp = atom.yp - 10 ** (-7) * ind
+                atom.zp = atom.zp - 10 ** (-7) * ind
 
+
+
+    """
+        generate further file
+    """
     def generate_position_restraints(self, out_path_prefix: str, residues: dict or list, verbose: bool = False) -> \
     Tuple[str, str]:
         """
@@ -830,7 +808,6 @@ class Cnf(_general_gromos_file):
 
         return posres.Position_Restraints(cnf)
 
-
     def write_possrespec(self, out_path: str, residues: dict or list, verbose: bool = False) -> str:
         """write_possrespec
                 This function writes out a gromos file, containing a atom list. that is to be position restrained!
@@ -869,27 +846,52 @@ class Cnf(_general_gromos_file):
         refpos_class.write(out_path)
         return out_path
 
-    def write_pdb(self, out_path: str):
-        """
-            This function converts the atom POS db of the traj into a pdb traj.
+    """
+        convert file: 
+    """
+    def createRDKITconf(self, mol:Chem.rdchem.Mol):
+        """creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.
 
         Parameters
         ----------
-        atoms : t.List[Atom]
-            List of atoms
+        mol : Chem.rdchem.Mol
+            Molecule, possibly with a conformation
+        """
+        inchi=Chem.MolToInchi(mol).split("/")
+        if len(inchi) >= 2:
+            name=inchi[1]
+        else:
+            name="XXX"
+        self.__setattr__("TITLE", TITLE("\t"+ name +" created from RDKit"))
+
+        #check if conformations exist else create a new one
+        if mol.GetNumConformers() < 1:
+            mol = Chem.AddHs(mol)
+            AllChem.EmbedMolecule(mol)
+        conf = mol.GetConformer(0)
+
+        #fill a list with atomP types from RDKit data
+        atomList=[]
+        for i in range(mol.GetNumAtoms()):
+            x = conf.GetAtomPosition(i).x
+            y = conf.GetAtomPosition(i).y
+            z = conf.GetAtomPosition(i).z
+            atomType = mol.GetAtomWithIdx(i).GetSymbol()
+            atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
+
+        # set POSITION attribute
+        self.__setattr__("POSITION", blocks.POSITION(atomList))
+
+    def get_pdb(self)->str:
+        """
+            translate cnf to pdb.
+
         Returns
         -------
-        t.List[str]
-             pdb strings of that molecule
+        str
+            pdb str.
+
         """
-        # 1) INPUT PARSING
-        if (isinstance(out_path, str)):
-            if (os.path.exists(os.path.dirname(out_path))):
-                out_file = open(out_path, "w")
-            else:
-                raise IOError("Could not find directory to write to: " + str(os.path.dirname(out_path)))
-        else:
-            raise ValueError("Did not understand the Value of out_path. Must be str.")
 
         # 2) CONSTUCT PDB BLOCKS
         # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
@@ -897,9 +899,6 @@ class Cnf(_general_gromos_file):
         dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
         dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
 
-        # 3) CONVERT FILE
-        # TODO: Inefficient!
-        out_file.write("TITLE " + str(self.TITLE).replace("END", "") + "\n")
         frame_positions = []
         for ind, atom in enumerate(self.POSITION):
             frame_positions.append(
@@ -907,10 +906,70 @@ class Cnf(_general_gromos_file):
                     atom.resID), dummy_insertion_code, atom.xp * 10, atom.yp * 10, atom.zp * 10, dummy_occupancy,
                                   dummy_bfactor,
                                   dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
-        out_file.write("\n".join(frame_positions) + '\n')
-        out_file.write('\nEND')
-        out_file.close()
-        return out_path
+
+        pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
+        pdb_str += "\n".join(frame_positions) + '\n'
+        pdb_str += '\nEND'
+
+        #future:
+        ##add bond block with top optionally
+
+        return pdb_str
+
+    def get_xyz(self)->str:
+        """
+            translate cnf to xyz
+
+        Returns
+        -------
+        str
+            in xyz format
+        """
+        xyz_str = str(len(self.POSITION)) + "\n"
+        xyz_str += "# "+str(self.TITLE.content.split("\n")[0])+"\n"
+        xyz_str += "# exported wit PyGromosTools\n"
+
+        xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
+
+        for position in self.POSITION:
+            xyz_line = xyz_format.format(position.atomType[0], position.xp * 10, position.yp * 10, position.zp * 10)
+            xyz_str += xyz_line
+
+        return xyz_str
+
+    def write_xyz(self, out_path: str)->str:
+        """
+            This function converts the atom POS db of the traj into a xyz structure.
+
+        Parameters
+        ----------
+        out_path : str
+            path, were the file should be written to.
+
+        Returns
+        -------
+        str
+            outpath of the file
+
+        """
+        return self._write_to_file(out_path=out_path, content_str=self.get_xyz())
+
+    def write_pdb(self, out_path: str)->str:
+        """
+            This function converts the atom POS db of the traj into a pdb traj.
+
+        Parameters
+        ----------
+        out_path : str
+            path, were the file should be written to.
+
+        Returns
+        -------
+        str
+            outpath of the file
+
+        """
+        return self._write_to_file(out_path=out_path, content_str=self.get_pdb())
 
     def cnf2trc(self) -> Trc:
         """This function converts a cnf to a trajectory with a single frame
@@ -948,3 +1007,11 @@ class Cnf(_general_gromos_file):
         #build dataframe and return
         trc.database = pd.DataFrame([dict])
         return trc
+
+    """
+        visualize
+    """
+
+    def visualize(self):
+        from pygromos.visualization.coordinates_visualization import show_cnf
+        return  show_cnf(self)

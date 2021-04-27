@@ -4,7 +4,7 @@ from pygromos.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
 
 from pygromos.data.simulation_parameters_templates import template_md
 from pygromos.data.topology_templates import blank_topo_template
-from pygromos.hpc_queuing.submission_systems.Submission_Systems import DUMMY
+from pygromos.hpc_queuing.submission_systems.dummy import DUMMY
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 
 from pygromos.tests.in_testfiles import in_test_file_path

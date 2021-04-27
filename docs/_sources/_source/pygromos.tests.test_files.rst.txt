@@ -4,6 +4,14 @@ pygromos.tests.test\_files package
 Submodules
 ----------
 
+pygromos.tests.test\_files.general\_file\_functions module
+----------------------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.general_file_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pygromos.tests.test\_files.test\_cnf\_funcs module
 --------------------------------------------------
 
@@ -24,6 +32,14 @@ pygromos.tests.test\_files.test\_gromosSystem module
 ----------------------------------------------------
 
 .. automodule:: pygromos.tests.test_files.test_gromosSystem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pygromos.tests.test\_files.test\_gromosSystem\_forcefields module
+-----------------------------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.test_gromosSystem_forcefields
    :members:
    :undoc-members:
    :show-inheritance:

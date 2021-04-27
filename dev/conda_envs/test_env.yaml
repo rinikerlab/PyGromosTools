@@ -19,13 +19,14 @@ dependencies:
   #science
   - openforcefield = 0.8.3
   - pandas
+  - pytables
   - numpy
   - sympy
   - scipy
-  - matplotlib
   - rdkit
-  
-  # Pip-only installs
-  - pip:
-    - tables
+ ##Visualization
+  - matplotlib
+  - py3dmol
+
+
 

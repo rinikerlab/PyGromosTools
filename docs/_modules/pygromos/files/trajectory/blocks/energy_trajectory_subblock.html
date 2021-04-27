@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -199,7 +199,7 @@
         <span class="k">elif</span> <span class="n">subsubblock_number_code</span> <span class="o">==</span> <span class="s2">&quot;temp&quot;</span><span class="p">:</span>
             <span class="n">num_subsubblocks</span> <span class="o">=</span> <span class="n">_general_pandas_energy_trajectory_subblock_numerated</span><span class="o">.</span><span class="n">num_temp_groups</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="s2">&quot;subblock number coder does not corresponde to variable&quot;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;subblock number coder does not corresponde to variable&quot;</span><span class="p">)</span>
         
         <span class="c1"># get the number of baths</span>
         <span class="k">if</span> <span class="n">num_subsubblocks</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -208,7 +208,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no good value found for the number of subsubblocks&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">num_subsubblocks</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="s2">&quot;invalid iterator with value: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">num_subsubblocks</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;invalid iterator with value: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">num_subsubblocks</span><span class="p">))</span>
             
             <span class="c1"># set value to static varibale for all futer values</span>
             <span class="k">if</span> <span class="n">subsubblock_number_code</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>

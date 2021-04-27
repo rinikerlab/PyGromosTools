@@ -564,6 +564,26 @@ Pertubation Blocks
 class MPERTATOM(_generic_gromos_block):
     def __init__(self, NJLA: int, NPTB: int, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: Tuple[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_eds_pertubation_state]=[],
                  dummy_IAC = 22, dummy_CHARGE=0.0):
+        """
+            This block is used for lambda sampling to define the different states.
+
+        Parameters
+        ----------
+        NJLA : int
+            number of perturbed atoms
+        NPTB : int
+            number of pertubation states
+        STATEIDENTIFIERS  : List[str]
+            string names for states
+        STATEATOMHEADER
+            header for the atom description table
+        STATEATOMS
+            list of atoms, that shall be perturbed
+        dummy_IAC
+            dummy atom VdW type for perturbed atoms
+        dummy_CHARGE
+            dummy atom charge type for perturbed atoms
+        """
         super().__init__(used=True, name=__class__.__name__)
         self.NJLA = NJLA
         self.NPTB = NPTB
@@ -730,7 +750,11 @@ class MPERTATOM(_generic_gromos_block):
     """
     def _state_STATEATOMHEADER_str(self):
         state_format_pattern = "{:>3} {:>5}"+"".join([" {:>3}{:>10}"for x in range(self.NPTB)])+"    {:10} {:10}"
-        print(state_format_pattern)
+
+        if(len(self.STATEATOMHEADER) != self.NPTB*2+4):
+            tmp_list = " ".join(["CHARGE"+str(x)+" "+"IAC"+str(x) for x in range(self.NPTB)])
+            self.STATEATOMHEADER = self.STATEATOMHEADER[:2]+tmp_list.split(" ")+self.STATEATOMHEADER[-2:]
+
         return state_format_pattern.format(*self.STATEATOMHEADER)
 
     def block_to_string(self) -> str:

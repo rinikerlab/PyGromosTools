@@ -181,12 +181,12 @@ class _gromosPPbase:
                 "@param " + in_parameter_lib_path,
                 "@seq " + in_sequence,
                 "@solv " + in_solvent]
-        arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
-        arg_file = open(arg_path, "w")
-        arg_file.write("\n".join(args))
-        arg_file.close()
-
-        command = self._bin +"make_top @f " + arg_path
+        #arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
+        #arg_file = open(arg_path, "w")
+        #arg_file.write("\n".join(args))
+        #arg_file.close()
+        #"@f " + arg_path
+        command = self._bin +"make_top "+" ".join(args)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
@@ -453,7 +453,7 @@ class _gromosPPbase:
         if (not workdir):
             os.chdir(out_energy_folder_path)
 
-        if (in_en_file_paths.strip().endswith("trg")):
+        if (in_en_file_paths.strip().endswith("trg") or in_en_file_paths.strip().endswith("trg.gz")):
             in_file_form = "@fr_files"
         else:
             in_file_form = "@en_files"
@@ -820,11 +820,108 @@ class _gromosPPbase:
 
         return out_path
 
+    def rmsf(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r cog", _binary_name:str= "rmsf")->str:
+        """
+            this is a wrapper for gromosPP rmsf programm. (Root mean square fluctuation
+
+        Parameters
+        ----------
+        in_top_path : str
+            path to topology file
+        in_trcs : Union[str, List[str]]
+            Path OR paths to trc coordinate files
+        atom_selection : str
+            selection of atoms
+        out_file_path :
+            out path.
+        pbc : str
+            periodic boundary condition of trc files
+        _binary_name: str
+            binary name of gromos file
+
+        Returns
+        -------
+        str
+            outpath of the traj
+        """
+
+        if(isinstance(in_trcs, list)):
+            in_trcs = " ".join(in_trcs)
+
+        additional_options = ""
+        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsf", "'" + atom_selection + "'", "@pdb", pbc, "@traj", in_trcs,  additional_options, " \n"])
+        bash.execute(command, catch_STD=out_file_path)
+        return out_file_path
+
+    def rmsd(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r cog", _binary_name:str= "rmsd")->str:
+        """
+
+        Parameters
+        ----------
+        in_top_path
+        in_trcs
+        atom_selection
+        out_file_path
+        pbc
+        _binary_name
+
+        Returns
+        -------
+
+        """
+
+        if(isinstance(in_trcs, list)):
+            in_trcs = " ".join(in_trcs)
+
+        additional_options = ""
+        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsd", "'" + atom_selection + "'", "@pdb", pbc, "@traj", in_trcs,  additional_options, " \n"])
+        bash.execute(command, catch_STD=out_file_path)
+        return out_file_path
+
+
+    def cog(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str="r cog", _binary_name:str= "rmsd")->str:
+        """
+        
+        @topo   <molecular topology file>
+        @pbc      <boundary conditions> [<gather method>]
+        @traj     <input trajectory files>
+        [@nthframe <write every nth frame> (default: 1)]
+        [@outformat   <output coordinates format>]
+        [@atomspec <atomspecifier(s) for which to calculate cog/com> ]
+        [@cog_com  <calculate centre of geometry (cog) or mass (com); default: cog>]
+        [@add_repl <add (add) the cog/com or replace (repl) the solutes; default: repl>]
+        [@solv <include solvent in outcoordinates>]
+
+        
+        Parameters
+        ----------
+        in_top_path
+        in_trcs
+        atom_selection
+        out_top_path
+        pbc
+        _binary_name
+
+        Returns
+        -------
+
+        """
+
+
+        if (isinstance(in_trcs, list)):
+            in_trcs = " ".join(in_trcs)
+
+        additional_options = ""
+        command = " ".join(
+            [self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsd", "'" + atom_selection + "'", "@pdb", pbc, "@traj",
+             in_trcs, additional_options, " \n"])
+        bash.execute(command, catch_STD=out_file_path)
+        return out_file_path
 
 
     def noe(self,  in_top_path:str, in_noe_path:str, in_traj_path:str, out_path:str,
                 pbc:str="v", gathering:str="cog",
-            _binary_name:str= "noe", verbose:bool=False):
+            _binary_name:str= "noe", verbose:bool=False) -> str:
         """
 
         Parameters
@@ -857,19 +954,18 @@ class _gromosPPbase:
         ---------------
         time: float, float (time, dt)
         """
-        command =  self._bin + _binary_name + " @topo " + in_top_path + " @traj "+in_traj_path+" @noe "+in_noe_path+" @pbc "+str(pbc)+" "+str(gathering)+" > "+out_path
+        command =  self._bin + _binary_name + " @topo " + in_top_path + " @traj "+in_traj_path+" @noe "+in_noe_path+" @pbc "+str(pbc)+" "+str(gathering)+"\n"
 
         if (verbose): print(command)
-        ret = bash.execute(command)
-        if (verbose): print(ret.readlines())
+        p = bash.execute(command, catch_STD=out_path, verbose=verbose)
 
         return out_path
 
 
     def jval(self,  in_top_path:str, in_jval_path:str, in_traj_path:(str, List[str]), out_path:str,
-                  pbc:str="v", gathering:str="cog",
-                  timeseries:bool=False, rmsd:bool = False, time:float = None,
-                  _binary_name:str= "jval", verbose:bool=False):
+              pbc:str="v", gathering:str="cog",
+              timeseries:bool=False, rmsd:bool = False, time:float = None,
+              _binary_name:str= "jval", verbose:bool=False):
         """
 
         Parameters
