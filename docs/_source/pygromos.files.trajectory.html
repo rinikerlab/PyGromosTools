@@ -88,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -425,6 +427,11 @@ Returns the euclidian difference to the last step as a numpy array</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt id="pygromos.files.trajectory.trc.Trc.get_pdb">
+<code class="sig-name descname"><span class="pre">get_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_pdb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt id="pygromos.files.trajectory.trc.Trc.path">
 <code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.path" title="Permalink to this definition">¶</a></dt>
@@ -451,6 +458,11 @@ Returns the euclidian difference to the last step as a numpy array</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.trajectory.trc.Trc.visualize">
+<code class="sig-name descname"><span class="pre">visualize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Cnf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.visualize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.files.trajectory.trc.Trc.write_pdb">
@@ -497,6 +509,11 @@ TODO: add support for periodic boundary condition</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="pygromos.files.trajectory.tre.Tre.get_Hvap">
+<code class="sig-name descname"><span class="pre">get_Hvap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nMolecules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_Hvap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_Hvap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="pygromos.files.trajectory.tre.Tre.get_density">
 <code class="sig-name descname"><span class="pre">get_density</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_density" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the density for every frame.
@@ -510,6 +527,16 @@ TODO: add support for periodic boundary condition</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.trajectory.tre.Tre.get_eds">
+<code class="sig-name descname"><span class="pre">get_eds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_eds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_eds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.trajectory.tre.Tre.get_precalclam">
+<code class="sig-name descname"><span class="pre">get_precalclam</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_precalclam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_precalclam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.files.trajectory.tre.Tre.get_temperature">
@@ -530,6 +557,21 @@ TODO: add support for periodic boundary condition</p>
 <code class="sig-name descname"><span class="pre">get_totals</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt id="pygromos.files.trajectory.tre.Tre.get_totals_bonded">
+<code class="sig-name descname"><span class="pre">get_totals_bonded</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals_bonded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals_bonded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.trajectory.tre.Tre.get_totals_nonbonded">
+<code class="sig-name descname"><span class="pre">get_totals_nonbonded</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals_nonbonded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals_nonbonded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.trajectory.tre.Tre.get_totals_total">
+<code class="sig-name descname"><span class="pre">get_totals_total</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals_total"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals_total" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt id="pygromos.files.trajectory.tre.Tre.path">
 <code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.path" title="Permalink to this definition">¶</a></dt>
@@ -541,6 +583,26 @@ TODO: add support for periodic boundary condition</p>
 <dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.tre.</span></code><code class="sig-name descname"><span class="pre">gromos_2020_tre_block_names_table</span></code><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#gromos_2020_tre_block_names_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names">
+<code class="sig-name descname"><span class="pre">eds_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names_singleState">
+<code class="sig-name descname"><span class="pre">eds_subblock_names_singleState</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['total',</span> <span class="pre">'nonbonded',</span> <span class="pre">'special',</span> <span class="pre">'offset']</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names_singleState" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names">
+<code class="sig-name descname"><span class="pre">lam_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names_singleLam">
+<code class="sig-name descname"><span class="pre">lam_subblock_names_singleLam</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['A_e_lj',</span> <span class="pre">'B_e_lj',</span> <span class="pre">'A_e_crf',</span> <span class="pre">'B_e_crf',</span> <span class="pre">'AB_kinetic',</span> <span class="pre">'AB_bond',</span> <span class="pre">'AB_angle',</span> <span class="pre">'AB_improper',</span> <span class="pre">'AB_disres',</span> <span class="pre">'AB_dihres',</span> <span class="pre">'AB_disfld']</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names_singleLam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.totals_subblock_names">
 <code class="sig-name descname"><span class="pre">totals_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['totene',</span> <span class="pre">'totkin',</span> <span class="pre">'totpot',</span> <span class="pre">'totcov',</span> <span class="pre">'totbond',</span> <span class="pre">'totangle',</span> <span class="pre">'totimproper',</span> <span class="pre">'totdihedral',</span> <span class="pre">'totcrossdihedral',</span> <span class="pre">'totnonbonded',</span> <span class="pre">'totlj',</span> <span class="pre">'totcrf',</span> <span class="pre">'totls',</span> <span class="pre">'totlspair',</span> <span class="pre">'totlsreal',</span> <span class="pre">'totlsk',</span> <span class="pre">'totlsa',</span> <span class="pre">'totlsself',</span> <span class="pre">'totlssurf',</span> <span class="pre">'totpolself',</span> <span class="pre">'totspecial',</span> <span class="pre">'totsasa',</span> <span class="pre">'totsasavol',</span> <span class="pre">'totconstraint',</span> <span class="pre">'totdisres',</span> <span class="pre">'totdisfieldres',</span> <span class="pre">'totdihres',</span> <span class="pre">'totposres',</span> <span class="pre">'totjval',</span> <span class="pre">'totxray',</span> <span class="pre">'totle',</span> <span class="pre">'totorder',</span> <span class="pre">'totsymm',</span> <span class="pre">'eds_vr,entropy',</span> <span class="pre">'totqm',</span> <span class="pre">'totbsleus',</span> <span class="pre">'totrdc',</span> <span class="pre">'wip1',</span> <span class="pre">'wip2',</span> <span class="pre">'wip3',</span> <span class="pre">'wip4',</span> <span class="pre">'wip5',</span> <span class="pre">'wip6']</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.totals_subblock_names" title="Permalink to this definition">¶</a></dt>

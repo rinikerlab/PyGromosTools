@@ -88,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -225,7 +227,7 @@
 <dl class="py attribute">
 <dt id="pygromos.tests.test_submission.test_hpc_queuing_submission_scheduling.test_MD_scheduler.submissionSystem">
 <code class="sig-name descname"><span class="pre">submissionSystem</span></code><a class="headerlink" href="#pygromos.tests.test_submission.test_hpc_queuing_submission_scheduling.test_MD_scheduler.submissionSystem" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY" title="pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.dummy.DUMMY" title="pygromos.hpc_queuing.submission_systems.dummy.DUMMY"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.dummy.DUMMY</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
@@ -245,7 +247,7 @@
 <dl class="py attribute">
 <dt id="pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_DUMMY.file_class">
 <code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_DUMMY.file_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY" title="pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.dummy.DUMMY" title="pygromos.hpc_queuing.submission_systems.dummy.DUMMY"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.dummy.DUMMY</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
@@ -283,7 +285,7 @@
 <dl class="py attribute">
 <dt id="pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_LOCAL.file_class">
 <code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_LOCAL.file_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.Submission_Systems.LOCAL" title="pygromos.hpc_queuing.submission_systems.Submission_Systems.LOCAL"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.Submission_Systems.LOCAL</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.local.LOCAL" title="pygromos.hpc_queuing.submission_systems.local.LOCAL"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.local.LOCAL</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
@@ -321,7 +323,7 @@
 <dl class="py attribute">
 <dt id="pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_LSF.file_class">
 <code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_LSF.file_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.Submission_Systems.LSF" title="pygromos.hpc_queuing.submission_systems.Submission_Systems.LSF"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.Submission_Systems.LSF</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="pygromos.hpc_queuing.submission_systems.html#pygromos.hpc_queuing.submission_systems.lsf.LSF" title="pygromos.hpc_queuing.submission_systems.lsf.LSF"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.lsf.LSF</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
@@ -359,7 +361,7 @@
 <dl class="py attribute">
 <dt id="pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_queuing_system.file_class">
 <code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_submission.test_hpc_queuing_submission_systems.test_queuing_system.file_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems.Submission_Systems._SubmissionSystem</span></code></p>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.hpc_queuing.submission_systems._submission_system._SubmissionSystem</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">

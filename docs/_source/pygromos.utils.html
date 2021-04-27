@@ -39,6 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.visualization package" href="pygromos.visualization.html" />
     <link rel="prev" title="pygromos.tests.test_submission package" href="pygromos.tests.test_submission.html" /> 
 </head>
 
@@ -87,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -410,7 +413,7 @@ TODO: refactor to use execute command!</p>
 
 <dl class="py function">
 <dt id="pygromos.utils.bash.execute">
-<code class="sig-prename descclassname"><span class="pre">pygromos.utils.bash.</span></code><code class="sig-name descname"><span class="pre">execute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catch_STD</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/utils/bash.html#execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.utils.bash.execute" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">pygromos.utils.bash.</span></code><code class="sig-name descname"><span class="pre">execute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catch_STD</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/utils/bash.html#execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.utils.bash.execute" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -470,8 +473,26 @@ therefore it uses os.popen</p>
 
 <dl class="py function">
 <dt id="pygromos.utils.bash.execute_subprocess">
-<code class="sig-prename descclassname"><span class="pre">pygromos.utils.bash.</span></code><code class="sig-name descname"><span class="pre">execute_subprocess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catch_STD</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/utils/bash.html#execute_subprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.utils.bash.execute_subprocess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname"><span class="pre">pygromos.utils.bash.</span></code><code class="sig-name descname"><span class="pre">execute_subprocess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catch_STD</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">subprocess.CompletedProcess</span><a class="reference internal" href="../_modules/pygromos/utils/bash.html#execute_subprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.utils.bash.execute_subprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>This command starts a subprocess, that is executing the str command in bash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<em>str</em>) – bash command</p></li>
+<li><p><strong>catch_STD</strong> – if bool: catch the output and past it into the command line
+if str: catch output and write it into this file</p></li>
+<li><p><strong>env</strong> (<em>dict</em>) – environment</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – verbosity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>return the executed process obj. (from subprocess)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>CompletedProcess</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="pygromos.utils.bash.extract_tar">
@@ -939,6 +960,7 @@ Result is beeing able to parse any function dynamically via bash.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pygromos.visualization.html" class="btn btn-neutral float-right" title="pygromos.visualization package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="pygromos.tests.test_submission.html" class="btn btn-neutral float-left" title="pygromos.tests.test_submission package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

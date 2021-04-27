@@ -7,7 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   pygromos.files.gromos_system.ff.serenityff.seremityff_data
+   pygromos.files.gromos_system.ff.serenityff.serenityff_data
 
 Submodules
 ----------

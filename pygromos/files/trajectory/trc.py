@@ -232,7 +232,11 @@ class Trc(traj._General_Trajectory):
         dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
 
         # 3) CONVERT FILE
-        pdb_str = "TITLE " + self.TITLE + "\n"
+        if( isinstance(self.TITLE, list)):
+            TITLE = "\n".join(self.TITLE)
+        else:
+            TITLE = self.TITLE
+        pdb_str = "TITLE " + TITLE + "\n"
         pos_cols = [col for col in self.database.columns if ("POS" in col)]
         for ind, time_step in self.database.iterrows():
             pos_lines = time_step[pos_cols]

@@ -88,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -218,12 +220,12 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="py attribute">
 <dt id="pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.input_cnf_path">
-<code class="sig-name descname"><span class="pre">input_cnf_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/small_system/6J29.cnf'</span></em><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.input_cnf_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">input_cnf_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/small_system/6J29.cnf'</span></em><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.input_cnf_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.input_top_path">
-<code class="sig-name descname"><span class="pre">input_top_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/small_system/6J29.top'</span></em><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.input_top_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">input_top_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/small_system/6J29.top'</span></em><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.input_top_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -234,12 +236,12 @@
 
 <dl class="py method">
 <dt id="pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.sim_block">
-<code class="sig-name descname"><span class="pre">sim_block</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">project_dir:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">step_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'emin'</span></em>, <em class="sig-param"><span class="pre">in_imd_path='/home/bschroed/Documents/code/pygromos_git/pygromos/data/simulation_parameters_templates/emin.imd'</span></em>, <em class="sig-param"><span class="pre">submission_system:</span> <span class="pre">pygromos.hpc_queuing.submission_systems.Submission_Systems._SubmissionSystem</span> <span class="pre">=</span> <span class="pre">&lt;pygromos.hpc_queuing.submission_systems.Submission_Systems.LOCAL</span> <span class="pre">object&gt;</span></em>, <em class="sig-param"><span class="pre">simulation_runs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em>, <em class="sig-param"><span class="pre">equilibration_runs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></em>, <em class="sig-param"><span class="pre">previous_simulation_run:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">analysis_script:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">do&gt;)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'pygromos.files.gromos_system.gromos_system.Gromos_System'&gt;</span></em>, <em class="sig-param"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.sim_block" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">sim_block</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">project_dir:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">step_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'emin'</span></em>, <em class="sig-param"><span class="pre">in_imd_path='/home/bschroed/Documents/code/PyGromosTools/pygromos/data/simulation_parameters_templates/emin.imd'</span></em>, <em class="sig-param"><span class="pre">submission_system:</span> <span class="pre">pygromos.hpc_queuing.submission_systems._submission_system._SubmissionSystem</span> <span class="pre">=</span> <span class="pre">&lt;pygromos.hpc_queuing.submission_systems.local.LOCAL</span> <span class="pre">object&gt;</span></em>, <em class="sig-param"><span class="pre">simulation_runs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em>, <em class="sig-param"><span class="pre">equilibration_runs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></em>, <em class="sig-param"><span class="pre">previous_simulation_run:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">analysis_script:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">do&gt;</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System"><span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.sim_block" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.submissionSystem">
-<code class="sig-name descname"><span class="pre">submissionSystem</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;pygromos.hpc_queuing.submission_systems.Submission_Systems.DUMMY</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.submissionSystem" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">submissionSystem</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;pygromos.hpc_queuing.submission_systems.dummy.DUMMY</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pygromos.tests.test_simulation_blocks.test_simulation_runner_blocks.test_simulation_blocks.submissionSystem" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

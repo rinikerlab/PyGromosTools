@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -279,6 +279,16 @@
     <span class="n">gromosXX</span> <span class="o">=</span> <span class="n">mdGromosXX</span><span class="o">.</span><span class="n">GromosXX</span><span class="p">(</span><span class="n">gromosXX_bin_dir</span><span class="o">=</span><span class="n">gromosXX_bin_dir</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> start MD &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">tmp_imd_path</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1">#TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!</span>
+        <span class="kn">from</span> <span class="nn">pygromos.files.coord</span> <span class="kn">import</span> <span class="n">cnf</span>
+        <span class="kn">import</span> <span class="nn">math</span>
+        <span class="n">cnf_file</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">Cnf</span><span class="p">(</span><span class="n">in_cnf_path</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">any</span><span class="p">([</span><span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cnf_file</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">euler</span><span class="p">])):</span>
+            <span class="n">cnf_file</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">euler</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+            <span class="n">cnf_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">in_cnf_path</span><span class="p">)</span>
+
+
         <span class="n">out_prefix</span> <span class="o">=</span> <span class="n">out_dir</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">tmp_prefix</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">omd_file_path</span> <span class="o">=</span> <span class="n">gromosXX</span><span class="o">.</span><span class="n">md_run</span><span class="p">(</span><span class="n">in_topo_path</span><span class="o">=</span><span class="n">in_top_path</span><span class="p">,</span> <span class="n">in_coord_path</span><span class="o">=</span><span class="n">in_cnf_path</span><span class="p">,</span> <span class="n">in_imd_path</span><span class="o">=</span><span class="n">tmp_imd_path</span><span class="p">,</span>

@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -165,7 +165,8 @@
 <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
 <span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.job_scheduling.schedulers.scheduler_functions</span> <span class="kn">import</span> <span class="n">chain_submission</span>
 <span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.job_scheduling.workers.simulation_workers</span> <span class="kn">import</span> <span class="n">simulation_run_worker</span> <span class="k">as</span> <span class="n">workerScript</span>
-<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.Submission_Systems</span> <span class="kn">import</span> <span class="n">_SubmissionSystem</span><span class="p">,</span> <span class="n">LSF</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems._submission_system</span> <span class="kn">import</span> <span class="n">_SubmissionSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.lsf</span> <span class="kn">import</span> <span class="n">LSF</span>
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span><span class="p">,</span> <span class="n">utils</span>
 
 <span class="n">spacer</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">spacer</span>
@@ -174,11 +175,11 @@
        <span class="n">out_dir_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
        <span class="n">simulation_run_num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
        <span class="n">equilibration_run_num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-       <span class="n">nmpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nomp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">work_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+       <span class="n">work_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
        <span class="n">analysis_script_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
        <span class="n">submission_system</span><span class="p">:</span><span class="n">_SubmissionSystem</span> <span class="o">=</span> <span class="n">LSF</span><span class="p">(),</span>
-       <span class="n">previous_job_ID</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">duration_per_job</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;24:00&quot;</span><span class="p">,</span> <span class="n">no_double_submit</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-       <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose_lv</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+       <span class="n">previous_job_ID</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">no_double_submit</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+       <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose_lvl</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -187,14 +188,11 @@
 <span class="sd">    out_dir_path</span>
 <span class="sd">    simulation_run_num</span>
 <span class="sd">    equilibration_run_num</span>
-<span class="sd">    nmpi</span>
-<span class="sd">    nomp</span>
 <span class="sd">    gromos_bin_dir</span>
 <span class="sd">    work_dir</span>
 <span class="sd">    analysis_script_path</span>
 <span class="sd">    submission_system</span>
 <span class="sd">    previous_job_ID</span>
-<span class="sd">    duration_per_job</span>
 <span class="sd">    no_double_submit</span>
 <span class="sd">    verbose</span>
 <span class="sd">    verbose_lv:</span>
@@ -206,7 +204,7 @@
 <span class="sd">    -------</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">job_verb</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">verbose_lv</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+    <span class="n">job_verb</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
 
     <span class="c1"># prepare</span>
     <span class="k">try</span><span class="p">:</span>
@@ -219,12 +217,12 @@
 
         <span class="c1"># workdir:</span>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">work_dir</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span> <span class="ow">and</span> <span class="n">work_dir</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">verbose_lv</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> -&gt; Generating given workdir: &quot;</span> <span class="o">+</span> <span class="n">work_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">verbose_lvl</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> -&gt; Generating given workdir: &quot;</span> <span class="o">+</span> <span class="n">work_dir</span><span class="p">)</span>
             <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">work_dir</span><span class="p">,</span> <span class="s2">&quot;-p&quot;</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">work_dir</span><span class="p">)</span>
             <span class="n">prepared_imd</span> <span class="o">=</span> <span class="n">work_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">in_simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">verbose_lv</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> -&gt; Using on node workdir&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">verbose_lvl</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> -&gt; Using on node workdir&quot;</span><span class="p">)</span>
             <span class="n">prepared_imd</span> <span class="o">=</span> <span class="n">out_dir_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">in_simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 
         <span class="c1"># sim vars logs</span>
@@ -283,7 +281,7 @@
                              <span class="n">out_dir_path</span><span class="o">=</span> <span class="n">out_dir_path</span><span class="p">,</span> <span class="n">out_prefix</span><span class="o">=</span><span class="n">tmp_outprefix</span><span class="p">,</span>
                              <span class="n">jobname</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">,</span>
                              <span class="n">chain_job_repetitions</span><span class="o">=</span><span class="n">equilibration_run_num</span><span class="p">,</span> <span class="n">worker_script</span><span class="o">=</span><span class="n">workerScript</span><span class="o">.</span><span class="vm">__file__</span><span class="p">,</span>
-                             <span class="n">job_submission_system</span><span class="o">=</span><span class="n">submission_system</span><span class="p">,</span><span class="n">job_queue_duration</span><span class="o">=</span><span class="n">duration_per_job</span><span class="p">,</span> <span class="n">nmpi</span><span class="o">=</span><span class="n">nmpi</span><span class="p">,</span>
+                             <span class="n">job_submission_system</span><span class="o">=</span><span class="n">submission_system</span><span class="p">,</span>
                              <span class="n">do_not_doubly_submit_to_queue</span><span class="o">=</span><span class="n">no_double_submit</span><span class="p">,</span> <span class="n">start_run_index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                              <span class="n">prefix_command</span> <span class="o">=</span>  <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">previous_job_ID</span> <span class="o">=</span> <span class="n">previous_job_ID</span><span class="p">,</span> <span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">,</span>
                              <span class="n">initialize_first_run</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">reinitialize</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -298,7 +296,7 @@
                          <span class="n">jobname</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">,</span>
                          <span class="n">chain_job_repetitions</span><span class="o">=</span><span class="n">equilibration_run_num</span> <span class="o">+</span> <span class="n">simulation_run_num</span><span class="p">,</span> <span class="n">start_run_index</span> <span class="o">=</span> <span class="n">equilibration_run_num</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                          <span class="n">worker_script</span><span class="o">=</span><span class="n">workerScript</span><span class="o">.</span><span class="vm">__file__</span><span class="p">,</span>
-                         <span class="n">job_submission_system</span><span class="o">=</span><span class="n">submission_system</span><span class="p">,</span> <span class="n">job_queue_duration</span><span class="o">=</span><span class="n">duration_per_job</span><span class="p">,</span> <span class="n">nmpi</span><span class="o">=</span><span class="n">nmpi</span><span class="p">,</span>
+                         <span class="n">job_submission_system</span><span class="o">=</span><span class="n">submission_system</span><span class="p">,</span>
                          <span class="n">do_not_doubly_submit_to_queue</span><span class="o">=</span><span class="n">no_double_submit</span><span class="p">,</span>
                          <span class="n">prefix_command</span> <span class="o">=</span>  <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">previous_job_ID</span> <span class="o">=</span> <span class="n">previous_job_ID</span><span class="p">,</span> <span class="n">work_dir</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                          <span class="n">initialize_first_run</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">reinitialize</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -316,8 +314,7 @@
 
 
             <span class="n">ana_previous_job_ID</span> <span class="o">=</span> <span class="n">submission_system</span><span class="o">.</span><span class="n">submit_to_queue</span><span class="p">(</span><span class="s2">&quot;python &quot;</span><span class="o">+</span><span class="n">analysis_script_path</span><span class="p">,</span> <span class="n">jobName</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">,</span>
-                                                                <span class="n">outLog</span><span class="o">=</span><span class="n">ana_log</span><span class="p">,</span> <span class="n">queue_after_jobID</span><span class="o">=</span><span class="n">previous_job_ID</span><span class="p">,</span>
-                                                                <span class="n">nmpi</span><span class="o">=</span><span class="n">nmpi</span><span class="p">,</span> <span class="n">nomp</span><span class="o">=</span><span class="n">nomp</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                                                <span class="n">outLog</span><span class="o">=</span><span class="n">ana_log</span><span class="p">,</span> <span class="n">queue_after_jobID</span><span class="o">=</span><span class="n">previous_job_ID</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ANA jobID: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">previous_job_ID</span><span class="p">))</span>
 

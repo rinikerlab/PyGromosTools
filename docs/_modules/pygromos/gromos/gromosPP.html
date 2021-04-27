@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -213,7 +213,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_bin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span>
@@ -337,12 +337,12 @@
                 <span class="s2">&quot;@param &quot;</span> <span class="o">+</span> <span class="n">in_parameter_lib_path</span><span class="p">,</span>
                 <span class="s2">&quot;@seq &quot;</span> <span class="o">+</span> <span class="n">in_sequence</span><span class="p">,</span>
                 <span class="s2">&quot;@solv &quot;</span> <span class="o">+</span> <span class="n">in_solvent</span><span class="p">]</span>
-        <span class="n">arg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_top_path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/topargs.arg&quot;</span>
-        <span class="n">arg_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">arg_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">arg_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
-        <span class="n">arg_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-        <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span><span class="s2">&quot;make_top @f &quot;</span> <span class="o">+</span> <span class="n">arg_path</span>
+        <span class="c1">#arg_path = os.path.dirname(out_top_path) + &quot;/topargs.arg&quot;</span>
+        <span class="c1">#arg_file = open(arg_path, &quot;w&quot;)</span>
+        <span class="c1">#arg_file.write(&quot;\n&quot;.join(args))</span>
+        <span class="c1">#arg_file.close()</span>
+        <span class="c1">#&quot;@f &quot; + arg_path</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span><span class="s2">&quot;make_top &quot;</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_top_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out_top_path</span></div>
 
@@ -609,7 +609,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">workdir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">out_energy_folder_path</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">in_en_file_paths</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;trg&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">in_en_file_paths</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;trg&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">in_en_file_paths</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;trg.gz&quot;</span><span class="p">)):</span>
             <span class="n">in_file_form</span> <span class="o">=</span> <span class="s2">&quot;@fr_files&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">in_file_form</span> <span class="o">=</span> <span class="s2">&quot;@en_files&quot;</span>
@@ -760,9 +760,10 @@
             <span class="n">command_suffix</span><span class="o">+=</span> <span class="s2">&quot; @boxsize &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">boxsize</span><span class="p">)</span>
         <span class="k">if</span><span class="p">(</span><span class="n">threshold</span><span class="o">!=</span><span class="kc">None</span><span class="p">):</span>
             <span class="n">command_suffix</span><span class="o">+=</span> <span class="s2">&quot; @thresh &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">minwall</span><span class="o">!=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="n">command_suffix</span><span class="o">+=</span> <span class="s2">&quot; @minwall &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">minwall</span><span class="p">)</span>
 
-
-        <span class="n">command</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot; @topo &quot;</span> <span class="o">+</span> <span class="n">in_top_path</span> <span class="o">+</span> <span class="s2">&quot; @pbc &quot;</span> <span class="o">+</span> <span class="n">periodic_boundary_condition</span> <span class="o">+</span> <span class="s2">&quot; @pos &quot;</span> <span class="o">+</span> <span class="n">in_cnf_path</span> <span class="o">+</span> <span class="s2">&quot; @solvent &quot;</span> <span class="o">+</span> <span class="n">in_solvent_cnf_file_path</span> <span class="o">+</span> <span class="s2">&quot; @minwall &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">minwall</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">command_suffix</span>
+        <span class="n">command</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot; @topo &quot;</span> <span class="o">+</span> <span class="n">in_top_path</span> <span class="o">+</span> <span class="s2">&quot; @pbc &quot;</span> <span class="o">+</span> <span class="n">periodic_boundary_condition</span> <span class="o">+</span> <span class="s2">&quot; @pos &quot;</span> <span class="o">+</span> <span class="n">in_cnf_path</span> <span class="o">+</span> <span class="s2">&quot; @solvent &quot;</span> <span class="o">+</span> <span class="n">in_solvent_cnf_file_path</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">command_suffix</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_cnf_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out_cnf_path</span></div>
@@ -789,7 +790,7 @@
         <span class="n">command</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot; @topo &quot;</span> <span class="o">+</span> <span class="n">in_top_path</span> <span class="o">+</span> <span class="s2">&quot; @pbc &quot;</span> <span class="o">+</span> <span class="n">periodic_boundary_condition</span> <span class="o">+</span> <span class="s2">&quot; @pos &quot;</span> <span class="o">+</span> <span class="n">in_cnf_path</span> <span class="o">+</span> <span class="s2">&quot; @nsm &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmolecule</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; @dens &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dens</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">command_suffix</span> <span class="o">+</span> <span class="s2">&quot; &gt; &quot;</span> <span class="o">+</span> <span class="n">out_cnf_path</span> <span class="o">+</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">return_command_only</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-            <span class="n">std_out</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute_os</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">std_out</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">out_cnf_path</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">command</span></div>
@@ -804,7 +805,7 @@
         <span class="n">command</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot; @topo &quot;</span> <span class="o">+</span> <span class="n">in_top_path</span> <span class="o">+</span> <span class="s2">&quot; @pos &quot;</span> <span class="o">+</span> <span class="n">in_cnf_path</span> <span class="o">+</span> <span class="s2">&quot; @nsm &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmolecule</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; @dens &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dens</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &gt; &quot;</span> <span class="o">+</span> <span class="n">out_cnf_path</span> <span class="o">+</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">return_command_only</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-            <span class="n">std_out</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute_os</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">std_out</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">out_cnf_path</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">command</span></div>
@@ -975,11 +976,108 @@
 
         <span class="k">return</span> <span class="n">out_path</span></div>
 
+<div class="viewcode-block" id="_gromosPPbase.rmsf"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.rmsf">[docs]</a>    <span class="k">def</span> <span class="nf">rmsf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_trcs</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">atom_selection</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_file_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">pbc</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;r cog&quot;</span><span class="p">,</span> <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;rmsf&quot;</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            this is a wrapper for gromosPP rmsf programm. (Root mean square fluctuation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_top_path : str</span>
+<span class="sd">            path to topology file</span>
+<span class="sd">        in_trcs : Union[str, List[str]]</span>
+<span class="sd">            Path OR paths to trc coordinate files</span>
+<span class="sd">        atom_selection : str</span>
+<span class="sd">            selection of atoms</span>
+<span class="sd">        out_file_path :</span>
+<span class="sd">            out path.</span>
+<span class="sd">        pbc : str</span>
+<span class="sd">            periodic boundary condition of trc files</span>
+<span class="sd">        _binary_name: str</span>
+<span class="sd">            binary name of gromos file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            outpath of the traj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">in_trcs</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="n">in_trcs</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_trcs</span><span class="p">)</span>
+
+        <span class="n">additional_options</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span><span class="p">,</span> <span class="s2">&quot; @topo &quot;</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">,</span> <span class="s2">&quot; @atomsrmsf&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">atom_selection</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;@pdb&quot;</span><span class="p">,</span> <span class="n">pbc</span><span class="p">,</span> <span class="s2">&quot;@traj&quot;</span><span class="p">,</span> <span class="n">in_trcs</span><span class="p">,</span>  <span class="n">additional_options</span><span class="p">,</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_file_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_file_path</span></div>
+
+<div class="viewcode-block" id="_gromosPPbase.rmsd"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.rmsd">[docs]</a>    <span class="k">def</span> <span class="nf">rmsd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_trcs</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">atom_selection</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_file_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">pbc</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;r cog&quot;</span><span class="p">,</span> <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;rmsd&quot;</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_top_path</span>
+<span class="sd">        in_trcs</span>
+<span class="sd">        atom_selection</span>
+<span class="sd">        out_file_path</span>
+<span class="sd">        pbc</span>
+<span class="sd">        _binary_name</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">in_trcs</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="n">in_trcs</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_trcs</span><span class="p">)</span>
+
+        <span class="n">additional_options</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span><span class="p">,</span> <span class="s2">&quot; @topo &quot;</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">,</span> <span class="s2">&quot; @atomsrmsd&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">atom_selection</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;@pdb&quot;</span><span class="p">,</span> <span class="n">pbc</span><span class="p">,</span> <span class="s2">&quot;@traj&quot;</span><span class="p">,</span> <span class="n">in_trcs</span><span class="p">,</span>  <span class="n">additional_options</span><span class="p">,</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_file_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_file_path</span></div>
+
+
+<div class="viewcode-block" id="_gromosPPbase.cog"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.cog">[docs]</a>    <span class="k">def</span> <span class="nf">cog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_trcs</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">atom_selection</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_file_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">pbc</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;r cog&quot;</span><span class="p">,</span> <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;rmsd&quot;</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        @topo   &lt;molecular topology file&gt;</span>
+<span class="sd">        @pbc      &lt;boundary conditions&gt; [&lt;gather method&gt;]</span>
+<span class="sd">        @traj     &lt;input trajectory files&gt;</span>
+<span class="sd">        [@nthframe &lt;write every nth frame&gt; (default: 1)]</span>
+<span class="sd">        [@outformat   &lt;output coordinates format&gt;]</span>
+<span class="sd">        [@atomspec &lt;atomspecifier(s) for which to calculate cog/com&gt; ]</span>
+<span class="sd">        [@cog_com  &lt;calculate centre of geometry (cog) or mass (com); default: cog&gt;]</span>
+<span class="sd">        [@add_repl &lt;add (add) the cog/com or replace (repl) the solutes; default: repl&gt;]</span>
+<span class="sd">        [@solv &lt;include solvent in outcoordinates&gt;]</span>
+
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_top_path</span>
+<span class="sd">        in_trcs</span>
+<span class="sd">        atom_selection</span>
+<span class="sd">        out_top_path</span>
+<span class="sd">        pbc</span>
+<span class="sd">        _binary_name</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">in_trcs</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="n">in_trcs</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_trcs</span><span class="p">)</span>
+
+        <span class="n">additional_options</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span><span class="p">,</span> <span class="s2">&quot; @topo &quot;</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">,</span> <span class="s2">&quot; @atomsrmsd&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">atom_selection</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;@pdb&quot;</span><span class="p">,</span> <span class="n">pbc</span><span class="p">,</span> <span class="s2">&quot;@traj&quot;</span><span class="p">,</span>
+             <span class="n">in_trcs</span><span class="p">,</span> <span class="n">additional_options</span><span class="p">,</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_file_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_file_path</span></div>
 
 
 <div class="viewcode-block" id="_gromosPPbase.noe"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.noe">[docs]</a>    <span class="k">def</span> <span class="nf">noe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_noe_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_traj_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                 <span class="n">pbc</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">gathering</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;cog&quot;</span><span class="p">,</span>
-            <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;noe&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;noe&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -1012,19 +1110,18 @@
 <span class="sd">        ---------------</span>
 <span class="sd">        time: float, float (time, dt)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">command</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot; @topo &quot;</span> <span class="o">+</span> <span class="n">in_top_path</span> <span class="o">+</span> <span class="s2">&quot; @traj &quot;</span><span class="o">+</span><span class="n">in_traj_path</span><span class="o">+</span><span class="s2">&quot; @noe &quot;</span><span class="o">+</span><span class="n">in_noe_path</span><span class="o">+</span><span class="s2">&quot; @pbc &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">pbc</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">gathering</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &gt; &quot;</span><span class="o">+</span><span class="n">out_path</span>
+        <span class="n">command</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot; @topo &quot;</span> <span class="o">+</span> <span class="n">in_top_path</span> <span class="o">+</span> <span class="s2">&quot; @traj &quot;</span><span class="o">+</span><span class="n">in_traj_path</span><span class="o">+</span><span class="s2">&quot; @noe &quot;</span><span class="o">+</span><span class="n">in_noe_path</span><span class="o">+</span><span class="s2">&quot; @pbc &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">pbc</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">gathering</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out_path</span></div>
 
 
 <div class="viewcode-block" id="_gromosPPbase.jval"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.jval">[docs]</a>    <span class="k">def</span> <span class="nf">jval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_jval_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_traj_path</span><span class="p">:(</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]),</span> <span class="n">out_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                  <span class="n">pbc</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">gathering</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;cog&quot;</span><span class="p">,</span>
-                  <span class="n">timeseries</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rmsd</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                  <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;jval&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+              <span class="n">pbc</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">gathering</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;cog&quot;</span><span class="p">,</span>
+              <span class="n">timeseries</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rmsd</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">_binary_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;jval&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>

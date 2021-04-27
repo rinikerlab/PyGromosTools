@@ -4,6 +4,7 @@ import unittest
 
 from pygromos.files.trajectory import _general_trajectory as gt
 from pygromos.files.trajectory import trc, tre, trg
+from pygromos.files.trajectory.tre_field_libs import ene_fields
 
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.tests.test_files import out_test_root_dir
@@ -66,6 +67,7 @@ class test_tre(traj_standard_tests):
 
     def test_get_totals(self):
         t = self.class_name(input_value=self.in_file_path)
+        t.tre_block_name_table = ene_fields.gromos_2015_tre_block_names_table
         tots_ene = t.get_totals()
         print(tots_ene)
         pass

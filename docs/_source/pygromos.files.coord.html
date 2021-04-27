@@ -88,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -221,12 +223,12 @@ allows reading, analysis and modifying of the coordinate files.</p>
 <p>is a child of general_gromos_file</p>
 <dl class="py attribute">
 <dt id="pygromos.files.coord.cnf.Cnf.GENBOX">
-<code class="sig-name descname"><span class="pre">GENBOX</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.GENBOX" title="pygromos.files.blocks.coord_blocks.GENBOX"><span class="pre">pygromos.files.blocks.coord_blocks.GENBOX</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.GENBOX" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">GENBOX</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.GENBOX" title="pygromos.files.blocks.coord_blocks.GENBOX"><span class="pre">pygromos.files.blocks.coord_blocks.GENBOX</span></a></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.GENBOX" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.files.coord.cnf.Cnf.LATTICESHIFTS">
-<code class="sig-name descname"><span class="pre">LATTICESHIFTS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.LATTICESHIFTS" title="pygromos.files.blocks.coord_blocks.LATTICESHIFTS"><span class="pre">pygromos.files.blocks.coord_blocks.LATTICESHIFTS</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.LATTICESHIFTS" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">LATTICESHIFTS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.LATTICESHIFTS" title="pygromos.files.blocks.coord_blocks.LATTICESHIFTS"><span class="pre">pygromos.files.blocks.coord_blocks.LATTICESHIFTS</span></a></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.LATTICESHIFTS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -241,7 +243,7 @@ allows reading, analysis and modifying of the coordinate files.</p>
 
 <dl class="py attribute">
 <dt id="pygromos.files.coord.cnf.Cnf.TIMESTEP">
-<code class="sig-name descname"><span class="pre">TIMESTEP</span></code><em class="property"><span class="pre">:</span> <span class="pre">pygromos.files.blocks._general_blocks.TIMESTEP</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.TIMESTEP" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">TIMESTEP</span></code><em class="property"><span class="pre">:</span> <span class="pre">pygromos.files.blocks._general_blocks.TIMESTEP</span></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.TIMESTEP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -251,7 +253,12 @@ allows reading, analysis and modifying of the coordinate files.</p>
 
 <dl class="py attribute">
 <dt id="pygromos.files.coord.cnf.Cnf.VELOCITY">
-<code class="sig-name descname"><span class="pre">VELOCITY</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.VELOCITY" title="pygromos.files.blocks.coord_blocks.VELOCITY"><span class="pre">pygromos.files.blocks.coord_blocks.VELOCITY</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.VELOCITY" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">VELOCITY</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.VELOCITY" title="pygromos.files.blocks.coord_blocks.VELOCITY"><span class="pre">pygromos.files.blocks.coord_blocks.VELOCITY</span></a></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.VELOCITY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.add_empty_box">
+<code class="sig-name descname"><span class="pre">add_empty_box</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.add_empty_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.add_empty_box" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -271,8 +278,22 @@ sensitive for that! todo: make more robust! bschroed</p>
 
 <dl class="py attribute">
 <dt id="pygromos.files.coord.cnf.Cnf.atom_ref_pos_block">
-<code class="sig-name descname"><span class="pre">atom_ref_pos_block</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.REFPOSITION" title="pygromos.files.blocks.coord_blocks.REFPOSITION"><span class="pre">pygromos.files.blocks.coord_blocks.REFPOSITION</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.atom_ref_pos_block" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">atom_ref_pos_block</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.REFPOSITION" title="pygromos.files.blocks.coord_blocks.REFPOSITION"><span class="pre">pygromos.files.blocks.coord_blocks.REFPOSITION</span></a></em><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.atom_ref_pos_block" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.center_of_geometry">
+<code class="sig-name descname"><span class="pre">center_of_geometry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selectedAtoms</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.center_of_geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.center_of_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the center of geometry for asingle molecule or the selected Atoms</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>cog</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.clean_posiResNums">
@@ -293,9 +314,34 @@ sensitive for that! todo: make more robust! bschroed</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.cnf2trc">
+<code class="sig-name descname"><span class="pre">cnf2trc</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc" title="pygromos.files.trajectory.trc.Trc"><span class="pre">pygromos.files.trajectory.trc.Trc</span></a><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.cnf2trc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.cnf2trc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function converts a cnf to a trajectory with a single frame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Trc with informations from Cnf(self)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc" title="pygromos.files.trajectory.trc.Trc">Trc</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.count_residue_atoms">
 <code class="sig-name descname"><span class="pre">count_residue_atoms</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resName</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.count_residue_atoms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.count_residue_atoms" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.createRDKITconf">
+<code class="sig-name descname"><span class="pre">createRDKITconf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">rdkit.Chem.rdchem.Mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.createRDKITconf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.createRDKITconf" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mol</strong> (<em>Chem.rdchem.Mol</em>) – Molecule, possibly with a conformation</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.delete_atom">
@@ -389,6 +435,22 @@ Raises not Implemented error, if a input variant of the residues</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.get_pdb">
+<code class="sig-name descname"><span class="pre">get_pdb</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.get_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.get_pdb" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>translate cnf to pdb.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>pdb str.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.get_residues">
 <code class="sig-name descname"><span class="pre">get_residues</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.get_residues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.get_residues" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
@@ -410,7 +472,7 @@ Raises not Implemented error, if a input variant of the residues</p>
 
 <dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.get_system_information">
-<code class="sig-name descname"><span class="pre">get_system_information</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">not_ligand_residues:</span> <span class="pre">List[str]</span> <span class="pre">=</span> <span class="pre">[],</span> <span class="pre">ligand_resn_prefix:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">solvent_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'SOLV')</span> <span class="pre">-&gt;</span> <span class="pre">(typing.Dict[str,</span> <span class="pre">typing.Dict[int,</span> <span class="pre">int]],</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fe811d444d0&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fe811d444d0&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fe811d444d0&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fe811d444d0&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.get_system_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.get_system_information" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_system_information</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">not_ligand_residues:</span> <span class="pre">List[str]</span> <span class="pre">=</span> <span class="pre">[],</span> <span class="pre">ligand_resn_prefix:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">solvent_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'SOLV')</span> <span class="pre">-&gt;</span> <span class="pre">(typing.Dict[str,</span> <span class="pre">typing.Dict[int,</span> <span class="pre">int]],</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fa68e295440&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fa68e295440&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fa68e295440&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">namedtuple</span> <span class="pre">at</span> <span class="pre">0x7fa68e295440&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.get_system_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.get_system_information" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function utilizes a dictionary containing all residues and atom numbers (e.g. cnf.get_residues()) and modifies them such, that the result can be used to set up a standard REEDS gromos_simulation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -428,6 +490,22 @@ Raises not Implemented error, if a input variant of the residues</p>
 <li><p><em>NamedTuple</em> – non_ligands</p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.get_xyz">
+<code class="sig-name descname"><span class="pre">get_xyz</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.get_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.get_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>translate cnf to xyz</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>in xyz format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -480,6 +558,11 @@ you can provide a residue ID or a residue Name or both (than only exact match wi
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.rotate">
+<code class="sig-name descname"><span class="pre">rotate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotationCenter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedAtoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.supress_atomPosition_singulrarities">
 <code class="sig-name descname"><span class="pre">supress_atomPosition_singulrarities</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.supress_atomPosition_singulrarities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.supress_atomPosition_singulrarities" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function adds a very small deviation to the position of an atom, dependent on the atom number.
@@ -493,6 +576,11 @@ This might be needed to avoid singularities in gromosXX.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.visualize">
+<code class="sig-name descname"><span class="pre">visualize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.visualize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.write">
@@ -513,19 +601,19 @@ This might be needed to avoid singularities in gromosXX.</p>
 
 <dl class="py method">
 <dt id="pygromos.files.coord.cnf.Cnf.write_pdb">
-<code class="sig-name descname"><span class="pre">write_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.write_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.write_pdb" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">write_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.write_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.write_pdb" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>This function converts the atom POS db of the traj into a pdb traj.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>atoms</strong> (<em>t.List[Atom]</em>) – List of atoms</p>
+<dd class="field-odd"><p><strong>out_path</strong> (<em>str</em>) – path, were the file should be written to.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pdb strings of that molecule</p>
+<dd class="field-even"><p>outpath of the file</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>t.List[str]</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -562,6 +650,25 @@ This might be needed to avoid singularities in gromosXX.</p>
 <dt id="pygromos.files.coord.cnf.Cnf.write_refpos">
 <code class="sig-name descname"><span class="pre">write_refpos</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.write_refpos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.write_refpos" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.coord.cnf.Cnf.write_xyz">
+<code class="sig-name descname"><span class="pre">write_xyz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/coord/cnf.html#Cnf.write_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.coord.cnf.Cnf.write_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function converts the atom POS db of the traj into a xyz structure.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>out_path</strong> (<em>str</em>) – path, were the file should be written to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>outpath of the file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -641,6 +748,11 @@ allows reading, analysis and modifying of the coordinate files.</p>
 <p>This class is a representation of the gromos .cnf coordinate files. It
 allows reading, analysis and modifying of the coordinate files.</p>
 <p>is a child of general_gromos_file</p>
+<dl class="py attribute">
+<dt id="pygromos.files.coord.refpos.Reference_Position.GENBOX">
+<code class="sig-name descname"><span class="pre">GENBOX</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.GENBOX" title="pygromos.files.blocks.coord_blocks.GENBOX"><span class="pre">pygromos.files.blocks.coord_blocks.GENBOX</span></a></em><a class="headerlink" href="#pygromos.files.coord.refpos.Reference_Position.GENBOX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt id="pygromos.files.coord.refpos.Reference_Position.LATTICESHIFTS">
 <code class="sig-name descname"><span class="pre">LATTICESHIFTS</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.coord_blocks.LATTICESHIFTS" title="pygromos.files.blocks.coord_blocks.LATTICESHIFTS"><span class="pre">pygromos.files.blocks.coord_blocks.LATTICESHIFTS</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.coord.refpos.Reference_Position.LATTICESHIFTS" title="Permalink to this definition">¶</a></dt>

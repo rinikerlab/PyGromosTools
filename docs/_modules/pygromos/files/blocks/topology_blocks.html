@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -718,8 +718,28 @@
 <span class="sd">Pertubation Blocks</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="MPERTATOM"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM">[docs]</a><span class="k">class</span> <span class="nc">MPERTATOM</span><span class="p">(</span><span class="n">_generic_gromos_block</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NJLA</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">NPTB</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">STATEIDENTIFIERS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span> <span class="n">STATEATOMHEADER</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NR&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHLJ&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHCRF&#39;</span><span class="p">],</span> <span class="n">STATEATOMS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">atom_eds_pertubation_state</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span>
+<div class="viewcode-block" id="MPERTATOM.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NJLA</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">NPTB</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">STATEIDENTIFIERS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span> <span class="n">STATEATOMHEADER</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NR&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHLJ&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHCRF&#39;</span><span class="p">],</span> <span class="n">STATEATOMS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">atom_eds_pertubation_state</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span>
                  <span class="n">dummy_IAC</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span> <span class="n">dummy_CHARGE</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This block is used for lambda sampling to define the different states.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        NJLA : int</span>
+<span class="sd">            number of perturbed atoms</span>
+<span class="sd">        NPTB : int</span>
+<span class="sd">            number of pertubation states</span>
+<span class="sd">        STATEIDENTIFIERS  : List[str]</span>
+<span class="sd">            string names for states</span>
+<span class="sd">        STATEATOMHEADER</span>
+<span class="sd">            header for the atom description table</span>
+<span class="sd">        STATEATOMS</span>
+<span class="sd">            list of atoms, that shall be perturbed</span>
+<span class="sd">        dummy_IAC</span>
+<span class="sd">            dummy atom VdW type for perturbed atoms</span>
+<span class="sd">        dummy_CHARGE</span>
+<span class="sd">            dummy atom charge type for perturbed atoms</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="n">NJLA</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span> <span class="o">=</span> <span class="n">NPTB</span>
@@ -727,7 +747,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="n">STATEATOMS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dummy_IAC</span> <span class="o">=</span> <span class="n">dummy_IAC</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dummy_CHARGE</span> <span class="o">=</span> <span class="n">dummy_CHARGE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dummy_CHARGE</span> <span class="o">=</span> <span class="n">dummy_CHARGE</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nStates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
@@ -886,7 +906,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_state_STATEATOMHEADER_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">state_format_pattern</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&gt;3}</span><span class="s2"> </span><span class="si">{:&gt;5}</span><span class="s2">&quot;</span><span class="o">+</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot; </span><span class="si">{:&gt;3}{:&gt;10}</span><span class="s2">&quot;</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span><span class="p">)])</span><span class="o">+</span><span class="s2">&quot;    </span><span class="si">{:10}</span><span class="s2"> </span><span class="si">{:10}</span><span class="s2">&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">state_format_pattern</span><span class="p">)</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">tmp_list</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;CHARGE&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="s2">&quot;IAC&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span><span class="p">)])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">tmp_list</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+
         <span class="k">return</span> <span class="n">state_format_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MPERTATOM.block_to_string"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM.block_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">block_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -1186,9 +1210,9 @@
 
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">table_start</span><span class="p">:]:</span>
             <span class="n">mass_atom_type_code</span><span class="p">,</span> <span class="n">mass</span><span class="p">,</span> <span class="n">mass_atom_name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_mass_type</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">mass_atom_type_code</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">mass</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mass_atom_name</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_mass_type</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">mass_atom_type_code</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">mass</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mass_atom_name</span><span class="p">)))</span></div>
 
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
+        <span class="c1">#print(self.content)</span>
 
 <div class="viewcode-block" id="MASSATOMTYPECODE.block_to_string"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MASSATOMTYPECODE.block_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">block_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>

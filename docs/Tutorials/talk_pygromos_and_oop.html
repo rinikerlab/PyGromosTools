@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Gromos Tutorial Pipeline" href="tutorial_gromos_pipeline.html" />
-    <link rel="prev" title="Turtorials" href="index.html" /> 
+    <link rel="prev" title="Tutorials" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,7 +88,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Turtorials</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Pygromos: OOP in python 3</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Implementations-of-OOP-in-Python3">Implementations of OOP in Python3</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Definition-of-a-Class">Definition of a Class</a></li>
@@ -102,7 +102,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#PyGromos-Files:">PyGromos Files:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Additional:-functional-programming">Additional: functional programming</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Additional:-functional-programming---BONUS">Additional: functional programming - BONUS</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Lambda-functions">Lambda functions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#preimplemented-functions">preimplemented functions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#list/dict---comprehensions">list/dict - comprehensions</a></li>
@@ -163,7 +163,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html">Turtorials</a> &raquo;</li>
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
         
       <li>Pygromos: OOP in python 3</li>
     
@@ -478,7 +478,7 @@ div.rendered_html tbody tr:hover {
 </ul>
 <p>In this talk I want to introduce you to Pygromos and look at some aspects of OOP in python3. Pleas keep in mind that Pygromos right now is an idea not a perfect package, it’s under development.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -504,7 +504,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -538,8 +538,8 @@ nice Island with 2 treasures
 <div class="section" id="Accessibility">
 <h4>Accessibility<a class="headerlink" href="#Accessibility" title="Permalink to this headline">¶</a></h4>
 <p>There is no such thing as strict accessiblitiy in python OOP. The only thing comming close to it, are the naming conventions and name mangling.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -562,11 +562,21 @@ nice Island with 2 treasures
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+Treasure 1 Location:  beneath the palm
+Treasure 2 Location:  in the rum barrel
+</pre></div></div>
+</div>
 <div class="section" id="Properties">
 <h5>Properties<a class="headerlink" href="#Properties" title="Permalink to this headline">¶</a></h5>
 <p>Class Properties are generated via Decorators “&#64;property”. They allow to implement getters and setters in python OOP and even allow preventing setting a variable directly if a setter is missing.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -594,6 +604,15 @@ nice Island with 2 treasures
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+beneath the palm 0
+1 under stone
+</pre></div></div>
+</div>
 </div>
 </div>
 <div class="section" id="Mutability-of-Class-Attributes">
@@ -601,8 +620,8 @@ nice Island with 2 treasures
 <p>A very pythonic way of coding is that attributes can be set on the fly(runtime) of a class. This is nice in small approaches, but be careful with this feature, it’s dangerous!</p>
 <p>key functionality: * setattr(obj, key, value) * hasattr(obj, key) -&gt; bool * getattr(obj, key) -&gt; value</p>
 <p>this is also possibile with functions!</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -626,6 +645,18 @@ nice Island with 2 treasures
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Manual:
+ is there a POSITION attribute?
+         True [1, 2, 3]
+POSITION        [1, 2, 3]
+VELOCITY        [4, 5, 6]
+</pre></div></div>
+</div>
 </div>
 </div>
 <div class="section" id="Methods">
@@ -633,8 +664,8 @@ nice Island with 2 treasures
 <div class="section" id="Levels">
 <h4>Levels<a class="headerlink" href="#Levels" title="Permalink to this headline">¶</a></h4>
 <p>there are three types of methods to my knowledge in python: * instance methods * class methods * static methods</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -669,12 +700,23 @@ nice Island with 2 treasures
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3
+Class Var:  1
+Class Var:  2
+instance  3
+</pre></div></div>
+</div>
 </div>
 <div class="section" id="Overwriting-methods-on-Runtime">
 <h4>Overwriting methods on Runtime<a class="headerlink" href="#Overwriting-methods-on-Runtime" title="Permalink to this headline">¶</a></h4>
 <p>In python one can overwrite methods of a class with new function definitions during runtime!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -712,8 +754,8 @@ Normal 3
 <div class="section" id="Inheritance">
 <h3>Inheritance<a class="headerlink" href="#Inheritance" title="Permalink to this headline">¶</a></h3>
 <p>This is a simple inheritance example. There are no multi-inheritances possible (like in Java, not like in C++). The super constructor can be called any time in the <strong>init</strong> functions (recommendation: call IT!).</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -735,11 +777,19 @@ Normal 3
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+treasure island 1
+</pre></div></div>
+</div>
 <div class="section" id="Type-Testing-&amp;-implicit-Polymorphism">
 <h4>Type Testing &amp; implicit Polymorphism<a class="headerlink" href="#Type-Testing-&-implicit-Polymorphism" title="Permalink to this headline">¶</a></h4>
 <p>as python is not type save, polymorphism is implicitly given. To ensure that you really encouter a certain class on runtime, one can use the isinstance or issubclass functions.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -781,6 +831,30 @@ Normal 3
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+the obj boringIsland ...
+ is a treasure_island: False
+ is an island: True
+ is an int: False
+the class of boringIsland ...
+ is a subclass of treasure_island: False
+ is an island: True
+ is an int: False
+
+the obj islandA ...
+ is a treasure_island: True
+ is an island: True
+ is an int: False
+the class of islandA ...
+ is a subclass of treasure_island: True
+ is an island: True
+ is an int: False
+</pre></div></div>
+</div>
 </div>
 </div>
 </div>
@@ -790,26 +864,39 @@ Normal 3
 <h3>PyGromos Wrapper:<a class="headerlink" href="#PyGromos-Wrapper:" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="Example-gromosPP:">
 <h4>Example gromosPP:<a class="headerlink" href="#Example-gromosPP:" title="Permalink to this headline">¶</a></h4>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pygromos.gromos.gromosPP</span> <span class="kn">import</span> <span class="n">GromosPP</span>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="kn">from</span> <span class="nn">pygromos.gromos.gromosPP</span> <span class="kn">import</span> <span class="n">GromosPP</span>
 <span class="kn">from</span> <span class="nn">pygromos.data.ff</span> <span class="kn">import</span> <span class="n">Gromos54A7</span>
 
 <span class="n">gromPP</span> <span class="o">=</span> <span class="n">GromosPP</span><span class="p">()</span>
 <span class="c1">## Make Peptide</span>
 <span class="n">sequence</span> <span class="o">=</span> <span class="s2">&quot;NH3+ VAL TYR ARG LYSH GLN COO-&quot;</span>
 <span class="n">solvent</span> <span class="o">=</span> <span class="s2">&quot;H2O&quot;</span>
-<span class="n">out_top_peptide</span> <span class="o">=</span> <span class="s2">&quot;example_files/topo/peptide.top&quot;</span>
+<span class="n">out_dir</span> <span class="o">=</span>  <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="s2">&quot;example_files/topo&quot;</span><span class="p">))</span>
+<span class="n">out_top_peptide</span> <span class="o">=</span> <span class="n">out_dir</span><span class="o">+</span><span class="s2">&quot;/peptide.top&quot;</span>
+
 
 <span class="n">gromPP</span><span class="o">.</span><span class="n">make_top</span><span class="p">(</span><span class="n">in_building_block_lib_path</span><span class="o">=</span><span class="n">Gromos54A7</span><span class="o">.</span><span class="n">mtb</span><span class="p">,</span>
                 <span class="n">in_parameter_lib_path</span><span class="o">=</span><span class="n">Gromos54A7</span><span class="o">.</span><span class="n">ifp</span><span class="p">,</span>
-                <span class="n">in_sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span> <span class="n">in_solvent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">in_sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
                 <span class="n">out_top_path</span><span class="o">=</span> <span class="n">out_top_peptide</span><span class="p">)</span>
+
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;example_files/peptide.top&#39;
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="Example-for-gromosXX:">
@@ -819,7 +906,9 @@ Normal 3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">gromXX</span> <span class="o">=</span> <span class="n">GromosXX</span><span class="p">()</span>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.gromos.gromosXX</span> <span class="kn">import</span> <span class="n">GromosXX</span>
+
+<span class="n">gromXX</span> <span class="o">=</span> <span class="n">GromosXX</span><span class="p">()</span>
 
 <span class="c1"># file paths</span>
 <span class="n">imd_emin_vacuum</span> <span class="o">=</span> <span class="s2">&quot;myPath.imd&quot;</span>
@@ -839,39 +928,68 @@ Normal 3
 </div>
 <div class="section" id="PyGromos-Files:">
 <h2>PyGromos Files:<a class="headerlink" href="#PyGromos-Files:" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pygromos.files</span> <span class="kn">import</span> <span class="n">imd</span><span class="p">,</span> <span class="n">Cnf</span>
-<span class="kn">from</span> <span class="nn">pygromos.data.imd_templates</span> <span class="kn">import</span> <span class="n">template_emin</span>
-<span class="kn">from</span> <span class="nn">pygromos.data.solvents</span> <span class="kn">import</span> <span class="n">spc</span>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.files.simulation_parameters</span> <span class="kn">import</span> <span class="n">imd</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.coord</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_emin</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.solvent_coordinates</span> <span class="kn">import</span> <span class="n">spc</span>
+
 
 <span class="n">cnf_file</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">spc</span><span class="p">)</span>
 <span class="n">residues</span> <span class="o">=</span> <span class="n">cnf_file</span><span class="o">.</span><span class="n">get_residues</span><span class="p">()</span>
+<span class="n">lig_num</span> <span class="o">=</span><span class="mi">2</span>
+
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;SOLV&#39;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1">#IMD Handling</span>
 <span class="n">emin_imd</span> <span class="o">=</span> <span class="n">imd</span><span class="o">.</span><span class="n">Imd</span><span class="p">(</span><span class="n">template_emin</span><span class="p">)</span>
-<span class="n">emin_imd</span><span class="o">.</span><span class="n">SYSTEM</span><span class="o">.</span><span class="n">NSM</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">residues</span><span class="p">[</span><span class="s2">&quot;SOLV&quot;</span><span class="p">]</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">emin_imd</span><span class="o">.</span><span class="n">SYSTEM</span><span class="o">.</span><span class="n">NSM</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">residues</span><span class="p">[</span><span class="s2">&quot;SOLV&quot;</span><span class="p">]))</span>
 <span class="n">emin_imd</span><span class="o">.</span><span class="n">FORCE</span><span class="o">.</span><span class="n">adapt_energy_groups</span><span class="p">(</span><span class="n">residues</span><span class="p">)</span>
-<span class="n">emin_imd</span><span class="o">.</span><span class="n">edit_EDS</span><span class="p">(</span><span class="n">NUMSTATES</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">residues</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                  <span class="n">S</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">EIR</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lig_num</span><span class="p">)])</span>
-<span class="n">emin_imd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">emin_imd_template_path</span><span class="p">)</span>
+<span class="n">emin_imd</span><span class="o">.</span><span class="n">edit_EDS</span><span class="p">(</span><span class="n">NUMSTATES</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">residues</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">EIR</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lig_num</span><span class="p">)])</span>
+<span class="n">emin_imd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">template_emin</span><span class="p">)</span>
 
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="section" id="Additional:-functional-programming">
-<h2>Additional: functional programming<a class="headerlink" href="#Additional:-functional-programming" title="Permalink to this headline">¶</a></h2>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Setting new EDS_block
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;/home/bschroed/Documents/code/PyGromosTools/pygromos/data/simulation_parameters_templates/emin.imd&#39;
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Additional:-functional-programming---BONUS">
+<h2>Additional: functional programming - BONUS<a class="headerlink" href="#Additional:-functional-programming---BONUS" title="Permalink to this headline">¶</a></h2>
 <p>Functional programming is yet another programming paradigm. In this style you try not to think in objects, but everything in functions. A pure functional program is not containing any stored values!</p>
 <div class="section" id="Lambda-functions">
 <h3>Lambda functions<a class="headerlink" href="#Lambda-functions" title="Permalink to this headline">¶</a></h3>
@@ -879,8 +997,8 @@ Normal 3
 <li><p>are one line functions, some kind of lazy function definition</p></li>
 <li><p>Note the functions are written into variables, which behave like “normal” variables and can be overwritten. This can happen with any function in python.</p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -898,12 +1016,22 @@ Normal 3
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+add:  3
+add modulo 2:  1
+the new add:  1
+</pre></div></div>
+</div>
 </div>
 <div class="section" id="preimplemented-functions">
 <h3>preimplemented functions<a class="headerlink" href="#preimplemented-functions" title="Permalink to this headline">¶</a></h3>
 <p>There are the standard functional functions pre implemented in gromos. * MAP * ZIP * FILTER</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -947,7 +1075,7 @@ Filter: a list with only odd numbers:
 <h3>list/dict - comprehensions<a class="headerlink" href="#list/dict---comprehensions" title="Permalink to this headline">¶</a></h3>
 <p>can be used to bring a for loop into one line.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -994,7 +1122,7 @@ combinatinos list:  [(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3), (&#39
 <h3>decorators - how they work<a class="headerlink" href="#decorators---how-they-work" title="Permalink to this headline">¶</a></h3>
 <p>Decorators are actually function wrapping a function, that builds a new function! :) This is part of higher order functional programming and therefore for the pros.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1024,7 +1152,7 @@ combinatinos list:  [(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3), (&#39
 <div class="highlight"><pre>
 don&#39;t tell about the island
 
-nice island, with two mountains and train traffic
+        nice island, with two mountains and train traffic
 
 Damn!
 
@@ -1034,6 +1162,15 @@ Damn!
 <p>Sereina, Phil</p>
 <p>Salome, Marc, Candide</p>
 <p>and all the IGC Group Members!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1045,7 +1182,7 @@ Damn!
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="tutorial_gromos_pipeline.html" class="btn btn-neutral float-right" title="Gromos Tutorial Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="index.html" class="btn btn-neutral float-left" title="Turtorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
