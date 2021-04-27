@@ -1,6 +1,14 @@
 pygromos.gromos package
 =======================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pygromos.gromos.pyGromosPP
+
 Submodules
 ----------
 

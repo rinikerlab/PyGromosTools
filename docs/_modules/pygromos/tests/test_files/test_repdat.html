@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -157,6 +157,7 @@
 <span></span><span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.otherfiles</span> <span class="kn">import</span> <span class="n">repdat</span>
+<span class="kn">from</span> <span class="nn">pygromos.tests.test_files.general_file_functions</span> <span class="kn">import</span> <span class="n">general_file_tests</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
 <span class="n">in_dir</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/repdat&quot;</span>
@@ -171,22 +172,26 @@
 <span class="n">out_plot2</span> <span class="o">=</span> <span class="n">root_out</span><span class="o">+</span><span class="s2">&quot;/out_REEDS_repdat2_transitions2.png&quot;</span>
 
 
-<div class="viewcode-block" id="test_repdat"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat">[docs]</a><span class="k">class</span> <span class="nc">test_repdat</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="test_repdat"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat">[docs]</a><span class="k">class</span> <span class="nc">test_repdat</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span> <span class="c1">#general_file_tests): #Todo: make copy and deepcopy + pickable</span>
+    <span class="n">__test__</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_path</span>
+    <span class="n">root_out</span> <span class="o">=</span> <span class="n">root_out</span>
+
 <div class="viewcode-block" id="test_repdat.test_parsing_test_file"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat.test_parsing_test_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_parsing_test_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">repdat_file</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">repdat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="test_repdat.test_parsing_new_file"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat.test_parsing_new_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_parsing_new_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">repdat_file</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span><span class="p">(</span><span class="n">in_path2</span><span class="p">)</span></div>
-
+        <span class="n">repdat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="test_repdat.test_write_out"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat.test_write_out">[docs]</a>    <span class="k">def</span> <span class="nf">test_write_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">repdat_file</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">repdat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">repdat_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="test_repdat.test_cleaning_concat"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat.test_cleaning_concat">[docs]</a>    <span class="k">def</span> <span class="nf">test_cleaning_concat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">repdat_file</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">repdat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">tmp_size1</span> <span class="o">=</span> <span class="n">repdat_file</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">tmp_run1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">repdat_file</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">run</span><span class="p">[</span><span class="n">tmp_size1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
 
@@ -211,12 +216,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">tmp_run1</span><span class="p">,</span> <span class="n">tmp_run2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="test_repdat.test_get_transitions"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat.test_get_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">repdat_file</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">repdat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">transitions</span> <span class="o">=</span> <span class="n">repdat_file</span><span class="o">.</span><span class="n">get_replica_traces</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="test_repdat.test_test_transitions"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_repdat.test_repdat.test_test_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">test_test_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
-        <span class="n">repdat_file</span> <span class="o">=</span> <span class="n">repdat</span><span class="o">.</span><span class="n">Repdat</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">repdat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">transitions</span> <span class="o">=</span> <span class="n">repdat_file</span><span class="o">.</span><span class="n">get_replica_traces</span><span class="p">()</span></div></div>
 
 </pre></div>

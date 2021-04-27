@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="MD Simulations with Submission System" href="example_MD_gromos_simulation.html" />
+    <link rel="next" title="Demonstartion of the PyGromosTools implementation of the Gromos++ programs" href="example_PyGromosPP.html" />
     <link rel="prev" title="Welcome to PyGromosTools" href="../introduction.html" /> 
 </head>
 
@@ -88,14 +88,14 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html">MD Simulations with Submission System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html">SD Simulations with Submission System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_PyGromosPP.html">Demonstartion of the PyGromosTools implementation of the Gromos++ programs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html">SD Simulations with Submission System</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -192,20 +192,8 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="example_MD_gromos_simulation.html">MD Simulations with Submission System</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html#Imports">Imports</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html#Input-files">Input files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html#RUN-MD-Simulation">RUN MD Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html#Further-Analysis:">Further Analysis:</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="example_SD_gromos_simulation.html">SD Simulations with Submission System</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html#Imports">Imports</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html#Input-files">Input files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html#RUN-SD-Simulation">RUN SD Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html#Further-Analysis:">Further Analysis:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_PyGromosPP.html">Demonstartion of the PyGromosTools implementation of the Gromos++ programs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_PyGromosPP.html#Ran_Box">Ran_Box</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a><ul>
@@ -248,10 +236,22 @@
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_files.html#PTP-Files-in-PyGromos">PTP-Files in PyGromos</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#defining-some-state-types-for-later-use-:)">defining some state types for later use :)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#Read-in-ptp-file:">Read in ptp file:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#Add-atom-or-state-or-overwrite-atominformation-(except-atom.NR)">Add atom or state or overwrite atominformation (except atom.NR)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#delete-full-state">delete full state</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#delete-specific-atoms">delete specific atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#Add-atom-or-state-or-overwrite-atominformation-(except-atom.NR)">Add atom or state or overwrite atominformation (except atom.NR)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_files.html#Building-ptp-from-scratch-and-generate-all-possible-state-combinations:">Building ptp from scratch and generate all possible state combinations:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_gromos_simulation.html">SD Simulations with Submission System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html#Imports">Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html#Input-files">Input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html#RUN-SD-Simulation">RUN SD Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html#Further-Analysis:">Further Analysis:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example_gromos_simulation.html#Coordinate-Analysis">Coordinate Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_gromos_simulation.html#Energy-Analysis">Energy Analysis</a></li>
 </ul>
 </li>
 </ul>
@@ -260,12 +260,18 @@
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html#Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos">Example file for the evaluation of GROMOS trajectory files in pygromos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html#1)-TRC">1) TRC</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#1.1)-TRC-import">1.1) TRC import</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#1.2)-Common-trc-functions">1.2) Common trc functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#1.2)-Common-trc-functions">1.2) Common trc functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="example_gromos_trajectories.html#RMSD">RMSD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_gromos_trajectories.html#RDF">RDF</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html#2)-TRE">2) TRE</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#2.1)-Tre-import-and-structure">2.1) Tre import and structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#2.2)-Common-Tre-functions">2.2) Common Tre functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#\lambda-Sampling-&amp;-TREs"><span class="math notranslate nohighlight">\(\lambda\)</span>-Sampling &amp; TREs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_gromos_trajectories.html#EDS-in-TREs">EDS in TREs</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html#Concatenate-and-Copy-multiple-Trajectories">Concatenate and Copy multiple Trajectories</a></li>
@@ -281,7 +287,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="example_MD_gromos_simulation.html" class="btn btn-neutral float-right" title="MD Simulations with Submission System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_PyGromosPP.html" class="btn btn-neutral float-right" title="Demonstartion of the PyGromosTools implementation of the Gromos++ programs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="../introduction.html" class="btn btn-neutral float-left" title="Welcome to PyGromosTools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

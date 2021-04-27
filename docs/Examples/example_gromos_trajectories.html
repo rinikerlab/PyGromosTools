@@ -33,14 +33,16 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Turtorials" href="../Tutorials/index.html" />
-    <link rel="prev" title="PyGromos File Examples" href="example_gromos_files.html" /> 
+    <link rel="next" title="Tutorials" href="../Tutorials/index.html" />
+    <link rel="prev" title="SD Simulations with Submission System" href="example_gromos_simulation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,10 +90,10 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html">MD Simulations with Submission System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html">SD Simulations with Submission System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_PyGromosPP.html">Demonstartion of the PyGromosTools implementation of the Gromos++ programs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html">SD Simulations with Submission System</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gromos Trajectory evaluation with Pygromos and Pandas</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos">Example file for the evaluation of GROMOS trajectory files in pygromos</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#1)-TRC">1) TRC</a><ul>
@@ -102,6 +104,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#2)-TRE">2) TRE</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#2.1)-Tre-import-and-structure">2.1) Tre import and structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#2.2)-Common-Tre-functions">2.2) Common Tre functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#\lambda-Sampling-&amp;-TREs"><span class="math notranslate nohighlight">\(\lambda\)</span>-Sampling &amp; TREs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#EDS-in-TREs">EDS in TREs</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#Concatenate-and-Copy-multiple-Trajectories">Concatenate and Copy multiple Trajectories</a></li>
@@ -109,7 +113,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -484,9 +488,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+
 <span></span><span class="c1">#specific imports from pygromos for trc and tre file support</span>
 <span class="kn">import</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="k">as</span> <span class="nn">traj_trc</span>
 <span class="kn">import</span> <span class="nn">pygromos.files.trajectory.tre</span> <span class="k">as</span> <span class="nn">traj_tre</span>
+
+
 </pre></div>
 </div>
 </div>
@@ -501,16 +508,23 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># import the trajectory file into a Trc class</span>
-<span class="n">trc</span> <span class="o">=</span> <span class="n">traj_trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/test_CHE_vacuum_sd.trc&quot;</span><span class="p">)</span>
+<span class="n">trc</span> <span class="o">=</span> <span class="n">traj_trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/Traj_files/test_CHE_vacuum_sd.trc&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-example_files/test_CHE_vacuum_sd.trc
+/home/mlehner/anaconda3/envs/gromos/lib/python3.7/site-packages/pandas/core/generic.py:2621: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;POS_1&#39;, &#39;POS_2&#39;, &#39;POS_3&#39;, &#39;POS_4&#39;, &#39;POS_5&#39;, &#39;POS_6&#39;, &#39;POS_7&#39;, &#39;POS_8&#39;,
+       &#39;POS_9&#39;, &#39;POS_10&#39;, &#39;POS_11&#39;, &#39;POS_12&#39;, &#39;POS_13&#39;, &#39;POS_14&#39;, &#39;POS_15&#39;,
+       &#39;POS_16&#39;, &#39;POS_17&#39;, &#39;POS_18&#39;],
+      dtype=&#39;object&#39;)]
+
+  encoding=encoding,
 </pre></div></div>
 </div>
 <p>Trc class offers the normal gromos block structure and additionaly a pandas DataFrame called database where all the timesteps are stored. For typical trc files the only classic block is the TITLE block, and all the other blocks are stored inside the database.</p>
@@ -544,6 +558,7 @@ example_files/test_CHE_vacuum_sd.trc
  &#39;get_cog_movement_vector_series_for_atom_group&#39;,
  &#39;path&#39;,
  &#39;radial_distribution&#39;,
+ &#39;rmsd&#39;,
  &#39;write&#39;,
  &#39;write_pdb&#39;]
 </pre></div></div>
@@ -567,7 +582,7 @@ example_files/test_CHE_vacuum_sd.trc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.03818326045999198
+0.03803161677595912
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -586,7 +601,7 @@ example_files/test_CHE_vacuum_sd.trc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.029582014393078063
+0.029597332762906308
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -605,8 +620,82 @@ example_files/test_CHE_vacuum_sd.trc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.15260032608007468
+0.15259971796798974
 </pre></div></div>
+</div>
+<div class="section" id="RMSD">
+<h4>RMSD<a class="headerlink" href="#RMSD" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Calculate the rmsd to the initial frame (0th frame). Alternatifly a different trajectory can be provide as argument to the rmsd function. The accepted arguments are integer or single trajectory frame.</span>
+<span class="n">rmsd</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">rmsd</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Which returns the rmsd for every tome frame to the initial frame. It can be seen how the rmsd slowly gets larger as the simulations gets farther away from the initial setup.</span>
+<span class="n">rmsd</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0      0.000000
+1      0.029114
+2      0.090643
+3      0.136652
+4      0.143205
+         ...
+413    0.469253
+414    0.473791
+415    0.516979
+416    0.510561
+417    0.542082
+Length: 418, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The mean over all frames can be easily taken with pandas function mean()</span>
+<span class="n">rmsd</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.45100360300648046
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="RDF">
+<h4>RDF<a class="headerlink" href="#RDF" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># WIP</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -615,25 +704,232 @@ example_files/test_CHE_vacuum_sd.trc
 <div class="section" id="2.1)-Tre-import-and-structure">
 <h3>2.1) Tre import and structure<a class="headerlink" href="#2.1)-Tre-import-and-structure" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># import the trajectory file into a Tre class</span>
-<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/test_CHE_H2O_bilayer.tre&quot;</span><span class="p">)</span>
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/Traj_files/test_CHE_H2O_bilayer.tre&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-example_files/test_CHE_H2O_bilayer.tre
+/home/bschroed/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/generic.py:2620: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;, &#39;mass&#39;,
+       &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+      dtype=&#39;object&#39;)]
+
+  encoding=encoding,
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre</span><span class="o">.</span><span class="n">database</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TIMESTEP_step</th>
+      <th>TIMESTEP_time</th>
+      <th>totals</th>
+      <th>baths</th>
+      <th>bonded</th>
+      <th>nonbonded</th>
+      <th>special</th>
+      <th>eds</th>
+      <th>mass</th>
+      <th>temperature</th>
+      <th>volume</th>
+      <th>pressure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.0</td>
+      <td>[-408806.2436, 393521.852, -802328.0956, 13840...</td>
+      <td>[[99739.83003, 29519.49412, 70220.33591], [293...</td>
+      <td>[[0.0, 49931.35526, 0.0, 88472.52195, 0.0]]</td>
+      <td>[[984602.6158, -1925334.589, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[296.2008302, 350.6569429, 278.0450574, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[29.98293036, 94773.2037, 131128.599, 30.37611...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1000</td>
+      <td>2.0</td>
+      <td>[-411576.4224, 392980.7347, -804557.157, 13955...</td>
+      <td>[[99960.45845, 29481.77196, 70478.6865], [2930...</td>
+      <td>[[0.0, 50409.38587, 0.0, 89141.04865, 0.0]]</td>
+      <td>[[988489.6284, -1932597.22, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[296.8560381, 350.2088478, 279.0680247, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[32.10481199, 92112.53213, 131040.7862, 26.183...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2000</td>
+      <td>4.0</td>
+      <td>[-409167.9172, 392370.1191, -801538.0363, 1389...</td>
+      <td>[[100096.9564, 29163.29693, 70933.65948], [292...</td>
+      <td>[[0.0, 50155.81989, 0.0, 88764.59053, 0.0]]</td>
+      <td>[[983688.8106, -1924147.257, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[297.2614008, 346.4257383, 280.8695397, 0.999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[28.23515616, 96520.43393, 130756.5894, 30.172...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3000</td>
+      <td>6.0</td>
+      <td>[-408468.813, 392911.3266, -801380.1396, 13890...</td>
+      <td>[[100572.3051, 29097.77284, 71474.53225], [292...</td>
+      <td>[[0.0, 50205.91055, 0.0, 88694.38663, 0.0]]</td>
+      <td>[[984891.3076, -1925171.744, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[298.6730603, 345.647389, 283.0111843, 1.0000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[28.79320593, 96009.21744, 130922.0286, 24.551...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4000</td>
+      <td>8.0</td>
+      <td>[-409322.7261, 391652.3813, -800975.1074, 1398...</td>
+      <td>[[100279.2719, 28656.33854, 71622.93335], [291...</td>
+      <td>[[0.0, 50608.00218, 0.0, 89216.65927, 0.0]]</td>
+      <td>[[980597.3587, -1921397.128, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[297.8028294, 340.4036676, 283.5987946, 0.999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[24.7954137, 100472.9563, 130538.2987, 27.3050...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5000</td>
+      <td>10.0</td>
+      <td>[-409060.5321, 391503.6168, -800564.1489, 1401...</td>
+      <td>[[99621.54627, 28465.00254, 71156.54373], [291...</td>
+      <td>[[0.0, 50668.20147, 0.0, 89507.19113, 0.0]]</td>
+      <td>[[980518.6316, -1921258.173, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[295.8495588, 338.1308206, 281.7520741, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[24.44895665, 100856.1354, 130501.386, 20.8121...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6000</td>
+      <td>12.0</td>
+      <td>[-407724.5301, 393376.3395, -801100.8696, 1399...</td>
+      <td>[[100618.1056, 29001.93804, 71616.16754], [292...</td>
+      <td>[[0.0, 50612.96859, 0.0, 89338.70979, 0.0]]</td>
+      <td>[[980975.7104, -1922028.258, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[298.8090756, 344.5089841, 283.5720046, 0.999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[24.88400774, 100946.7969, 131119.5628, 21.646...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7000</td>
+      <td>14.0</td>
+      <td>[-406045.9433, 393472.141, -799518.0842, 14009...</td>
+      <td>[[101200.4734, 29288.55636, 71911.91706], [292...</td>
+      <td>[[0.0, 50652.38951, 0.0, 89438.21007, 0.0]]</td>
+      <td>[[979207.7071, -1918816.391, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[300.5385535, 347.9136733, 284.743057, 1.0000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[22.9661595, 103318.3573, 131165.6623, 27.4988...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8000</td>
+      <td>16.0</td>
+      <td>[-408499.0398, 391678.3093, -800177.3491, 1397...</td>
+      <td>[[100402.1573, 28648.71805, 71753.43928], [291...</td>
+      <td>[[0.0, 50465.54724, 0.0, 89294.44028, 0.0]]</td>
+      <td>[[977305.7837, -1917243.12, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[298.1677666, 340.3131452, 284.115547, 0.9999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[19.87564957, 106444.6562, 130544.6054, 14.226...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9000</td>
+      <td>18.0</td>
+      <td>[-406991.4101, 392482.0724, -799473.4824, 1399...</td>
+      <td>[[100192.0289, 28084.21204, 72107.81681], [292...</td>
+      <td>[[0.0, 50693.74147, 0.0, 89209.25341, 0.0]]</td>
+      <td>[[976722.0947, -1916098.572, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[297.5437407, 333.6074763, 285.5187434, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[18.24226614, 108700.5608, 130819.9731, 21.832...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -642,7 +938,7 @@ example_files/test_CHE_H2O_bilayer.tre
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -651,11 +947,17 @@ example_files/test_CHE_H2O_bilayer.tre
  &#39;TITLE&#39;,
  &#39;add_traj&#39;,
  &#39;database&#39;,
+ &#39;get_Hvap&#39;,
  &#39;get_density&#39;,
+ &#39;get_eds&#39;,
+ &#39;get_precalclam&#39;,
  &#39;get_temperature&#39;,
  &#39;get_totals&#39;,
+ &#39;get_totals_bonded&#39;,
+ &#39;get_totals_nonbonded&#39;,
+ &#39;get_totals_total&#39;,
  &#39;path&#39;,
- &#39;totals_subblock_names&#39;,
+ &#39;tre_block_name_table&#39;,
  &#39;write&#39;]
 </pre></div></div>
 </div>
@@ -666,7 +968,7 @@ example_files/test_CHE_H2O_bilayer.tre
 <div class="section" id="2.2)-Common-Tre-functions">
 <h3>2.2) Common Tre functions<a class="headerlink" href="#2.2)-Common-Tre-functions" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -676,7 +978,7 @@ example_files/test_CHE_H2O_bilayer.tre
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -685,7 +987,7 @@ example_files/test_CHE_H2O_bilayer.tre
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -695,7 +997,7 @@ example_files/test_CHE_H2O_bilayer.tre
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -706,7 +1008,7 @@ array([297.7702854 , 297.71343093])
 <p>Tables and lists inside the database are stored in numpy arrays. For example the two temperatures from the previos example are stored in a numpy array of size 2 since it has two temperature baths</p>
 <p>Specific values inside a tre file can also be directly accesed with numpy and pandas syntax</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -715,20 +1017,19 @@ array([297.7702854 , 297.71343093])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 TIMESTEP_step                                                 2000
-TIMESTEP_time                                                    4
+TIMESTEP_time                                                  4.0
 totals           [-409167.9172, 392370.1191, -801538.0363, 1389...
 baths            [[100096.9564, 29163.29693, 70933.65948], [292...
 bonded                 [[0.0, 50155.81989, 0.0, 88764.59053, 0.0]]
 nonbonded                  [[983688.8106, -1924147.257, 0.0, 0.0]]
 special          [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...
-eds                                                             []
-numstates                                                      WIP
+eds                                                          [0.0]
 mass                                                 [1277287.736]
 temperature      [[297.2614008, 346.4257383, 280.8695397, 0.999...
 volume           [2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...
@@ -737,7 +1038,7 @@ Name: 2, dtype: object
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -747,7 +1048,7 @@ Name: 2, dtype: object
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -765,13 +1066,733 @@ Name: 2, dtype: object
 Name: nonbonded, dtype: float64
 </pre></div></div>
 </div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/managers.py</span> in <span class="ansi-cyan-fg">create_block_manager_from_blocks</span><span class="ansi-blue-fg">(blocks, axes)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1675</span>                     make_block(
+<span class="ansi-green-fg">-&gt; 1676</span><span class="ansi-red-fg">                         </span>values<span class="ansi-blue-fg">=</span>blocks<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> placement<span class="ansi-blue-fg">=</span>slice<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> len<span class="ansi-blue-fg">(</span>axes<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> ndim<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2</span>
+<span class="ansi-green-intense-fg ansi-bold">   1677</span>                     )
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/blocks.py</span> in <span class="ansi-cyan-fg">make_block</span><span class="ansi-blue-fg">(values, placement, klass, ndim, dtype)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2731</span>
+<span class="ansi-green-fg">-&gt; 2732</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> klass<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">,</span> ndim<span class="ansi-blue-fg">=</span>ndim<span class="ansi-blue-fg">,</span> placement<span class="ansi-blue-fg">=</span>placement<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2733</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/blocks.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, values, placement, ndim)</span>
+<span class="ansi-green-intense-fg ansi-bold">    142</span>             raise ValueError(
+<span class="ansi-green-fg">--&gt; 143</span><span class="ansi-red-fg">                 </span><span class="ansi-blue-fg">f&#34;Wrong number of items passed {len(self.values)}, &#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    144</span>                 <span class="ansi-blue-fg">f&#34;placement implies {len(self.mgr_locs)}&#34;</span>
+
+<span class="ansi-red-fg">ValueError</span>: Wrong number of items passed 38, placement implies 43
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-15-9af2843bceb9&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>tre<span class="ansi-blue-fg">.</span>get_totals<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/trajectory/tre.py</span> in <span class="ansi-cyan-fg">get_totals</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     46</span>
+<span class="ansi-green-intense-fg ansi-bold">     47</span>     <span class="ansi-green-fg">def</span> get_totals<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>totals <span class="ansi-blue-fg">=</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">(</span>data <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>stack<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;totals&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>to_numpy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>tre_block_name_table<span class="ansi-blue-fg">.</span>totals_subblock_names<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     49</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>totals
+<span class="ansi-green-intense-fg ansi-bold">     50</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, data, index, columns, dtype, copy)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>                 mgr <span class="ansi-blue-fg">=</span> init_dict<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>data<span class="ansi-blue-fg">.</span>name<span class="ansi-blue-fg">:</span> data<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">                 </span>mgr <span class="ansi-blue-fg">=</span> init_ndarray<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">,</span> copy<span class="ansi-blue-fg">=</span>copy<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>         <span class="ansi-red-fg"># For data is list-like, or Iterable (will consume into list)</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/construction.py</span> in <span class="ansi-cyan-fg">init_ndarray</span><span class="ansi-blue-fg">(values, index, columns, dtype, copy)</span>
+<span class="ansi-green-intense-fg ansi-bold">    236</span>         block_values <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>values<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    237</span>
+<span class="ansi-green-fg">--&gt; 238</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> create_block_manager_from_blocks<span class="ansi-blue-fg">(</span>block_values<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">[</span>columns<span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    239</span>
+<span class="ansi-green-intense-fg ansi-bold">    240</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/managers.py</span> in <span class="ansi-cyan-fg">create_block_manager_from_blocks</span><span class="ansi-blue-fg">(blocks, axes)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1685</span>         blocks <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>getattr<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;values&#34;</span><span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> b <span class="ansi-green-fg">in</span> blocks<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1686</span>         tot_items <span class="ansi-blue-fg">=</span> sum<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> b <span class="ansi-green-fg">in</span> blocks<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">-&gt; 1687</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> construction_error<span class="ansi-blue-fg">(</span>tot_items<span class="ansi-blue-fg">,</span> blocks<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> axes<span class="ansi-blue-fg">,</span> e<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1688</span>
+<span class="ansi-green-intense-fg ansi-bold">   1689</span>
+
+<span class="ansi-red-fg">ValueError</span>: Shape of passed values is (10, 38), indices imply (10, 43)
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="\lambda-Sampling-&amp;-TREs">
+<h3><span class="math notranslate nohighlight">\(\lambda\)</span>-Sampling &amp; TREs<a class="headerlink" href="#\lambda-Sampling-&-TREs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># import the trajectory file into a Tre class</span>
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/Traj_files/RAFE_TI_l0_5.tre&quot;</span><span class="p">)</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">get_precalclam</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/generic.py:2620: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
+       &#39;precalclam&#39;, &#39;ABdih&#39;, &#39;mass&#39;, &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+      dtype=&#39;object&#39;)]
+
+  encoding=encoding,
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>nr_lambdas</th>
+      <th>A_e_lj_1</th>
+      <th>B_e_lj_1</th>
+      <th>A_e_crf_1</th>
+      <th>B_e_crf_1</th>
+      <th>AB_kinetic_1</th>
+      <th>AB_bond_1</th>
+      <th>AB_angle_1</th>
+      <th>AB_improper_1</th>
+      <th>AB_disres_1</th>
+      <th>...</th>
+      <th>B_e_lj_2</th>
+      <th>A_e_crf_2</th>
+      <th>B_e_crf_2</th>
+      <th>AB_kinetic_2</th>
+      <th>AB_bond_2</th>
+      <th>AB_angle_2</th>
+      <th>AB_improper_2</th>
+      <th>AB_disres_2</th>
+      <th>AB_dihres_2</th>
+      <th>AB_disfld_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2.0</td>
+      <td>-4.469426</td>
+      <td>-53.669555</td>
+      <td>-79.373179</td>
+      <td>-52.887373</td>
+      <td>36.091797</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-35.873657</td>
+      <td>-30.872681</td>
+      <td>-122.394320</td>
+      <td>36.091797</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>-55.493090</td>
+      <td>-58.228689</td>
+      <td>-86.711496</td>
+      <td>-52.410062</td>
+      <td>44.886645</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-45.606063</td>
+      <td>-30.785515</td>
+      <td>-122.457590</td>
+      <td>44.886645</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.0</td>
+      <td>-3.935587</td>
+      <td>-54.492379</td>
+      <td>-79.515189</td>
+      <td>-54.142546</td>
+      <td>46.199981</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-11.948241</td>
+      <td>-29.997893</td>
+      <td>-139.035309</td>
+      <td>46.199981</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.0</td>
+      <td>-44.047130</td>
+      <td>-54.945185</td>
+      <td>-83.150923</td>
+      <td>-53.673066</td>
+      <td>41.268221</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-46.293060</td>
+      <td>-30.604894</td>
+      <td>-130.358158</td>
+      <td>41.268221</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2.0</td>
+      <td>-23.340313</td>
+      <td>-52.961388</td>
+      <td>-75.743516</td>
+      <td>-53.920133</td>
+      <td>36.680211</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-31.298169</td>
+      <td>-29.582651</td>
+      <td>-134.272063</td>
+      <td>36.680211</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>2.0</td>
+      <td>39.941549</td>
+      <td>-64.577818</td>
+      <td>-71.993096</td>
+      <td>-53.485889</td>
+      <td>35.829309</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-49.950195</td>
+      <td>-29.687513</td>
+      <td>-130.534976</td>
+      <td>35.829309</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>496</th>
+      <td>2.0</td>
+      <td>-8.487283</td>
+      <td>-54.840254</td>
+      <td>-73.625420</td>
+      <td>-54.112768</td>
+      <td>33.260161</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-49.181289</td>
+      <td>-30.208203</td>
+      <td>-117.262832</td>
+      <td>33.260161</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>497</th>
+      <td>2.0</td>
+      <td>29.934914</td>
+      <td>-54.557127</td>
+      <td>-76.326046</td>
+      <td>-51.811587</td>
+      <td>41.735086</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-2.244047</td>
+      <td>-29.913671</td>
+      <td>-104.326673</td>
+      <td>41.735086</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>498</th>
+      <td>2.0</td>
+      <td>-35.691879</td>
+      <td>-60.330236</td>
+      <td>-77.859153</td>
+      <td>-54.295433</td>
+      <td>44.944847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-41.949763</td>
+      <td>-29.898032</td>
+      <td>-123.231158</td>
+      <td>44.944847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>499</th>
+      <td>2.0</td>
+      <td>21.308545</td>
+      <td>-58.470225</td>
+      <td>-72.376205</td>
+      <td>-53.554977</td>
+      <td>41.740483</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-20.574294</td>
+      <td>-28.857399</td>
+      <td>-125.539239</td>
+      <td>41.740483</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>500 rows × 23 columns</p>
+</div></div>
+</div>
+</div>
+<div class="section" id="EDS-in-TREs">
+<h3>EDS in TREs<a class="headerlink" href="#EDS-in-TREs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># import the trajectory file into a Tre class</span>
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/Traj_files/RAFE_eds.tre&quot;</span><span class="p">)</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">get_eds</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>numstates</th>
+      <th>total_1</th>
+      <th>nonbonded_1</th>
+      <th>special_1</th>
+      <th>offset_1</th>
+      <th>total_2</th>
+      <th>nonbonded_2</th>
+      <th>special_2</th>
+      <th>offset_2</th>
+      <th>total_3</th>
+      <th>...</th>
+      <th>special_7</th>
+      <th>offset_7</th>
+      <th>total_8</th>
+      <th>nonbonded_8</th>
+      <th>special_8</th>
+      <th>offset_8</th>
+      <th>total_9</th>
+      <th>nonbonded_9</th>
+      <th>special_9</th>
+      <th>offset_9</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9.0</td>
+      <td>-304.241276</td>
+      <td>-304.241276</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-309.738568</td>
+      <td>-309.738568</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-286.397004</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-306.757290</td>
+      <td>-306.757290</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.661115e+05</td>
+      <td>1.661115e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>9.0</td>
+      <td>-327.432243</td>
+      <td>-327.432243</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-343.990987</td>
+      <td>-343.990987</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-330.156886</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-337.505471</td>
+      <td>-337.505471</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.114028e+05</td>
+      <td>2.114028e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9.0</td>
+      <td>-342.969913</td>
+      <td>-342.969913</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-348.338017</td>
+      <td>-348.338017</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-342.678812</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-343.085575</td>
+      <td>-343.085575</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.335587e+05</td>
+      <td>2.335587e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>9.0</td>
+      <td>-307.787722</td>
+      <td>-307.787722</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-320.642022</td>
+      <td>-320.642022</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-275.892803</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-287.546356</td>
+      <td>-287.546356</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.263949e+05</td>
+      <td>1.263949e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9.0</td>
+      <td>-325.101329</td>
+      <td>-325.101329</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-333.832261</td>
+      <td>-333.832261</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-309.882401</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-328.133697</td>
+      <td>-328.133697</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.637117e+05</td>
+      <td>3.637117e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>9.0</td>
+      <td>-341.014069</td>
+      <td>-341.014069</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-338.126642</td>
+      <td>-338.126642</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-319.108916</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-331.591241</td>
+      <td>-331.591241</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.426647e+06</td>
+      <td>3.426647e+06</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>9.0</td>
+      <td>-332.591891</td>
+      <td>-332.591891</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-313.860613</td>
+      <td>-313.860613</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-270.145527</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-295.307547</td>
+      <td>-295.307547</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6.720166e+05</td>
+      <td>6.720166e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>9.0</td>
+      <td>-384.741762</td>
+      <td>-384.741762</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-379.723111</td>
+      <td>-379.723111</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-340.573094</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-363.097220</td>
+      <td>-363.097220</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6.147874e+04</td>
+      <td>6.147874e+04</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>9.0</td>
+      <td>-341.408526</td>
+      <td>-341.408526</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-352.793311</td>
+      <td>-352.793311</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-268.495614</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-327.075935</td>
+      <td>-327.075935</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.863084e+04</td>
+      <td>2.863084e+04</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9.0</td>
+      <td>-336.573404</td>
+      <td>-336.573404</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-340.350887</td>
+      <td>-340.350887</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-238.003947</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-325.957742</td>
+      <td>-325.957742</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.048352e+04</td>
+      <td>3.048352e+04</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 37 columns</p>
+</div></div>
+</div>
 </div>
 </div>
 <div class="section" id="Concatenate-and-Copy-multiple-Trajectories">
 <h2>Concatenate and Copy multiple Trajectories<a class="headerlink" href="#Concatenate-and-Copy-multiple-Trajectories" title="Permalink to this headline">¶</a></h2>
 <p>Trajectories offer a wide range of additional file manipulations. Trajectory classes can be copied (deep) and added to each other to concatenate multiple small simulation pieces into one large trajectory.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -779,8 +1800,8 @@ Name: nonbonded, dtype: float64
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -788,8 +1809,54 @@ Name: nonbonded, dtype: float64
 </pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre_combined</span> <span class="o">=</span> <span class="n">tre</span> <span class="o">+</span> <span class="n">tre_copy</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<p>In the new combined trajectory we have one long trajectory made from the two smaller ones. The lenght is one element shorter, since normally the last element of the first trajectory and the first element of the second trajectory is the same element. This can be controlled via the option “skip_new_0=True” in the add_traj() function which is the core of the “+” operator for trajectories. In the following line the default behavior can be seen as a smooth numbering in the TIMESTEPs.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">TIMESTEP_time</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -798,7 +1865,7 @@ Name: nonbonded, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -807,7 +1874,7 @@ Name: nonbonded, dtype: float64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -816,7 +1883,7 @@ Name: nonbonded, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -826,7 +1893,7 @@ Name: nonbonded, dtype: float64
 </div>
 <p>In the new combined trajectory we have one long trajectory made from the two smaller ones. The lenght is one element shorter, since normally the last element of the first trajectory and the first element of the second trajectory is the same element. This can be controlled via the option “skip_new_0=True” in the add_traj() function which is the core of the “+” operator for trajectories. In the following line the default behavior can be seen as a smooth numbering in the TIMESTEPs.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -835,7 +1902,7 @@ Name: nonbonded, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -871,6 +1938,15 @@ Name: TIMESTEP_time, dtype: float64
 </pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -880,8 +1956,8 @@ Name: TIMESTEP_time, dtype: float64
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../Tutorials/index.html" class="btn btn-neutral float-right" title="Turtorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="example_gromos_files.html" class="btn btn-neutral float-left" title="PyGromos File Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_gromos_simulation.html" class="btn btn-neutral float-left" title="SD Simulations with Submission System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

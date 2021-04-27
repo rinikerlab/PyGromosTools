@@ -88,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -219,8 +221,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pygromos.files.gromos_system.ff.serenityff.html">pygromos.files.gromos_system.ff.serenityff package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pygromos.files.gromos_system.ff.serenityff.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pygromos.files.gromos_system.ff.serenityff.seremityff_data.html">pygromos.files.gromos_system.ff.serenityff.seremityff_data package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.files.gromos_system.ff.serenityff.seremityff_data.html#module-pygromos.files.gromos_system.ff.serenityff.seremityff_data">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.files.gromos_system.ff.serenityff.serenityff_data.html">pygromos.files.gromos_system.ff.serenityff.serenityff_data package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.files.gromos_system.ff.serenityff.serenityff_data.html#module-pygromos.files.gromos_system.ff.serenityff.serenityff_data">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -241,6 +243,32 @@
 </div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pygromos.files.gromos_system.ff.forcefield_system">
+<span id="pygromos-files-gromos-system-ff-forcefield-system-module"></span><h2>pygromos.files.gromos_system.ff.forcefield_system module<a class="headerlink" href="#module-pygromos.files.gromos_system.ff.forcefield_system" title="Permalink to this headline">¶</a></h2>
+<p>File:            forcefield managment for gromos_system
+Warnings: this class is WIP!</p>
+<dl class="simple">
+<dt>Description:</dt><dd><p>This class handles all possible forcefields gromos_system accepts</p>
+</dd>
+</dl>
+<p>Author: Marc Lehner</p>
+<dl class="py class">
+<dt id="pygromos.files.gromos_system.ff.forcefield_system.forcefield_system">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.gromos_system.ff.forcefield_system.</span></code><code class="sig-name descname"><span class="pre">forcefield_system</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'2016H66'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_import</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/ff/forcefield_system.html#forcefield_system"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.ff.forcefield_system.forcefield_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.ff.forcefield_system.forcefield_system.auto_import_ff">
+<code class="sig-name descname"><span class="pre">auto_import_ff</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/ff/forcefield_system.html#forcefield_system.auto_import_ff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.ff.forcefield_system.forcefield_system.auto_import_ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.gromos_system.ff.forcefield_system.forcefield_system.import_off">
+<code class="sig-name descname"><span class="pre">import_off</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/ff/forcefield_system.html#forcefield_system.import_off"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.ff.forcefield_system.forcefield_system.import_off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="pygromos-files-gromos-system-ff-openforcefield2gromos-module">
 <h2>pygromos.files.gromos_system.ff.openforcefield2gromos module<a class="headerlink" href="#pygromos-files-gromos-system-ff-openforcefield2gromos-module" title="Permalink to this headline">¶</a></h2>

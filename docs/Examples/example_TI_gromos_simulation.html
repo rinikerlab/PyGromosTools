@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="PyGromos File Examples" href="example_gromos_files.html" />
-    <link rel="prev" title="SD Simulations with Submission System" href="example_SD_gromos_simulation.html" /> 
+    <link rel="prev" title="Demonstartion of the PyGromosTools implementation of the Gromos++ programs" href="example_PyGromosPP.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,8 +88,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="example_MD_gromos_simulation.html">MD Simulations with Submission System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_SD_gromos_simulation.html">SD Simulations with Submission System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_PyGromosPP.html">Demonstartion of the PyGromosTools implementation of the Gromos++ programs</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">TI Calculation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Imports">Imports</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Input-files">Input files</a></li>
@@ -111,10 +110,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html">SD Simulations with Submission System</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -472,8 +472,8 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pygromos</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
-<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.Submission_Systems</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
-<span class="kn">from</span> <span class="nn">pygromos.files.blocks.imd_blocks</span> <span class="kn">import</span> <span class="n">PERTURBATION</span><span class="p">,</span> <span class="n">WRITETRAJ</span><span class="p">,</span><span class="n">PRECALCLAM</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.imd_blocks</span> <span class="kn">import</span> <span class="n">PERTURBATION</span><span class="p">,</span> <span class="n">WRITETRAJ</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
 </pre></div>
@@ -667,7 +667,7 @@ SYSTEM:
 <span></span><span class="c1"># PREPARE EMIN</span>
 <span class="c1">## IMPORT</span>
 <span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_emin_vac</span>
-<span class="kn">from</span> <span class="nn">pygromos.simulation_runner.simulation_building_blocks</span> <span class="kn">import</span> <span class="n">emin</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">emin</span>
 
 <span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/initial_startSys.obj&quot;</span><span class="p">)</span>
 <span class="n">step_name</span>  <span class="o">=</span> <span class="s2">&quot;a_emin&quot;</span> <span class="c1">#also the dir_name, out prefix etc.</span>
@@ -828,8 +828,8 @@ SYSTEM:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pygromos.simulation_runner.simulation_building_blocks</span> <span class="kn">import</span> <span class="n">sd</span>
-<span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_sd</span>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_sd</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">sd</span>
 
 <span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/M030_to_6KET/a_emin/emin_out.obj&quot;</span><span class="p">)</span>
 <span class="n">step_name</span>  <span class="o">=</span> <span class="s2">&quot;b_vacuum_sd&quot;</span>
@@ -865,7 +865,7 @@ SYSTEM:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sd_gromos_system</span><span class="p">,</span> <span class="n">jobID</span>  <span class="o">=</span> <span class="n">sd</span><span class="p">(</span><span class="n">in_gromos_system</span><span class="o">=</span><span class="n">grom_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span>
+<span></span><span class="n">sd_gromos_system</span><span class="p">,</span> <span class="n">jobID</span>  <span class="o">=</span> <span class="n">sd</span><span class="p">(</span><span class="n">in_gromos_system</span><span class="o">=</span><span class="n">emin_gromos_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span>
                               <span class="n">step_name</span><span class="o">=</span><span class="n">step_name</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">subSystem</span><span class="p">(),</span>
                       <span class="n">equilibration_runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simulation_runs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">sd_gromos_system</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step_dir</span><span class="o">+</span><span class="s2">&quot;/sd_out_system.obj&quot;</span><span class="p">)</span>
@@ -1058,7 +1058,7 @@ Frames:         300      Columns:       15
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
-<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.Submission_Systems</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
 <span class="n">sys_name</span> <span class="o">=</span> <span class="s2">&quot;M030_to_6KET&quot;</span>
@@ -1104,11 +1104,9 @@ Frames:         300      Columns:       15
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pygromos.simulation_runner.simulation_building_blocks</span> <span class="kn">import</span> <span class="n">TI_sampling</span>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.simulations.modules.ti_modules</span> <span class="kn">import</span> <span class="n">TI_sampling</span>
 
 <span class="n">step_name</span>  <span class="o">=</span> <span class="s2">&quot;d_lambda_sampling&quot;</span>
-
-
 
 <span class="n">TI_sampling</span><span class="p">(</span><span class="n">in_gromos_system</span> <span class="o">=</span> <span class="n">sd_gromos_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">step_name</span>  <span class="o">=</span> <span class="n">step_name</span><span class="p">,</span>
             <span class="n">lambda_values</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
@@ -1142,7 +1140,7 @@ Frames:         300      Columns:       15
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="example_gromos_files.html" class="btn btn-neutral float-right" title="PyGromos File Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="example_SD_gromos_simulation.html" class="btn btn-neutral float-left" title="SD Simulations with Submission System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_PyGromosPP.html" class="btn btn-neutral float-left" title="Demonstartion of the PyGromosTools implementation of the Gromos++ programs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

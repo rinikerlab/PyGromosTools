@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -207,7 +207,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_bin&quot;</span><span class="p">)):</span>
+        <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_bin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span>
@@ -291,7 +291,7 @@
         <span class="k">if</span><span class="p">(</span><span class="n">nmpi</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">nomp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There are no Hybrid NMPI and NOMP jobs possible with gromos!&quot;</span><span class="p">)</span>
         <span class="k">elif</span><span class="p">(</span><span class="n">nmpi</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;mpirun -n &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmpi</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; --loadbalance --cpus-per-proc &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">]</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;mpirun -n &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmpi</span><span class="o">*</span><span class="n">nomp</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="p">]</span> <span class="c1"># --loadbalance  &quot; --cpus-per-proc &quot; +  + &quot; &quot;</span>
             <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="s2">&quot;md_mpi&quot;</span><span class="p">]</span>
         <span class="k">elif</span><span class="p">(</span><span class="n">nomp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;export OMP_NUM_THREADS=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;  &amp;&amp; &quot;</span><span class="p">]</span>

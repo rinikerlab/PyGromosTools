@@ -1,0 +1,10 @@
+pygromos.analysis package
+=========================
+
+Module contents
+---------------
+
+.. automodule:: pygromos.analysis
+   :members:
+   :undoc-members:
+   :show-inheritance:
