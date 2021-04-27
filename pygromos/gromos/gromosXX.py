@@ -135,7 +135,7 @@ class _Gromos:
         if(nmpi > 1 and nomp > 1):
             raise ValueError("There are no Hybrid NMPI and NOMP jobs possible with gromos!")
         elif(nmpi > 1):
-            command += ["mpirun -n " + str(nmpi) + " --loadbalance --cpus-per-proc " + str(nomp) + " "]
+            command += ["mpirun -n " + str(nmpi*nomp)+" "] # --loadbalance  " --cpus-per-proc " +  + " "
             command += [self._bin + "md_mpi"]
         elif(nomp > 1):
             command += ["export OMP_NUM_THREADS=" + str(nomp) + "  && "]

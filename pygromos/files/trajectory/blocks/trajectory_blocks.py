@@ -35,10 +35,17 @@ class _general_pandas_tre_block(_general_pandas_trajectory_block):
         for subblocktitle, subblock in subblock_content.items():
             if("lambda" == subblocktitle):  #Exceptions for TRG
                 tmp_sub_block = getattr(ene_sub_block, "lam")(subblock) #stupid block naming.... but they couldn't have known
-            elif("nr_lambdas" == subblocktitle):
+            elif("ABdih" == subblocktitle):
                 subblocktitle = "precalclam"
+                tmp_sub2.extend(subblock)
+                tmp_sub_block = getattr(ene_sub_block, subblocktitle)(tmp_sub2)
+            elif("numstates" == subblocktitle):
+                subblocktitle = "eds"
                 tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)
-            elif("precalclam"== subblocktitle):
+            elif("precalclam"== subblocktitle or "eds" == subblocktitle):
+                continue
+            elif("nr_lambdas" == subblocktitle):
+                tmp_sub2 = subblock
                 continue
             else:
                 tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)

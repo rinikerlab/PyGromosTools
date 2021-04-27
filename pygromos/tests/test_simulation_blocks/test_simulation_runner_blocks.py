@@ -42,7 +42,9 @@ class test_simulation_blocks(unittest.TestCase):
                                      submission_system=self.submissionSystem)
 
     def test_lam_window(self):
-        pygromos.simulations.modules.ti_modules._TI_lam_step(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
+        from pygromos.data import simulation_parameters_templates as imd_templates
+
+        pygromos.simulations.modules.ti_modules._TI_lam_step(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir, in_imd_path=imd_templates.template_md,
                                                              submission_system=self.submissionSystem)
 
     def test_ti_sampling(self):

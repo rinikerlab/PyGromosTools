@@ -102,7 +102,7 @@ class Hvap_calculation():
         return self.calc_hvap()
 
     def create_liq(self):
-        self.gromosPP.com_top(self.groSys_gas.top.in_path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
+        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
         tempTop = Top(in_value=self.work_folder+"/temp.top")
         tempTop.write(out_path=self.work_folder+"temp.top")
         time.sleep(1)

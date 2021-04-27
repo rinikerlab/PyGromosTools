@@ -102,7 +102,7 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
-    job_submission_system.job_duration = job_queue_duration
+    job_submission_system.job_duration = job_submission_system.job_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         if verbose: print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)
@@ -198,7 +198,9 @@ def chain_submission(simSystem:Gromos_System,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
                                                                  outLog=outLog, errLog=errLog)
-                if (verbose): print("CLEANING ID: ", previous_job_ID)
+
+                if verbose: print("CLEANING ID: ", previous_job_ID)
+
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of clean-up command of "+str(tmp_jobname)+"_cleanUP:\n"+"\n".join(err.args))
 

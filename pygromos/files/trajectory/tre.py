@@ -27,6 +27,11 @@ class gromos_2020_tre_block_names_table():
                              "totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle",
                              "totorder","totsymm","eds_vr,entropy","totqm","totbsleus","totrdc","wip1","wip2","wip3","wip4","wip5","wip6"]
 
+    eds_subblock_names_singleState = ["total", "nonbonded", "special", "offset"]
+    eds_subblock_names = None #is generated on the fly in get_eds of TRE - depends on num_states -> simulation specific
+
+    lam_subblock_names_singleLam = ["A_e_lj", "B_e_lj", "A_e_crf", "B_e_crf", "AB_kinetic", "AB_bond", "AB_angle", "AB_improper", "AB_disres", "AB_dihres", "AB_disfld"]
+    lam_subblock_names = None #is generated on the fly in get_eds of TRE - depends on num_states -> simulation specific
 
 class Tre(traj._General_Trajectory):
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0):
@@ -55,7 +60,30 @@ class Tre(traj._General_Trajectory):
         self.totals_nonbonded = self.database["totals"].apply(lambda x: x[2])
         return self.totals_nonbonded
 
+    def get_eds(self)->pd.DataFrame:
+        num_states = self.database["eds"][0][0]
+        if(num_states>0):
+            state_strings =[[column+"_"+str(state_row) for column in self.tre_block_name_table.eds_subblock_names_singleState] for state_row in range(1, 1+int(num_states))]
+            self.tre_block_name_table.eds_subblock_names = ["numstates"]
+            self.tre_block_name_table.eds_subblock_names.extend(list(np.concatenate(state_strings)))
+        else:
+            self.tre_block_name_table.eds_subblock_names = ["numstates"]
 
+        self.eds = pd.DataFrame(data=np.stack(self.database["eds"].to_numpy()), columns=self.tre_block_name_table.eds_subblock_names)
+        return self.eds
+
+    def get_precalclam(self)->pd.DataFrame:
+        num_lam = self.database["precalclam"][0][0]
+        if(num_lam>0):
+            state_strings =[[column+"_"+str(state_row) for column in self.tre_block_name_table.lam_subblock_names_singleLam] for state_row in range(1, 1+int(num_lam))]
+            self.tre_block_name_table.lam_subblock_names = ["nr_lambdas"]
+            self.tre_block_name_table.lam_subblock_names.extend(list(np.concatenate(state_strings)))
+            self.tre_block_name_table.lam_subblock_names.extend(["A_dihedral", "B_dihedral"])
+        else:
+            self.tre_block_name_table.lam_subblock_names = ["nr_lambdas", "A_dihedral", "B_dihedral"]
+
+        self.precalclam = pd.DataFrame(data=np.stack(self.database["precalclam"].to_numpy()), columns=self.tre_block_name_table.lam_subblock_names)
+        return self.precalclam
 
     """--------------------------------------------------------------
     Additional predefined function for common analysis
