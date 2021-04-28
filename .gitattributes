@@ -1,3 +1,4 @@
-*tre linguist-vendored=false
-*trg linguist-vendored=false
-*trc linguist-vendored=false
+*tre linguist-vendored
+*trg linguist-vendored
+*trc linguist-vendored
+pygromos/tests/in_testfiles/trg/test.trg  linguist-vendored
