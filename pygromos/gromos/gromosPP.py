@@ -848,7 +848,9 @@ class _gromosPPbase:
         if(isinstance(in_trcs, list)):
             in_trcs = " ".join(in_trcs)
 
-        additional_options = ""
+        additional_options = [""]
+        additional_options = " ".join(map(str, additional_options))
+
         command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsf", "'" + atom_selection + "'", "@pbc", pbc, "@traj", in_trcs,  additional_options, " \n"])
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
@@ -873,7 +875,8 @@ class _gromosPPbase:
         if(isinstance(in_trcs, list)):
             in_trcs = " ".join(in_trcs)
 
-        additional_options = ""
+        additional_options = [""]
+        additional_options = " ".join(map(str, additional_options))
         command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsd", "'" + atom_selection + "'", "@pbc", pbc, "@traj", in_trcs,  additional_options, " \n"])
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
@@ -917,7 +920,7 @@ class _gromosPPbase:
         if (isinstance(in_trcs, list)):
             in_trcs = " ".join(in_trcs)
 
-        additional_options = []
+        additional_options = [""]
         if(not atom_selection is None):
             additional_options+= [" @atomspec ", "'" + atom_selection + "'"]
         if(not outformat is None):
@@ -930,6 +933,8 @@ class _gromosPPbase:
             additional_options += [" @solv ", solv]
         if(not nthframe is None):
             additional_options += [" @nthframe ", nthframe]
+
+        additional_options = " ".join(map(str, additional_options))
 
         command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, "@pdb", pbc, "@traj", in_trcs, additional_options, " \n"])
 
