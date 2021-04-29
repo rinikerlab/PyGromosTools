@@ -936,7 +936,7 @@ class _gromosPPbase:
 
         additional_options = " ".join(map(str, additional_options))
 
-        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, "@pdb", pbc, "@traj", in_trcs, additional_options, " \n"])
+        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, "@pbc", pbc, "@traj", in_trcs, additional_options, " \n"])
 
         if(verbose): print(command)
         bash.execute(command, catch_STD=out_file_path, verbose=verbose)
