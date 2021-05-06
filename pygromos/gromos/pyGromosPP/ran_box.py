@@ -71,7 +71,7 @@ def ran_box(in_top_path:str,
     ret_cnf.TITLE.content = str(nmolecule) + " * " + cnf.POSITION.content[0].resName
 
     # add positions
-    points = list(it.product(range(8), range(8), range(8)))
+    points = list(it.product(range(divider), range(divider), range(divider)))
     for ind, (xi, yi, zi) in enumerate(random.sample(points, nmolecule)):
         shift = np.array([xi*distance, yi*distance, zi*distance])
         cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
