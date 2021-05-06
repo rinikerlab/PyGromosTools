@@ -68,8 +68,6 @@ class Hvap_calculation():
         self.groSys_liq = deepcopy(self.groSys_gas)
         self.groSys_liq.work_folder = work_folder + "/" + system_name +"_liq"
         self.groSys_liq.rebase_files()
-        self.groSys_liq.cnf = None
-        self.groSys_liq.top = None
 
         self.submissonSystem = subSys()
 
@@ -104,15 +102,19 @@ class Hvap_calculation():
         return self.calc_hvap()
 
     def create_liq(self):
+        # create liq top
         self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
         tempTop = Top(in_value=self.work_folder+"/temp.top")
         tempTop.write(out_path=self.work_folder+"temp.top")
-        time.sleep(1)
+        time.sleep(1) #wait for file to write and close
         self.groSys_liq.top = tempTop
-        if self.groSys_liq.cnf is None:
-            ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
-            time.sleep(1)
-            self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
+
+        #create liq cnf
+        ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+        time.sleep(3) #wait for file to write and close 
+        self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
+
+        #reset liq system
         self.groSys_liq.rebase_files()
 
     def run_gas(self):
