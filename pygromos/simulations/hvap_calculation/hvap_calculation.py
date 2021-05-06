@@ -68,6 +68,8 @@ class Hvap_calculation():
         self.groSys_liq = deepcopy(self.groSys_gas)
         self.groSys_liq.work_folder = work_folder + "/" + system_name +"_liq"
         self.groSys_liq.rebase_files()
+        self.groSys_liq.cnf = None
+        self.groSys_liq.top = None
 
         self.submissonSystem = subSys()
 
