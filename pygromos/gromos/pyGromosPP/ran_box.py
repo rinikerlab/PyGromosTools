@@ -68,6 +68,7 @@ def ran_box(in_top_path:str,
     if hasattr(ret_cnf, "STOCHINT"):
         delattr(ret_cnf, "STOCHINT")
     ret_cnf.GENBOX.length = [box_length, box_length, box_length]
+    ret_cnf.GENBOX.angles = [90,90,90]
     ret_cnf.TITLE.content = str(nmolecule) + " * " + cnf.POSITION.content[0].resName
 
     # add positions
