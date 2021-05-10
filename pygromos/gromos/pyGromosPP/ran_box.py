@@ -37,11 +37,12 @@ def ran_box(in_top_path:str,
         raise Exception("ran_box works only with one residue in the .cnf file!\nFound: "+str(cnf.get_residues()))
 
     #get volume and box length
+    minwall = 0.12 #saftey distance of a bond length to box edge
     mol_mass = top.get_mass()
     volume = 1.66056 * nmolecule * mol_mass / dens
     box_length = volume**(1./3.)
     divider = int(np.ceil(nmolecule**(1./3.)))
-    distance = box_length/float(divider)
+    distance = (box_length-2*minwall)/float(divider)
 
     #calculate maxRandShift
     scale = 0.5 #scale can be manually decreased
@@ -75,7 +76,7 @@ def ran_box(in_top_path:str,
     # add positions
     points = list(it.product(range(divider), range(divider), range(divider)))
     for ind, (xi, yi, zi) in enumerate(random.sample(points, nmolecule)):
-        shift = np.array([xi*distance, yi*distance, zi*distance])
+        shift = np.array([(xi+0.5)*distance+minwall, (yi+0.5)*distance+minwall, (zi+0.5)*distance+minwall])
         cnf.rotate(alpha=random.uniform(0,360), beta=random.uniform(0,360), gamma=random.uniform(0,360))
         randomShift = np.array([random.uniform(-maxRandShift,maxRandShift),random.uniform(-maxRandShift,maxRandShift),random.uniform(-maxRandShift,maxRandShift)])
 
