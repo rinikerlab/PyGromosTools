@@ -636,18 +636,38 @@ class Gromos_System():
         self.imd.SYSTEM.NPM = 1
         self.imd.SYSTEM.NSM = len(self.residue_list ["SOLV"]) if("SOLV" in self.residue_list ) else 0
 
-        ##Force Group
-        force_groups = {}
+        ##Energy and Force Group
+        energy_groups = {}
 
-        if (self.protein_info.residues != 0):
-            pass
-            #TODO: Do something for protein
+        if(self._single_energy_group):
+            energy_groups = { self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
+        else:
+            #solute
+            if(self.solute_info.number_of_atoms>0):
+                energy_groups.update({self.solute_info.positions[0]: self.solute_info.number_of_atoms})
+            #protein
+            if (self.protein_info.number_of_atoms > 0):
+                energy_groups.update({self.protein_info.start_position: self.protein_info.number_of_atoms})
+            #ligand
+            if (self.non_ligand_info.number_of_atoms > 0):
+                solv_add = self.non_ligand_info.number_of_atoms
+            else:
+                solv_add = 0
+            #solvent
+            if(self.solvent_info.number_of_atoms > 0):
+                    max_key = max(energy_groups)+1 if(len(energy_groups)>0) else 1
+                    energy_groups.update({max_key: self.solvent_info.number_of_atoms+solv_add})
 
-        if (self.non_ligand_info.number != 0):
-            pass
-            #TODO: Do something for non-Ligands
+            #sort all entries in list
+            last_atom_count = 0
+            sorted_energy_groups = {}
+            for ind,key in enumerate(sorted(energy_groups)):
+                value = energy_groups[key]+last_atom_count
+                sorted_energy_groups.update({value:1+ind})
+                last_atom_count=value
 
-        self.imd.FORCE.adapt_energy_groups(residues=self.residue_list)
+        #adapt energy groups in IMD with sorted list of energy groups created above
+        self.imd.FORCE.adapt_energy_groups(residues=sorted_energy_groups)
 
         ##Multibath:
         if (hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None):
