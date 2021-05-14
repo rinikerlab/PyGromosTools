@@ -668,7 +668,7 @@ class Gromos_System():
                 last_atom_count=value
 
         #adapt energy groups in IMD with sorted list of energy groups created above
-        self.imd.FORCE.adapt_energy_groups(residues=sorted_energy_groups)
+        self.imd.FORCE.adapt_energy_groups(energy_groups=sorted_energy_groups)
 
         ##Multibath:
         if (hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None):

@@ -727,8 +727,22 @@ class FORCE(_generic_imd_block):
             self.NEGR = int(NEGR)
             self.NRE = NRE
 
-    def adapt_energy_groups(self, residues: Dict[str, Dict[int, int]]):
-        """adapt_energy_groups
+    def adapt_energy_groups(self, energy_groups: Dict[int, int]):
+        """
+
+        Parameters
+        ----------
+        residues : Dict[int, int]
+            [description]
+        """
+        self.NEGR = len(energy_groups)
+        self.NRE = [energy_groups[last_atom] for last_atom in energy_groups]
+
+    def __adapt_energy_groups(self, residues: Dict[str, Dict[int, int]]):
+        """
+        Old REEDS option
+
+        adapt_energy_groups
             This method is very "crude" and will put each residue into an own energy group.
 
         Parameters
