@@ -72,6 +72,7 @@ class Gromos_System():
     _future_promised_files:list
 
     _single_multibath:bool  = False
+    _single_energy_group:bool = False
 
     _gromosPP : GromosPP
     _gromosXX : GromosXX
