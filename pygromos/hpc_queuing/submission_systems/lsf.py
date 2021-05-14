@@ -378,7 +378,7 @@ class LSF(_SubmissionSystem):
             if (not regex):
                 job_name = " " + job_name + " "
             if (verbose): print("getting job data")
-            if (True or dummyTesting):
+            if (dummyTesting):
                 out_job_lines = []
                 #out_job_lines = ["123 TEST", "456 TEST2"]
             else:
