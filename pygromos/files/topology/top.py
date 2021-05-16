@@ -8,12 +8,17 @@ Author: Marc Lehner, Benjamin Ries
 """
 
 #imports
+from copy import deepcopy
+from typing import TypeVar
 import warnings
 import math
 
 from pygromos.utils import bash as bash
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
+
+
+TopType = TypeVar("Top")
 
 
 #functions
@@ -41,7 +46,7 @@ def check_top():
 class Top(_general_gromos_file._general_gromos_file):
     gromos_file_ending:str = "top"
 
-    def __init__(self, in_value:(str or dict or None or __class__), _future_file:bool=False):
+    def __init__(self, in_value:(str or dict or None or TopType), _future_file:bool=False):
         if type(in_value) is str:
             super().__init__(in_value=in_value, _future_file=_future_file)
         elif(in_value == None):
@@ -53,6 +58,165 @@ class Top(_general_gromos_file._general_gromos_file):
             raise Exception('not implemented yet!')
         else:
             raise Exception('not implemented yet!')
+
+    def __add__(self, top:TopType)->TopType:
+        return self._add_top(top=top)
+
+    def _add_top(self, top:TopType, solvFrom1:bool=True, verbose:bool=False)->TopType:
+        """
+        combines two topologies. Parameters are taken from the initial topology. 
+        But missing parameters from the second topology will be added.
+        Can be used like com_top from Gromos++ 
+
+        Parameters
+        ----------
+        top : TopType
+            second topology to add to the first topology
+        solvFrom1 : bool, optional
+            should the solvent be taken from the first topology? (else second), by default True
+        verbose : bool, optional
+            extra print statements, by default True
+        sanityCheck : bool, optional
+            feature and compatibility check, by default True
+
+        Returns
+        -------
+        TopType
+            returns a topology made by combing two topologies
+        """
+        # create the return top
+        retTop = deepcopy(self)
+        # add solv
+        if not solvFrom1:
+            if verbose: print("taking solvent from second topology")
+            retTop.SOLVENTATOM = top.SOLVENTATOM
+            retTop.SOLVENTCONSTR = top.SOLVENTCONSTR
+
+        #calculate the shift of atom types of the second topology and add new atomtypes
+        atomTypeShift = {}
+        for idx, atomT in enumerate(top.ATOMTYPENAME.content[1:]): #new atomtypes to find names for
+            foundAtomType = False
+            for mainIdx, mainAtomT in enumerate(retTop.ATOMTYPENAME.content[1:]): #AtomTypes in self to match against
+                if atomT == mainAtomT:
+                    foundAtomType = True
+                    atomTypeShift.update({idx+1:mainIdx+1})
+                    break
+            if not foundAtomType:
+                retTop.ATOMTYPENAME.content[0] = str(int(retTop.ATOMTYPENAME.content[0]) + 1)
+                retTop.ATOMTYPENAME.content.append(atomT)
+
+        if verbose: print("atomTypeShift: " + str(atomTypeShift))
+
+        #add RESNAME
+        for resname in top.RESNAME.content[1:]:
+            retTop.add_new_resname(resname[0])
+
+        #add SOLUTEATOM
+        atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in main top. Shift secondary top atoms accordingly
+        if verbose: print("atom number shift: " + str(atnmShift))
+        mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in main top.
+        if verbose: print("molecule number shift: " + str(mresShift))
+
+        for atom in top.SOLUTEATOM.content:
+            retTop.add_new_soluteatom(ATNM = atnmShift + atom.ATNM,
+                                    MRES = mresShift + atom.MRES,
+                                    PANM = atom.PANM,
+                                    IAC = atomTypeShift[atom.IAC],
+                                    MASS = atom.MASS,
+                                    CG = atom.CG,
+                                    CGC = atom.CGC,
+                                    INE = [str(int(x)+atnmShift) for x in atom.INEvalues],
+                                    INE14 = [str(int(x)+atnmShift) for x in atom.INE14values])
+
+        # add bonds and bonds with H
+        for bond in top.BOND.content:
+            bondType = top.BONDSTRETCHTYPE.content[bond.ICB - 1]
+            retTop.add_new_bond(k=bondType.CHB, 
+                                b0=bondType.B0, 
+                                atomI=bond.IB + atnmShift, 
+                                atomJ=bond.JB + atnmShift)
+        for bond in top.BONDH.content:
+            bondType = top.BONDSTRETCHTYPE.content[bond.ICB - 1]
+            retTop.add_new_bond(k=bondType.CHB, 
+                                b0=bondType.B0, 
+                                atomI=bond.IB + atnmShift, 
+                                atomJ=bond.JB + atnmShift,
+                                includesH=True)
+
+        # add angles and angles with H
+        for angle in top.BONDANGLE.content:
+            angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
+            retTop.add_new_angle(k=angleType.CB, 
+                                kh=angleType.CHB, 
+                                b0=angleType.B0, 
+                                atomI=angle.IT + atnmShift, 
+                                atomJ=angle.JT + atnmShift,
+                                atomK=angle.KT + atnmShift)
+        for angle in top.BONDANGLEH.content:
+            angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
+            retTop.add_new_angle(k=angleType.CB, 
+                                kh=angleType.CHB, 
+                                b0=angleType.B0, 
+                                atomI=angle.IT + atnmShift, 
+                                atomJ=angle.JT + atnmShift,
+                                atomK=angle.KT + atnmShift, includesH=True)
+
+        # add diheadrals and diheadrals with H
+        for dihdrl in top.DIHEDRAL.content:
+            dihdrlType = top.TORSDIHEDRALTYPE.content[dihdrl.ICP - 1]
+            retTop.add_new_torsiondihedral(CP=dihdrlType.CP, 
+                                        PD=dihdrlType.PD, 
+                                        NP=dihdrlType.NP, 
+                                        atomI=dihdrl.IP + atnmShift, 
+                                        atomJ=dihdrl.JP + atnmShift, 
+                                        atomK=dihdrl.KP + atnmShift, 
+                                        atomL=dihdrl.LP + atnmShift)
+        for dihdrl in top.DIHEDRALH.content:
+            dihdrlType = top.TORSDIHEDRALTYPE.content[dihdrl.ICPH - 1]
+            retTop.add_new_torsiondihedral(CP=dihdrlType.CP, 
+                                        PD=dihdrlType.PD, 
+                                        NP=dihdrlType.NP, 
+                                        atomI=dihdrl.IPH + atnmShift, 
+                                        atomJ=dihdrl.JPH + atnmShift, 
+                                        atomK=dihdrl.KPH + atnmShift, 
+                                        atomL=dihdrl.LPH + atnmShift,
+                                        includesH=True)
+
+        # add impdihedrals with and without H
+        for dihdrl in top.IMPDIHEDRAL.content:
+            dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQ - 1]
+            retTop.add_new_impdihedral(CQ=dihdrlType.CQ, 
+                                        Q0=dihdrlType.Q0,
+                                        atomI=dihdrl.IQ + atnmShift, 
+                                        atomJ=dihdrl.JQ + atnmShift, 
+                                        atomK=dihdrl.KQ + atnmShift, 
+                                        atomL=dihdrl.LQ + atnmShift)
+        for dihdrl in top.IMPDIHEDRALH.content:
+            dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQH - 1]
+            retTop.add_new_torsiondihedral(CQ=dihdrlType.CQ, 
+                                        Q0=dihdrlType.Q0, 
+                                        atomI=dihdrl.IQH + atnmShift, 
+                                        atomJ=dihdrl.JQH + atnmShift, 
+                                        atomK=dihdrl.KQH + atnmShift, 
+                                        atomL=dihdrl.LQH + atnmShift,
+                                        includesH=True)
+
+        # add SOLUTEMOLECULES
+        retTop.SOLUTEMOLECULES.content[0][0] = str(int(retTop.SOLUTEMOLECULES.content[0][0])+int(top.SOLUTEMOLECULES.content[0][0]))
+        for solmol in top.SOLUTEMOLECULES.content[1:]:
+            retTop.SOLUTEMOLECULES.content.append([str(int(solmol[0]) + atnmShift)])
+
+        # add TEMPERATUREGROUPS
+        retTop.TEMPERATUREGROUPS.content[0][0] = str(int(retTop.TEMPERATUREGROUPS.content[0][0])+int(top.SOLUTEMOLECULES.content[0][0]))
+        for solmol in top.TEMPERATUREGROUPS.content[1:]:
+            retTop.TEMPERATUREGROUPS.content.append([str(int(solmol[0]) + atnmShift)])
+
+        # add PRESSUREGROUPS
+        retTop.PRESSUREGROUPS.content[0][0] = str(int(retTop.PRESSUREGROUPS.content[0][0])+int(top.SOLUTEMOLECULES.content[0][0]))
+        for solmol in top.PRESSUREGROUPS.content[1:]:
+            retTop.PRESSUREGROUPS.content.append([str(int(solmol[0]) + atnmShift)])
+
+        return retTop
 
     def read_file(self):
         #Read blocks to string
