@@ -1,4 +1,5 @@
 import copy
+from os import name
 from typing import Iterable, Callable
 from numbers import Number
 
@@ -11,6 +12,12 @@ class _generic_field():
 
     def __str__(self):
         return self.to_string()
+
+    def __copy__(self):
+        field = type(self)()
+        for attr in vars(self):
+            setattr(field, attr, getattr(self, attr))
+        return field
 
     def to_string(self):
         raise NotImplementedError("to string method needs to be implemented!")
@@ -37,6 +44,16 @@ class _generic_gromos_block:
 
     def __iter__(self):
         return iter(self.content)
+
+    def __copy__(self):
+        block = type(self)(content=self.content)
+        return block
+
+    def __deepcopy__(self, memo):
+        #return block as string, split by line and cut block title and END
+        newContent=self.block_to_string().split("\n")[1:-2]
+        block = type(self)(content=newContent)
+        return block
 
 
     def _check_import_method(self, content:str = None):
@@ -118,8 +135,8 @@ class TIMESTEP(_generic_gromos_block):
     step: int
     t: float
 
-    def __init__(self, t: float, step: int, subcontent=False):
-        super().__init__(used=True, name="TIMESTEP")
+    def __init__(self, t: float, step: int, subcontent=False, name="TIMESTEP", used=True):
+        super().__init__(used=used, name=name)
         self.t = t
         self.step = step
         self.subcontent = subcontent
@@ -136,8 +153,8 @@ class TITLE(_generic_gromos_block):
     line_seperator:str = "\n"
     order = [[["content"]]]
 
-    def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n"):
-        super().__init__(used=True, name="TITLE")
+    def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n", name="TITLE", used=True):
+        super().__init__(used=used, name=name)
         self.content = content
         self.field_seperator = field_seperator
         self.line_seperator = line_seperator

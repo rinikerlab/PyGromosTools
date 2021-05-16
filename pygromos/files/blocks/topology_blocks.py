@@ -2244,6 +2244,9 @@ class PHYSICALCONSTANTS(_topology_block):
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
             self.read_content_from_str(content)
+        elif (isinstance(content, tuple) and len(content)==4):
+            self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ = content
+            self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
