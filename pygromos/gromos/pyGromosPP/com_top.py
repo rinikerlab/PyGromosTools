@@ -9,11 +9,10 @@ This mehod can also be called directly via top1.com_top(top2), top1 + top2 or to
 Author: Marc Lehner
 """
 
-from copy import deepcopy
-from typing import Union
+from typing import List
 from pygromos.files.topology.top import Top
 
-def com_top(top1:Top, top2:Top, solvFrom1:bool=True, paramFrom1:bool=True, verbose:bool=True) -> Top:
+def com_top(top1:Top, top2:Top, topo_multiplier:List[int]=[1,1], solvFrom1:bool=True, paramFrom1:bool=True, verbose:bool=True) -> Top:
     """[summary]
 
     Parameters
@@ -22,6 +21,8 @@ def com_top(top1:Top, top2:Top, solvFrom1:bool=True, paramFrom1:bool=True, verbo
         a topology
     top2 : Top
         another topology
+    topo_multiplier : List[int]
+        multiplier for topos. entries must be >=0
     solvFrom1 : bool, optional
         wether to take the solvent from topology 1, by default True
     paramFrom1 : bool, optional
@@ -34,10 +35,26 @@ def com_top(top1:Top, top2:Top, solvFrom1:bool=True, paramFrom1:bool=True, verbo
     Top
         combined topology
     """
+    # sanity checks
+    if len(topo_multiplier) != 2:
+        raise Exception("topo_multiplier length is not 2")
+    if topo_multiplier[0] < 0 or topo_multiplier[1] < 0:
+        raise Exception("Does not work with negative multipliers")
+
     # create the return top
+    retTop=Top(in_value=None)
+    
     if paramFrom1:
-        return top1._add_top(top=top2, solvFrom1=solvFrom1, verbose=verbose)
+        for i in range(topo_multiplier[0]):
+            retTop = retTop._add_top(top=top1, verbose=verbose)
+        for i in range(topo_multiplier[1]):
+            retTop = retTop._add_top(top=top2, solvFrom1=solvFrom1, verbose=verbose)
     else:
-        return top2._add_top(top=top1, solvFrom1=solvFrom1, verbose=verbose)
+        for i in range(topo_multiplier[1]):
+            retTop = retTop._add_top(top=top2, verbose=verbose)
+        for i in range(topo_multiplier[0]):
+            retTop = retTop._add_top(top=top1, solvFrom1=solvFrom1, verbose=verbose)
+
+    return retTop
 
     

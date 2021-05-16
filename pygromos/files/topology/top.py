@@ -9,7 +9,7 @@ Author: Marc Lehner, Benjamin Ries
 
 #imports
 from copy import deepcopy
-from typing import TypeVar
+from typing import TypeVar, Union
 import warnings
 import math
 
@@ -62,7 +62,7 @@ class Top(_general_gromos_file._general_gromos_file):
     def __add__(self, top:TopType)->TopType:
         return self._add_top(top=top)
 
-    def _add_top(self, top:TopType, solvFrom1:bool=True, verbose:bool=False)->TopType:
+    def _add_top(self, top:Union[TopType, None], solvFrom1:bool=True, verbose:bool=False)->TopType:
         """
         combines two topologies. Parameters are taken from the initial topology. 
         But missing parameters from the second topology will be added.
@@ -86,6 +86,8 @@ class Top(_general_gromos_file._general_gromos_file):
         """
         # create the return top
         retTop = deepcopy(self)
+        if top is None:
+            return retTop
         # add solv
         if not solvFrom1:
             if verbose: print("taking solvent from second topology")
@@ -94,6 +96,8 @@ class Top(_general_gromos_file._general_gromos_file):
 
         #calculate the shift of atom types of the second topology and add new atomtypes
         atomTypeShift = {}
+        if not (hasattr(retTop, "ATOMTYPENAME") and len(retTop.ATOMTYPENAME.content)>=2):
+            setattr(retTop, "ATOMTYPENAME", deepcopy(top.ATOMTYPENAME))
         for idx, atomT in enumerate(top.ATOMTYPENAME.content[1:]): #new atomtypes to find names for
             foundAtomType = False
             for mainIdx, mainAtomT in enumerate(retTop.ATOMTYPENAME.content[1:]): #AtomTypes in self to match against
@@ -112,9 +116,13 @@ class Top(_general_gromos_file._general_gromos_file):
             retTop.add_new_resname(resname[0])
 
         #add SOLUTEATOM
-        atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in main top. Shift secondary top atoms accordingly
+        if hasattr(retTop, "SOLUTEATOM"):
+            atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in main top. Shift secondary top atoms accordingly
+            mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in main top.
+        else:
+            atnmShift=0
+            mresShift=0
         if verbose: print("atom number shift: " + str(atnmShift))
-        mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in main top.
         if verbose: print("molecule number shift: " + str(mresShift))
 
         for atom in top.SOLUTEATOM.content:
@@ -202,19 +210,16 @@ class Top(_general_gromos_file._general_gromos_file):
                                         includesH=True)
 
         # add SOLUTEMOLECULES
-        retTop.SOLUTEMOLECULES.content[0][0] = str(int(retTop.SOLUTEMOLECULES.content[0][0])+int(top.SOLUTEMOLECULES.content[0][0]))
         for solmol in top.SOLUTEMOLECULES.content[1:]:
-            retTop.SOLUTEMOLECULES.content.append([str(int(solmol[0]) + atnmShift)])
+            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift))
 
         # add TEMPERATUREGROUPS
-        retTop.TEMPERATUREGROUPS.content[0][0] = str(int(retTop.TEMPERATUREGROUPS.content[0][0])+int(top.SOLUTEMOLECULES.content[0][0]))
         for solmol in top.TEMPERATUREGROUPS.content[1:]:
-            retTop.TEMPERATUREGROUPS.content.append([str(int(solmol[0]) + atnmShift)])
+            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift))
 
         # add PRESSUREGROUPS
-        retTop.PRESSUREGROUPS.content[0][0] = str(int(retTop.PRESSUREGROUPS.content[0][0])+int(top.SOLUTEMOLECULES.content[0][0]))
         for solmol in top.PRESSUREGROUPS.content[1:]:
-            retTop.PRESSUREGROUPS.content.append([str(int(solmol[0]) + atnmShift)])
+            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
 
         return retTop
 
@@ -554,6 +559,42 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BONDSTRETCHTYPE.NBTY += 1
         self.CONSTRAINT.content.append(blocks.constraint_type(IC=IC, JC=JC, ICC=bond_type_number))
         self.CONSTRAINT.NCON += 1
+
+    def add_new_TEMPERATUREGROUPS(self, number:str, verbose=False):
+        if not hasattr(self, "TEMPERATUREGROUPS"):
+            defaultContent=['0', 'Dummy']
+            self.add_block(blocktitle="TEMPERATUREGROUPS", content=defaultContent, verbose=verbose)
+            self.TEMPERATUREGROUPS.content.append([number])
+            self.TEMPERATUREGROUPS.content.remove(['Dummy'])
+        else:
+            if len(self.TEMPERATUREGROUPS.content) < 1:
+                self.TEMPERATUREGROUPS.content.append(["0"])
+            self.TEMPERATUREGROUPS.content.append([number])
+        self.TEMPERATUREGROUPS.content[0][0] = str(int(self.TEMPERATUREGROUPS.content[0][0])+1)
+
+    def add_new_SOLUTEMOLECULES(self, number:str, verbose=False):
+        if not hasattr(self, "SOLUTEMOLECULES"):
+            defaultContent=['0', 'Dummy']
+            self.add_block(blocktitle="SOLUTEMOLECULES", content=defaultContent, verbose=verbose)
+            self.SOLUTEMOLECULES.content.append([number])
+            self.SOLUTEMOLECULES.content.remove(['Dummy'])
+        else:
+            if len(self.SOLUTEMOLECULES.content) < 1:
+                self.SOLUTEMOLECULES.content.append(["0"])
+            self.SOLUTEMOLECULES.content.append([number])
+        self.SOLUTEMOLECULES.content[0][0] = str(int(self.SOLUTEMOLECULES.content[0][0])+1)
+
+    def add_new_PRESSUREGROUPS(self, number:str, verbose=False):
+        if not hasattr(self, "PRESSUREGROUPS"):
+            defaultContent=['0', 'Dummy']
+            self.add_block(blocktitle="PRESSUREGROUPS", content=defaultContent, verbose=verbose)
+            self.PRESSUREGROUPS.content.append([number])
+            self.PRESSUREGROUPS.content.remove(['Dummy'])
+        else:
+            if len(self.PRESSUREGROUPS.content) < 1:
+                self.PRESSUREGROUPS.content.append(["0"])
+            self.PRESSUREGROUPS.content.append([number])
+        self.PRESSUREGROUPS.content[0][0] = str(int(self.PRESSUREGROUPS.content[0][0])+1)
 
     def get_mass(self) -> float:
         """
