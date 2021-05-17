@@ -1,6 +1,6 @@
 import copy
 from os import name
-from typing import Iterable, Callable
+from typing import Iterable, Callable, List
 from numbers import Number
 
 # FIELDS
@@ -135,11 +135,20 @@ class TIMESTEP(_generic_gromos_block):
     step: int
     t: float
 
-    def __init__(self, t: float, step: int, subcontent=False, name="TIMESTEP", used=True):
-        super().__init__(used=used, name=name)
-        self.t = t
-        self.step = step
+    def __init__(self, t: float=None, step: int=None, content=None, subcontent=False, name="TIMESTEP", used=True):
+
+        if(t is None and step is None):
+            super().__init__(used=used, name=name, content=content)
+        elif(content is None):
+            super().__init__(used=used, name=name, content=[str(t)+"\t"+str(step)])
+
         self.subcontent = subcontent
+
+    def read_content_from_str(self, content:List[str]):
+        content = content[0].strip().split()
+        self.content = content
+        self.t = float(content[0])
+        self.step = float(content[1])
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
@@ -154,10 +163,12 @@ class TITLE(_generic_gromos_block):
     order = [[["content"]]]
 
     def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n", name="TITLE", used=True):
-        super().__init__(used=used, name=name)
-        self.content = content
+        super().__init__(used=used, name=name, content=content)
         self.field_seperator = field_seperator
         self.line_seperator = line_seperator
+
+    def read_content_from_str(self, content:List[str]):
+        self.content = content
 
     def block_to_string(self) -> str:
         result = ""

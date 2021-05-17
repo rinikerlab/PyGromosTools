@@ -76,7 +76,6 @@ class Cnf(_general_gromos_file):
         #general import
         else:
             super().__init__(in_value=in_value, _future_file=_future_file)
-
             if (hasattr(self, "POSITION")):
                 if clean_resiNumbers_by_Name: self.clean_posiResNums()  # carefull! if two resis same name after an another than, here is  a problem.
                 self.residues = self.get_residues(verbose=verbose)

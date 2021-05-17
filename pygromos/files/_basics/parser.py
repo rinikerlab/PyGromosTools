@@ -14,7 +14,6 @@ from pygromos.files.blocks import topology_blocks as tb
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
 import re
 
-blocks.TITLE("FUN")
 
 #translation dicts
 imd_field_translation_dict = {
@@ -419,46 +418,6 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
                     "PERTDATA", "STOCHINT"}
     file = open(in_file_path, "r")
 
-
-    #FUNCS
-    def _parse_GENBOX_block(subblock:List[str])-> blocks.coords.GENBOX:
-        """_parse_GENBOX_block
-            private
-            parses an GENBOX block
-        Parameters
-        ----------
-        subblock :  List[str]
-            is a gathered box block
-
-        Returns
-        -------
-        blocks.coords.GENBOX
-            a box block class
-        """
-
-        if(len(subblock[0].split()) == 1):
-            pbc = blocks.coords.Pbc(int(subblock[0].strip()))
-        else:
-            raise IOError("Could not read pbc information!")
-        if(len(subblock[1].split())== 3):
-            length = list(map(float, subblock[1].strip().split()))
-        else:
-            raise IOError("Could not read box length information!")
-        if(len(subblock[2].split())== 3):
-            angles = list(map(float, subblock[2].strip().split()))
-        else:
-            raise IOError("Could not read box angles information!")
-        if(len(subblock[3].split())== 3):
-            euler = list(map(float, subblock[3].strip().split()))
-        else:
-            raise IOError("Could not read box euler information!")
-        if(len(subblock[4].split())== 3):
-            origin = list(map(float, subblock[4].strip().split()))
-        else:
-            raise IOError("Could not read box origin information!")
-
-        return blocks.coords.GENBOX(pbc=pbc, length=length, angles=angles, euler=euler, origin=origin)
-
     data = {}
     first_key=False
     block = "none"
@@ -470,75 +429,12 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
             block = line.strip().split()[0]
         elif("END" == line.strip()):
             if(block in known_blocks):
-                if (block == "POSITION" or block == "POSRESSPEC" or block == "REFPOSITION"):
-                    subblock = list(filter(lambda x: not "#" in x, map(lambda x: x.strip().split(), subblock)))
-                    if (all(len(x) == 7 for x in subblock)):
-                        field = [
-                            blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]), yp=float(x[5]), zp=float(x[6])) for x in subblock]
-                        atom_P_block = getattr(blocks.coords, block)(field)
-                        data.update({block: atom_P_block})
-                    else:
-                        short_lines = [x for x in subblock if (len(x) != 7)]
-                        raise IOError("inconsistent Atom Position line lenghts (have to be =7 fields!). Problem in line: " + "\n\t".join(short_lines))
-                elif(block == "VELOCITY"):
-                    subblock = list(map(lambda x: x.strip().split(), subblock))
-                    if(all(len(x) == 7 for x in subblock)):
-                        content = [
-                            blocks.coords.atomV(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xv=float(x[4]), yv=float(x[5]), zv=float(x[6])) for x in subblock]
-                        atom_V_block = blocks.coords.VELOCITY(content)
-                        data.update({"VELOCITY": atom_V_block})
-                    else:
-                        short_lines = [x[0] for x in subblock if(len(x) != 7 )]
-                        raise IOError("inconsistent Atom Velocities line lenghts (have to be =7 fields!). Problem in line: "+"\n\t".join(short_lines))
-                elif(block == "LATTICESHIFTS"):
-                    #inefficient and stupid... but necessary
-                    subblock1 = list(map(lambda x: re.findall(r"[\w]+",x.strip()), subblock))
-                    subblock2 = list(map(lambda x: [x.strip() for x in re.findall(r"[\W]+",x.strip())], subblock))
-                    subblock = []
-                    for number,sign in zip(subblock1, subblock2):
-                        if(len(sign) == 2):
-                            row = [number[0], sign[0]+number[1], sign[1]+number[2]]
-                        elif(len(sign)==3):
-                            row = [sign[0]+number[0], sign[1]+number[1], sign[2]+number[2]]
-                        else:
-                            raise Exception("This does not work! \n SIGN: "+ str(sign)+"\n Number: "+str(number))
-                        subblock.append(row)
 
-                    if(all(len(x) == 3 for x in subblock)):
-                        content= list(map(lambda c: blocks.coords.lattice_shift(atomID=int(c[0]), x=int(c[1][0]), y=int(c[1][1]), z=int(c[1][2])), enumerate(subblock)))
-                        data.update({"LATTICESHIFTS": blocks.coords.LATTICESHIFTS(content)})
-                    else:
-                        short_lines = [str(x) for x in subblock if(len(x) != 3 )]
-                        raise IOError("inconsistent Atom LatticeShifts line lenghts (have to be =3 fields!). Problem in line: "+"\n\t".join(short_lines))
-                elif (block == "GENBOX"):
-                    data.update({"GENBOX": _parse_GENBOX_block(subblock)})
-                elif (block == "TIMESTEP"):
-                    time_step = subblock[0].strip().split()
-                    step = int(time_step[0])
-                    time = float(time_step[1])
-                    if(step not in data):
-                        data.update({"TIMESTEP": blocks.TIMESTEP(step=step, t=time)})
-                    else:
-                        print("WARNING!: The step "+str(step)+" was found mutliple simulation_runs!")
-                elif (block == "STOCHINT"):
-                    subblock = list(map(lambda x: x.strip().split(), subblock))
-                    if(all(len(x) == 7 for x in subblock[0:len(subblock)-2])):
-                        content = [
-                            blocks.coords.atomSI(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), sxx=float(x[4]), sxy=float(x[5]), sxz=float(x[6])) for x in subblock[:-1]]
-                        seed = subblock[len(subblock)-1]
-                        data.update({"STOCHINT": blocks.coords.STOCHINT(content, seed)})
-                    else:
-                        short_lines = [x[0] for x in subblock if(len(x) != 7 )]
-                        raise IOError("inconsistent STOCHINT line lenghts (have to be =7 fields!). Problem in line: "+"\n\t".join(short_lines))
-               
-                elif(block == "PERTDATA"):
-                    data.update({"PERTDATA": blocks.coords.PERTDATA(lam="\n".join(subblock).strip())})
-                elif(block == "TITLE"):
-                    data.update({"TITLE": blocks.TITLE(content="\n".join(subblock))})
+                atom_block = getattr(blocks.coords, block)(content=subblock)
+                data.update({block: atom_block})
             else:
                 print("WARNING!: Don't know block: " + block + ". read it simple.")
                 data.update({block: _generic_gromos_block(name=block, used=True, content=subblock)})
-
             first_key=False
             block = "none"
             subblock = []
