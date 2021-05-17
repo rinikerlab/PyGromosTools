@@ -93,7 +93,7 @@ class openforcefield2gromos():
                 atomJ = key[1]+1
                 k = force.k.value_in_unit(kilojoule / (mole * nanometer ** 2))
                 b0 = force.length.value_in_unit(nanometer)
-                self.gromosTop.add_new_bond(k=k, b0=b0, atomI=atomI, atomJ=atomJ, includesH=hQ)
+                self.gromosTop.add_new_bond(k=k, b0=b0, atomI=atomI, atomJ=atomJ, includesH=False) #hQ
         if not hasattr(self.gromosTop, "BONDSTRETCHTYPE"):
             self.gromosTop.add_block(blocktitle="BONDSTRETCHTYPE", content=[])
         if not hasattr(self.gromosTop, "BONDH"):
@@ -112,7 +112,7 @@ class openforcefield2gromos():
                 k = force.k.value_in_unit(kilojoule / (mole * radian ** 2))
                 kh = force.k.value_in_unit(kilojoule / (mole * degree ** 2))
                 b0 = force.angle.value_in_unit(degree)
-                self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=hQ)
+                self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=False) #hQ
         if not hasattr(self.gromosTop, "BONDANGLEBENDTYPE"):
             self.gromosTop.add_block(blocktitle="BONDANGLEBENDTYPE", content=[])
         if not hasattr(self.gromosTop, "BONDANGLEH"):
@@ -136,7 +136,7 @@ class openforcefield2gromos():
                     CP=k_list[t].value_in_unit(kilojoule/mole)
                     PD=phase_list[t].value_in_unit(degree)
                     NP=per_list[t]
-                    self.gromosTop.add_new_torsiondihedral(CP=CP, PD=PD, NP=NP, atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL, includesH=hQ)
+                    self.gromosTop.add_new_torsiondihedral(CP=CP, PD=PD, NP=NP, atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL, includesH=False)#hQ
         if not hasattr(self.gromosTop, "TORSDIHEDRALTYPE"):
             self.gromosTop.add_block(blocktitle="TORSDIHEDRALTYPE", content=[])
         if not hasattr(self.gromosTop, "DIHEDRALH"):
@@ -160,7 +160,7 @@ class openforcefield2gromos():
                     CP=k_list[t].value_in_unit(kilojoule/mole)
                     PD=phase_list[t].value_in_unit(degree)
                     NP=per_list[t]
-                    self.gromosTop.add_new_torsiondihedral(CP=CP, PD=PD, NP=NP, atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL, includesH=hQ)
+                    self.gromosTop.add_new_torsiondihedral(CP=CP, PD=PD, NP=NP, atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL, includesH=False) #hQ
         if not hasattr(self.gromosTop, "IMPDIHEDRALTYPE"):
             self.gromosTop.add_block(blocktitle="IMPDIHEDRALTYPE", content=[])
         if not hasattr(self.gromosTop, "IMPDIHEDRALH"):
@@ -313,7 +313,7 @@ class openforcefield2gromos():
                 C6 = 2 * epsilon * (rmin**6)
                 C12 = epsilon * (rmin**12)
                 IACname = force.id
-                self.gromosTop.add_new_SOLUTEATOM(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, IACname=IACname)
+                self.gromosTop.add_new_atom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, IACname=IACname)
             moleculeItr += 1
 
     def convert_other_stuff(self):

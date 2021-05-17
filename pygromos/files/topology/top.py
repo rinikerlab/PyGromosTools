@@ -98,16 +98,20 @@ class Top(_general_gromos_file._general_gromos_file):
         atomTypeShift = {}
         if not (hasattr(retTop, "ATOMTYPENAME") and len(retTop.ATOMTYPENAME.content)>=2):
             setattr(retTop, "ATOMTYPENAME", deepcopy(top.ATOMTYPENAME))
+            setattr(retTop, "LJPARAMETERS", deepcopy(top.LJPARAMETERS))
         for idx, atomT in enumerate(top.ATOMTYPENAME.content[1:]): #new atomtypes to find names for
             foundAtomType = False
             for mainIdx, mainAtomT in enumerate(retTop.ATOMTYPENAME.content[1:]): #AtomTypes in self to match against
-                if atomT == mainAtomT:
+                if atomT == mainAtomT: 
                     foundAtomType = True
                     atomTypeShift.update({idx+1:mainIdx+1})
                     break
             if not foundAtomType:
-                retTop.ATOMTYPENAME.content[0] = str(int(retTop.ATOMTYPENAME.content[0]) + 1)
+                retTop.ATOMTYPENAME.content[0][0] = str(int(retTop.ATOMTYPENAME.content[0][0]) + 1)
                 retTop.ATOMTYPENAME.content.append(atomT)
+                atomTypeShift.update({idx+1:retTop.ATOMTYPENAME.content[0][0]})
+                ljType = top.get_LJparameter_from_IAC(IAC=idx+1)
+                retTop.add_new_LJparameter(C6=float(ljType.C6), C12=float(ljType.C12))
 
         if verbose: print("atomTypeShift: " + str(atomTypeShift))
 
@@ -240,6 +244,12 @@ class Top(_general_gromos_file._general_gromos_file):
             self._block_order = orderList
         else:
             self._block_order = ["TITLE", "PHYSICALCONSTANTS","TOPVERSION","ATOMTYPENAME","RESNAME","SOLUTEATOM","BONDSTRETCHTYPE","BONDH","BOND","BONDANGLEBENDTYPE","BONDANGLEH","BONDANGLE","IMPDIHEDRALTYPE","IMPDIHEDRALH","IMPDIHEDRAL","TORSDIHEDRALTYPE","DIHEDRALH","DIHEDRAL","CROSSDIHEDRALH","CROSSDIHEDRAL","LJPARAMETERS","SOLUTEMOLECULES","TEMPERATUREGROUPS","PRESSUREGROUPS","LJEXCEPTIONS","SOLVENTATOM","SOLVENTCONSTR"]
+
+    def get_num_atomtypes(self) -> int:
+        if not hasattr(self, "ATOMTYPENAME"):
+            return 0
+        else:
+            return int(self.ATOMTYPENAME.content[0][0])
 
     def add_new_atomtype(self, name:str, verbose=False):
         if not hasattr(self, "ATOMTYPENAME"):
@@ -489,11 +499,17 @@ class Top(_general_gromos_file._general_gromos_file):
                     return lj.IAC
             return 0 # LJ parameter not found
 
+    def get_LJparameter_from_IAC(self, IAC:int):
+        if not hasattr(self, "LJPARAMETERS"):
+            raise Exception("no LJPARAMETERS block to search in")
+        if (IAC**2 - 1) > self.LJPARAMETERS.NRATT2:
+            raise Exception("IAC key is too larger than IACs in LJ block")
+        return self.LJPARAMETERS.content[(IAC**2 -1)]
 
-    def add_new_SOLUTEATOM(self, ATNM:int, MRES:int=1, PANM:str='_', IAC:int=1, MASS:float=1.0, CG:int=0, CGC:int=0, INE:list=[], INE14:list=[], verbose=None, C6:float=None, C12:float=None, CS6:float=0, CS12:float=0, IACname:str=None):
-        if not hasattr(self, "SOLUTEATOM"):
-             self.add_block(blocktitle="SOLUTEATOM", content=[], verbose=verbose)
-             self.SOLUTEATOM.NRP = 0
+
+    def add_new_atom(self, ATNM:int=0, MRES:int=0, PANM:str='_', IAC:int=1, MASS:float=1.0, CG:int=0, CGC:int=1, INE:list=[], INE14:list=[], verbose=False, C6:float=None, C12:float=None, CS6:float=0, CS12:float=0, IACname:str=None):
+        if IACname is None:
+            IACname = PANM
         
         # Find IAC and (if needed) add a new LJ Parameter
         if C6 != None or C12 != None:           #need to find PANM and IAC
@@ -502,27 +518,12 @@ class Top(_general_gromos_file._general_gromos_file):
                 if IAC == 0: #IAC not found -> add new LJ parameter
                     self.add_new_LJparameter(C6=C6, C12=C12, CS6=CS6, CS12=CS12, verbose=verbose, AddATOMTYPENAME=IACname)
                     IAC = self.LJPARAMETERS.content[-1].IAC
+                    if verbose: print("New Atomtype with LJ parameters added. IAC found as: " + str(IAC))
             else:
                 self.add_new_LJparameter(C6=C6, C12=C12, CS6=CS6, CS12=CS12, verbose=verbose, AddATOMTYPENAME=IACname)
                 IAC = 1
-        
-        # IAC should be known at this point -> we can search for PANM if not known
-        #if PANM == None:
-        #    if not (IAC >=1):
-        #        raise "You miss treated your IAC or created a different unexpected error"
-        #    else:
-        #        if not hasattr(self, "ATOMTYPENAME"):
-        #            raise "How did you think we could find PANM if ATOMTYPENAME does not even exist"
-        #        elif len(self.ATOMTYPENAME.content) <= IAC:
-        #            raise "The desired IAC is not yet written into ATOMTYPENAME"
-        #        else:
-        #            PANM = self.ATOMTYPENAME.content[IAC][0]
 
-        #TODO: Maybe add further automation for ATNM, MRES, MASS, CG, ...
-        #Now all variables of the new SOLUTEATOM should be known
-        newSoluteAtom = blocks.soluteatom_type(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=len(INE), INEvalues=INE, INE14=len(INE14), INE14values=INE14)
-        self.SOLUTEATOM.content.append(newSoluteAtom)
-        self.SOLUTEATOM.NRP += 1
+        self.add_new_soluteatom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14)
 
     def add_new_CONSTRAINT(self, IC:int, JC:int, ICC:float, verbose=False):
         """

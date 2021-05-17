@@ -1689,7 +1689,8 @@ class SPECATOMLJPAIR(_iterable_topology_block):
             raise IOError("I don't understand the type of NRST: " + str(type(NRST)))
 
     def read_content_from_str(self, content: str):
-        warnings.warn("SPECIAL LJ BLOCK IS NOT IMPLEMENTED!")
+        #TODO: implement
+        #warnings.warn("SPECIAL LJ BLOCK IS NOT IMPLEMENTED!")
         return []
 
 ###################################################################
