@@ -19,7 +19,7 @@ conda install <package_name>
 ### Installing the package
 
 ```bash
-    cd pygromos
+    cd PyGromosTools
     python setup.py install
 ```
 
