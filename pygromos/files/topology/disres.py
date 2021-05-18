@@ -27,12 +27,10 @@ class Distance_restraints(_general_gromos_file._general_gromos_file):
     def read_blocks(self):
         #parse file into dicts
         data = parser.read_disres(self.path)
-        #convert distance_res lines to objects
-        data["DISTANCERESSPEC"]["RESTRAINTS"] = list(map(lambda x: blocks.atom_pair_distanceRes(**x), data["DISTANCERESSPEC"]["RESTRAINTS"]))
         #add _blocks as attribute to objects
         for key, sub_content in data.items():
             #print(sub_content)
-            self.add_block(blocktitle=key, content=sub_content)
+            self.add_block(block=sub_content)
 
 
 class Disres(Distance_restraints):

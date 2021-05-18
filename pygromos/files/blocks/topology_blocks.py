@@ -531,7 +531,8 @@ TOPOLOGY BLOCKS
 Restraints Blocks
 """
 class DISTANCERESSPEC(_generic_gromos_block):
-    def __init__(self, KDISH: int, KDISC: int, RESTRAINTHEADER: list, RESTRAINTS: list):
+    def __init__(self, KDISH: int=None, KDISC: int=None, RESTRAINTHEADER: list=None, RESTRAINTS: list=None,
+                 content:List[str]=None):
         """
 
         Parameters
@@ -541,11 +542,52 @@ class DISTANCERESSPEC(_generic_gromos_block):
         RESTRAINTHEADER :
         RESTRAINTS :
         """
-        super().__init__(used=True, name="DISTANCERESSPEC")
+
+        if(content is None):
+            content = ["# KDISH, KDISC\n", str(KDISH)+"\t"+str(KDISC),
+                       "\t".join(RESTRAINTHEADER),
+                       ]+list(map(str, RESTRAINTS))
+
+        super().__init__(used=True, name="DISTANCERESSPEC", content=content)
+
+
+    def read_content_from_str(self, content:List[str]):
+        # readout KDISH or KDISC
+        keys = content[0].replace("#", "").strip().split()
+        KDISH, KDISC = content[1].split()
+
+        # read list header:
+        line_header = content[2].replace("#", "").split()
+        ##unify keys:
+        key_dict = {"i": 1, "j": 1, "k": 1, "l": 1, "type": 1}
+        renamed_header = []
+        for x in line_header:
+            if (x in key_dict):
+                renamed_header.append(x + str(key_dict[x]))
+                key_dict[x] += 1
+            else:
+                renamed_header.append(x)
+        RESTRAINTHEADER = renamed_header
+
+        # read restraints
+        RESTRAINTS = []
+        for line in content[3:]:
+            if (not line.startswith("#") and len(line.split()) == len(RESTRAINTHEADER)):
+                values = line.split()
+                RESTRAINTS_dict= {key: values[RESTRAINTHEADER.index(key)] for key in RESTRAINTHEADER}
+                RESTRAINTS.append(atom_pair_distanceRes(**RESTRAINTS_dict))
+            elif (line.startswith("#")):
+                continue
+            else:
+                print("WARNING! could not Read in :" + line)
+                continue
+
         self.KDISH = KDISH
         self.KDISC = KDISC
         self.RESTRAINTHEADER = RESTRAINTHEADER
         self.RESTRAINTS = RESTRAINTS
+
+
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -554,6 +596,7 @@ class DISTANCERESSPEC(_generic_gromos_block):
         result += "#{:>4} {:>5} {:>5} {:>5} {:>5}    {:>5} {:>5} {:>5} {:>5} {:>5}  {:>10} {:>10} {:>3}\n".format(
             *self.RESTRAINTHEADER)
         for x in self.RESTRAINTS:
+            print(x)
             result += x.to_string()
         result += "END\n"
         return result

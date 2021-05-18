@@ -239,46 +239,14 @@ def read_disres(in_path:str)->Dict:
     def _read_disres_subblock(blocks):
         result_data = {}
         for block in blocks:
+
             if (block == "TITLE"):
-                result_data.update({block:blocks[block]})
+                block_obj = getattr(tb, block)(content=blocks[block])
+                result_data.update({block: block_obj})
 
             elif(block == "DISTANCERESSPEC"):
-                subcontent = {}
-                restrains=[]
-                current_block = blocks[block]
-
-                #readout KDISH or KDISC
-                keys = current_block[0].replace("#", "").strip().split()
-                values = current_block[1].split()
-                subcontent.update({key: values[keys.index(key)] for key in keys})
-
-                #read list header:
-                line_header = current_block[2].replace("#", "").split()
-                ##unify keys:
-                key_dict = {"i":1, "j":1, "k":1,"l":1, "type":1}
-                renamed_header = []
-                for x in line_header:
-                    if(x in key_dict):
-                        renamed_header.append(x+str(key_dict[x]))
-                        key_dict[x]+=1
-                    else:
-                        renamed_header.append(x)
-                line_header = renamed_header
-
-                #read restraints
-                for line in current_block[3:]:
-                    if(not line.startswith("#") and len(line.split()) == len(line_header)):
-                        values = line.split()
-                        restrains.append({key:values[line_header.index(key)] for key in line_header})
-                        #print(restrains)
-                    elif(line.startswith("#")):
-                        continue
-                    else:
-                        print("WARNING! could not Read in :"+line)
-                        continue
-                subcontent.update({"RESTRAINTHEADER":line_header})
-                subcontent.update({"RESTRAINTS": restrains})
-                result_data.update({block:subcontent})
+                block_obj = getattr(tb, block)(content=blocks[block])
+                result_data.update({block: block_obj})
             else:
                 raise IOError("DISRES parser does not know block: "+str(block)+"\n with content: "+"\n".join(blocks[block]))
         return result_data
