@@ -605,8 +605,8 @@ class DISTANCERESSPEC(_generic_gromos_block):
 Pertubation Blocks
 """
 class MPERTATOM(_generic_gromos_block):
-    def __init__(self, NJLA: int, NPTB: int, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: Tuple[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_eds_pertubation_state]=[],
-                 dummy_IAC = 22, dummy_CHARGE=0.0):
+    def __init__(self, NJLA: int=None, NPTB: int=None, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: Tuple[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_eds_pertubation_state]=[],
+                 dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
         """
             This block is used for lambda sampling to define the different states.
 
@@ -627,14 +627,66 @@ class MPERTATOM(_generic_gromos_block):
         dummy_CHARGE
             dummy atom charge type for perturbed atoms
         """
-        super().__init__(used=True, name=__class__.__name__)
-        self.NJLA = NJLA
-        self.NPTB = NPTB
-        self.STATEIDENTIFIERS = STATEIDENTIFIERS
-        self.STATEATOMHEADER = STATEATOMHEADER
-        self.STATEATOMS = STATEATOMS
+
+        if(content is None):
+            super().__init__(used=True, name=__class__.__name__)
+            self.NJLA = NJLA
+            self.NPTB = NPTB
+            self.STATEIDENTIFIERS = STATEIDENTIFIERS
+            self.STATEATOMHEADER = STATEATOMHEADER
+            self.STATEATOMS = STATEATOMS
+
+        else:
+            super().__init__(used=True, name=__class__.__name__, content=content)
+
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
+
+
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        comment = ""
+        NJLA = None
+        NTPB = None
+        STATEIDENTIFIERS = []
+        STATEATOMS = []
+
+        first = True
+        for line in content:
+            # print(line)
+            if ("#" in line):
+                comment = line
+            else:
+                if (field > 3):
+                    if (first):
+                        STATEATOMHEADER = ["NR", "NAME", ]
+                        [STATEATOMHEADER.extend(["IAC" + str(x), "CHARGE" + str(x)]) for x in range(1, self.NPTB + 1)]
+                        STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+                        self.STATEATOMHEADER = STATEATOMHEADER
+                        first = False
+
+                    state_line = {key: value for key, value in zip(self.STATEATOMHEADER, line.split())}
+                    final_state_line = {key: state_line[key] for key in state_line if
+                                        (not "IAC" in key and not "CHARGE" in key)}
+
+                    states = {x: pertubation_eds_state(IAC=int(state_line["IAC" + str(x)]),
+                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in
+                              range(1, 1 + self.NPTB)}
+
+                    final_state_line.update({"STATES": states})
+                    STATEATOMS.append(atom_eds_pertubation_state(**final_state_line))
+
+                elif (field == 0):
+                    NJLA, NPTB = tuple(map(int, line.split()))
+                    self.NJLA = NJLA
+                    self.NPTB = NPTB
+                elif (field == 1):
+                    STATEIDENTIFIERS = line.split()
+                    self.STATEIDENTIFIERS = STATEIDENTIFIERS
+                field += 1
+
+        self.STATEATOMS = STATEATOMS
+
 
     @property
     def nStates(self)->int:
@@ -815,31 +867,75 @@ class PERTATOMPARAM(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state]=None,
                  STATEATOMHEADER: Tuple[str]= None,
                  NJLA: int=None, STATEIDENTIFIERS=None,
-                 dummy_IAC = 22, dummy_CHARGE=0.0):
-        super().__init__(used=True, name=__class__.__name__)
+                 dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
 
+
+        self.NPTB = 2
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
 
-        if(STATEATOMHEADER is None):
-            self.STATEATOMHEADER = ["NR", "RES", "NAME",]
-            self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+        if(content is None):
+            if(STATEATOMHEADER is None):
+                self.STATEATOMHEADER = ["NR", "RES",   "NAME",]
+                self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+            else:
+                self.STATEATOMHEADER = STATEATOMHEADER
+
+
+            if(STATEATOMS is None):
+                self.STATEATOMS = []
+            else:
+                self.STATEATOMS = []
+                self.NJLA = 0
+
+                self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__)
         else:
-            self.STATEATOMHEADER = STATEATOMHEADER
-
-
-        if(STATEATOMS is None):
-            self.STATEATOMS = []
-        else:
-            self.STATEATOMS = []
-            self.NJLA = 0
-
-            self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
         if(not NJLA is None and not len(STATEATOMS)==NJLA):
             raise ValueError("NJLA must be equal to the length of STATEATOMS! NJLA="+str(NJLA)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
 
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        NJLA = None
+        STATEIDENTIFIERS = None
+        STATEATOMHEADER = None
+        STATEATOMS = []
+        first = True
+        for line in content:
+            if ("#" in line):
+                comment = line
+                continue
+            else:
+                if (field > 1):
+                    if(first):
+                        STATEATOMHEADER = ["NR",  "RES", "NAME",]
+                        [STATEATOMHEADER.extend(["IAC" + str(x), "MASS" + str(x), "CHARGE" + str(x)]) for x in range(1, 3)]
+                        STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+                        first = False
+
+                    state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
+                    final_state_line = {key: state_line[key] for key in state_line if
+                                        (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
+                    states = {x: pertubation_lam_state(IAC=int(round(float(state_line["IAC" + str(x)]))),
+                                                          MASS=float(state_line["MASS" + str(x)]),
+                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
+
+                    final_state_line.update({"STATES":states})
+                    STATEATOMS.append(atom_lam_pertubation_state(**final_state_line))
+
+                elif (field == 0):
+                    NJLA = int(line.strip())
+                elif (field == 1):
+                    STATEIDENTIFIERS = line.split()
+                field += 1
+
+        self.NJLA = NJLA
+        self.STATEIDENTIFIERS = STATEIDENTIFIERS
+        self.STATEATOMHEADER = STATEATOMHEADER
+        self.STATEATOMS = STATEATOMS
 
     @property
     def nStates(self)->int:

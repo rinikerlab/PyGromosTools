@@ -275,80 +275,9 @@ def read_ptp(in_path:str)->Dict:
     def  _read_ptp_subblock(blocks):
         result_data = {}
         for block in blocks:
-            if (block == "TITLE"):
-                result_data.update({block:blocks[block]})
-            elif(block == "PERTATOMPARAM"):
-                field=0
-                comment = ""
-                subcontent = {}
-                perturbance_atoms = []
-                current_block = blocks[block]
-
-                for line in current_block:
-                    if("#" in line):
-                        comment = line
-                        continue
-                    else:
-                        if(field>0):
-                            if("" not in subcontent):
-                                header = ["NR", "RES", "NAME"]
-                                [header.extend(["IAC"+str(x), "MASS"+str(x), "CHARGE"+str(x)]) for x in range(1,3)]
-                                header += ["ALPHLJ", "ALPHCRF"]
-                                subcontent.update({"STATEATOMHEADER": header})
-                            state_line = {key:value for key, value in zip(header, line.split())}
-                            final_state_line = {key: state_line[key] for key in state_line if(not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
-
-                            states = {x:tb.pertubation_lam_state(IAC=int(state_line["IAC" + str(x)]),MASS=float(state_line["MASS" + str(x)]), CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
-
-                            final_state_line.update({"STATES":states})
-                            perturbance_atoms.append(final_state_line)
-
-                        elif(field==0):
-                            NJLA = int(line.strip())
-                            subcontent.update({"NJLA": NJLA,})
-                        elif(field==1):
-                            state_identifiers = line.split()
-                            subcontent.update({"STATEIDENTIFIERS":state_identifiers})
-                        field+=1
-                subcontent.update({"STATEATOMS":perturbance_atoms})
-                result_data.update({block:subcontent})
-            elif(block == "MPERTATOM"):
-                field=0
-                comment = ""
-                subcontent = {}
-                perturbance_atoms = []
-                current_block = blocks[block]
-
-                for line in current_block:
-                    #print(line)
-                    if("#" in line):
-                        comment = line
-                    else:
-                        if(field>3):
-                            if("" not in subcontent):
-                                header = ["NR","NAME"]
-                                [header.extend(["IAC"+str(x), "CHARGE"+str(x)]) for x in range(1, subcontent["NPTB"]+1)]
-                                header += ["ALPHLJ", "ALPHCRF"]
-                                subcontent.update({"STATEATOMHEADER": header})
-                            state_line = {key:value for key, value in zip(header, line.split())}
-                            final_state_line = {key: state_line[key] for key in state_line if(not "IAC" in key and not "CHARGE" in key)}
-
-                            states = {x:tb.pertubation_eds_state(IAC=int(state_line["IAC" + str(x)]), CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 1 + subcontent["NPTB"])}
-
-                            final_state_line.update({"STATES":states})
-
-                            perturbance_atoms.append(final_state_line)
-
-                        elif(field==0):
-                            NJLA, NTPB = tuple(map(int, line.split()))
-                            subcontent.update({"NJLA": NJLA,
-                                               "NPTB": NTPB})
-                        elif(field==1):
-                            state_identifiers = line.split()
-                            subcontent.update({"STATEIDENTIFIERS":state_identifiers})
-                        field+=1
-                subcontent.update({"STATEATOMS":perturbance_atoms})
-                result_data.update({block:subcontent})
+            if (block in ["TITLE", "PERTATOMPARAM", "MPERTATOM"]):
+                atom_block = getattr(tb, block)(content= blocks[block])
+                result_data.update({block: atom_block})
             else:
                 raise IOError("PTP parser does not know block: "+str(block)+"\n with content: "+"\n".join(blocks[block]))
         return result_data
@@ -357,7 +286,6 @@ def read_ptp(in_path:str)->Dict:
         lines = infile.readlines()
         #parse the coarse gromos_block structure
         blocks = _read_gromos_block(lines)
-
         #parse data of the _blocks
         data = _read_ptp_subblock(blocks)
     return data

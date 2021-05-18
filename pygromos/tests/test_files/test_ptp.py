@@ -10,6 +10,7 @@ from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 from pygromos.tests.in_testfiles import in_test_file_path
 in_path= in_test_file_path + "/ptp/eds.ptp"
+in_path2 = in_test_file_path + "/ptp/lam_pert.ptp"
 
 from pygromos.tests.test_files import out_test_root_dir
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="ptp_")
@@ -31,13 +32,13 @@ class test_ptp(general_file_tests):
         print(ptp)
         ptp.write(outpath)
 
-    def test_get_states(self):
+    def test_get_eds_states(self):
         ptp = self.class_type(in_path)
         states = ptp.MPERTATOM.states
         print(states)
 
 
-    def test_add_state(self):
+    def test_add_eds_state(self):
         from pygromos.files.blocks.topology_blocks import  atom_eds_pertubation_state, pertubation_eds_state
         ptp = self.class_type(in_path)
 
@@ -49,18 +50,18 @@ class test_ptp(general_file_tests):
         ptp.write(outpath_new_atom)
 
 
-    def test_delete_state(self):
+    def test_delete_eds_state(self):
         ptp = self.class_type(in_path)
         ptp.MPERTATOM.delete_state(stateIDs=6)
         ptp.MPERTATOM.delete_state(stateNames="state3")
         ptp.write(outpath_less_state)
 
-    def test_remove_atoms(self):
+    def test_remove_eds_atoms(self):
         ptp = self.class_type(in_path)
         ptp.MPERTATOM.delete_atom(atomNR=[3, 4, 5, 6])
         ptp.write(outpath_less_atom)
 
-    def test_new_ptp_from_scratch(self):
+    def test_new_eds_ptp_from_scratch(self):
         from pygromos.files.blocks.topology_blocks import atom_eds_pertubation_state, pertubation_eds_state, MPERTATOM
         ptp = self.class_type()
         on_state = pertubation_eds_state(IAC=16, CHARGE=-1.0)
@@ -74,7 +75,7 @@ class test_ptp(general_file_tests):
         print(ptp)
         ptp.write(outpath_new_build)
 
-    def test_gen_all_states_ptp(self):
+    def test_eds_gen_all_states_ptp(self):
         # INPUT:
         ## the states to use:
         o_state = pertubation_eds_state(IAC=16, CHARGE=-1.0)
