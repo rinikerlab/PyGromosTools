@@ -894,8 +894,8 @@ class PAIRLIST(_generic_imd_block):
 
     _order = [[["ALGORITHM", "NSNB", "RCUTP", "RCUTL", "SIZE", "TYPE"]]]
 
-    def __init__(self, ALGORITHM: int=0, NSNB: int=0, RCUTP: float=0, RCUTL: float=0, SIZE: Union(str, float)=0,
-                 TYPE:Union(str, bool)=False, content=None):
+    def __init__(self, ALGORITHM: int=0, NSNB: int=0, RCUTP: float=0, RCUTL: float=0, SIZE: (str or float)=0,
+                 TYPE:(str or bool)=False, content=None):
         """
         Args:
             ALGORITHM:
