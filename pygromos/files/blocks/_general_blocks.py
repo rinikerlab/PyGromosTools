@@ -62,6 +62,8 @@ class _generic_gromos_block:
                 self.read_content_from_str(content)
             elif type(content) == self.__class__:
                 self.content = content
+            elif isinstance(content, str):
+                self.read_content_from_str(content=content.split(self.line_seperator))
             else:
                 raise Exception("Generic Block did not understand the type of content")
         else:
