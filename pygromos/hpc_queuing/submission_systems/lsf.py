@@ -391,3 +391,31 @@ class LSF(_SubmissionSystem):
         except TimeoutError:
             return []
         return out_job_lines
+
+    def is_job_in_queue(self, job_name: str, verbose: bool = False) -> bool:
+        """
+        checks wether a function is still in the lsf queu
+
+        Parameters
+        ----------
+        job_name : str
+            name of the job. (Or any other unique identifier from bjobs to compare)
+        verbose : bool, optional
+            extra prints, by default False
+
+        Returns
+        -------
+        bool
+            is the job in the lsf queue?
+        """
+        try:
+            if (verbose): print("getting job data")
+            time.sleep(2)
+            out_process = bash.execute("bjobs -w", catch_STD=True)
+            stdout = list(map(str, out_process.stdout.readlines()))
+            for i in stdout:
+                if job_name in i:
+                    return True #return as soon as one occuraence is found
+        except TimeoutError:
+            return False
+        return False
