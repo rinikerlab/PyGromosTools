@@ -51,7 +51,7 @@ class _generic_gromos_block:
 
     def __deepcopy__(self, memo):
         #return block as string, split by line and cut block title and END
-        newContent=self.block_to_string().split("\n")[1:-2]
+        newContent=[x.split(self.field_seperator) for x in self.block_to_string().split(self.line_seperator)[1:-2]]
         block = type(self)(content=newContent)
         return block
 
