@@ -152,7 +152,7 @@ class serenityff():
                         C12 = C12_input[(c6dict[key[0]][0])]
                     CS12 = 0.5 * C12
                     IACname = c6dict[key[0]][0]
-                    self.off2g.gromosTop.add_new_SOLUTEATOM(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=CS6, CS12=CS12, IACname=IACname)
+                    self.off2g.gromosTop.add_new_soluteatom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=CS6, CS12=CS12, IACname=IACname)
                 moleculeItr += 1
         else:
             raise NotImplementedError("WIP")
