@@ -66,14 +66,15 @@ class _generic_imd_block(_generic_gromos_block):
         result += "END\n"
         return result
 
-    def read_content_from_str(self, content: List(str)):
+    def read_content_from_str(self, content: List[str]):
         keyLineNumb = 0
         contentlines = []
         for line in content:
             if line.startswith("# "):
                 # a new key line was found add values to class
-                self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
-                keyLineNumb +=1
+                if len(contentlines) > 0:
+                    self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
+                    keyLineNumb +=1
             else:
                 # no key found -> add data to list to be later added to key
                 fields = line.split(self.field_seperator)
@@ -84,27 +85,30 @@ class _generic_imd_block(_generic_gromos_block):
         self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
 
     def __parse_key_content(self, keyLineNumb = 0, contentlines = []):
-        if len(contentlines) > 0:
-            if len(contentlines) == 1:
-                if len(contentlines[0] == self._order[0][keyLineNumb]):
-                    # found key-value match
-                    for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
-                        # first bring key to attribute form
-                        setattr(self, self.__clean_key_from_order(key=key), field) # What to do eith type of field? When convert from string to int/float/bool
+        #print("----------------")
+        #print(contentlines)
+        #print(self._order[0])
+        #print(keyLineNumb)
+        if len(contentlines) == 1:
+            if len(contentlines[0]) == len(self._order[0][keyLineNumb]):
+                # found key-value match
+                for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
+                    # first bring key to attribute form
+                    setattr(self, self.__clean_key_from_order(key=key), field) # What to do eith type of field? When convert from string to int/float/bool
+        else:
+            if len(self._order[0][keyLineNumb]) == 1:
+                # one key but multiple fields
+                setattr(self, self.__clean_key_from_order(key=self._order[0][keyLineNumb][0]), contentlines)
             else:
-                if len(self._order[0][keyLineNumb]) == 1:
-                    # one key but multiple fields
-                    setattr(self, self.__clean_key_from_order(key=self._order[0][keyLineNumb][0]), contentlines)
-                else:
-                    # set attribute with a list over multiple lines for keys in paralles (example temp baths)
-                    for i, key in enumerate(self._order[0][keyLineNumb]):
-                        field = [x[i] for x in contentlines]
-                        setattr(self, self.__clean_key_from_order(key=key), field)
+                # set attribute with a list over multiple lines for keys in paralles (example temp baths)
+                for i, key in enumerate(self._order[0][keyLineNumb]):
+                    field = [x[i] for x in contentlines]
+                    setattr(self, self.__clean_key_from_order(key=key), field)
 
     def __clean_key_from_order(self, key) -> str:
-        key = key.replace("("," ").replace("."," ")
+        key = key.replace("# ","").replace("("," ").replace("."," ")
         key.split(" ")
-        return key[1]
+        return key[0]
 
 
 
