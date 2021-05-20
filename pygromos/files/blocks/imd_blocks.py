@@ -137,16 +137,6 @@ class SYSTEM(_generic_imd_block):
             self.NPM = int(NPM)
             self.NSM = int(NSM)
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 2:
-                    self.NPM = fields[0]
-                    self.NSM = fields[1]
-
 
 class STEP(_generic_imd_block):
     """ Step Block
@@ -179,18 +169,6 @@ class STEP(_generic_imd_block):
             self.NSTLIM = int(NSTLIM)
             self.T = float(T)
             self.DT = float(DT)
-
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 3:
-                    self.NSTLIM = fields[0]
-                    self.T = fields[1]
-                    self.DT = fields[2]
-
 
 
 
@@ -262,31 +240,7 @@ class NEW_REPLICA_EDS(_generic_imd_block):
             self.PERIODIC = int(PERIODIC)
 
 
-    def read_content_from_str(self, content: str):
-        data=[]
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                data.append(fields)
-        try:
-            self.REEDS = bool(data[0][0])
-            self.NRES = int(data[1][0])
-            self.NEOFF = int(data[1][1])
-            self.NUMSTATES = int(data[1][2])
-            self.RES = data[2][0]
-            self.EIR = data[3][0]
-            self.NRETRIAL = int(data[4][0])
-            self.NREQUIL = int(data[4][1])
-            self.CONT = bool(data[4][2])
-            self.EDS_STAT_OUT = int(data[4][3])
-            self.PERIODIC = int(data[4][4])
-        except:
-            print(data)
-            raise IndexError
-                    
-
+   
 
 class REPLICA_EDS(_generic_imd_block):
     name: str = "REPLICA_EDS"
@@ -351,28 +305,7 @@ class REPLICA_EDS(_generic_imd_block):
             self.CONT = CONT
             self.EDS_STAT_OUT = EDS_STAT_OUT
 
-    def read_content_from_str(self, content: str):
-        data=[]
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                data.append(fields)
-        try:
-            self.REEDS = bool(data[0][0])
-            self.NRES = int(data[1][0])
-            self.NUMSTATES = int(data[1][1])
-            self.RES = data[2][0]
-            self.EIR = data[3][0]
-            self.NRETRIAL = int(data[4][0])
-            self.NREQUIL = int(data[4][1])
-            self.CONT = bool(data[4][2])
-            self.EDS_STAT_OUT = int(data[4][3])
-        except:
-            print(data)
-            raise IndexError
-
+    
 class OLD_REPLICA_EDS(_generic_imd_block):
     """REEDS Block
 
@@ -401,27 +334,7 @@ class OLD_REPLICA_EDS(_generic_imd_block):
             self.NREQUIL = NREQUIL
             self.CONT = CONT
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 12:
-                    self.NATOM = fields[0]
-                    self.NRES = fields[1]
-                    self.RET = fields[2]
-                    self.ALPHLJ = fields[3]
-                    self.ALPHCRF = fields[4]
-                    self.NUMSTATES = fields[5]
-                    self.RES = fields[6]
-                    self.RETS = fields[7]
-                    self.EIR = fields[8]
-                    self.NRETRIAL = fields[9]
-                    self.NREQUIL = fields[10]
-                    self.CONT = fields[11]
-
-
+    
 class BOUNDCOND(_generic_imd_block):
     """Boundary Condition Block
 
@@ -447,16 +360,7 @@ class BOUNDCOND(_generic_imd_block):
             self.NTB = int(NTB)
             self.NDFMIN = int(NDFMIN)
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                self.NTB = int(fields[0])
-                self.NDFMIN = int(fields[1])
-
-
+    
 class STOCHDYN(_generic_imd_block):
     """Stochastic Dynamics block
 
@@ -506,21 +410,6 @@ class STOCHDYN(_generic_imd_block):
             self.CFRIC = float(CFRIC)
             self.TEMPSD = float(TEMPSD)
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 7:
-                    self.NTSD = fields[0]
-                    self.NTFR = fields[1]
-                    self.NSFR = fields[2]
-                    self.NBREF = fields[3]
-                    self.RCUTF = fields[4]
-                    self.CFRIC = fields[5]
-                    self.TEMPSD = fields[6]
-                    
 
 
 class PERTURBATION(_generic_imd_block):
@@ -591,28 +480,6 @@ class PERTURBATION(_generic_imd_block):
             self.NLAM = int(NLAM)
             self.NSCALE = int(NSCALE)
 
-    def read_content_from_str(self, content: str):
-        data=[]
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                data.append(fields)
-        try:
-            self.NTG = int(data[0][0])
-            self.NRDGL = int(data[0][1])
-            self.RLAM = float(data[0][2])
-            self.DLAMT = float(data[0][3])
-            self.ALPHLJ = float(data[1][0])
-            self.ALPHC = float(data[1][1])
-            self.NLAM = int(data[1][2])
-            self.NSCALE = int(data[1][3])
-
-        except:
-            print(data)
-            raise IndexError
-
 
 class PRECALCLAM(_generic_imd_block):
     """
@@ -653,27 +520,7 @@ class PRECALCLAM(_generic_imd_block):
             self.MAXLAM = float(MAXLAM)
 
         
-    def read_content_from_str(self, content: str):
-        data=[]
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                data.append(fields)
-        try:
-            self.NTG = int(data[0][0])
-            self.NRDGL = int(data[0][1])
-            self.RLAM = float(data[0][2])
-            self.DLAMT = float(data[0][3])
-            self.ALPHLJ = float(data[1][0])
-            self.ALPHC = float(data[1][1])
-            self.NLAM = int(data[1][2])
-            self.NSCALE = int(data[1][3])
 
-        except:
-            print(data)
-            raise IndexError
 
 class MULTIBATH(_generic_imd_block):
     """MULTIBATH Block
@@ -1042,23 +889,6 @@ class CONSTRAINT(_generic_imd_block):
             self.NTCS = int(NTCS)
             self.NTCS0 = float(NTCS0)
 
-    def read_content_from_str(self, content: str):
-        data=[]
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                data.append(fields)
-        try:
-            self.NTC = int(data[0][0])
-            self.NTCP = int(data[1][0])
-            self.NTCP0 = float(data[1][1])
-            self.NTCS = int(data[2][0])
-            self.NTCS0 = float(data[2][1])
-        except:
-            print(data)
-            raise IndexError
 
 
 class PAIRLIST(_generic_imd_block):
@@ -1118,19 +948,6 @@ class PAIRLIST(_generic_imd_block):
             self.SIZE = SIZE
             self.TYPE = TYPE
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 6:
-                    self.ALGORITHM = fields[0]
-                    self.NSNB = fields[1]
-                    self.RCUTP = fields[2]
-                    self.RCUTL = fields[3]
-                    self.SIZE = fields[4]
-                    self.TYPE = fields[5]
 
 
 class NONBONDED(_generic_imd_block):
@@ -1399,15 +1216,6 @@ class COMTRANSROT(_generic_imd_block):
         if content is None:
             self.NSCM = NSCM
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 1:
-                    self.NSCM = fields[0]
-
 
 class EDS(_generic_imd_block):
     """EDS block
@@ -1489,22 +1297,6 @@ class DISTANCERES(_generic_imd_block):
             self.VDIR = VDIR
             self.NTWDIR = NTWDIR
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 8:
-                    self.NTDIR = fields[0]
-                    self.NTDIRA = fields[1]
-                    self.CDIR = fields[2]
-                    self.DIR0 = fields[3]
-                    self.TAUDIR = fields[4]
-                    self.FORCESCALE = fields[5]
-                    self.VDIR = fields[6]
-                    self.NTWDIR = fields[7]
-
 
 class POSITIONRES(_generic_imd_block):
     """POSITIONRES block
@@ -1534,18 +1326,6 @@ class POSITIONRES(_generic_imd_block):
             self.NTPORS = NTPORS
             self.CPOR = CPOR
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 4:
-                    self.NTPOR = fields[0]
-                    self.NTPORB = fields[1]
-                    self.NTPORS = fields[2]
-                    self.CPOR = fields[3]
-
 
 
 class PRINTOUT(_generic_imd_block):
@@ -1570,16 +1350,6 @@ class PRINTOUT(_generic_imd_block):
             self.name = "PRINTOUT"
             self.NTPR = NTPR
             self.NTPP = NTPP
-
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 2:
-                    self.NTPR = fields[0]
-                    self.NTPP = fields[1]
 
 
 class ENERGYMIN(_generic_imd_block):
@@ -1618,21 +1388,6 @@ class ENERGYMIN(_generic_imd_block):
             self.DXM = DXM
             self.NMIN = NMIN
             self.FLIM = FLIM
-
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 7:
-                    self.NTEM = fields[0]
-                    self.NCYC = fields[1]
-                    self.DELE = fields[2]
-                    self.DX0 = fields[3]
-                    self.DXM = fields[4]
-                    self.NMIN = fields[5]
-                    self.FLIM = fields[6]
 
 
 class WRITETRAJ(_generic_imd_block):
@@ -1682,21 +1437,6 @@ class WRITETRAJ(_generic_imd_block):
             self.NTWG = int(NTWG)
             self.NTWB = int(NTWB)
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 7:
-                    self.NTWX = fields[0]
-                    self.NTWSE = fields[1]
-                    self.NTWV = fields[2]
-                    self.NTWF = fields[3]
-                    self.NTWE = fields[4]
-                    self.NTWG = fields[5]
-                    self.NTWB = fields[6]
-
 
 class AMBER(_generic_imd_block):
     """AMBER block
@@ -1722,16 +1462,6 @@ class AMBER(_generic_imd_block):
             self.name = "AMBER"
             self.AMBER = AMBER
             self.AMBSCAL = AMBSCAL
-
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 2:
-                    self.AMBER = fields[0]
-                    self.AMBSCAL = fields[1]
 
 
 
@@ -1760,17 +1490,6 @@ class COVALENTFORM(_generic_imd_block):
             self.NTBAH = NTBAH
             self.NTBDN = NTBDN
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 3:
-                    self.NTBBH = fields[0]
-                    self.NTBAH = fields[1]
-                    self.NTBDN = fields[2]
-
 
 class INNERLOOP(_generic_imd_block):
     """INNERLOOP block
@@ -1796,17 +1515,6 @@ class INNERLOOP(_generic_imd_block):
             self.NTILM = NTILM
             self.NTILS = NTILS
             self.NGPUS = NGPUS
-
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 3:
-                    self.NTILM = fields[0]
-                    self.NTILS = fields[1]
-                    self.NGPUS = fields[2]
 
 
 class LAMBDA(_generic_imd_block):
@@ -1871,22 +1579,6 @@ class LAMBDA(_generic_imd_block):
             if not len(NTLI) == len(ELI):
                 warnings.warn("Warning in LAMBDA Block. There must be the same number of NTLI and ELI parameters.")
 
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 9:
-                    self.NTIL = fields[0]
-                    self.NTLI = fields[1]
-                    self.NILG1 = fields[2]
-                    self.NILG2 = fields[3]
-                    self.ALI = fields[4]
-                    self.BLI = fields[5]
-                    self.CLI = fields[6]
-                    self.DLI = fields[7]
-                    self.ELI = fields[8]
 
 class ROTTRANS(_generic_imd_block):
     """Roto-translational block
@@ -1917,14 +1609,4 @@ class ROTTRANS(_generic_imd_block):
         if content is None:
             self.RTC = RTC
             self.RTCLAST = RTCLAST
-
-    def read_content_from_str(self, content: str):
-        for line in content:
-            if not line.startswith("#"):
-                fields = line.split(self.field_seperator)
-                while '' in fields:
-                    fields.remove('')
-                if len(fields) == 2:
-                    self.RTC = fields[0]
-                    self.RTCLAST = fields[1]
 
