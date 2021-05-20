@@ -14,13 +14,7 @@ class _generic_imd_block(_generic_gromos_block):
     _order: List[List[str]]  # contains the ordering of all fields in a block
 
     def __init__(self, used: bool, content=None):
-        super().__init__(name=self.name, used=used)
-        if content is not None:
-            self.read_content_from_str(content=content)
-
-    def read_content_from_str(self, content: str):
-        return super().read_content_from_str(content)
-
+        super().__init__(name=self.name, used=used, content=content)
 
     def block_to_string(self) -> str:
         result = ""
@@ -72,6 +66,47 @@ class _generic_imd_block(_generic_gromos_block):
         result += "END\n"
         return result
 
+    def read_content_from_str(self, content: List(str)):
+        keyLineNumb = 0
+        contentlines = []
+        for line in content:
+            if line.startswith("# "):
+                # a new key line was found add values to class
+                self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
+                keyLineNumb +=1
+            else:
+                # no key found -> add data to list to be later added to key
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                contentlines.append(fields)
+        # add fianl key after loop 
+        self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
+
+    def __parse_key_content(self, keyLineNumb = 0, contentlines = []):
+        if len(contentlines) > 0:
+            if len(contentlines) == 1:
+                if len(contentlines[0] == self._order[0][keyLineNumb]):
+                    # found key-value match
+                    for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
+                        # first bring key to attribute form
+                        setattr(self, self.__clean_key_from_order(key=key), field) # What to do eith type of field? When convert from string to int/float/bool
+            else:
+                if len(self._order[0][keyLineNumb]) == 1:
+                    # one key but multiple fields
+                    setattr(self, self.__clean_key_from_order(key=self._order[0][keyLineNumb][0]), contentlines)
+                else:
+                    # set attribute with a list over multiple lines for keys in paralles (example temp baths)
+                    for i, key in enumerate(self._order[0][keyLineNumb]):
+                        field = [x[i] for x in contentlines]
+                        setattr(self, self.__clean_key_from_order(key=key), field)
+
+    def __clean_key_from_order(self, key) -> str:
+        key = key.replace("("," ").replace("."," ")
+        key.split(" ")
+        return key[1]
+
+
 
 class SYSTEM(_generic_imd_block):
     """System Block
@@ -97,7 +132,7 @@ class SYSTEM(_generic_imd_block):
     _order = [[["NPM", "NSM"]]]
 
     def __init__(self, NPM:int=0, NSM:int=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NPM = int(NPM)
             self.NSM = int(NSM)
@@ -139,7 +174,7 @@ class STEP(_generic_imd_block):
     _order = [[["NSTLIM", "T", "DT"]]]
 
     def __init__(self, NSTLIM:int=0, T:float=0, DT:float=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NSTLIM = int(NSTLIM)
             self.T = float(T)
@@ -209,7 +244,7 @@ class NEW_REPLICA_EDS(_generic_imd_block):
     def __init__(self, REEDS: bool=False, NRES: int=0, NUMSTATES: int=0, NEOFF: int=0, RES: List[float]=[], EIR: List[List[float]]=[[]],
                  NRETRIAL: int=0, NREQUIL: int=0,
                  EDS_STAT_OUT: int=0, CONT: bool=False, PERIODIC: int=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.REEDS = bool(REEDS)
 
@@ -217,14 +252,40 @@ class NEW_REPLICA_EDS(_generic_imd_block):
             self.NEOFF = int(NEOFF)
             self.NUMSTATES = int(NUMSTATES)
 
-            self.RES = list(RES)
-            self.EIR = list(EIR)
+            self.RES = RES
+            self.EIR = EIR
 
             self.NRETRIAL = int(NRETRIAL)
             self.NREQUIL = int(NREQUIL)
             self.CONT = bool(CONT)
             self.EDS_STAT_OUT = int(EDS_STAT_OUT)
             self.PERIODIC = int(PERIODIC)
+
+
+    def read_content_from_str(self, content: str):
+        data=[]
+        for line in content:
+            if not line.startswith("#"):
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                data.append(fields)
+        try:
+            self.REEDS = bool(data[0][0])
+            self.NRES = int(data[1][0])
+            self.NEOFF = int(data[1][1])
+            self.NUMSTATES = int(data[1][2])
+            self.RES = data[2][0]
+            self.EIR = data[3][0]
+            self.NRETRIAL = int(data[4][0])
+            self.NREQUIL = int(data[4][1])
+            self.CONT = bool(data[4][2])
+            self.EDS_STAT_OUT = int(data[4][3])
+            self.PERIODIC = int(data[4][4])
+        except:
+            print(data)
+            raise IndexError
+                    
 
 
 class REPLICA_EDS(_generic_imd_block):
@@ -246,9 +307,9 @@ class REPLICA_EDS(_generic_imd_block):
     _order = [[["REEDS"], ["NRES", "NUMSTATES"], ["RES(1 ... NRES)"],
                ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT"]]]
 
-    def __init__(self, REEDS: bool, NRES: int, NUMSTATES: int, RES: List[float], EIR: List[List[float]], NRETRIAL: int,
-                 NREQUIL: int,
-                 EDS_STAT_OUT: int, CONT: bool, content=None):
+    def __init__(self, REEDS: bool=True, NRES: int=0, NUMSTATES: int=0, RES: List[float]=[0], EIR: List[List[float]]=[[0]], NRETRIAL: int=0,
+                 NREQUIL: int=0,
+                 EDS_STAT_OUT: int=0, CONT: bool=True, content=None):
         """REPLICA_EDS Block
 
             This block is controlling the REPLICA_EDS settings in  gromos and is basically a mixture of EDS and RE block. (Don't use them when using this block!)
@@ -275,20 +336,42 @@ class REPLICA_EDS(_generic_imd_block):
         CONT: bool
             Is this a continuation run?
         """
-        super().__init__(used=True)
-        self.REEDS = REEDS
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.REEDS = REEDS
 
-        self.NRES = NRES
-        self.NUMSTATES = NUMSTATES
+            self.NRES = NRES
+            self.NUMSTATES = NUMSTATES
 
-        self.RES = RES
-        self.EIR = EIR
+            self.RES = RES
+            self.EIR = EIR
 
-        self.NRETRIAL = NRETRIAL
-        self.NREQUIL = NREQUIL
-        self.CONT = CONT
-        self.EDS_STAT_OUT = EDS_STAT_OUT
+            self.NRETRIAL = NRETRIAL
+            self.NREQUIL = NREQUIL
+            self.CONT = CONT
+            self.EDS_STAT_OUT = EDS_STAT_OUT
 
+    def read_content_from_str(self, content: str):
+        data=[]
+        for line in content:
+            if not line.startswith("#"):
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                data.append(fields)
+        try:
+            self.REEDS = bool(data[0][0])
+            self.NRES = int(data[1][0])
+            self.NUMSTATES = int(data[1][1])
+            self.RES = data[2][0]
+            self.EIR = data[3][0]
+            self.NRETRIAL = int(data[4][0])
+            self.NREQUIL = int(data[4][1])
+            self.CONT = bool(data[4][2])
+            self.EDS_STAT_OUT = int(data[4][3])
+        except:
+            print(data)
+            raise IndexError
 
 class OLD_REPLICA_EDS(_generic_imd_block):
     """REEDS Block
@@ -301,21 +384,42 @@ class OLD_REPLICA_EDS(_generic_imd_block):
     _order = [[["NATOM(TOTAL NUMBER OF ATOMS)"], ["NRES"], ["RET"], ["ALPHLJ", "ALPHCRF"], ["NUMSTATES"],
                ["RES(1 ... NRES)"], ["RETS(1 ... NRES)"], ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
 
-    def __init__(self, NATOM, NRES, RET, ALPHLJ, ALPHCRF, NUMSTATES, RES, RETS, EIR, NRETRIAL, NREQUIL, CONT):
-        super().__init__(used=True)
-        self.name = "REPLICA_EDS"
-        self.NATOM = NATOM
-        self.NRES = NRES
-        self.RET = RET
-        self.ALPHLJ = ALPHLJ
-        self.ALPHCRF = ALPHCRF
-        self.NUMSTATES = NUMSTATES
-        self.RES = RES
-        self.RETS = RETS
-        self.EIR = EIR
-        self.NRETRIAL = NRETRIAL
-        self.NREQUIL = NREQUIL
-        self.CONT = CONT
+    def __init__(self, NATOM=None, NRES=None, RET=None, ALPHLJ=None, ALPHCRF=None, NUMSTATES=None, RES=None, RETS=None, EIR=None, NRETRIAL=None, NREQUIL=None, CONT=None, content=None):
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.name = "REPLICA_EDS"
+            self.NATOM = NATOM
+            self.NRES = NRES
+            self.RET = RET
+            self.ALPHLJ = ALPHLJ
+            self.ALPHCRF = ALPHCRF
+            self.NUMSTATES = NUMSTATES
+            self.RES = RES
+            self.RETS = RETS
+            self.EIR = EIR
+            self.NRETRIAL = NRETRIAL
+            self.NREQUIL = NREQUIL
+            self.CONT = CONT
+
+    def read_content_from_str(self, content: str):
+        for line in content:
+            if not line.startswith("#"):
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                if len(fields) == 12:
+                    self.NATOM = fields[0]
+                    self.NRES = fields[1]
+                    self.RET = fields[2]
+                    self.ALPHLJ = fields[3]
+                    self.ALPHCRF = fields[4]
+                    self.NUMSTATES = fields[5]
+                    self.RES = fields[6]
+                    self.RETS = fields[7]
+                    self.EIR = fields[8]
+                    self.NRETRIAL = fields[9]
+                    self.NREQUIL = fields[10]
+                    self.CONT = fields[11]
 
 
 class BOUNDCOND(_generic_imd_block):
@@ -338,7 +442,7 @@ class BOUNDCOND(_generic_imd_block):
     _order = [[["NTB", "NDFMIN"]]]
 
     def __init__(self, NTB: int=0, NDFMIN: int=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTB = int(NTB)
             self.NDFMIN = int(NDFMIN)
@@ -349,9 +453,8 @@ class BOUNDCOND(_generic_imd_block):
                 fields = line.split(self.field_seperator)
                 while '' in fields:
                     fields.remove('')
-                if len(fields) == 2:
-                    self.NTB = fields[0]
-                    self.NDFMIN = fields[1]
+                self.NTB = int(fields[0])
+                self.NDFMIN = int(fields[1])
 
 
 class STOCHDYN(_generic_imd_block):
@@ -393,7 +496,7 @@ class STOCHDYN(_generic_imd_block):
                  CFRIC: float=0,
                  TEMPSD: float=0,
                  content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTSD = int(NTSD)
             self.NTFR = int(NTFR)
@@ -477,7 +580,7 @@ class PERTURBATION(_generic_imd_block):
 
     def __init__(self, NTG: int=0, NRDGL: int=0, RLAM: float=0, DLAMT: float=0, ALPHLJ: float=0, ALPHC: float=0, NLAM: int=0,
                  NSCALE: int=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTG = int(NTG)
             self.NRDGL = int(NRDGL)
@@ -487,6 +590,28 @@ class PERTURBATION(_generic_imd_block):
             self.ALPHC = float(ALPHC)
             self.NLAM = int(NLAM)
             self.NSCALE = int(NSCALE)
+
+    def read_content_from_str(self, content: str):
+        data=[]
+        for line in content:
+            if not line.startswith("#"):
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                data.append(fields)
+        try:
+            self.NTG = int(data[0][0])
+            self.NRDGL = int(data[0][1])
+            self.RLAM = float(data[0][2])
+            self.DLAMT = float(data[0][3])
+            self.ALPHLJ = float(data[1][0])
+            self.ALPHC = float(data[1][1])
+            self.NLAM = int(data[1][2])
+            self.NSCALE = int(data[1][3])
+
+        except:
+            print(data)
+            raise IndexError
 
 
 class PRECALCLAM(_generic_imd_block):
@@ -521,12 +646,34 @@ class PRECALCLAM(_generic_imd_block):
         MAXLAM
             between MINLAM and 1: maximum lambda value to precalculate energies
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NRLAM = int(NRLAM)
             self.MINLAM = float(MINLAM)
             self.MAXLAM = float(MAXLAM)
 
+        
+    def read_content_from_str(self, content: str):
+        data=[]
+        for line in content:
+            if not line.startswith("#"):
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                data.append(fields)
+        try:
+            self.NTG = int(data[0][0])
+            self.NRDGL = int(data[0][1])
+            self.RLAM = float(data[0][2])
+            self.DLAMT = float(data[0][3])
+            self.ALPHLJ = float(data[1][0])
+            self.ALPHC = float(data[1][1])
+            self.NLAM = int(data[1][2])
+            self.NSCALE = int(data[1][3])
+
+        except:
+            print(data)
+            raise IndexError
 
 class MULTIBATH(_generic_imd_block):
     """MULTIBATH Block
@@ -577,7 +724,7 @@ class MULTIBATH(_generic_imd_block):
                  COMBATH: List[int]=[],
                  IRBATH: List[int]=[], NUM: int = None, content=None):
 
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.ALGORITHM = int(ALGORITHM)
             self.NUM = NUM
@@ -589,18 +736,18 @@ class MULTIBATH(_generic_imd_block):
             self.COMBATH = list(COMBATH)
             self.IRBATH = list(IRBATH)
 
-        if not len(TEMP0) == len(TAU):
-            warnings.warn("Warning in MULTIBATH block. There must be the same number of TEMP0 and TAU parameters")
-        if not len(TEMP0) == int(NBATHS):
-            warnings.warn("Warning in MULTIBATH block. There must be the same number of BATHS and TEMP0 parameters")
-            warnings.warn(TEMP0)
-            warnings.warn(NBATHS)
-        if not len(LAST) == int(NBATHS):
-            warnings.warn("Warning in MULTIBATH block. There must be the same number of BATHS and LAST parameters")
-        if not len(LAST) == len(COMBATH):
-            warnings.warn("Warning in MULTIBATH block. There must be the same number of COMBATH and LAST parameters.")
-        if not len(LAST) == len(IRBATH):
-            warnings.warn("Warning in MULTIBATH block. There must be the same number of IRBATH and LAST parameters")
+            if not len(TEMP0) == len(TAU):
+                warnings.warn("Warning in MULTIBATH block. There must be the same number of TEMP0 and TAU parameters")
+            if not len(TEMP0) == int(NBATHS):
+                warnings.warn("Warning in MULTIBATH block. There must be the same number of BATHS and TEMP0 parameters")
+                warnings.warn(TEMP0)
+                warnings.warn(NBATHS)
+            if not len(LAST) == int(NBATHS):
+                warnings.warn("Warning in MULTIBATH block. There must be the same number of BATHS and LAST parameters")
+            if not len(LAST) == len(COMBATH):
+                warnings.warn("Warning in MULTIBATH block. There must be the same number of COMBATH and LAST parameters.")
+            if not len(LAST) == len(IRBATH):
+                warnings.warn("Warning in MULTIBATH block. There must be the same number of IRBATH and LAST parameters")
 
     def adapt_multibath(self, last_atoms_bath: Dict[int, int], algorithm: int = None, num: int = None, T: (float, List[float]) = None,
                         TAU: float = None) -> None:
@@ -722,7 +869,7 @@ class PRESSURESCALE(_generic_imd_block):
 
     def __init__(self, COUPLE: int=0, SCALE: int=0, COMP: float=0, TAUP: float=0, VIRIAL: int=0, SEMIANISOTROPIC: List[int]=[],
                  PRES0: List[List[float]]=[[0,0,0],[0,0,0],[0,0,0]], content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.COUPLE = int(COUPLE)
             self.SCALE = int(SCALE)
@@ -777,7 +924,7 @@ class FORCE(_generic_imd_block):
             NEGR:
             NRE (list):
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.BONDS = bool(BONDS)
             self.ANGLES = bool(ANGLES)
@@ -887,13 +1034,31 @@ class CONSTRAINT(_generic_imd_block):
             NTCS:
             NTCS0:
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTC = int(NTC)
             self.NTCP = int(NTCP)
             self.NTCP0 = float(NTCP0)
             self.NTCS = int(NTCS)
             self.NTCS0 = float(NTCS0)
+
+    def read_content_from_str(self, content: str):
+        data=[]
+        for line in content:
+            if not line.startswith("#"):
+                fields = line.split(self.field_seperator)
+                while '' in fields:
+                    fields.remove('')
+                data.append(fields)
+        try:
+            self.NTC = int(data[0][0])
+            self.NTCP = int(data[1][0])
+            self.NTCP0 = float(data[1][1])
+            self.NTCS = int(data[2][0])
+            self.NTCS0 = float(data[2][1])
+        except:
+            print(data)
+            raise IndexError
 
 
 class PAIRLIST(_generic_imd_block):
@@ -944,7 +1109,7 @@ class PAIRLIST(_generic_imd_block):
             SIZE:
             TYPE:
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.ALGORITHM = int(ALGORITHM)
             self.NSNB = int(NSNB)
@@ -1085,7 +1250,7 @@ class NONBONDED(_generic_imd_block):
                  NKX: float=0, NKY: float=0, NKZ: float=0, KCUT: float=0, NGX: float=0, NGY: float=0, NGZ: float=0, NASORD: int=0,
                  NFDORD: int=0, NALIAS: float=0, NSPORD: float=0, NQEVAL: float=0, FACCUR: float=0, NRDGRD: bool=False, NWRGRD: bool=False,
                  NLRLJ: bool=False, SLVDNS: float=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NLRELE = NLRELE
             self.APPAK = APPAK
@@ -1195,7 +1360,7 @@ class INITIALISE(_generic_imd_block):
             IG:
             TEMPI:
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTIVEL = NTIVEL
             self.NTISHK = NTISHK
@@ -1230,7 +1395,7 @@ class COMTRANSROT(_generic_imd_block):
     _order = [[["NSCM"]]]
 
     def __init__(self, NSCM=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NSCM = NSCM
 
@@ -1271,7 +1436,7 @@ class EDS(_generic_imd_block):
 
     def __init__(self, NUMSTATES: int=0, S: float=0, EIR: List[float]=[], EDS: bool = 1, ALPHLJ: float = 0.0,
                  ALPHC: float = 0.0, FUNCTIONAL: int = 1, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.name = "EDS"
             self.EDS = EDS
@@ -1313,7 +1478,7 @@ class DISTANCERES(_generic_imd_block):
             VDIR:
             NTWDIR:
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTDIR = NTDIR
             self.NTDIRA = NTDIRA
@@ -1362,7 +1527,7 @@ class POSITIONRES(_generic_imd_block):
     _order = [[["NTPOR", "NTPORB", "NTPORS", "CPOR"]]]
 
     def __init__(self, NTPOR=0, NTPORB=0, NTPORS=0, CPOR=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTPOR = NTPOR
             self.NTPORB = NTPORB
@@ -1400,7 +1565,7 @@ class PRINTOUT(_generic_imd_block):
     _order = [[["NTPR", "NTPP"]]]
 
     def __init__(self, NTPR=0, NTPP=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.name = "PRINTOUT"
             self.NTPR = NTPR
@@ -1444,7 +1609,7 @@ class ENERGYMIN(_generic_imd_block):
     _order = [["NTEM    NCYC    DELE    DX0     DXM   NMIN   FLIM".split()]]
 
     def __init__(self, NTEM=0, NCYC=0, DELE=0, DX0=0, DXM=0, NMIN=0, FLIM=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTEM = NTEM
             self.NCYC = NCYC
@@ -1507,7 +1672,7 @@ class WRITETRAJ(_generic_imd_block):
             NTWG:
             NTWB:
         """
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTWX = int(NTWX)
             self.NTWSE = int(NTWSE)
@@ -1552,7 +1717,7 @@ class AMBER(_generic_imd_block):
     _order = [[["AMBER", "AMBSCAL"]]]
 
     def __init__(self, AMBER=0, AMBSCAL=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.name = "AMBER"
             self.AMBER = AMBER
@@ -1589,7 +1754,7 @@ class COVALENTFORM(_generic_imd_block):
     _order = [[["NTBBH", "NTBAH", "NTBDN"]]]
 
     def __init__(self, NTBBH=0, NTBAH=0, NTBDN=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTBBH = NTBBH
             self.NTBAH = NTBAH
@@ -1626,7 +1791,7 @@ class INNERLOOP(_generic_imd_block):
     _order = [[["NTILM", "NTILS", "NGPUS"]]]
 
     def __init__(self, NTILM=0, NTILS=0, NGPUS=0, content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTILM = NTILM
             self.NTILS = NTILS
@@ -1679,7 +1844,7 @@ class LAMBDA(_generic_imd_block):
 
     def __init__(self, NTIL: int=0, NTLI: List[int]=[], NILG1: List[int]=[], NILG2: List[int]=[], ALI: List[float]=[],
                  BLI: List[float]=[], CLI: List[float]=[], DLI: List[float]=[], ELI: List[float]=[], content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.NTIL = NTIL
             self.NTLI = NTLI
@@ -1748,7 +1913,7 @@ class ROTTRANS(_generic_imd_block):
                 RTC:     int=0,
                 RTCLAST: int=0,
                 content=None):
-        super().__init__(used=True)
+        super().__init__(used=True, content=content)
         if content is None:
             self.RTC = RTC
             self.RTCLAST = RTCLAST
