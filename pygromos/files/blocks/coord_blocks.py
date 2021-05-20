@@ -111,6 +111,18 @@ class POSITION(_iterable_gromos_block):
     def __init__(self, content: List[atomP]):
         super().__init__(used=True, name="POSITION", content=content)
 
+    def _check_import_method(self, content: str):
+        if (isinstance(content, list) and all([isinstance(x, atomP) for x in content])):
+            self.content = content
+        elif isinstance(content, str):
+            self.read_content_from_str(content=content.split(self.line_seperator))
+        elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+            self.read_content_from_str(content=content)
+        elif content is None:
+            self.content = []
+        else:
+            raise Exception("Generic Block did not understand the type of content \n content: \n"+str(content))
+
     def read_content_from_str(self, content:List[str]):
 
         lines = list(map(lambda x: x.split(), content))

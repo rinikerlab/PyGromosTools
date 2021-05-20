@@ -2316,6 +2316,8 @@ class _topology_table_block(_iterable_topology_block):
             self.read_content_from_str(content)
         elif (isinstance(content, Iterable) and all([isinstance(x, type(self.table_line_type)) for x in content])):
             self.content = content
+        elif (isinstance(content, str)):
+            self.read_content_from_str(content.split(self.line_seperator))
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
         
@@ -2384,6 +2386,8 @@ class PHYSICALCONSTANTS(_topology_block):
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
             self.read_content_from_str(content)
+        elif (isinstance(content, str)):
+            self.read_content_from_str(content.split(self.line_seperator))
         elif (isinstance(content, tuple) and len(content)==4):
             self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ = content
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]

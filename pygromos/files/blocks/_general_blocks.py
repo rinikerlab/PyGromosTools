@@ -51,7 +51,7 @@ class _generic_gromos_block:
 
     def __deepcopy__(self, memo):
         #return block as string, split by line and cut block title and END
-        newContent=[x.split(self.field_seperator) for x in self.block_to_string().split(self.line_seperator)[1:-2]]
+        newContent= self.line_seperator.join(self.block_to_string().split(self.line_seperator)[1:-2])
         block = type(self)(content=newContent)
         return block
 
@@ -65,7 +65,7 @@ class _generic_gromos_block:
             elif isinstance(content, str):
                 self.read_content_from_str(content=content.split(self.line_seperator))
             else:
-                raise Exception("Generic Block did not understand the type of content")
+                raise Exception("Generic Block did not understand the type of content \n content: \n"+str(content))
         else:
             self.content = []
 
