@@ -14,7 +14,7 @@ root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="top_")
 out_path = root_out+"/out_imd_REEDS1.imd"
 
 
-class test_imd(general_file_tests):
+class test_top(general_file_tests):
     __test__ = True
     class_type = top.Top
     in_file_path = in_path
