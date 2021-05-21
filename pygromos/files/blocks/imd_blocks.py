@@ -96,7 +96,7 @@ class _generic_imd_block(_generic_gromos_block):
                 for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
                     # first bring key to attribute form
                     key = self._clean_key_from_order(key=key)
-                    field = self._try_to_convert_field(field=field)
+                    field = self._try_to_convert_field(field=field, key=key)
                     setattr(self, key, field)
         else: # parse multi line
             if len(self._order[0][keyLineNumb]) == 1:
@@ -124,10 +124,10 @@ class _generic_imd_block(_generic_gromos_block):
             return key.split(" ")[0]
         return key
 
-    def _try_to_convert_field(self, field):
+    def _try_to_convert_field(self, field, key):
         if isinstance(field, str):
             try:
-                return float(field)
+                return self.__annotations__[key](field) #solves the type problem for simple types
             except:
                 return field
         elif isinstance(field, list):
