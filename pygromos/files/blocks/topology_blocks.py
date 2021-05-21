@@ -482,9 +482,12 @@ TITLE: TITLE = TITLE
 class FORCEFIELD(_generic_gromos_block):
     NAME: str
 
-    def __init__(self, NAME: str):
-        super().__init__(name=self.__class__.__name__, used=True)
-        self.NAME = NAME[0].strip()
+    def __init__(self, NAME: str=None, content=None):
+        if content is None:
+            super().__init__(name=self.__class__.__name__, used=True)
+            self.NAME = NAME[0].strip()
+        else:
+            super().__init__(name=self.__class__.__name__, used=True, content=content)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -495,9 +498,12 @@ class FORCEFIELD(_generic_gromos_block):
 class MAKETOPVERSION(_generic_gromos_block):
     VERSION: str
 
-    def __init__(self, VERSION: str):
-        super().__init__(name=self.__class__.__name__, used=True)
-        self.VERSION = VERSION[0].strip()
+    def __init__(self, VERSION: str=None, content=None):
+        if(content is None):
+            super().__init__(name=self.__class__.__name__, used=True)
+            self.VERSION = VERSION[0].strip()
+        else:
+            super().__init__(name=self.__class__.__name__, used=True, content=content)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -547,7 +553,6 @@ class DISTANCERESSPEC(_generic_gromos_block):
             content = ["# KDISH, KDISC\n", str(KDISH)+"\t"+str(KDISC),
                        "\t".join(RESTRAINTHEADER),
                        ]+list(map(str, RESTRAINTS))
-
         super().__init__(used=True, name="DISTANCERESSPEC", content=content)
 
 
@@ -1144,7 +1149,6 @@ class MASSATOMTYPECODE(_iterable_topology_block):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
 
         self._content = []
-
         if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
             self.read_content_from_str(content)
         elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):

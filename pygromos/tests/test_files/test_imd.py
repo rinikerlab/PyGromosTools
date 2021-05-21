@@ -34,11 +34,7 @@ class test_imd(general_file_tests):
         imd_file = self.class_type(self.in_file_path)
         svals = "1.0 1.0 1.0 1.0".split()
         EIR = 0.0 # #
-        EIR_VECTOR =  [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]   #write dev cases!
-        #EIR_MATRIX = [[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
-         #             [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
-         #             [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
-         #             [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]]
+        EIR_VECTOR =  [0.0, 0.1, 0.2, 0.3, 0.4, ]   #write dev cases!
         EIR = EIR_VECTOR
         imd_file.edit_REEDS(SVALS=svals, EIR=EIR)
         return 0
