@@ -276,8 +276,6 @@ class NEW_REPLICA_EDS(_generic_imd_block):
             self.PERIODIC = int(PERIODIC)
 
 
-   
-
 class REPLICA_EDS(_generic_imd_block):
     name: str = "REPLICA_EDS"
 
@@ -341,36 +339,30 @@ class REPLICA_EDS(_generic_imd_block):
             self.CONT = CONT
             self.EDS_STAT_OUT = EDS_STAT_OUT
 
-    
-class OLD_REPLICA_EDS(_generic_imd_block):
-    """REEDS Block
+    def read_content_from_str(self, content: List[str]):
+        try:
+            setattr(self, "REEDS", int(content[1].split()[0]))
+            setattr(self, "NRES", int(content[3].split()[0]))
+            setattr(self, "NUMSTATES", int(content[3].split()[1]))
+            s_values =  list(map(float, content[5].split()))
+            if(len(s_values)== self.NRES):
+                setattr(self, "RES", s_values)
+            else:
+                raise IOError("REPLICA_EDS: NRES was not equal to the number of s-values in IMD!")
+            EIR = []
+            for ind in range(7, 7+self.NUMSTATES):
+                EIR_line = list(map(float, content[ind].split()))
+                if(len(EIR_line) != self.NRES):
+                    raise IOError("REPLICA_EDS: NRES was not equal to the number of EIRs given in IMD!")
+                EIR.append(EIR_line)
+            setattr(self, "EIR", EIR)
+            [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
 
-        This is the old REPLICA_EDS BLOCK, it is only here to guarantee compatability!
+        except Exception as err:
+            raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
 
-        Warnings: DEAPREACIATED - WILL BE REMOVED!
-    """
 
-    _order = [[["NATOM(TOTAL NUMBER OF ATOMS)"], ["NRES"], ["RET"], ["ALPHLJ", "ALPHCRF"], ["NUMSTATES"],
-               ["RES(1 ... NRES)"], ["RETS(1 ... NRES)"], ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
 
-    def __init__(self, NATOM=None, NRES=None, RET=None, ALPHLJ=None, ALPHCRF=None, NUMSTATES=None, RES=None, RETS=None, EIR=None, NRETRIAL=None, NREQUIL=None, CONT=None, content=None):
-        super().__init__(used=True, content=content)
-        if content is None:
-            self.name = "REPLICA_EDS"
-            self.NATOM = NATOM
-            self.NRES = NRES
-            self.RET = RET
-            self.ALPHLJ = ALPHLJ
-            self.ALPHCRF = ALPHCRF
-            self.NUMSTATES = NUMSTATES
-            self.RES = RES
-            self.RETS = RETS
-            self.EIR = EIR
-            self.NRETRIAL = NRETRIAL
-            self.NREQUIL = NREQUIL
-            self.CONT = CONT
-
-    
 class BOUNDCOND(_generic_imd_block):
     """Boundary Condition Block
 
@@ -555,8 +547,6 @@ class PRECALCLAM(_generic_imd_block):
             self.MINLAM = float(MINLAM)
             self.MAXLAM = float(MAXLAM)
 
-        
-
 
 class MULTIBATH(_generic_imd_block):
     """MULTIBATH Block
@@ -635,7 +625,6 @@ class MULTIBATH(_generic_imd_block):
             super().__init__(used=True, content=content)
 
     def read_content_from_str(self, content: List[str]):
-        print("HALLO", content)
         try:
             setattr(self, self._order[0][0][0], int(content[1].split()[0]))
             if ("NUM" in content[0]):
@@ -798,6 +787,14 @@ class PRESSURESCALE(_generic_imd_block):
             self.SEMIANISOTROPIC = list(SEMIANISOTROPIC)
             self.PRES0 = list(PRES0)
 
+    def read_content_from_str(self, content: List[str]):
+        try:
+            [setattr(self, key, value)for key, value in zip(self._order[0][0], content[1].split())]
+            setattr(self,"SEMIANISOTROPIC", list(map(int, content[3].split())))
+            setattr(self,"PRES0", [list(map(float, x.split())) for x in content[5:]])
+        except Exception as err:
+            raise IOError("Could not read string for block "+__class__.__name__+"\n"+str(err.args))
+
 
 class FORCE(_generic_imd_block):
     """FORCE Block
@@ -880,7 +877,6 @@ class FORCE(_generic_imd_block):
             fields = content[1].split(self.field_seperator)
             while '' in fields:
                 fields.remove('')
-            print(fields)
             self._parse_key_content(keyLineNumb=0, contentlines=[fields])
             setattr(self, self._order[0][1][0], int(content[3].split()[0]))
             setattr(self, self._order[0][1][1], list(map(float, content[3].split()[1:])))
@@ -990,7 +986,6 @@ class CONSTRAINT(_generic_imd_block):
             self.NTCS0 = float(NTCS0)
 
 
-
 class PAIRLIST(_generic_imd_block):
     """PAIRLIST Block
 
@@ -1047,7 +1042,6 @@ class PAIRLIST(_generic_imd_block):
             self.RCUTL = float(RCUTL)
             self.SIZE = SIZE
             self.TYPE = TYPE
-
 
 
 class NONBONDED(_generic_imd_block):
@@ -1355,6 +1349,18 @@ class EDS(_generic_imd_block):
             self.S = S
             self.EIR = EIR
 
+    def read_content_from_str(self, content: List[str]):
+        try:
+            setattr(self, "EDS", int(content[1].split()[0]))
+            setattr(self, "ALPHLJ", float(content[3].split()[0]))
+            setattr(self, "ALPHC", float(content[3].split()[1]))
+            setattr(self, "FUNCTIONAL", int(content[5].split()[0]))
+            setattr(self, "NUMSTATES", int(content[7].split()[0]))
+            setattr(self, "S", list(map(float, content[9].split())))
+            setattr(self, "EIR", list(map(float, content[11].split())))
+
+        except Exception as err:
+            raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
 
 class DISTANCERES(_generic_imd_block):
     """DISTANCERES Block
@@ -1425,7 +1431,6 @@ class POSITIONRES(_generic_imd_block):
             self.NTPORB = NTPORB
             self.NTPORS = NTPORS
             self.CPOR = CPOR
-
 
 
 class PRINTOUT(_generic_imd_block):
@@ -1562,7 +1567,6 @@ class AMBER(_generic_imd_block):
             self.name = "AMBER"
             self.AMBER = AMBER
             self.AMBSCAL = AMBSCAL
-
 
 
 class COVALENTFORM(_generic_imd_block):
