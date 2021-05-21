@@ -275,6 +275,29 @@ class NEW_REPLICA_EDS(_generic_imd_block):
             self.EDS_STAT_OUT = int(EDS_STAT_OUT)
             self.PERIODIC = int(PERIODIC)
 
+    def read_content_from_str(self, content: List[str]):
+        try:
+            setattr(self, "REEDS", int(content[1].split()[0]))
+            setattr(self, "NRES", int(content[3].split()[0]))
+            setattr(self, "NEOFF", int(content[3].split()[1]))
+            setattr(self, "NUMSTATES", int(content[3].split()[2]))
+            s_values =  list(map(float, content[5].split()))
+            if(len(s_values)== self.NRES):
+                setattr(self, "RES", s_values)
+            else:
+                raise IOError("REPLICA_EDS: NRES was not equal to the number of s-values in IMD!")
+            EIR = []
+            for ind in range(7, 7+self.NUMSTATES):
+                EIR_line = list(map(float, content[ind].split()))
+                if(len(EIR_line) != self.NRES):
+                    raise IOError("REPLICA_EDS: NRES was not equal to the number of EIRs given in IMD!")
+                EIR.append(EIR_line)
+            setattr(self, "EIR", EIR)
+            [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
+
+        except Exception as err:
+            raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
+
 
 class REPLICA_EDS(_generic_imd_block):
     name: str = "REPLICA_EDS"
