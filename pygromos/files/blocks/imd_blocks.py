@@ -73,7 +73,7 @@ class _generic_imd_block(_generic_gromos_block):
             if line.startswith("# "):
                 # a new key line was found add values to class
                 if len(contentlines) > 0:
-                    self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
+                    self._parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
                     keyLineNumb +=1 # go next key line
                     contentlines = [] # reset content storage
             else:
@@ -83,9 +83,9 @@ class _generic_imd_block(_generic_gromos_block):
                     fields.remove('')
                 contentlines.append(fields)
         # add fianl key after loop 
-        self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
+        self._parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
 
-    def __parse_key_content(self, keyLineNumb = 0, contentlines = []):
+    def _parse_key_content(self, keyLineNumb = 0, contentlines = []):
         #print("----------------")
         #print(contentlines)
         #print(self._order[0])
@@ -95,36 +95,36 @@ class _generic_imd_block(_generic_gromos_block):
                 # found key-value match
                 for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
                     # first bring key to attribute form
-                    key = self.__clean_key_from_order(key=key)
-                    field = self.__try_to_convert_field(field=field)
+                    key = self._clean_key_from_order(key=key)
+                    field = self._try_to_convert_field(field=field)
                     setattr(self, key, field)
         else: # parse multi line
             if len(self._order[0][keyLineNumb]) == 1:
                 # one key but multiple fields
-                key = self.__clean_key_from_order(key=self._order[0][keyLineNumb][0])
-                field = self.__try_to_convert_field(field=contentlines)
+                key = self._clean_key_from_order(key=self._order[0][keyLineNumb][0])
+                field = self._try_to_convert_field(field=contentlines)
                 setattr(self, key, field)
             else:
                 # set attribute with a list over multiple lines for keys in paralles (example temp baths)
                 for i, key in enumerate(self._order[0][keyLineNumb]):
                     field = [x[i] for x in contentlines]
-                    key = self.__clean_key_from_order(key=key)
-                    field = self.__try_to_convert_field(field=field)
+                    key = self._clean_key_from_order(key=key)
+                    field = self._try_to_convert_field(field=field)
                     setattr(self, key, field)
 
-    def __clean_key_from_order(self, key) -> str:
+    def _clean_key_from_order(self, key) -> str:
         #key = key.replace("("," ").replace("."," ")
         #key.split(" ")
         #return key[0]
         if "(" in key:
             return key.split("(")[0]
         if "." in key:
-            return key.split("(")[0]
+            return key.split(".")[0]
         if " " in key:
             return key.split(" ")[0]
         return key
 
-    def __try_to_convert_field(self, field):
+    def _try_to_convert_field(self, field):
         if isinstance(field, str):
             try:
                 return float(field)
@@ -822,6 +822,23 @@ class FORCE(_generic_imd_block):
             else:
                 self.NEGR = int(NEGR)
                 self.NRE = NRE
+
+        def _parse_key_content(self, keyLineNumb = 0, contentlines = []):
+            if keyLineNumb == 0:
+                for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
+                    # first bring key to attribute form
+                    key = self.__clean_key_from_order(key=key)
+                    field = self.__try_to_convert_field(field=field)
+                    setattr(self, key, field)
+            else:
+                # NEGR
+                key = "NEGR"
+                field = self.__try_to_convert_field(field=contentlines[0][0])
+                setattr(self, key, field)
+                # NRE
+                key = "NRE"
+                field = self.__try_to_convert_field(field=contentlines[0][1:])
+                setattr(self, key, field)
 
     def adapt_energy_groups(self, energy_groups: Dict[int, int]):
         """
