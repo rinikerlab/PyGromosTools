@@ -602,12 +602,11 @@ class MULTIBATH(_generic_imd_block):
 
     _order: List[List[str]] = [[["ALGORITHM"], ["NUM"], ["NBATHS"], ["TEMP0(1 ... NBATHS)", "TAU(1 ... NBATHS)"],
                                 ["DOFSET"], ["LAST(1 ... DOFSET)", "COMBATH(1 ... DOFSET)", "IRBATH(1 ... DOFSET)"]]]
+                                #num is not part of the imd file!?
 
     def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=0,
                  COMBATH: List[int]=[],
                  IRBATH: List[int]=[], NUM: int = None, content=None):
-
-        super().__init__(used=True, content=content)
         if content is None:
             self.ALGORITHM = int(ALGORITHM)
             self.NUM = NUM
@@ -631,6 +630,43 @@ class MULTIBATH(_generic_imd_block):
                 warnings.warn("Warning in MULTIBATH block. There must be the same number of COMBATH and LAST parameters.")
             if not len(LAST) == len(IRBATH):
                 warnings.warn("Warning in MULTIBATH block. There must be the same number of IRBATH and LAST parameters")
+            super().__init__(used=True)
+        else:
+            super().__init__(used=True, content=content)
+
+    def read_content_from_str(self, content: List[str]):
+        print("HALLO", content)
+        try:
+            setattr(self, self._order[0][0][0], int(content[1].split()[0]))
+            if ("NUM" in content[0]):
+                setattr(self, self._order[0][1][0], int(content[1].split()[1]))
+
+            setattr(self, self._order[0][2][0], int(content[3].split()[0]))
+            TEMP0 = []
+            TAU = []
+            for ind in range(5, 5+self.NBATHS):
+                fields = list(map(float, content[ind].split()))
+                TEMP0.append(fields[0])
+                TAU.append(fields[1])
+            setattr(self, "TEMP0", TEMP0)
+            setattr(self, "TAU", TAU)
+            setattr(self, self._order[0][4][0], int(content[5+self.NBATHS+1].split()[0]))
+
+            LAST = []
+            COMBATH=[]
+            IRBATH=[]
+            for ind in range(10, 5+3+2*self.NBATHS):
+                fields = list(map(float, content[ind].split()))
+                LAST.append(fields[0])
+                COMBATH.append(fields[1])
+                IRBATH.append(fields[2])
+            setattr(self, "LAST", LAST)
+            setattr(self, "COMBATH", COMBATH)
+            setattr(self, "IRBATH", IRBATH)
+
+        except Exception as err:
+            raise IOError("Could not parse "+__class__.__name__+" block!\n"+str(err.args))
+
 
     def adapt_multibath(self, last_atoms_bath: Dict[int, int], algorithm: int = None, num: int = None, T: (float, List[float]) = None,
                         TAU: float = None) -> None:
