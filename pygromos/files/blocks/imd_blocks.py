@@ -74,7 +74,8 @@ class _generic_imd_block(_generic_gromos_block):
                 # a new key line was found add values to class
                 if len(contentlines) > 0:
                     self.__parse_key_content(keyLineNumb=keyLineNumb, contentlines=contentlines)
-                    keyLineNumb +=1
+                    keyLineNumb +=1 # go next key line
+                    contentlines = [] # reset content storage
             else:
                 # no key found -> add data to list to be later added to key
                 fields = line.split(self.field_seperator)
@@ -89,26 +90,57 @@ class _generic_imd_block(_generic_gromos_block):
         #print(contentlines)
         #print(self._order[0])
         #print(keyLineNumb)
-        if len(contentlines) == 1:
+        if len(contentlines) == 1: #it's a one liner
             if len(contentlines[0]) == len(self._order[0][keyLineNumb]):
                 # found key-value match
                 for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
                     # first bring key to attribute form
-                    setattr(self, self.__clean_key_from_order(key=key), field) # What to do eith type of field? When convert from string to int/float/bool
-        else:
+                    key = self.__clean_key_from_order(key=key)
+                    field = self.__try_to_convert_field(field=field)
+                    setattr(self, key, field)
+        else: # parse multi line
             if len(self._order[0][keyLineNumb]) == 1:
                 # one key but multiple fields
-                setattr(self, self.__clean_key_from_order(key=self._order[0][keyLineNumb][0]), contentlines)
+                key = self.__clean_key_from_order(key=self._order[0][keyLineNumb][0])
+                field = self.__try_to_convert_field(field=contentlines)
+                setattr(self, key, field)
             else:
                 # set attribute with a list over multiple lines for keys in paralles (example temp baths)
                 for i, key in enumerate(self._order[0][keyLineNumb]):
                     field = [x[i] for x in contentlines]
-                    setattr(self, self.__clean_key_from_order(key=key), field)
+                    key = self.__clean_key_from_order(key=key)
+                    field = self.__try_to_convert_field(field=field)
+                    setattr(self, key, field)
 
     def __clean_key_from_order(self, key) -> str:
-        key = key.replace("# ","").replace("("," ").replace("."," ")
-        key.split(" ")
-        return key[0]
+        #key = key.replace("("," ").replace("."," ")
+        #key.split(" ")
+        #return key[0]
+        if "(" in key:
+            return key.split("(")[0]
+        if "." in key:
+            return key.split("(")[0]
+        if " " in key:
+            return key.split(" ")[0]
+        return key
+
+    def __try_to_convert_field(self, field):
+        if isinstance(field, str):
+            try:
+                return float(field)
+            except:
+                return field
+        elif isinstance(field, list):
+            if all([isinstance(x, str) for x in field]):
+                try:
+                    return [float(x) for x in field]
+                except:
+                    return field
+            elif all([isinstance(x, list) for x in field]) and all([[isinstance(x, list)for x in y] for y in field]):
+                try:
+                    return [[float(x) for x in y] for y in field]
+                except:
+                    return field
 
 
 
