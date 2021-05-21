@@ -7,7 +7,7 @@ from pygromos.utils import bash
 
 from pygromos.tests.in_testfiles import in_test_file_path
 root_in = in_test_file_path+"/imd"
-in_path = root_in+"/in_imd_REEDS1.imd"
+in_path = root_in+"/in_REEDS1.imd"
 
 from pygromos.tests.test_files import out_test_root_dir
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="imd_")
