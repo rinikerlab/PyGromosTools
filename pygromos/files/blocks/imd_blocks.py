@@ -807,7 +807,7 @@ class FORCE(_generic_imd_block):
             NEGR:
             NRE (list):
         """
-        super().__init__(used=True, content=content)
+
         if content is None:
             self.BONDS = bool(BONDS)
             self.ANGLES = bool(ANGLES)
@@ -815,13 +815,12 @@ class FORCE(_generic_imd_block):
             self.DIHEDRAL = bool(DIHEDRAL)
             self.ELECTROSTATIC = bool(ELECTROSTATIC)
             self.VDW = bool(VDW)
-            #dirty hack:
-            if(isinstance(NEGR, list)):
-                self.NEGR = int(NEGR[0])
-                self.NRE = list(map(int, NEGR[1:]+NRE))
-            else:
-                self.NEGR = int(NEGR)
-                self.NRE = NRE
+            self.NEGR = int(NEGR)
+            self.NRE = NRE
+            super().__init__(used=True)
+
+        else:
+            super().__init__(used=True, content=content)
 
         def _parse_key_content(self, keyLineNumb = 0, contentlines = []):
             if keyLineNumb == 0:
@@ -839,6 +838,18 @@ class FORCE(_generic_imd_block):
                 key = "NRE"
                 field = self.__try_to_convert_field(field=contentlines[0][1:])
                 setattr(self, key, field)
+
+    def read_content_from_str(self, content: List[str]):
+        try:
+            fields = content[1].split(self.field_seperator)
+            while '' in fields:
+                fields.remove('')
+            print(fields)
+            self._parse_key_content(keyLineNumb=0, contentlines=[fields])
+            setattr(self, self._order[0][1][0], int(content[3].split()[0]))
+            setattr(self, self._order[0][1][1], list(map(float, content[3].split()[1:])))
+        except Exception as err:
+            raise IOError("Could not parse FORCE block!\n"+str(err.args))
 
     def adapt_energy_groups(self, energy_groups: Dict[int, int]):
         """
