@@ -16,7 +16,7 @@ class LSF(_SubmissionSystem):
 
     _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
     _job_queue_time_stamp: datetime
-    _job_queue_list: pd.DataFrame
+    job_queue_list: pd.DataFrame #contains all jobs in the queue (from this users)
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
                  verbose: bool = False, enviroment=None):
@@ -86,7 +86,7 @@ class LSF(_SubmissionSystem):
         # QUEUE checking to not double submit
         if (do_not_doubly_submit_to_queue and self.submission):
             if (self.verbose): print('check queue')
-            ids = self.get_jobs_from_queue(jobName)
+            ids = list(self.search_queue_for_jobname(jobName).index)
 
             if (len(ids) > 0):
                 if (self.verbose): print(
@@ -341,6 +341,108 @@ class LSF(_SubmissionSystem):
             self.max_storage)+", job_duration=\""+str(self.job_duration)+"\")\n\n"
         return gen_cmd
 
+    """
+        Job Queue Managment
+    """
+    def get_queued_jobs(self):
+        """
+            This function updates the job-list of the queueing system in the class.
+
+        """
+        # Do we need an update of the job list?
+        check_job_list = True
+        if (hasattr(self, "_job_queue_time_stamp")):
+            last_update = datetime.now() - self._job_queue_time_stamp
+            check_job_list = last_update.seconds > self._refresh_job_queue_list_all_s
+
+        if (check_job_list):
+            # try getting the lsf queue
+            try:
+                out_process = bash.execute("bjobs -w", catch_STD=True)
+                job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+                self._job_queue_time_stamp = datetime.now()
+            except Exception as err:
+                raise Exception("Could not get job_list!\nerr:\n" + "\n".join(err.args))
+
+            # format information:
+            jlist = list(map(lambda x: x.strip().split(), job_list_str))
+            header = jlist[0]
+            jobs = jlist[1:]
+
+            jobs_dict = {}
+            for job in jobs:
+                jobID = int(job[0])
+                user = job[1]
+                status = job[2]
+                queue = job[3]
+                from_host = job[4]
+                exec_host = job[5]
+                job_name = " ".join(job[6:-3])
+                submit_time = datetime.strptime(str(datetime.now().year) + " " + " ".join(job[-3:]), '%Y %b %d %H:%M')
+                values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
+                jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
+
+            self.job_queue_list = pd.DataFrame(jobs_dict, index=False).T
+
+        else:
+            if (self.verbose):
+                print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
+            pass
+
+    def search_queue_for_jobid(self, job_id:int)->pd.DataFrame:
+        self.get_queued_jobs()
+        return self.job_queue_list.where(self.job_queue_list.JOBID == job_id).dropna()
+
+    def search_queue_for_jobname(self, job_name:str, regex:bool=False):
+        """search_queue_for_jobname
+
+            this jobs searches the job queue for a certain job name.
+
+        Parameters
+        ----------
+        job_name :  str
+        regex:  bool, optional
+            if the string is a Regular Expression
+        Returns
+        -------
+        List[str]
+            the output of the queue containing the jobname
+        """
+
+        self.get_queued_jobs()
+        if(regex):
+            return self._job_queue_list.where(self._job_queue_list.JOB_NAME.str.match(job_name)).dropna()
+        else:
+            return self.job_queue_list.where(self.job_queue_list.JOBID == job_name).dropna()
+
+    def is_job_in_queue(self, job_name: str=None, job_id:int=None, verbose: bool = False) -> bool:
+        """
+        checks wether a function is still in the lsf queu
+
+        Parameters
+        ----------
+        job_name : str
+            name of the job.
+        job_id : int
+            id of the job.
+        verbose : bool, optional
+            extra prints, by default False
+
+        Returns
+        -------
+        bool
+            is the job in the lsf queue?
+        """
+
+        if(not job_name is None):
+            return len(self.search_queue_for_jobname(job_name=job_name)) > 0
+        elif(not job_id is None):
+            return len(self.search_queue_for_jobname(job_name=job_name)) >0
+        else:
+            raise ValueError("Please provide either the job_name or the job_id!")
+
+
+    #TOBEDELETED
     def get_jobs_from_queue(self, job_text: str, regex: bool = False,
                             dummyTesting: bool = False, verbose: bool = False) -> List[int]:
         """search_queue_for_jobname
@@ -397,78 +499,3 @@ class LSF(_SubmissionSystem):
             return []
         return out_job_lines
 
-
-    def get_queued_jobs(self):
-        """
-            This function updates the job-list of the queueing system in the class.
-
-        Returns
-        -------
-
-        """
-        #Do we need an update of the job list?
-        check_job_list= True
-        if(hasattr(self, "_job_queue_time_stamp")):
-            last_update = datetime.now()-self._job_queue_time_stamp
-            check_job_list = last_update.seconds > self._refresh_job_queue_list_all_s
-            
-        if(check_job_list):
-            try:
-                out_process = bash.execute("bjobs -w", catch_STD=True)
-                job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                self._job_queue_time_stamp = datetime.now()
-            except Exception as err:
-                raise Exception("Could not get job_list!\nerr:\n"+"\n".join(err.args))
-
-            #format information:
-            jlist = list(map(lambda x: x.strip().split(), job_list_str))
-            header = jlist[0]
-            jobs = jlist[1:]
-
-            jobs_dict = {}
-            for job in jobs:
-                jobID = job[0]
-                user = job[1]
-                status = job[2]
-                queue = job[3]
-                from_host = job[4]
-                exec_host = job[5]
-                job_name = " ".join(job[6:-3])
-                submit_time = datetime.strptime(str(datetime.now().year) + " " + " ".join(job[-3:]), '%Y %b %d %H:%M')
-                values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
-                jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
-
-            self._job_queue_list  = pd.DataFrame(jobs_dict).T
-
-        else:
-            if(self.verbose):
-                print("Skipping refresh of job list, as the last update is "+str(last_update)+"s ago")
-            pass
-
-    def is_job_in_queue(self, job_name: str, verbose: bool = False) -> bool:
-        """
-        checks wether a function is still in the lsf queu
-
-        Parameters
-        ----------
-        job_name : str
-            name of the job. (Or any other unique identifier from bjobs to compare)
-        verbose : bool, optional
-            extra prints, by default False
-
-        Returns
-        -------
-        bool
-            is the job in the lsf queue?
-        """
-        try:
-            if (verbose): print("getting job data")
-            time.sleep(2)
-            out_process = bash.execute("bjobs -w", catch_STD=True)
-            stdout = list(map(str, out_process.stdout.readlines()))
-            for i in stdout:
-                if job_name in i:
-                    return True #return as soon as one occuraence is found
-        except TimeoutError:
-            return False
-        return False
