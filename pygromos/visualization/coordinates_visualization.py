@@ -18,6 +18,19 @@ def show_cnf(cnf: Cnf):
 
 
 def show_coordinate_traj(trc:Trc, cnf: Cnf):
+    """
+    This function visualizes the provided TRC and maps it on the
+
+    Parameters
+    ----------
+    trc : Trc
+
+    cnf: Cnf
+
+    Returns
+    -------
+
+    """
     traj = trc.get_pdb(cnf)
     view = py3Dmol.view(width=400, height=400)
     view.addModelsAsFrames(traj)
