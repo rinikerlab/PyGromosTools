@@ -411,7 +411,7 @@ class LSF(_SubmissionSystem):
 
         self.get_queued_jobs()
         if(regex):
-            return self._job_queue_list.where(self._job_queue_list.JOB_NAME.str.match(job_name)).dropna()
+            return self.job_queue_list.where(self.job_queue_list.JOB_NAME.str.match(job_name)).dropna()
         else:
             return self.job_queue_list.where(self.job_queue_list.JOBID == job_name).dropna()
 
