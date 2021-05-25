@@ -416,7 +416,7 @@ class LSF(_SubmissionSystem):
             try:
                 out_process = bash.execute("bjobs -w", catch_STD=True)
                 job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                self._job_queue_time_stamp = datetime.datetime.now()
+                self._job_queue_time_stamp = datetime.now()
             except Exception as err:
                 raise Exception("Could not get job_list!\nerr:\n"+"\n".join(err.args))
 
