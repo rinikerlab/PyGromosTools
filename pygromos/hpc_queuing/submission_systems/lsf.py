@@ -421,7 +421,7 @@ class LSF(_SubmissionSystem):
                 raise Exception("Could not get job_list!\nerr:\n"+"\n".join(err.args))
 
             #format information:
-            jlist = list(map(lambda x: x.strip().split(), job_list_str._job_queue_list))
+            jlist = list(map(lambda x: x.strip().split(), job_list_str))
             header = jlist[0]
             jobs = jlist[1:]
 
