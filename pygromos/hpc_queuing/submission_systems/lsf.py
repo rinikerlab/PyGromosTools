@@ -360,14 +360,17 @@ class LSF(_SubmissionSystem):
             try:
                 out_process = bash.execute("bjobs -w", catch_STD=True)
                 job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+                out_process = bash.execute("bjobs -wd", catch_STD=True)
+                job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
                 self._job_queue_time_stamp = datetime.now()
             except Exception as err:
                 raise Exception("Could not get job_list!\nerr:\n" + "\n".join(err.args))
 
             # format information:
             jlist = list(map(lambda x: x.strip().split(), job_list_str))
+            jlist_fin = list(map(lambda x: x.strip().split(), job_list_finished_str))
             header = jlist[0]
-            jobs = jlist[1:]
+            jobs = jlist[1:]+jlist_fin[1:]
 
             jobs_dict = {}
             for job in jobs:
