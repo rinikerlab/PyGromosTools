@@ -413,7 +413,7 @@ class LSF(_SubmissionSystem):
         if(regex):
             return self.job_queue_list.where(self.job_queue_list.JOB_NAME.str.match(job_name)).dropna()
         else:
-            return self.job_queue_list.where(self.job_queue_list.JOBID == job_name).dropna()
+            return self.job_queue_list.where(self.job_queue_list.JOB_NAME == job_name).dropna()
 
     def is_job_in_queue(self, job_name: str=None, job_id:int=None, verbose: bool = False) -> bool:
         """
@@ -440,3 +440,23 @@ class LSF(_SubmissionSystem):
             return len(self.search_queue_for_jobname(job_name=job_name)) >0
         else:
             raise ValueError("Please provide either the job_name or the job_id!")
+
+    """
+        kill jobs
+    """
+    def kill_jobs(self, job_name:str=None, regex:bool=False, job_ids: Union[List[int], int]=None):
+        if(not job_name is None):
+            jobs = list(self.search_queue_for_jobname(job_name, regex=regex).index)
+        elif(not job_ids is None):
+            if(job_ids is int):
+                job_ids = [job_ids]
+        else:
+            raise ValueError("Please provide either job_name or job_ids!")
+
+        if(self.verbose):
+            print("Stopping: "+", ".join(map(str, job_ids)))
+        try:
+            bash.execute('bkill '+ " ".join(map(str, job_ids)))
+        except Exception as err:
+            raise ChildProcessError("could not execute this command: \n" +
+                                    str(err.args))
