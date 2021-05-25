@@ -461,5 +461,7 @@ class LSF(_SubmissionSystem):
         try:
             bash.execute('bkill '+ " ".join(map(str, job_ids)))
         except Exception as err:
-            raise ChildProcessError("could not execute this command: \n" +
-                                    str(err.args))
+            if(any(["Job has already finished" in x for x in err.args])):
+                print("Job has already finished")
+            else:
+                raise ChildProcessError("could not execute this command: \n" + str(err.args))
