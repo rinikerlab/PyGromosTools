@@ -399,8 +399,20 @@ class LSF(_SubmissionSystem):
 
 
     def get_queued_jobs(self):
-        last_update = datetime.now()-self._job_queue_time_stamp
-        if(hasattr(self, "_job_queue_time_stamp") and last_update.seconds > self._refresh_job_queue_list_all_s):
+        """
+            This function updates the job-list of the queueing system in the class.
+
+        Returns
+        -------
+
+        """
+        #Do we need an update of the job list?
+        check_job_list= True
+        if(hasattr(self, "_job_queue_time_stamp")):
+            last_update = datetime.now()-self._job_queue_time_stamp
+            check_job_list = last_update.seconds > self._refresh_job_queue_list_all_s
+            
+        if(check_job_list):
             try:
                 out_process = bash.execute("bjobs -w", catch_STD=True)
                 job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
@@ -432,6 +444,7 @@ class LSF(_SubmissionSystem):
             if(self.verbose):
                 print("Skipping refresh of job list, as the last update is "+str(last_update)+"s ago")
             pass
+
     def is_job_in_queue(self, job_name: str, verbose: bool = False) -> bool:
         """
         checks wether a function is still in the lsf queu
