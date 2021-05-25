@@ -1,7 +1,8 @@
 import os
 import re
 import time
-import datetime
+from datetime import datetime
+import pandas as pd
 from typing import Union, List
 
 from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
@@ -12,6 +13,10 @@ class LSF(_SubmissionSystem):
     """LSF
         This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.
     """
+
+    _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
+    _job_queue_time_stamp: datetime
+    _job_queue_list: pd.DataFrame
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
                  verbose: bool = False, enviroment=None):
@@ -394,13 +399,39 @@ class LSF(_SubmissionSystem):
 
 
     def get_queued_jobs(self):
-        try:
-            out_process = bash.execute("bjobs -w", catch_STD=True)
-            self._job_queue_list = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-            self._job_queue_time_stamp = datetime.datetime.now()
-        except Exception as err:
-            raise Exception("Could not get job_list")
+        last_update = datetime.now()-self._job_queue_time_stamp
+        if(hasattr(self, "_job_queue_time_stamp") and last_update.seconds > self._refresh_job_queue_list_all_s):
+            try:
+                out_process = bash.execute("bjobs -w", catch_STD=True)
+                job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+                self._job_queue_time_stamp = datetime.datetime.now()
+            except Exception as err:
+                raise Exception("Could not get job_list")
 
+            #format information:
+            jlist = list(map(lambda x: x.strip().split(), job_list_str._job_queue_list))
+            header = jlist[0]
+            jobs = jlist[1:]
+
+            jobs_dict = {}
+            for job in jobs:
+                jobID = job[0]
+                user = job[1]
+                status = job[2]
+                queue = job[3]
+                from_host = job[4]
+                exec_host = job[5]
+                job_name = " ".join(job[6:-3])
+                submit_time = datetime.strptime(str(datetime.now().year) + " " + " ".join(job[-3:]), '%Y %b %d %H:%M')
+                values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
+                jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
+
+            self._job_queue_list  = pd.DataFrame(jobs_dict).T
+
+        else:
+            if(self.verbose):
+                print("Skipping refresh of job list, as the last update is "+str(last_update)+"s ago")
+            pass
     def is_job_in_queue(self, job_name: str, verbose: bool = False) -> bool:
         """
         checks wether a function is still in the lsf queu
