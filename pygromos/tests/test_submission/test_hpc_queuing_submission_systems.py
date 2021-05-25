@@ -86,12 +86,11 @@ class test_LSF(test_queuing_system):
 
     def setUp(self) -> None:
         self.SubmissionSystem = self.file_class(verbose=self.verbose, submission=False)
+        self.SubmissionSystem._dummy=True
 
     def test_submit(self):
         command = "echo \" WUHAHAHA\""
-
-        self.SubmissionSystem.submit_to_queue(command=command, jobName="TEST", sumbit_from_file=False,
-                                              dummyTesting=True)
+        self.SubmissionSystem.submit_to_queue(command=command, jobName="TEST", sumbit_from_file=False)
 
     def test_submit_jobAarray_to_queue(self):
         command = "echo \" WUHAHAHA\""

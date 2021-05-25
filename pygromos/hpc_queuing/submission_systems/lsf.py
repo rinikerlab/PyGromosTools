@@ -14,6 +14,7 @@ class LSF(_SubmissionSystem):
         This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.
     """
 
+    _dummy:bool=False
     _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
     _job_queue_time_stamp: datetime
     job_queue_list: pd.DataFrame #contains all jobs in the queue (from this users)
@@ -22,15 +23,11 @@ class LSF(_SubmissionSystem):
                  verbose: bool = False, enviroment=None):
         super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment)
 
-    def submit_to_queue(self, command: str,
-                        jobName: str, outLog=None, errLog=None,
-                        queue_after_jobID: int = None, do_not_doubly_submit_to_queue: bool = False,
-                        force_queue_start_after: bool = False,
-                        projectName: str = None, jobGroup: str = None, priority=None,
-                        begin_mail: bool = False, end_mail: bool = False,
-                        post_execution_command: str = None,
-                        submit_from_dir: str = None, sumbit_from_file: bool = True,
-                        dummyTesting: bool = False, verbose: bool = None) -> Union[int, None]:
+    def submit_to_queue(self, command: str, jobName: str, outLog=None, errLog=None, queue_after_jobID: int = None,
+                        do_not_doubly_submit_to_queue: bool = False, force_queue_start_after: bool = False,
+                        projectName: str = None, jobGroup: str = None, priority=None, begin_mail: bool = False,
+                        end_mail: bool = False, post_execution_command: str = None, submit_from_dir: str = None,
+                        sumbit_from_file: bool = True, verbose: bool = None) -> Union[int, None]:
         """
             This function submits the given command to the LSF QUEUE
 
@@ -63,9 +60,6 @@ class LSF(_SubmissionSystem):
         verbose:    bool, optional
             WARNING! - Will be removed in Future! use attribute verbose or constructor! WARNING!
             print out some messages
-        dummyTesting:   bool, optional
-            WARNING! - Will be removed in Future! use attribute or constructor as submission! WARNING!
-            do not submit the job to the queue.
         stupid_mode
         Returns
         -------
@@ -77,8 +71,6 @@ class LSF(_SubmissionSystem):
         # required parsing will be removed in future:
         if (not verbose is None):
             self.verbose = verbose
-        if (dummyTesting):
-            self.submission = not dummyTesting
 
         # generate submission_string:
         submission_string = ""
@@ -152,7 +144,7 @@ class LSF(_SubmissionSystem):
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
 
         if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
-        if (self.submission):
+        if (self.submission and not self._dummy):
             try:
                 out_process = bash.execute(command=submission_string, catch_STD=True, env=self._enviroment)
                 std_out = "\n".join(map(str, out_process.stdout.readlines()))
@@ -180,7 +172,7 @@ class LSF(_SubmissionSystem):
                                   do_not_doubly_submit_to_queue: bool = True,
                                   jobGroup: str = None,
                                   begin_mail: bool = False, end_mail: bool = False,
-                                  verbose: bool = None, dummyTesting: bool = False, ) -> Union[int, None]:
+                                  verbose: bool = None,) -> Union[int, None]:
         """
         This functioncan be used for submission of a job array. The ammount of jobs is determined by  the difference:
                     end_Job-start_Job
@@ -248,8 +240,6 @@ class LSF(_SubmissionSystem):
         # required parsing will be removed in future:
         if (not verbose is None):
             self.verbose = verbose
-        if (dummyTesting):
-            self.submission = not dummyTesting
 
         # QUEUE checking to not double submit
         if (self.submission and do_not_doubly_submit_to_queue):
@@ -311,7 +301,7 @@ class LSF(_SubmissionSystem):
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
 
         if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
-        if (self.submission):
+        if (self.submission and not self._dummy):
             try:
                 std_out_buff = bash.execute(command=submission_string, env=self._enviroment)
                 std_out = "\n".join(std_out_buff.readlines())
@@ -357,36 +347,42 @@ class LSF(_SubmissionSystem):
 
         if (check_job_list):
             # try getting the lsf queue
-            try:
-                out_process = bash.execute("bjobs -w", catch_STD=True)
-                job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                out_process = bash.execute("bjobs -wd", catch_STD=True)
-                job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                self._job_queue_time_stamp = datetime.now()
-            except Exception as err:
-                raise Exception("Could not get job_list!\nerr:\n" + "\n".join(err.args))
+            if (not self._dummy):
+                try:
+                        out_process = bash.execute("bjobs -w", catch_STD=True)
+                        job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+                        out_process = bash.execute("bjobs -wd", catch_STD=True)
+                        job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+                        self._job_queue_time_stamp = datetime.now()
+                except Exception as err:
+                    raise Exception("Could not get job_list!\nerr:\n" + "\n".join(err.args))
+            else:
+                job_list_str = []
+                job_list_finished_str = []
 
             # format information:
             jlist = list(map(lambda x: x.strip().split(), job_list_str))
             jlist_fin = list(map(lambda x: x.strip().split(), job_list_finished_str))
-            header = jlist[0]
-            jobs = jlist[1:]+jlist_fin[1:]
+            if(len(jlist) > 1):
+                header = jlist[0]
+                jobs = jlist[1:]+jlist_fin[1:]
 
-            jobs_dict = {}
-            for job in jobs:
-                jobID = int(job[0])
-                user = job[1]
-                status = job[2]
-                queue = job[3]
-                from_host = job[4]
-                exec_host = job[5]
-                job_name = " ".join(job[6:-3])
-                submit_time = datetime.strptime(str(datetime.now().year) + " " + " ".join(job[-3:]), '%Y %b %d %H:%M')
-                values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
-                jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
+                jobs_dict = {}
+                for job in jobs:
+                    jobID = int(job[0])
+                    user = job[1]
+                    status = job[2]
+                    queue = job[3]
+                    from_host = job[4]
+                    exec_host = job[5]
+                    job_name = " ".join(job[6:-3])
+                    submit_time = datetime.strptime(str(datetime.now().year) + " " + " ".join(job[-3:]), '%Y %b %d %H:%M')
+                    values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
+                    jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
 
-            self.job_queue_list = pd.DataFrame(jobs_dict, index=None).T
-
+                self.job_queue_list = pd.DataFrame(jobs_dict, index=None).T
+            else:
+                self.job_queue_list = pd.DataFrame(columns=["JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()])
         else:
             if (self.verbose):
                 print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
@@ -449,9 +445,9 @@ class LSF(_SubmissionSystem):
     """
     def kill_jobs(self, job_name:str=None, regex:bool=False, job_ids: Union[List[int], int]=None):
         if(not job_name is None):
-            jobs = list(self.search_queue_for_jobname(job_name, regex=regex).index)
+            job_ids = list(self.search_queue_for_jobname(job_name, regex=regex).index)
         elif(not job_ids is None):
-            if(job_ids is int):
+            if(isinstance(job_ids, int)):
                 job_ids = [job_ids]
         else:
             raise ValueError("Please provide either job_name or job_ids!")
@@ -461,5 +457,7 @@ class LSF(_SubmissionSystem):
         try:
             bash.execute('bkill '+ " ".join(map(str, job_ids)))
         except Exception as err:
-            raise ChildProcessError("could not execute this command: \n" +
-                                    str(err.args))
+            if(any(["Job has already finished" in x for x in err.args])):
+                print("Job has already finished")
+            else:
+                raise ChildProcessError("could not execute this command: \n" + str(err.args))
