@@ -449,9 +449,9 @@ class LSF(_SubmissionSystem):
     """
     def kill_jobs(self, job_name:str=None, regex:bool=False, job_ids: Union[List[int], int]=None):
         if(not job_name is None):
-            jobs = list(self.search_queue_for_jobname(job_name, regex=regex).index)
+            job_ids = list(self.search_queue_for_jobname(job_name, regex=regex).index)
         elif(not job_ids is None):
-            if(job_ids is int):
+            if(isinstance(job_ids, int)):
                 job_ids = [job_ids]
         else:
             raise ValueError("Please provide either job_name or job_ids!")
