@@ -590,11 +590,12 @@ class Gromos_System():
             else:
                 name = self.Forcefield.mol_name
             # make top
-            if self._gromosPP is None or self.gromosPP is None:
-               warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
-            else:
+            if self._gromosPP._isValid:
                 self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
                 self.top = Top(in_value=out)
+            else:
+                warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
+             
         elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
             if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
