@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import datetime
 from typing import Union, List
 
 from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
@@ -383,14 +384,22 @@ class LSF(_SubmissionSystem):
                 #out_job_lines = ["123 TEST", "456 TEST2"]
             else:
                 time.sleep(5)
-                out_process = bash.execute("bjobs -w", catch_STD=True)
-                stdout = list(map(str, out_process.stdout.readlines()))
+                self.get_queued_jobs()
                 out_job_lines = list(filter(lambda line: re.search(job_name, line), stdout))
 
             if (verbose): print("got job_lines: ", out_job_lines)
         except TimeoutError:
             return []
         return out_job_lines
+
+
+    def get_queued_jobs(self):
+        try:
+            out_process = bash.execute("bjobs -w", catch_STD=True)
+            self._job_queue_list = list(map(str, out_process.stdout.readlines()))
+            self._job_queue_time_stamp = datetime.datetime.now()
+        except Exception as err:
+            raise Exception("Could not get job_list")
 
     def is_job_in_queue(self, job_name: str, verbose: bool = False) -> bool:
         """
