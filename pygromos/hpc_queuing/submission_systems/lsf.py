@@ -254,7 +254,7 @@ class LSF(_SubmissionSystem):
         # QUEUE checking to not double submit
         if (self.submission and do_not_doubly_submit_to_queue):
             if (self.verbose): print('check queue')
-            ids = self.get_jobs_from_queue(jobName)
+            ids = self.search_queue_for_jobname(jobName)
 
             if (len(ids) > 0):
                 if (self.verbose): print(
@@ -382,7 +382,7 @@ class LSF(_SubmissionSystem):
                 values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
                 jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
 
-            self.job_queue_list = pd.DataFrame(jobs_dict, index=Nonse).T
+            self.job_queue_list = pd.DataFrame(jobs_dict, index=None).T
 
         else:
             if (self.verbose):
@@ -440,62 +440,3 @@ class LSF(_SubmissionSystem):
             return len(self.search_queue_for_jobname(job_name=job_name)) >0
         else:
             raise ValueError("Please provide either the job_name or the job_id!")
-
-
-    #TOBEDELETED
-    def get_jobs_from_queue(self, job_text: str, regex: bool = False,
-                            dummyTesting: bool = False, verbose: bool = False) -> List[int]:
-        """search_queue_for_jobname
-
-            this jobs searches the job queue for a certain job id.
-
-        Parameters
-        ----------
-        job_text :  str
-        regex:  bool, optional
-            if the string is a Regular Expression
-        Returns
-        -------
-        List[int]
-            output contains all ids of fitting jobs to the querry
-        """
-        out_job_lines = self.search_queue_for_jobname(job_text, regex=regex,
-                                                      dummyTesting=dummyTesting, verbose=verbose)
-        if (verbose): print("Isolate job IDs")
-        get_job_ids = list(map(int, filter(lambda x: x.isdigit(), map(lambda x: x.split(" ")[0], out_job_lines))))
-        if (verbose): print("jobID: ", get_job_ids)
-        return get_job_ids
-
-    def search_queue_for_jobname(self, job_name: str, regex: bool = False,
-                                 dummyTesting: bool = False, verbose: bool = False) -> List[str]:
-        """search_queue_for_jobname
-
-            this jobs searches the job queue for a certain job id.
-
-        Parameters
-        ----------
-        job_name :  str
-        regex:  bool, optional
-            if the string is a Regular Expression
-        Returns
-        -------
-        List[str]
-            the output of the queue containing the jobname
-        """
-        try:
-            if (not regex):
-                job_name = " " + job_name + " "
-            if (verbose): print("getting job data")
-            if (dummyTesting):
-                out_job_lines = []
-                #out_job_lines = ["123 TEST", "456 TEST2"]
-            else:
-                time.sleep(5)
-                self.get_queued_jobs()
-                out_job_lines = list(filter(lambda line: re.search(job_name, line), stdout))
-
-            if (verbose): print("got job_lines: ", out_job_lines)
-        except TimeoutError:
-            return []
-        return out_job_lines
-

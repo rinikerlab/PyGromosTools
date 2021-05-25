@@ -18,7 +18,7 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
     if (verbose) and verbose_lvl >= 2: print("Checking if jobs was already submitted or done")
     if (do_not_doubly_submit_to_queue):  # can we find an job with this name in the queue?
         if (verbose) and verbose_lvl >= 2: print("Checking for jobs with name: " + tmp_jobname)
-        queued_job_ids = job_submission_system.get_jobs_from_queue(job_text=tmp_jobname)
+        queued_job_ids = job_submission_system.search_queue_for_jobname(job_name=tmp_jobname)
 
         ## check if already submitted
         if (len(queued_job_ids) > 0):  # check if job is already submitted:

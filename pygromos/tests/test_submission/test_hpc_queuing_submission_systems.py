@@ -105,9 +105,5 @@ class test_LSF(test_queuing_system):
 
     def test_search_queue_for_jobname(self):
         search_job = "Test"
-        self.SubmissionSystem.search_queue_for_jobname(job_name=search_job,dummyTesting=True)
+        self.SubmissionSystem.search_queue_for_jobname(job_name=search_job)
 
-    def test_get_jobs_from_queue(self):
-        get_jobs_with = "Test"
-
-        self.SubmissionSystem.get_jobs_from_queue(job_text=get_jobs_with, dummyTesting=True)
