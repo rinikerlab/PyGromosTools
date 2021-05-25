@@ -382,7 +382,7 @@ class LSF(_SubmissionSystem):
                 values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
                 jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
 
-            self.job_queue_list = pd.DataFrame(jobs_dict, index=False).T
+            self.job_queue_list = pd.DataFrame(jobs_dict, index=Nonse).T
 
         else:
             if (self.verbose):
