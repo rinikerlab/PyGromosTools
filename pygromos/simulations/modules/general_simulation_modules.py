@@ -140,7 +140,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system.trc = Trc(input_value=final_trc_file)
         else:
             in_gromos_system.trc = Trc(input_value=None)
-            in_gromos_system.trc = True
+            in_gromos_system.trc._future_file = True
             in_gromos_system.trc.path = final_trc_file
 
     if(hasattr(in_gromos_system.imd, "WRITETRAJ") and in_gromos_system.imd.WRITETRAJ.NTWE > 0):
@@ -151,7 +151,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system.tre = Tre(input_value=final_tre_file)
         else:
             in_gromos_system.tre = Tre(input_value=None)
-            in_gromos_system.tre = True
+            in_gromos_system.tre._future_file = True
             in_gromos_system.tre.path = final_tre_file
 
     if(hasattr(in_gromos_system.imd, "WRITETRAJ") and in_gromos_system.imd.WRITETRAJ.NTWG > 0):
@@ -162,7 +162,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system.trg = Trg(input_value=final_trg_file)
         else:
             in_gromos_system.trg = Trg(input_value=None)
-            in_gromos_system.trg = True
+            in_gromos_system.trg._future_file = True
             in_gromos_system.trg.path = final_trg_file
 
     in_gromos_system.work_folder = step_dir
