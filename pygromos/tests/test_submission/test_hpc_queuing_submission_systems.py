@@ -76,9 +76,9 @@ class test_LOCAL(test_queuing_system):
         self.SubmissionSystem.search_queue_for_jobname(job_name=search_job, verbose=self.verbose)
 
     def test_get_jobs_from_queue(self):
-        get_jobs_with = "Test"
+        job_id = 123
 
-        self.SubmissionSystem.get_jobs_from_queue(job_text=get_jobs_with, verbose=self.verbose)
+        self.SubmissionSystem.search_queue_for_jobid(job_id=job_id, verbose=self.verbose)
 
 
 class test_LSF(test_queuing_system):
