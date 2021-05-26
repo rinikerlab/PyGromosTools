@@ -642,7 +642,10 @@ class Gromos_System():
         from pygromos.files.blocks.coord_blocks import Pbc
         ##vacuum if no box or GENBOX-pbc == Vacuum
         if (not self.cnf._future_file and (not hasattr(self.cnf, "GENBOX") or self.cnf.GENBOX.pbc == Pbc.vacuum)):
-            self.imd.BOUNDCOND.NTB = 0
+            self.imd.BOUNDCOND.NTB = Pbc.vacuum.value
+        elif(not self.cnf._future_file and (not hasattr(self.cnf, "GENBOX") or self.cnf.GENBOX.pbc == Pbc.rectangular)):
+            self.imd.BOUNDCOND.NTB = Pbc.rectangular.value
+            self.imd.BOUNDCOND.NDFMIN = 3
 
 
         ##Energy and Force Group
