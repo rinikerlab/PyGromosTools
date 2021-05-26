@@ -488,10 +488,11 @@ class FORCEFIELD(_generic_gromos_block):
             self.NAME = NAME[0].strip()
         else:
             super().__init__(name=self.__class__.__name__, used=True, content=content)
+            self.NAME = "\n".join(content)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        result += self.NAME + self.line_seperator
+        #result += self.NAME + self.line_seperator
         result += "END" + self.line_seperator
         return result
 
@@ -504,6 +505,7 @@ class MAKETOPVERSION(_generic_gromos_block):
             self.VERSION = VERSION[0].strip()
         else:
             super().__init__(name=self.__class__.__name__, used=True, content=content)
+            self.VERSION = "\n".join(content)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -609,7 +611,6 @@ class DISTANCERESSPEC(_generic_gromos_block):
         result += "#{:>4} {:>5} {:>5} {:>5} {:>5}    {:>5} {:>5} {:>5} {:>5} {:>5}  {:>10} {:>10} {:>3}\n".format(
             *self.RESTRAINTHEADER)
         for x in self.RESTRAINTS:
-            print(x)
             result += x.to_string()
         result += "END\n"
         return result
@@ -814,7 +815,7 @@ class MPERTATOM(_generic_gromos_block):
                 stateNames = [stateNames]
 
             for stateN in stateNames:
-                print(stateN)
+                #print(stateN)
                 stateID = self.STATEIDENTIFIERS.index(stateN)+1
 
                 for atom in self.STATEATOMS:
@@ -1077,7 +1078,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                 stateNames = [stateNames]
 
             for stateN in stateNames:
-                print(stateN)
+                #print(stateN)
                 stateID = self.STATEIDENTIFIERS.index(stateN)+1
 
                 for atom in self.STATEATOMS:
