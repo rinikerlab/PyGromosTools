@@ -1159,23 +1159,23 @@ class NONBONDED(_generic_imd_block):
     RCRF: float
     EPSRF: float
     NSLFEXCL: bool
-    NSHAPE: float
+    NSHAPE: int
     ASHAPE: float
     NA2CLC: int
-    TOLA2: float
+    TOLA2: str
     EPSLS: float
-    NKX: float
-    NKY: float
-    NKZ: float
+    NKX: int
+    NKY: int
+    NKZ: int
     KCUT: float
-    NGX: float
-    NGY: float
-    NGZ: float
+    NGX: int
+    NGY: int
+    NGZ: int
     NASORD: int
     NFDORD: int
-    NALIAS: float
-    NSPORD: float
-    NQEVAL: float
+    NALIAS: int
+    NSPORD: int
+    NQEVAL: int
     FACCUR: float
     NRDGRD: bool
     NWRGRD: bool
@@ -1186,11 +1186,11 @@ class NONBONDED(_generic_imd_block):
                ["NKX", "NKY", "NKZ", "KCUT"], ["NGX", "NGY", "NGZ", "NASORD", "NFDORD", "NALIAS", "NSPORD"],
                ["NQEVAL", "FACCUR", "NRDGRD", "NWRGRD"], ["NLRLJ", "SLVDNS"]]]
 
-    def __init__(self, NLRELE: int=0, APPAK: float=0, RCRF: float=0, EPSRF: float=0, NSLFEXCL: bool=False, NSHAPE: float=0,
-                 ASHAPE: float=0, NA2CLC: int=0, TOLA2: float=0,
+    def __init__(self, NLRELE: int=0, APPAK: float=0, RCRF: float=0, EPSRF: float=0, NSLFEXCL: bool=False, NSHAPE: int=0,
+                 ASHAPE: float=0, NA2CLC: int=0, TOLA2: str=0,
                  EPSLS: float=0,
-                 NKX: float=0, NKY: float=0, NKZ: float=0, KCUT: float=0, NGX: float=0, NGY: float=0, NGZ: float=0, NASORD: int=0,
-                 NFDORD: int=0, NALIAS: float=0, NSPORD: float=0, NQEVAL: float=0, FACCUR: float=0, NRDGRD: bool=False, NWRGRD: bool=False,
+                 NKX: int=0, NKY: int=0, NKZ: int=0, KCUT: float=0, NGX: int=0, NGY: int=0, NGZ: int=0, NASORD: int=0,
+                 NFDORD: int=0, NALIAS: int=0, NSPORD: int=0, NQEVAL: int=0, FACCUR: float=0, NRDGRD: bool=False, NWRGRD: bool=False,
                  NLRLJ: bool=False, SLVDNS: float=0, content=None):
         super().__init__(used=True, content=content)
         if content is None:
@@ -1199,27 +1199,27 @@ class NONBONDED(_generic_imd_block):
             self.RCRF = RCRF
             self.EPSRF = EPSRF
             self.NSLFEXCL = NSLFEXCL
-            self.NSHAPE = NSHAPE
+            self.NSHAPE = int(NSHAPE)
             self.ASHAPE = ASHAPE
-            self.NA2CLC = NA2CLC
-            self.TOLA2 = TOLA2
+            self.NA2CLC = int(NA2CLC)
+            self.TOLA2 = str(TOLA2)
             self.EPSLS = EPSLS
-            self.NKX = NKX
-            self.NKY = NKY
-            self.NKZ = NKZ
+            self.NKX = int(NKX)
+            self.NKY = int(NKY)
+            self.NKZ = int(NKZ)
             self.KCUT = KCUT
-            self.NGX = NGX
-            self.NGY = NGY
-            self.NGZ = NGZ
-            self.NASORD = NASORD
-            self.NFDORD = NFDORD
-            self.NALIAS = NALIAS
-            self.NSPORD = NSPORD
-            self.NQEVAL = NQEVAL
+            self.NGX = int(NGX)
+            self.NGY = int(NGY)
+            self.NGZ = int(NGZ)
+            self.NASORD = int(NASORD)
+            self.NFDORD = int(NFDORD)
+            self.NALIAS = int(NALIAS)
+            self.NSPORD = int(NSPORD)
+            self.NQEVAL = int(NQEVAL)
             self.FACCUR = FACCUR
-            self.NRDGRD = NRDGRD
-            self.NWRGRD = NWRGRD
-            self.NLRLJ = NLRLJ
+            self.NRDGRD = bool(int(NRDGRD))
+            self.NWRGRD = bool(int(NWRGRD))
+            self.NLRLJ = bool(int(NLRLJ))
             self.SLVDNS = SLVDNS
 
 
@@ -1509,7 +1509,7 @@ class ENERGYMIN(_generic_imd_block):
     DELE: float
     DX0: float
     DXM: float
-    NMIN: float
+    NMIN: int
     FLIM: float
 
     _order = [["NTEM    NCYC    DELE    DX0     DXM   NMIN   FLIM".split()]]
