@@ -128,12 +128,13 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         from pygromos.files.coord import cnf
         import math
         cnf_file = cnf.Cnf(in_cnf_path)
-        if(any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
+        if(hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
             cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
             cnf_file.write(in_cnf_path)
 
 
         out_prefix = out_dir+"/"+tmp_prefix
+
         try:
             omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
                                      in_pert_topo_path=in_perttopo_path, in_disres_path=in_disres_path,

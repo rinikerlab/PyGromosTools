@@ -76,9 +76,9 @@ class test_LOCAL(test_queuing_system):
         self.SubmissionSystem.search_queue_for_jobname(job_name=search_job, verbose=self.verbose)
 
     def test_get_jobs_from_queue(self):
-        get_jobs_with = "Test"
+        job_id = 123
 
-        self.SubmissionSystem.get_jobs_from_queue(job_text=get_jobs_with, verbose=self.verbose)
+        self.SubmissionSystem.search_queue_for_jobid(job_id=job_id, verbose=self.verbose)
 
 
 class test_LSF(test_queuing_system):
@@ -86,12 +86,11 @@ class test_LSF(test_queuing_system):
 
     def setUp(self) -> None:
         self.SubmissionSystem = self.file_class(verbose=self.verbose, submission=False)
+        self.SubmissionSystem._dummy=True
 
     def test_submit(self):
         command = "echo \" WUHAHAHA\""
-
-        self.SubmissionSystem.submit_to_queue(command=command, jobName="TEST", sumbit_from_file=False,
-                                              dummyTesting=True)
+        self.SubmissionSystem.submit_to_queue(command=command, jobName="TEST", sumbit_from_file=False)
 
     def test_submit_jobAarray_to_queue(self):
         command = "echo \" WUHAHAHA\""
@@ -105,9 +104,5 @@ class test_LSF(test_queuing_system):
 
     def test_search_queue_for_jobname(self):
         search_job = "Test"
-        self.SubmissionSystem.search_queue_for_jobname(job_name=search_job,dummyTesting=True)
+        self.SubmissionSystem.search_queue_for_jobname(job_name=search_job)
 
-    def test_get_jobs_from_queue(self):
-        get_jobs_with = "Test"
-
-        self.SubmissionSystem.get_jobs_from_queue(job_text=get_jobs_with, dummyTesting=True)

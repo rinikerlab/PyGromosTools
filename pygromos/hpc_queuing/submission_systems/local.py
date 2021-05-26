@@ -1,5 +1,6 @@
 import os
 import warnings
+import pandas as pd
 from typing import Union, List
 
 from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
@@ -17,7 +18,6 @@ class LOCAL(_SubmissionSystem):
 
     def submit_to_queue(self, command: str, jobName: str = "local", submit_from_dir: str = None,
                         sumbit_from_file: bool = False, **kwargs) -> Union[int, None]:
-        # job_properties:Job_properties=None, <- currently not usd
         """submit_to_queue
 
                 This function submits a job to the submission queue.
@@ -140,29 +140,12 @@ class LOCAL(_SubmissionSystem):
             print("Did note submit: ", command)
             return None
 
-    def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
-        """search_queue_for_jobname
-
-            this jobs searches the job queue for a certain job id.
-
-        Parameters
-        ----------
-        job_text :  str
-        regex:  bool, optional
-            if the string is a Regular Expression
-        Returns
-        -------
-        List[int]
-            output contains all ids of fitting jobs to the querry
-        """
-        if (self.verbose): print("Searching ID: ", job_text)
-        warnings.warn("Queue search was called, but no queue present!")
-        return []
 
     def search_queue_for_jobname(self, job_name: str, **kwargs) -> List[str]:
         """search_queue_for_jobname
 
-            this jobs searches the job queue for a certain job id.
+            this jobs searches the job queue for a certain job name.
+            DUMMY FUNCTION!
 
         Parameters
         ----------
@@ -174,6 +157,28 @@ class LOCAL(_SubmissionSystem):
         List[str]
             the output of the queue containing the jobname
         """
-        if (self.verbose): print("Searching job Name: ", job_name)
-        warnings.warn("Queue search was called, but no queue present!")
+        if (self.verbose):
+            print("Searching job Name: ", job_name)
+            warnings.warn("Queue search was called, but no queue present!")
+        return []
+
+
+    def search_queue_for_jobid(self, job_id: int, **kwargs)->pd.DataFrame:
+        """search_queue_for_jobid
+
+            this jobs searches the job queue for a certain job id.
+            DUMMY FUNCTION!
+
+        Parameters
+        ----------
+        job_id :  int
+            id of the job
+        Raises
+        -------
+        NotImplemented
+            Needs to be implemented in subclasses
+        """
+        if (self.verbose):
+            print("Searching job ID: ", job_id)
+            warnings.warn("Queue search was called, but no queue present!")
         return []

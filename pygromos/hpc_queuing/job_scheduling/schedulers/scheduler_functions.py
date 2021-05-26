@@ -1,8 +1,11 @@
 import glob
 import os
 
+import pandas as pd
+
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.hpc_queuing.submission_systems import lsf
 from pygromos.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
 from pygromos.utils import bash
@@ -18,7 +21,10 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
     if (verbose) and verbose_lvl >= 2: print("Checking if jobs was already submitted or done")
     if (do_not_doubly_submit_to_queue):  # can we find an job with this name in the queue?
         if (verbose) and verbose_lvl >= 2: print("Checking for jobs with name: " + tmp_jobname)
-        queued_job_ids = job_submission_system.get_jobs_from_queue(job_text=tmp_jobname)
+        queued_job_ids = job_submission_system.search_queue_for_jobname(job_name=tmp_jobname)
+        print(queued_job_ids)
+        if(queued_job_ids is pd.DataFrame):
+            queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
 
         ## check if already submitted
         if (len(queued_job_ids) > 0):  # check if job is already submitted:
@@ -101,6 +107,7 @@ def chain_submission(simSystem:Gromos_System,
 
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
+
 
     job_submission_system.job_duration = job_submission_system.job_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
@@ -197,7 +204,8 @@ def chain_submission(simSystem:Gromos_System,
                 clean_id = job_submission_system.submit_to_queue(command=clean_up_command,
                                                                  jobName=tmp_jobname + "_cleanUP",
                                                                  queue_after_jobID=previous_job_ID,
-                                                                 outLog=outLog, errLog=errLog)
+                                                                 outLog=outLog,
+                                                                 errLog=errLog,)
 
                 if verbose: print("CLEANING ID: ", previous_job_ID)
 

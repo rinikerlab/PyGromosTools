@@ -127,6 +127,8 @@ class _generic_imd_block(_generic_gromos_block):
     def _try_to_convert_field(self, field, key):
         if isinstance(field, str):
             try:
+                if(self.__annotations__[key] is bool):
+                    return bool(int(field))  # solves the type problem for simple types
                 return self.__annotations__[key](field) #solves the type problem for simple types
             except:
                 return field
@@ -871,30 +873,35 @@ class FORCE(_generic_imd_block):
             self.DIHEDRAL = bool(DIHEDRAL)
             self.ELECTROSTATIC = bool(ELECTROSTATIC)
             self.VDW = bool(VDW)
-            self.NEGR = int(NEGR)
+            try:
+                self.NEGR = int(NEGR)
+            except :
+                if(NEGR is list):
+                    self.NEGR = int(NEGR[0])
+                    NRE = NEGR[1:]+NRE
             self.NRE = NRE
             super().__init__(used=True)
 
         else:
             super().__init__(used=True, content=content)
-        """
-        def _parse_key_content(self, keyLineNumb = 0, contentlines = []):
-            if keyLineNumb == 0:
-                for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
-                    # first bring key to attribute form
-                    key = self.__clean_key_from_order(key=key)
-                    field = self.__try_to_convert_field(field=field)
-                    setattr(self, key, field)
-            else:
-                # NEGR
-                key = "NEGR"
-                field = self.__try_to_convert_field(field=contentlines[0][0])
+
+    def _parse_key_content(self, keyLineNumb = 0, contentlines = []):
+        if keyLineNumb == 0:
+            for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
+                # first bring key to attribute form
+                key = self._clean_key_from_order(key=key)
+                field = self._try_to_convert_field(field=field, key=key)
                 setattr(self, key, field)
-                # NRE
-                key = "NRE"
-                field = self.__try_to_convert_field(field=contentlines[0][1:])
-                setattr(self, key, field)
-        """
+        else:
+            # NEGR
+            key = "NEGR"
+            field = self._try_to_convert_field(field=contentlines[0][0], key=key)
+            setattr(self, key, field)
+            # NRE
+            key = "NRE"
+            field = self._try_to_convert_field(field=contentlines[0][1:], key=key)
+            setattr(self, key, field)
+
 
     def read_content_from_str(self, content: List[str]):
         try:

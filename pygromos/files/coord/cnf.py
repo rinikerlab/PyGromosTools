@@ -895,7 +895,8 @@ class Cnf(_general_gromos_file):
 
         # 2) CONSTUCT PDB BLOCKS
         # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+        pdb_format = "ATOM  {:>5d} {:<4}{:1}{:<4} {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+
         dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
         dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
 
@@ -926,9 +927,8 @@ class Cnf(_general_gromos_file):
             in xyz format
         """
         xyz_str = str(len(self.POSITION)) + "\n"
-        xyz_str += "# "+str(self.TITLE.content.split("\n")[0])+"\n"
+        xyz_str += "# "+str(self.TITLE.content[0])
         xyz_str += "# exported wit PyGromosTools\n"
-
         xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
 
         for position in self.POSITION:

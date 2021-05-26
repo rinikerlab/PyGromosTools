@@ -23,9 +23,9 @@ import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_block_names_table
 
 class Tre(traj._General_Trajectory):
-    def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0):
+    def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0, _ene_ana_names = gromos_2020_tre_block_names_table):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
-        self.tre_block_name_table = gromos_2020_tre_block_names_table
+        self.tre_block_name_table = _ene_ana_names
 
 
     """--------------------------------------------------------------
@@ -34,7 +34,7 @@ class Tre(traj._General_Trajectory):
     """
 
     def get_totals(self) -> pd.DataFrame:
-        print(self.database["totals"][0].shape, self.database["totals"][0])
+        #print(self.database["totals"][0].shape, self.database["totals"][0])
         self.totals = pd.DataFrame(data = np.stack(self.database["totals"].to_numpy()), columns=self.tre_block_name_table.totals_subblock_names)
         return self.totals
 
@@ -120,5 +120,3 @@ class Tre(traj._General_Trajectory):
         rt_constant = 0.008314462618153239 * temperature # R in kilojoule_per_mole/kelvin * T
         self.heat_vap = gas_nonbonded_energy - liquid_nonbonded_energyself/nMolecules + rt_constant
         return self.heat_vap
-
-        

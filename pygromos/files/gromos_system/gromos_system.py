@@ -74,6 +74,8 @@ class Gromos_System():
     _single_multibath:bool  = False
     _single_energy_group:bool = False
 
+    _gromosPP_bin_dir : Union[None, str] = None
+    _gromosXX_bin_dir : Union[None, str] = None
     _gromosPP : GromosPP
     _gromosXX : GromosXX
 
@@ -125,7 +127,7 @@ class Gromos_System():
         self._future_promise= False
         self._future_promised_files = []
 
-        if in_smiles == None and rdkitMol == None and readIn == False:
+        if (in_smiles == None and rdkitMol == None) or readIn == False:
             if verbose: warnings.warn("No data provided to gromos_system\nmanual work needed")
 
         # import files:
@@ -244,6 +246,7 @@ class Gromos_System():
 
     def __setstate__(self, state):
         self.__dict__ = state
+        print(state.keys())
         for key in skip:
             if(key in self.__dict__ ) and not self.__dict__[key] is None:
                 setattr(self, key, skip[key](**self.__dict__[key]))
@@ -254,10 +257,8 @@ class Gromos_System():
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-
-        #@bschroed remove this !
-        self._gromosPP = GromosPP(gromosPP_bin_dir=self._gromosPP_bin_dir)
-        self._gromosXX =GromosXX(gromosXX_bin_dir=self._gromosXX_bin_dir)
+        self._gromosPP = GromosPP(self._gromosPP_bin_dir)
+        self._gromosXX = GromosXX(self._gromosXX_bin_dir)
 
         #are promised files now present?
         self._check_promises()
