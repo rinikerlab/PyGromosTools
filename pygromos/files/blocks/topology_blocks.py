@@ -1,5 +1,4 @@
 import re
-import warnings
 import __main__
 from enum import Enum
 from typing import Union, Iterable, Tuple, List, Dict
@@ -482,9 +481,12 @@ TITLE: TITLE = TITLE
 class FORCEFIELD(_generic_gromos_block):
     NAME: str
 
-    def __init__(self, NAME: str):
-        super().__init__(name=self.__class__.__name__, used=True)
-        self.NAME = NAME[0].strip()
+    def __init__(self, NAME: str=None, content=None):
+        if content is None:
+            super().__init__(name=self.__class__.__name__, used=True)
+            self.NAME = NAME[0].strip()
+        else:
+            super().__init__(name=self.__class__.__name__, used=True, content=content)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -495,9 +497,12 @@ class FORCEFIELD(_generic_gromos_block):
 class MAKETOPVERSION(_generic_gromos_block):
     VERSION: str
 
-    def __init__(self, VERSION: str):
-        super().__init__(name=self.__class__.__name__, used=True)
-        self.VERSION = VERSION[0].strip()
+    def __init__(self, VERSION: str=None, content=None):
+        if(content is None):
+            super().__init__(name=self.__class__.__name__, used=True)
+            self.VERSION = VERSION[0].strip()
+        else:
+            super().__init__(name=self.__class__.__name__, used=True, content=content)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -524,6 +529,14 @@ class _iterable_topology_block(_iterable_gromos_block):
         self.FORCEFIELD = FORCEFIELD
         self.MAKETOPVERSION = MAKETOPVERSION
 
+
+    def __deepcopy__(self, memo):
+        #return block as string, split by line and cut block title and END
+        newContent= self.block_to_string().split(self.line_seperator)[1:-2]
+        block = type(self)(content=newContent)
+        return block
+
+
 """
 TOPOLOGY BLOCKS
 """
@@ -531,7 +544,8 @@ TOPOLOGY BLOCKS
 Restraints Blocks
 """
 class DISTANCERESSPEC(_generic_gromos_block):
-    def __init__(self, KDISH: int, KDISC: int, RESTRAINTHEADER: list, RESTRAINTS: list):
+    def __init__(self, KDISH: int=None, KDISC: int=None, RESTRAINTHEADER: list=None, RESTRAINTS: list=None,
+                 content:List[str]=None):
         """
 
         Parameters
@@ -541,11 +555,51 @@ class DISTANCERESSPEC(_generic_gromos_block):
         RESTRAINTHEADER :
         RESTRAINTS :
         """
-        super().__init__(used=True, name="DISTANCERESSPEC")
+
+        if(content is None):
+            content = ["# KDISH, KDISC\n", str(KDISH)+"\t"+str(KDISC),
+                       "\t".join(RESTRAINTHEADER),
+                       ]+list(map(str, RESTRAINTS))
+        super().__init__(used=True, name="DISTANCERESSPEC", content=content)
+
+
+    def read_content_from_str(self, content:List[str]):
+        # readout KDISH or KDISC
+        keys = content[0].replace("#", "").strip().split()
+        KDISH, KDISC = content[1].split()
+
+        # read list header:
+        line_header = content[2].replace("#", "").split()
+        ##unify keys:
+        key_dict = {"i": 1, "j": 1, "k": 1, "l": 1, "type": 1}
+        renamed_header = []
+        for x in line_header:
+            if (x in key_dict):
+                renamed_header.append(x + str(key_dict[x]))
+                key_dict[x] += 1
+            else:
+                renamed_header.append(x)
+        RESTRAINTHEADER = renamed_header
+
+        # read restraints
+        RESTRAINTS = []
+        for line in content[3:]:
+            if (not line.startswith("#") and len(line.split()) == len(RESTRAINTHEADER)):
+                values = line.split()
+                RESTRAINTS_dict= {key: values[RESTRAINTHEADER.index(key)] for key in RESTRAINTHEADER}
+                RESTRAINTS.append(atom_pair_distanceRes(**RESTRAINTS_dict))
+            elif (line.startswith("#")):
+                continue
+            else:
+                print("WARNING! could not Read in :" + line)
+                continue
+
         self.KDISH = KDISH
         self.KDISC = KDISC
         self.RESTRAINTHEADER = RESTRAINTHEADER
         self.RESTRAINTS = RESTRAINTS
+
+
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
@@ -554,6 +608,7 @@ class DISTANCERESSPEC(_generic_gromos_block):
         result += "#{:>4} {:>5} {:>5} {:>5} {:>5}    {:>5} {:>5} {:>5} {:>5} {:>5}  {:>10} {:>10} {:>3}\n".format(
             *self.RESTRAINTHEADER)
         for x in self.RESTRAINTS:
+            print(x)
             result += x.to_string()
         result += "END\n"
         return result
@@ -562,8 +617,8 @@ class DISTANCERESSPEC(_generic_gromos_block):
 Pertubation Blocks
 """
 class MPERTATOM(_generic_gromos_block):
-    def __init__(self, NJLA: int, NPTB: int, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: Tuple[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_eds_pertubation_state]=[],
-                 dummy_IAC = 22, dummy_CHARGE=0.0):
+    def __init__(self, NJLA: int=None, NPTB: int=None, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: Tuple[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_eds_pertubation_state]=[],
+                 dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
         """
             This block is used for lambda sampling to define the different states.
 
@@ -584,14 +639,66 @@ class MPERTATOM(_generic_gromos_block):
         dummy_CHARGE
             dummy atom charge type for perturbed atoms
         """
-        super().__init__(used=True, name=__class__.__name__)
-        self.NJLA = NJLA
-        self.NPTB = NPTB
-        self.STATEIDENTIFIERS = STATEIDENTIFIERS
-        self.STATEATOMHEADER = STATEATOMHEADER
-        self.STATEATOMS = STATEATOMS
+
+        if(content is None):
+            super().__init__(used=True, name=__class__.__name__)
+            self.NJLA = NJLA
+            self.NPTB = NPTB
+            self.STATEIDENTIFIERS = STATEIDENTIFIERS
+            self.STATEATOMHEADER = STATEATOMHEADER
+            self.STATEATOMS = STATEATOMS
+
+        else:
+            super().__init__(used=True, name=__class__.__name__, content=content)
+
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
+
+
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        comment = ""
+        NJLA = None
+        NTPB = None
+        STATEIDENTIFIERS = []
+        STATEATOMS = []
+
+        first = True
+        for line in content:
+            # print(line)
+            if ("#" in line):
+                comment = line
+            else:
+                if (field > 3):
+                    if (first):
+                        STATEATOMHEADER = ["NR", "NAME", ]
+                        [STATEATOMHEADER.extend(["IAC" + str(x), "CHARGE" + str(x)]) for x in range(1, self.NPTB + 1)]
+                        STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+                        self.STATEATOMHEADER = STATEATOMHEADER
+                        first = False
+
+                    state_line = {key: value for key, value in zip(self.STATEATOMHEADER, line.split())}
+                    final_state_line = {key: state_line[key] for key in state_line if
+                                        (not "IAC" in key and not "CHARGE" in key)}
+
+                    states = {x: pertubation_eds_state(IAC=int(state_line["IAC" + str(x)]),
+                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in
+                              range(1, 1 + self.NPTB)}
+
+                    final_state_line.update({"STATES": states})
+                    STATEATOMS.append(atom_eds_pertubation_state(**final_state_line))
+
+                elif (field == 0):
+                    NJLA, NPTB = tuple(map(int, line.split()))
+                    self.NJLA = NJLA
+                    self.NPTB = NPTB
+                elif (field == 1):
+                    STATEIDENTIFIERS = line.split()
+                    self.STATEIDENTIFIERS = STATEIDENTIFIERS
+                field += 1
+
+        self.STATEATOMS = STATEATOMS
+
 
     @property
     def nStates(self)->int:
@@ -772,31 +879,75 @@ class PERTATOMPARAM(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state]=None,
                  STATEATOMHEADER: Tuple[str]= None,
                  NJLA: int=None, STATEIDENTIFIERS=None,
-                 dummy_IAC = 22, dummy_CHARGE=0.0):
-        super().__init__(used=True, name=__class__.__name__)
+                 dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
 
+
+        self.NPTB = 2
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
 
-        if(STATEATOMHEADER is None):
-            self.STATEATOMHEADER = ["NR", "RES", "NAME",]
-            self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+        if(content is None):
+            if(STATEATOMHEADER is None):
+                self.STATEATOMHEADER = ["NR", "RES",   "NAME",]
+                self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+            else:
+                self.STATEATOMHEADER = STATEATOMHEADER
+
+
+            if(STATEATOMS is None):
+                self.STATEATOMS = []
+            else:
+                self.STATEATOMS = []
+                self.NJLA = 0
+
+                self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__)
         else:
-            self.STATEATOMHEADER = STATEATOMHEADER
-
-
-        if(STATEATOMS is None):
-            self.STATEATOMS = []
-        else:
-            self.STATEATOMS = []
-            self.NJLA = 0
-
-            self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
         if(not NJLA is None and not len(STATEATOMS)==NJLA):
             raise ValueError("NJLA must be equal to the length of STATEATOMS! NJLA="+str(NJLA)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
 
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        NJLA = None
+        STATEIDENTIFIERS = None
+        STATEATOMHEADER = None
+        STATEATOMS = []
+        first = True
+        for line in content:
+            if ("#" in line):
+                comment = line
+                continue
+            else:
+                if (field > 1):
+                    if(first):
+                        STATEATOMHEADER = ["NR",  "RES", "NAME",]
+                        [STATEATOMHEADER.extend(["IAC" + str(x), "MASS" + str(x), "CHARGE" + str(x)]) for x in range(1, 3)]
+                        STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+                        first = False
+
+                    state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
+                    final_state_line = {key: state_line[key] for key in state_line if
+                                        (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
+                    states = {x: pertubation_lam_state(IAC=int(round(float(state_line["IAC" + str(x)]))),
+                                                          MASS=float(state_line["MASS" + str(x)]),
+                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
+
+                    final_state_line.update({"STATES":states})
+                    STATEATOMS.append(atom_lam_pertubation_state(**final_state_line))
+
+                elif (field == 0):
+                    NJLA = int(line.strip())
+                elif (field == 1):
+                    STATEIDENTIFIERS = line.split()
+                field += 1
+
+        self.NJLA = NJLA
+        self.STATEIDENTIFIERS = STATEIDENTIFIERS
+        self.STATEATOMHEADER = STATEATOMHEADER
+        self.STATEATOMS = STATEATOMS
 
     @property
     def nStates(self)->int:
@@ -1005,7 +1156,6 @@ class MASSATOMTYPECODE(_iterable_topology_block):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
 
         self._content = []
-
         if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
             self.read_content_from_str(content)
         elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
@@ -1689,7 +1839,8 @@ class SPECATOMLJPAIR(_iterable_topology_block):
             raise IOError("I don't understand the type of NRST: " + str(type(NRST)))
 
     def read_content_from_str(self, content: str):
-        warnings.warn("SPECIAL LJ BLOCK IS NOT IMPLEMENTED!")
+        #TODO: implement
+        #warnings.warn("SPECIAL LJ BLOCK IS NOT IMPLEMENTED!")
         return []
 
 ###################################################################
@@ -2176,6 +2327,8 @@ class _topology_table_block(_iterable_topology_block):
             self.read_content_from_str(content)
         elif (isinstance(content, Iterable) and all([isinstance(x, type(self.table_line_type)) for x in content])):
             self.content = content
+        elif (isinstance(content, str)):
+            self.read_content_from_str(content.split(self.line_seperator))
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
         
@@ -2244,6 +2397,11 @@ class PHYSICALCONSTANTS(_topology_block):
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
             self.read_content_from_str(content)
+        elif (isinstance(content, str)):
+            self.read_content_from_str(content.split(self.line_seperator))
+        elif (isinstance(content, tuple) and len(content)==4):
+            self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ = content
+            self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 

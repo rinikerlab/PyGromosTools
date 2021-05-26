@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os
 import warnings
+import shutil
+import math
 from typing import Dict, Union, List
 from collections import OrderedDict
 from pygromos.gromos import gromosPP
@@ -12,6 +14,8 @@ template_control_dict = OrderedDict({
     "concat": {"do": True,
                "sub": {
                    "cp_cnf": True,
+                   "repair_NaN": True,
+                   "cp_omd": True,
                    "cat_trc": True,
                    "cat_tre": True,
                    "cat_trg": False,
@@ -106,11 +110,30 @@ def project_concatenation(in_folder: str, out_folder: str, in_prefix:str, #in_si
             
             cnf_path = glob.glob(in_folder+"/"+in_prefix+"*/*.cnf")[-1]
             sim_cnf = cnf.Cnf(cnf_path)
+            if (control_dict["repair_NaN"]):
+                if(any([math.isnan(x) for x in sim_cnf.GENBOX.euler])):
+                    sim_cnf.GENBOX.euler = [0.0, 0.0, 0.0]
             out_cnf = sim_cnf.write( out_prefix+".cnf")
 
             #in_simSystem.cnf = sim_dir_cnfs[-1]
             #in_simSystem.cnf.path = out_prefix+".cnf"
             #in_simSystem.write_files(cnf=True, all=False)
+
+    if (control_dict["cp_omd"]):
+
+        out_omd = out_prefix+".omd"
+        if(os.path.exists(out_prefix+".omd")):
+            warnings.warn("Skipping concatenation of tres, as there already exists one!\n "
+                          "If you want to generate a new trc. Please delete the old one!\n\t Path:"+out_prefix+".omd")
+        else:
+            if (verbose): print("\tStart omd")
+            # find all omd files in this project
+            sim_dir_omd = gather_simulation_step_file_paths(in_folder, filePrefix=in_prefix, #in_simSystem.name,
+                                                                fileSuffixes=".omd",
+                                                                verbose=verbose)
+            for omd in sim_dir_omd:
+                shutil.copy2(omd, out_prefix + omd.split("/")[-1])
+
 
     if (control_dict["cat_trc"]):
         # find all trc files in this project

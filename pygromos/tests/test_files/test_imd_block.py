@@ -4,7 +4,7 @@ from pygromos.files.blocks import imd_blocks
 class test_imd_block(unittest.TestCase):
 
     def test_some_blocks(self):
-        test = imd_blocks.OLD_REPLICA_EDS(NATOM=1, NRES=2, RET=3, ALPHLJ=3, ALPHCRF=4, NUMSTATES=5, RES=6, RETS=7, EIR=8,
+        test = imd_blocks.REPLICA_EDS( NRES=2, NUMSTATES=5, RES=6,  EIR=8,
                                                              NRETRIAL=9, NREQUIL=10, CONT=11)
 
         test2 = imd_blocks.MULTIBATH(ALGORITHM = 1, NBATHS = 1, TEMP0 = [3], TAU = [4], DOFSET = 5, LAST = [6], COMBATH = [6], IRBATH = [7])

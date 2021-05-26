@@ -1,5 +1,4 @@
-import copy
-from typing import Iterable, Callable
+from typing import Iterable, List
 from numbers import Number
 
 # FIELDS
@@ -11,6 +10,12 @@ class _generic_field():
 
     def __str__(self):
         return self.to_string()
+
+    def __copy__(self):
+        field = type(self)()
+        for attr in vars(self):
+            setattr(field, attr, getattr(self, attr))
+        return field
 
     def to_string(self):
         raise NotImplementedError("to string method needs to be implemented!")
@@ -38,6 +43,16 @@ class _generic_gromos_block:
     def __iter__(self):
         return iter(self.content)
 
+    def __copy__(self):
+        block = type(self)(name=self.name, used=self.used, content=self.content)
+        return block
+
+    def __deepcopy__(self, memo):
+        #return block as string, split by line and cut block title and END
+        newContent= self.line_seperator.join(self.block_to_string().split(self.line_seperator)[1:-2])
+        block = type(self)(content=newContent)
+        return block
+
 
     def _check_import_method(self, content:str = None):
         if(not content is None):
@@ -45,8 +60,10 @@ class _generic_gromos_block:
                 self.read_content_from_str(content)
             elif type(content) == self.__class__:
                 self.content = content
+            elif isinstance(content, str):
+                self.read_content_from_str(content=content.split(self.line_seperator))
             else:
-                raise Exception("Generic Block did not understand the type of content")
+                raise Exception("Generic Block did not understand the type of content \n content: \n"+str(content))
         else:
             self.content = []
 
@@ -118,11 +135,20 @@ class TIMESTEP(_generic_gromos_block):
     step: int
     t: float
 
-    def __init__(self, t: float, step: int, subcontent=False):
-        super().__init__(used=True, name="TIMESTEP")
-        self.t = t
-        self.step = step
+    def __init__(self, t: float=None, step: int=None, content=None, subcontent=False, name="TIMESTEP", used=True):
+
+        if(t is None and step is None):
+            super().__init__(used=used, name=name, content=content)
+        elif(content is None):
+            super().__init__(used=used, name=name, content=[str(t)+"\t"+str(step)])
+
         self.subcontent = subcontent
+
+    def read_content_from_str(self, content:List[str]):
+        content = content[0].strip().split()
+        self.content = content
+        self.t = float(content[0])
+        self.step = float(content[1])
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
@@ -136,11 +162,13 @@ class TITLE(_generic_gromos_block):
     line_seperator:str = "\n"
     order = [[["content"]]]
 
-    def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n"):
-        super().__init__(used=True, name="TITLE")
-        self.content = content
+    def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n", name="TITLE", used=True):
+        super().__init__(used=used, name=name, content=content)
         self.field_seperator = field_seperator
         self.line_seperator = line_seperator
+
+    def read_content_from_str(self, content:List[str]):
+        self.content = content
 
     def block_to_string(self) -> str:
         result = ""

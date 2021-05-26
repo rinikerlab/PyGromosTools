@@ -187,6 +187,7 @@ def chain_submission(simSystem:Gromos_System,
                 if verbose: print("SIMULATION ID: ", previous_job_ID)
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
+
             try:
                 # schedule - simulation cleanup:
                 ##this mainly tars files.

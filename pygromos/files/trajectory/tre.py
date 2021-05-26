@@ -121,10 +121,4 @@ class Tre(traj._General_Trajectory):
         self.heat_vap = gas_nonbonded_energy - liquid_nonbonded_energyself/nMolecules + rt_constant
         return self.heat_vap
 
-
-print("\n".join(map(lambda x: "\t".join(map(str, x)), list(zip(range(len(
-    gromos_2020_tre_block_names_table.totals_subblock_names)), gromos_2020_tre_block_names_table.totals_subblock_names)))))
-
-
-
-
+        

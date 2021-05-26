@@ -76,7 +76,6 @@ class Cnf(_general_gromos_file):
         #general import
         else:
             super().__init__(in_value=in_value, _future_file=_future_file)
-
             if (hasattr(self, "POSITION")):
                 if clean_resiNumbers_by_Name: self.clean_posiResNums()  # carefull! if two resis same name after an another than, here is  a problem.
                 self.residues = self.get_residues(verbose=verbose)
@@ -103,7 +102,7 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
-
+    
     def write(self, out_path: str) -> str:
         # write out
         out_file = open(out_path, "w")
@@ -881,6 +880,7 @@ class Cnf(_general_gromos_file):
 
         # set POSITION attribute
         self.__setattr__("POSITION", blocks.POSITION(atomList))
+        self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4,4,4], angles=[90,90,90]))
 
     def get_pdb(self)->str:
         """
