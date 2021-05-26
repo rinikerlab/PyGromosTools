@@ -8,12 +8,17 @@ Author: Marc Lehner, Benjamin Ries
 """
 
 #imports
+from copy import deepcopy
+from typing import TypeVar, Union
 import warnings
 import math
 
 from pygromos.utils import bash as bash
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
+
+
+TopType = TypeVar("Top")
 
 
 #functions
@@ -41,7 +46,7 @@ def check_top():
 class Top(_general_gromos_file._general_gromos_file):
     gromos_file_ending:str = "top"
 
-    def __init__(self, in_value:(str or dict or None or __class__), _future_file:bool=False):
+    def __init__(self, in_value:(str or dict or None or TopType), _future_file:bool=False):
         if type(in_value) is str:
             super().__init__(in_value=in_value, _future_file=_future_file)
         elif(in_value == None):
@@ -53,6 +58,174 @@ class Top(_general_gromos_file._general_gromos_file):
             raise Exception('not implemented yet!')
         else:
             raise Exception('not implemented yet!')
+
+    def __add__(self, top:TopType)->TopType:
+        return self._add_top(top=top)
+
+    def _add_top(self, top:Union[TopType, None], solvFrom1:bool=True, verbose:bool=False)->TopType:
+        """
+        combines two topologies. Parameters are taken from the initial topology. 
+        But missing parameters from the second topology will be added.
+        Can be used like com_top from Gromos++ 
+
+        Parameters
+        ----------
+        top : TopType
+            second topology to add to the first topology
+        solvFrom1 : bool, optional
+            should the solvent be taken from the first topology? (else second), by default True
+        verbose : bool, optional
+            extra print statements, by default True
+        sanityCheck : bool, optional
+            feature and compatibility check, by default True
+
+        Returns
+        -------
+        TopType
+            returns a topology made by combing two topologies
+        """
+        # create the return top
+        retTop = deepcopy(self)
+        if top is None:
+            return retTop
+        # add solv
+        if not solvFrom1:
+            if verbose: print("taking solvent from second topology")
+            retTop.SOLVENTATOM = top.SOLVENTATOM
+            retTop.SOLVENTCONSTR = top.SOLVENTCONSTR
+
+        #calculate the shift of atom types of the second topology and add new atomtypes
+        atomTypeShift = {}
+        if not (hasattr(retTop, "ATOMTYPENAME") and len(retTop.ATOMTYPENAME.content)>=2):
+            setattr(retTop, "ATOMTYPENAME", deepcopy(top.ATOMTYPENAME))
+            setattr(retTop, "LJPARAMETERS", deepcopy(top.LJPARAMETERS))
+        for idx, atomT in enumerate(top.ATOMTYPENAME.content[1:]): #new atomtypes to find names for
+            foundAtomType = False
+            for mainIdx, mainAtomT in enumerate(retTop.ATOMTYPENAME.content[1:]): #AtomTypes in self to match against
+                if atomT == mainAtomT: 
+                    foundAtomType = True
+                    atomTypeShift.update({idx+1:mainIdx+1})
+                    break
+            if not foundAtomType:
+                retTop.ATOMTYPENAME.content[0][0] = str(int(retTop.ATOMTYPENAME.content[0][0]) + 1)
+                retTop.ATOMTYPENAME.content.append(atomT)
+                atomTypeShift.update({idx+1:retTop.ATOMTYPENAME.content[0][0]})
+                ljType = top.get_LJparameter_from_IAC(IAC=idx+1)
+                retTop.add_new_LJparameter(C6=float(ljType.C6), C12=float(ljType.C12))
+
+        if verbose: print("atomTypeShift: " + str(atomTypeShift))
+
+        #add RESNAME
+        for resname in top.RESNAME.content[1:]:
+            retTop.add_new_resname(resname[0])
+
+        #add SOLUTEATOM
+        if hasattr(retTop, "SOLUTEATOM"):
+            atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in main top. Shift secondary top atoms accordingly
+            mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in main top.
+        else:
+            atnmShift=0
+            mresShift=0
+        if verbose: print("atom number shift: " + str(atnmShift))
+        if verbose: print("molecule number shift: " + str(mresShift))
+
+        for atom in top.SOLUTEATOM.content:
+            retTop.add_new_soluteatom(ATNM = atnmShift + atom.ATNM,
+                                    MRES = mresShift + atom.MRES,
+                                    PANM = atom.PANM,
+                                    IAC = atomTypeShift[atom.IAC],
+                                    MASS = atom.MASS,
+                                    CG = atom.CG,
+                                    CGC = atom.CGC,
+                                    INE = [str(int(x)+atnmShift) for x in atom.INEvalues],
+                                    INE14 = [str(int(x)+atnmShift) for x in atom.INE14values])
+
+        # add bonds and bonds with H
+        for bond in top.BOND.content:
+            bondType = top.BONDSTRETCHTYPE.content[bond.ICB - 1]
+            retTop.add_new_bond(k=bondType.CHB, 
+                                b0=bondType.B0, 
+                                atomI=bond.IB + atnmShift, 
+                                atomJ=bond.JB + atnmShift)
+        for bond in top.BONDH.content:
+            bondType = top.BONDSTRETCHTYPE.content[bond.ICB - 1]
+            retTop.add_new_bond(k=bondType.CHB, 
+                                b0=bondType.B0, 
+                                atomI=bond.IB + atnmShift, 
+                                atomJ=bond.JB + atnmShift,
+                                includesH=True)
+
+        # add angles and angles with H
+        for angle in top.BONDANGLE.content:
+            angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
+            retTop.add_new_angle(k=angleType.CB, 
+                                kh=angleType.CHB, 
+                                b0=angleType.B0, 
+                                atomI=angle.IT + atnmShift, 
+                                atomJ=angle.JT + atnmShift,
+                                atomK=angle.KT + atnmShift)
+        for angle in top.BONDANGLEH.content:
+            angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
+            retTop.add_new_angle(k=angleType.CB, 
+                                kh=angleType.CHB, 
+                                b0=angleType.B0, 
+                                atomI=angle.IT + atnmShift, 
+                                atomJ=angle.JT + atnmShift,
+                                atomK=angle.KT + atnmShift, includesH=True)
+
+        # add diheadrals and diheadrals with H
+        for dihdrl in top.DIHEDRAL.content:
+            dihdrlType = top.TORSDIHEDRALTYPE.content[dihdrl.ICP - 1]
+            retTop.add_new_torsiondihedral(CP=dihdrlType.CP, 
+                                        PD=dihdrlType.PD, 
+                                        NP=dihdrlType.NP, 
+                                        atomI=dihdrl.IP + atnmShift, 
+                                        atomJ=dihdrl.JP + atnmShift, 
+                                        atomK=dihdrl.KP + atnmShift, 
+                                        atomL=dihdrl.LP + atnmShift)
+        for dihdrl in top.DIHEDRALH.content:
+            dihdrlType = top.TORSDIHEDRALTYPE.content[dihdrl.ICPH - 1]
+            retTop.add_new_torsiondihedral(CP=dihdrlType.CP, 
+                                        PD=dihdrlType.PD, 
+                                        NP=dihdrlType.NP, 
+                                        atomI=dihdrl.IPH + atnmShift, 
+                                        atomJ=dihdrl.JPH + atnmShift, 
+                                        atomK=dihdrl.KPH + atnmShift, 
+                                        atomL=dihdrl.LPH + atnmShift,
+                                        includesH=True)
+
+        # add impdihedrals with and without H
+        for dihdrl in top.IMPDIHEDRAL.content:
+            dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQ - 1]
+            retTop.add_new_impdihedral(CQ=dihdrlType.CQ, 
+                                        Q0=dihdrlType.Q0,
+                                        atomI=dihdrl.IQ + atnmShift, 
+                                        atomJ=dihdrl.JQ + atnmShift, 
+                                        atomK=dihdrl.KQ + atnmShift, 
+                                        atomL=dihdrl.LQ + atnmShift)
+        for dihdrl in top.IMPDIHEDRALH.content:
+            dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQH - 1]
+            retTop.add_new_torsiondihedral(CQ=dihdrlType.CQ, 
+                                        Q0=dihdrlType.Q0, 
+                                        atomI=dihdrl.IQH + atnmShift, 
+                                        atomJ=dihdrl.JQH + atnmShift, 
+                                        atomK=dihdrl.KQH + atnmShift, 
+                                        atomL=dihdrl.LQH + atnmShift,
+                                        includesH=True)
+
+        # add SOLUTEMOLECULES
+        for solmol in top.SOLUTEMOLECULES.content[1:]:
+            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift))
+
+        # add TEMPERATUREGROUPS
+        for solmol in top.TEMPERATUREGROUPS.content[1:]:
+            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift))
+
+        # add PRESSUREGROUPS
+        for solmol in top.PRESSUREGROUPS.content[1:]:
+            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
+
+        return retTop
 
     def read_file(self):
         #Read blocks to string
@@ -71,6 +244,12 @@ class Top(_general_gromos_file._general_gromos_file):
             self._block_order = orderList
         else:
             self._block_order = ["TITLE", "PHYSICALCONSTANTS","TOPVERSION","ATOMTYPENAME","RESNAME","SOLUTEATOM","BONDSTRETCHTYPE","BONDH","BOND","BONDANGLEBENDTYPE","BONDANGLEH","BONDANGLE","IMPDIHEDRALTYPE","IMPDIHEDRALH","IMPDIHEDRAL","TORSDIHEDRALTYPE","DIHEDRALH","DIHEDRAL","CROSSDIHEDRALH","CROSSDIHEDRAL","LJPARAMETERS","SOLUTEMOLECULES","TEMPERATUREGROUPS","PRESSUREGROUPS","LJEXCEPTIONS","SOLVENTATOM","SOLVENTCONSTR"]
+
+    def get_num_atomtypes(self) -> int:
+        if not hasattr(self, "ATOMTYPENAME"):
+            return 0
+        else:
+            return int(self.ATOMTYPENAME.content[0][0])
 
     def add_new_atomtype(self, name:str, verbose=False):
         if not hasattr(self, "ATOMTYPENAME"):
@@ -320,11 +499,17 @@ class Top(_general_gromos_file._general_gromos_file):
                     return lj.IAC
             return 0 # LJ parameter not found
 
+    def get_LJparameter_from_IAC(self, IAC:int):
+        if not hasattr(self, "LJPARAMETERS"):
+            raise Exception("no LJPARAMETERS block to search in")
+        if (IAC**2 - 1) > self.LJPARAMETERS.NRATT2:
+            raise Exception("IAC key is too larger than IACs in LJ block")
+        return self.LJPARAMETERS.content[(IAC**2 -1)]
 
-    def add_new_SOLUTEATOM(self, ATNM:int, MRES:int=1, PANM:str='_', IAC:int=1, MASS:float=1.0, CG:int=0, CGC:int=0, INE:list=[], INE14:list=[], verbose=None, C6:float=None, C12:float=None, CS6:float=0, CS12:float=0, IACname:str=None):
-        if not hasattr(self, "SOLUTEATOM"):
-             self.add_block(blocktitle="SOLUTEATOM", content=[], verbose=verbose)
-             self.SOLUTEATOM.NRP = 0
+
+    def add_new_atom(self, ATNM:int=0, MRES:int=0, PANM:str='_', IAC:int=1, MASS:float=1.0, CG:int=0, CGC:int=1, INE:list=[], INE14:list=[], verbose=False, C6:float=None, C12:float=None, CS6:float=0, CS12:float=0, IACname:str=None):
+        if IACname is None:
+            IACname = PANM
         
         # Find IAC and (if needed) add a new LJ Parameter
         if C6 != None or C12 != None:           #need to find PANM and IAC
@@ -333,27 +518,12 @@ class Top(_general_gromos_file._general_gromos_file):
                 if IAC == 0: #IAC not found -> add new LJ parameter
                     self.add_new_LJparameter(C6=C6, C12=C12, CS6=CS6, CS12=CS12, verbose=verbose, AddATOMTYPENAME=IACname)
                     IAC = self.LJPARAMETERS.content[-1].IAC
+                    if verbose: print("New Atomtype with LJ parameters added. IAC found as: " + str(IAC))
             else:
                 self.add_new_LJparameter(C6=C6, C12=C12, CS6=CS6, CS12=CS12, verbose=verbose, AddATOMTYPENAME=IACname)
                 IAC = 1
-        
-        # IAC should be known at this point -> we can search for PANM if not known
-        #if PANM == None:
-        #    if not (IAC >=1):
-        #        raise "You miss treated your IAC or created a different unexpected error"
-        #    else:
-        #        if not hasattr(self, "ATOMTYPENAME"):
-        #            raise "How did you think we could find PANM if ATOMTYPENAME does not even exist"
-        #        elif len(self.ATOMTYPENAME.content) <= IAC:
-        #            raise "The desired IAC is not yet written into ATOMTYPENAME"
-        #        else:
-        #            PANM = self.ATOMTYPENAME.content[IAC][0]
 
-        #TODO: Maybe add further automation for ATNM, MRES, MASS, CG, ...
-        #Now all variables of the new SOLUTEATOM should be known
-        newSoluteAtom = blocks.soluteatom_type(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=len(INE), INEvalues=INE, INE14=len(INE14), INE14values=INE14)
-        self.SOLUTEATOM.content.append(newSoluteAtom)
-        self.SOLUTEATOM.NRP += 1
+        self.add_new_soluteatom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14)
 
     def add_new_CONSTRAINT(self, IC:int, JC:int, ICC:float, verbose=False):
         """
@@ -390,6 +560,42 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BONDSTRETCHTYPE.NBTY += 1
         self.CONSTRAINT.content.append(blocks.constraint_type(IC=IC, JC=JC, ICC=bond_type_number))
         self.CONSTRAINT.NCON += 1
+
+    def add_new_TEMPERATUREGROUPS(self, number:str, verbose=False):
+        if not hasattr(self, "TEMPERATUREGROUPS"):
+            defaultContent=['0', 'Dummy']
+            self.add_block(blocktitle="TEMPERATUREGROUPS", content=defaultContent, verbose=verbose)
+            self.TEMPERATUREGROUPS.content.append([number])
+            self.TEMPERATUREGROUPS.content.remove(['Dummy'])
+        else:
+            if len(self.TEMPERATUREGROUPS.content) < 1:
+                self.TEMPERATUREGROUPS.content.append(["0"])
+            self.TEMPERATUREGROUPS.content.append([number])
+        self.TEMPERATUREGROUPS.content[0][0] = str(int(self.TEMPERATUREGROUPS.content[0][0])+1)
+
+    def add_new_SOLUTEMOLECULES(self, number:str, verbose=False):
+        if not hasattr(self, "SOLUTEMOLECULES"):
+            defaultContent=['0', 'Dummy']
+            self.add_block(blocktitle="SOLUTEMOLECULES", content=defaultContent, verbose=verbose)
+            self.SOLUTEMOLECULES.content.append([number])
+            self.SOLUTEMOLECULES.content.remove(['Dummy'])
+        else:
+            if len(self.SOLUTEMOLECULES.content) < 1:
+                self.SOLUTEMOLECULES.content.append(["0"])
+            self.SOLUTEMOLECULES.content.append([number])
+        self.SOLUTEMOLECULES.content[0][0] = str(int(self.SOLUTEMOLECULES.content[0][0])+1)
+
+    def add_new_PRESSUREGROUPS(self, number:str, verbose=False):
+        if not hasattr(self, "PRESSUREGROUPS"):
+            defaultContent=['0', 'Dummy']
+            self.add_block(blocktitle="PRESSUREGROUPS", content=defaultContent, verbose=verbose)
+            self.PRESSUREGROUPS.content.append([number])
+            self.PRESSUREGROUPS.content.remove(['Dummy'])
+        else:
+            if len(self.PRESSUREGROUPS.content) < 1:
+                self.PRESSUREGROUPS.content.append(["0"])
+            self.PRESSUREGROUPS.content.append([number])
+        self.PRESSUREGROUPS.content[0][0] = str(int(self.PRESSUREGROUPS.content[0][0])+1)
 
     def get_mass(self) -> float:
         """

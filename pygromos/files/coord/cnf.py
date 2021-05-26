@@ -76,7 +76,6 @@ class Cnf(_general_gromos_file):
         #general import
         else:
             super().__init__(in_value=in_value, _future_file=_future_file)
-
             if (hasattr(self, "POSITION")):
                 if clean_resiNumbers_by_Name: self.clean_posiResNums()  # carefull! if two resis same name after an another than, here is  a problem.
                 self.residues = self.get_residues(verbose=verbose)
@@ -103,7 +102,7 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
-
+    
     def write(self, out_path: str) -> str:
         # write out
         out_file = open(out_path, "w")
@@ -881,6 +880,7 @@ class Cnf(_general_gromos_file):
 
         # set POSITION attribute
         self.__setattr__("POSITION", blocks.POSITION(atomList))
+        self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4,4,4], angles=[90,90,90]))
 
     def get_pdb(self)->str:
         """
@@ -895,7 +895,8 @@ class Cnf(_general_gromos_file):
 
         # 2) CONSTUCT PDB BLOCKS
         # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+        pdb_format = "ATOM  {:>5d} {:<4}{:1}{:<4} {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+
         dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
         dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
 
@@ -926,9 +927,8 @@ class Cnf(_general_gromos_file):
             in xyz format
         """
         xyz_str = str(len(self.POSITION)) + "\n"
-        xyz_str += "# "+str(self.TITLE.content.split("\n")[0])+"\n"
+        xyz_str += "# "+str(self.TITLE.content[0])
         xyz_str += "# exported wit PyGromosTools\n"
-
         xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
 
         for position in self.POSITION:

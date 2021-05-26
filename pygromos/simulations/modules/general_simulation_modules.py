@@ -132,23 +132,38 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
         in_gromos_system.cnf.path = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
 
     # Return trajectories if available
-    final_trc_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trc"
-    if os.path.exists(final_trc_file+".h5"):
-        in_gromos_system.trc = Trc(input_value=final_trc_file+".h5")
-    elif os.path.exists(final_trc_file):
-        in_gromos_system.trc = Trc(input_value=final_trc_file)
+    if(hasattr(in_gromos_system.imd, "WRITETRAJ") and in_gromos_system.imd.WRITETRAJ.NTWX > 0):
+        final_trc_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trc"
+        if os.path.exists(final_trc_file+".h5"):
+            in_gromos_system.trc = Trc(input_value=final_trc_file+".h5")
+        elif os.path.exists(final_trc_file):
+            in_gromos_system.trc = Trc(input_value=final_trc_file)
+        else:
+            in_gromos_system.trc = Trc(input_value=None)
+            in_gromos_system.trc._future_file = True
+            in_gromos_system.trc.path = final_trc_file
 
-    final_tre_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".tre"
-    if os.path.exists(final_tre_file+".h5"):
-        in_gromos_system.tre = Tre(input_value=final_tre_file+".h5")
-    elif os.path.exists(final_tre_file):
-        in_gromos_system.tre = Tre(input_value=final_tre_file)
+    if(hasattr(in_gromos_system.imd, "WRITETRAJ") and in_gromos_system.imd.WRITETRAJ.NTWE > 0):
+        final_tre_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".tre"
+        if os.path.exists(final_tre_file+".h5"):
+            in_gromos_system.tre = Tre(input_value=final_tre_file+".h5")
+        elif os.path.exists(final_tre_file):
+            in_gromos_system.tre = Tre(input_value=final_tre_file)
+        else:
+            in_gromos_system.tre = Tre(input_value=None)
+            in_gromos_system.tre._future_file = True
+            in_gromos_system.tre.path = final_tre_file
 
-    final_trg_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trg"
-    if os.path.exists(final_trg_file+".h5"):
-        in_gromos_system.trg = Trg(input_value=final_trg_file+".h5")
-    elif os.path.exists(final_trg_file):
-        in_gromos_system.trg = Trg(input_value=final_trg_file)
+    if(hasattr(in_gromos_system.imd, "WRITETRAJ") and in_gromos_system.imd.WRITETRAJ.NTWG > 0):
+        final_trg_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".trg"
+        if os.path.exists(final_trg_file+".h5"):
+            in_gromos_system.trg = Trg(input_value=final_trg_file+".h5")
+        elif os.path.exists(final_trg_file):
+            in_gromos_system.trg = Trg(input_value=final_trg_file)
+        else:
+            in_gromos_system.trg = Trg(input_value=None)
+            in_gromos_system.trg._future_file = True
+            in_gromos_system.trg.path = final_trg_file
 
     in_gromos_system.work_folder = step_dir
     return in_gromos_system, last_jobID

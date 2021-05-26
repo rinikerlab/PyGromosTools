@@ -32,7 +32,7 @@ class _General_Trajectory():
     #attribute annotation:
     database:pandas.DataFrame
     path:str
-
+    _future_file:bool #if code is executed async, this helps organizing.
 
     def __init__(self, input_value:(str or None), auto_save=True, stride:int=1, skip:int=0):
         if input_value == None:
@@ -91,12 +91,14 @@ class _General_Trajectory():
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=False)
+        return traj
 
     def __deepcopy__(self, memo):
         traj = type(self)(input_value=None)
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=True)
+        return traj
 
     def add_traj(self, traj, skip_new_0=True):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A

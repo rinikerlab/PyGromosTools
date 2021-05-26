@@ -72,7 +72,10 @@ class Gromos_System():
     _future_promised_files:list
 
     _single_multibath:bool  = False
+    _single_energy_group:bool = False
 
+    _gromosPP_bin_dir : Union[None, str] = None
+    _gromosXX_bin_dir : Union[None, str] = None
     _gromosPP : GromosPP
     _gromosXX : GromosXX
 
@@ -124,7 +127,7 @@ class Gromos_System():
         self._future_promise= False
         self._future_promised_files = []
 
-        if in_smiles == None and rdkitMol == None and readIn == False:
+        if (in_smiles == None and rdkitMol == None) or readIn == False:
             if verbose: warnings.warn("No data provided to gromos_system\nmanual work needed")
 
         # import files:
@@ -146,10 +149,6 @@ class Gromos_System():
             self.solute_info = None
             self.protein_info = None
             self.non_ligand_info = None
-
-
-        if(adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
-            self.adapt_imd()
 
         # import molecule from smiles using rdkit
         if in_smiles:
@@ -173,6 +172,10 @@ class Gromos_System():
 
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
+
+        
+        if(adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
+            self.adapt_imd()
 
         #misc
         self._all_files_key = list(map(lambda x: "_"+x, self.required_files.keys()))
@@ -243,8 +246,9 @@ class Gromos_System():
 
     def __setstate__(self, state):
         self.__dict__ = state
+        print(state.keys())
         for key in skip:
-            if(key in self.__dict__ ):
+            if(key in self.__dict__ ) and not self.__dict__[key] is None:
                 setattr(self, key, skip[key](**self.__dict__[key]))
 
         #misc
@@ -253,10 +257,8 @@ class Gromos_System():
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-
-        #@bschroed remove this !
-        self._gromosPP = GromosPP(gromosPP_bin_dir=self._gromosPP_bin_dir)
-        self._gromosXX =GromosXX(gromosXX_bin_dir=self._gromosXX_bin_dir)
+        self._gromosPP = GromosPP(self._gromosPP_bin_dir)
+        self._gromosXX = GromosXX(self._gromosXX_bin_dir)
 
         #are promised files now present?
         self._check_promises()
@@ -589,11 +591,12 @@ class Gromos_System():
             else:
                 name = self.Forcefield.mol_name
             # make top
-            if self._gromosPP is None or self.gromosPP.bin is None or self.gromosPP.bin == "":
-               warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
-            else:
+            if self._gromosPP._isValid:
                 self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
                 self.top = Top(in_value=out)
+            else:
+                warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
+             
         elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
             if not has_openff:
                 raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
@@ -636,18 +639,38 @@ class Gromos_System():
         self.imd.SYSTEM.NPM = 1
         self.imd.SYSTEM.NSM = len(self.residue_list ["SOLV"]) if("SOLV" in self.residue_list ) else 0
 
-        ##Force Group
-        force_groups = {}
+        ##Energy and Force Group
+        energy_groups = {}
 
-        if (self.protein_info.residues != 0):
-            pass
-            #TODO: Do something for protein
+        if(self._single_energy_group):
+            energy_groups = { self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
+        else:
+            #solute
+            if(self.solute_info.number_of_atoms>0):
+                energy_groups.update({self.solute_info.positions[0]: self.solute_info.number_of_atoms})
+            #protein
+            if (self.protein_info.number_of_atoms > 0):
+                energy_groups.update({self.protein_info.start_position: self.protein_info.number_of_atoms})
+            #ligand
+            if (self.non_ligand_info.number_of_atoms > 0):
+                solv_add = self.non_ligand_info.number_of_atoms
+            else:
+                solv_add = 0
+            #solvent
+            if(self.solvent_info.number_of_atoms > 0):
+                    max_key = max(energy_groups)+1 if(len(energy_groups)>0) else 1
+                    energy_groups.update({max_key: self.solvent_info.number_of_atoms+solv_add})
 
-        if (self.non_ligand_info.number != 0):
-            pass
-            #TODO: Do something for non-Ligands
+            #sort all entries in list
+            last_atom_count = 0
+            sorted_energy_groups = {}
+            for ind,key in enumerate(sorted(energy_groups)):
+                value = energy_groups[key]+last_atom_count
+                sorted_energy_groups.update({value:1+ind})
+                last_atom_count=value
 
-        self.imd.FORCE.adapt_energy_groups(residues=self.residue_list)
+        #adapt energy groups in IMD with sorted list of energy groups created above
+        self.imd.FORCE.adapt_energy_groups(energy_groups=sorted_energy_groups)
 
         ##Multibath:
         if (hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None):
