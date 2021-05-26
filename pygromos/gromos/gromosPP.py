@@ -828,7 +828,7 @@ class _gromosPPbase:
 
         return out_path
 
-    def rmsf(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r cog", _binary_name:str= "rmsf")->str:
+    def rmsf(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r", _binary_name:str= "rmsf")->str:
         """
             this is a wrapper for gromosPP rmsf programm. (Root mean square fluctuation
 
@@ -856,12 +856,14 @@ class _gromosPPbase:
         if(isinstance(in_trcs, list)):
             in_trcs = " ".join(in_trcs)
 
-        additional_options = ""
-        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsf", "'" + atom_selection + "'", "@pdb", pbc, "@traj", in_trcs,  additional_options, " \n"])
+        additional_options = [""]
+        additional_options = " ".join(map(str, additional_options))
+
+        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsf", "'" + atom_selection + "'", "@pbc", pbc, "@traj", in_trcs,  additional_options, " \n"])
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
-    def rmsd(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r cog", _binary_name:str= "rmsd")->str:
+    def rmsd(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r", _binary_name:str= "rmsd")->str:
         """
 
         Parameters
@@ -881,49 +883,72 @@ class _gromosPPbase:
         if(isinstance(in_trcs, list)):
             in_trcs = " ".join(in_trcs)
 
-        additional_options = ""
-        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsd", "'" + atom_selection + "'", "@pdb", pbc, "@traj", in_trcs,  additional_options, " \n"])
+        additional_options = [""]
+        additional_options = " ".join(map(str, additional_options))
+        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsd", "'" + atom_selection + "'", "@pbc", pbc, "@traj", in_trcs,  additional_options, " \n"])
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
-
-    def cog(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str="r cog", _binary_name:str= "rmsd")->str:
+    def cog(self, in_top_path:str, in_trcs:Union[str, List[str]], out_file_path:str,
+            atom_selection:str=None, outformat:str=None, cog_com:str=None,
+            add_repl:str=None, solv:str=None, nthframe:str=None,
+            pbc: str="r cog", _binary_name:str= "cog", verbose:bool=False)->str:
         """
-        
-        @topo   <molecular topology file>
-        @pbc      <boundary conditions> [<gather method>]
-        @traj     <input trajectory files>
-        [@nthframe <write every nth frame> (default: 1)]
-        [@outformat   <output coordinates format>]
-        [@atomspec <atomspecifier(s) for which to calculate cog/com> ]
-        [@cog_com  <calculate centre of geometry (cog) or mass (com); default: cog>]
-        [@add_repl <add (add) the cog/com or replace (repl) the solutes; default: repl>]
-        [@solv <include solvent in outcoordinates>]
 
         
         Parameters
         ----------
-        in_top_path
-        in_trcs
-        atom_selection
-        out_top_path
-        pbc
-        _binary_name
+        in_top_path : str
+            path to topo file
+        in_trcs : str
+            path to trc files
+        out_file_path : str
+            outpath
+        atom_selection: str, optional
+            atomspecifier(s) for which to calculate cog/com
+        outformat : str, optional
+            output coordinates format
+        cog_com : str, optional
+            calculate centre of geometry (cog) or mass (com); default: cog
+        add_repl: str, optional
+            add (add) the cog/com or replace (repl) the solutes; default: repl
+        solv: str, optional
+            include solvent in outcoordinates
+        nthframe: str, optional
+            write every nth frame (default: 1)
+        _binary_name : str, otpional
+            binary name of gromosPP programm (default: cog)
 
         Returns
         -------
-
+        str
+            output_path of the generated csv file
         """
-
 
         if (isinstance(in_trcs, list)):
             in_trcs = " ".join(in_trcs)
 
-        additional_options = ""
-        command = " ".join(
-            [self._bin + _binary_name, " @topo ", in_top_path, " @atomsrmsd", "'" + atom_selection + "'", "@pdb", pbc, "@traj",
-             in_trcs, additional_options, " \n"])
-        bash.execute(command, catch_STD=out_file_path)
+        additional_options = [""]
+        if(not atom_selection is None):
+            additional_options+= [" @atomspec ", "'" + atom_selection + "'"]
+        if(not outformat is None):
+            additional_options+= [" @outformat ", outformat ]
+        if(not cog_com is None):
+            additional_options+= [" @cog_com ", cog_com ]
+        if(not add_repl is None):
+            additional_options += [" @add_repl ", add_repl]
+        if(not solv is None):
+            additional_options += [" @solv ", solv]
+        if(not nthframe is None):
+            additional_options += [" @nthframe ", nthframe]
+
+        additional_options = " ".join(map(str, additional_options))
+
+        command = " ".join([self._bin + _binary_name, " @topo ", in_top_path, "@pbc", pbc, "@traj", in_trcs, additional_options, " \n"])
+
+        if(verbose): print(command)
+        bash.execute(command, catch_STD=out_file_path, verbose=verbose)
+
         return out_file_path
 
 

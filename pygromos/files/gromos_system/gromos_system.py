@@ -74,6 +74,8 @@ class Gromos_System():
     _single_multibath:bool  = False
     _single_energy_group:bool = False
 
+    _gromosPP_bin_dir : Union[None, str] = None
+    _gromosXX_bin_dir : Union[None, str] = None
     _gromosPP : GromosPP
     _gromosXX : GromosXX
 
@@ -244,6 +246,7 @@ class Gromos_System():
 
     def __setstate__(self, state):
         self.__dict__ = state
+        print(state.keys())
         for key in skip:
             if(key in self.__dict__ ) and not self.__dict__[key] is None:
                 setattr(self, key, skip[key](**self.__dict__[key]))
@@ -256,8 +259,11 @@ class Gromos_System():
 
 
         #@bschroed remove this !
-        self._gromosPP = GromosPP(gromosPP_bin_dir=self._gromosPP_bin_dir)
-        self._gromosXX =GromosXX(gromosXX_bin_dir=self._gromosXX_bin_dir)
+        self._gromosXX_bin_dir= state['_gromosXX_bin_dir']
+        self._gromosPP_bin_dir= state['_gromosPP_bin_dir']
+
+        self._gromosPP = GromosPP(self._gromosPP_bin_dir)
+        self._gromosXX = GromosXX(self._gromosXX_bin_dir)
 
         #are promised files now present?
         self._check_promises()
