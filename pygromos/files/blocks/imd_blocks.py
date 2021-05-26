@@ -884,8 +884,6 @@ class FORCE(_generic_imd_block):
             super().__init__(used=True, content=content)
 
     def _parse_key_content(self, keyLineNumb = 0, contentlines = []):
-        print(contentlines)
-        print(keyLineNumb)
         if keyLineNumb == 0:
             for key, field in zip(self._order[0][keyLineNumb], contentlines[0]):
                 # first bring key to attribute form

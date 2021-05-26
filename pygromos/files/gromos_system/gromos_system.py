@@ -125,7 +125,7 @@ class Gromos_System():
         self._future_promise= False
         self._future_promised_files = []
 
-        if in_smiles == None and rdkitMol == None and readIn == False:
+        if (in_smiles == None and rdkitMol == None) or readIn == False:
             if verbose: warnings.warn("No data provided to gromos_system\nmanual work needed")
 
         # import files:

@@ -157,8 +157,9 @@ class LOCAL(_SubmissionSystem):
         List[str]
             the output of the queue containing the jobname
         """
-        if (self.verbose): print("Searching job Name: ", job_name)
-        warnings.warn("Queue search was called, but no queue present!")
+        if (self.verbose):
+            print("Searching job Name: ", job_name)
+            warnings.warn("Queue search was called, but no queue present!")
         return []
 
 
@@ -177,6 +178,7 @@ class LOCAL(_SubmissionSystem):
         NotImplemented
             Needs to be implemented in subclasses
         """
-        if (self.verbose): print("Searching job ID: ", job_id)
-        warnings.warn("Queue search was called, but no queue present!")
+        if (self.verbose):
+            print("Searching job ID: ", job_id)
+            warnings.warn("Queue search was called, but no queue present!")
         return []

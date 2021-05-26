@@ -128,7 +128,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         from pygromos.files.coord import cnf
         import math
         cnf_file = cnf.Cnf(in_cnf_path)
-        if(any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
+        if(hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
             cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
             cnf_file.write(in_cnf_path)
 
