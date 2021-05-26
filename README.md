@@ -6,8 +6,8 @@ Welcome to PyGromosTools
 [![CI](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml)
 [![codecov](https://codecov.io/gh/rinikerlab/PyGromosTools/branch/main/graph/badge.svg?token=R36KJCEKEC)](https://codecov.io/gh/rinikerlab/PyGromosTools)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python)
-[![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://rinikerlab.github.io/PyGromosTools/)
 [![DOI](https://zenodo.org/badge/323972251.svg)](https://zenodo.org/badge/latestdoi/323972251)
+[![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://rinikerlab.github.io/PyGromosTools/)
 
 General
 -------------
