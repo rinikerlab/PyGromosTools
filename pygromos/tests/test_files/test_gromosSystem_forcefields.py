@@ -31,7 +31,7 @@ class test_gromos_system_forcefields(unittest.TestCase):
 
 class test_gromos_system_54A7(test_gromos_system_forcefields):
     ff = forcefield_system(name="54A7")
-    ff.mol_name = "MTL"
+    ff.mol_name = "CH3OH"
 
 class test_gromos_system_2016H66(test_gromos_system_forcefields):
     ff = forcefield_system(name="2016H66")
