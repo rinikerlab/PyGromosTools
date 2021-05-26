@@ -257,11 +257,6 @@ class Gromos_System():
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-
-        #@bschroed remove this !
-        self._gromosXX_bin_dir= state['_gromosXX_bin_dir']
-        self._gromosPP_bin_dir= state['_gromosPP_bin_dir']
-
         self._gromosPP = GromosPP(self._gromosPP_bin_dir)
         self._gromosXX = GromosXX(self._gromosXX_bin_dir)
 
