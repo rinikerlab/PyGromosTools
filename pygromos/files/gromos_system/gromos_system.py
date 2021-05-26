@@ -246,7 +246,6 @@ class Gromos_System():
 
     def __setstate__(self, state):
         self.__dict__ = state
-        print(state.keys())
         for key in skip:
             if(key in self.__dict__ ) and not self.__dict__[key] is None:
                 setattr(self, key, skip[key](**self.__dict__[key]))
@@ -265,7 +264,7 @@ class Gromos_System():
 
 
     def __deepcopy__(self, memo):
-        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder+"/test", readIn=False, verbose=self.verbose)
+        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder, readIn=False, verbose=self.verbose)
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
@@ -638,6 +637,13 @@ class Gromos_System():
         ##System
         self.imd.SYSTEM.NPM = 1
         self.imd.SYSTEM.NSM = len(self.residue_list ["SOLV"]) if("SOLV" in self.residue_list ) else 0
+
+        #boundary condition:
+        from pygromos.files.blocks.coord_blocks import Pbc
+        ##vacuum if no box or GENBOX-pbc == Vacuum
+        if (not self.cnf._future_file and (not hasattr(self.cnf, "GENBOX") or self.cnf.GENBOX.pbc == Pbc.vacuum)):
+            self.imd.BOUNDCOND.NTB = 0
+
 
         ##Energy and Force Group
         energy_groups = {}

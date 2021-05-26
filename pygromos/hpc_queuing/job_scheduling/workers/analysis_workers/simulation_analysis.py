@@ -107,7 +107,6 @@ def project_concatenation(in_folder: str, out_folder: str, in_prefix:str, #in_si
 
             import glob
             print(in_folder+"/"+in_prefix+"/*.cnf")
-            
             cnf_path = glob.glob(in_folder+"/"+in_prefix+"*/*.cnf")[-1]
             sim_cnf = cnf.Cnf(cnf_path)
             if (control_dict["repair_NaN"]):
@@ -146,12 +145,13 @@ def project_concatenation(in_folder: str, out_folder: str, in_prefix:str, #in_si
             traj_files = gather_simulation_step_file_paths(in_folder, filePrefix=in_prefix,
                                                              fileSuffixes=[".trc", ".trc.gz", ".trc.tar.gz"],
                                                              verbose=verbose)
-            out_trc_file = trc.Trc(traj_files[0], auto_save=False)
-            if(len(traj_files)>0):
-                for tmp_trc_file in traj_files[1:]:
-                    tmp_trc = trc.Trc(tmp_trc_file, auto_save=False)
-                    out_trc_file += tmp_trc
-            out_trc_file.write(output_path=out_traj_path)
+            if(len(traj_files) > 0):
+                out_trc_file = trc.Trc(traj_files[0], auto_save=False)
+                if(len(traj_files)>0):
+                    for tmp_trc_file in traj_files[1:]:
+                        tmp_trc = trc.Trc(tmp_trc_file, auto_save=False)
+                        out_trc_file += tmp_trc
+                out_trc_file.write(output_path=out_traj_path)
     if (control_dict["cat_tre"]):
         out_traj_path = out_prefix+".tre.h5"
         if(os.path.exists(out_traj_path)):
@@ -162,12 +162,13 @@ def project_concatenation(in_folder: str, out_folder: str, in_prefix:str, #in_si
             traj_files = gather_simulation_step_file_paths(in_folder, filePrefix=in_prefix,
                                                              fileSuffixes=[".tre", ".tre.gz", ".tre.tar.gz"],
                                                              verbose=verbose)
-            out_trc_file = tre.Tre(traj_files[0], auto_save=False)
-            if(len(traj_files)>0):
-                for tmp_trc_file in traj_files[1:]:
-                    tmp_trc = tre.Tre(tmp_trc_file, auto_save=False)
-                    out_trc_file += tmp_trc
-            out_trc_file.write(output_path=out_traj_path)
+            if(len(traj_files) > 0):
+                out_trc_file = tre.Tre(traj_files[0], auto_save=False)
+                if(len(traj_files)>0):
+                    for tmp_trc_file in traj_files[1:]:
+                        tmp_trc = tre.Tre(tmp_trc_file, auto_save=False)
+                        out_trc_file += tmp_trc
+                out_trc_file.write(output_path=out_traj_path)
 
     if (control_dict["cat_trg"]):
         out_traj_path = out_prefix+".trg.h5"
@@ -179,13 +180,13 @@ def project_concatenation(in_folder: str, out_folder: str, in_prefix:str, #in_si
             traj_files = gather_simulation_step_file_paths(in_folder, filePrefix=in_prefix,
                                                              fileSuffixes=[".trg", ".trg.gz", ".trg.tar.gz"],
                                                              verbose=verbose)
-
-            out_trg_file = trg.Trg(traj_files[0], auto_save=False)
-            if(len(traj_files)>0):
-                for tmp_trg_file in traj_files[1:]:
-                    tmp_trg = trg.Trg(tmp_trg_file, auto_save=False)
-                    out_trg_file += tmp_trg
-            out_trg_file.write(output_path=out_traj_path)
+            if(len(traj_files) > 0):
+                out_trg_file = trg.Trg(traj_files[0], auto_save=False)
+                if(len(traj_files)>0):
+                    for tmp_trg_file in traj_files[1:]:
+                        tmp_trg = trg.Trg(tmp_trg_file, auto_save=False)
+                        out_trg_file += tmp_trg
+                out_trg_file.write(output_path=out_traj_path)
 
 
     """
@@ -273,5 +274,5 @@ def gather_simulation_step_file_paths(in_folder: str, filePrefix: str = "",
         print("\t" + "\t".join([y + "\n" for y in files]))
 
     if (len(files) == 0):
-        raise ValueError("could not find any file with the prefix: " + str(filePrefix) + " * "+str(fileSuffixes)+" in folder : \n" + in_folder)
+        warnings.warn("could not find any file with the prefix: " + str(filePrefix) + " * "+str(fileSuffixes)+" in folder : \n" + in_folder)
     return files
