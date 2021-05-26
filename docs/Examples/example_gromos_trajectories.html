@@ -41,7 +41,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tutorials" href="../Tutorials/index.html" />
+    <link rel="next" title="&lt;no title&gt;" href="example_hvap.html" />
     <link rel="prev" title="SD Simulations with Submission System" href="example_gromos_simulation.html" /> 
 </head>
 
@@ -111,6 +111,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#Concatenate-and-Copy-multiple-Trajectories">Concatenate and Copy multiple Trajectories</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="example_submission_systems.html">Submission Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_topology_creation.html">Topology creation and modifications with PyGromosTools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
@@ -483,7 +485,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -496,6 +498,56 @@ div.rendered_html tbody tr:hover {
 
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0       totene
+1       totkin
+2       totpot
+3       totcov
+4       totbond
+5       totangle
+6       totimproper
+7       totdihedral
+8       totcrossdihedral
+9       totnonbonded
+10      totlj
+11      totcrf
+12      totls
+13      totlspair
+14      totlsreal
+15      totlsk
+16      totlsa
+17      totlsself
+18      totlssurf
+19      totpolself
+20      totspecial
+21      totsasa
+22      totsasavol
+23      totconstraint
+24      totdisres
+25      totdisfieldres
+26      totdihres
+27      totposres
+28      totjval
+29      totxray
+30      totle
+31      totorder
+32      totsymm
+33      eds_vr,entropy
+34      totqm
+35      totbsleus
+36      totrdc
+37      wip1
+38      wip2
+39      wip3
+40      wip4
+41      wip5
+42      wip6
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="1)-TRC">
@@ -517,7 +569,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mlehner/anaconda3/envs/gromos/lib/python3.7/site-packages/pandas/core/generic.py:2621: PerformanceWarning:
+/home/bschroed/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/generic.py:2620: PerformanceWarning:
 your performance may suffer as PyTables will pickle object types that it cannot
 map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;POS_1&#39;, &#39;POS_2&#39;, &#39;POS_3&#39;, &#39;POS_4&#39;, &#39;POS_5&#39;, &#39;POS_6&#39;, &#39;POS_7&#39;, &#39;POS_8&#39;,
        &#39;POS_9&#39;, &#39;POS_10&#39;, &#39;POS_11&#39;, &#39;POS_12&#39;, &#39;POS_13&#39;, &#39;POS_14&#39;, &#39;POS_15&#39;,
@@ -556,9 +608,11 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
  &#39;get_atom_pair_distance_series&#39;,
  &#39;get_cog_movement_total_series_for_atom_group&#39;,
  &#39;get_cog_movement_vector_series_for_atom_group&#39;,
+ &#39;get_pdb&#39;,
  &#39;path&#39;,
  &#39;radial_distribution&#39;,
  &#39;rmsd&#39;,
+ &#39;visualize&#39;,
  &#39;write&#39;,
  &#39;write_pdb&#39;]
 </pre></div></div>
@@ -704,12 +758,14 @@ Length: 418, dtype: float64
 <div class="section" id="2.1)-Tre-import-and-structure">
 <h3>2.1) Tre import and structure<a class="headerlink" href="#2.1)-Tre-import-and-structure" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># import the trajectory file into a Tre class</span>
-<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/Traj_files/test_CHE_H2O_bilayer.tre&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre_field_libs.ene_fields</span> <span class="kn">import</span> <span class="n">gromos_2015_tre_block_names_table</span>
+
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;example_files/Traj_files/test_CHE_H2O_bilayer.tre&quot;</span><span class="p">,</span> <span class="n">_ene_ana_names</span><span class="o">=</span><span class="n">gromos_2015_tre_block_names_table</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -728,7 +784,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -737,7 +793,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -929,7 +985,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -938,7 +994,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -968,7 +1024,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 <div class="section" id="2.2)-Common-Tre-functions">
 <h3>2.2) Common Tre functions<a class="headerlink" href="#2.2)-Common-Tre-functions" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -978,7 +1034,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -987,7 +1043,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -997,7 +1053,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1008,7 +1064,7 @@ array([297.7702854 , 297.71343093])
 <p>Tables and lists inside the database are stored in numpy arrays. For example the two temperatures from the previos example are stored in a numpy array of size 2 since it has two temperature baths</p>
 <p>Specific values inside a tre file can also be directly accesed with numpy and pandas syntax</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1017,7 +1073,7 @@ array([297.7702854 , 297.71343093])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1038,7 +1094,7 @@ Name: 2, dtype: object
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1048,7 +1104,7 @@ Name: 2, dtype: object
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1067,7 +1123,7 @@ Name: nonbonded, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1075,72 +1131,320 @@ Name: nonbonded, dtype: float64
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/managers.py</span> in <span class="ansi-cyan-fg">create_block_manager_from_blocks</span><span class="ansi-blue-fg">(blocks, axes)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1675</span>                     make_block(
-<span class="ansi-green-fg">-&gt; 1676</span><span class="ansi-red-fg">                         </span>values<span class="ansi-blue-fg">=</span>blocks<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> placement<span class="ansi-blue-fg">=</span>slice<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> len<span class="ansi-blue-fg">(</span>axes<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> ndim<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2</span>
-<span class="ansi-green-intense-fg ansi-bold">   1677</span>                     )
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/blocks.py</span> in <span class="ansi-cyan-fg">make_block</span><span class="ansi-blue-fg">(values, placement, klass, ndim, dtype)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2731</span>
-<span class="ansi-green-fg">-&gt; 2732</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> klass<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">,</span> ndim<span class="ansi-blue-fg">=</span>ndim<span class="ansi-blue-fg">,</span> placement<span class="ansi-blue-fg">=</span>placement<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2733</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/blocks.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, values, placement, ndim)</span>
-<span class="ansi-green-intense-fg ansi-bold">    142</span>             raise ValueError(
-<span class="ansi-green-fg">--&gt; 143</span><span class="ansi-red-fg">                 </span><span class="ansi-blue-fg">f&#34;Wrong number of items passed {len(self.values)}, &#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    144</span>                 <span class="ansi-blue-fg">f&#34;placement implies {len(self.mgr_locs)}&#34;</span>
-
-<span class="ansi-red-fg">ValueError</span>: Wrong number of items passed 38, placement implies 43
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-15-9af2843bceb9&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>tre<span class="ansi-blue-fg">.</span>get_totals<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/trajectory/tre.py</span> in <span class="ansi-cyan-fg">get_totals</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>     <span class="ansi-green-fg">def</span> get_totals<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>totals <span class="ansi-blue-fg">=</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">(</span>data <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>stack<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;totals&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>to_numpy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>tre_block_name_table<span class="ansi-blue-fg">.</span>totals_subblock_names<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>totals
-<span class="ansi-green-intense-fg ansi-bold">     50</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, data, index, columns, dtype, copy)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>                 mgr <span class="ansi-blue-fg">=</span> init_dict<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>data<span class="ansi-blue-fg">.</span>name<span class="ansi-blue-fg">:</span> data<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">                 </span>mgr <span class="ansi-blue-fg">=</span> init_ndarray<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">,</span> copy<span class="ansi-blue-fg">=</span>copy<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>         <span class="ansi-red-fg"># For data is list-like, or Iterable (will consume into list)</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/construction.py</span> in <span class="ansi-cyan-fg">init_ndarray</span><span class="ansi-blue-fg">(values, index, columns, dtype, copy)</span>
-<span class="ansi-green-intense-fg ansi-bold">    236</span>         block_values <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>values<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">    237</span>
-<span class="ansi-green-fg">--&gt; 238</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> create_block_manager_from_blocks<span class="ansi-blue-fg">(</span>block_values<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">[</span>columns<span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    239</span>
-<span class="ansi-green-intense-fg ansi-bold">    240</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/internals/managers.py</span> in <span class="ansi-cyan-fg">create_block_manager_from_blocks</span><span class="ansi-blue-fg">(blocks, axes)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1685</span>         blocks <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>getattr<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;values&#34;</span><span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> b <span class="ansi-green-fg">in</span> blocks<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">   1686</span>         tot_items <span class="ansi-blue-fg">=</span> sum<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> b <span class="ansi-green-fg">in</span> blocks<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">-&gt; 1687</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> construction_error<span class="ansi-blue-fg">(</span>tot_items<span class="ansi-blue-fg">,</span> blocks<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> axes<span class="ansi-blue-fg">,</span> e<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1688</span>
-<span class="ansi-green-intense-fg ansi-bold">   1689</span>
-
-<span class="ansi-red-fg">ValueError</span>: Shape of passed values is (10, 38), indices imply (10, 43)
+(38,) [ -408806.2436    393521.852    -802328.0956    138403.8772
+        0.         49931.35526        0.         88472.52195
+        0.       -940731.9728    984602.6158  -1925334.589
+        0.             0.             0.             0.
+        0.             0.             0.             0.
+        0.             0.             0.             0.
+        0.             0.             0.             0.
+        0.             0.             0.             0.
+        0.             0.             0.             0.
+        0.             0.     ]
 </pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>totene</th>
+      <th>totkin</th>
+      <th>totpot</th>
+      <th>totcov</th>
+      <th>totbond</th>
+      <th>totangle</th>
+      <th>totimproper</th>
+      <th>totdihedral</th>
+      <th>totcrossdihedral</th>
+      <th>totnonbonded</th>
+      <th>...</th>
+      <th>totjval</th>
+      <th>totxray</th>
+      <th>totle</th>
+      <th>totorder</th>
+      <th>totsymm</th>
+      <th>eds_vr,entropy</th>
+      <th>totqm</th>
+      <th>totbsleus</th>
+      <th>totrdc</th>
+      <th>wip1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-408806.2436</td>
+      <td>393521.8520</td>
+      <td>-802328.0956</td>
+      <td>138403.8772</td>
+      <td>0.0</td>
+      <td>49931.35526</td>
+      <td>0.0</td>
+      <td>88472.52195</td>
+      <td>0.0</td>
+      <td>-940731.9728</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-411576.4224</td>
+      <td>392980.7347</td>
+      <td>-804557.1570</td>
+      <td>139550.4345</td>
+      <td>0.0</td>
+      <td>50409.38587</td>
+      <td>0.0</td>
+      <td>89141.04865</td>
+      <td>0.0</td>
+      <td>-944107.5915</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-409167.9172</td>
+      <td>392370.1191</td>
+      <td>-801538.0363</td>
+      <td>138920.4104</td>
+      <td>0.0</td>
+      <td>50155.81989</td>
+      <td>0.0</td>
+      <td>88764.59053</td>
+      <td>0.0</td>
+      <td>-940458.4467</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-408468.8130</td>
+      <td>392911.3266</td>
+      <td>-801380.1396</td>
+      <td>138900.2972</td>
+      <td>0.0</td>
+      <td>50205.91055</td>
+      <td>0.0</td>
+      <td>88694.38663</td>
+      <td>0.0</td>
+      <td>-940280.4368</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-409322.7261</td>
+      <td>391652.3813</td>
+      <td>-800975.1074</td>
+      <td>139824.6615</td>
+      <td>0.0</td>
+      <td>50608.00218</td>
+      <td>0.0</td>
+      <td>89216.65927</td>
+      <td>0.0</td>
+      <td>-940799.7689</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-409060.5321</td>
+      <td>391503.6168</td>
+      <td>-800564.1489</td>
+      <td>140175.3926</td>
+      <td>0.0</td>
+      <td>50668.20147</td>
+      <td>0.0</td>
+      <td>89507.19113</td>
+      <td>0.0</td>
+      <td>-940739.5415</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-407724.5301</td>
+      <td>393376.3395</td>
+      <td>-801100.8696</td>
+      <td>139951.6784</td>
+      <td>0.0</td>
+      <td>50612.96859</td>
+      <td>0.0</td>
+      <td>89338.70979</td>
+      <td>0.0</td>
+      <td>-941052.5480</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-406045.9433</td>
+      <td>393472.1410</td>
+      <td>-799518.0842</td>
+      <td>140090.5996</td>
+      <td>0.0</td>
+      <td>50652.38951</td>
+      <td>0.0</td>
+      <td>89438.21007</td>
+      <td>0.0</td>
+      <td>-939608.6838</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-408499.0398</td>
+      <td>391678.3093</td>
+      <td>-800177.3491</td>
+      <td>139759.9875</td>
+      <td>0.0</td>
+      <td>50465.54724</td>
+      <td>0.0</td>
+      <td>89294.44028</td>
+      <td>0.0</td>
+      <td>-939937.3367</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-406991.4101</td>
+      <td>392482.0724</td>
+      <td>-799473.4824</td>
+      <td>139902.9949</td>
+      <td>0.0</td>
+      <td>50693.74147</td>
+      <td>0.0</td>
+      <td>89209.25341</td>
+      <td>0.0</td>
+      <td>-939376.4773</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 38 columns</p>
+</div></div>
 </div>
 </div>
 <div class="section" id="\lambda-Sampling-&amp;-TREs">
 <h3><span class="math notranslate nohighlight">\(\lambda\)</span>-Sampling &amp; TREs<a class="headerlink" href="#\lambda-Sampling-&-TREs" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1158,14 +1462,14 @@ During handling of the above exception, another exception occurred:
 /home/bschroed/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/generic.py:2620: PerformanceWarning:
 your performance may suffer as PyTables will pickle object types that it cannot
 map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
-       &#39;precalclam&#39;, &#39;ABdih&#39;, &#39;mass&#39;, &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+       &#39;precalclam&#39;, &#39;mass&#39;, &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
       dtype=&#39;object&#39;)]
 
   encoding=encoding,
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1198,8 +1502,6 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <th>AB_improper_1</th>
       <th>AB_disres_1</th>
       <th>...</th>
-      <th>B_e_lj_2</th>
-      <th>A_e_crf_2</th>
       <th>B_e_crf_2</th>
       <th>AB_kinetic_2</th>
       <th>AB_bond_2</th>
@@ -1208,6 +1510,8 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <th>AB_disres_2</th>
       <th>AB_dihres_2</th>
       <th>AB_disfld_2</th>
+      <th>A_dihedral</th>
+      <th>B_dihedral</th>
     </tr>
   </thead>
   <tbody>
@@ -1224,10 +1528,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-35.873657</td>
-      <td>-30.872681</td>
       <td>-122.394320</td>
       <td>36.091797</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1248,10 +1552,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-45.606063</td>
-      <td>-30.785515</td>
       <td>-122.457590</td>
       <td>44.886645</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1272,10 +1576,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-11.948241</td>
-      <td>-29.997893</td>
       <td>-139.035309</td>
       <td>46.199981</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1296,10 +1600,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-46.293060</td>
-      <td>-30.604894</td>
       <td>-130.358158</td>
       <td>41.268221</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1320,10 +1624,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-31.298169</td>
-      <td>-29.582651</td>
       <td>-134.272063</td>
       <td>36.680211</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1368,10 +1672,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-49.950195</td>
-      <td>-29.687513</td>
       <td>-130.534976</td>
       <td>35.829309</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1392,10 +1696,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-49.181289</td>
-      <td>-30.208203</td>
       <td>-117.262832</td>
       <td>33.260161</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1416,10 +1720,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-2.244047</td>
-      <td>-29.913671</td>
       <td>-104.326673</td>
       <td>41.735086</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1440,10 +1744,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-41.949763</td>
-      <td>-29.898032</td>
       <td>-123.231158</td>
       <td>44.944847</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1464,10 +1768,10 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       <td>0.0</td>
       <td>0.0</td>
       <td>...</td>
-      <td>-20.574294</td>
-      <td>-28.857399</td>
       <td>-125.539239</td>
       <td>41.740483</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1477,14 +1781,14 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
     </tr>
   </tbody>
 </table>
-<p>500 rows × 23 columns</p>
+<p>500 rows × 25 columns</p>
 </div></div>
 </div>
 </div>
 <div class="section" id="EDS-in-TREs">
 <h3>EDS in TREs<a class="headerlink" href="#EDS-in-TREs" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1494,8 +1798,22 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/generic.py:2620: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
+       &#39;precalclam&#39;, &#39;mass&#39;, &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+      dtype=&#39;object&#39;)]
+
+  encoding=encoding,
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1792,7 +2110,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 <h2>Concatenate and Copy multiple Trajectories<a class="headerlink" href="#Concatenate-and-Copy-multiple-Trajectories" title="Permalink to this headline">¶</a></h2>
 <p>Trajectories offer a wide range of additional file manipulations. Trajectory classes can be copied (deep) and added to each other to concatenate multiple small simulation pieces into one large trajectory.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1800,8 +2118,8 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1809,54 +2127,8 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tre_combined</span> <span class="o">=</span> <span class="n">tre</span> <span class="o">+</span> <span class="n">tre_copy</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-</div>
-<p>In the new combined trajectory we have one long trajectory made from the two smaller ones. The lenght is one element shorter, since normally the last element of the first trajectory and the first element of the second trajectory is the same element. This can be controlled via the option “skip_new_0=True” in the add_traj() function which is the core of the “+” operator for trajectories. In the following line the default behavior can be seen as a smooth numbering in the TIMESTEPs.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">TIMESTEP_time</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1865,7 +2137,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1874,7 +2146,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1883,7 +2155,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1893,7 +2165,7 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 <p>In the new combined trajectory we have one long trajectory made from the two smaller ones. The lenght is one element shorter, since normally the last element of the first trajectory and the first element of the second trajectory is the same element. This can be controlled via the option “skip_new_0=True” in the add_traj() function which is the core of the “+” operator for trajectories. In the following line the default behavior can be seen as a smooth numbering in the TIMESTEPs.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1902,41 +2174,97 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0      0.0
-1      2.0
-2      4.0
-3      6.0
-4      8.0
-5     10.0
-6     12.0
-7     14.0
-8     16.0
-9     18.0
-10    20.0
-11    22.0
-12    24.0
-13    26.0
-14    28.0
-15    30.0
-16    32.0
-17    34.0
-18    36.0
+0     0.00
+1     0.04
+2     0.08
+3     0.12
+4     0.16
+5     0.20
+6     0.24
+7     0.28
+8     0.32
+9     0.36
+10    0.40
+11    0.44
+12    0.48
+13    0.52
+14    0.56
+15    0.60
+16    0.64
+17    0.68
+18    0.72
 Name: TIMESTEP_time, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">tre_combined</span> <span class="o">=</span> <span class="n">tre</span> <span class="o">+</span> <span class="n">tre_copy</span>
 </pre></div>
 </div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(19, 13)
+</pre></div></div>
+</div>
+<p>In the new combined trajectory we have one long trajectory made from the two smaller ones. The lenght is one element shorter, since normally the last element of the first trajectory and the first element of the second trajectory is the same element. This can be controlled via the option “skip_new_0=True” in the add_traj() function which is the core of the “+” operator for trajectories. In the following line the default behavior can be seen as a smooth numbering in the TIMESTEPs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">TIMESTEP_time</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0     0.00
+1     0.04
+2     0.08
+3     0.12
+4     0.16
+5     0.20
+6     0.24
+7     0.28
+8     0.32
+9     0.36
+10    0.40
+11    0.44
+12    0.48
+13    0.52
+14    0.56
+15    0.60
+16    0.64
+17    0.68
+18    0.72
+Name: TIMESTEP_time, dtype: float64
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -1956,7 +2284,7 @@ Name: TIMESTEP_time, dtype: float64
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../Tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_hvap.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="example_gromos_simulation.html" class="btn btn-neutral float-left" title="SD Simulations with Submission System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

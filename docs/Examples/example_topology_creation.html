@@ -1,0 +1,1402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Topology creation and modifications with PyGromosTools &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorials" href="../Tutorials/index.html" />
+    <link rel="prev" title="Submission Systems" href="example_submission_systems.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example_PyGromosPP.html">Demonstartion of the PyGromosTools implementation of the Gromos++ programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html">SD Simulations with Submission System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_submission_systems.html">Submission Systems</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Topology creation and modifications with PyGromosTools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Automatic-System-generation-and-combining-of-topologies">Automatic System generation and combining of topologies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Manual-topology-modifications">Manual topology modifications</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Topology creation and modifications with PyGromosTools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/Examples/example_topology_creation.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Topology-creation-and-modifications-with-PyGromosTools">
+<h1>Topology creation and modifications with PyGromosTools<a class="headerlink" href="#Topology-creation-and-modifications-with-PyGromosTools" title="Permalink to this headline">¶</a></h1>
+<p>PyGromosTools offers a wide variaty of tools and functions to assist in the creation and modification of specialized topologies.</p>
+<p>In the following notebook we will demonstrate some of the functions and theire usage. These functions and workflows should work with all supported forcfields, but we will use OpenForceField due to the fact that it is independant of make_top and a Gromos++ installation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.ff.forcefield_system</span> <span class="kn">import</span> <span class="n">forcefield_system</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field Toolkit does not require the OpenEye Toolkits, and can use RDKit/AmberTools instead. However, if you have a valid license for the OpenEye Toolkits, consider installing them for faster performance and additional file format support: https://docs.eyesopen.com/toolkits/python/quickstart-python/linuxosx.html OpenEye offers free Toolkit licenses for academics: https://www.eyesopen.com/academic-licensing
+Warning: Unable to load toolkit &#39;AmberTools&#39;.
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># setting the work directory</span>
+<span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;/example_files/topo_tutorial/&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Automatic-System-generation-and-combining-of-topologies">
+<h2>Automatic System generation and combining of topologies<a class="headerlink" href="#Automatic-System-generation-and-combining-of-topologies" title="Permalink to this headline">¶</a></h2>
+<p>In the first part of this notebbok we demonstrate some automatic tools to create and modifie topologies.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># defining the forcefield we want to use. In case a Gromos system is used make sure to have a valid Gromos++ installation and define the gromos++ path in Gromos_System or add it to you Path.</span>
+<span class="n">ff</span> <span class="o">=</span> <span class="n">forcefield_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Found off: /home/mlehner/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff-1.3.0.offxml
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># We define a molecule in RDKit. Note that this molecule could be modified in RDKit or read from sdf, pdb, ... files</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C1CCCCC1&quot;</span><span class="p">)</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="n">AllChem</span><span class="o">.</span><span class="n">EmbedMolecule</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># We define our Gromos_system. Note the option auto_convert=True to automatically genarte a valid topology from the molecule defined in mol and the forcefield defined in ff.</span>
+<span class="n">grosys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">Forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">rdkitMol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+==================
+        CHECK dependencies
+
+Check /home/mlehner/PyGromosTools/examples/example_files/topo_tutorial/
+/home/mlehner/PyGromosTools/examples/example_files/topo_tutorial/
+All dependencies are correct!
+
+
+Generate Empty:  imd
+Generate Empty:  top
+Generate Empty:  cnf
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The topology created in the last step printed</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">TITLE</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TITLE
+
+        name:    hill_formula: C6H12
+        ----------------------------------------
+        | created from OpenForceField topology |
+        | use Amber Block for OpenFF topology! |
+        ----------------------------------------
+
+         &gt;&gt;&gt; Generated with python lib function_libs utilities. (riniker group)
+         &gt;&gt;&gt; line_seperator: &#39;\n&#39;       field_seperator: &#39;\t&#39;   comments_char: &#39;#&#39;
+END
+</pre></div></div>
+</div>
+<p>After the automatic creation of this topology for a Cyclohexan molecule we could try to make a liquid topology. Therefore we want to have multiple copies of our topology in one single topology.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># define a new, empty top</span>
+<span class="n">retTop</span><span class="o">=</span><span class="n">Top</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>With the “+=” operator we can add multiple topologies to a single topology. Or multiply the topology in a for loop. This alows costum topologies for liquids. After the loop we can reasign the variable to our Gromos_System and check if the additional molecules were added.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">retTop</span> <span class="o">+=</span> <span class="n">grosys</span><span class="o">.</span><span class="n">top</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">retTop</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># we added 10 copies of the initial moleucle to retTop and our new topology now contains 10 molecules in the RESNAME block.</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">RESNAME</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RESNAME
+10
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+END
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">make_ordered</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>We can also add different molecules in our system. For example we could add a Toluene to our Cyclohexane system.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># create a topology for Toluene</span>
+<span class="n">tolTop</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;TOL&quot;</span><span class="p">,</span> <span class="n">in_smiles</span><span class="o">=</span><span class="s2">&quot;c1ccccc1C&quot;</span><span class="p">,</span> <span class="n">Forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+==================
+        CHECK dependencies
+
+Check /home/mlehner/PyGromosTools/examples/example_files/topo_tutorial/
+/home/mlehner/PyGromosTools/examples/example_files/topo_tutorial/
+All dependencies are correct!
+
+
+Generate Empty:  imd
+Generate Empty:  top
+Generate Empty:  cnf
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># add the toluene topology to our main topology</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span> <span class="o">+=</span> <span class="n">tolTop</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tolTop</span><span class="o">.</span><span class="n">LJPARAMETERS</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">C6</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.0022221343815367416
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># check if it was added properly</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">RESNAME</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RESNAME
+11
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C6H12
+C7H8
+END
+</pre></div></div>
+</div>
+<p>If many topologies should be added to a single topology the PyGromosTools version of com_top can be used which directly implements multipliers. Instead of for loops.</p>
+</div>
+<div class="section" id="Manual-topology-modifications">
+<h2>Manual topology modifications<a class="headerlink" href="#Manual-topology-modifications" title="Permalink to this headline">¶</a></h2>
+<p>In this second part of the notebook we demonstrate some functions to manually tweek topologies.</p>
+<p>Like with any othe PyGromosTools file class we have the option to brute force rewrite blocks. However, this often requires advanced knowlede of the block structure. Except for a few simple cases like the TITLE block.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;This is a new Title&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">make_ordered</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">TITLE</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TITLE
+This is a new Title
+         &gt;&gt;&gt; Generated with python lib function_libs utilities. (riniker group)
+         &gt;&gt;&gt; line_seperator: &#39;\n&#39;       field_seperator: &#39;\t&#39;   comments_char: &#39;#&#39;
+END
+</pre></div></div>
+</div>
+<p>For more complexe blocks PyGromosTools provides many functions to modify topologies. For example we could simply add a new soluteatom to the system. This would be relevant if you want to manually add a ion with very specific Nonbonded values to you system. These tools are vary powrful, but don’t do any sanity checks on the values or compatibility to your forcefields.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># We add a ion named &#39;XX&#39; with charge +1 and certain LJ-Parameters to the main topology</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">add_new_atom</span><span class="p">(</span><span class="n">PANM</span><span class="o">=</span><span class="s2">&quot;XX&quot;</span><span class="p">,</span> <span class="n">CG</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">C6</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">C12</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+New Atomtype with LJ parameters added. IAC found as: 5
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Check for the new Atomtype &#39;XX&#39;</span>
+<span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">ATOMTYPENAME</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ATOMTYPENAME
+5
+n16
+n2
+n14
+n7
+XX
+END
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grosys</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">SOLUTEATOM</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SOLUTEATOM
+#   NRP: number of solute atoms
+         196
+#  ATNM: atom number
+#  MRES: residue number
+#  PANM: atom name of solute atom
+#   IAC: integer (van der Waals) atom type code
+#  MASS: mass of solute atom
+#    CG: charge of solute atom
+#   CGC: charge group code (0 or 1)
+#   INE: number of excluded atoms
+# INE14: number of 1-4 interactions
+# ATNM MRES PANM IAC     MASS       CG  CGC INE
+#                                           INE14
+        1       1       C1      1       12.01078        0.0     1       10      2       3       5       6       7       8
+                                                                                        9       10      17      18
+                                                                                5       4       11      12      15      16
+        2       1       C2      1       12.01078        0.0     1       9       3       4       6       7       8       9
+                                                                                        10      11      12
+                                                                                5       5       13      14      17      18
+        3       1       C3      1       12.01078        0.0     1       8       4       5       9       10      11      12
+                                                                                        13      14
+                                                                                5       6       7       8       15      16
+        4       1       C4      1       12.01078        0.0     1       8       5       6       11      12      13      14
+                                                                                        15      16
+                                                                                4       9       10      17      18
+        5       1       C5      1       12.01078        0.0     1       7       6       13      14      15      16      17
+                                                                                        18
+                                                                                4       7       8       11      12
+        6       1       C6      1       12.01078        0.0     1       6       7       8       15      16      17      18
+
+                                                                                4       9       10      13      14
+        7       1       H1      2       1.007947        0.0     1       1       8
+                                                                                4       9       10      17      18
+        8       1       H2      2       1.007947        0.0     1       0
+                                                                                4       9       10      17      18
+        9       1       H3      2       1.007947        0.0     1       1       10
+                                                                                2       11      12
+        10      1       H4      2       1.007947        0.0     1       0
+                                                                                2       11      12
+        11      1       H5      2       1.007947        0.0     1       1       12
+                                                                                2       13      14
+        12      1       H6      2       1.007947        0.0     1       0
+                                                                                2       13      14
+        13      1       H7      2       1.007947        0.0     1       1       14
+                                                                                2       15      16
+        14      1       H8      2       1.007947        0.0     1       0
+                                                                                2       15      16
+        15      1       H9      2       1.007947        0.0     1       1       16
+                                                                                2       17      18
+        16      1       H10     2       1.007947        0.0     1       0
+                                                                                2       17      18
+        17      1       H11     2       1.007947        0.0     1       1       18
+                                                                                0
+        18      1       H12     2       1.007947        0.0     1       0
+                                                                                0
+        19      2       C1      1       12.01078        0.0     1       10      20      21      23      24      25      26
+                                                                                        27      28      35      36
+                                                                                5       22      29      30      33      34
+        20      2       C2      1       12.01078        0.0     1       9       21      22      24      25      26      27
+                                                                                        28      29      30
+                                                                                5       23      31      32      35      36
+        21      2       C3      1       12.01078        0.0     1       8       22      23      27      28      29      30
+                                                                                        31      32
+                                                                                5       24      25      26      33      34
+        22      2       C4      1       12.01078        0.0     1       8       23      24      29      30      31      32
+                                                                                        33      34
+                                                                                4       27      28      35      36
+        23      2       C5      1       12.01078        0.0     1       7       24      31      32      33      34      35
+                                                                                        36
+                                                                                4       25      26      29      30
+        24      2       C6      1       12.01078        0.0     1       6       25      26      33      34      35      36
+
+                                                                                4       27      28      31      32
+        25      2       H1      2       1.007947        0.0     1       1       26
+                                                                                4       27      28      35      36
+        26      2       H2      2       1.007947        0.0     1       0
+                                                                                4       27      28      35      36
+        27      2       H3      2       1.007947        0.0     1       1       28
+                                                                                2       29      30
+        28      2       H4      2       1.007947        0.0     1       0
+                                                                                2       29      30
+        29      2       H5      2       1.007947        0.0     1       1       30
+                                                                                2       31      32
+        30      2       H6      2       1.007947        0.0     1       0
+                                                                                2       31      32
+        31      2       H7      2       1.007947        0.0     1       1       32
+                                                                                2       33      34
+        32      2       H8      2       1.007947        0.0     1       0
+                                                                                2       33      34
+        33      2       H9      2       1.007947        0.0     1       1       34
+                                                                                2       35      36
+        34      2       H10     2       1.007947        0.0     1       0
+                                                                                2       35      36
+        35      2       H11     2       1.007947        0.0     1       1       36
+                                                                                0
+        36      2       H12     2       1.007947        0.0     1       0
+                                                                                0
+        37      3       C1      1       12.01078        0.0     1       10      38      39      41      42      43      44
+                                                                                        45      46      53      54
+                                                                                5       40      47      48      51      52
+        38      3       C2      1       12.01078        0.0     1       9       39      40      42      43      44      45
+                                                                                        46      47      48
+                                                                                5       41      49      50      53      54
+        39      3       C3      1       12.01078        0.0     1       8       40      41      45      46      47      48
+                                                                                        49      50
+                                                                                5       42      43      44      51      52
+        40      3       C4      1       12.01078        0.0     1       8       41      42      47      48      49      50
+                                                                                        51      52
+                                                                                4       45      46      53      54
+        41      3       C5      1       12.01078        0.0     1       7       42      49      50      51      52      53
+                                                                                        54
+                                                                                4       43      44      47      48
+        42      3       C6      1       12.01078        0.0     1       6       43      44      51      52      53      54
+
+                                                                                4       45      46      49      50
+        43      3       H1      2       1.007947        0.0     1       1       44
+                                                                                4       45      46      53      54
+        44      3       H2      2       1.007947        0.0     1       0
+                                                                                4       45      46      53      54
+        45      3       H3      2       1.007947        0.0     1       1       46
+                                                                                2       47      48
+        46      3       H4      2       1.007947        0.0     1       0
+                                                                                2       47      48
+        47      3       H5      2       1.007947        0.0     1       1       48
+                                                                                2       49      50
+        48      3       H6      2       1.007947        0.0     1       0
+                                                                                2       49      50
+        49      3       H7      2       1.007947        0.0     1       1       50
+                                                                                2       51      52
+        50      3       H8      2       1.007947        0.0     1       0
+                                                                                2       51      52
+        51      3       H9      2       1.007947        0.0     1       1       52
+                                                                                2       53      54
+        52      3       H10     2       1.007947        0.0     1       0
+                                                                                2       53      54
+        53      3       H11     2       1.007947        0.0     1       1       54
+                                                                                0
+        54      3       H12     2       1.007947        0.0     1       0
+                                                                                0
+        55      4       C1      1       12.01078        0.0     1       10      56      57      59      60      61      62
+                                                                                        63      64      71      72
+                                                                                5       58      65      66      69      70
+        56      4       C2      1       12.01078        0.0     1       9       57      58      60      61      62      63
+                                                                                        64      65      66
+                                                                                5       59      67      68      71      72
+        57      4       C3      1       12.01078        0.0     1       8       58      59      63      64      65      66
+                                                                                        67      68
+                                                                                5       60      61      62      69      70
+        58      4       C4      1       12.01078        0.0     1       8       59      60      65      66      67      68
+                                                                                        69      70
+                                                                                4       63      64      71      72
+        59      4       C5      1       12.01078        0.0     1       7       60      67      68      69      70      71
+                                                                                        72
+                                                                                4       61      62      65      66
+        60      4       C6      1       12.01078        0.0     1       6       61      62      69      70      71      72
+
+                                                                                4       63      64      67      68
+        61      4       H1      2       1.007947        0.0     1       1       62
+                                                                                4       63      64      71      72
+        62      4       H2      2       1.007947        0.0     1       0
+                                                                                4       63      64      71      72
+        63      4       H3      2       1.007947        0.0     1       1       64
+                                                                                2       65      66
+        64      4       H4      2       1.007947        0.0     1       0
+                                                                                2       65      66
+        65      4       H5      2       1.007947        0.0     1       1       66
+                                                                                2       67      68
+        66      4       H6      2       1.007947        0.0     1       0
+                                                                                2       67      68
+        67      4       H7      2       1.007947        0.0     1       1       68
+                                                                                2       69      70
+        68      4       H8      2       1.007947        0.0     1       0
+                                                                                2       69      70
+        69      4       H9      2       1.007947        0.0     1       1       70
+                                                                                2       71      72
+        70      4       H10     2       1.007947        0.0     1       0
+                                                                                2       71      72
+        71      4       H11     2       1.007947        0.0     1       1       72
+                                                                                0
+        72      4       H12     2       1.007947        0.0     1       0
+                                                                                0
+        73      5       C1      1       12.01078        0.0     1       10      74      75      77      78      79      80
+                                                                                        81      82      89      90
+                                                                                5       76      83      84      87      88
+        74      5       C2      1       12.01078        0.0     1       9       75      76      78      79      80      81
+                                                                                        82      83      84
+                                                                                5       77      85      86      89      90
+        75      5       C3      1       12.01078        0.0     1       8       76      77      81      82      83      84
+                                                                                        85      86
+                                                                                5       78      79      80      87      88
+        76      5       C4      1       12.01078        0.0     1       8       77      78      83      84      85      86
+                                                                                        87      88
+                                                                                4       81      82      89      90
+        77      5       C5      1       12.01078        0.0     1       7       78      85      86      87      88      89
+                                                                                        90
+                                                                                4       79      80      83      84
+        78      5       C6      1       12.01078        0.0     1       6       79      80      87      88      89      90
+
+                                                                                4       81      82      85      86
+        79      5       H1      2       1.007947        0.0     1       1       80
+                                                                                4       81      82      89      90
+        80      5       H2      2       1.007947        0.0     1       0
+                                                                                4       81      82      89      90
+        81      5       H3      2       1.007947        0.0     1       1       82
+                                                                                2       83      84
+        82      5       H4      2       1.007947        0.0     1       0
+                                                                                2       83      84
+        83      5       H5      2       1.007947        0.0     1       1       84
+                                                                                2       85      86
+        84      5       H6      2       1.007947        0.0     1       0
+                                                                                2       85      86
+        85      5       H7      2       1.007947        0.0     1       1       86
+                                                                                2       87      88
+        86      5       H8      2       1.007947        0.0     1       0
+                                                                                2       87      88
+        87      5       H9      2       1.007947        0.0     1       1       88
+                                                                                2       89      90
+        88      5       H10     2       1.007947        0.0     1       0
+                                                                                2       89      90
+        89      5       H11     2       1.007947        0.0     1       1       90
+                                                                                0
+        90      5       H12     2       1.007947        0.0     1       0
+                                                                                0
+        91      6       C1      1       12.01078        0.0     1       10      92      93      95      96      97      98
+                                                                                        99      100     107     108
+                                                                                5       94      101     102     105     106
+        92      6       C2      1       12.01078        0.0     1       9       93      94      96      97      98      99
+                                                                                        100     101     102
+                                                                                5       95      103     104     107     108
+        93      6       C3      1       12.01078        0.0     1       8       94      95      99      100     101     102
+                                                                                        103     104
+                                                                                5       96      97      98      105     106
+        94      6       C4      1       12.01078        0.0     1       8       95      96      101     102     103     104
+                                                                                        105     106
+                                                                                4       99      100     107     108
+        95      6       C5      1       12.01078        0.0     1       7       96      103     104     105     106     107
+                                                                                        108
+                                                                                4       97      98      101     102
+        96      6       C6      1       12.01078        0.0     1       6       97      98      105     106     107     108
+
+                                                                                4       99      100     103     104
+        97      6       H1      2       1.007947        0.0     1       1       98
+                                                                                4       99      100     107     108
+        98      6       H2      2       1.007947        0.0     1       0
+                                                                                4       99      100     107     108
+        99      6       H3      2       1.007947        0.0     1       1       100
+                                                                                2       101     102
+        100     6       H4      2       1.007947        0.0     1       0
+                                                                                2       101     102
+        101     6       H5      2       1.007947        0.0     1       1       102
+                                                                                2       103     104
+        102     6       H6      2       1.007947        0.0     1       0
+                                                                                2       103     104
+        103     6       H7      2       1.007947        0.0     1       1       104
+                                                                                2       105     106
+        104     6       H8      2       1.007947        0.0     1       0
+                                                                                2       105     106
+        105     6       H9      2       1.007947        0.0     1       1       106
+                                                                                2       107     108
+        106     6       H10     2       1.007947        0.0     1       0
+                                                                                2       107     108
+        107     6       H11     2       1.007947        0.0     1       1       108
+                                                                                0
+        108     6       H12     2       1.007947        0.0     1       0
+                                                                                0
+        109     7       C1      1       12.01078        0.0     1       10      110     111     113     114     115     116
+                                                                                        117     118     125     126
+                                                                                5       112     119     120     123     124
+        110     7       C2      1       12.01078        0.0     1       9       111     112     114     115     116     117
+                                                                                        118     119     120
+                                                                                5       113     121     122     125     126
+        111     7       C3      1       12.01078        0.0     1       8       112     113     117     118     119     120
+                                                                                        121     122
+                                                                                5       114     115     116     123     124
+        112     7       C4      1       12.01078        0.0     1       8       113     114     119     120     121     122
+                                                                                        123     124
+                                                                                4       117     118     125     126
+        113     7       C5      1       12.01078        0.0     1       7       114     121     122     123     124     125
+                                                                                        126
+                                                                                4       115     116     119     120
+        114     7       C6      1       12.01078        0.0     1       6       115     116     123     124     125     126
+
+                                                                                4       117     118     121     122
+        115     7       H1      2       1.007947        0.0     1       1       116
+                                                                                4       117     118     125     126
+        116     7       H2      2       1.007947        0.0     1       0
+                                                                                4       117     118     125     126
+        117     7       H3      2       1.007947        0.0     1       1       118
+                                                                                2       119     120
+        118     7       H4      2       1.007947        0.0     1       0
+                                                                                2       119     120
+        119     7       H5      2       1.007947        0.0     1       1       120
+                                                                                2       121     122
+        120     7       H6      2       1.007947        0.0     1       0
+                                                                                2       121     122
+        121     7       H7      2       1.007947        0.0     1       1       122
+                                                                                2       123     124
+        122     7       H8      2       1.007947        0.0     1       0
+                                                                                2       123     124
+        123     7       H9      2       1.007947        0.0     1       1       124
+                                                                                2       125     126
+        124     7       H10     2       1.007947        0.0     1       0
+                                                                                2       125     126
+        125     7       H11     2       1.007947        0.0     1       1       126
+                                                                                0
+        126     7       H12     2       1.007947        0.0     1       0
+                                                                                0
+        127     8       C1      1       12.01078        0.0     1       10      128     129     131     132     133     134
+                                                                                        135     136     143     144
+                                                                                5       130     137     138     141     142
+        128     8       C2      1       12.01078        0.0     1       9       129     130     132     133     134     135
+                                                                                        136     137     138
+                                                                                5       131     139     140     143     144
+        129     8       C3      1       12.01078        0.0     1       8       130     131     135     136     137     138
+                                                                                        139     140
+                                                                                5       132     133     134     141     142
+        130     8       C4      1       12.01078        0.0     1       8       131     132     137     138     139     140
+                                                                                        141     142
+                                                                                4       135     136     143     144
+        131     8       C5      1       12.01078        0.0     1       7       132     139     140     141     142     143
+                                                                                        144
+                                                                                4       133     134     137     138
+        132     8       C6      1       12.01078        0.0     1       6       133     134     141     142     143     144
+
+                                                                                4       135     136     139     140
+        133     8       H1      2       1.007947        0.0     1       1       134
+                                                                                4       135     136     143     144
+        134     8       H2      2       1.007947        0.0     1       0
+                                                                                4       135     136     143     144
+        135     8       H3      2       1.007947        0.0     1       1       136
+                                                                                2       137     138
+        136     8       H4      2       1.007947        0.0     1       0
+                                                                                2       137     138
+        137     8       H5      2       1.007947        0.0     1       1       138
+                                                                                2       139     140
+        138     8       H6      2       1.007947        0.0     1       0
+                                                                                2       139     140
+        139     8       H7      2       1.007947        0.0     1       1       140
+                                                                                2       141     142
+        140     8       H8      2       1.007947        0.0     1       0
+                                                                                2       141     142
+        141     8       H9      2       1.007947        0.0     1       1       142
+                                                                                2       143     144
+        142     8       H10     2       1.007947        0.0     1       0
+                                                                                2       143     144
+        143     8       H11     2       1.007947        0.0     1       1       144
+                                                                                0
+        144     8       H12     2       1.007947        0.0     1       0
+                                                                                0
+        145     9       C1      1       12.01078        0.0     1       10      146     147     149     150     151     152
+                                                                                        153     154     161     162
+                                                                                5       148     155     156     159     160
+        146     9       C2      1       12.01078        0.0     1       9       147     148     150     151     152     153
+                                                                                        154     155     156
+                                                                                5       149     157     158     161     162
+        147     9       C3      1       12.01078        0.0     1       8       148     149     153     154     155     156
+                                                                                        157     158
+                                                                                5       150     151     152     159     160
+        148     9       C4      1       12.01078        0.0     1       8       149     150     155     156     157     158
+                                                                                        159     160
+                                                                                4       153     154     161     162
+        149     9       C5      1       12.01078        0.0     1       7       150     157     158     159     160     161
+                                                                                        162
+                                                                                4       151     152     155     156
+        150     9       C6      1       12.01078        0.0     1       6       151     152     159     160     161     162
+
+                                                                                4       153     154     157     158
+        151     9       H1      2       1.007947        0.0     1       1       152
+                                                                                4       153     154     161     162
+        152     9       H2      2       1.007947        0.0     1       0
+                                                                                4       153     154     161     162
+        153     9       H3      2       1.007947        0.0     1       1       154
+                                                                                2       155     156
+        154     9       H4      2       1.007947        0.0     1       0
+                                                                                2       155     156
+        155     9       H5      2       1.007947        0.0     1       1       156
+                                                                                2       157     158
+        156     9       H6      2       1.007947        0.0     1       0
+                                                                                2       157     158
+        157     9       H7      2       1.007947        0.0     1       1       158
+                                                                                2       159     160
+        158     9       H8      2       1.007947        0.0     1       0
+                                                                                2       159     160
+        159     9       H9      2       1.007947        0.0     1       1       160
+                                                                                2       161     162
+        160     9       H10     2       1.007947        0.0     1       0
+                                                                                2       161     162
+        161     9       H11     2       1.007947        0.0     1       1       162
+                                                                                0
+        162     9       H12     2       1.007947        0.0     1       0
+                                                                                0
+        163     10      C1      1       12.01078        0.0     1       10      164     165     167     168     169     170
+                                                                                        171     172     179     180
+                                                                                5       166     173     174     177     178
+        164     10      C2      1       12.01078        0.0     1       9       165     166     168     169     170     171
+                                                                                        172     173     174
+                                                                                5       167     175     176     179     180
+        165     10      C3      1       12.01078        0.0     1       8       166     167     171     172     173     174
+                                                                                        175     176
+                                                                                5       168     169     170     177     178
+        166     10      C4      1       12.01078        0.0     1       8       167     168     173     174     175     176
+                                                                                        177     178
+                                                                                4       171     172     179     180
+        167     10      C5      1       12.01078        0.0     1       7       168     175     176     177     178     179
+                                                                                        180
+                                                                                4       169     170     173     174
+        168     10      C6      1       12.01078        0.0     1       6       169     170     177     178     179     180
+
+                                                                                4       171     172     175     176
+        169     10      H1      2       1.007947        0.0     1       1       170
+                                                                                4       171     172     179     180
+        170     10      H2      2       1.007947        0.0     1       0
+                                                                                4       171     172     179     180
+        171     10      H3      2       1.007947        0.0     1       1       172
+                                                                                2       173     174
+        172     10      H4      2       1.007947        0.0     1       0
+                                                                                2       173     174
+        173     10      H5      2       1.007947        0.0     1       1       174
+                                                                                2       175     176
+        174     10      H6      2       1.007947        0.0     1       0
+                                                                                2       175     176
+        175     10      H7      2       1.007947        0.0     1       1       176
+                                                                                2       177     178
+        176     10      H8      2       1.007947        0.0     1       0
+                                                                                2       177     178
+        177     10      H9      2       1.007947        0.0     1       1       178
+                                                                                2       179     180
+        178     10      H10     2       1.007947        0.0     1       0
+                                                                                2       179     180
+        179     10      H11     2       1.007947        0.0     1       1       180
+                                                                                0
+        180     10      H12     2       1.007947        0.0     1       0
+                                                                                0
+        181     11      C1      3       12.01078        0       1       7       182     183     185     186     187     188
+                                                                                        189
+                                                                                6       184     190     192     193     194     195
+        182     11      C2      3       12.01078        0       1       6       183     184     186     188     189     190
+
+                                                                                3       185     187     191
+        183     11      C3      3       12.01078        0       1       5       184     185     189     190     191
+                                                                                3       186     188     192
+        184     11      C4      3       12.01078        0       1       5       185     186     190     191     192
+                                                                                2       187     189
+        185     11      C5      3       12.01078        0       1       4       186     187     191     192
+                                                                                5       188     190     193     194     195
+        186     11      C6      3       12.01078        0       1       6       187     188     192     193     194     195
+
+                                                                                2       189     191
+        187     11      C7      1       12.01078        0       1       3       193     194     195
+                                                                                2       188     192
+        188     11      H1      4       1.007947        0       1       0
+                                                                                1       189
+        189     11      H2      4       1.007947        0       1       0
+                                                                                1       190
+        190     11      H3      4       1.007947        0       1       0
+                                                                                1       191
+        191     11      H4      4       1.007947        0       1       0
+                                                                                1       192
+        192     11      H5      4       1.007947        0       1       0
+                                                                                0
+        193     11      H6      2       1.007947        0       1       2       194     195
+                                                                                0
+        194     11      H7      2       1.007947        0       1       1       195
+                                                                                0
+        195     11      H8      2       1.007947        0       1       0
+                                                                                0
+        196     12      XX      5       1.0     1       1       0
+                                                                                0
+END
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grosys</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+File imd is empty , can not be written!
+/home/mlehner/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised None
+  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../Tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_submission_systems.html" class="btn btn-neutral float-left" title="Submission Systems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

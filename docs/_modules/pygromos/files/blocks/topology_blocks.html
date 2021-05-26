@@ -155,7 +155,6 @@
             
   <h1>Source code for pygromos.files.blocks.topology_blocks</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">__main__</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
@@ -638,22 +637,30 @@
 <div class="viewcode-block" id="FORCEFIELD"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.FORCEFIELD">[docs]</a><span class="k">class</span> <span class="nc">FORCEFIELD</span><span class="p">(</span><span class="n">_generic_gromos_block</span><span class="p">):</span>
     <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">NAME</span> <span class="o">=</span> <span class="n">NAME</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NAME</span> <span class="o">=</span> <span class="n">NAME</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FORCEFIELD.block_to_string"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.FORCEFIELD.block_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">block_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NAME</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span>
+        <span class="c1">#result += self.NAME + self.line_seperator</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;END&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span>
         <span class="k">return</span> <span class="n">result</span></div></div>
 
 <div class="viewcode-block" id="MAKETOPVERSION"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MAKETOPVERSION">[docs]</a><span class="k">class</span> <span class="nc">MAKETOPVERSION</span><span class="p">(</span><span class="n">_generic_gromos_block</span><span class="p">):</span>
     <span class="n">VERSION</span><span class="p">:</span> <span class="nb">str</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">VERSION</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">VERSION</span> <span class="o">=</span> <span class="n">VERSION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">VERSION</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VERSION</span> <span class="o">=</span> <span class="n">VERSION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MAKETOPVERSION.block_to_string"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MAKETOPVERSION.block_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">block_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span>
@@ -680,6 +687,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">FORCEFIELD</span> <span class="o">=</span> <span class="n">FORCEFIELD</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">MAKETOPVERSION</span> <span class="o">=</span> <span class="n">MAKETOPVERSION</span>
 
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
+        <span class="c1">#return block as string, split by line and cut block title and END</span>
+        <span class="n">newContent</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_to_string</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">content</span><span class="o">=</span><span class="n">newContent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">block</span>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">TOPOLOGY BLOCKS</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -687,7 +702,8 @@
 <span class="sd">Restraints Blocks</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="DISTANCERESSPEC"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.DISTANCERESSPEC">[docs]</a><span class="k">class</span> <span class="nc">DISTANCERESSPEC</span><span class="p">(</span><span class="n">_generic_gromos_block</span><span class="p">):</span>
-<div class="viewcode-block" id="DISTANCERESSPEC.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.DISTANCERESSPEC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">KDISH</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">KDISC</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">RESTRAINTHEADER</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">RESTRAINTS</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<div class="viewcode-block" id="DISTANCERESSPEC.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.DISTANCERESSPEC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">KDISH</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">KDISC</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RESTRAINTHEADER</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RESTRAINTS</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">content</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -697,11 +713,51 @@
 <span class="sd">        RESTRAINTHEADER :</span>
 <span class="sd">        RESTRAINTS :</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DISTANCERESSPEC&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;# KDISH, KDISC</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">KDISH</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">KDISC</span><span class="p">),</span>
+                       <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RESTRAINTHEADER</span><span class="p">),</span>
+                       <span class="p">]</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">RESTRAINTS</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DISTANCERESSPEC&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DISTANCERESSPEC.read_content_from_str"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.DISTANCERESSPEC.read_content_from_str">[docs]</a>    <span class="k">def</span> <span class="nf">read_content_from_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="c1"># readout KDISH or KDISC</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">KDISH</span><span class="p">,</span> <span class="n">KDISC</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="c1"># read list header:</span>
+        <span class="n">line_header</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="c1">##unify keys:</span>
+        <span class="n">key_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="n">renamed_header</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line_header</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">key_dict</span><span class="p">):</span>
+                <span class="n">renamed_header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key_dict</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+                <span class="n">key_dict</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">renamed_header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">RESTRAINTHEADER</span> <span class="o">=</span> <span class="n">renamed_header</span>
+
+        <span class="c1"># read restraints</span>
+        <span class="n">RESTRAINTS</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">RESTRAINTHEADER</span><span class="p">)):</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">RESTRAINTS_dict</span><span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">values</span><span class="p">[</span><span class="n">RESTRAINTHEADER</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">RESTRAINTHEADER</span><span class="p">}</span>
+                <span class="n">RESTRAINTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_pair_distanceRes</span><span class="p">(</span><span class="o">**</span><span class="n">RESTRAINTS_dict</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING! could not Read in :&quot;</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">continue</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">KDISH</span> <span class="o">=</span> <span class="n">KDISH</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">KDISC</span> <span class="o">=</span> <span class="n">KDISC</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RESTRAINTHEADER</span> <span class="o">=</span> <span class="n">RESTRAINTHEADER</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RESTRAINTS</span> <span class="o">=</span> <span class="n">RESTRAINTS</span></div>
+
+
 
 <div class="viewcode-block" id="DISTANCERESSPEC.block_to_string"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.DISTANCERESSPEC.block_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">block_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span>
@@ -718,8 +774,8 @@
 <span class="sd">Pertubation Blocks</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="MPERTATOM"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM">[docs]</a><span class="k">class</span> <span class="nc">MPERTATOM</span><span class="p">(</span><span class="n">_generic_gromos_block</span><span class="p">):</span>
-<div class="viewcode-block" id="MPERTATOM.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NJLA</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">NPTB</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">STATEIDENTIFIERS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span> <span class="n">STATEATOMHEADER</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NR&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHLJ&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHCRF&#39;</span><span class="p">],</span> <span class="n">STATEATOMS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">atom_eds_pertubation_state</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span>
-                 <span class="n">dummy_IAC</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span> <span class="n">dummy_CHARGE</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="MPERTATOM.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NJLA</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">NPTB</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">STATEIDENTIFIERS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span> <span class="n">STATEATOMHEADER</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NR&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHLJ&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHCRF&#39;</span><span class="p">],</span> <span class="n">STATEATOMS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">atom_eds_pertubation_state</span><span class="p">]</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">dummy_IAC</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span> <span class="n">dummy_CHARGE</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            This block is used for lambda sampling to define the different states.</span>
 
@@ -740,14 +796,66 @@
 <span class="sd">        dummy_CHARGE</span>
 <span class="sd">            dummy atom charge type for perturbed atoms</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="n">NJLA</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span> <span class="o">=</span> <span class="n">NPTB</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="n">STATEIDENTIFIERS</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="n">STATEATOMS</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="n">NJLA</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span> <span class="o">=</span> <span class="n">NPTB</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="n">STATEIDENTIFIERS</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="n">STATEATOMS</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">dummy_IAC</span> <span class="o">=</span> <span class="n">dummy_IAC</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dummy_CHARGE</span> <span class="o">=</span> <span class="n">dummy_CHARGE</span></div>
+
+
+<div class="viewcode-block" id="MPERTATOM.read_content_from_str"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.MPERTATOM.read_content_from_str">[docs]</a>    <span class="k">def</span> <span class="nf">read_content_from_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">NJLA</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">NTPB</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">STATEATOMS</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="c1"># print(line)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">comment</span> <span class="o">=</span> <span class="n">line</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">field</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">first</span><span class="p">):</span>
+                        <span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NR&quot;</span><span class="p">,</span> <span class="s2">&quot;NAME&quot;</span><span class="p">,</span> <span class="p">]</span>
+                        <span class="p">[</span><span class="n">STATEATOMHEADER</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;IAC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s2">&quot;CHARGE&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+                        <span class="n">STATEATOMHEADER</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;ALPHLJ&quot;</span><span class="p">,</span> <span class="s2">&quot;ALPHCRF&quot;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
+                        <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>
+
+                    <span class="n">state_line</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())}</span>
+                    <span class="n">final_state_line</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">state_line</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">state_line</span> <span class="k">if</span>
+                                        <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;IAC&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;CHARGE&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">)}</span>
+
+                    <span class="n">states</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">state_line</span><span class="p">[</span><span class="s2">&quot;IAC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]),</span>
+                                                          <span class="n">CHARGE</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">state_line</span><span class="p">[</span><span class="s2">&quot;CHARGE&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span>
+                              <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span><span class="p">)}</span>
+
+                    <span class="n">final_state_line</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;STATES&quot;</span><span class="p">:</span> <span class="n">states</span><span class="p">})</span>
+                    <span class="n">STATEATOMS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="o">**</span><span class="n">final_state_line</span><span class="p">))</span>
+
+                <span class="k">elif</span> <span class="p">(</span><span class="n">field</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">NJLA</span><span class="p">,</span> <span class="n">NPTB</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="n">NJLA</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span> <span class="o">=</span> <span class="n">NPTB</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">field</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="n">STATEIDENTIFIERS</span>
+                <span class="n">field</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="n">STATEATOMS</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nStates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
@@ -862,7 +970,7 @@
                 <span class="n">stateNames</span> <span class="o">=</span> <span class="p">[</span><span class="n">stateNames</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">stateN</span> <span class="ow">in</span> <span class="n">stateNames</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">stateN</span><span class="p">)</span>
+                <span class="c1">#print(stateN)</span>
                 <span class="n">stateID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATEIDENTIFIERS</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">stateN</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
 
                 <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span><span class="p">:</span>
@@ -928,31 +1036,79 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">STATEATOMS</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">atom_lam_pertubation_state</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">STATEATOMHEADER</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">NJLA</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">STATEIDENTIFIERS</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">dummy_IAC</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span> <span class="n">dummy_CHARGE</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+                 <span class="n">dummy_IAC</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span> <span class="n">dummy_CHARGE</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NPTB</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dummy_IAC</span> <span class="o">=</span> <span class="n">dummy_IAC</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dummy_CHARGE</span> <span class="o">=</span> <span class="n">dummy_CHARGE</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">STATEATOMHEADER</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NR&quot;</span><span class="p">,</span> <span class="s2">&quot;RES&quot;</span><span class="p">,</span> <span class="s2">&quot;NAME&quot;</span><span class="p">,]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;ALPHLJ&quot;</span><span class="p">,</span> <span class="s2">&quot;ALPHCRF&quot;</span><span class="p">]</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">STATEATOMHEADER</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NR&quot;</span><span class="p">,</span> <span class="s2">&quot;RES&quot;</span><span class="p">,</span>   <span class="s2">&quot;NAME&quot;</span><span class="p">,]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;ALPHLJ&quot;</span><span class="p">,</span> <span class="s2">&quot;ALPHCRF&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
+
+
+            <span class="k">if</span><span class="p">(</span><span class="n">STATEATOMS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_state_atoms</span><span class="p">(</span><span class="n">STATEATOMS</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
-
-
-        <span class="k">if</span><span class="p">(</span><span class="n">STATEATOMS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="mi">0</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_state_atoms</span><span class="p">(</span><span class="n">STATEATOMS</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">used</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
 
         <span class="c1"># You can check yourself :)</span>
         <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">NJLA</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">STATEATOMS</span><span class="p">)</span><span class="o">==</span><span class="n">NJLA</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NJLA must be equal to the length of STATEATOMS! NJLA=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">NJLA</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> stateatoms&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">STATEATOMS</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
+<div class="viewcode-block" id="PERTATOMPARAM.read_content_from_str"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.PERTATOMPARAM.read_content_from_str">[docs]</a>    <span class="k">def</span> <span class="nf">read_content_from_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">NJLA</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">STATEATOMS</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">stdid</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">comment</span> <span class="o">=</span> <span class="n">line</span>
+                <span class="k">if</span><span class="p">(</span><span class="s2">&quot;state_identifiers&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">):</span>
+                    <span class="n">stdid</span><span class="o">=</span><span class="kc">True</span>
+                <span class="k">elif</span><span class="p">(</span><span class="n">stdid</span><span class="p">):</span>
+                    <span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="n">stdid</span><span class="o">=</span><span class="kc">False</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">field</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">first</span><span class="p">):</span>
+                        <span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NR&quot;</span><span class="p">,</span>  <span class="s2">&quot;RES&quot;</span><span class="p">,</span> <span class="s2">&quot;NAME&quot;</span><span class="p">,]</span>
+                        <span class="p">[</span><span class="n">STATEATOMHEADER</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;IAC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s2">&quot;MASS&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s2">&quot;CHARGE&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+                        <span class="n">STATEATOMHEADER</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;ALPHLJ&quot;</span><span class="p">,</span> <span class="s2">&quot;ALPHCRF&quot;</span><span class="p">]</span>
+                        <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>
+
+                    <span class="n">state_line</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">STATEATOMHEADER</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())}</span>
+                    <span class="n">final_state_line</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">state_line</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">state_line</span> <span class="k">if</span>
+                                        <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;IAC&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;CHARGE&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;MASS&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">)}</span>
+                    <span class="n">states</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">pertubation_lam_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">state_line</span><span class="p">[</span><span class="s2">&quot;IAC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]))),</span>
+                                                          <span class="n">MASS</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">state_line</span><span class="p">[</span><span class="s2">&quot;MASS&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]),</span>
+                                                          <span class="n">CHARGE</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">state_line</span><span class="p">[</span><span class="s2">&quot;CHARGE&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)}</span>
+
+                    <span class="n">final_state_line</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;STATES&quot;</span><span class="p">:</span><span class="n">states</span><span class="p">})</span>
+                    <span class="n">STATEATOMS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_lam_pertubation_state</span><span class="p">(</span><span class="o">**</span><span class="n">final_state_line</span><span class="p">))</span>
+
+                <span class="k">elif</span> <span class="p">(</span><span class="n">field</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">NJLA</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">field</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NJLA</span> <span class="o">=</span> <span class="n">NJLA</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STATEIDENTIFIERS</span> <span class="o">=</span> <span class="n">STATEIDENTIFIERS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMHEADER</span> <span class="o">=</span> <span class="n">STATEATOMHEADER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span> <span class="o">=</span> <span class="n">STATEATOMS</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nStates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
@@ -1081,7 +1237,7 @@
                 <span class="n">stateNames</span> <span class="o">=</span> <span class="p">[</span><span class="n">stateNames</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">stateN</span> <span class="ow">in</span> <span class="n">stateNames</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">stateN</span><span class="p">)</span>
+                <span class="c1">#print(stateN)</span>
                 <span class="n">stateID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATEIDENTIFIERS</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">stateN</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
 
                 <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATEATOMS</span><span class="p">:</span>
@@ -1161,7 +1317,6 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FORCEFIELD</span><span class="o">=</span><span class="n">FORCEFIELD</span><span class="p">,</span> <span class="n">MAKETOPVERSION</span><span class="o">=</span><span class="n">MAKETOPVERSION</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="p">[]</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">content</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">read_content_from_str</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
         <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">atom_mass_type</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">content</span><span class="p">])):</span>
@@ -1845,7 +2000,8 @@
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;I don&#39;t understand the type of NRST: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">NRST</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="SPECATOMLJPAIR.read_content_from_str"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.SPECATOMLJPAIR.read_content_from_str">[docs]</a>    <span class="k">def</span> <span class="nf">read_content_from_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;SPECIAL LJ BLOCK IS NOT IMPLEMENTED!&quot;</span><span class="p">)</span>
+        <span class="c1">#TODO: implement</span>
+        <span class="c1">#warnings.warn(&quot;SPECIAL LJ BLOCK IS NOT IMPLEMENTED!&quot;)</span>
         <span class="k">return</span> <span class="p">[]</span></div></div>
 
 <span class="c1">###################################################################</span>
@@ -2332,6 +2488,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">read_content_from_str</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
         <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table_line_type</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">content</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_content_from_str</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;I don&#39;t understand the type of content: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)))</span>
         
@@ -2400,6 +2558,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">FPEPSI</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">HBAR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPDL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">BOLTZ</span><span class="p">]</span>
         <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">content</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">read_content_from_str</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_content_from_str</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_seperator</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">==</span><span class="mi">4</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FPEPSI</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">HBAR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPDL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">BOLTZ</span> <span class="o">=</span> <span class="n">content</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">FPEPSI</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">HBAR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPDL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">BOLTZ</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;I don&#39;t understand the type of content: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)))</span>
 

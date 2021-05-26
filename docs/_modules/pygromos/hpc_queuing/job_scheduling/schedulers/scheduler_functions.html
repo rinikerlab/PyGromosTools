@@ -157,8 +157,11 @@
 <span></span><span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
 <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
 <span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems._submission_system</span> <span class="kn">import</span> <span class="n">_SubmissionSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems</span> <span class="kn">import</span> <span class="n">lsf</span>
 <span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span>
 <span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.job_scheduling.workers.simulation_workers</span> <span class="kn">import</span> <span class="n">clean_up_simulation_files</span>
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
@@ -174,7 +177,10 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking if jobs was already submitted or done&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">do_not_doubly_submit_to_queue</span><span class="p">):</span>  <span class="c1"># can we find an job with this name in the queue?</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking for jobs with name: &quot;</span> <span class="o">+</span> <span class="n">tmp_jobname</span><span class="p">)</span>
-        <span class="n">queued_job_ids</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">get_jobs_from_queue</span><span class="p">(</span><span class="n">job_text</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">)</span>
+        <span class="n">queued_job_ids</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="n">job_name</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">queued_job_ids</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">queued_job_ids</span> <span class="o">=</span> <span class="n">queued_job_ids</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="o">.</span><span class="n">STAT</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;RUN&quot;</span><span class="p">,</span> <span class="s2">&quot;PEND&quot;</span><span class="p">]))</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 
         <span class="c1">## check if already submitted</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>  <span class="c1"># check if job is already submitted:</span>
@@ -257,6 +263,7 @@
 
     <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">job_submission_system</span> <span class="ow">is</span> <span class="n">LOCAL</span><span class="p">):</span>
         <span class="n">simSystem</span><span class="o">.</span><span class="n">_future_promise</span> <span class="o">=</span> <span class="kc">True</span>
+
 
     <span class="n">job_submission_system</span><span class="o">.</span><span class="n">job_duration</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">job_duration</span>
     <span class="k">for</span> <span class="n">runID</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_run_index</span><span class="p">,</span> <span class="n">chain_job_repetitions</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
@@ -343,6 +350,7 @@
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SIMULATION ID: &quot;</span><span class="p">,</span> <span class="n">previous_job_ID</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>  <span class="c1"># job already in the queue</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR during submission of main job &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">tmp_jobname</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="c1"># schedule - simulation cleanup:</span>
                 <span class="c1">##this mainly tars files.</span>
@@ -352,7 +360,8 @@
                 <span class="n">clean_id</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">submit_to_queue</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">clean_up_command</span><span class="p">,</span>
                                                                  <span class="n">jobName</span><span class="o">=</span><span class="n">tmp_jobname</span> <span class="o">+</span> <span class="s2">&quot;_cleanUP&quot;</span><span class="p">,</span>
                                                                  <span class="n">queue_after_jobID</span><span class="o">=</span><span class="n">previous_job_ID</span><span class="p">,</span>
-                                                                 <span class="n">outLog</span><span class="o">=</span><span class="n">outLog</span><span class="p">,</span> <span class="n">errLog</span><span class="o">=</span><span class="n">errLog</span><span class="p">)</span>
+                                                                 <span class="n">outLog</span><span class="o">=</span><span class="n">outLog</span><span class="p">,</span>
+                                                                 <span class="n">errLog</span><span class="o">=</span><span class="n">errLog</span><span class="p">,)</span>
 
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CLEANING ID: &quot;</span><span class="p">,</span> <span class="n">previous_job_ID</span><span class="p">)</span>
 

@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    pygromos.files.trajectory.blocks
+   pygromos.files.trajectory.tre_field_libs
 
 Submodules
 ----------

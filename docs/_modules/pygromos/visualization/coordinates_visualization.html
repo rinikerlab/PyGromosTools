@@ -159,26 +159,79 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="kn">import</span> <span class="n">Trc</span>
-
+<span class="kn">from</span> <span class="nn">pygromos.utils.amino_acids</span> <span class="kn">import</span> <span class="n">three_letter_aa_lib</span><span class="p">,</span> <span class="n">ions</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">py3Dmol</span>
 
 <div class="viewcode-block" id="show_cnf"><a class="viewcode-back" href="../../../_source/pygromos.visualization.html#pygromos.visualization.coordinates_visualization.show_cnf">[docs]</a><span class="k">def</span> <span class="nf">show_cnf</span><span class="p">(</span><span class="n">cnf</span><span class="p">:</span> <span class="n">Cnf</span><span class="p">):</span>
-    <span class="n">xyz_str</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">get_xyz</span><span class="p">()</span>
-    <span class="n">view</span><span class="o">=</span><span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyz_str</span><span class="p">)</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s2">&quot;stick&quot;</span><span class="p">:{}})</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">()</span>
+    <span class="n">cCNF</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
 
+    <span class="n">view</span><span class="o">=</span><span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">solute</span> <span class="o">=</span> <span class="p">[</span><span class="n">resn</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">resn</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span><span class="p">(</span><span class="n">cCNF</span> <span class="o">!=</span><span class="s2">&quot;SOLV&quot;</span><span class="p">)]</span>
+    <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">([</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)])</span><span class="o">&gt;</span><span class="mi">15</span> <span class="ow">or</span> <span class="s2">&quot;SOLV&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
+        <span class="n">solv_cnf</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">atomP</span> <span class="ow">in</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">POSITION</span><span class="p">:</span>
+            <span class="n">atomP</span><span class="o">.</span><span class="n">atomType</span> <span class="o">=</span> <span class="n">atomP</span><span class="o">.</span><span class="n">atomType</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">atomP</span><span class="o">.</span><span class="n">resName</span> <span class="o">==</span> <span class="s2">&quot;SOLV&quot;</span><span class="p">):</span>
+                <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atomP</span><span class="p">)</span>
+        <span class="n">solv_cnf</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
+        <span class="n">solv_cnf</span><span class="o">.</span><span class="n">POSITION</span> <span class="o">=</span> <span class="n">pos</span>
+
+        <span class="n">xyz_str</span> <span class="o">=</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">()</span>
+        <span class="n">xyzd_str</span> <span class="o">=</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">get_xyz</span><span class="p">()</span>
+
+        <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyz_str</span><span class="p">)</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyzd_str</span><span class="p">)</span>
+
+        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">solute</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;stick&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">([</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)])</span><span class="o">&gt;</span><span class="mi">15</span><span class="p">):</span>
+            <span class="n">protein</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)]</span>
+            <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">protein</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;cartoon&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+            <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;cartoon&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;arrows&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;tubes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;oval&#39;</span><span class="p">}})</span>
+
+        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="s2">&quot;SOLV&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="p">{}})</span>        <span class="c1"># Solvent</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">ions</span><span class="p">},</span>  <span class="p">{</span><span class="s2">&quot;sphere&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">:</span><span class="mf">0.7</span><span class="p">}})</span>        <span class="c1"># ions</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xyz_str</span> <span class="o">=</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">get_xyz</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyz_str</span><span class="p">)</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;stick&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+
+    <span class="n">view</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">view</span></div>
 
 
 
 <div class="viewcode-block" id="show_coordinate_traj"><a class="viewcode-back" href="../../../_source/pygromos.visualization.html#pygromos.visualization.coordinates_visualization.show_coordinate_traj">[docs]</a><span class="k">def</span> <span class="nf">show_coordinate_traj</span><span class="p">(</span><span class="n">trc</span><span class="p">:</span><span class="n">Trc</span><span class="p">,</span> <span class="n">cnf</span><span class="p">:</span> <span class="n">Cnf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function visualizes the provided TRC and maps it on the</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trc : Trc</span>
+
+<span class="sd">    cnf: Cnf</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">traj</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
     <span class="n">view</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
     <span class="n">view</span><span class="o">.</span><span class="n">addModelsAsFrames</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
     <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;stick&quot;</span><span class="p">:</span> <span class="p">{}})</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">animate</span><span class="p">({</span><span class="s2">&quot;loop&quot;</span><span class="p">:</span> <span class="s2">&quot;forwardAndBackward&quot;</span><span class="p">})</span>
+
+    <span class="n">solute</span> <span class="o">=</span> <span class="p">[</span><span class="n">resn</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">resn</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span><span class="p">(</span><span class="n">resn</span> <span class="o">!=</span><span class="s2">&quot;SOLV&quot;</span><span class="p">)]</span>
+    <span class="n">aminoA</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aminoA</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">):</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">aminoA</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;cartoon&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;arrows&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;tubes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;oval&#39;</span><span class="p">}})</span>
+    <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">ions</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;sphere&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">}})</span>  <span class="c1"># ions</span>
+
+    <span class="n">view</span><span class="o">.</span><span class="n">animate</span><span class="p">({</span><span class="s2">&quot;loop&quot;</span><span class="p">:</span><span class="s2">&quot;forward&quot;</span><span class="p">})</span>
 
     <span class="n">view</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">view</span></div>

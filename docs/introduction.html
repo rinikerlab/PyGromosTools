@@ -195,6 +195,7 @@
 <div class="section" id="welcome-to-pygromostools">
 <h1>Welcome to PyGromosTools<a class="headerlink" href="#welcome-to-pygromostools" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml"><img alt="CI" src="https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/rinikerlab/PyGromosTools"><img alt="codecov" src="https://codecov.io/gh/rinikerlab/PyGromosTools/branch/main/graph/badge.svg?token=R36KJCEKEC" /></a>
 <a class="reference external image-reference" href="https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python"><img alt="Language grade: Python" src="https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&amp;logoWidth=18" /></a>
 <a class="reference external image-reference" href="https://rinikerlab.github.io/PyGromosTools/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-here-white.svg" /></a>
 <div class="section" id="general">
@@ -293,15 +294,58 @@ print(imd)
 </pre></div>
 </div>
 </li>
+<li><p>Simulation Submission and Execution :</p>
+<ul class="simple">
+<li><p>Different Types of Simulation modules, like MD, SD or Emin.</p></li>
+<li><p>Can be executed locally or on a cluster</p></li>
+<li><p>easy to automatize and combine with analysis routines</p></li>
+</ul>
+<p>Run on a local machine:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">emin</span>
+
+<span class="c1">#define file paths</span>
+<span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;./example_files/SD_Simulation&quot;</span>
+<span class="n">root_in_dir</span> <span class="o">=</span> <span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/SD_input&quot;</span>
+<span class="n">cnf_path</span> <span class="o">=</span> <span class="n">root_in_dir</span><span class="o">+</span><span class="s2">&quot;/6J29_unitedatom_optimised_geometry.cnf&quot;</span>
+<span class="n">top_path</span> <span class="o">=</span> <span class="n">root_in_dir</span> <span class="o">+</span> <span class="s2">&quot;/6J29.top&quot;</span>
+<span class="n">sys_name</span> <span class="o">=</span> <span class="s2">&quot;6J29&quot;</span>
+
+<span class="c1">#Build gromos System:</span>
+<span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">in_cnf_path</span><span class="o">=</span><span class="n">cnf_path</span><span class="p">,</span> <span class="n">in_top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span>
+                            <span class="n">system_name</span><span class="o">=</span><span class="n">sys_name</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="n">root_in_dir</span><span class="p">)</span>
+
+<span class="c1">#Run Emin</span>
+<span class="n">emin_gromos_system</span><span class="p">,</span> <span class="n">jobID</span> <span class="o">=</span> <span class="n">emin</span><span class="p">(</span><span class="n">in_gromos_system</span><span class="o">=</span><span class="n">grom_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span>
+                        <span class="n">step_name</span><span class="o">=</span><span class="n">step_name</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">subSystem</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Run on LSF-Cluster:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.lsf</span> <span class="kn">import</span> <span class="n">LSF</span> <span class="k">as</span> <span class="n">subSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">emin</span>
+
+<span class="c1">#define file paths</span>
+<span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;./example_files/SD_Simulation&quot;</span>
+<span class="n">root_in_dir</span> <span class="o">=</span> <span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/SD_input&quot;</span>
+<span class="n">cnf_path</span> <span class="o">=</span> <span class="n">root_in_dir</span><span class="o">+</span><span class="s2">&quot;/6J29_unitedatom_optimised_geometry.cnf&quot;</span>
+<span class="n">top_path</span> <span class="o">=</span> <span class="n">root_in_dir</span> <span class="o">+</span> <span class="s2">&quot;/6J29.top&quot;</span>
+<span class="n">sys_name</span> <span class="o">=</span> <span class="s2">&quot;6J29&quot;</span>
+
+<span class="c1">#Build gromos System:</span>
+<span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">in_cnf_path</span><span class="o">=</span><span class="n">cnf_path</span><span class="p">,</span> <span class="n">in_top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span>
+                          <span class="n">system_name</span><span class="o">=</span><span class="n">sys_name</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="n">root_in_dir</span><span class="p">)</span>
+
+<span class="c1">#Run Emin</span>
+<span class="n">sub_system</span> <span class="o">=</span> <span class="n">subSystem</span><span class="p">(</span><span class="n">nmpi</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#allows parallelization</span>
+<span class="n">emin_gromos_system</span><span class="p">,</span> <span class="n">jobID</span> <span class="o">=</span> <span class="n">emin</span><span class="p">(</span><span class="n">in_gromos_system</span><span class="o">=</span><span class="n">grom_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span>
+                        <span class="n">step_name</span><span class="o">=</span><span class="n">step_name</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">sub_system</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
 <li><p>Other utilities:</p>
 <ul class="simple">
-<li><p>Automated queueing and submission for:</p>
-<ul>
-<li><p>Local calculation</p></li>
-<li><p>Cluster calculation (LSF system)</p></li>
-<li><p>Dummy</p></li>
-</ul>
-</li>
 <li><p>Bash wrappers for GROMOS</p></li>
 <li><p>Amino acid library</p></li>
 </ul>

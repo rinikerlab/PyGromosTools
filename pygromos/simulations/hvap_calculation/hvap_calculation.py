@@ -38,7 +38,7 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 
 class Hvap_calculation():
-    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="off"), gromosXX:str=None, gromosPP:str=None, useGromosPlsPls:bool=True, verbose:bool=True) -> None:
+    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="54A7"), gromosXX:str=None, gromosPP:str=None, useGromosPlsPls:bool=True, verbose:bool=True) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
 
         Parameters

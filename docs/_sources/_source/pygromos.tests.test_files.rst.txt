@@ -20,6 +20,14 @@ pygromos.tests.test\_files.test\_cnf\_funcs module
    :undoc-members:
    :show-inheritance:
 
+pygromos.tests.test\_files.test\_disres module
+----------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.test_disres
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pygromos.tests.test\_files.test\_disres\_file module
 ----------------------------------------------------
 
@@ -72,6 +80,14 @@ pygromos.tests.test\_files.test\_repdat module
 ----------------------------------------------
 
 .. automodule:: pygromos.tests.test_files.test_repdat
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pygromos.tests.test\_files.test\_top module
+-------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.test_top
    :members:
    :undoc-members:
    :show-inheritance:

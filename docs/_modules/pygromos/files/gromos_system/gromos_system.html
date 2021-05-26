@@ -228,7 +228,10 @@
     <span class="n">_future_promised_files</span><span class="p">:</span><span class="nb">list</span>
 
     <span class="n">_single_multibath</span><span class="p">:</span><span class="nb">bool</span>  <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_single_energy_group</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
+    <span class="n">_gromosPP_bin_dir</span> <span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_gromosXX_bin_dir</span> <span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">_gromosPP</span> <span class="p">:</span> <span class="n">GromosPP</span>
     <span class="n">_gromosXX</span> <span class="p">:</span> <span class="n">GromosXX</span>
 
@@ -280,7 +283,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_future_promise</span><span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_future_promised_files</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="n">in_smiles</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdkitMol</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">readIn</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">in_smiles</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdkitMol</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">readIn</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No data provided to gromos_system</span><span class="se">\n</span><span class="s2">manual work needed&quot;</span><span class="p">)</span>
 
         <span class="c1"># import files:</span>
@@ -302,10 +305,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">solute_info</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">protein_info</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">non_ligand_info</span> <span class="o">=</span> <span class="kc">None</span>
-
-
-        <span class="k">if</span><span class="p">(</span><span class="n">adapt_imd_automatically</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnf</span><span class="o">.</span><span class="n">_future_file</span> <span class="ow">and</span> <span class="ow">not</span>  <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">_future_file</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">adapt_imd</span><span class="p">()</span>
 
         <span class="c1"># import molecule from smiles using rdkit</span>
         <span class="k">if</span> <span class="n">in_smiles</span><span class="p">:</span>
@@ -329,6 +328,10 @@
 
         <span class="k">if</span> <span class="n">in_cnf_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">)</span> <span class="o">==</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">)</span>
+
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">adapt_imd_automatically</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnf</span><span class="o">.</span><span class="n">_future_file</span> <span class="ow">and</span> <span class="ow">not</span>  <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">_future_file</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">adapt_imd</span><span class="p">()</span>
 
         <span class="c1">#misc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_files_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_files</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
@@ -400,7 +403,7 @@
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">:</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">skip</span><span class="p">[</span><span class="n">key</span><span class="p">](</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
 
         <span class="c1">#misc</span>
@@ -409,17 +412,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_files</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_files</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optional_files</span><span class="p">))</span>
 
-
-        <span class="c1">#@bschroed remove this !</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gromosPP</span> <span class="o">=</span> <span class="n">GromosPP</span><span class="p">(</span><span class="n">gromosPP_bin_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_gromosPP_bin_dir</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gromosXX</span> <span class="o">=</span><span class="n">GromosXX</span><span class="p">(</span><span class="n">gromosXX_bin_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_gromosXX_bin_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gromosPP</span> <span class="o">=</span> <span class="n">GromosPP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gromosPP_bin_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gromosXX</span> <span class="o">=</span> <span class="n">GromosXX</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gromosXX_bin_dir</span><span class="p">)</span>
 
         <span class="c1">#are promised files now present?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_promises</span><span class="p">()</span>
 
 
     <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
-        <span class="n">copy_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span><span class="o">+</span><span class="s2">&quot;/test&quot;</span><span class="p">,</span> <span class="n">readIn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">copy_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span> <span class="n">readIn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
         <span class="n">copy_obj</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()))</span>
         <span class="k">return</span> <span class="n">copy_obj</span>
 
@@ -745,11 +746,12 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">mol_name</span>
             <span class="c1"># make top</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gromosPP</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">bin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">bin</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-               <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gromosPP</span><span class="o">.</span><span class="n">_isValid</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">make_top</span><span class="p">(</span><span class="n">out_top_path</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">in_building_block_lib_path</span><span class="o">=</span><span class="n">mtb_temp</span><span class="p">,</span> <span class="n">in_parameter_lib_path</span><span class="o">=</span><span class="n">ifp_temp</span><span class="p">,</span> <span class="n">in_sequence</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation&quot;</span><span class="p">)</span>
+             
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;smirnoff&quot;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;off&quot;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;openforcefield&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">has_openff</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import smirnoff FF as openFF toolkit was missing! &quot;</span>
@@ -792,18 +794,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">SYSTEM</span><span class="o">.</span><span class="n">NPM</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">SYSTEM</span><span class="o">.</span><span class="n">NSM</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residue_list</span> <span class="p">[</span><span class="s2">&quot;SOLV&quot;</span><span class="p">])</span> <span class="k">if</span><span class="p">(</span><span class="s2">&quot;SOLV&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">residue_list</span> <span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
 
-        <span class="c1">##Force Group</span>
-        <span class="n">force_groups</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#boundary condition:</span>
+        <span class="kn">from</span> <span class="nn">pygromos.files.blocks.coord_blocks</span> <span class="kn">import</span> <span class="n">Pbc</span>
+        <span class="c1">##vacuum if no box or GENBOX-pbc == Vacuum</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">_future_file</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="p">,</span> <span class="s2">&quot;GENBOX&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">pbc</span> <span class="o">==</span> <span class="n">Pbc</span><span class="o">.</span><span class="n">vacuum</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">BOUNDCOND</span><span class="o">.</span><span class="n">NTB</span> <span class="o">=</span> <span class="n">Pbc</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">_future_file</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="p">,</span> <span class="s2">&quot;GENBOX&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">pbc</span> <span class="o">==</span> <span class="n">Pbc</span><span class="o">.</span><span class="n">rectangular</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">BOUNDCOND</span><span class="o">.</span><span class="n">NTB</span> <span class="o">=</span> <span class="n">Pbc</span><span class="o">.</span><span class="n">rectangular</span><span class="o">.</span><span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">BOUNDCOND</span><span class="o">.</span><span class="n">NDFMIN</span> <span class="o">=</span> <span class="mi">3</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protein_info</span><span class="o">.</span><span class="n">residues</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="k">pass</span>
-            <span class="c1">#TODO: Do something for protein</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">non_ligand_info</span><span class="o">.</span><span class="n">number</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="k">pass</span>
-            <span class="c1">#TODO: Do something for non-Ligands</span>
+        <span class="c1">##Energy and Force Group</span>
+        <span class="n">energy_groups</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">FORCE</span><span class="o">.</span><span class="n">adapt_energy_groups</span><span class="p">(</span><span class="n">residues</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">residue_list</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_energy_group</span><span class="p">):</span>
+            <span class="n">energy_groups</span> <span class="o">=</span> <span class="p">{</span> <span class="bp">self</span><span class="o">.</span><span class="n">solute_info</span><span class="o">.</span><span class="n">number_of_atoms</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">protein_info</span><span class="o">.</span><span class="n">number_of_atoms</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_ligand_info</span><span class="o">.</span><span class="n">number_of_atoms</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvent_info</span><span class="o">.</span><span class="n">number_of_atoms</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#solute</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solute_info</span><span class="o">.</span><span class="n">number_of_atoms</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+                <span class="n">energy_groups</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">solute_info</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="bp">self</span><span class="o">.</span><span class="n">solute_info</span><span class="o">.</span><span class="n">number_of_atoms</span><span class="p">})</span>
+            <span class="c1">#protein</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protein_info</span><span class="o">.</span><span class="n">number_of_atoms</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">energy_groups</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">protein_info</span><span class="o">.</span><span class="n">start_position</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">protein_info</span><span class="o">.</span><span class="n">number_of_atoms</span><span class="p">})</span>
+            <span class="c1">#ligand</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">non_ligand_info</span><span class="o">.</span><span class="n">number_of_atoms</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">solv_add</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_ligand_info</span><span class="o">.</span><span class="n">number_of_atoms</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">solv_add</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1">#solvent</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solvent_info</span><span class="o">.</span><span class="n">number_of_atoms</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">max_key</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">energy_groups</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">energy_groups</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+                    <span class="n">energy_groups</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">max_key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvent_info</span><span class="o">.</span><span class="n">number_of_atoms</span><span class="o">+</span><span class="n">solv_add</span><span class="p">})</span>
+
+            <span class="c1">#sort all entries in list</span>
+            <span class="n">last_atom_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">sorted_energy_groups</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">ind</span><span class="p">,</span><span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">energy_groups</span><span class="p">)):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">energy_groups</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">+</span><span class="n">last_atom_count</span>
+                <span class="n">sorted_energy_groups</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">value</span><span class="p">:</span><span class="mi">1</span><span class="o">+</span><span class="n">ind</span><span class="p">})</span>
+                <span class="n">last_atom_count</span><span class="o">=</span><span class="n">value</span>
+
+        <span class="c1">#adapt energy groups in IMD with sorted list of energy groups created above</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">FORCE</span><span class="o">.</span><span class="n">adapt_energy_groups</span><span class="p">(</span><span class="n">energy_groups</span><span class="o">=</span><span class="n">sorted_energy_groups</span><span class="p">)</span>
 
         <span class="c1">##Multibath:</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;MULTIBATH&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;MULTIBATH&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
