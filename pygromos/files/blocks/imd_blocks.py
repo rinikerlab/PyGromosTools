@@ -127,6 +127,8 @@ class _generic_imd_block(_generic_gromos_block):
     def _try_to_convert_field(self, field, key):
         if isinstance(field, str):
             try:
+                if(self.__annotations__[key] is bool):
+                    return bool(int(field))  # solves the type problem for simple types
                 return self.__annotations__[key](field) #solves the type problem for simple types
             except:
                 return field
