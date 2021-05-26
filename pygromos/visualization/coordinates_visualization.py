@@ -68,8 +68,14 @@ def show_coordinate_traj(trc:Trc, cnf: Cnf):
     view = py3Dmol.view(width=400, height=400)
     view.addModelsAsFrames(traj)
     view.setStyle({'model': -1}, {"stick": {}})
+
+    solute = [resn[:3] for resn in cnf.residues if(resn !="SOLV")]
+    aminoA = [res for res in solute if (res in three_letter_aa_lib)]
+    if (len(aminoA) > 15):
+        view.setStyle({'resn': aminoA}, {"cartoon": {'arrows': True, 'tubes': True, 'style': 'oval'}})
     view.setStyle({'resn': ions}, {"sphere": {"color": "lightgreen", "radius": 0.7}})  # ions
-    view.animate({"loop": "forwardAndBackward"})
+
+    view.animate({"loop":"forward"}) #"forwardAndBackward"})
 
     view.zoomTo()
     return view
