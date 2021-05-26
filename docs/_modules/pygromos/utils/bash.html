@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -853,10 +853,27 @@
 
     <span class="k">return</span> <span class="n">dummyProcess</span><span class="p">(</span><span class="n">stdout</span><span class="o">=</span><span class="n">ret</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="p">[],</span> <span class="n">ret</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="execute_subprocess"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.bash.execute_subprocess">[docs]</a><span class="k">def</span> <span class="nf">execute_subprocess</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="p">(</span><span class="nb">str</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]),</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">catch_STD</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="c1">#if(isinstance(command, str))</span>
-    <span class="c1">#    command = command.split(&quot; &quot;)</span>
-    <span class="c1">#if(verbose): print(&quot;submitting command: \n\t&quot;+&quot; &quot;.join(command))</span>
+<div class="viewcode-block" id="execute_subprocess"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.bash.execute_subprocess">[docs]</a><span class="k">def</span> <span class="nf">execute_subprocess</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="p">(</span><span class="nb">str</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]),</span> <span class="n">catch_STD</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sub</span><span class="o">.</span><span class="n">CompletedProcess</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;execute_subprocess</span>
+<span class="sd">        This command starts a subprocess, that is executing the str command in bash.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command : str</span>
+<span class="sd">        bash command</span>
+<span class="sd">    catch_STD :</span>
+<span class="sd">        if bool: catch the output and past it into the command line</span>
+<span class="sd">        if str: catch output and write it into this file</span>
+<span class="sd">    env: dict</span>
+<span class="sd">        environment</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        verbosity</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    CompletedProcess</span>
+<span class="sd">        return the executed process obj. (from subprocess)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
         <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
@@ -867,12 +884,19 @@
         <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;stdout&quot;</span><span class="p">:</span> <span class="n">sub</span><span class="o">.</span><span class="n">PIPE</span><span class="p">})</span>
     <span class="k">elif</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">catch_STD</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
         <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;stdout&quot;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">catch_STD</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)})</span>
+    
+    <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-
-    <span class="n">p</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span> <span class="o">=</span> <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span> <span class="o">=</span> <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1">#print(p, vars(p))</span>
-    <span class="n">p</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="c1"># Wait for process to finish</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">p</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span> <span class="c1"># Wait for process to finish</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;TIME OUT WITH: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Continue Waiting: &quot;</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="c1"># Wait for process to finish</span>
     <span class="n">p</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span> <span class="c1"># Make sure its terminated</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
     <span class="k">if</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>   <span class="c1"># Did an Error occure?</span>
@@ -957,8 +981,8 @@
     <span class="k">del</span> <span class="n">p</span>
     <span class="k">return</span> <span class="n">ret_stdout</span></div>
 
-<div class="viewcode-block" id="execute"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.bash.execute">[docs]</a><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="p">(</span><span class="nb">str</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]),</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">catch_STD</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">execute_subprocess</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">catch_STD</span><span class="p">)</span></div>
+<div class="viewcode-block" id="execute"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.bash.execute">[docs]</a><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="p">(</span><span class="nb">str</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]),</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">catch_STD</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">execute_subprocess</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">catch_STD</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -160,7 +160,7 @@
 
 <span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_md</span>
 <span class="kn">from</span> <span class="nn">pygromos.data.topology_templates</span> <span class="kn">import</span> <span class="n">blank_topo_template</span>
-<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.Submission_Systems</span> <span class="kn">import</span> <span class="n">DUMMY</span>
+<span class="kn">from</span> <span class="nn">pygromos.hpc_queuing.submission_systems.dummy</span> <span class="kn">import</span> <span class="n">DUMMY</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
@@ -181,7 +181,6 @@
        <span class="n">submission_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">submissionSystem</span><span class="p">()</span>
 
        <span class="n">simulation_scheduler</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">in_simSystem</span><span class="o">=</span><span class="n">in_simSystem</span><span class="p">,</span> <span class="n">out_dir_path</span><span class="o">=</span><span class="n">out_dir_path</span><span class="p">,</span>
-                                 <span class="n">nmpi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nomp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">duration_per_job</span><span class="o">=</span><span class="s2">&quot;00:01&quot;</span><span class="p">,</span>
                                  <span class="n">submission_system</span><span class="o">=</span><span class="n">submission_system</span><span class="p">,</span>
                                  <span class="n">simulation_run_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span></div></div>
 </pre></div>

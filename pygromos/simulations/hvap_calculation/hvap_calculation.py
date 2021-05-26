@@ -23,8 +23,11 @@ import os
 import warnings
 import time
 
+from pygromos.gromos.pyGromosPP.ran_box import ran_box
+from pygromos.gromos.pyGromosPP.com_top import com_top
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.hvap_calculation import hvap_input_files
+from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSys
 from pygromos.simulations.modules.general_simulation_modules import simulation
@@ -35,7 +38,7 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 
 class Hvap_calculation():
-    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", verbose:bool=True) -> None:
+    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="off"), gromosXX:str=None, gromosPP:str=None, useGromosPlsPls:bool=True, verbose:bool=True) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
 
         Parameters
@@ -46,10 +49,9 @@ class Hvap_calculation():
         # system variables
         if type(input_system) is Gromos_System:
             self.groSys_gas = input_system
-        elif type(input_system) is str:
-            raise NotImplementedError("WIP use Gromos_System")
-        elif type(input_system) is Chem.rdchem.Mol:
-            raise NotImplementedError("WIP use Gromos_System")
+        elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
+            self.groSys_gas = Gromos_System(work_folder=work_folder, system_name=system_name, in_smiles=input_system, Forcefield=forcefield, in_imd_path=hvap_input_files.imd_hvap_gas_sd, verbose=verbose)
+            
 
         self.work_folder = work_folder
         self.system_name = system_name
@@ -92,6 +94,8 @@ class Hvap_calculation():
         self.groSys_gas_final = None
         self.groSys_liq_final = None
 
+        self.useGromosPlsPls = useGromosPlsPls
+
         self.verbose = verbose
 
     def run(self) -> int:
@@ -101,15 +105,26 @@ class Hvap_calculation():
         return self.calc_hvap()
 
     def create_liq(self):
-        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
-        tempTop = Top(in_value=self.work_folder+"/temp.top")
-        tempTop.write(out_path=self.work_folder+"temp.top")
-        time.sleep(1)
-        self.groSys_liq.top = tempTop
-        if self.groSys_liq.cnf is None:
-            self.gromosPP.ran_box(in_top_path=self.groSys_liq.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder + "/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
-            time.sleep(1)
-            self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
+        # create liq top
+        if self.useGromosPlsPls:
+            try:
+                self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
+                tempTop = Top(in_value=self.work_folder+"/temp.top")
+                tempTop.write(out_path=self.work_folder+"temp.top")
+                time.sleep(1) #wait for file to write and close
+                self.groSys_liq.top = tempTop
+            except:
+                self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
+        else:
+            self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
+        
+
+        #create liq cnf
+        ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+        time.sleep(3) #wait for file to write and close 
+        self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
+
+        #reset liq system
         self.groSys_liq.rebase_files()
 
     def run_gas(self):

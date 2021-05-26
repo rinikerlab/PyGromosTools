@@ -86,7 +86,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
@@ -158,6 +158,7 @@
 
 <span class="kn">from</span> <span class="nn">pygromos.files.topology.disres</span> <span class="kn">import</span> <span class="n">Disres</span>
 <span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="kn">from</span> <span class="nn">pygromos.tests.test_files.general_file_functions</span> <span class="kn">import</span> <span class="n">general_file_tests</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
 <span class="n">root_in</span> <span class="o">=</span><span class="n">in_test_file_path</span><span class="o">+</span><span class="s2">&quot;/disres&quot;</span>
@@ -167,10 +168,14 @@
 <span class="n">root_out</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">out_test_root_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;disres_&quot;</span><span class="p">)</span>
 <span class="n">out_path</span> <span class="o">=</span> <span class="n">root_out</span><span class="o">+</span><span class="s2">&quot;/out_disres.dat&quot;</span>
 
-<div class="viewcode-block" id="test_disres"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_disres_file.test_disres">[docs]</a><span class="k">class</span> <span class="nc">test_disres</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="test_disres"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_disres_file.test_disres">[docs]</a><span class="k">class</span> <span class="nc">test_disres</span><span class="p">(</span><span class="n">general_file_tests</span><span class="p">):</span>
+    <span class="n">__test__</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">Disres</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_path</span>
+    <span class="n">root_out</span> <span class="o">=</span> <span class="n">root_out</span>
+
 <div class="viewcode-block" id="test_disres.test_parsing_test_file"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_disres_file.test_disres.test_parsing_test_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_parsing_test_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">disres</span> <span class="o">=</span> <span class="n">Disres</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
-        <span class="c1">#print(disres)</span>
+        <span class="n">disres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
         <span class="n">disres</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span></div></div>
 </pre></div>

@@ -21,17 +21,12 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
     def read_blocks(self):
         #parse file into dicts
         data = parser.read_ptp(self.path)
+        print(data.keys())
 
         for key in data:
-            if("MPERTATOM" == key):
-                data[key]["STATEATOMS"] = list(map(lambda x: blocks.atom_eds_pertubation_state(**x), data["MPERTATOM"]["STATEATOMS"]))
-                self.add_block(blocktitle=key, content=data[key])
+            print(key)
+            self.add_block(block=data[key])
 
-            elif ("PERTATOMPARAM" == key):
-                data["PERTATOMPARAM"]["STATEATOMS"] = list(map(lambda x: blocks.atom_lam_pertubation_state(**x), data["PERTATOMPARAM"]["STATEATOMS"]))
-                self.add_block(blocktitle=key, content=data[key])
-            else:
-                self.add_block(blocktitle=key, content=data[key])
 
 
 class Ptp(Pertubation_topology):

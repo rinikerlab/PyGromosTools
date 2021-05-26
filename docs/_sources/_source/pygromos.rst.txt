@@ -7,13 +7,15 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   pygromos.analysis
    pygromos.data
    pygromos.files
    pygromos.gromos
    pygromos.hpc_queuing
-   pygromos.simulation_runner
+   pygromos.simulations
    pygromos.tests
    pygromos.utils
+   pygromos.visualization
 
 Submodules
 ----------

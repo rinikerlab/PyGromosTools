@@ -1,0 +1,24 @@
+# Codecov configuration to make it a bit less noisy
+codecov:
+  branch: main
+
+coverage:
+  status:
+    patch: false
+    project:
+      branches:
+        - main
+      default:
+        threshold: 50%
+
+comment:
+  layout: "header"
+  require_changes: false
+  branches: null
+  behavior: default
+  flags: null
+  paths: null
+  
+ignore:
+  - "pygromos/data/"  # ignore folders and all its contents
+  - "pygromos/tests/" # ignore test files

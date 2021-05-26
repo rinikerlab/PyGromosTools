@@ -1,9 +1,11 @@
+import re
 from enum import Enum
 from typing import List, Iterable
 from numbers import Number
 
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field, _iterable_gromos_block
 from pygromos.files.blocks._general_blocks import TITLE, TIMESTEP, TRAJ
+from pygromos.files import blocks
 
 # forward declarations
 TITLE:TITLE = TITLE
@@ -107,8 +109,25 @@ class POSITION(_iterable_gromos_block):
 
     """
     def __init__(self, content: List[atomP]):
-        super().__init__(used=True, name="POSITION")
-        self.content = content
+        super().__init__(used=True, name="POSITION", content=content)
+
+    def _check_import_method(self, content: str):
+        if (isinstance(content, list) and all([isinstance(x, atomP) for x in content])):
+            self.content = content
+        elif isinstance(content, str):
+            self.read_content_from_str(content=content.split(self.line_seperator))
+        elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+            self.read_content_from_str(content=content)
+        elif content is None:
+            self.content = []
+        else:
+            raise Exception("Generic Block did not understand the type of content \n content: \n"+str(content))
+
+    def read_content_from_str(self, content:List[str]):
+
+        lines = list(map(lambda x: x.split(), content))
+        self.content = [blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]),
+                        yp=float(x[5]), zp=float(x[6])) for x in list(map(lambda x: x.split(), content)) if(not x[0] == "#")]
 
 class POSRESSPEC(_iterable_gromos_block):
     """
@@ -121,8 +140,11 @@ class POSRESSPEC(_iterable_gromos_block):
 
     """
     def __init__(self, content: List[atomP]):
-        super().__init__(used=True, name="POSRESSPEC")
-        self.content = content
+        super().__init__(used=True, name="POSRESSPEC", content=content)
+
+    def read_content_from_str(self, content:List[str]):
+        self.content = [blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]),
+                        yp=float(x[5]), zp=float(x[6])) for x in list(map(lambda x: x.split(), content)) if(not x[0] == "#")]
 
 class VELOCITY(_iterable_gromos_block):
     """
@@ -136,8 +158,10 @@ class VELOCITY(_iterable_gromos_block):
     """
 
     def __init__(self, content: List[atomV]):
-        super().__init__(used=True, name="VELOCITY")
-        self.content = content
+        super().__init__(used=True, name="VELOCITY", content=content)
+
+    def read_content_from_str(self, content:List[str]):
+        self.content = [atomV(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xv=float(x[4]), yv=float(x[5]), zv=float(x[6])) for x in list(map(lambda x: x.split(), content)) if(not x[0] == "#")]
 
 class STOCHINT(_iterable_gromos_block):
     """
@@ -152,14 +176,15 @@ class STOCHINT(_iterable_gromos_block):
             contains the seed for the stochastic dynamics simulation
     """
 
-    def __init__(self, content: List[atomSI], seed: str):
-        super().__init__(used=True, name="STOCHINT")
-        self.content = content
-        self.seed = seed
-        #print(self.seed)
+    def __init__(self, content: List[atomSI]):
+        super().__init__(used=True, name="STOCHINT", content=content)
 
     def to_string(self) -> str:
         return self.content + self.seed
+
+    def read_content_from_str(self, content:List[str]):
+        self.content = [blocks.coords.atomSI(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), sxx=float(x[4]), sxy=float(x[5]), sxz=float(x[6])) for x in list(map(lambda x: x.split(), content))[:-1] if(not x[0] == "#")]
+        self.seed = list(map(lambda x: x.split(), content))[-1]
 
 
 class REFPOSITION(_iterable_gromos_block):
@@ -185,6 +210,10 @@ class REFPOSITION(_iterable_gromos_block):
         super().__init__(used=True, name="REFPOSITION")
         self.content = content
 
+    def read_content_from_str(self, content:List[str]):
+        self.content = [blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]),
+                        yp=float(x[5]), zp=float(x[6])) for x in list(map(lambda x: x.split(), content))  if(not x[0] == "#")]
+
 
 class LATTICESHIFTS(_iterable_gromos_block):
     """
@@ -205,8 +234,30 @@ class LATTICESHIFTS(_iterable_gromos_block):
         content: List[lattice_shift]
             every element in this list is a lattice shift obj
         """
-        super().__init__(used=True, name="LATTICESHIFTS")
-        self.content = content
+        super().__init__(used=True, name="LATTICESHIFTS", content=content)
+
+    def read_content_from_str(self, content:List[str]):
+        subblock1 = list(map(lambda x: re.findall(r"[\w]+", x.strip()), content))
+        subblock2 = list(map(lambda x: [x.strip() for x in re.findall(r"[\W]+", x.strip())], content))
+
+        subblock = []
+        for number, sign in zip(subblock1, subblock2):
+            if("#" in sign):
+                continue
+            elif (len(sign) == 2):
+                row = [number[0], sign[0] + number[1], sign[1] + number[2]]
+            elif (len(sign) == 3):
+                row = [sign[0] + number[0], sign[1] + number[1], sign[2] + number[2]]
+            else:
+                raise Exception("This does not work! \n SIGN: " + str(sign) + "\n Number: " + str(number))
+            subblock.append(row)
+
+        if (all(len(x) == 3 for x in subblock)):
+            self.content = list(map(lambda c: blocks.coords.lattice_shift(atomID=int(c[0]), x=int(c[1][0]), y=int(c[1][1]),
+                                                                     z=int(c[1][2])), enumerate(subblock)))
+        else:
+            short_lines = [str(x) for x in subblock if (len(x) != 3)]
+            raise IOError("inconsistent Atom LatticeShifts line lenghts (have to be =3 fields!). Problem in line: " + "\n\t".join(short_lines))
 
 
 class GENBOX(_generic_gromos_block):
@@ -225,7 +276,7 @@ class GENBOX(_generic_gromos_block):
 
     '''
 
-    def __init__(self, pbc: Pbc=Pbc(0), length: List[float] = [0.0,0.0,0.0], angles: List[float] = [0.0,0.0,0.0], euler: List[float] = [0.0,0.0,0.0], origin: List[float] = [0.0,0.0,0.0]):
+    def __init__(self, pbc: Pbc=Pbc(0), length: List[float] = [0.0,0.0,0.0], angles: List[float] = [0.0,0.0,0.0], euler: List[float] = [0.0,0.0,0.0], origin: List[float] = [0.0,0.0,0.0], content=None):
         '''
 
         Parameters
@@ -238,12 +289,15 @@ class GENBOX(_generic_gromos_block):
 
         '''
 
-        super().__init__(used=True, name="GENBOX")
-        self._pbc = Pbc(pbc)
-        self._length = length
-        self._angles = angles
-        self._euler = euler
-        self._origin = origin
+        if(not content is None):
+            super().__init__(used=True, name="GENBOX", content=content)
+        else:
+            super().__init__(used=True, name="GENBOX")
+            self._pbc = Pbc(pbc)
+            self._length = length
+            self._angles = angles
+            self._euler = euler
+            self._origin = origin
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
@@ -255,6 +309,28 @@ class GENBOX(_generic_gromos_block):
         result += "END\n"
 
         return result
+
+    def read_content_from_str(self, content:List[str]):
+        if(len(content[0].split()) == 1):
+            self._pbc = blocks.coords.Pbc(int(content[0].strip()))
+        else:
+            raise IOError("Could not read pbc information!")
+        if(len(content[1].split())== 3):
+            self._length = list(map(float, content[1].strip().split()))
+        else:
+            raise IOError("Could not read box length information!")
+        if(len(content[2].split())== 3):
+            self._angles = list(map(float, content[2].strip().split()))
+        else:
+            raise IOError("Could not read box angles information!")
+        if(len(content[3].split())== 3):
+            self._euler = list(map(float, content[3].strip().split()))
+        else:
+            raise IOError("Could not read box euler information!")
+        if(len(content[4].split())== 3):
+            self._origin = list(map(float, content[4].strip().split()))
+        else:
+            raise IOError("Could not read box origin information!")
 
     #Attributes
     @property
@@ -312,7 +388,7 @@ class GENBOX(_generic_gromos_block):
 class PERTDATA(_generic_gromos_block):
 
     content: float
-    def __init__(self, lam: float):
+    def __init__(self, content: List[str]):
         """
            This block is used for lambda-sampling and gives the lambda value of the current coordinates.
 
@@ -321,9 +397,11 @@ class PERTDATA(_generic_gromos_block):
         lambda_value: float
             current lambda value
         """
-        super(PERTDATA, self).__init__(name=__class__.__name__, used=True)
-        self.content = float(lam)
-        
+        super(PERTDATA, self).__init__(name=__class__.__name__, used=True, content=content)
+
+    def read_content_from_str(self, content:List[str]):
+        self.content = float("\n".join(content).strip())
+
     @property
     def lam(self)->float:
         return self.content

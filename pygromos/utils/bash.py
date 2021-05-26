@@ -825,5 +825,5 @@ def execute_old(command: (str or List[str]), verbose: bool = False, ignore_retur
     del p
     return ret_stdout
 
-def execute(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False, env=None):
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD)
+def execute(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False, env:dict=None):
+    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)

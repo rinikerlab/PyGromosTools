@@ -4,6 +4,7 @@ Welcome to PyGromosTools
 ==============================
 [//]: # (Badges)
 [![CI](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml)
+[![codecov](https://codecov.io/gh/rinikerlab/PyGromosTools/branch/main/graph/badge.svg?token=R36KJCEKEC)](https://codecov.io/gh/rinikerlab/PyGromosTools)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python)
 [![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://rinikerlab.github.io/PyGromosTools/)
 
@@ -87,11 +88,59 @@ Content
   print(gsys)
   ```
 
+* Simulation Submission and Execution :
+  * Different Types of Simulation modules, like MD, SD or Emin.
+  * Can be executed locally or on a cluster
+  * easy to automatize and combine with analysis routines
+     
+  Run on a local machine:
+  ```python
+  from pygromos.files.gromos_system import Gromos_System
+  from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSystem
+  from pygromos.simulations.modules.preset_simulation_modules import emin
+
+  #define file paths
+  root_dir = "./example_files/SD_Simulation"
+  root_in_dir = root_dir+"/SD_input"
+  cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
+  top_path = root_in_dir + "/6J29.top"
+  sys_name = "6J29"
+
+  #Build gromos System:
+  grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
+                              system_name=sys_name, work_folder=root_in_dir)
+             
+  #Run Emin
+  emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
+                          step_name=step_name, submission_system=subSystem())
+      
+  ```
+  
+  Run on LSF-Cluster:
+    ```python
+  from pygromos.files.gromos_system import Gromos_System
+  from pygromos.hpc_queuing.submission_systems.lsf import LSF as subSystem
+  from pygromos.simulations.modules.preset_simulation_modules import emin
+
+  #define file paths
+  root_dir = "./example_files/SD_Simulation"
+  root_in_dir = root_dir+"/SD_input"
+  cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
+  top_path = root_in_dir + "/6J29.top"
+  sys_name = "6J29"
+
+  #Build gromos System:
+  grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
+                            system_name=sys_name, work_folder=root_in_dir)
+             
+  #Run Emin
+  sub_system = subSystem(nmpi=4) #allows parallelization
+  emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
+                          step_name=step_name, submission_system=sub_system)
+      
+  ```
+  
 * Other utilities:
-  * Automated queueing and submission for:
-    * Local calculation
-    * Cluster calculation (LSF system)
-    * Dummy
   * Bash wrappers for GROMOS
   * Amino acid library
 

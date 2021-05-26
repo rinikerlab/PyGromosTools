@@ -102,6 +102,8 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
+
+    job_submission_system.job_duration = job_submission_system.job_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
         if verbose: print("\n submit  " + jobname + "_" + str(runID) + "\n"+spacer3)
@@ -186,6 +188,7 @@ def chain_submission(simSystem:Gromos_System,
                 if verbose: print("SIMULATION ID: ", previous_job_ID)
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
+
             try:
                 # schedule - simulation cleanup:
                 ##this mainly tars files.

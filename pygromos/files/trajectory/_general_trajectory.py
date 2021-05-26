@@ -91,12 +91,14 @@ class _General_Trajectory():
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=False)
+        return traj
 
     def __deepcopy__(self, memo):
         traj = type(self)(input_value=None)
         for attr in vars(self):
             setattr(traj, attr, getattr(self, attr))
         traj.database = self.database.copy(deep=True)
+        return traj
 
     def add_traj(self, traj, skip_new_0=True):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A

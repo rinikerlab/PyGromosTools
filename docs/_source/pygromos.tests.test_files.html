@@ -88,17 +88,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Turtorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.simulation_runner.html">pygromos.simulation_runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
@@ -210,12 +212,52 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-pygromos.tests.test_files.general_file_functions">
+<span id="pygromos-tests-test-files-general-file-functions-module"></span><h2>pygromos.tests.test_files.general_file_functions module<a class="headerlink" href="#module-pygromos.tests.test_files.general_file_functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pygromos.tests.test_files.general_file_functions.general_file_tests">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.general_file_functions.</span></code><code class="sig-name descname"><span class="pre">general_file_tests</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/general_file_functions.html#general_file_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.general_file_functions.general_file_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py method">
+<dt id="pygromos.tests.test_files.general_file_functions.general_file_tests.test_copy">
+<code class="sig-name descname"><span class="pre">test_copy</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/general_file_functions.html#general_file_tests.test_copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.general_file_functions.general_file_tests.test_copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.general_file_functions.general_file_tests.test_deepcopy">
+<code class="sig-name descname"><span class="pre">test_deepcopy</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/general_file_functions.html#general_file_tests.test_deepcopy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.general_file_functions.general_file_tests.test_deepcopy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.general_file_functions.general_file_tests.test_pickle">
+<code class="sig-name descname"><span class="pre">test_pickle</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/general_file_functions.html#general_file_tests.test_pickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.general_file_functions.general_file_tests.test_pickle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-pygromos.tests.test_files.test_cnf_funcs">
 <span id="pygromos-tests-test-files-test-cnf-funcs-module"></span><h2>pygromos.tests.test_files.test_cnf_funcs module<a class="headerlink" href="#module-pygromos.tests.test_files.test_cnf_funcs" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pygromos.tests.test_files.test_cnf_funcs.test_cnf">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_cnf_funcs.</span></code><code class="sig-name descname"><span class="pre">test_cnf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_cnf_funcs.html#test_cnf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_cnf_funcs.test_cnf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.tests.test_files.general_file_functions.general_file_tests" title="pygromos.tests.test_files.general_file_functions.general_file_tests"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.tests.test_files.general_file_functions.general_file_tests</span></code></a></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_cnf_funcs.test_cnf.class_type">
+<code class="sig-name descname"><span class="pre">class_type</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_cnf_funcs.test_cnf.class_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf" title="pygromos.files.coord.cnf.Cnf"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.coord.cnf.Cnf</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_cnf_funcs.test_cnf.in_file_path">
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/cnf/in_cnf1.cnf'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_cnf_funcs.test_cnf.in_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_cnf_funcs.test_cnf.root_out">
+<code class="sig-name descname"><span class="pre">root_out</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/cnf_rg5vqicr'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_cnf_funcs.test_cnf.root_out" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="pygromos.tests.test_files.test_cnf_funcs.test_cnf.test_clean_posiResNumsByName">
 <code class="sig-name descname"><span class="pre">test_clean_posiResNumsByName</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_cnf_funcs.html#test_cnf.test_clean_posiResNumsByName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_cnf_funcs.test_cnf.test_clean_posiResNumsByName" title="Permalink to this definition">¶</a></dt>
@@ -244,7 +286,23 @@
 <dl class="py class">
 <dt id="pygromos.tests.test_files.test_disres_file.test_disres">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_disres_file.</span></code><code class="sig-name descname"><span class="pre">test_disres</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_disres_file.html#test_disres"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_disres_file.test_disres" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.tests.test_files.general_file_functions.general_file_tests" title="pygromos.tests.test_files.general_file_functions.general_file_tests"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.tests.test_files.general_file_functions.general_file_tests</span></code></a></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_disres_file.test_disres.class_type">
+<code class="sig-name descname"><span class="pre">class_type</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_disres_file.test_disres.class_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="pygromos.files.topology.html#pygromos.files.topology.disres.Disres" title="pygromos.files.topology.disres.Disres"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.topology.disres.Disres</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_disres_file.test_disres.in_file_path">
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/disres/in_disres.dat'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_disres_file.test_disres.in_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_disres_file.test_disres.root_out">
+<code class="sig-name descname"><span class="pre">root_out</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/disres_w82pqp6a'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_disres_file.test_disres.root_out" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="pygromos.tests.test_files.test_disres_file.test_disres.test_parsing_test_file">
 <code class="sig-name descname"><span class="pre">test_parsing_test_file</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_disres_file.html#test_disres.test_parsing_test_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_disres_file.test_disres.test_parsing_test_file" title="Permalink to this definition">¶</a></dt>
@@ -260,19 +318,19 @@
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_gromosSystem.</span></code><code class="sig-name descname"><span class="pre">test_gromos_system</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_gromosSystem.html#test_gromos_system"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="py attribute">
-<dt id="pygromos.tests.test_files.test_gromosSystem.test_gromos_system.file_class">
-<code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system.file_class" title="Permalink to this definition">¶</a></dt>
+<dt id="pygromos.tests.test_files.test_gromosSystem.test_gromos_system.class_type">
+<code class="sig-name descname"><span class="pre">class_type</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system.class_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_gromosSystem.test_gromos_system.input_cnf_path">
-<code class="sig-name descname"><span class="pre">input_cnf_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/small_system/6J29.cnf'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system.input_cnf_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">input_cnf_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/small_system/6J29.cnf'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system.input_cnf_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_gromosSystem.test_gromos_system.input_top_path">
-<code class="sig-name descname"><span class="pre">input_top_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/small_system/6J29.top'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system.input_top_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">input_top_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/small_system/6J29.top'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem.test_gromos_system.input_top_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -314,12 +372,90 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-pygromos.tests.test_files.test_gromosSystem_forcefields">
+<span id="pygromos-tests-test-files-test-gromossystem-forcefields-module"></span><h2>pygromos.tests.test_files.test_gromosSystem_forcefields module<a class="headerlink" href="#module-pygromos.tests.test_files.test_gromosSystem_forcefields" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_2016H66">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_gromosSystem_forcefields.</span></code><code class="sig-name descname"><span class="pre">test_gromos_system_2016H66</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_gromosSystem_forcefields.html#test_gromos_system_2016H66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_2016H66" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields" title="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields</span></code></a></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_2016H66.ff">
+<code class="sig-name descname"><span class="pre">ff</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;pygromos.files.gromos_system.ff.forcefield_system.forcefield_system</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_2016H66.ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_54A7">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_gromosSystem_forcefields.</span></code><code class="sig-name descname"><span class="pre">test_gromos_system_54A7</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_gromosSystem_forcefields.html#test_gromos_system_54A7"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_54A7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields" title="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields</span></code></a></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_54A7.ff">
+<code class="sig-name descname"><span class="pre">ff</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;pygromos.files.gromos_system.ff.forcefield_system.forcefield_system</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_54A7.ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_gromosSystem_forcefields.</span></code><code class="sig-name descname"><span class="pre">test_gromos_system_forcefields</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_gromosSystem_forcefields.html#test_gromos_system_forcefields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.ff">
+<code class="sig-name descname"><span class="pre">ff</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;pygromos.files.gromos_system.ff.forcefield_system.forcefield_system</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.file_class">
+<code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.file_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.smiles">
+<code class="sig-name descname"><span class="pre">smiles</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'CO'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.smiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.test_construct_empty">
+<code class="sig-name descname"><span class="pre">test_construct_empty</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_gromosSystem_forcefields.html#test_gromos_system_forcefields.test_construct_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.test_construct_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.test_construct_top_from_ff">
+<code class="sig-name descname"><span class="pre">test_construct_top_from_ff</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_gromosSystem_forcefields.html#test_gromos_system_forcefields.test_construct_top_from_ff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.test_construct_top_from_ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.verbose">
+<code class="sig-name descname"><span class="pre">verbose</span></code><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_gromosSystem_forcefields.test_gromos_system_forcefields.verbose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-pygromos.tests.test_files.test_imd">
 <span id="pygromos-tests-test-files-test-imd-module"></span><h2>pygromos.tests.test_files.test_imd module<a class="headerlink" href="#module-pygromos.tests.test_files.test_imd" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pygromos.tests.test_files.test_imd.test_imd">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_imd.</span></code><code class="sig-name descname"><span class="pre">test_imd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_imd.html#test_imd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_imd.test_imd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.tests.test_files.general_file_functions.general_file_tests" title="pygromos.tests.test_files.general_file_functions.general_file_tests"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.tests.test_files.general_file_functions.general_file_tests</span></code></a></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_imd.test_imd.class_type">
+<code class="sig-name descname"><span class="pre">class_type</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_imd.test_imd.class_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="pygromos.files.simulation_parameters.html#pygromos.files.simulation_parameters.imd.Imd" title="pygromos.files.simulation_parameters.imd.Imd"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.simulation_parameters.imd.Imd</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_imd.test_imd.in_file_path">
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/imd/in_imd_REEDS1.imd'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_imd.test_imd.in_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_imd.test_imd.root_out">
+<code class="sig-name descname"><span class="pre">root_out</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/imd_m9tewuav'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_imd.test_imd.root_out" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="pygromos.tests.test_files.test_imd.test_imd.test_edit_REEDS">
 <code class="sig-name descname"><span class="pre">test_edit_REEDS</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_imd.html#test_imd.test_edit_REEDS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_imd.test_imd.test_edit_REEDS" title="Permalink to this definition">¶</a></dt>
@@ -362,12 +498,22 @@
 <dl class="py class">
 <dt id="pygromos.tests.test_files.test_ptp.test_ptp">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_ptp.</span></code><code class="sig-name descname"><span class="pre">test_ptp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_ptp.html#test_ptp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_ptp.test_ptp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.tests.test_files.general_file_functions.general_file_tests" title="pygromos.tests.test_files.general_file_functions.general_file_tests"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.tests.test_files.general_file_functions.general_file_tests</span></code></a></p>
 <dl class="py attribute">
-<dt id="pygromos.tests.test_files.test_ptp.test_ptp.file_class">
-<code class="sig-name descname"><span class="pre">file_class</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_ptp.test_ptp.file_class" title="Permalink to this definition">¶</a></dt>
+<dt id="pygromos.tests.test_files.test_ptp.test_ptp.class_type">
+<code class="sig-name descname"><span class="pre">class_type</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_ptp.test_ptp.class_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="pygromos.files.topology.html#pygromos.files.topology.ptp.Pertubation_topology" title="pygromos.files.topology.ptp.Pertubation_topology"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.topology.ptp.Pertubation_topology</span></code></a></p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_ptp.test_ptp.in_file_path">
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/ptp/eds.ptp'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_ptp.test_ptp.in_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_ptp.test_ptp.root_out">
+<code class="sig-name descname"><span class="pre">root_out</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/ptp_j_p3m9s_'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_ptp.test_ptp.root_out" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="pygromos.tests.test_files.test_ptp.test_ptp.test_IO">
@@ -413,6 +559,22 @@
 <dt id="pygromos.tests.test_files.test_repdat.test_repdat">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.tests.test_files.test_repdat.</span></code><code class="sig-name descname"><span class="pre">test_repdat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_repdat.html#test_repdat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_repdat.test_repdat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_repdat.test_repdat.class_type">
+<code class="sig-name descname"><span class="pre">class_type</span></code><a class="headerlink" href="#pygromos.tests.test_files.test_repdat.test_repdat.class_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat" title="pygromos.files.otherfiles.repdat.Repdat"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.otherfiles.repdat.Repdat</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_repdat.test_repdat.in_file_path">
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/repdat/in_REEDS_repdat2_short.dat'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_repdat.test_repdat.in_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_repdat.test_repdat.root_out">
+<code class="sig-name descname"><span class="pre">root_out</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/repdat_jcxm6hyd'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_repdat.test_repdat.root_out" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="pygromos.tests.test_files.test_repdat.test_repdat.test_cleaning_concat">
 <code class="sig-name descname"><span class="pre">test_cleaning_concat</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_repdat.html#test_repdat.test_cleaning_concat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_repdat.test_repdat.test_cleaning_concat" title="Permalink to this definition">¶</a></dt>
@@ -460,17 +622,17 @@
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_trc.in_file_h5_path">
-<code class="sig-name descname"><span class="pre">in_file_h5_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/trc/in_test.trc.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trc.in_file_h5_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file_h5_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/trc/in_test.trc.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trc.in_file_h5_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_trc.in_file_path">
-<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/trc/in_test.trc'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trc.in_file_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/trc/in_test.trc'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trc.in_file_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_trc.outpath">
-<code class="sig-name descname"><span class="pre">outpath</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/out_testresults/tmp_test_files_gpzxnxrs/trajs_xtpu00wy/out_trc1.trc.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trc.outpath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">outpath</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/trajs_d3dqohl3/out_trc1.trc.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trc.outpath" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -487,22 +649,47 @@
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_tre.in_file2_path">
-<code class="sig-name descname"><span class="pre">in_file2_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/tre/in_tre2.tre'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file2_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file2_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/tre/in_tre2.tre'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file2_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_trajectory.test_tre.in_file_eds_path">
+<code class="sig-name descname"><span class="pre">in_file_eds_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/tre/in_eds.tre'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file_eds_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_tre.in_file_h5_path">
-<code class="sig-name descname"><span class="pre">in_file_h5_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/tre/in_tre1.tre.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file_h5_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file_h5_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/tre/in_tre1.tre.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file_h5_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pygromos.tests.test_files.test_trajectory.test_tre.in_file_lam_path">
+<code class="sig-name descname"><span class="pre">in_file_lam_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/tre/in_lam.tre'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file_lam_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_tre.in_file_path">
-<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/tre/in_tre1.tre'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/tre/in_tre1.tre'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.in_file_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_tre.outpath">
-<code class="sig-name descname"><span class="pre">outpath</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/out_testresults/tmp_test_files_gpzxnxrs/trajs_xtpu00wy/out_tre1.tre.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.outpath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">outpath</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/trajs_d3dqohl3/out_tre1.tre.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.outpath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.test_trajectory.test_tre.test_get_eds">
+<code class="sig-name descname"><span class="pre">test_get_eds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_trajectory.html#test_tre.test_get_eds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.test_get_eds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.test_trajectory.test_tre.test_get_lam">
+<code class="sig-name descname"><span class="pre">test_get_lam</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_trajectory.html#test_tre.test_get_lam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.test_get_lam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.tests.test_files.test_trajectory.test_tre.test_get_totals">
+<code class="sig-name descname"><span class="pre">test_get_totals</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/tests/test_files/test_trajectory.html#test_tre.test_get_totals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_tre.test_get_totals" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -519,17 +706,17 @@
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_trg.in_file_h5_path">
-<code class="sig-name descname"><span class="pre">in_file_h5_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/trg/test.trg.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trg.in_file_h5_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file_h5_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/trg/test.trg.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trg.in_file_h5_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_trg.in_file_path">
-<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/in_testfiles/trg/test.trg'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trg.in_file_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">in_file_path</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/in_testfiles/trg/test.trg'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trg.in_file_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.tests.test_files.test_trajectory.test_trg.outpath">
-<code class="sig-name descname"><span class="pre">outpath</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/pygromos_git/pygromos/tests/out_testresults/tmp_test_files_gpzxnxrs/trajs_xtpu00wy/out_tre1.tre.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trg.outpath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">outpath</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'/home/bschroed/Documents/code/PyGromosTools/pygromos/tests/out_testresults/tmp_test_files_ij5nd2oj/trajs_d3dqohl3/out_tre1.tre.h5'</span></em><a class="headerlink" href="#pygromos.tests.test_files.test_trajectory.test_trg.outpath" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

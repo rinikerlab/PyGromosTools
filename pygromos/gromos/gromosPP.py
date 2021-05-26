@@ -13,6 +13,7 @@ from typing import List
 from numbers import Number
 from pygromos.utils import bash
 from pygromos.data import pdb_lib
+from pygromos.data.ff.Gromos2016H66 import ifp, mtb
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 
 
@@ -30,6 +31,7 @@ class _gromosPPbase:
     """
 
     _bin: str = ""
+    _isValid:bool = False
 
     def __init__(self, gromosPP_bin_dir:str=None):
         """
@@ -48,6 +50,12 @@ class _gromosPPbase:
             self._bin = gromosPP_bin_dir + "/"
         else:
             self._bin = ""
+
+        try:
+            self.make_top(out_top_path=os.devnull, in_building_block_lib_path=mtb, in_parameter_lib_path=ifp, in_sequence="CH4")
+            self._isValid = True
+        except:
+            self._isValid = False
 
     def __str__(self):
         return self.__doc__
@@ -181,12 +189,12 @@ class _gromosPPbase:
                 "@param " + in_parameter_lib_path,
                 "@seq " + in_sequence,
                 "@solv " + in_solvent]
-        arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
-        arg_file = open(arg_path, "w")
-        arg_file.write("\n".join(args))
-        arg_file.close()
-
-        command = self._bin +"make_top @f " + arg_path
+        #arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
+        #arg_file = open(arg_path, "w")
+        #arg_file.write("\n".join(args))
+        #arg_file.close()
+        #"@f " + arg_path
+        command = self._bin +"make_top "+" ".join(args)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
