@@ -32,7 +32,7 @@ class _General_Trajectory():
     #attribute annotation:
     database:pandas.DataFrame
     path:str
-
+    _future_file:bool #if code is executed async, this helps organizing.
 
     def __init__(self, input_value:(str or None), auto_save=True, stride:int=1, skip:int=0):
         if input_value == None:

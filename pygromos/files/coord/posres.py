@@ -42,9 +42,8 @@ class Position_Restraints(Cnf):
             for block in self._block_order:
                 if(hasattr(in_value, block)):
                     setattr(self, block, getattr(in_value, block))
-            self.POSRESSPEC = blocks.POSRESSPEC(in_value.POSITION.content)
+            self.POSRESSPEC = blocks.POSRESSPEC(in_value.POSITION.block_to_string().split("\n")[1:-2])
             self.path = None
             self._future_file = False
-
         else:
             super().__init__(in_value=in_value, _future_file=_future_file)

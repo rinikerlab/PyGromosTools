@@ -24,6 +24,7 @@ import warnings
 import time
 
 from pygromos.gromos.pyGromosPP.ran_box import ran_box
+from pygromos.gromos.pyGromosPP.com_top import com_top
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
@@ -37,7 +38,7 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 
 class Hvap_calculation():
-    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="off"), gromosXX:str=None, gromosPP:str=None, verbose:bool=True) -> None:
+    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="off"), gromosXX:str=None, gromosPP:str=None, useGromosPlsPls:bool=True, verbose:bool=True) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
 
         Parameters
@@ -93,6 +94,8 @@ class Hvap_calculation():
         self.groSys_gas_final = None
         self.groSys_liq_final = None
 
+        self.useGromosPlsPls = useGromosPlsPls
+
         self.verbose = verbose
 
     def run(self) -> int:
@@ -103,11 +106,18 @@ class Hvap_calculation():
 
     def create_liq(self):
         # create liq top
-        self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
-        tempTop = Top(in_value=self.work_folder+"/temp.top")
-        tempTop.write(out_path=self.work_folder+"temp.top")
-        time.sleep(1) #wait for file to write and close
-        self.groSys_liq.top = tempTop
+        if self.useGromosPlsPls:
+            try:
+                self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
+                tempTop = Top(in_value=self.work_folder+"/temp.top")
+                tempTop.write(out_path=self.work_folder+"temp.top")
+                time.sleep(1) #wait for file to write and close
+                self.groSys_liq.top = tempTop
+            except:
+                self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
+        else:
+            self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
+        
 
         #create liq cnf
         ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)

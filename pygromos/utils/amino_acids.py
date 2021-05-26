@@ -8,7 +8,7 @@ Notes
 
 """
 from collections import namedtuple
-
+ions = ["NA+", "CL-"]
 # add here new amino acid features.
 amino_acid:namedtuple = namedtuple("amino_acid", ["name", "oneLetter", "threeLetter","numUnitedAtoms", "numFullAtomistic"])
 

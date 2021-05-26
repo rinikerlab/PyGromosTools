@@ -17,7 +17,6 @@ class LSF(_SubmissionSystem):
     _dummy:bool=False
     _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
     _job_queue_time_stamp: datetime
-    job_queue_list: pd.DataFrame #contains all jobs in the queue (from this users)
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
                  verbose: bool = False, enviroment=None):
@@ -392,7 +391,7 @@ class LSF(_SubmissionSystem):
         self.get_queued_jobs()
         return self.job_queue_list.where(self.job_queue_list.JOBID == job_id).dropna()
 
-    def search_queue_for_jobname(self, job_name:str, regex:bool=False):
+    def search_queue_for_jobname(self, job_name:str, regex:bool=False)->pd.DataFrame:
         """search_queue_for_jobname
 
             this jobs searches the job queue for a certain job name.
@@ -414,36 +413,24 @@ class LSF(_SubmissionSystem):
         else:
             return self.job_queue_list.where(self.job_queue_list.JOB_NAME == job_name).dropna()
 
-    def is_job_in_queue(self, job_name: str=None, job_id:int=None, verbose: bool = False) -> bool:
-        """
-        checks wether a function is still in the lsf queu
-
-        Parameters
-        ----------
-        job_name : str
-            name of the job.
-        job_id : int
-            id of the job.
-        verbose : bool, optional
-            extra prints, by default False
-
-        Returns
-        -------
-        bool
-            is the job in the lsf queue?
-        """
-
-        if(not job_name is None):
-            return len(self.search_queue_for_jobname(job_name=job_name)) > 0
-        elif(not job_id is None):
-            return len(self.search_queue_for_jobname(job_name=job_name)) >0
-        else:
-            raise ValueError("Please provide either the job_name or the job_id!")
 
     """
         kill jobs
     """
     def kill_jobs(self, job_name:str=None, regex:bool=False, job_ids: Union[List[int], int]=None):
+        """
+            this function can be used to terminate or remove pending jobs from the queue.
+        Parameters
+        ----------
+        job_name : str
+            name of the job to be killed
+        regex : bool
+            if true, all jobs matching job_name get killed!
+        job_ids : Union[List[int], int]
+            job Ids to be killed
+
+        """
+
         if(not job_name is None):
             job_ids = list(self.search_queue_for_jobname(job_name, regex=regex).index)
         elif(not job_ids is None):
