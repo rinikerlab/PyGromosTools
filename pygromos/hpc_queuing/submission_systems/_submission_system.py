@@ -122,9 +122,9 @@ class _SubmissionSystem:
 
         raise NotImplemented("search_queue_for_jobID is not implemented for: " + self.__class__.__name__)
 
-    def is_job_in_queue(self, job_name: str=None, job_id:int=None) -> bool:
+    def is_job_in_queue(self, job_name: str=None, job_id:int=None, _onlyRUNPEND:bool=True) -> bool:
         """
-        checks wether a function is still in the lsf queu
+        checks wether a function is still in the lsf queue
 
         Parameters
         ----------
@@ -141,9 +141,19 @@ class _SubmissionSystem:
             is the job in the lsf queue?
         """
         if(not job_name is None):
-            return len(self.search_queue_for_jobname(job_name=job_name)) > 0
+            if(_onlyRUNPEND):
+                queued_job_ids = self.search_queue_for_jobname(job_name=job_name)
+                queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
+                return len(queued_job_ids) > 0
+            else:
+                return len(self.search_queue_for_jobname(job_name=job_name)) > 0
         elif(not job_id is None):
-            return len(self.search_queue_for_jobid(job_id=job_id)) >0
+            if(_onlyRUNPEND):
+                queued_job_ids = self.search_queue_for_jobid(job_id=job_id)
+                queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
+                return len(queued_job_ids) > 0
+            else:
+                return len(self.search_queue_for_jobid(job_id=job_id)) >0
         else:
             raise ValueError("Please provide either the job_name or the job_id!")
 
