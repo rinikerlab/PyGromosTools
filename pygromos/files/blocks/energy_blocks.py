@@ -1,6 +1,4 @@
-from typing import Dict
 
-from pygromos.files.blocks._general_blocks import _generic_gromos_block
 from pygromos.files.blocks._general_blocks import TITLE, TIMESTEP, TRAJ
 
 # forward declarations

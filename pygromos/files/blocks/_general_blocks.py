@@ -1,6 +1,4 @@
-import copy
-from os import name
-from typing import Iterable, Callable, List
+from typing import Iterable, List
 from numbers import Number
 
 # FIELDS
@@ -46,7 +44,7 @@ class _generic_gromos_block:
         return iter(self.content)
 
     def __copy__(self):
-        block = type(self)(content=self.content)
+        block = type(self)(name=self.name, used=self.used, content=self.content)
         return block
 
     def __deepcopy__(self, memo):

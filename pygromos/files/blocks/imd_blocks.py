@@ -1,6 +1,6 @@
 import warnings
 from numbers import Number
-from typing import List, Dict, Union
+from typing import List, Dict
 
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
@@ -102,14 +102,14 @@ class _generic_imd_block(_generic_gromos_block):
             if len(self._order[0][keyLineNumb]) == 1:
                 # one key but multiple fields
                 key = self._clean_key_from_order(key=self._order[0][keyLineNumb][0])
-                field = self._try_to_convert_field(field=contentlines)
+                field = self._try_to_convert_field(field=contentlines, key=key)
                 setattr(self, key, field)
             else:
                 # set attribute with a list over multiple lines for keys in paralles (example temp baths)
                 for i, key in enumerate(self._order[0][keyLineNumb]):
                     field = [x[i] for x in contentlines]
                     key = self._clean_key_from_order(key=key)
-                    field = self._try_to_convert_field(field=field)
+                    field = self._try_to_convert_field(field=field, key=key)
                     setattr(self, key, field)
 
     def _clean_key_from_order(self, key) -> str:
@@ -899,6 +899,7 @@ class FORCE(_generic_imd_block):
             key = "NRE"
             field = self._try_to_convert_field(field=contentlines[0][1:], key=key)
             setattr(self, key, field)
+
 
     def read_content_from_str(self, content: List[str]):
         try:

@@ -1,5 +1,4 @@
 import re
-import warnings
 import __main__
 from enum import Enum
 from typing import Union, Iterable, Tuple, List, Dict

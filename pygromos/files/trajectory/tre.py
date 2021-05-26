@@ -120,4 +120,3 @@ class Tre(traj._General_Trajectory):
         rt_constant = 0.008314462618153239 * temperature # R in kilojoule_per_mole/kelvin * T
         self.heat_vap = gas_nonbonded_energy - liquid_nonbonded_energyself/nMolecules + rt_constant
         return self.heat_vap
-

@@ -102,43 +102,6 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
-
-    def createRDKITconf(self, mol:Chem.rdchem.Mol):
-        """creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.
-
-        Parameters
-        ----------
-        mol : Chem.rdchem.Mol
-            Molecule, possibly with a conformation
-        """
-        inchi=Chem.MolToInchi(mol).split("/")
-        if len(inchi) >= 2:
-            name=inchi[1]
-        else:
-            name="XXX"
-        self.__setattr__("TITLE", TITLE("\t"+ name +" created from RDKit"))
-
-        atomList=[]
-
-        #check if mol is not empty. Else creates an empty position block
-        if mol.GetNumAtoms() >= 1:
-            #check if conformations exist else create a new one
-            if mol.GetNumConformers() < 1:
-                mol = Chem.AddHs(mol)
-                AllChem.EmbedMolecule(mol)
-            conf = mol.GetConformer(0)
-
-            #fill a list with atomP types from RDKit data
-            
-            for i in range(mol.GetNumAtoms()):
-                x = conf.GetAtomPosition(i).x
-                y = conf.GetAtomPosition(i).y
-                z = conf.GetAtomPosition(i).z
-                atomType = mol.GetAtomWithIdx(i).GetSymbol()
-                atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
-
-        # set POSITION attribute
-        self.__setattr__("POSITION", blocks.POSITION(atomList))
     
     def write(self, out_path: str) -> str:
         # write out
@@ -917,6 +880,7 @@ class Cnf(_general_gromos_file):
 
         # set POSITION attribute
         self.__setattr__("POSITION", blocks.POSITION(atomList))
+        self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4,4,4], angles=[90,90,90]))
 
     def get_pdb(self)->str:
         """
