@@ -225,7 +225,7 @@ class Trc(traj._General_Trajectory):
         return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: self._rms(x), axis=1)
 
 
-    def get_pdb(self, cnf:str)->str:
+    def get_pdb(self, cnf:str, exclude_resn=["SOLV"])->str:
         pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
 
         dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
@@ -245,6 +245,8 @@ class Trc(traj._General_Trajectory):
             frame_positions = []
             for ind, coord_set in enumerate(pos_lines):
                 atom = cnf.POSITION[ind]
+                if(atom.resName in exclude_resn):
+                    continue
                 frame_positions.append(
                     pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(
                         atom.resID), dummy_insertion_code, coord_set[0] * 10, coord_set[1] * 10, coord_set[2] * 10,
@@ -312,6 +314,38 @@ class Trc(traj._General_Trajectory):
     def visualize(self, cnf:CnfType):
         from pygromos.visualization.coordinates_visualization import show_coordinate_traj
         return show_coordinate_traj(self, cnf=cnf)
+
+    def _periodic_distance(self, vec:np.array, grid:np.array) -> np.array:
+        for i in range(3):
+            if vec[i] > (grid[i] / 2):
+                vec[i] = grid[i] - vec[i]
+            elif vec[i] < (grid[i] / 2):
+                vec[i] = grid[i] + vec[i]
+        return vec
+
+    def cog_reframe(self, cnf:CnfType, index_list:list=[1]):
+        # create mask for cog calculation
+        col_list = [x for x in self.database.columns if ("POS" in x)]
+
+        # calculate average box size
+        grid = self.database["length"].mean()
+        grid = np.array( cnf.GENBOX.length) / 2
+
+        #print("Grid", grid)
+
+        # cog calculation: select POS -> apply pbc -> average all positions
+        pbc_pos = self.database[col_list].applymap(lambda x: self._periodic_distance(x, grid))
+        cog = pbc_pos.sum(axis=1) / len(col_list)
+        #print("COG:", cog)
+
+        # box center
+        boxCenter = self.database["length"] / 2
+        #print("box_center:", boxCenter.shape, boxCenter[0])
+
+        # shift all positions
+        posList = [x for x in self.database.columns if x.startswith('POS_')]
+        for ind, idx in enumerate(posList):
+            self.database[idx] = self.database[idx].apply(lambda x: self._periodic_distance(x, grid))  # + boxCenter
 
 """
     @classmethod

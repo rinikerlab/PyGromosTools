@@ -157,6 +157,8 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">pygromos.gromos</span> <span class="kn">import</span> <span class="n">gromosPP</span>
@@ -168,6 +170,8 @@
     <span class="s2">&quot;concat&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;do&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="p">{</span>
                    <span class="s2">&quot;cp_cnf&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                   <span class="s2">&quot;repair_NaN&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                   <span class="s2">&quot;cp_omd&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                    <span class="s2">&quot;cat_trc&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                    <span class="s2">&quot;cat_tre&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                    <span class="s2">&quot;cat_trg&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
@@ -259,14 +263,32 @@
 
             <span class="kn">import</span> <span class="nn">glob</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">in_folder</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">in_prefix</span><span class="o">+</span><span class="s2">&quot;/*.cnf&quot;</span><span class="p">)</span>
-            
             <span class="n">cnf_path</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">in_folder</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">in_prefix</span><span class="o">+</span><span class="s2">&quot;*/*.cnf&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">sim_cnf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">Cnf</span><span class="p">(</span><span class="n">cnf_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">control_dict</span><span class="p">[</span><span class="s2">&quot;repair_NaN&quot;</span><span class="p">]):</span>
+                <span class="k">if</span><span class="p">(</span><span class="nb">any</span><span class="p">([</span><span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sim_cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">euler</span><span class="p">])):</span>
+                    <span class="n">sim_cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">euler</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
             <span class="n">out_cnf</span> <span class="o">=</span> <span class="n">sim_cnf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">out_prefix</span><span class="o">+</span><span class="s2">&quot;.cnf&quot;</span><span class="p">)</span>
 
             <span class="c1">#in_simSystem.cnf = sim_dir_cnfs[-1]</span>
             <span class="c1">#in_simSystem.cnf.path = out_prefix+&quot;.cnf&quot;</span>
             <span class="c1">#in_simSystem.write_files(cnf=True, all=False)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">control_dict</span><span class="p">[</span><span class="s2">&quot;cp_omd&quot;</span><span class="p">]):</span>
+
+        <span class="n">out_omd</span> <span class="o">=</span> <span class="n">out_prefix</span><span class="o">+</span><span class="s2">&quot;.omd&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_prefix</span><span class="o">+</span><span class="s2">&quot;.omd&quot;</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Skipping concatenation of tres, as there already exists one!</span><span class="se">\n</span><span class="s2"> &quot;</span>
+                          <span class="s2">&quot;If you want to generate a new trc. Please delete the old one!</span><span class="se">\n\t</span><span class="s2"> Path:&quot;</span><span class="o">+</span><span class="n">out_prefix</span><span class="o">+</span><span class="s2">&quot;.omd&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Start omd&quot;</span><span class="p">)</span>
+            <span class="c1"># find all omd files in this project</span>
+            <span class="n">sim_dir_omd</span> <span class="o">=</span> <span class="n">gather_simulation_step_file_paths</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="n">filePrefix</span><span class="o">=</span><span class="n">in_prefix</span><span class="p">,</span> <span class="c1">#in_simSystem.name,</span>
+                                                                <span class="n">fileSuffixes</span><span class="o">=</span><span class="s2">&quot;.omd&quot;</span><span class="p">,</span>
+                                                                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">omd</span> <span class="ow">in</span> <span class="n">sim_dir_omd</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">omd</span><span class="p">,</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="n">omd</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
 
     <span class="k">if</span> <span class="p">(</span><span class="n">control_dict</span><span class="p">[</span><span class="s2">&quot;cat_trc&quot;</span><span class="p">]):</span>
         <span class="c1"># find all trc files in this project</span>
@@ -279,12 +301,13 @@
             <span class="n">traj_files</span> <span class="o">=</span> <span class="n">gather_simulation_step_file_paths</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="n">filePrefix</span><span class="o">=</span><span class="n">in_prefix</span><span class="p">,</span>
                                                              <span class="n">fileSuffixes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;.trc&quot;</span><span class="p">,</span> <span class="s2">&quot;.trc.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.trc.tar.gz&quot;</span><span class="p">],</span>
                                                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-            <span class="n">out_trc_file</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">traj_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">tmp_trc_file</span> <span class="ow">in</span> <span class="n">traj_files</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-                    <span class="n">tmp_trc</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">tmp_trc_file</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                    <span class="n">out_trc_file</span> <span class="o">+=</span> <span class="n">tmp_trc</span>
-            <span class="n">out_trc_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_path</span><span class="o">=</span><span class="n">out_traj_path</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">out_trc_file</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">traj_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">tmp_trc_file</span> <span class="ow">in</span> <span class="n">traj_files</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="n">tmp_trc</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">tmp_trc_file</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="n">out_trc_file</span> <span class="o">+=</span> <span class="n">tmp_trc</span>
+                <span class="n">out_trc_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_path</span><span class="o">=</span><span class="n">out_traj_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">control_dict</span><span class="p">[</span><span class="s2">&quot;cat_tre&quot;</span><span class="p">]):</span>
         <span class="n">out_traj_path</span> <span class="o">=</span> <span class="n">out_prefix</span><span class="o">+</span><span class="s2">&quot;.tre.h5&quot;</span>
         <span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_traj_path</span><span class="p">)):</span>
@@ -295,12 +318,13 @@
             <span class="n">traj_files</span> <span class="o">=</span> <span class="n">gather_simulation_step_file_paths</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="n">filePrefix</span><span class="o">=</span><span class="n">in_prefix</span><span class="p">,</span>
                                                              <span class="n">fileSuffixes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;.tre&quot;</span><span class="p">,</span> <span class="s2">&quot;.tre.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.tre.tar.gz&quot;</span><span class="p">],</span>
                                                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-            <span class="n">out_trc_file</span> <span class="o">=</span> <span class="n">tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">traj_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">tmp_trc_file</span> <span class="ow">in</span> <span class="n">traj_files</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-                    <span class="n">tmp_trc</span> <span class="o">=</span> <span class="n">tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">tmp_trc_file</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                    <span class="n">out_trc_file</span> <span class="o">+=</span> <span class="n">tmp_trc</span>
-            <span class="n">out_trc_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_path</span><span class="o">=</span><span class="n">out_traj_path</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">out_trc_file</span> <span class="o">=</span> <span class="n">tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">traj_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">tmp_trc_file</span> <span class="ow">in</span> <span class="n">traj_files</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="n">tmp_trc</span> <span class="o">=</span> <span class="n">tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">tmp_trc_file</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="n">out_trc_file</span> <span class="o">+=</span> <span class="n">tmp_trc</span>
+                <span class="n">out_trc_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_path</span><span class="o">=</span><span class="n">out_traj_path</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">control_dict</span><span class="p">[</span><span class="s2">&quot;cat_trg&quot;</span><span class="p">]):</span>
         <span class="n">out_traj_path</span> <span class="o">=</span> <span class="n">out_prefix</span><span class="o">+</span><span class="s2">&quot;.trg.h5&quot;</span>
@@ -312,13 +336,13 @@
             <span class="n">traj_files</span> <span class="o">=</span> <span class="n">gather_simulation_step_file_paths</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="n">filePrefix</span><span class="o">=</span><span class="n">in_prefix</span><span class="p">,</span>
                                                              <span class="n">fileSuffixes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;.trg&quot;</span><span class="p">,</span> <span class="s2">&quot;.trg.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.trg.tar.gz&quot;</span><span class="p">],</span>
                                                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-            <span class="n">out_trg_file</span> <span class="o">=</span> <span class="n">trg</span><span class="o">.</span><span class="n">Trg</span><span class="p">(</span><span class="n">traj_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">tmp_trg_file</span> <span class="ow">in</span> <span class="n">traj_files</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-                    <span class="n">tmp_trg</span> <span class="o">=</span> <span class="n">trg</span><span class="o">.</span><span class="n">Trg</span><span class="p">(</span><span class="n">tmp_trg_file</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                    <span class="n">out_trg_file</span> <span class="o">+=</span> <span class="n">tmp_trg</span>
-            <span class="n">out_trg_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_path</span><span class="o">=</span><span class="n">out_traj_path</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">out_trg_file</span> <span class="o">=</span> <span class="n">trg</span><span class="o">.</span><span class="n">Trg</span><span class="p">(</span><span class="n">traj_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traj_files</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">tmp_trg_file</span> <span class="ow">in</span> <span class="n">traj_files</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="n">tmp_trg</span> <span class="o">=</span> <span class="n">trg</span><span class="o">.</span><span class="n">Trg</span><span class="p">(</span><span class="n">tmp_trg_file</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="n">out_trg_file</span> <span class="o">+=</span> <span class="n">tmp_trg</span>
+                <span class="n">out_trg_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_path</span><span class="o">=</span><span class="n">out_traj_path</span><span class="p">)</span>
 
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -406,7 +430,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">y</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;could not find any file with the prefix: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filePrefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; * &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fileSuffixes</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; in folder : </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">in_folder</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;could not find any file with the prefix: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filePrefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; * &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fileSuffixes</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; in folder : </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">in_folder</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">files</span></div>
 </pre></div>
 

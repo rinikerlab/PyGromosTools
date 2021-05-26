@@ -166,6 +166,7 @@
 
 <span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
 <span class="n">in_path</span><span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/ptp/eds.ptp&quot;</span>
+<span class="n">in_path2</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/ptp/lam_pert.ptp&quot;</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.tests.test_files</span> <span class="kn">import</span> <span class="n">out_test_root_dir</span>
 <span class="n">root_out</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">out_test_root_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;ptp_&quot;</span><span class="p">)</span>
@@ -187,13 +188,13 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">ptp</span><span class="p">)</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="test_ptp.test_get_states"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_get_states">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="test_ptp.test_get_eds_states"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_get_eds_states">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_eds_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
         <span class="n">states</span> <span class="o">=</span> <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">states</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">states</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_ptp.test_add_state"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_add_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="test_ptp.test_add_eds_state"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_add_eds_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_eds_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">pygromos.files.blocks.topology_blocks</span> <span class="kn">import</span>  <span class="n">atom_eds_pertubation_state</span><span class="p">,</span> <span class="n">pertubation_eds_state</span>
         <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
 
@@ -205,18 +206,18 @@
         <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_new_atom</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_ptp.test_delete_state"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_delete_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_delete_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="test_ptp.test_delete_eds_state"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_delete_eds_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_delete_eds_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">delete_state</span><span class="p">(</span><span class="n">stateIDs</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">delete_state</span><span class="p">(</span><span class="n">stateNames</span><span class="o">=</span><span class="s2">&quot;state3&quot;</span><span class="p">)</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_less_state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="test_ptp.test_remove_atoms"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_remove_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="test_ptp.test_remove_eds_atoms"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_remove_eds_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_eds_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">delete_atom</span><span class="p">(</span><span class="n">atomNR</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_less_atom</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="test_ptp.test_new_ptp_from_scratch"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_new_ptp_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">test_new_ptp_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="test_ptp.test_new_eds_ptp_from_scratch"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_new_eds_ptp_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">test_new_eds_ptp_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">pygromos.files.blocks.topology_blocks</span> <span class="kn">import</span> <span class="n">atom_eds_pertubation_state</span><span class="p">,</span> <span class="n">pertubation_eds_state</span><span class="p">,</span> <span class="n">MPERTATOM</span>
         <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">()</span>
         <span class="n">on_state</span> <span class="o">=</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
@@ -230,7 +231,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">ptp</span><span class="p">)</span>
         <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_new_build</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="test_ptp.test_gen_all_states_ptp"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_gen_all_states_ptp">[docs]</a>    <span class="k">def</span> <span class="nf">test_gen_all_states_ptp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="test_ptp.test_eds_gen_all_states_ptp"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_eds_gen_all_states_ptp">[docs]</a>    <span class="k">def</span> <span class="nf">test_eds_gen_all_states_ptp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># INPUT:</span>
         <span class="c1">## the states to use:</span>
         <span class="n">o_state</span> <span class="o">=</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>

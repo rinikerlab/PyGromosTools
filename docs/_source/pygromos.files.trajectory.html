@@ -220,6 +220,12 @@
 <li class="toctree-l2"><a class="reference internal" href="pygromos.files.trajectory.blocks.html#module-pygromos.files.trajectory.blocks">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="pygromos.files.trajectory.tre_field_libs.html">pygromos.files.trajectory.tre_field_libs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.trajectory.tre_field_libs.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.trajectory.tre_field_libs.html#module-pygromos.files.trajectory.tre_field_libs.ene_fields">pygromos.files.trajectory.tre_field_libs.ene_fields module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pygromos.files.trajectory.tre_field_libs.html#module-pygromos.files.trajectory.tre_field_libs">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -259,6 +265,11 @@ TODO: add support for rdkit conformers</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="pygromos.files.trajectory.trc.Trc.cog_reframe">
+<code class="sig-name descname"><span class="pre">cog_reframe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Cnf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.cog_reframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.cog_reframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="pygromos.files.trajectory.trc.Trc.database">
@@ -429,7 +440,7 @@ Returns the euclidian difference to the last step as a numpy array</p>
 
 <dl class="py method">
 <dt id="pygromos.files.trajectory.trc.Trc.get_pdb">
-<code class="sig-name descname"><span class="pre">get_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_pdb" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_resn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['SOLV']</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_pdb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -501,7 +512,7 @@ TODO: add support for periodic boundary condition</p>
 <p>TODO: add ene_ana functions</p>
 <dl class="py class">
 <dt id="pygromos.files.trajectory.tre.Tre">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.tre.</span></code><code class="sig-name descname"><span class="pre">Tre</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.tre.</span></code><code class="sig-name descname"><span class="pre">Tre</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">input_value:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">auto_save=True</span></em>, <em class="sig-param"><span class="pre">stride:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em>, <em class="sig-param"><span class="pre">skip:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></em>, <em class="sig-param"><span class="pre">_ene_ana_names=&lt;class</span> <span class="pre">'pygromos.files.trajectory.tre_field_libs.ene_fields.gromos_2020_tre_block_names_table'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.trajectory._general_trajectory._General_Trajectory</span></code></p>
 <dl class="py attribute">
 <dt id="pygromos.files.trajectory.tre.Tre.database">
@@ -575,37 +586,6 @@ TODO: add support for periodic boundary condition</p>
 <dl class="py attribute">
 <dt id="pygromos.files.trajectory.tre.Tre.path">
 <code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.tre.</span></code><code class="sig-name descname"><span class="pre">gromos_2020_tre_block_names_table</span></code><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#gromos_2020_tre_block_names_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names">
-<code class="sig-name descname"><span class="pre">eds_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names_singleState">
-<code class="sig-name descname"><span class="pre">eds_subblock_names_singleState</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['total',</span> <span class="pre">'nonbonded',</span> <span class="pre">'special',</span> <span class="pre">'offset']</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.eds_subblock_names_singleState" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names">
-<code class="sig-name descname"><span class="pre">lam_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names_singleLam">
-<code class="sig-name descname"><span class="pre">lam_subblock_names_singleLam</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['A_e_lj',</span> <span class="pre">'B_e_lj',</span> <span class="pre">'A_e_crf',</span> <span class="pre">'B_e_crf',</span> <span class="pre">'AB_kinetic',</span> <span class="pre">'AB_bond',</span> <span class="pre">'AB_angle',</span> <span class="pre">'AB_improper',</span> <span class="pre">'AB_disres',</span> <span class="pre">'AB_dihres',</span> <span class="pre">'AB_disfld']</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.lam_subblock_names_singleLam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.totals_subblock_names">
-<code class="sig-name descname"><span class="pre">totals_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['totene',</span> <span class="pre">'totkin',</span> <span class="pre">'totpot',</span> <span class="pre">'totcov',</span> <span class="pre">'totbond',</span> <span class="pre">'totangle',</span> <span class="pre">'totimproper',</span> <span class="pre">'totdihedral',</span> <span class="pre">'totcrossdihedral',</span> <span class="pre">'totnonbonded',</span> <span class="pre">'totlj',</span> <span class="pre">'totcrf',</span> <span class="pre">'totls',</span> <span class="pre">'totlspair',</span> <span class="pre">'totlsreal',</span> <span class="pre">'totlsk',</span> <span class="pre">'totlsa',</span> <span class="pre">'totlsself',</span> <span class="pre">'totlssurf',</span> <span class="pre">'totpolself',</span> <span class="pre">'totspecial',</span> <span class="pre">'totsasa',</span> <span class="pre">'totsasavol',</span> <span class="pre">'totconstraint',</span> <span class="pre">'totdisres',</span> <span class="pre">'totdisfieldres',</span> <span class="pre">'totdihres',</span> <span class="pre">'totposres',</span> <span class="pre">'totjval',</span> <span class="pre">'totxray',</span> <span class="pre">'totle',</span> <span class="pre">'totorder',</span> <span class="pre">'totsymm',</span> <span class="pre">'eds_vr,entropy',</span> <span class="pre">'totqm',</span> <span class="pre">'totbsleus',</span> <span class="pre">'totrdc',</span> <span class="pre">'wip1',</span> <span class="pre">'wip2',</span> <span class="pre">'wip3',</span> <span class="pre">'wip4',</span> <span class="pre">'wip5',</span> <span class="pre">'wip6']</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.gromos_2020_tre_block_names_table.totals_subblock_names" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

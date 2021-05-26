@@ -160,6 +160,7 @@
 
 <span class="kn">from</span> <span class="nn">pygromos.files.trajectory</span> <span class="kn">import</span> <span class="n">_general_trajectory</span> <span class="k">as</span> <span class="n">gt</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.trajectory</span> <span class="kn">import</span> <span class="n">trc</span><span class="p">,</span> <span class="n">tre</span><span class="p">,</span> <span class="n">trg</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre_field_libs</span> <span class="kn">import</span> <span class="n">ene_fields</span>
 
 <span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
 <span class="kn">from</span> <span class="nn">pygromos.tests.test_files</span> <span class="kn">import</span> <span class="n">out_test_root_dir</span>
@@ -222,6 +223,7 @@
 
 <div class="viewcode-block" id="test_tre.test_get_totals"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_tre.test_get_totals">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_totals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">tre_block_name_table</span> <span class="o">=</span> <span class="n">ene_fields</span><span class="o">.</span><span class="n">gromos_2015_tre_block_names_table</span>
         <span class="n">tots_ene</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">tots_ene</span><span class="p">)</span>
         <span class="k">pass</span></div>

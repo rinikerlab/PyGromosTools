@@ -1,6 +1,7 @@
 import os
 import sys
 import traceback
+import time
 from collections import OrderedDict
 from copy import deepcopy
 from typing import Union
@@ -40,7 +41,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system = deepcopy(in_gromos_system)
             in_gromos_system.work_folder = out_input_dir
             in_gromos_system.name = step_name
-            if in_imd_path is None:
+            if not in_gromos_system.imd._future_file:
                 in_gromos_system.adapt_imd()
             else:
                 in_gromos_system.imd = in_imd_path
@@ -122,6 +123,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not submit the commands\n\t"+"\n\t".join(map(str, err.args)))
 
+    time.sleep(3)
     # Return the promise final system
     final_cnf_file = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
     if(os.path.exists(final_cnf_file)):

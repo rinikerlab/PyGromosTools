@@ -106,6 +106,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#Read-in-ptp-file:">Read in ptp file:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#delete-full-state">delete full state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#delete-specific-atoms">delete specific atoms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Write-out-ptp-file">Write out ptp file</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Add-atom-or-state-or-overwrite-atominformation-(except-atom.NR)">Add atom or state or overwrite atominformation (except atom.NR)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Building-ptp-from-scratch-and-generate-all-possible-state-combinations:">Building ptp from scratch and generate all possible state combinations:</a></li>
 </ul>
@@ -114,6 +117,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_simulation.html">SD Simulations with Submission System</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_submission_systems.html">Submission Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_topology_creation.html">Topology creation and modifications with PyGromosTools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
@@ -482,7 +487,7 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="kn">from</span> <span class="nn">pygromos.files.simulation_parameters.imd</span> <span class="kn">import</span> <span class="n">Imd</span>
 <span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_md</span>
 
-<span class="n">out_imd</span><span class="o">=</span><span class="s2">&quot;test.imd&quot;</span>
+<span class="n">out_imd</span><span class="o">=</span><span class="s2">&quot;./test.imd&quot;</span>
 
 <span class="c1">#load</span>
 <span class="n">imd</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">template_md</span><span class="p">)</span>
@@ -501,7 +506,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -565,14 +570,14 @@ MULTIBATH
   0
 # NBATHS
   2
-# TEMP0(1 ... NBATHS)   TAU(1 ... NBATHS)
-  298   0.1
-  298   0.1
+# TEMP0(1 ... NBATHS)    TAU(1 ... NBATHS)
+  298    0.1
+  298    0.1
 # DOFSET
   2
-# LAST(1 ... DOFSET)    COMBATH(1 ... DOFSET)   IRBATH(1 ... DOFSET)
-  196           1       1
-  3712          2       2
+# LAST(1 ... DOFSET)     COMBATH(1 ... DOFSET)   IRBATH(1 ... DOFSET)
+  196    1       1
+  3712   2       2
 END
 NONBONDED
 #        NLRELE
@@ -623,36 +628,6 @@ END
 
 </pre></div></div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-2-b33feecd86d1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     17</span>
-<span class="ansi-green-intense-fg ansi-bold">     18</span> <span class="ansi-red-fg">#store again</span>
-<span class="ansi-green-fg">---&gt; 19</span><span class="ansi-red-fg"> </span>out_imd <span class="ansi-blue-fg">=</span> imd<span class="ansi-blue-fg">.</span>write<span class="ansi-blue-fg">(</span>out_imd<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     20</span>
-
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">write</span><span class="ansi-blue-fg">(self, out_path)</span>
-<span class="ansi-green-intense-fg ansi-bold">    217</span>             out_path
-<span class="ansi-green-intense-fg ansi-bold">    218</span>         &#34;&#34;&#34;
-<span class="ansi-green-fg">--&gt; 219</span><span class="ansi-red-fg">         </span>os<span class="ansi-blue-fg">.</span>makedirs<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>dirname<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> exist_ok<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    220</span>         file <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;w&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    221</span>         file<span class="ansi-blue-fg">.</span>write<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/os.py</span> in <span class="ansi-cyan-fg">makedirs</span><span class="ansi-blue-fg">(name, mode, exist_ok)</span>
-<span class="ansi-green-intense-fg ansi-bold">    221</span>             <span class="ansi-green-fg">return</span>
-<span class="ansi-green-intense-fg ansi-bold">    222</span>     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 223</span><span class="ansi-red-fg">         </span>mkdir<span class="ansi-blue-fg">(</span>name<span class="ansi-blue-fg">,</span> mode<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    224</span>     <span class="ansi-green-fg">except</span> OSError<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    225</span>         <span class="ansi-red-fg"># Cannot rely on checking for EEXIST, since the operating system</span>
-
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;&#39;
-</pre></div></div>
-</div>
 </div>
 <div class="section" id="CNF---Coordinate-File">
 <h2>CNF - Coordinate File<a class="headerlink" href="#CNF---Coordinate-File" title="Permalink to this headline">¶</a></h2>
@@ -695,7 +670,7 @@ END
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -707,7 +682,7 @@ TITLE
          &gt;&gt;&gt; line_seperator: &#39;\n&#39;       field_seperator: &#39;\t&#39;   comments_char: &#39;#&#39;
 END
 TIMESTEP
-        250000  500.0
+        500.0   250000.0
 END
 POSITION
 #
@@ -11969,29 +11944,6 @@ END
 
 </pre></div></div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-3-ccdcbca08a63&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     29</span>
-<span class="ansi-green-intense-fg ansi-bold">     30</span> <span class="ansi-red-fg">#store again</span>
-<span class="ansi-green-fg">---&gt; 31</span><span class="ansi-red-fg"> </span>out_cnf <span class="ansi-blue-fg">=</span> cnf<span class="ansi-blue-fg">.</span>write<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">=</span>out_cnf<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     32</span>
-
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/coord/cnf.py</span> in <span class="ansi-cyan-fg">write</span><span class="ansi-blue-fg">(self, out_path)</span>
-<span class="ansi-green-intense-fg ansi-bold">    727</span>     <span class="ansi-green-fg">def</span> write<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> out_path<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> str<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    728</span>         <span class="ansi-red-fg"># write out</span>
-<span class="ansi-green-fg">--&gt; 729</span><span class="ansi-red-fg">         </span>out_file <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;w&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    730</span>         out_file<span class="ansi-blue-fg">.</span>write<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>__str__<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    731</span>         out_file<span class="ansi-blue-fg">.</span>close<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;example_files/new.cnf&#39;
-</pre></div></div>
-</div>
 </div>
 <div class="section" id="TRC---Coordinate-Trajectory-File">
 <h2>TRC - Coordinate Trajectory File<a class="headerlink" href="#TRC---Coordinate-Trajectory-File" title="Permalink to this headline">¶</a></h2>
@@ -12004,33 +11956,357 @@ END
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="kn">import</span> <span class="n">Trc</span>
 
-<span class="n">in_cnfs_reg</span> <span class="o">=</span> <span class="s2">&quot;*.cnf&quot;</span>
-<span class="n">out_trc_path</span> <span class="o">=</span> <span class="s2">&quot;concat_cnfs.trc&quot;</span>
-<span class="n">cnfs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">in_cnfs_reg</span><span class="p">)</span>
-<span class="n">out_trc</span> <span class="o">=</span> <span class="n">Trc</span><span class="o">.</span><span class="n">cnfs_to_trc</span><span class="p">(</span><span class="n">cnfs</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">out_trc</span><span class="p">)</span>
+<span class="n">in_trc_path</span> <span class="o">=</span> <span class="s2">&quot;example_files/Traj_files/test_CHE_vacuum_sd.trc&quot;</span>
+<span class="n">trc_file</span> <span class="o">=</span> <span class="n">Trc</span><span class="p">(</span><span class="n">in_trc_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trc_file</span><span class="p">)</span>
 
-<span class="n">out_trc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_trc_path</span><span class="p">)</span>
-
+<span class="n">trc_file</span><span class="o">.</span><span class="n">database</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-4-41afe52824ee&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> out_trc_path <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;concat_cnfs.trc&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span> cnfs <span class="ansi-blue-fg">=</span> glob<span class="ansi-blue-fg">.</span>glob<span class="ansi-blue-fg">(</span>in_cnfs_reg<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span>out_trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">.</span>cnfs_to_trc<span class="ansi-blue-fg">(</span>cnfs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span> print<span class="ansi-blue-fg">(</span>out_trc<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span>
+Trajectory:
+                MD++
 
-<span class="ansi-red-fg">AttributeError</span>: type object &#39;Trc&#39; has no attribute &#39;cnfs_to_trc&#39;
+            SD in vacuum
+
+                 &gt;&gt;&gt; Generated with python lib function_libs utilities. (riniker group)
+
+                 &gt;&gt;&gt; line_seperator: &#39;\n&#39;       field_seperator: &#39;\t&#39;
+
+
+
+                position trajectory
+
+Type:
+        Trc
+Frames:         418      Columns:       20
+
+
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/generic.py:2620: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;POS_1&#39;, &#39;POS_2&#39;, &#39;POS_3&#39;, &#39;POS_4&#39;, &#39;POS_5&#39;, &#39;POS_6&#39;, &#39;POS_7&#39;, &#39;POS_8&#39;,
+       &#39;POS_9&#39;, &#39;POS_10&#39;, &#39;POS_11&#39;, &#39;POS_12&#39;, &#39;POS_13&#39;, &#39;POS_14&#39;, &#39;POS_15&#39;,
+       &#39;POS_16&#39;, &#39;POS_17&#39;, &#39;POS_18&#39;],
+      dtype=&#39;object&#39;)]
+
+  encoding=encoding,
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TIMESTEP_step</th>
+      <th>TIMESTEP_time</th>
+      <th>POS_1</th>
+      <th>POS_2</th>
+      <th>POS_3</th>
+      <th>POS_4</th>
+      <th>POS_5</th>
+      <th>POS_6</th>
+      <th>POS_7</th>
+      <th>POS_8</th>
+      <th>POS_9</th>
+      <th>POS_10</th>
+      <th>POS_11</th>
+      <th>POS_12</th>
+      <th>POS_13</th>
+      <th>POS_14</th>
+      <th>POS_15</th>
+      <th>POS_16</th>
+      <th>POS_17</th>
+      <th>POS_18</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.0</td>
+      <td>[0.125461942, 0.073121612, 0.022488507]</td>
+      <td>[0.008429298, 0.137346479, -0.051456304]</td>
+      <td>[-0.124208689, 0.078352989, -0.004393125]</td>
+      <td>[-0.125473259, -0.073164755, -0.022491044]</td>
+      <td>[-0.008427049, -0.137358319, 0.051467855]</td>
+      <td>[0.12421812, -0.078395504, 0.004383902]</td>
+      <td>[0.120109047, 0.09775109, 0.128544424]</td>
+      <td>[0.219960981, 0.114878215, -0.012286225]</td>
+      <td>[0.009089208, 0.245430409, -0.037368008]</td>
+      <td>[0.019591406, 0.121999046, -0.158791591]</td>
+      <td>[-0.207404334, 0.123785476, -0.058220081]</td>
+      <td>[-0.140500261, 0.103135405, 0.100502992]</td>
+      <td>[-0.120108748, -0.097754132, -0.128549779]</td>
+      <td>[-0.219977687, -0.114887268, 0.012292481]</td>
+      <td>[-0.019592413, -0.121997603, 0.158801287]</td>
+      <td>[-0.009089262, -0.245440316, 0.03736666]</td>
+      <td>[0.207415382, -0.123791492, 0.05822732]</td>
+      <td>[0.140502361, -0.10313866, -0.10051698]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>250</td>
+      <td>0.5</td>
+      <td>[0.112665903, 0.075456142, 0.008576893]</td>
+      <td>[-0.006292936, 0.133489038, -0.067368731]</td>
+      <td>[-0.138630477, 0.069144913, -0.026949655]</td>
+      <td>[-0.136136301, -0.083430238, -0.026585615]</td>
+      <td>[-0.017340734, -0.134806686, 0.054252708]</td>
+      <td>[0.115319807, -0.077090112, 0.005749655]</td>
+      <td>[0.119263232, 0.109127181, 0.112032629]</td>
+      <td>[0.205519469, 0.132027936, 0.016187964]</td>
+      <td>[-0.000928616, 0.241364921, -0.082006622]</td>
+      <td>[0.012215914, 0.131396387, -0.174762419]</td>
+      <td>[-0.229864909, 0.122029364, -0.054519533]</td>
+      <td>[-0.174806002, 0.110388543, 0.067235633]</td>
+      <td>[-0.13047065, -0.120727618, -0.128857721]</td>
+      <td>[-0.231936643, -0.135260879, -0.022463617]</td>
+      <td>[-0.03367165, -0.126832745, 0.161718913]</td>
+      <td>[-0.018187681, -0.240137447, 0.082263233]</td>
+      <td>[0.207318795, -0.129949702, 0.030674984]</td>
+      <td>[0.156165558, -0.115424822, -0.087746666]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>500</td>
+      <td>1.0</td>
+      <td>[0.076719813, 0.100667983, -0.007786563]</td>
+      <td>[-0.024414607, 0.116810687, -0.120925103]</td>
+      <td>[-0.147761754, 0.028905567, -0.10231682]</td>
+      <td>[-0.107518829, -0.116232195, -0.077775067]</td>
+      <td>[-0.007262241, -0.131091804, 0.036326022]</td>
+      <td>[0.116584669, -0.045292281, 0.012084667]</td>
+      <td>[0.042957071, 0.149971706, 0.083370789]</td>
+      <td>[0.143126048, 0.185381681, 0.009352052]</td>
+      <td>[-0.035599453, 0.212717017, -0.171512042]</td>
+      <td>[0.01450409, 0.109177094, -0.222457885]</td>
+      <td>[-0.241239495, 0.053152211, -0.15288742]</td>
+      <td>[-0.207544562, 0.075103268, -0.023738024]</td>
+      <td>[-0.077451909, -0.160918115, -0.172542674]</td>
+      <td>[-0.18816452, -0.1893494, -0.083460394]</td>
+      <td>[-0.048657462, -0.121167613, 0.136669822]</td>
+      <td>[0.012639795, -0.230868177, 0.075435932]</td>
+      <td>[0.211585565, -0.056285957, 0.064387956]</td>
+      <td>[0.182254972, -0.075269711, -0.069588177]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>750</td>
+      <td>1.5</td>
+      <td>[0.052559611, 0.106045184, -0.04363657]</td>
+      <td>[-0.027244595, 0.101610016, -0.173616811]</td>
+      <td>[-0.149276189, 0.011756184, -0.155623533]</td>
+      <td>[-0.112813831, -0.128766739, -0.108620261]</td>
+      <td>[-0.037360896, -0.119323643, 0.023684097]</td>
+      <td>[0.08694555, -0.031494405, 0.012818982]</td>
+      <td>[0.003655004, 0.167743424, 0.031750786]</td>
+      <td>[0.12296685, 0.188172525, -0.03023188]</td>
+      <td>[-0.032664229, 0.18867171, -0.238977139]</td>
+      <td>[0.035803408, 0.064781913, -0.254546893]</td>
+      <td>[-0.232176795, 0.018894498, -0.226033244]</td>
+      <td>[-0.230750732, 0.058676495, -0.100473321]</td>
+      <td>[-0.057109087, -0.187688942, -0.181460093]</td>
+      <td>[-0.190606618, -0.203917737, -0.122117562]</td>
+      <td>[-0.101097456, -0.090684746, 0.107334394]</td>
+      <td>[-0.034533041, -0.211224994, 0.082216014]</td>
+      <td>[0.158398006, -0.037526828, 0.094904011]</td>
+      <td>[0.168604894, -0.083089003, -0.037674982]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1000</td>
+      <td>2.0</td>
+      <td>[0.057632633, 0.111318578, 0.013286095]</td>
+      <td>[0.009158412, 0.093760913, -0.130356198]</td>
+      <td>[-0.110013489, -0.001097451, -0.139807173]</td>
+      <td>[-0.073481221, -0.137789747, -0.082673818]</td>
+      <td>[-0.029223523, -0.11948169, 0.062205272]</td>
+      <td>[0.090648997, -0.025571685, 0.072065206]</td>
+      <td>[-0.009634125, 0.172176146, 0.07370444]</td>
+      <td>[0.120470164, 0.196117612, 0.040476717]</td>
+      <td>[0.006500052, 0.18461114, -0.190523712]</td>
+      <td>[0.09281006, 0.066185975, -0.194566987]</td>
+      <td>[-0.163686295, -0.008865648, -0.234357537]</td>
+      <td>[-0.209372609, 0.032729623, -0.110404867]</td>
+      <td>[-0.003686144, -0.197615795, -0.141244659]</td>
+      <td>[-0.130804626, -0.226507422, -0.109584807]</td>
+      <td>[-0.115224162, -0.099606464, 0.126158438]</td>
+      <td>[-0.037370737, -0.203891393, 0.130686113]</td>
+      <td>[0.154173648, -0.035131535, 0.160123905]</td>
+      <td>[0.183689957, -0.070303396, 0.037087292]</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>413</th>
+      <td>103250</td>
+      <td>206.5</td>
+      <td>[-0.078949656, 0.049035147, 0.407097975]</td>
+      <td>[-0.005369057, -0.081138501, 0.376643467]</td>
+      <td>[-0.044806486, -0.135556055, 0.239654173]</td>
+      <td>[-0.196145492, -0.139300641, 0.220507782]</td>
+      <td>[-0.263257479, -0.005095981, 0.248260813]</td>
+      <td>[-0.230378413, 0.042897579, 0.389334985]</td>
+      <td>[-0.037376231, 0.135291788, 0.355023032]</td>
+      <td>[-0.049363169, 0.100596138, 0.498456301]</td>
+      <td>[0.097867573, -0.09431016, 0.409029476]</td>
+      <td>[-0.017215252, -0.160778041, 0.450110669]</td>
+      <td>[0.018877445, -0.20983974, 0.191619033]</td>
+      <td>[0.000784574, -0.075705213, 0.160785089]</td>
+      <td>[-0.245397383, -0.221707985, 0.272125318]</td>
+      <td>[-0.238155124, -0.204406284, 0.143843276]</td>
+      <td>[-0.245662857, 0.064837019, 0.16653787]</td>
+      <td>[-0.365054933, 0.00972515, 0.212224546]</td>
+      <td>[-0.292507134, 0.120648432, 0.433785754]</td>
+      <td>[-0.279557955, -0.012305282, 0.469428786]</td>
+    </tr>
+    <tr>
+      <th>414</th>
+      <td>103500</td>
+      <td>207.0</td>
+      <td>[-0.072184507, 0.02216693, 0.38928319]</td>
+      <td>[-0.001296968, -0.110312776, 0.362701267]</td>
+      <td>[-0.060336732, -0.172998052, 0.236722354]</td>
+      <td>[-0.211158339, -0.19553147, 0.242288177]</td>
+      <td>[-0.280368256, -0.065743958, 0.282932372]</td>
+      <td>[-0.223132446, 0.006046486, 0.404827037]</td>
+      <td>[-0.051528298, 0.099437642, 0.31523542]</td>
+      <td>[-0.025383891, 0.093686711, 0.456921246]</td>
+      <td>[0.104745133, -0.116153704, 0.387239398]</td>
+      <td>[0.000293573, -0.182144749, 0.444668574]</td>
+      <td>[0.003565497, -0.240303407, 0.179573235]</td>
+      <td>[-0.032006697, -0.121561474, 0.144901352]</td>
+      <td>[-0.229465604, -0.271179848, 0.318607787]</td>
+      <td>[-0.259761948, -0.269973972, 0.179220797]</td>
+      <td>[-0.29161413, 0.003334256, 0.199360817]</td>
+      <td>[-0.387644863, -0.060508633, 0.264298959]</td>
+      <td>[-0.283083997, 0.074296396, 0.465060909]</td>
+      <td>[-0.253021774, -0.048767084, 0.494171278]</td>
+    </tr>
+    <tr>
+      <th>415</th>
+      <td>103750</td>
+      <td>207.5</td>
+      <td>[-0.034368267, 0.018200584, 0.472373829]</td>
+      <td>[0.014147618, -0.117135571, 0.421183073]</td>
+      <td>[-0.057907453, -0.162895414, 0.294706173]</td>
+      <td>[-0.209827921, -0.152200185, 0.304312116]</td>
+      <td>[-0.258214692, -0.017789623, 0.358005523]</td>
+      <td>[-0.186254205, 0.021119838, 0.486831306]</td>
+      <td>[-0.009445151, 0.106706502, 0.413829415]</td>
+      <td>[0.025665333, 0.077558747, 0.541330428]</td>
+      <td>[0.116411141, -0.150893952, 0.438016958]</td>
+      <td>[0.012046322, -0.194538662, 0.49789909]</td>
+      <td>[-0.012075411, -0.243634776, 0.237595932]</td>
+      <td>[-0.020238903, -0.108657718, 0.207996673]</td>
+      <td>[-0.246317815, -0.232259158, 0.368644396]</td>
+      <td>[-0.271674269, -0.212364611, 0.237706777]</td>
+      <td>[-0.254093289, 0.057500148, 0.279293846]</td>
+      <td>[-0.361251777, 0.014272148, 0.342630145]</td>
+      <td>[-0.235822759, 0.090902767, 0.554328036]</td>
+      <td>[-0.221814624, -0.035863369, 0.572676345]</td>
+    </tr>
+    <tr>
+      <th>416</th>
+      <td>104000</td>
+      <td>208.0</td>
+      <td>[-0.028512033, 0.011151684, 0.451013336]</td>
+      <td>[0.002109678, -0.132800161, 0.410634601]</td>
+      <td>[-0.081541419, -0.177753028, 0.291174717]</td>
+      <td>[-0.233013502, -0.167244879, 0.306497536]</td>
+      <td>[-0.263060639, -0.026485514, 0.357219939]</td>
+      <td>[-0.178796944, 0.025356057, 0.473405909]</td>
+      <td>[0.01511045, 0.084660442, 0.383378624]</td>
+      <td>[0.042166678, 0.062104296, 0.516506478]</td>
+      <td>[0.105721501, -0.166003801, 0.417196899]</td>
+      <td>[-0.005775534, -0.202036796, 0.494450543]</td>
+      <td>[-0.049365472, -0.262897404, 0.231189788]</td>
+      <td>[-0.047196351, -0.126525889, 0.201291966]</td>
+      <td>[-0.266534933, -0.240094246, 0.380323475]</td>
+      <td>[-0.294531124, -0.216502557, 0.231196384]</td>
+      <td>[-0.254351661, 0.040445763, 0.271620216]</td>
+      <td>[-0.363299491, 0.015123282, 0.347126329]</td>
+      <td>[-0.216324893, 0.10643129, 0.535851566]</td>
+      <td>[-0.212133409, -0.02586938, 0.56367094]</td>
+    </tr>
+    <tr>
+      <th>417</th>
+      <td>104250</td>
+      <td>208.5</td>
+      <td>[-0.035694296, 0.027291015, 0.499043904]</td>
+      <td>[0.038477399, -0.103508526, 0.4729845]</td>
+      <td>[-0.010776406, -0.176263758, 0.348216158]</td>
+      <td>[-0.162159401, -0.195412318, 0.349705308]</td>
+      <td>[-0.234242376, -0.06284722, 0.372449538]</td>
+      <td>[-0.186641069, 0.004872141, 0.500643149]</td>
+      <td>[0.000315601, 0.106456866, 0.433340054]</td>
+      <td>[0.003691369, 0.094353057, 0.575414397]</td>
+      <td>[0.142815555, -0.112979285, 0.503063805]</td>
+      <td>[0.039113146, -0.169663408, 0.559610869]</td>
+      <td>[0.049962673, -0.25477986, 0.303191019]</td>
+      <td>[0.03000159, -0.126709418, 0.260110528]</td>
+      <td>[-0.190420043, -0.275277754, 0.418280495]</td>
+      <td>[-0.211522615, -0.274554803, 0.293324635]</td>
+      <td>[-0.23067987, 0.00212773, 0.285008236]</td>
+      <td>[-0.336392279, -0.054562805, 0.335344227]</td>
+      <td>[-0.250537059, 0.083297914, 0.541234244]</td>
+      <td>[-0.222553258, -0.045615629, 0.590322023]</td>
+    </tr>
+  </tbody>
+</table>
+<p>418 rows × 20 columns</p>
+</div></div>
 </div>
 </div>
 <div class="section" id="TOP---topology-File">
@@ -12044,7 +12320,7 @@ END
 <div class="section" id="IFP---topology-parameter-file">
 <h3>IFP - topology parameter file<a class="headerlink" href="#IFP---topology-parameter-file" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12057,33 +12333,17 @@ END
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/blocks/topology_blocks.py:1694: UserWarning: SPECIAL LJ BLOCK IS NOT IMPLEMENTED!
-  warnings.warn(&#34;SPECIAL LJ BLOCK IS NOT IMPLEMENTED!&#34;)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-1-21d331c5eb1f&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg">#parse forcefield file</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> myfp <span class="ansi-blue-fg">=</span> ifp<span class="ansi-blue-fg">.</span>ifp<span class="ansi-blue-fg">(</span>Gromos54A7<span class="ansi-blue-fg">.</span>ifp<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>myfp<span class="ansi-blue-fg">.</span>write<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>getcwd<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/fun.ifp&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;os&#39; is not defined
+&#39;/home/bschroed/Documents/code/PyGromosTools/examples/fun.ifp&#39;
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12092,6 +12352,15 @@ END
 <span class="n">test</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;/fun.ifp&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;/home/bschroed/Documents/code/PyGromosTools/examples/fun.ifp&#39;
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="disres---distance-restraint-file">
@@ -12102,7 +12371,7 @@ END
 <h2>PTP-Files in PyGromos<a class="headerlink" href="#PTP-Files-in-PyGromos" title="Permalink to this headline">¶</a></h2>
 <p>Here I try to give a few example on what s possible with the ptp obj in pygromos.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12115,7 +12384,7 @@ END
 <div class="section" id="defining-some-state-types-for-later-use-:)">
 <h3>defining some state types for later use :)<a class="headerlink" href="#defining-some-state-types-for-later-use-:)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12128,7 +12397,7 @@ END
 <div class="section" id="Read-in-ptp-file:">
 <h3>Read in ptp file:<a class="headerlink" href="#Read-in-ptp-file:" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12147,9 +12416,9 @@ END
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-6 16
-{:&gt;3} {:&gt;5} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10}    {:10} {:10}
-[&#39;NR&#39;, &#39;NAME&#39;, &#39;IAC1&#39;, &#39;CHARGE1&#39;, &#39;IAC2&#39;, &#39;CHARGE2&#39;, &#39;IAC3&#39;, &#39;CHARGE3&#39;, &#39;IAC4&#39;, &#39;CHARGE4&#39;, &#39;IAC5&#39;, &#39;CHARGE5&#39;, &#39;IAC6&#39;, &#39;CHARGE6&#39;, &#39;ALPHLJ&#39;, &#39;ALPHCRF&#39;]
+dict_keys([&#39;TITLE&#39;, &#39;MPERTATOM&#39;])
+TITLE
+MPERTATOM
 TITLE
 prep_eds: EDS perturbation topology using:
 /home/bschroed/code/scripts/test/testfile/ptp/ligand_1.top
@@ -12185,7 +12454,7 @@ END
 <div class="section" id="delete-full-state">
 <h3>delete full state<a class="headerlink" href="#delete-full-state" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12200,29 +12469,42 @@ END
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">IndexError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-5-938d6c06c0cd&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>ptp<span class="ansi-blue-fg">.</span>MPERTATOM<span class="ansi-blue-fg">.</span>delete_state<span class="ansi-blue-fg">(</span>stateIDs<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>ptp<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>
+TITLE
+prep_eds: EDS perturbation topology using:
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_1.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_2.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_3.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_4.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_5.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_6.top
 
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/blocks/topology_blocks.py</span> in <span class="ansi-cyan-fg">delete_state</span><span class="ansi-blue-fg">(self, stateIDs, stateNames)</span>
-<span class="ansi-green-intense-fg ansi-bold">    696</span>                     <span class="ansi-green-fg">if</span><span class="ansi-blue-fg">(</span>state <span class="ansi-green-fg">in</span> atom<span class="ansi-blue-fg">.</span>STATES<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    697</span>                         <span class="ansi-green-fg">del</span> atom<span class="ansi-blue-fg">.</span>STATES<span class="ansi-blue-fg">[</span>state<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">--&gt; 698</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">del</span> self<span class="ansi-blue-fg">.</span>STATEIDENTIFIERS<span class="ansi-blue-fg">[</span>state <span class="ansi-blue-fg">-</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">    699</span>                 self.STATEATOMHEADER = [x for x in self.STATEATOMHEADER if
-<span class="ansi-green-intense-fg ansi-bold">    700</span>                                         (not x == &#34;IAC&#34; + str(state) and not &#34;CHARGE&#34; + str(state) == x)]
 
-<span class="ansi-red-fg">IndexError</span>: list assignment index out of range
+         &gt;&gt;&gt; Generated with python lib function_libs utilities. (riniker group)
+         &gt;&gt;&gt; line_seperator: &#39;\n&#39;       field_seperator: &#39;\t&#39;   comments_char: &#39;#&#39;
+END
+MPERTATOM
+# NJLA           NPTB
+         10      4
+# state_identifiers
+         state1          state2          state4          state5
+#  NR  NAME IAC2   CHARGE2 IAC4   CHARGE4 IAC5   CHARGE5 IAC6   CHARGE6    ALPHLJ     ALPHCRF
+    3   C17  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    4   C16  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    5   O15  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    6   C13  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    7   O14  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    8   C12  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    9   C10  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+   10    N9  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+END
+
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="delete-specific-atoms">
 <h3>delete specific atoms<a class="headerlink" href="#delete-specific-atoms" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12236,7 +12518,6 @@ END
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-4 12
 TITLE
 prep_eds: EDS perturbation topology using:
 /home/bschroed/code/scripts/test/testfile/ptp/ligand_1.top
@@ -12265,9 +12546,12 @@ END
 
 </pre></div></div>
 </div>
-<p>#3# Write out ptp file</p>
+</div>
+</div>
+<div class="section" id="Write-out-ptp-file">
+<h2>Write out ptp file<a class="headerlink" href="#Write-out-ptp-file" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12275,28 +12559,19 @@ END
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-4 12
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;example_file/fun.ptp&#39;
+&#39;example_files/fun.ptp&#39;
 </pre></div></div>
-</div>
 </div>
 <div class="section" id="Add-atom-or-state-or-overwrite-atominformation-(except-atom.NR)">
 <h3>Add atom or state or overwrite atominformation (except atom.NR)<a class="headerlink" href="#Add-atom-or-state-or-overwrite-atominformation-(except-atom.NR)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12313,9 +12588,6 @@ END
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1 6
-{:&gt;3} {:&gt;5} {:&gt;3}{:&gt;10}    {:10} {:10}
-[&#39;NR&#39;, &#39;NAME&#39;, &#39;CHARGE0&#39;, &#39;IAC0&#39;, &#39;ALPHLJ&#39;, &#39;ALPHCRF&#39;]
 TITLE
 prep_eds: EDS perturbation topology using:
 /home/bschroed/code/scripts/test/testfile/ptp/ligand_1.top
@@ -12347,7 +12619,7 @@ END
 <div class="section" id="Building-ptp-from-scratch-and-generate-all-possible-state-combinations:">
 <h3>Building ptp from scratch and generate all possible state combinations:<a class="headerlink" href="#Building-ptp-from-scratch-and-generate-all-possible-state-combinations:" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12360,11 +12632,11 @@ END
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;NR&#39;, &#39;NAME&#39;, &#39;IAC2&#39;, &#39;CHARGE2&#39;, &#39;IAC4&#39;, &#39;CHARGE4&#39;, &#39;IAC5&#39;, &#39;CHARGE5&#39;, &#39;IAC6&#39;, &#39;CHARGE6&#39;, &#39;ALPHLJ&#39;, &#39;ALPHCRF&#39;]
+[&#39;NR&#39;, &#39;NAME&#39;, &#39;CHARGE0&#39;, &#39;IAC0&#39;, &#39;ALPHLJ&#39;, &#39;ALPHCRF&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -12445,11 +12717,8 @@ gives the state number as key and all the active molecules in this state
 {1: (1,), 2: (2,), 3: (3,), 4: (1, 2), 5: (1, 3), 6: (2, 3), 7: (1, 2, 3)}
 
 gives the atom_perttubation states for all mols
-{1: [&lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc4457d50&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc4457290&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc4457a50&gt;], 2: [&lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc44578d0&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc44571d0&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc47c3150&gt;], 3: [&lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc47c3110&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc47c3090&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7f4fc47c3050&gt;]}
+{1: [&lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2210&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2250&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2e90&gt;], 2: [&lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2f90&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2d10&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2e50&gt;], 3: [&lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2cd0&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2ad0&gt;, &lt;pygromos.files.blocks.topology_blocks.atom_eds_pertubation_state object at 0x7fcceb1a2c10&gt;]}
 
-7 18
-{:&gt;3} {:&gt;5} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10}    {:10} {:10}
-[&#39;NR&#39;, &#39;NAME&#39;, &#39;CHARGE0&#39;, &#39;IAC0&#39;, &#39;CHARGE1&#39;, &#39;IAC1&#39;, &#39;CHARGE2&#39;, &#39;IAC2&#39;, &#39;CHARGE3&#39;, &#39;IAC3&#39;, &#39;CHARGE4&#39;, &#39;IAC4&#39;, &#39;CHARGE5&#39;, &#39;IAC5&#39;, &#39;CHARGE6&#39;, &#39;IAC6&#39;, &#39;ALPHLJ&#39;, &#39;ALPHCRF&#39;]
 MPERTATOM
 # NJLA           NPTB
          9       7
@@ -12467,13 +12736,10 @@ MPERTATOM
     9    H2  33   -2.00000  33   -2.00000  33   -2.00000  33   -2.00000    1.00000    1.00000
 END
 
-7 18
-{:&gt;3} {:&gt;5} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10} {:&gt;3}{:&gt;10}    {:10} {:10}
-[&#39;NR&#39;, &#39;NAME&#39;, &#39;CHARGE0&#39;, &#39;IAC0&#39;, &#39;CHARGE1&#39;, &#39;IAC1&#39;, &#39;CHARGE2&#39;, &#39;IAC2&#39;, &#39;CHARGE3&#39;, &#39;IAC3&#39;, &#39;CHARGE4&#39;, &#39;IAC4&#39;, &#39;CHARGE5&#39;, &#39;IAC5&#39;, &#39;CHARGE6&#39;, &#39;IAC6&#39;, &#39;ALPHLJ&#39;, &#39;ALPHCRF&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">

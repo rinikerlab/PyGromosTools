@@ -917,12 +917,18 @@ class PERTATOMPARAM(_generic_gromos_block):
         STATEATOMHEADER = None
         STATEATOMS = []
         first = True
+        stdid = False
         for line in content:
             if ("#" in line):
                 comment = line
+                if("state_identifiers" in line):
+                    stdid=True
+                elif(stdid):
+                    STATEIDENTIFIERS = line.replace("#", "").split()
+                    stdid=False
                 continue
             else:
-                if (field > 1):
+                if (field > 0):
                     if(first):
                         STATEATOMHEADER = ["NR",  "RES", "NAME",]
                         [STATEATOMHEADER.extend(["IAC" + str(x), "MASS" + str(x), "CHARGE" + str(x)]) for x in range(1, 3)]
@@ -941,8 +947,6 @@ class PERTATOMPARAM(_generic_gromos_block):
 
                 elif (field == 0):
                     NJLA = int(line.strip())
-                elif (field == 1):
-                    STATEIDENTIFIERS = line.split()
                 field += 1
 
         self.NJLA = NJLA
