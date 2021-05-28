@@ -127,15 +127,6 @@ class eds(_general_pandas_energy_trajectory_subblock):
     def to_dict(self) -> dict:
         return super().to_dict()
 
-class numstates(_general_pandas_energy_trajectory_subblock_numerated):
-    #TODO: MTL: implement proper parsing
-    def __init__(self, content):
-        #super().__init__(content, subsubblock_number_code="states")
-        self.blockName = "numstates"
-    
-    def to_dict(self) -> dict:
-        return {self.blockName: "WIP"}
-
 class precalclam(_general_pandas_energy_trajectory_subblock):
     def __init__(self, content):
         super().__init__(content)
@@ -143,25 +134,6 @@ class precalclam(_general_pandas_energy_trajectory_subblock):
     
     def to_dict(self) -> dict:
         return super().to_dict()
-
-class nr_lambdas(_general_pandas_energy_trajectory_subblock):
-    #TODO: MTL: implement proper parsing
-    def __init__(self, content):
-        #super().__init__(content )
-        self.blockName = "nr_lambdas"
-
-    def to_dict(self) -> dict:
-        return {self.blockName: "WIP"}
-
-class ABdih(_general_pandas_energy_trajectory_subblock):
-    #TODO: MTL: implement proper parsing
-    def __init__(self, content ):
-        #super().__init__(content )
-        self.blockName = "ABdih"
-    
-    def to_dict(self) -> dict:
-        #return super().to_dict()
-        return {self.blockName: "WIP"}
 
 class mass(_general_pandas_energy_trajectory_subblock):
     def __init__(self, content ):

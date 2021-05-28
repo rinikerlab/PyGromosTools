@@ -526,7 +526,7 @@ class _iterable_topology_block(_iterable_gromos_block):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
-    def __init__(self, FORCEFIELD, MAKETOPVERSION, content = None):
+    def __init__(self, FORCEFIELD:FORCEFIELD=None, MAKETOPVERSION:MAKETOPVERSION=None, content = None):
         super().__init__(self.__class__.__name__, used=True, content = content)
         self.FORCEFIELD = FORCEFIELD
         self.MAKETOPVERSION = MAKETOPVERSION
@@ -1361,8 +1361,8 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
         if (NRTTY is None):
             self.NRTTY = len(self.content)
         elif (isinstance(NRTTY, int)):
-            if (NRBTY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
-                self.NRBTY = NRBTY
+            if (NRTTY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+                self.NRBTY = NRTTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NRMATY is not equal to the ammount of MASSATOMTYPES.")
         else:
@@ -1376,7 +1376,7 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
             else:
                 raise ValueError("IN MASSATOMTYPECODE NMATY is not the maximal Mass atom type code.")
         else:
-            raise IOError("I don't understand the type of NMATY: " + str(type(NBTY)))
+            raise IOError("I don't understand the type of NMATY: " + str(type(NTTY)))
 
     def read_content_from_str(self, content: str):
         if (isinstance(content, str)):

@@ -59,7 +59,7 @@ class _SubmissionSystem:
             if a job was submitted the jobID is returned else None.
 
         """
-        raise NotImplemented("Do is not implemented for: " + self.__class__.__name__)
+        raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
 
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
         """
@@ -99,11 +99,11 @@ class _SubmissionSystem:
             if the string is a Regular Expression
         Raises
         -------
-        NotImplemented
+        NotImplementedError
             Needs to be implemented in subclasses
         """
 
-        raise NotImplemented("Do is not implemented for: " + self.__class__.__name__)
+        raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
 
     def search_queue_for_jobid(self, job_id: int, **kwargs)->pd.DataFrame:
         """search_queue_for_jobid
@@ -116,11 +116,11 @@ class _SubmissionSystem:
             id of the job
         Raises
         -------
-        NotImplemented
+        NotImplementedError
             Needs to be implemented in subclasses
         """
 
-        raise NotImplemented("search_queue_for_jobID is not implemented for: " + self.__class__.__name__)
+        raise NotImplementedError("search_queue_for_jobID is not implemented for: " + self.__class__.__name__)
 
     def is_job_in_queue(self, job_name: str=None, job_id:int=None, _onlyRUNPEND:bool=True) -> bool:
         """
@@ -170,7 +170,7 @@ class _SubmissionSystem:
             job Ids to be killed
 
         """
-        raise NotImplemented("kill_jobs is not implemented for: " + self.__class__.__name__)
+        raise NotImplementedError("kill_jobs is not implemented for: " + self.__class__.__name__)
 
 
     @property
