@@ -36,11 +36,9 @@ def make_topolog(input_arg, build, param, seq, solve="H2O"):
 
 def combine_topologies():
     raise Exception('not implemented yet!')
-    return 0
 
 def check_top():
     raise Exception('not implemented yet!')
-    return 0
 
 #file Classes
 class Top(_general_gromos_file._general_gromos_file):

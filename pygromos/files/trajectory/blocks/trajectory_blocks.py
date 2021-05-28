@@ -109,21 +109,8 @@ class  SHAKEFAILPREVPOSITION(_general_pandas_trajectory_block):
             iterator += 1
         return return_dict
 
-class  REFPOSITION(_general_pandas_trajectory_block):
-    def __init__(self, content):
-        super().__init__(content)
-        
-    def to_dict(self) -> dict:
-        return_dict = {}
-        iterator = 1
-        for line in self.content:
-            if line.strip().startswith('#') or line.strip() == '':
-                continue
-            return_dict.update({"REF_"+str(iterator):np.array(line.strip().split()).astype(np.float)})
-            iterator += 1
-        return return_dict
 
-class  REFPOSITION(_general_pandas_trajectory_block):
+class REFPOSITION(_general_pandas_trajectory_block):
     def __init__(self, content):
         super().__init__(content)
         
