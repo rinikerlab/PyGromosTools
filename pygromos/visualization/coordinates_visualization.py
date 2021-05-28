@@ -14,8 +14,6 @@ def show_cnf(cnf: Cnf):
 
     solute = [resn[:3] for resn in cnf.residues if(cCNF !="SOLV")]
     if(len([res for res in solute if(res in three_letter_aa_lib)])>15 or "SOLV" in cnf.residues):
-        solv_cnf = deepcopy(cnf)
-
         pos = []
         for atomP in cCNF.POSITION:
             atomP.atomType = atomP.atomType[:1]

@@ -53,7 +53,7 @@ class Repdat(pd.DataFrame):  #
         """
 
         if type(input_path) is str:
-            system, stat, df = parser.read_repdat(input_path, Vj_header=True)
+            system, df = parser.read_repdat(input_path, Vj_header=True)
             self.system = system
             self.DATA = df         #future data field a pandas frame!
             self.path = input_path
