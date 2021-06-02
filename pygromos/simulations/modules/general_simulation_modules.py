@@ -48,7 +48,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
     previous_simulation_run : int, optional
         job-ID of the previous simulation
     force_simulation : bool, optional
-
+        if simulation already exist, shall it be overwritten?
     analysis_script : callable, optional
         script that is used to analyse the job
     analysis_control_dict : dict, optional
