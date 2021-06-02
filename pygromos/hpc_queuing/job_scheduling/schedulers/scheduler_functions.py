@@ -133,7 +133,7 @@ def chain_submission(simSystem:Gromos_System,
 
             # MAIN commands
             md_script_command = prefix_command + " && "
-            md_script_command += "python " + worker_script + " "
+            md_script_command += "python3 " + worker_script + " "
             md_script_command += "-out_dir " + tmp_outdir + " "
             md_script_command += "-in_cnf_path " + simSystem.cnf.path + " "
             md_script_command += "-in_imd_path " + simSystem.imd.path + " "
@@ -175,7 +175,7 @@ def chain_submission(simSystem:Gromos_System,
 
             ## POST COMMAND
             clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
-            clean_up_command = "python " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
+            clean_up_command = "python3 " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
                 tmp_outdir) + " -n_processes " + str(clean_up_processes)
 
             if verbose: print("PREVIOUS ID: ", previous_job_ID)

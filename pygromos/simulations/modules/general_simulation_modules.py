@@ -2,6 +2,7 @@ import os
 import sys
 import traceback
 import time
+import warnings
 from collections import OrderedDict
 from copy import deepcopy
 from typing import Union
@@ -20,12 +21,34 @@ from pygromos.utils.utils import spacer as spacer
 
 
 def simulation(in_gromos_system:Gromos_System, project_dir:str,
-               step_name:str="sim", in_imd_path = None,
+               step_name:str="sim", in_imd_path:str = None,
                submission_system:_SubmissionSystem=LOCAL(), simulation_runs:int=1, equilibration_runs:int = 0,
-               previous_simulation_run:int=None, nmpi:int = 1,
-               force_simulation:bool=False,
+               previous_simulation_run:int=None, force_simulation:bool=False,
                analysis_script:callable = simulation_analysis.do, analysis_control_dict:dict = None,
-               verbose:bool = True, verbose_lvl:int=1) -> Union[Gromos_System, int]:
+               verbose:bool = True, verbose_lvl:int=1, _template_imd_path:str=None) -> Union[Gromos_System, int]:
+    """
+
+    Parameters
+    ----------
+    in_gromos_system
+    project_dir
+    step_name
+    in_imd_path
+    submission_system
+    simulation_runs
+    equilibration_runs
+    previous_simulation_run
+    force_simulation
+    analysis_script
+    analysis_control_dict
+    verbose
+    verbose_lvl
+    _template_imd_path
+
+    Returns
+    -------
+
+    """
     #PREPERATIONS
     try:
         try:
@@ -41,11 +64,18 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system = deepcopy(in_gromos_system)
             in_gromos_system.work_folder = out_input_dir
             in_gromos_system.name = step_name
-            if not in_gromos_system.imd._future_file:
-                in_gromos_system.adapt_imd()
-            else:
+
+            if(not in_imd_path is None):
                 in_gromos_system.imd = in_imd_path
-                in_gromos_system.adapt_imd()
+            elif(hasattr(in_gromos_system, "TITLE")):
+                pass
+            elif(not _template_imd_path is None):
+                if(verbose): warnings.warn("Template_imd_path was used: "+_template_imd_path)
+                in_gromos_system.imd = _template_imd_path
+            else:
+                raise ValueError("Could not find any .imd path (gromos system has no imd, in_imd_path not given and also no _template_imd_path!)")
+
+            in_gromos_system.adapt_imd()
 
             out_analysis_cnf = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
 
