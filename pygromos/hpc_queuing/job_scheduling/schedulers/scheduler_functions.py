@@ -22,9 +22,9 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
     if (do_not_doubly_submit_to_queue):  # can we find an job with this name in the queue?
         if (verbose) and verbose_lvl >= 2: print("Checking for jobs with name: " + tmp_jobname)
         queued_job_ids = job_submission_system.search_queue_for_jobname(job_name=tmp_jobname)
-        print(queued_job_ids)
-        if(queued_job_ids is pd.DataFrame):
-            queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
+        
+        if(isinstance(queued_job_ids, (pd.DataFrame, pd.Series))):
+            queued_job_ids = list(queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna().JOBID)
 
         ## check if already submitted
         if (len(queued_job_ids) > 0):  # check if job is already submitted:
@@ -35,6 +35,7 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
                 simSystem.cnf = tmp_out_cnf
             except Exception as err:
                 raise IOError("Tried to read found cnf file: "+tmp_out_cnf+". FAILED! \n"+str(err.args))
+            
             if (len(queued_job_ids) == 1):
                 previous_job = queued_job_ids[0]
                 if (verbose) and verbose_lvl >= 2: print("\nTRY to attach next job to ", previous_job, "\n")
@@ -213,6 +214,7 @@ def chain_submission(simSystem:Gromos_System,
                 raise ValueError("ERROR during submission of clean-up command of "+str(tmp_jobname)+"_cleanUP:\n"+"\n".join(err.args))
 
             # OPTIONAL schedule - analysis inbetween.
+            ana_id = None
             if (runID > 1 and run_analysis_script_every_x_runs != 0 and
                     runID % run_analysis_script_every_x_runs == 0
                     and runID < chain_job_repetitions):
@@ -242,5 +244,5 @@ def chain_submission(simSystem:Gromos_System,
         #Resulting cnf is provided to use it in further approaches.
         simSystem.cnf = tmp_out_cnf
 
-    previous_job_ID = clean_id
+    previous_job_ID = clean_id if (ana_id is None) else ana_id
     return previous_job_ID, tmp_jobname, simSystem

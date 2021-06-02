@@ -1082,7 +1082,6 @@ class _gromosPPbase:
     #To implement
     def _gr962pdb(self):
         raise Exception('not implemented yet!')
-        return 0
 
 
 class GromosPP(_gromosPPbase):

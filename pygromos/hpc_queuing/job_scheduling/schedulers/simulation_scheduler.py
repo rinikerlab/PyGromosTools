@@ -171,4 +171,4 @@ def do(in_simSystem: Gromos_System,
         return -1
 
     #in_simSystem._future_promise = False #reset future promising if necessary
-    return previous_job_ID
+    return ana_previous_job_ID

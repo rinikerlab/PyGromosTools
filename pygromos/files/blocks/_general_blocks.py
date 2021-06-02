@@ -25,7 +25,7 @@ class _generic_field():
 class _generic_gromos_block:
     comment: str
     content:Iterable    #some content
-    def __init__(self, name: str, used: bool, content:str=None):  # content:str,
+    def __init__(self, name: str=None, used: bool=None, content:str=None):  # content:str,
         self.used = used
         self.name = name
         self.line_seperator = "\n"

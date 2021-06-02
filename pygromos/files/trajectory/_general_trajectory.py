@@ -210,7 +210,6 @@ class _General_Trajectory():
                 if pathlib.Path(input_path).stat().st_ctime < pathlib.Path(input_path+".h5").stat().st_ctime:
                     self._read_db_from_hf5(input_path=input_path+".h5", title="Reread from hdf save \nContains only database\nfor all other blocks please make a fresh import")
 
-            pass
         if (not os.path.exists(input_path)):
             raise IOError("Could not find File: ", input_path)
         else:
