@@ -120,7 +120,10 @@ class Hvap_calculation():
         
 
         #create liq cnf
-        ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
+        if self.useGromosPlsPls:
+            self.gromosPP.ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density, threshold=0.1, layer=True)
+        else:
+            ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
         time.sleep(3) #wait for file to write and close 
         self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
 
