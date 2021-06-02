@@ -243,5 +243,5 @@ def chain_submission(simSystem:Gromos_System,
         #Resulting cnf is provided to use it in further approaches.
         simSystem.cnf = tmp_out_cnf
 
-    previous_job_ID = clean_id
+    previous_job_ID = ana_id
     return previous_job_ID, tmp_jobname, simSystem
