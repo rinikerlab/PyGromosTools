@@ -214,6 +214,7 @@ def chain_submission(simSystem:Gromos_System,
                 raise ValueError("ERROR during submission of clean-up command of "+str(tmp_jobname)+"_cleanUP:\n"+"\n".join(err.args))
 
             # OPTIONAL schedule - analysis inbetween.
+            ana_id = None
             if (runID > 1 and run_analysis_script_every_x_runs != 0 and
                     runID % run_analysis_script_every_x_runs == 0
                     and runID < chain_job_repetitions):
@@ -243,5 +244,5 @@ def chain_submission(simSystem:Gromos_System,
         #Resulting cnf is provided to use it in further approaches.
         simSystem.cnf = tmp_out_cnf
 
-    previous_job_ID = ana_id
+    previous_job_ID = clean_id if (ana_id is None) else ana_id
     return previous_job_ID, tmp_jobname, simSystem
