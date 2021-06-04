@@ -562,6 +562,7 @@ def read_repdat(path: str,  Vj_header=False) ->(Dict, List[blocks.repdat.replica
                 system_options.update({key:value})
 
     if(new_repdat): ### TODO: NEW PARSER for actual gromos version!
+        print("new_repdat")
         file.close()
 
         eir = {}
@@ -591,6 +592,7 @@ def read_repdat(path: str,  Vj_header=False) ->(Dict, List[blocks.repdat.replica
 
         #To do: messy juggling to match old fun
         df.rename(columns={"exch": "s"}, inplace=True)
+        df.rename(columns={"start": "ID"}, inplace=True)
 
         #orig  column order- to be maintained, just replace V columns by state_potential dict
         data_header = df.columns
@@ -606,6 +608,19 @@ def read_repdat(path: str,  Vj_header=False) ->(Dict, List[blocks.repdat.replica
         df = pd.DataFrame(dict_list)
         df = df[new_header]
         df = df.astype({'ID': 'int32', 'partner': 'int32', 'run': 'int32','s': 'int32'})
+        
+        # indices should start at 1 to be compatible with the old repdat format
+        if min(df.ID) == 0:
+            for i in range(0, len(df.pos)):
+                df.pos[i] = df.loc[i]['pos']+1
+                df.ID[i] = df.loc[i]['ID']+1
+                df.coord_ID[i] = df.loc[i]['coord_ID']+1
+                df.partner[i] = df.loc[i]['partner']+1
+                df.partner_start[i] = df.loc[i]['partner_start']+1
+                df.partner_coord_ID[i] = df.loc[i]['partner_coord_ID']+1
+
+        df = df.astype({'ID': 'int32', 'partner': 'int32', 'run': 'int32','s': 'int32'})
+        
         return system_options, df
     
     else:
