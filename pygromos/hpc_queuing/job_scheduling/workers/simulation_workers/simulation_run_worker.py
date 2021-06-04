@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 import os
 import sys
+package_path = os.path.abspath(__file__+"/../../../../../..")
+print(package_path)
+sys.path.append(package_path)
 
 from pygromos.gromos import gromosXX as mdGromosXX
 from pygromos.files.simulation_parameters import imd
 from pygromos.utils import bash as bash
 from pygromos.utils.utils import spacer3 as spacer, dynamic_parser
+
 
 
 def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str, runID:int=1,
