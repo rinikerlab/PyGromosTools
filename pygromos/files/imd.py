@@ -103,6 +103,7 @@ class Imd(_general_gromos_file._general_gromos_file):
                     if (key == "REPLICA_EDS"):  # TODO: remove as soon as new block is established! or change to old >)
                         self.add_block(blocktitle="NEW_REPLICA_EDS", content=sub_content)
                         self.REPLICA_EDS = self.NEW_REPLICA_EDS
+                        self.NEW_REPLICA_EDS = ""
                     else:
                         raise IOError("Could not read in imd " + key + " block!\n values: \n\t" + str(sub_content) + "\n\n" + "\n\t".join(err.args))
                 except Exception as err:
@@ -214,7 +215,7 @@ class Imd(_general_gromos_file._general_gromos_file):
             if (CONT ):
                 reeds_block.CONT = CONT
 
-        elif(isinstance(reeds_block, blocks.REPLICA_EDS)):
+        elif(isinstance(reeds_block, blocks.NEW_REPLICA_EDS)):
             if(isinstance(REEDS, bool)):
                 reeds_block.REEDS = REEDS
 
@@ -226,6 +227,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
                 reeds_block.RES = list(map(str, SVALS))
                 reeds_block.NRES = len(SVALS)   #adjust number of Svals
+                reeds_block.NEOFF = len(SVALS) #assume 1D REEDS for now
 
                 if(isinstance(EIR, (Number, Iterable))): #expand energy offsets to new s value ammount
                     # set new EIR with 3 different types of input (single number, vector or matrix)
