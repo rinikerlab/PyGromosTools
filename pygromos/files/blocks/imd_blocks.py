@@ -867,12 +867,12 @@ class FORCE(_generic_imd_block):
         """
 
         if content is None:
-            self.BONDS = bool(BONDS)
-            self.ANGLES = bool(ANGLES)
-            self.IMPROPER = bool(IMPROPER)
-            self.DIHEDRAL = bool(DIHEDRAL)
-            self.ELECTROSTATIC = bool(ELECTROSTATIC)
-            self.VDW = bool(VDW)
+            self.BONDS = bool(int(BONDS))
+            self.ANGLES = bool(int(ANGLES))
+            self.IMPROPER = bool(int(IMPROPER))
+            self.DIHEDRAL = bool(int(DIHEDRAL))
+            self.ELECTROSTATIC = bool(int(ELECTROSTATIC))
+            self.VDW = bool(int(VDW))
             try:
                 self.NEGR = int(NEGR)
             except :
