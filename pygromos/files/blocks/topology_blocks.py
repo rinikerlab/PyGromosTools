@@ -1899,7 +1899,7 @@ class soluteatom_type(_generic_field):
         for iter in self.INEvalues:
             str_line += "\t" + str(iter)
             lcounter += 1
-            if (lcounter % 6) == 0:
+            if (lcounter % 6) == 0 and len(self.INEvalues)>6:
                 str_line += "\n\t\t\t\t\t\t\t\t\t\t"
         str_line += "\n\t\t\t\t\t\t\t\t\t\t" + str(self.INE14)
         for iter in self.INE14values:
