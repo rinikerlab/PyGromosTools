@@ -333,10 +333,14 @@ class LSF(_SubmissionSystem):
     """
         Job Queue Managment
     """
-    def get_queued_jobs(self):
+    def get_queued_jobs(self)->pd.DataFrame:
         """
             This function updates the job-list of the queueing system in the class.
 
+        Returns
+        -------
+        pd.DataFrame
+            returns the job_queue as pandas dataFrame.
         """
         # Do we need an update of the job list?
         check_job_list = True
@@ -385,7 +389,8 @@ class LSF(_SubmissionSystem):
         else:
             if (self.verbose):
                 print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
-
+            pass
+        return self.job_queue_list
 
     def search_queue_for_jobid(self, job_id:int)->pd.DataFrame:
         self.get_queued_jobs()
