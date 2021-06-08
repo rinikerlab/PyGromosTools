@@ -372,7 +372,7 @@ class LSF(_SubmissionSystem):
 
                 jobs_dict = {}
                 for job in jobs:
-                    jobID = int(job[0])
+                    jobID = int(job[0].split("[")[0])
                     user = job[1]
                     status = job[2]
                     queue = job[3]
