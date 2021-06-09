@@ -27,7 +27,7 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
             queued_job_ids = list(queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna().JOBID)
 
         ## check if already submitted
-        if (len(queued_job_ids) > 0):  # check if job is already submitted:
+        if (len(queued_job_ids) > 1):  # check if job is already submitted:
             if verbose: print(
                 "\t\t\tSKIP job Submission: " + tmp_jobname + " was already submitted to the queue! \n\t\t\t\tSKIP\n"
                 + "\t\t\tsubmitted IDS: " + "\n\t\t\t".join(map(str, queued_job_ids)) + "\n")
@@ -109,7 +109,7 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
-
+    ana_id=None
     job_submission_system.job_duration = job_submission_system.job_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
@@ -214,7 +214,6 @@ def chain_submission(simSystem:Gromos_System,
                 raise ValueError("ERROR during submission of clean-up command of "+str(tmp_jobname)+"_cleanUP:\n"+"\n".join(err.args))
 
             # OPTIONAL schedule - analysis inbetween.
-            ana_id = None
             if (runID > 1 and run_analysis_script_every_x_runs != 0 and
                     runID % run_analysis_script_every_x_runs == 0
                     and runID < chain_job_repetitions):
