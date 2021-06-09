@@ -347,7 +347,9 @@ class LSF(_SubmissionSystem):
         if (hasattr(self, "_job_queue_time_stamp")):
             last_update = datetime.now() - self._job_queue_time_stamp
             check_job_list = last_update.seconds > self._refresh_job_queue_list_all_s
-
+        if(not self.submission): #shortcut to reduce queue calls!
+           self.job_queue_list = pd.DataFrame(columns=["JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()])
+           return self.job_queue_list
         if (check_job_list):
             # try getting the lsf queue
             if (not self._dummy):
