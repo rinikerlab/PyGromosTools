@@ -85,7 +85,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
 
             if(not in_imd_path is None):
                 in_gromos_system.imd = in_imd_path
-            elif(hasattr(in_gromos_system, "TITLE")):
+            elif(hasattr(in_gromos_system.imd, "TITLE")):
                 pass
             elif(not _template_imd_path is None):
                 if(verbose): warnings.warn("Template_imd_path was used: "+_template_imd_path)
