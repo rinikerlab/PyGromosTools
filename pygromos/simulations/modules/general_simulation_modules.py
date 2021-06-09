@@ -2,9 +2,10 @@ import os
 import sys
 import traceback
 import time
+import warnings
 from collections import OrderedDict
 from copy import deepcopy
-from typing import Union
+from typing import Tuple
 
 from pygromos.files.coord import cnf
 from pygromos.files.gromos_system import Gromos_System
@@ -20,12 +21,52 @@ from pygromos.utils.utils import spacer as spacer
 
 
 def simulation(in_gromos_system:Gromos_System, project_dir:str,
-               step_name:str="sim", in_imd_path = None,
+               step_name:str="sim", in_imd_path:str = None,
                submission_system:_SubmissionSystem=LOCAL(), simulation_runs:int=1, equilibration_runs:int = 0,
-               previous_simulation_run:int=None, nmpi:int = 1,
-               force_simulation:bool=False,
+               previous_simulation_run:int=None, force_simulation:bool=False,
                analysis_script:callable = simulation_analysis.do, analysis_control_dict:dict = None,
-               verbose:bool = True, verbose_lvl:int=1) -> Union[Gromos_System, int]:
+               verbose:bool = True, verbose_lvl:int=1, _template_imd_path:str=None) -> Tuple[Gromos_System, int]:
+    """
+        This function is a generic simulation block, that can be used to run and schedule simulations.
+
+    Parameters
+    ----------
+    in_gromos_system : Gromos_System
+        gromos system that contains the iformation of the files, that are required for the simulation run.
+    project_dir : str
+        parent project directory
+    step_name :  str, optional
+        name of the step - used as jobname and folder in the project dir.
+    in_imd_path : str, optional
+        if a path to an imd file is given here, it will be used!
+    submission_system : _SubmissionSystem, optional
+        the system, that should be used to submit a job
+    simulation_runs : int, optional
+        number of sequential simulation runs
+    equilibration_runs : int, optional
+        number of equilibration runs, that will not appear in the final traj
+    previous_simulation_run : int, optional
+        job-ID of the previous simulation
+    force_simulation : bool, optional
+        if simulation already exist, shall it be overwritten?
+    analysis_script : callable, optional
+        script that is used to analyse the job
+    analysis_control_dict : dict, optional
+        sub selection of steps, for the analysis script, that should be executed
+    verbose : bool, optional
+        "baeh, baeh, baeh"  - a wise black-nose sheep from ausserberg.
+    verbose_lvl : int, optional
+        how much baeh?
+    _template_imd_path : str, optional
+        default template imd
+
+    Returns
+    -------
+    Gromos_System,
+        returns a new gromos system which is containing the simulation info.
+    int
+        jobID of the last submitted job.
+    """
     #PREPERATIONS
     try:
         try:
@@ -41,11 +82,18 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             in_gromos_system = deepcopy(in_gromos_system)
             in_gromos_system.work_folder = out_input_dir
             in_gromos_system.name = step_name
-            if not in_gromos_system.imd._future_file:
-                in_gromos_system.adapt_imd()
-            else:
+
+            if(not in_imd_path is None):
                 in_gromos_system.imd = in_imd_path
-                in_gromos_system.adapt_imd()
+            elif(hasattr(in_gromos_system.imd, "TITLE")):
+                pass
+            elif(not _template_imd_path is None):
+                if(verbose): warnings.warn("Template_imd_path was used: "+_template_imd_path)
+                in_gromos_system.imd = _template_imd_path
+            else:
+                raise ValueError("Could not find any .imd path (gromos system has no imd, in_imd_path not given and also no _template_imd_path!)")
+
+            in_gromos_system.adapt_imd()
 
             out_analysis_cnf = out_analysis_dir + "/data/" + in_gromos_system.name + ".cnf"
 

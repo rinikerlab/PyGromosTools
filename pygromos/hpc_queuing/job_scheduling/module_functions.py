@@ -157,7 +157,7 @@ def build_MD_analysis_script(in_simulation_name:str, in_folder:str, in_topology_
     -------
 
     """
-    import_text = "#!/usr/bin/env python\n\n"
+    import_text = "#!/usr/bin/env python3 \n\n"
     import_text += "#################################\n"
     import_text += "# This is a small automatic generated ana_script wrapper.\n"
     import_text += "#################################\n"

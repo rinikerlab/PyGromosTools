@@ -1897,7 +1897,7 @@ class soluteatom_type(_generic_field):
         str_line = "\t" + str(self.ATNM) + "\t" + str(self.MRES) + "\t" + str(self.PANM) + "\t" + str(self.IAC) + "\t" + str(self.MASS) + "\t" + str(self.CG) + "\t" + str(self.CGC) + "\t" + str(self.INE)
         lcounter = 0
         for iter in self.INEvalues:
-            str_line += "\t" + str(iter)
+            str_line += "\t" + str(iter).strip()
             lcounter += 1
             if (lcounter % 6) == 0 and len(self.INEvalues)>6:
                 str_line += "\n\t\t\t\t\t\t\t\t\t\t"
