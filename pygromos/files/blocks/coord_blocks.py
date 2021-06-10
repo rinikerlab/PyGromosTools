@@ -371,7 +371,7 @@ class GENBOX(_generic_gromos_block):
     @euler.setter
     def euler(self, euler: List[float]):
         if(isinstance(euler, List) and all([isinstance(x, Number) for x in euler])):
-            self.euler = euler
+            self._euler = euler
         else:
             raise ValueError("euler must be List[float]")
     @property
