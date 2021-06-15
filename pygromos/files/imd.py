@@ -148,7 +148,7 @@ class Imd(_general_gromos_file._general_gromos_file):
         print(type(reeds_block))
 
         if(isinstance(reeds_block, blocks.OLD_REPLICA_EDS)):    #old deappriciated-#todo delete if not needed anymore!
-            print("GOIN G THROUG OLD IF!")
+            print("OLD_REPLICA_EDS")
             if (isinstance(NATOM, (Number, str))):
                 reeds_block.NATOM = NATOM
             if (isinstance(RET, (Number, str))):
@@ -216,6 +216,7 @@ class Imd(_general_gromos_file._general_gromos_file):
                 reeds_block.CONT = CONT
 
         elif(isinstance(reeds_block, blocks.NEW_REPLICA_EDS)):
+            print("NEW_REPLICA_EDS")
             if(isinstance(REEDS, bool)):
                 reeds_block.REEDS = REEDS
 
@@ -287,6 +288,79 @@ class Imd(_general_gromos_file._general_gromos_file):
             if (isinstance(EDS_STAT_OUT, (str, int, bool))):
                 reeds_block.EDS_STAT_OUT = EDS_STAT_OUT
 
+        elif(isinstance(reeds_block, blocks.REPLICA_EDS)):
+            print("REPLICA_EDS")
+            if(isinstance(REEDS, bool)):
+                reeds_block.REEDS = REEDS
+
+            if(isinstance(NUMSTATES, (Number, str))):
+                reeds_block.NUMSTATES = NUMSTATES
+
+            if(isinstance(SVALS, Iterable)): #edit SVALS
+                SVALS = nice_s_vals(SVALS)
+
+                reeds_block.RES = list(map(str, SVALS))
+                reeds_block.NRES = len(SVALS)   #adjust number of Svals
+
+                if(isinstance(EIR, (Number, Iterable))): #expand energy offsets to new s value ammount
+                    # set new EIR with 3 different types of input (single number, vector or matrix)
+                    EIR_matrix = []
+
+                    # single number
+                    if(isinstance(EIR, Number)):  # depends on SVALS and NRES
+                        EIR_vector = [EIR for x in range(reeds_block.NUMSTATES)]
+
+                        for z in EIR_vector:
+                            EIR_matrix.append([z for i in range(int(reeds_block.NRES))])
+
+                    # vector or matrix
+                    elif(isinstance(EIR, Iterable) and len(EIR) == int(reeds_block.NUMSTATES) and all([isinstance(x, Number) for x in EIR])):
+                        for z in EIR:
+                            EIR_matrix.append([z for i in range(int(reeds_block.NRES))])
+                    else:
+                        raise Exception(
+                            "not enough EIR-vals for making REEDS Block. Got " + str(len(EIR)) + " for " + str(
+                                reeds_block.NRES) + " SVals\n Number of states: "+str(reeds_block.NUMSTATES))
+                    reeds_block.EIR = EIR_matrix
+                else:
+                    if(any([len(row)!= len(SVALS) for row in reeds_block.EIR])):
+                        newEIR = []
+                        for EIR_row in reeds_block.EIR:
+                            newEIRrow = [EIR_row[0] for r in range(len(SVALS))]
+                            newEIR.append(newEIRrow)
+                        reeds_block.EIR = newEIR
+
+            if(isinstance(EIR, (Number , Iterable))):
+                EIR_matrix = []
+                print(EIR)
+                # single number
+                if isinstance(EIR, Number):  # depends on SVALS and NRES
+                    EIR_vector = [str(EIR) for x in range(reeds_block.NUMSTATES)]
+
+                    for z in EIR_vector:
+                        EIR_matrix.append([z for i in range(int(reeds_block.NRES))])
+
+                # vector or matrix
+                elif (isinstance(EIR, Iterable) and len(EIR) == int(reeds_block.NUMSTATES) and all(
+                        [isinstance(x, (Number, str)) for x in EIR])):
+                    for z in EIR:
+                        EIR_matrix.append([float(z) for i in range(int(reeds_block.NRES))])
+                else:
+                    raise Exception(
+                        "not enough EIR-vals for making REEDS Block. Got " + str(len(EIR)) + " for " + str(
+                            reeds_block.NRES) + " SVals and states: "+str(reeds_block.NUMSTATES)+ "\n")
+                reeds_block.EIR = EIR_matrix
+
+            if (isinstance(NRETRIAL, (str, int))):
+                reeds_block.NRETRIAL = NRETRIAL
+            if (isinstance(NREQUIL, (str, int))):
+                reeds_block.NREQUIL = NREQUIL
+            if (isinstance(CONT, (str, int, bool))):
+                reeds_block.CONT = CONT
+            if (isinstance(EDS_STAT_OUT, (str, int, bool))):
+                reeds_block.EDS_STAT_OUT = EDS_STAT_OUT
+        else:
+            raise Exception("neither old nor new REPLICA_EDS block recognized\n")
 
     @staticmethod
     def clean_residue_list_for_imd(residues:Dict[str, Dict[int,int]], not_ligand_residues:List[str]=[], ligand_resn_prefix:(str or List[str])=None)-> (Dict[str, Dict[int,int]], NamedTuple, NamedTuple, NamedTuple):
