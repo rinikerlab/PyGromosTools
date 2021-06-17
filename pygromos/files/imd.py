@@ -229,11 +229,11 @@ class Imd(_general_gromos_file._general_gromos_file):
                 reeds_block.RES = list(map(str, SVALS))
                 reeds_block.NRES = len(SVALS)   #adjust number of Svals
                 
-                if(reeds_block.REEDS == 1):
-                    reeds_block.NEOFF = len(SVALS) if(reeds_block.REEDS == 1) else  #assume 1D REEDS for now
-                elif(reeds_block.REEDS > 1):
+                if(reeds_block.REEDS == 1): #1D REEDS
+                    reeds_block.NEOFF = len(SVALS)
+                elif(reeds_block.REEDS > 1): #2D REEDS
                     reeds_block.NEOFF = len(SVALS)*(reeds_block.NUMSTATES+1)
-                else:
+                else: #No REEDS
                     reeds_block.NEOFF = 0
                     
                 if(isinstance(EIR, (Number, Iterable))): #expand energy offsets to new s value ammount
