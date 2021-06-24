@@ -326,12 +326,15 @@ class _gromosPPbase:
         if(not isinstance(dt, type(None)) and isinstance(dt, type(None))):
             options += "@time "+str(0)+" "+str(dt)
 
-        if(frames !=None or notimeblock != None or notimeblock != None):
+        if(notimeblock != None or notimeblock != None): # removed an if #or frames != None
             raise NotImplementedError("Chosen Options for frameout not implemented yet!")
+        if frames is not None and isinstance(frames, int): # To printout a specific frame!
+            options += "@spec SPEC @frames " + str(frames) + " "
 
-        if(out_file_path!=None):
+        if(out_file_path!=None and frames is None):
             orig =os.getcwd()+"/FRAME_00001."+out_file_format
-
+        elif frames is not None: # Warning doesn't work for all ! 
+            orig = os.getcwd()+ "/FRAME_" + "0"*(5-len(str(frames))) + str(frames) + '.' + out_file_format
         else:
             orig =os.getcwd()+"/FRAME* "
             if(not isinstance(out_file_format, type(None))):
@@ -350,7 +353,7 @@ class _gromosPPbase:
             print("gromosPP.frameout: could not exectue framout:\n"+str(err.args))
             raise Exception("gromosPP.frameout: could not exectue framout:\n"+str(err.args))
 
-
+        print ('looking for + ' + orig)
         bash.wait_for_fileSystem(check_paths=orig, regex_mode=True)
 
 
