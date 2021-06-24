@@ -229,9 +229,9 @@ class Imd(_general_gromos_file._general_gromos_file):
                 reeds_block.RES = list(map(str, SVALS))
                 reeds_block.NRES = len(SVALS)   #adjust number of Svals
                 
-                if(reeds_block.REEDS == 1): #1D REEDS
+                if(int(reeds_block.REEDS) == 1): #1D REEDS
                     reeds_block.NEOFF = len(SVALS)
-                elif(reeds_block.REEDS > 1): #2D REEDS
+                elif(int(reeds_block.REEDS) > 1): #2D REEDS
                     reeds_block.NEOFF = len(SVALS)*(reeds_block.NUMSTATES+1)
                 else: #No REEDS
                     reeds_block.NEOFF = 0
