@@ -146,7 +146,7 @@ def do(in_simSystem: Gromos_System,
                          initialize_first_run= False, reinitialize= False,
                          verbose = job_verb)
 
-
+        ana_previous_job_ID = previous_job_ID
         if (not analysis_script_path is None):
             tmp_jobname = in_simSystem.name + "_ana"
 
