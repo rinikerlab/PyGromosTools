@@ -27,7 +27,7 @@ def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
             queued_job_ids = list(queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna().JOBID)
 
         ## check if already submitted
-        if (len(queued_job_ids) > 0):  # check if job is already submitted:
+        if (len(queued_job_ids) > 1):  # check if job is already submitted:
             if verbose: print(
                 "\t\t\tSKIP job Submission: " + tmp_jobname + " was already submitted to the queue! \n\t\t\t\tSKIP\n"
                 + "\t\t\tsubmitted IDS: " + "\n\t\t\t".join(map(str, queued_job_ids)) + "\n")
@@ -109,7 +109,7 @@ def chain_submission(simSystem:Gromos_System,
     if(not job_submission_system is LOCAL):
         simSystem._future_promise = True
 
-
+    ana_id=None
     job_submission_system.job_duration = job_submission_system.job_duration
     for runID in range(start_run_index, chain_job_repetitions + 1):
 
@@ -134,7 +134,7 @@ def chain_submission(simSystem:Gromos_System,
 
             # MAIN commands
             md_script_command = prefix_command + " && "
-            md_script_command += "python " + worker_script + " "
+            md_script_command += "python3 " + worker_script + " "
             md_script_command += "-out_dir " + tmp_outdir + " "
             md_script_command += "-in_cnf_path " + simSystem.cnf.path + " "
             md_script_command += "-in_imd_path " + simSystem.imd.path + " "
@@ -176,7 +176,7 @@ def chain_submission(simSystem:Gromos_System,
 
             ## POST COMMAND
             clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
-            clean_up_command = "python " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
+            clean_up_command = "python3 " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
                 tmp_outdir) + " -n_processes " + str(clean_up_processes)
 
             if verbose: print("PREVIOUS ID: ", previous_job_ID)
@@ -243,5 +243,5 @@ def chain_submission(simSystem:Gromos_System,
         #Resulting cnf is provided to use it in further approaches.
         simSystem.cnf = tmp_out_cnf
 
-    previous_job_ID = clean_id
+    previous_job_ID = clean_id if (ana_id is None) else ana_id
     return previous_job_ID, tmp_jobname, simSystem

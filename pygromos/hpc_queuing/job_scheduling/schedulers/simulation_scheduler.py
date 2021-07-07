@@ -146,7 +146,7 @@ def do(in_simSystem: Gromos_System,
                          initialize_first_run= False, reinitialize= False,
                          verbose = job_verb)
 
-
+        ana_previous_job_ID = previous_job_ID
         if (not analysis_script_path is None):
             tmp_jobname = in_simSystem.name + "_ana"
 
@@ -157,7 +157,7 @@ def do(in_simSystem: Gromos_System,
 
 
 
-            ana_previous_job_ID = submission_system.submit_to_queue("python "+analysis_script_path, jobName=tmp_jobname,
+            ana_previous_job_ID = submission_system.submit_to_queue("python3 "+analysis_script_path, jobName=tmp_jobname,
                                                                 outLog=ana_log, queue_after_jobID=previous_job_ID, verbose=True)
 
             if (verbose): print("ANA jobID: " + str(previous_job_ID))
@@ -171,4 +171,4 @@ def do(in_simSystem: Gromos_System,
         return -1
 
     #in_simSystem._future_promise = False #reset future promising if necessary
-    return previous_job_ID
+    return ana_previous_job_ID

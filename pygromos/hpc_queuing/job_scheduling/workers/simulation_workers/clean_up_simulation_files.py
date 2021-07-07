@@ -8,6 +8,10 @@ It should be hanged in after each simulation step.
 
 import argparse
 import glob
+import os, sys
+package_path = os.path.abspath(__file__+"/../../../../../..")
+print(package_path)
+sys.path.append(package_path)
 
 from pygromos.hpc_queuing.job_scheduling import file_management as fM
 

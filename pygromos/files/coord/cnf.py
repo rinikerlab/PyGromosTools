@@ -119,7 +119,7 @@ class Cnf(_general_gromos_file):
 
         This is a very crude functio at the moment! It only takes positions
         of a residue and merges them! if there are residues with the same name,
-        this might lead to problems, as clean_posiResNumByName function is not
+        this might lead to problems, as clean_posiresnumbyname function is not
         sensitive for that! todo: make more robust! bschroed
 
         Parameters
