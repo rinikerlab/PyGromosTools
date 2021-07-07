@@ -136,6 +136,10 @@ class openforcefield2gromos():
                     CP=k_list[t].value_in_unit(kilojoule/mole)
                     PD=phase_list[t].value_in_unit(degree)
                     NP=per_list[t]
+                    # convert negativ CP by phase shifting
+                    if CP < 0:
+                        CP = abs(CP)
+                        PD += 180
                     self.gromosTop.add_new_torsiondihedral(CP=CP, PD=PD, NP=NP, atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL, includesH=False)#hQ
         if not hasattr(self.gromosTop, "TORSDIHEDRALTYPE"):
             self.gromosTop.add_block(blocktitle="TORSDIHEDRALTYPE", content=[])
