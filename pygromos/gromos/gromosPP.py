@@ -255,7 +255,7 @@ class _gromosPPbase:
         return out_file_path
 
     def frameout(self, in_top_path:str, in_coord_path:str, periodic_boundary_condition:str,
-                 out_file_path:str=None, out_file_format:str=None, single_file:bool=None,
+                 out_file_path:str=None, out_file_format:str=None, single_file:bool=False,
                  gather:(int or str)=None, include:str= "SOLUTE",
                  reference_structure_path:str=None, atomsfit:str=None,
                  frames:int=None, time:int=None, dt:int=None, notimeblock:bool=None,
@@ -272,7 +272,7 @@ class _gromosPPbase:
         periodic_boundary_condition :   str
         out_file_path : None or str, optional
         out_file_format :   None or str, optional
-        single_file :   None or bool, optional
+        single_file :   bool, optional
         gather :    None or int or str optional
 
         include :   None or str, optional
@@ -307,34 +307,42 @@ class _gromosPPbase:
         """
 
         options = ""
-        if(out_file_format != None):
+        if(out_file_format is not None):
             options += "@outformat " + str(out_file_format) + " "
 
         periodic_boundary_condition = "@pbc " + periodic_boundary_condition + " "
-        if (gather != None):
+        if(gather is not None):
             periodic_boundary_condition += " " + str(gather) + " "
-        if(include!=None):
+        if(include is not None):
             options+="@include "+str(include)+" "
-        if(single_file!=None):
+        if(single_file):
             options += "@single "
-        if(atomsfit!=None and reference_structure_path!=None):
+        if(atomsfit is not None and reference_structure_path is not None):
             options += "@ref " + str(reference_structure_path) + " @atomsfit " + atomsfit + " "
-        if(not isinstance(dt, type(None))):
+        
+        if(time is not None and dt is None):
             options += "@time "+str(time)+" "
-        if(not isinstance(dt, type(None)) and not isinstance(dt, type(None))):
-            options += " "+str(dt)+" "
-        if(not isinstance(dt, type(None)) and isinstance(dt, type(None))):
-            options += "@time "+str(0)+" "+str(dt)
-
-        if(frames !=None or notimeblock != None or notimeblock != None):
+        if(time is not None and dt is not None):
+            options += "@time "+str(time)+" "++str(dt)+" "
+        if(time is None and dt is not None):
+            options += "@time 0 " + str(dt)+" "
+    
+        if(notimeblock is not None):
             raise NotImplementedError("Chosen Options for frameout not implemented yet!")
+        
+        if(frames is not None and isinstance(frames, int)): # To printout a specific frame!
+            options += "@spec SPEC @frames " + str(frames) + " "
+        if(frames is not None and isinstance(frames, list)):
+            raise NotImplementedError("Frameout for multiple specific frames not implemented yet!")
 
-        if(out_file_path!=None):
+        # Determine name of the output file name the files FRAME_xxx.out
+        if(out_file_path is not None and frames is None):
             orig =os.getcwd()+"/FRAME_00001."+out_file_format
-
+        elif out_file_path is not None and isinstance(frames, int):  
+            orig = os.getcwd()+ "/FRAME_" + "0"*(5-len(str(frames))) + str(frames) + '.' + out_file_format
         else:
             orig =os.getcwd()+"/FRAME* "
-            if(not isinstance(out_file_format, type(None))):
+            if(out_file_format is not None):
                 out_file_path = os.path.dirname(in_coord_path) + "/FRAME_00001."+out_file_format
             else:
                 out_file_path = os.path.dirname(in_coord_path) + "/FRAME_00001."+in_coord_path.split(".")[-1]
@@ -346,13 +354,14 @@ class _gromosPPbase:
         try:
             ret = bash.execute(command)
             if(verbose):    print("STDOUT: ", "\n".join(ret.readlines()))
+            if ret != 0: 
+                print('Error during the execution of gromosPP.frameout')
+                return None
         except Exception as err:
             print("gromosPP.frameout: could not exectue framout:\n"+str(err.args))
             raise Exception("gromosPP.frameout: could not exectue framout:\n"+str(err.args))
 
-
         bash.wait_for_fileSystem(check_paths=orig, regex_mode=True)
-
 
         #move to output
         try:
