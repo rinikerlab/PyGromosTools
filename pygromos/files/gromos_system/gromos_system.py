@@ -155,6 +155,7 @@ class Gromos_System():
             self.mol = Chem.MolFromSmiles(in_smiles)
             self.mol = Chem.AddHs(self.mol)
             AllChem.EmbedMolecule(self.mol)
+            AllChem.UFFOptimizeMolecule(self.mol)
             self.hasData = True
 
         # import  molecule from RDKit

@@ -867,6 +867,7 @@ class Cnf(_general_gromos_file):
         if mol.GetNumConformers() < 1:
             mol = Chem.AddHs(mol)
             AllChem.EmbedMolecule(mol)
+            AllChem.UFFOptimizeMolecule(mol)
         conf = mol.GetConformer(0)
 
         #fill a list with atomP types from RDKit data
