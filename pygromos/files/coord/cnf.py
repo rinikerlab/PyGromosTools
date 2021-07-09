@@ -858,6 +858,7 @@ class Cnf(_general_gromos_file):
 
         conversionFactor  :  float
             the factor used to convert length from rdkit to Gromos
+            (default: angstrom -> nano meter = 0.1)
         """
         inchi=Chem.MolToInchi(mol).split("/")
         if len(inchi) >= 2:
