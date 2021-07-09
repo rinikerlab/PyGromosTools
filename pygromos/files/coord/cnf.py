@@ -848,13 +848,16 @@ class Cnf(_general_gromos_file):
     """
         convert file: 
     """
-    def createRDKITconf(self, mol:Chem.rdchem.Mol):
+    def createRDKITconf(self, mol:Chem.rdchem.Mol, conversionFactor:float = 0.1):
         """creates a PyGromosTools CNF type from a rdkit molecule. If a conformation exists the first one will be used.
 
         Parameters
         ----------
         mol : Chem.rdchem.Mol
             Molecule, possibly with a conformation
+
+        conversionFactor  :  float
+            the factor used to convert length from rdkit to Gromos
         """
         inchi=Chem.MolToInchi(mol).split("/")
         if len(inchi) >= 2:
@@ -873,14 +876,15 @@ class Cnf(_general_gromos_file):
         #fill a list with atomP types from RDKit data
         atomList=[]
         for i in range(mol.GetNumAtoms()):
-            x = conf.GetAtomPosition(i).x
-            y = conf.GetAtomPosition(i).y
-            z = conf.GetAtomPosition(i).z
+            x = conversionFactor * conf.GetAtomPosition(i).x
+            y = conversionFactor * conf.GetAtomPosition(i).y
+            z = conversionFactor * conf.GetAtomPosition(i).z
             atomType = mol.GetAtomWithIdx(i).GetSymbol()
             atomList.append(blocks.atomP(resID=1, resName=name, atomType=atomType, atomID=i+1, xp=x, yp=y, zp=z))
 
         # set POSITION attribute
         self.__setattr__("POSITION", blocks.POSITION(atomList))
+        # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4,4,4], angles=[90,90,90]))
 
     def get_pdb(self)->str:
