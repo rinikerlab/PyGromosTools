@@ -179,12 +179,29 @@ class STOCHINT(_iterable_gromos_block):
     def __init__(self, content: List[atomSI]):
         super().__init__(used=True, name="STOCHINT", content=content)
 
-    def to_string(self) -> str:
-        return self.content + self.seed
+    def block_to_string(self) -> str:
+        result = self.name + self.line_seperator
+        result+= "#"+self.field_seperator+self.field_seperator.join(self.table_header)+ "\n"
+        for x in self.content:
+            result += x.to_string()
+        result += "# seed\n"
+        result+= self.seed
+        result += "END\n"
+
+        return result
 
     def read_content_from_str(self, content:List[str]):
-        self.content = [blocks.coords.atomSI(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), sxx=float(x[4]), sxy=float(x[5]), sxz=float(x[6])) for x in list(map(lambda x: x.split(), content))[:-1] if(not x[0] == "#")]
-        self.seed = list(map(lambda x: x.split(), content))[-1]
+        if(content is str):
+            content = content.split("\n")
+        self.content = [blocks.coords.atomSI(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), sxx=float(x[4]), sxy=float(x[5]),
+        sxz=float(x[6])) for x in list(map(lambda x: x.split(), content[:-1])) if(not x[0] == "#")]
+
+        #seed safety check
+        x = content[-1].split()
+        if(len(x) == 7):
+            raise ValueError("The seed of STOCHINT has a length of 7 pleas use longer once of check if seed is present! \nGOT: "+str(x))
+        else:
+            self.seed = content[-1]
 
 
 class REFPOSITION(_iterable_gromos_block):
