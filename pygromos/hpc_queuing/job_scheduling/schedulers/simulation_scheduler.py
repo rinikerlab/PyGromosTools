@@ -105,7 +105,8 @@ def do(in_simSystem: Gromos_System,
         print("#####################################################################################")
 
         traceback.print_exception(*sys.exc_info())
-        return -1
+
+        raise IOError("ERROR in Preperations to submission!") from err
 
     # RUN Job
     try:
@@ -168,7 +169,8 @@ def do(in_simSystem: Gromos_System,
         print("#####################################################################################")
 
         traceback.print_exception(*sys.exc_info())
-        return -1
+        raise IOError("ERROR in SUBMISSION!") from err
 
     #in_simSystem._future_promise = False #reset future promising if necessary
     return ana_previous_job_ID
+            
