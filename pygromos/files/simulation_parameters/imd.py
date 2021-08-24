@@ -185,11 +185,16 @@ class Imd(_general_gromos_file._general_gromos_file):
                 for z in EIR_vector:
                     EIR_matrix.append([z for i in range(int(reeds_block.NRES))])
 
-            # vector or matrix
+            # vector
             elif (isinstance(EIR, Iterable) and len(EIR) == int(reeds_block.NUMSTATES) and all(
                     [isinstance(x, (Number, str)) for x in EIR])):
                 for z in EIR:
                     EIR_matrix.append([float(z) for i in range(int(reeds_block.NRES))])
+            # matrix
+            elif(isinstance(EIR, Iterable) and all([isinstance(x, Iterable) and all([isinstance(y, (Number, str)) for y in x]) for x in EIR])):
+                    if (len(self.REPLICA_EDS.NRES) == len(EIR)):
+                        EIR = np.array(EIR).T
+                    EIR_matrix = list(map(lambda x: list(map(float, x)), EIR))
             else:
                 raise Exception(
                     "not enough EIR-vals for making REEDS Block. Got " + str(len(EIR)) + " for " + str(
