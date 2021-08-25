@@ -192,20 +192,20 @@ class Imd(_general_gromos_file._general_gromos_file):
                     for z in EIR_vector:
                         EIR_matrix.append([z for i in range(int(reeds_block.NRES))])
 
-                #vector or matrix
-                elif type(EIR) is list and len(EIR) == int(reeds_block.NUMSTATES):
-                    if len(EIR) == int(reeds_block.NUMSTATES) and type(EIR[0]) in [str, float, int]:
-                        EIR_matrix = []
-                        for z in EIR:
-                            EIR_matrix.append([z for i in range(int(reeds_block.NRES))])
-
-                    elif(len(EIR) == int(reeds_block.NRES) and type(EIR[0]) is list and len(EIR[0]) == int(reeds_block.NUMSTATES)):
-                        EIR_matrix = list(map(lambda x: list(map(str, x)), EIR))
-
-                    else:
-                        raise Exception(
-                            "not enough EIR-vals for making REEDS Block. Got " + str(len(EIR)) + " for " + str(
-                                reeds_block.NRES) + " SVals\n")
+                # vector
+                elif (isinstance(EIR, Iterable) and len(EIR) == int(reeds_block.NUMSTATES) and all(
+                        [isinstance(x, (Number, str)) for x in EIR])):
+                    for z in EIR:
+                        EIR_matrix.append([float(z) for i in range(int(reeds_block.NRES))])
+                # matrix
+                elif(isinstance(EIR, Iterable) and all([isinstance(x, Iterable) and all([isinstance(y, (Number, str)) for y in x]) for x in EIR])):
+                        if (len(self.REPLICA_EDS.NRES) == len(EIR)):
+                            EIR = np.array(EIR).T
+                        EIR_matrix = list(map(lambda x: list(map(float, x)), EIR))
+                else:
+                    raise Exception(
+                        "not enough EIR-vals for making REEDS Block. Got " + str(len(EIR)) + " for " + str(
+                            reeds_block.NRES) + " SVals\n")
                 reeds_block.EIR = EIR_matrix
 
             if (NRETRIAL ):
