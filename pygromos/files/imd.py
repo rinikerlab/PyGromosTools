@@ -187,7 +187,7 @@ class Imd(_general_gromos_file._general_gromos_file):
                             EIR_matrix.append([float(z) for i in range(int(reeds_block.NRES))])
                     # matrix
                     elif(isinstance(EIR, Iterable) and all([isinstance(x, Iterable) and all([isinstance(y, (Number, str)) for y in x]) for x in EIR])):
-                            if (len(self.REPLICA_EDS.NRES) == len(EIR)):
+                            if (self.REPLICA_EDS.NRES == len(EIR)):
                                 EIR = np.array(EIR).T
                             EIR_matrix = list(map(lambda x: list(map(float, x)), EIR))
                     else:
