@@ -323,7 +323,7 @@ class _gromosPPbase:
         if(time is not None and dt is None):
             options += "@time "+str(time)+" "
         if(time is not None and dt is not None):
-            options += "@time "+str(time)+" "++str(dt)+" "
+            options += "@time "+str(time)+" "+str(dt)+" "
         if(time is None and dt is not None):
             options += "@time 0 " + str(dt)+" "
     
