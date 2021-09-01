@@ -354,9 +354,7 @@ class _gromosPPbase:
         try:
             ret = bash.execute(command)
             if(verbose):    print("STDOUT: ", "\n".join(ret.readlines()))
-            if ret != 0: 
-                print('Error during the execution of gromosPP.frameout')
-                return None
+        
         except Exception as err:
             print("gromosPP.frameout: could not exectue framout:\n"+str(err.args))
             raise Exception("gromosPP.frameout: could not exectue framout:\n"+str(err.args))
