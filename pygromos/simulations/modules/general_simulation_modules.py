@@ -161,7 +161,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             if verbose:
                 print(utils.spacer2+"FOUND RESULT: "+out_analysis_cnf+"\n GOING TO SKIPT THIS SUBMISSION!")
             #warnings.warn("Skipping active submission, as result CNF was found: \n"+out_analysis_cnf)
-            last_jobID = None
+            last_jobID = 0
         else:
             last_jobID = simulation_scheduler.do(in_simSystem=in_gromos_system, out_dir_path=out_simulation_dir,
                                                     simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
