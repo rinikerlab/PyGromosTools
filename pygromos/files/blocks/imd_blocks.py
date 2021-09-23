@@ -319,7 +319,6 @@ class REPLICA(_generic_imd_block):
             self.NREQUIL = int(NREQUIL)
             self.CONT = bool(CONT)
 
-    "I DON'T GET HOW THIS FOLLOWING FUNCTION WORKS AT ALL"
     def read_content_from_str(self, content: List[str]):
         try:
         setattr(self, "RETL", int(content[1].split()[0]))
