@@ -321,7 +321,7 @@ class REPLICA(_generic_imd_block):
 
     def read_content_from_str(self, content: List[str]):
         try:
-        setattr(self, "RETL", int(content[1].split()[0]))
+            setattr(self, "RETL", int(content[1].split()[0]))
             setattr(self, "NRET", int(content[3].split()[0]))
             T_values =  list(map(float, content[5].split()))
             if(len(T_values)== self.NRET):
@@ -329,9 +329,9 @@ class REPLICA(_generic_imd_block):
             else:
                 raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
             setattr(self, "NRELAM", int(content[9].split()[0]))
-            lambda_values =  list(map(float, content[11].split()))
-            if(len(lambda_values)== self.NRELAM):
-                setattr(self, "RELAM", lambda_values)
+            lambda_val =  list(map(float, content[11].split()))
+            if(len(lambda_val)== self.NRELAM):
+                setattr(self, "RELAM", lambda_val)
             else:
                 raise IOError("REPLICA: NRELAM was not equal to the number of lambda values (RELAM) in IMD!")
             lambda_timestep = list(map(float, content[13].split()))
@@ -339,8 +339,6 @@ class REPLICA(_generic_imd_block):
                 setattr(self, "RETS", lambda_timestep)
             else:
                 raise IOError("REPLICA: NRELAM was not equal to the number of lambda timestep values (RETS) in IMD!")
-
-
             [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
 
         except Exception as err:
