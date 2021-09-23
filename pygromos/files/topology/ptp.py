@@ -11,6 +11,7 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
     TITLE: blocks.TITLE
     MPERATOM: blocks.MPERTATOM
     PERTATOMPARAM:blocks.PERTATOMPARAM
+    PERTPROPERDIH: blocks.PERTPROPERDIH
 
     gromos_file_ending:str = "ptp"
 

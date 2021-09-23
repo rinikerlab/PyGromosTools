@@ -275,7 +275,7 @@ def read_ptp(in_path:str)->Dict:
     def  _read_ptp_subblock(blocks):
         result_data = {}
         for block in blocks:
-            if (block in ["TITLE", "PERTATOMPARAM", "MPERTATOM"]):
+            if (block in ["TITLE", "PERTATOMPARAM", "MPERTATOM", "PERTPROPERDIH"]):
                 atom_block = getattr(tb, block)(content= blocks[block])
                 result_data.update({block: atom_block})
             else:

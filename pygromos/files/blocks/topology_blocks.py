@@ -40,13 +40,15 @@ class geometric_code(Enum):
    FIELDS
 """
 pertubation_eds_state = namedtuple("pertubationEdsState", ["IAC", "CHARGE"])
-pertubation_lam_state = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
+pertubation_lam_state_nonbonded = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
 
 setattr(__main__, pertubation_eds_state.__name__, pertubation_eds_state)
 pertubation_eds_state.__module__ = "__main__"
 
-setattr(__main__, pertubation_lam_state.__name__, pertubation_lam_state)
-pertubation_lam_state.__module__ = "__main__"
+setattr(__main__, pertubation_lam_state_nonbonded.__name__, pertubation_lam_state_nonbonded)
+pertubation_lam_state_nonbonded.__module__ = "__main__"
+
+
 
 class atom_eds_pertubation_state(_generic_field):
     state_format_pattern = " {:>3} {:>10.5f}"
@@ -66,7 +68,7 @@ class atom_eds_pertubation_state(_generic_field):
 class atom_lam_pertubation_state(_generic_field):
     state_format_pattern = " {:>5} {:>5} {:>10.5f}"
 
-    def __init__(self, NR:int, RES:int, NAME:str, STATES:Dict[int, pertubation_lam_state], ALPHLJ:float=1.0, ALPHCRF:float=1.0):
+    def __init__(self, NR:int, RES:int, NAME:str, STATES:Dict[int, pertubation_lam_state_nonbonded], ALPHLJ:float=1.0, ALPHCRF:float=1.0):
         self.NR = int(NR)
         self.RES = int(RES)
         self.NAME = NAME
@@ -78,6 +80,23 @@ class atom_lam_pertubation_state(_generic_field):
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x].IAC),float(self.STATES[x].MASS), float(self.STATES[x].CHARGE)) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5} {:>5}"+state_str+" {:10.5f} {:10.5f}\n"
         return format_str.format(self.NR, self.RES,  self.NAME, self.ALPHLJ, self.ALPHCRF)
+
+class atom_lam_pertubation_state_dihedral(_generic_field):
+    state_format_pattern = " {:>5}"
+
+    def __init__(self, NR: int, atomI: int, atomJ: int, atomK: int, atomL: int, STATES: Dict[int, int]):
+        self.NR = int(NR)
+        self.atomi = atomI
+        self.atomj = atomJ
+        self.atomk = atomK
+        self.atoml = atomL
+        self.STATES = STATES
+
+    def to_string(self):
+        state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
+        format_str = "{:>5} {:>5} {:>5} {:>5}"+state_str+"\n"
+        return format_str.format(self.atomi,  self.atomj, self.atomk, self.atoml)
+
 
 class atom_pair_distanceRes(_generic_field):
     def __init__(self, i1: int, j1: int, k1: int, l1: int, type1: (geometric_code or int),
@@ -938,9 +957,9 @@ class PERTATOMPARAM(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     final_state_line = {key: state_line[key] for key in state_line if
                                         (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
-                    states = {x: pertubation_lam_state(IAC=int(round(float(state_line["IAC" + str(x)]))),
-                                                          MASS=float(state_line["MASS" + str(x)]),
-                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
+                    states = {x: pertubation_lam_state_nonbonded(IAC=int(round(float(state_line["IAC" + str(x)]))),
+                                                                 MASS=float(state_line["MASS" + str(x)]),
+                                                                 CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
 
                     final_state_line.update({"STATES":states})
                     STATEATOMS.append(atom_lam_pertubation_state(**final_state_line))
@@ -983,7 +1002,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         """
 
         #some preperations:
-        pre_dummy_state = lambda atomMass: pertubation_lam_state(IAC=self.dummy_IAC, MASS=atomMass,CHARGE=self.dummy_CHARGE)
+        pre_dummy_state = lambda atomMass: pertubation_lam_state_nonbonded(IAC=self.dummy_IAC, MASS=atomMass, CHARGE=self.dummy_CHARGE)
         insert_id = self.STATEATOMHEADER.index("ALPHLJ")
 
         #find all new states
@@ -1138,6 +1157,112 @@ class PERTATOMPARAM(_generic_gromos_block):
         result += "END"+self.line_seperator
         return result
 
+class PERTPROPERDIH(_generic_gromos_block):
+    def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_dihedral]=None,
+                 STATEATOMHEADER: Tuple[str]= None,
+                 NPD: int=None,
+                 dummy_DIH = 22, content:List[str]=None):
+        self.NPTB = 2
+        self.dummy_DIH = dummy_DIH
+
+        if(content is None):
+            if(STATEATOMHEADER is None):
+                self.STATEATOMHEADER = ["atomI", "atomJ", "atomK", "atomL", "type1", "type2"]
+            else:
+                self.STATEATOMHEADER = STATEATOMHEADER
+
+
+            if(STATEATOMS is None):
+                self.STATEATOMS = []
+            else:
+                self.STATEATOMS = []
+                self.NPD = 0
+
+                #self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__)
+        else:
+            super().__init__(used=True, name=__class__.__name__, content=content)
+
+        # You can check yourself :)
+        if(not NPD is None and not len(STATEATOMS)==NPD):
+            raise ValueError("NJLA must be equal to the length of STATEATOMS! NJLA="+str(NPD)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
+
+    @property
+    def nStates(self)->int:
+        return self.NPTB
+
+    @property
+    def nTotalStateAtoms(self)->int:
+        return self.NPD
+
+    @property
+    def states(self)->dict:
+        return {self.STATEIDENTIFIERS[state-1]: {atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)} for state in range(1, self.NPTB+1)}
+
+
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        NPD = None
+        STATEIDENTIFIERS = None
+        STATEATOMHEADER = None
+        STATEATOMS = []
+        first = True
+        stdid = False
+        i=1
+        for line in content:
+            if ("#" in line):
+                comment = line
+                if("state_identifiers" in line):
+                    stdid=True
+                elif(stdid):
+                    STATEIDENTIFIERS = line.replace("#", "").split()
+                    stdid=False
+                continue
+            else:
+                if (field > 0):
+                    if(first):
+                        STATEATOMHEADER = ["atomI",  "atomJ", "atomK", "atomL", "type1", "type2"]
+                        first = False
+
+                    print(STATEATOMHEADER, line.split())
+                    state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
+                    state_line.update({"NR":len(STATEATOMS)+1})
+
+                    print(state_line)
+
+
+
+                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    states = {1: state_line["type1"],
+                              2: state_line["type2"]}
+
+                    final_state_line.update({"STATES":states})
+                    STATEATOMS.append(atom_lam_pertubation_state_dihedral(**final_state_line))
+
+                elif (field == 0):
+                    NPD = int(line.strip())
+                field += 1
+
+        self.NPD = NPD
+        self.STATEIDENTIFIERS = STATEIDENTIFIERS
+        self.STATEATOMHEADER = STATEATOMHEADER
+        self.STATEATOMS = STATEATOMS
+
+    """
+    STR FUNCTIONS
+    """
+    def _state_STATEATOMHEADER_str(self):
+        state_format_pattern = "{:>5} {:>5} {:>5} {:>5}"+"".join([" {:>5} "for x in range(self.NPTB)])+""
+        return state_format_pattern.format(*self.STATEATOMHEADER)
+
+    def block_to_string(self) -> str:
+        result = self.name + self.line_seperator
+        result += "# NPD " + self.field_seperator + "NPTB = " + self.field_seperator + str(self.NPTB) + self.field_seperator+ self.line_seperator
+        result += self.field_seperator + str(self.NPD)+self.line_seperator
+        result += "# " + self._state_STATEATOMHEADER_str() + self.line_seperator
+        result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
+        result += "END"+self.line_seperator
+        return result
 
 
 
