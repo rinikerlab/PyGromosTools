@@ -1224,13 +1224,8 @@ class PERTPROPERDIH(_generic_gromos_block):
                         STATEATOMHEADER = ["atomI",  "atomJ", "atomK", "atomL", "type1", "type2"]
                         first = False
 
-                    print(STATEATOMHEADER, line.split())
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR":len(STATEATOMS)+1})
-
-                    print(state_line)
-
-
 
                     final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
                     states = {1: state_line["type1"],
@@ -1331,13 +1326,8 @@ class PERTPROPERDIH(_generic_gromos_block):
                         STATEATOMHEADER = ["atomI",  "atomJ", "atomK", "atomL", "type1", "type2"]
                         first = False
 
-                    print(STATEATOMHEADER, line.split())
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR":len(STATEATOMS)+1})
-
-                    print(state_line)
-
-
 
                     final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
                     states = {1: state_line["type1"],

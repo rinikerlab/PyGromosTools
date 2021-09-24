@@ -22,10 +22,8 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
     def read_blocks(self):
         #parse file into dicts
         data = parser.read_ptp(self.path)
-        print(data.keys())
 
         for key in data:
-            print(key)
             self.add_block(block=data[key])
 
 
