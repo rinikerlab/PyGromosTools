@@ -3,7 +3,7 @@ import numpy as np
 import tempfile
 import os
 from itertools import combinations
-from pygromos.files.blocks.topology_blocks import atom_eds_pertubation_state, pertubation_eds_state
+from pygromos.files.blocks.pertubation_blocks import pertubation_eds_state, atom_eds_pertubation_state
 from pygromos.files.topology.ptp import Pertubation_topology as ptp
 from pygromos.tests.test_files.general_file_functions import general_file_tests
 
@@ -62,7 +62,8 @@ class test_ptp(general_file_tests):
         ptp.write(outpath_less_atom)
 
     def test_new_eds_ptp_from_scratch(self):
-        from pygromos.files.blocks.topology_blocks import atom_eds_pertubation_state, pertubation_eds_state, MPERTATOM
+        from pygromos.files.blocks.topology_blocks import atom_eds_pertubation_state, pertubation_eds_state
+        from pygromos.files.blocks.pertubation_blocks import MPERTATOM
         ptp = self.class_type()
         on_state = pertubation_eds_state(IAC=16, CHARGE=-1.0)
 

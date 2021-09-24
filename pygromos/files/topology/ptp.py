@@ -1,7 +1,8 @@
 import warnings
 
+import pygromos.files.blocks.pertubation_blocks
 from pygromos.files._basics import _general_gromos_file, parser
-from pygromos.files.blocks import topology_blocks as blocks
+from pygromos.files.blocks import pertubation_blocks as blocks
 
 
 class Pertubation_topology(_general_gromos_file._general_gromos_file):
@@ -10,7 +11,7 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", ]
     TITLE: blocks.TITLE
     MPERATOM: blocks.MPERTATOM
-    PERTATOMPARAM:blocks.PERTATOMPARAM
+    PERTATOMPARAM: blocks.PERTATOMPARAM
     PERTPROPERDIH: blocks.PERTPROPERDIH
 
     gromos_file_ending:str = "ptp"
