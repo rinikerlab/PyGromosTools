@@ -610,7 +610,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         result += "END"+self.line_seperator
         return result
 
-class : PERTBONDSTRETCH(_generic_gromos_block):
+class PERTBONDSTRETCH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_bond]=None,
                  STATEATOMHEADER: Tuple[str]= None,
                  NPB: int=None,
@@ -712,7 +712,7 @@ class : PERTBONDSTRETCH(_generic_gromos_block):
         result += "END"+self.line_seperator
         return result
 
-class : PERTBONDSTRETCHH(_generic_gromos_block):
+class PERTBONDSTRETCHH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_bond]=None,
                  STATEATOMHEADER: Tuple[str]= None,
                  NPB: int=None,
