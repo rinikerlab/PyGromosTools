@@ -16,6 +16,8 @@ amino_acid:namedtuple = namedtuple("amino_acid", ["name", "oneLetter", "threeLet
 Alanine=amino_acid(name="alanine", oneLetter="A", threeLetter="ALA", numUnitedAtoms=6, numFullAtomistic=None)
 
 Cystein=amino_acid(name="cystein", oneLetter="C", threeLetter="CYSH", numUnitedAtoms=8, numFullAtomistic=None)
+Cystein_sulf1=amino_acid(name="cystein", oneLetter="C", threeLetter="CYS1", numUnitedAtoms=8, numFullAtomistic=None)
+Cystein_sulf2=amino_acid(name="cystein", oneLetter="C", threeLetter="CYS2", numUnitedAtoms=8, numFullAtomistic=None)
 
 AsparticAcid=amino_acid(name="aspartic acid", oneLetter="D", threeLetter="ASP", numUnitedAtoms=9, numFullAtomistic=None)
 
@@ -28,7 +30,7 @@ Glycine=amino_acid(name="glycine", oneLetter="G", threeLetter="GLY", numUnitedAt
 Histidine_Neutral=amino_acid(name="histidine", oneLetter="H", threeLetter="HIS", numUnitedAtoms=10, numFullAtomistic=None)
 Histidine_HID=amino_acid(name="histidine_HID", oneLetter="H", threeLetter="HISA", numUnitedAtoms=13, numFullAtomistic=None)
 Histidine_HIE=amino_acid(name="histidine_HIE", oneLetter="H", threeLetter="HISB", numUnitedAtoms=14, numFullAtomistic=None)
-Histidine_positive=amino_acid(name="histidine_positive", oneLetter="H", threeLetter="HISP", numUnitedAtoms=15, numFullAtomistic=None)
+Histidine_positive=amino_acid(name="histidine_positive", oneLetter="H", threeLetter="HISH", numUnitedAtoms=15, numFullAtomistic=None)
 
 Isoleucine=amino_acid(name="isoleucine", oneLetter="I", threeLetter="ILE", numUnitedAtoms=9, numFullAtomistic=None)
 
@@ -59,7 +61,7 @@ Tyrosine=amino_acid(name="tyrosine", oneLetter="Y", threeLetter="TYR", numUnited
 
 
 #Add new amino Acid into set. rest automatic
-aa_set = {Alanine, Cystein, AsparticAcid, GlutamicAcid, Phenylalanine, Glycine, Histidine_Neutral, Isoleucine, Lysine, Leucine, Methionine, Asparagine, Proline, Glutamine, Arginine, Serine, Threonine, Valine, Tryptophane, Tyrosine, Lysine_positive,Histidine_HIE, Histidine_HID, Histidine_positive}
+aa_set = {Alanine, Cystein, AsparticAcid, GlutamicAcid, Phenylalanine, Glycine, Histidine_Neutral, Isoleucine, Lysine, Leucine, Methionine, Asparagine, Proline, Glutamine, Arginine, Serine, Threonine, Valine, Tryptophane, Tyrosine, Lysine_positive,Histidine_HIE, Histidine_HID, Histidine_positive, Cystein_sulf1, Cystein_sulf2}
 
 #nici
 #automatic lib gen
