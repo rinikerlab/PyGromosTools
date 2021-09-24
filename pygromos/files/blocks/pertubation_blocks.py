@@ -354,7 +354,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                  NJLA: int=None, STATEIDENTIFIERS=None,
                  dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
 
-
+        self.NJLA=0
         self.NPTB = 2
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
