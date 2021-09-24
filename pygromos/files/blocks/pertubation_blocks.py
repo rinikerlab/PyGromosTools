@@ -67,6 +67,35 @@ class atom_lam_pertubation_state(_generic_field):
         format_str = "{:>5} {:>5} {:>5}"+state_str+" {:10.5f} {:10.5f}\n"
         return format_str.format(self.NR, self.RES,  self.NAME, self.ALPHLJ, self.ALPHCRF)
 
+class atom_lam_pertubation_state_bond(_generic_field):
+    state_format_pattern = " {:>5}"
+
+    def __init__(self, NR: int, atomI: int, atomJ: int, STATES: Dict[int, int]):
+        self.NR = int(NR)
+        self.atomi = atomI
+        self.atomj = atomJ
+        self.STATES = STATES
+
+    def to_string(self):
+        state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
+        format_str = "{:>5} {:>5}"+state_str+"\n"
+        return format_str.format(self.atomi,  self.atomj)
+
+class atom_lam_pertubation_state_angle(_generic_field):
+    state_format_pattern = " {:>5}"
+
+    def __init__(self, NR: int, atomI: int, atomJ: int, atomK: int, STATES: Dict[int, int]):
+        self.NR = int(NR)
+        self.atomi = atomI
+        self.atomj = atomJ
+        self.atomk = atomK
+        self.STATES = STATES
+
+    def to_string(self):
+        state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
+        format_str = "{:>5} {:>5} {:>5}"+state_str+"\n"
+        return format_str.format(self.atomi,  self.atomj, self.atomk)
+
 
 class atom_lam_pertubation_state_dihedral(_generic_field):
     state_format_pattern = " {:>5}"
