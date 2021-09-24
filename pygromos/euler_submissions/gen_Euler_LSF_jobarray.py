@@ -96,7 +96,19 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     in_cnf=in_system.coordinates
     in_top = in_system.top.top_path
     in_ptp = in_system.top.pertubation_path
-    in_disres = in_system.top.disres_path
+
+    if(not in_system.top.disres_path is None):
+        in_disres = in_system.top.disres_path
+        rest_text = "DISRES=" + in_disres +"\n"
+        gromos_res = "        @distrest    ${DISRES}"
+
+    else:
+        in_posres = in_system.top.in_posres
+        in_refpos = in_system.top.in_refpos
+        
+        rest_text = "POSRES="+in_posres+"\nREFPOS="+in_refpos+"\n"
+        gromos_res  = "        @posresspec    ${POSRES}\\\n"
+        gromos_res += "        @refpos    ${REFPOS}"
 
     if(gromosXX_bin== None):
         gromosXX_bin="md_mpi"
@@ -123,7 +135,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
 
     "#INPUT FILES\n"
     "TOPO=" + in_top +"\n"
-    "DISRES=" + in_disres +"\n"
+    ""+rest_text+"\n"
     "PTTOPO=" + in_ptp +"\n"
     "INIMD=" + in_imd +"_${RUNID}.imd\n"
     "INPUTCRD=" + in_cnf +"\n"
@@ -149,7 +161,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "        @conf        ${INPUTCRD} \\\n"
     "        @input       ${INIMD} \\\n"
     "        @pttopo      ${PTTOPO} \\\n"
-    "        @distrest    ${DISRES} \\\n"
+    ""+gromos_res+"\\\n"
     "        @fin         ${TMPOUTPREFIXEQ}.cnf \\\n"
     "        @trc         ${TMPOUTPREFIXEQ}.trc \\\n"
     "        @tre         ${TMPOUTPREFIXEQ}.tre \\\n"
