@@ -391,6 +391,8 @@ class PERTATOMPARAM(_generic_gromos_block):
         if(content is None):
             if(STATEATOMHEADER is None):
                 self.STATEATOMHEADER = ["NR", "RES",   "NAME",]
+                for s in range(self.NPTB):
+                    self.STATEATOMHEADER += ["IAC", "MASS",   "CHARGE",]
                 self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
             else:
                 self.STATEATOMHEADER = STATEATOMHEADER
