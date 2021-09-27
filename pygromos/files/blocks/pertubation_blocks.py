@@ -1371,7 +1371,7 @@ class PERTPROPERDIHH(_generic_gromos_block):
 
 ### IMPROPER
 
-class PERTPIMROPERDIH(_generic_gromos_block):
+class PERTIMROPERDIH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_dihedral]=None,
                  STATEATOMHEADER: Tuple[str]= None,
                  NPD: int=None,
@@ -1474,7 +1474,7 @@ class PERTPIMROPERDIH(_generic_gromos_block):
         return result
 
 
-class PERTPIMROPERDIHH(_generic_gromos_block):
+class PERTIMROPERDIHH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_dihedral]=None,
                  STATEATOMHEADER: Tuple[str]= None,
                  NPD: int=None,
