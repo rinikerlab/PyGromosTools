@@ -116,6 +116,7 @@ class atom_lam_pertubation_state_dihedral(_generic_field):
 """
     BLOCKS
 """
+### NONBONDED
 
 class MPERTATOM(_generic_gromos_block):
     def __init__(self, NJLA: int=None, NPTB: int=None, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: Tuple[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_eds_pertubation_state]=[],
@@ -641,6 +642,8 @@ class PERTATOMPARAM(_generic_gromos_block):
         result += "END"+self.line_seperator
         return result
 
+### BONDED
+
 class PERTBONDSTRETCH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_bond]=None,
                  STATEATOMHEADER: Tuple[str]= None,
@@ -743,6 +746,7 @@ class PERTBONDSTRETCH(_generic_gromos_block):
         result += "END"+self.line_seperator
         return result
 
+
 class PERTBONDSTRETCHH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_bond]=None,
                  STATEATOMHEADER: Tuple[str]= None,
@@ -844,6 +848,8 @@ class PERTBONDSTRETCHH(_generic_gromos_block):
         result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
         result += "END"+self.line_seperator
         return result
+
+### ANGLE
 
 class PERTBONDANGLE(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_angle]=None,
@@ -1050,6 +1056,7 @@ class PERTBONDANGLEH(_generic_gromos_block):
         result += "END"+self.line_seperator
         return result
 
+### DIHEDRAL
 
 class PERTPROPERDIH(_generic_gromos_block):
     def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_dihedral]=None,
@@ -1361,4 +1368,211 @@ class PERTPROPERDIHH(_generic_gromos_block):
             result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
             result += "END" + self.line_seperator
             return result
+
+### IMPROPER
+
+class PERTPIMROPERDIH(_generic_gromos_block):
+    def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_dihedral]=None,
+                 STATEATOMHEADER: Tuple[str]= None,
+                 NPD: int=None,
+                 dummy_IMP = 22, content:List[str]=None):
+        self.NPTB = 2
+        self.dummy_DIH = dummy_IMP
+
+        if(content is None):
+            if(STATEATOMHEADER is None):
+                self.STATEATOMHEADER = ["atomI", "atomJ", "atomK", "atomL", "type1", "type2"]
+            else:
+                self.STATEATOMHEADER = STATEATOMHEADER
+
+
+            if(STATEATOMS is None):
+                self.STATEATOMS = []
+            else:
+                self.STATEATOMS = []
+                self.NPD = 0
+
+                #self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__)
+        else:
+            super().__init__(used=True, name=__class__.__name__, content=content)
+
+        # You can check yourself :)
+        if(not NPD is None and not len(STATEATOMS)==NPD):
+            raise ValueError("NPD must be equal to the length of STATEATOMS! NPD="+str(NPD)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
+
+    @property
+    def nStates(self)->int:
+        return self.NPTB
+
+    @property
+    def nTotalStateAtoms(self)->int:
+        return self.NPD
+
+    @property
+    def states(self)->dict:
+        return {self.STATEIDENTIFIERS[state-1]: {atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)} for state in range(1, self.NPTB+1)}
+
+
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        NPD = None
+        STATEIDENTIFIERS = None
+        STATEATOMHEADER = None
+        STATEATOMS = []
+        first = True
+        stdid = False
+        i=1
+        for line in content:
+            if ("#" in line):
+                comment = line
+                if("state_identifiers" in line):
+                    stdid=True
+                elif(stdid):
+                    STATEIDENTIFIERS = line.replace("#", "").split()
+                    stdid=False
+                continue
+            else:
+                if (field > 0):
+                    if(first):
+                        STATEATOMHEADER = ["atomI",  "atomJ", "atomK", "atomL", "type1", "type2"]
+                        first = False
+
+                    state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
+                    state_line.update({"NR":len(STATEATOMS)+1})
+
+                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    states = {1: state_line["type1"],
+                              2: state_line["type2"]}
+
+                    final_state_line.update({"STATES":states})
+                    STATEATOMS.append(atom_lam_pertubation_state_dihedral(**final_state_line))
+
+                elif (field == 0):
+                    NPD = int(line.strip())
+                field += 1
+
+        self.NPD = NPD
+        self.STATEIDENTIFIERS = STATEIDENTIFIERS
+        self.STATEATOMHEADER = STATEATOMHEADER
+        self.STATEATOMS = STATEATOMS
+
+    """
+    STR FUNCTIONS
+    """
+    def _state_STATEATOMHEADER_str(self):
+        state_format_pattern = "{:>5} {:>5} {:>5} {:>5}"+"".join([" {:>5} "for x in range(self.NPTB)])+""
+        return state_format_pattern.format(*self.STATEATOMHEADER)
+
+    def block_to_string(self) -> str:
+        result = self.name + self.line_seperator
+        result += "# NPD " + self.field_seperator + "NPTB = " + self.field_seperator + str(self.NPTB) + self.field_seperator+ self.line_seperator
+        result += self.field_seperator + str(self.NPD)+self.line_seperator
+        result += "# " + self._state_STATEATOMHEADER_str() + self.line_seperator
+        result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
+        result += "END"+self.line_seperator
+        return result
+
+
+class PERTPIMROPERDIHH(_generic_gromos_block):
+    def __init__(self, STATEATOMS:List[atom_lam_pertubation_state_dihedral]=None,
+                 STATEATOMHEADER: Tuple[str]= None,
+                 NPD: int=None,
+                 dummy_IMP = 22, content:List[str]=None):
+        self.NPTB = 2
+        self.dummy_DIH = dummy_IMP
+
+        if(content is None):
+            if(STATEATOMHEADER is None):
+                self.STATEATOMHEADER = ["atomI", "atomJ", "atomK", "atomL", "type1", "type2"]
+            else:
+                self.STATEATOMHEADER = STATEATOMHEADER
+
+
+            if(STATEATOMS is None):
+                self.STATEATOMS = []
+            else:
+                self.STATEATOMS = []
+                self.NPD = 0
+
+                #self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__)
+        else:
+            super().__init__(used=True, name=__class__.__name__, content=content)
+
+        # You can check yourself :)
+        if(not NPD is None and not len(STATEATOMS)==NPD):
+            raise ValueError("NPD must be equal to the length of STATEATOMS! NPD="+str(NPD)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
+
+    @property
+    def nStates(self)->int:
+        return self.NPTB
+
+    @property
+    def nTotalStateAtoms(self)->int:
+        return self.NPD
+
+    @property
+    def states(self)->dict:
+        return {self.STATEIDENTIFIERS[state-1]: {atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)} for state in range(1, self.NPTB+1)}
+
+
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        NPD = None
+        STATEIDENTIFIERS = None
+        STATEATOMHEADER = None
+        STATEATOMS = []
+        first = True
+        stdid = False
+        i=1
+        for line in content:
+            if ("#" in line):
+                comment = line
+                if("state_identifiers" in line):
+                    stdid=True
+                elif(stdid):
+                    STATEIDENTIFIERS = line.replace("#", "").split()
+                    stdid=False
+                continue
+            else:
+                if (field > 0):
+                    if(first):
+                        STATEATOMHEADER = ["atomI",  "atomJ", "atomK", "atomL", "type1", "type2"]
+                        first = False
+
+                    state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
+                    state_line.update({"NR":len(STATEATOMS)+1})
+
+                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    states = {1: state_line["type1"],
+                              2: state_line["type2"]}
+
+                    final_state_line.update({"STATES":states})
+                    STATEATOMS.append(atom_lam_pertubation_state_dihedral(**final_state_line))
+
+                elif (field == 0):
+                    NPD = int(line.strip())
+                field += 1
+
+        self.NPD = NPD
+        self.STATEIDENTIFIERS = STATEIDENTIFIERS
+        self.STATEATOMHEADER = STATEATOMHEADER
+        self.STATEATOMS = STATEATOMS
+
+    """
+    STR FUNCTIONS
+    """
+    def _state_STATEATOMHEADER_str(self):
+        state_format_pattern = "{:>5} {:>5} {:>5} {:>5}"+"".join([" {:>5} "for x in range(self.NPTB)])+""
+        return state_format_pattern.format(*self.STATEATOMHEADER)
+
+    def block_to_string(self) -> str:
+        result = self.name + self.line_seperator
+        result += "# NPD " + self.field_seperator + "NPTB = " + self.field_seperator + str(self.NPTB) + self.field_seperator+ self.line_seperator
+        result += self.field_seperator + str(self.NPD)+self.line_seperator
+        result += "# " + self._state_STATEATOMHEADER_str() + self.line_seperator
+        result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
+        result += "END"+self.line_seperator
+        return result
 
