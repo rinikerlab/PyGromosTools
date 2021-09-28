@@ -72,29 +72,29 @@ class atom_lam_pertubation_state_bond(_generic_field):
 
     def __init__(self, NR: int, atomI: int, atomJ: int, STATES: Dict[int, int]):
         self.NR = int(NR)
-        self.atomi = atomI
-        self.atomj = atomJ
+        self.atomI = atomI
+        self.atomJ = atomJ
         self.STATES = STATES
 
     def to_string(self):
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5}"+state_str+"\n"
-        return format_str.format(self.atomi,  self.atomj)
+        return format_str.format(self.atomI, self.atomJ)
 
 class atom_lam_pertubation_state_angle(_generic_field):
     state_format_pattern = " {:>5}"
 
     def __init__(self, NR: int, atomI: int, atomJ: int, atomK: int, STATES: Dict[int, int]):
         self.NR = int(NR)
-        self.atomi = atomI
-        self.atomj = atomJ
-        self.atomk = atomK
+        self.atomI = atomI
+        self.atomJ = atomJ
+        self.atomK = atomK
         self.STATES = STATES
 
     def to_string(self):
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5} {:>5}"+state_str+"\n"
-        return format_str.format(self.atomi,  self.atomj, self.atomk)
+        return format_str.format(self.atomI,  self.atomJ, self.atomK)
 
 
 class atom_lam_pertubation_state_dihedral(_generic_field):
@@ -102,16 +102,16 @@ class atom_lam_pertubation_state_dihedral(_generic_field):
 
     def __init__(self, NR: int, atomI: int, atomJ: int, atomK: int, atomL: int, STATES: Dict[int, int]):
         self.NR = int(NR)
-        self.atomi = atomI
-        self.atomj = atomJ
-        self.atomk = atomK
-        self.atoml = atomL
+        self.atomI = atomI
+        self.atomJ = atomJ
+        self.atomK = atomK
+        self.atomL = atomL
         self.STATES = STATES
 
     def to_string(self):
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5} {:>5} {:>5}"+state_str+"\n"
-        return format_str.format(self.atomi,  self.atomj, self.atomk, self.atoml)
+        return format_str.format(self.atomI,  self.atomJ, self.atomK, self.atomL)
 
 """
     BLOCKS
@@ -926,7 +926,7 @@ class PERTBONDANGLE(_generic_gromos_block):
                               2: state_line["type2"]}
 
                     final_state_line.update({"STATES":states})
-                    STATEATOMS.append(atom_lam_pertubation_state_dihedral(**final_state_line))
+                    STATEATOMS.append(atom_lam_pertubation_state_angle(**final_state_line))
 
                 elif (field == 0):
                     NPA = int(line.strip())
@@ -1029,7 +1029,7 @@ class PERTBONDANGLEH(_generic_gromos_block):
                               2: state_line["type2"]}
 
                     final_state_line.update({"STATES":states})
-                    STATEATOMS.append(atom_lam_pertubation_state_dihedral(**final_state_line))
+                    STATEATOMS.append(atom_lam_pertubation_state_angle(**final_state_line))
 
                 elif (field == 0):
                     NPA = int(line.strip())

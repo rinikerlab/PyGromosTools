@@ -1799,7 +1799,9 @@ class _topology_table_block(_iterable_topology_block):
                     # pre parse all non-empty non-comment lines into a list of strings
                     fields = table_line.strip().split()
                     if(len(fields) != len(parameter_name)):
-                        raise Exception("Fields are not matching the ammount of needed arguments!\n #fileds: " + str(len(fields)) + "\t#args: " + str(len(parameter_name)))
+                        raise Exception("Fields are not matching the ammount of needed arguments!\n "
+                                        "#fileds: " + str(len(fields)) + "\t#args: " + str(len(parameter_name))+"\n\n "
+                                        "require: "+str(parameter_name)+"\t got: "+str(fields))
                     #generate arguments dict for line parsing (= table_line_type class construction)
                     kwargs={key: parameter_type[key](field) for key, field in zip(parameter_name, fields)}
                     self.content.append(self.table_line_type(**kwargs))
@@ -2187,8 +2189,10 @@ class IMPDIHEDRALTYPE(_topology_table_block):
         """
         kwargs = {"NQTY" : NQTY}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NQTY: number of improper dihedrals" + self.line_seperator
