@@ -3066,19 +3066,19 @@ class LJPARAMETERS(_topology_table_block):
         return result
 
 
-class SOLUTEMOLECULES(_topology_block):#TODO: implement correctly if needed
+class SOLUTEMOLECULES(_topology_block):
     def __init__(self, content:(str or dict or None or __class__),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-class TEMPERATUREGROUPS(_topology_block):#TODO: implement correctly if needed
+class TEMPERATUREGROUPS(_topology_block):
     def __init__(self, content:(str or dict or None or __class__),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-class PRESSUREGROUPS(_topology_block):#TODO: implement correctly if needed
+class PRESSUREGROUPS(_topology_block):
     def __init__(self, content:(str or dict or None or __class__),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
