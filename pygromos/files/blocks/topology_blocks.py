@@ -1930,6 +1930,28 @@ class bondstretchtype_type(_generic_field):
         str_line = "\t" +  "{:.5e}".format(self.CB) + "\t" + "{:.5e}".format(self.CHB) + "\t" + "{:.5e}".format(self.B0) +"\n"
         return str_line
 
+class bondanglebendtype_type(_generic_field):
+    def __init__(self, CT: float, CHT:float, T0: float):
+        """
+               GROMOS bondanglebendtype for a single angle
+
+        Parameters
+        ----------
+        CT: float
+            quartic force constant
+        CHT: float
+            harmonic force constant
+        T0: float
+            angle at minimum energy
+        """
+        self.CT = CT
+        self.CHT = CHT
+        self.T0 = T0
+
+    def to_string(self):
+        str_line = "\t" +  "{:.5e}".format(self.CT) + "\t" + "{:.5e}".format(self.CHT) + "\t" + "{:.5e}".format(self.T0) +"\n"
+        return str_line
+
 
 class top_bond_type(_generic_field):
     def __init__(self, IB: int, JB: int, ICB: int):
@@ -2642,9 +2664,9 @@ class BONDH(_topology_table_block):
 class BONDANGLEBENDTYPE(_topology_table_block):
     NBTY: int
     table_header: Iterable[str] = ["CT", "CHT", "T0"]
-    table_line_type = bondstretchtype_type #TODO: make own data type
+    table_line_type = bondanglebendtype_type
 
-    def __init__(self, content: Union[Iterable[bondstretchtype_type], str],
+    def __init__(self, content: Union[Iterable[bondanglebendtype_type], str],
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None,
                  NBTY = None):
@@ -2653,7 +2675,7 @@ class BONDANGLEBENDTYPE(_topology_table_block):
 
         Parameters
         ----------
-        content: Union[Iterable[bondstretchtype_type], str]
+        content: Union[Iterable[bondanglebendtype_type], str]
         FORCEFIELD : FORCEFIELD
         MAKETOPVERSION : MAKETOPVERSION
         NBTY : int, optional
@@ -3044,19 +3066,19 @@ class LJPARAMETERS(_topology_table_block):
         return result
 
 
-class SOLUTEMOLECULES(_topology_block):#TODO: implement correctly if needed
+class SOLUTEMOLECULES(_topology_block):
     def __init__(self, content:(str or dict or None or __class__),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-class TEMPERATUREGROUPS(_topology_block):#TODO: implement correctly if needed
+class TEMPERATUREGROUPS(_topology_block):
     def __init__(self, content:(str or dict or None or __class__),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-class PRESSUREGROUPS(_topology_block):#TODO: implement correctly if needed
+class PRESSUREGROUPS(_topology_block):
     def __init__(self, content:(str or dict or None or __class__),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
