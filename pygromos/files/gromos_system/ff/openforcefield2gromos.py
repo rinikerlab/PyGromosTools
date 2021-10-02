@@ -13,10 +13,10 @@ from pygromos.files.topology.top import Top
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 
-if(importlib.util.find_spec("openforcefield") == None):
+if(importlib.util.find_spec("openff") == None):
     raise ImportError("openforcefield2gromos is not enabled without openFF toolkit package! Please install openFF toolkit.")
 else:
-    from openforcefield.topology import Molecule, Topology
+    from openff.toolkit.topology import Molecule, Topology
     #from openforcefield.typing.engines import smirnoff
     #from openforcefield.typing.engines.smirnoff import forcefield
 

@@ -38,8 +38,8 @@ if (importlib.util.find_spec("rdkit") != None):
 else:
     has_rdkit = False
 
-if (importlib.util.find_spec("openforcefield") != None):
-    from openforcefield.topology import Molecule
+if (importlib.util.find_spec("openff") != None):
+    from openff.toolkit.topology import Molecule
     from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
     from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
 
