@@ -16,7 +16,7 @@ dependencies:
   - tqdm
   - ipywidgets
   #science
-  - openforcefield = 0.10.0
+  - openff-toolkit = 0.10.0
   - pandas
   - pytables
   - numpy
