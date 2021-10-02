@@ -2,7 +2,6 @@ name: test
 channels:
   - rdkit
   - conda-forge
-  - omnia
   - defaults
 dependencies:
   # Base depends
@@ -17,7 +16,7 @@ dependencies:
   - tqdm
   - ipywidgets
   #science
-  - openforcefield = 0.8.3
+  - openforcefield
   - pandas
   - pytables
   - numpy
