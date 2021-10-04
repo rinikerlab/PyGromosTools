@@ -21,7 +21,7 @@ from pygromos.data.ff import Gromos2016H66
 from pygromos.data.ff import Gromos54A7
 
 if (importlib.util.find_spec("openforcefield") != None):
-    from openforcefield.typing.engines import smirnoff
+    from openff.toolkit.typing.engines import smirnoff
     has_openff = True
 else:
     has_openff = False
