@@ -23,7 +23,7 @@ else:
 from pygromos.data import topology_templates
 import os
 import collections
-from simtk.unit import *
+from simtk import unit as u
 
 class openforcefield2gromos():
     def __init__(self, openFFmolecule:Molecule, gromosTop:Top=None, forcefield:forcefield_system=None):
@@ -91,8 +91,8 @@ class openforcefield2gromos():
                 hQ =  not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])
                 atomI = key[0]+1
                 atomJ = key[1]+1
-                k = force.k.value_in_unit(kilojoule / (mole * nanometer ** 2))
-                b0 = force.length.value_in_unit(nanometer)
+                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.nanometer ** 2))
+                b0 = force.length.value_in_unit(u.nanometer)
                 self.gromosTop.add_new_bond(k=k, b0=b0, atomI=atomI, atomJ=atomJ, includesH=False) #hQ
         if not hasattr(self.gromosTop, "BONDSTRETCHTYPE"):
             self.gromosTop.add_block(blocktitle="BONDSTRETCHTYPE", content=[])
@@ -109,9 +109,9 @@ class openforcefield2gromos():
                 atomI=key[0]+1
                 atomJ=key[1]+1
                 atomK=key[2]+1
-                k = force.k.value_in_unit(kilojoule / (mole * radian ** 2))
-                kh = force.k.value_in_unit(kilojoule / (mole * degree ** 2))
-                b0 = force.angle.value_in_unit(degree)
+                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.radian ** 2))
+                kh = force.k.value_in_unit(u.kilojoule / (u.mole * u.degree ** 2))
+                b0 = force.angle.value_in_unit(u.degree)
                 self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=False) #hQ
         if not hasattr(self.gromosTop, "BONDANGLEBENDTYPE"):
             self.gromosTop.add_block(blocktitle="BONDANGLEBENDTYPE", content=[])
@@ -133,8 +133,8 @@ class openforcefield2gromos():
                 phase_list = force.phase
                 per_list = force.periodicity
                 for t in range(len(k_list)):
-                    CP=k_list[t].value_in_unit(kilojoule/mole)
-                    PD=phase_list[t].value_in_unit(degree)
+                    CP=k_list[t].value_in_unit(u.kilojoule/u.mole)
+                    PD=phase_list[t].value_in_unit(u.degree)
                     NP=per_list[t]
                     # convert negativ CP by phase shifting
                     if CP < 0:
@@ -161,8 +161,8 @@ class openforcefield2gromos():
                 phase_list = force.phase
                 per_list = force.periodicity
                 for t in range(len(k_list)):
-                    CP=k_list[t].value_in_unit(kilojoule/mole)
-                    PD=phase_list[t].value_in_unit(degree)
+                    CP=k_list[t].value_in_unit(u.kilojoule/u.mole)
+                    PD=phase_list[t].value_in_unit(u.degree)
                     NP=per_list[t]
                     self.gromosTop.add_new_torsiondihedral(CP=CP, PD=PD, NP=NP, atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL, includesH=False) #hQ
         if not hasattr(self.gromosTop, "IMPDIHEDRALTYPE"):
@@ -299,7 +299,7 @@ class openforcefield2gromos():
                 panm_dict[element_symbol] += 1
                 PANM = element_symbol + str(panm_dict[element_symbol])
                 IAC = 0
-                MASS = self.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(dalton)
+                MASS = self.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(u.dalton)
                 CG = 0
                 CGC = 1 
                 if str(key[0]) in self.exclusionList13:
@@ -312,8 +312,8 @@ class openforcefield2gromos():
                     INE14 = [int(x)+1 for x in openFFexList14]
                 else:
                     INE14 = list()
-                epsilon = float(force.epsilon.value_in_unit(kilojoule_per_mole))
-                rmin = 2 * force.rmin_half.value_in_unit(nanometer)
+                epsilon = float(force.epsilon.value_in_unit(u.kilojoule_per_mole))
+                rmin = 2 * force.rmin_half.value_in_unit(u.nanometer)
                 C6 = 2 * epsilon * (rmin**6)
                 C12 = epsilon * (rmin**12)
                 IACname = force.id
