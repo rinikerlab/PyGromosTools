@@ -289,13 +289,6 @@ class REPLICA(_generic_imd_block):
     NREQUIL: int
     CONT: bool
 
-
-    """
-    _order = [[["REEDS"], ["NRES", "NUMSTATES", "NEOFF"], ["RES(1 ... NRES)"],
-               ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT", "PERIODIC"]]]
-    """
-
-
     _order = [[["RETL"], ["NRET"], ["RET(1 ... NRET)"], ["LRESCALE"],
                ["NRELAM"], ["RELAM(1 ... NRELAM)"], ["RETS(1 ... NRELAM)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
 
