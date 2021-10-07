@@ -133,7 +133,7 @@ class openforcefield2gromos():
                 phase_list = force.phase
                 per_list = force.periodicity
                 for t in range(len(k_list)):
-                    CP=k_list[t].value_in_unit(u.kilojoule/u.mole)
+                    CP=k_list[t].value_in_unit(u.kilojoule_per_mole)
                     PD=phase_list[t].value_in_unit(u.degree)
                     NP=per_list[t]
                     # convert negativ CP by phase shifting
