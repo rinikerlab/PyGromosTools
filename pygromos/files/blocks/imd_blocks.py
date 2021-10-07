@@ -387,7 +387,7 @@ class NEW_REPLICA_EDS(_generic_imd_block):
     CONT: bool
     PERIODIC: int
 
-    _order = [[["REEDS"], ["NRES", "NEOFF", "NUMSTATES"], ["RES(1 ... NRES)"],
+    _order = [[["REEDS"], ["NRES", "NUMSTATES",  "NEOFF"], ["RES(1 ... NRES)"],
                ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT", "PERIODIC"]]]
 
     def __init__(self, REEDS: bool=False, NRES: int=0, NUMSTATES: int=0, NEOFF: int=0, RES: List[float]=[], EIR: List[List[float]]=[[]],
