@@ -209,6 +209,137 @@ class STEP(_generic_imd_block):
             self.DT = float(DT)
 
 
+class REPLICA(_generic_imd_block):
+    """REPLICA Block
+
+        This block is controlling the REPLICA settings in gromos. It works both for T-REMD and H-REMD
+
+    Attributes
+    ----------
+    RETL:   bool
+        Do you want to rund an RE simulation or not?
+        RETL=0 : turn off RE
+        RETL=1 : turn on RE
+    NRET:   int
+        Number of temperatures
+    RET:    List[float]
+        List of temperature at each replica
+    LRESCALE:   bool
+        controls temperature scaling
+        0 don't scale temperatures after exchange trial
+        1 scale temperatures after exchange trial
+    NRELAM: int
+        number of lambda values
+    RELAM:  List[float]
+        lambda value for each lambda-replica
+    RETS:   List[float]
+        timestep of each LAMBDA replica
+    NRETRIAL:   int
+        How many replica exchanges trials should be executed? (NRETRIAL*STEP.NSTLIM == total simulation time)
+    NREQUIL:    int
+        How many equilibration runs shall be exectured? (NREQUIL*STEP.NSTLIM == total simulation time)
+    CONT:   bool
+        Is this a continuation run?
+        0 start from one configuration file
+        1 start from multiple configuration files
+
+
+    Example Block
+    -------------
+    # RETL
+    1
+    # NRET
+    10
+    # RET(1..NRET)
+    300.0  320.0  340.0 360.0 380.0 
+    400.0  420.0  440.0 460.0 480.0
+    # LRESCALE
+    1
+    # NRELAM
+    10
+    # RELAM(1..NRELAM
+    0.0    0.1    0.2   0.3   0.4
+    0.5    0.6    0.7   0.8   0.9
+    # RETS(1..NRELAM)
+    0.002  0.001  0.001 0.001 0.002
+    0.003  0.002  0.001 0.001 0.002
+    # NRETRIAL
+    100
+    # NREQUIL
+    10
+    # CONT
+    0
+    END
+
+    """
+    name: str = "REPLICA"
+
+    RETL: bool
+
+    NRET: int
+    RET: List[float]
+
+    LRESCALE: bool
+
+    NRELAM: int
+    RELAM: List[float]
+    RETS: List[float]
+
+    NRETRIAL: int
+    NREQUIL: int
+    CONT: bool
+
+    _order = [[["RETL"], ["NRET"], ["RET(1 ... NRET)"], ["LRESCALE"],
+               ["NRELAM"], ["RELAM(1 ... NRELAM)"], ["RETS(1 ... NRELAM)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
+
+    def __init__(self, RETL: bool=False, NRET: int=0, RET: List[float]=[],  LRESCALE: int=0, NRELAM: int=0, RELAM: List[float]=[], RETS: List[float]=[], 
+                 NRETRIAL: int=0, NREQUIL: int=0,
+                 CONT: bool=False, content=None):
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.RETL = bool(RETL)
+
+            self.NRET = int(NRET)
+            self.RET = RET
+
+            self.LRESCALE = bool(LRESCALE)
+
+            self.NRELAM = int(NRELAM)
+            self.RELAM = RELAM
+            self.RETS = RETS
+
+            self.NRETRIAL = int(NRETRIAL)
+            self.NREQUIL = int(NREQUIL)
+            self.CONT = bool(CONT)
+
+    def read_content_from_str(self, content: List[str]):
+        try:
+            setattr(self, "RETL", int(content[1].split()[0]))
+            setattr(self, "NRET", int(content[3].split()[0]))
+            T_values =  list(map(float, content[5].split()))
+            if(len(T_values)== self.NRET):
+                setattr(self, "RET", T_values)
+            else:
+                raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
+            setattr(self, "NRELAM", int(content[9].split()[0]))
+            lambda_val =  list(map(float, content[11].split()))
+            if(len(lambda_val)== self.NRELAM):
+                setattr(self, "RELAM", lambda_val)
+            else:
+                raise IOError("REPLICA: NRELAM was not equal to the number of lambda values (RELAM) in IMD!")
+            lambda_timestep = list(map(float, content[13].split()))
+            if(len(lambda_timestep)== self.NRELAM):
+                setattr(self, "RETS", lambda_timestep)
+            else:
+                raise IOError("REPLICA: NRELAM was not equal to the number of lambda timestep values (RETS) in IMD!")
+            [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
+
+        except Exception as err:
+            raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
+
+
+
+
 
 class NEW_REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
@@ -221,6 +352,8 @@ class NEW_REPLICA_EDS(_generic_imd_block):
         Shall REEDS be activated?
     NRES:   int
         Number of s-Values
+    NEOFF:  int
+        number of replica exchange eds energy Offset vectors (only used for 2D REEDS - still needs to be present ;))
     NUMSTATES:  int
         Number of EDS-states
 
@@ -254,7 +387,7 @@ class NEW_REPLICA_EDS(_generic_imd_block):
     CONT: bool
     PERIODIC: int
 
-    _order = [[["REEDS"], ["NRES", "NUMSTATES", "NEOFF"], ["RES(1 ... NRES)"],
+    _order = [[["REEDS"], ["NRES", "NUMSTATES",  "NEOFF"], ["RES(1 ... NRES)"],
                ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT", "PERIODIC"]]]
 
     def __init__(self, REEDS: bool=False, NRES: int=0, NUMSTATES: int=0, NEOFF: int=0, RES: List[float]=[], EIR: List[List[float]]=[[]],
