@@ -91,7 +91,7 @@ class openforcefield2gromos():
                 hQ =  not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])
                 atomI = key[0]+1
                 atomJ = key[1]+1
-                k = 2*force.k.value_in_unit(u.kilojoule / (u.mole * u.nanometer ** 2))
+                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.nanometer ** 2))
                 b0 = force.length.value_in_unit(u.nanometer)
                 self.gromosTop.add_new_bond(k=k, b0=b0, atomI=atomI, atomJ=atomJ, includesH=False) #hQ
         if not hasattr(self.gromosTop, "BONDSTRETCHTYPE"):
@@ -109,7 +109,7 @@ class openforcefield2gromos():
                 atomI=key[0]+1
                 atomJ=key[1]+1
                 atomK=key[2]+1
-                k = 2*force.k.value_in_unit(u.kilojoule / (u.mole * u.radian ** 2))
+                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.radian ** 2))
                 kh = force.k.value_in_unit(u.kilojoule / (u.mole * u.degree ** 2))
                 b0 = force.angle.value_in_unit(u.degree)
                 self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=False) #hQ
