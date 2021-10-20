@@ -9,9 +9,83 @@ TITLE
 	 >>> Generated with python lib function_libs utilities. (riniker group)
 	 >>> line_seperator: '\n'	 field_seperator: '\t'	 comments_char: '#'
 END
+PHYSICALCONSTANTS
+# FPEPSI: 1.0/(4.0*PI*EPS0) (EPS0 is the permittivity of vacuum)
+138.9354
+# HBAR: Planck's constant HBAR = H/(2* PI)
+0.0635078
+# SPDL: Speed of light (nm/ps)
+299792.458
+# BOLTZ: Boltzmann's constant kB
+0.00831441
+END
+TOPVERSION
+2.0
+END
+ATOMTYPENAME
+2
+n16
+n2
+END
 RESNAME
 1
 C6H12
+END
+SOLUTEATOM
+#   NRP: number of solute atoms
+ 	 18
+#  ATNM: atom number
+#  MRES: residue number
+#  PANM: atom name of solute atom
+#   IAC: integer (van der Waals) atom type code
+#  MASS: mass of solute atom
+#    CG: charge of solute atom
+#   CGC: charge group code (0 or 1)
+#   INE: number of excluded atoms
+# INE14: number of 1-4 interactions
+# ATNM MRES PANM IAC     MASS       CG  CGC INE
+#                                           INE14
+	1	1	C1	1	12.01078	0	1	10	2	3	5	6	7	8
+											9	10	17	18
+										5	4	11	12	15	16
+	2	1	C2	1	12.01078	0	1	9	3	4	6	7	8	9
+											10	11	12
+										5	5	13	14	17	18
+	3	1	C3	1	12.01078	0	1	8	4	5	9	10	11	12
+											13	14
+										5	6	7	8	15	16
+	4	1	C4	1	12.01078	0	1	8	5	6	11	12	13	14
+											15	16
+										4	9	10	17	18
+	5	1	C5	1	12.01078	0	1	7	6	13	14	15	16	17
+											18
+										4	7	8	11	12
+	6	1	C6	1	12.01078	0	1	6	7	8	15	16	17	18
+										4	9	10	13	14
+	7	1	H1	2	1.007947	0	1	1	8
+										4	9	10	17	18
+	8	1	H2	2	1.007947	0	1	0
+										4	9	10	17	18
+	9	1	H3	2	1.007947	0	1	1	10
+										2	11	12
+	10	1	H4	2	1.007947	0	1	0
+										2	11	12
+	11	1	H5	2	1.007947	0	1	1	12
+										2	13	14
+	12	1	H6	2	1.007947	0	1	0
+										2	13	14
+	13	1	H7	2	1.007947	0	1	1	14
+										2	15	16
+	14	1	H8	2	1.007947	0	1	0
+										2	15	16
+	15	1	H9	2	1.007947	0	1	1	16
+										2	17	18
+	16	1	H10	2	1.007947	0	1	0
+										2	17	18
+	17	1	H11	2	1.007947	0	1	1	18
+										0
+	18	1	H12	2	1.007947	0	1	0
+										0
 END
 BONDSTRETCHTYPE
 # 	 NBTY: number of covalent bond types
@@ -19,6 +93,11 @@ BONDSTRETCHTYPE
 # 	 CB 	 CHB 	 B0
 	9.56035e+06	4.42871e+05	1.52190e-01
 	2.58776e+07	6.19310e+05	1.09390e-01
+END
+BONDH
+# 	 NBONH: number of bonds involving H atoms in solute
+ 	 0
+# 	 IBH 	 JBH 	 ICBH
 END
 BOND
 # 	 NBON: number of bonds NOT involving H atoms in solute
@@ -43,17 +122,17 @@ BOND
 	6	17	2
 	6	18	2
 END
-BONDH
-# 	 NBONH: number of bonds involving H atoms in solute
- 	 0
-# 	 IBH 	 JBH 	 ICBH
-END
 BONDANGLEBENDTYPE
 # 	 NBTY: number of angle types
  	 2
 # 	 CT 	 CHT 	 T0
 	8.90444e+02	1.35622e-01	1.16548e+02
 	8.16323e+02	1.24333e-01	1.15603e+02
+END
+BONDANGLEH
+# 	 NTHEH: number of bondangles involving a H
+ 	 0
+# 	 ITH 	 JTH 	 KTH 	 ICTH
 END
 BONDANGLE
 # 	 NTHE: number of angles
@@ -96,10 +175,20 @@ BONDANGLE
 	15	5	16	2
 	17	6	18	2
 END
-BONDANGLEH
-# 	 NTHEH: number of bondangles involving a H
+IMPDIHEDRALTYPE
+# 	 NQTY: number of improper dihedrals
  	 0
-# 	 ITH 	 JTH 	 KTH 	 ICTH
+# 	 CQ 	 Q0
+END
+IMPDIHEDRALH
+# 	 NQHIH: number of improper dihedrals involving H atoms
+ 	 0
+# 	 IQH 	 JQH 	 KQH 	 LQH 	 ICQH
+END
+IMPDIHEDRAL
+# 	 #  NQHI: number of improper dihedrals
+ 	 0
+# 	 IQ 	 JQ 	 KQ 	 LQ 	 ICQ
 END
 TORSDIHEDRALTYPE
 # 	 NPTY: number of torsion dihedrals
@@ -110,6 +199,11 @@ TORSDIHEDRALTYPE
 	1.35888e+00	1.80000e+02	1
 	4.35414e-01	0.00000e+00	3
 	7.99950e-01	0.00000e+00	3
+END
+DIHEDRALH
+# 	 NPHIH: number of torsion dihedrals involving H atoms
+ 	 0
+# 	 IPH 	 JPH 	 KPH 	 LPH 	 ICPH
 END
 DIHEDRAL
 # 	 NPHI: number of dihedrals NOT involving H atoms
@@ -182,26 +276,6 @@ DIHEDRAL
 	16	5	6	17	5
 	16	5	6	18	5
 END
-DIHEDRALH
-# 	 NPHIH: number of torsion dihedrals involving H atoms
- 	 0
-# 	 IPH 	 JPH 	 KPH 	 LPH 	 ICPH
-END
-IMPDIHEDRALTYPE
-# 	 NQTY: number of improper dihedrals
- 	 0
-# 	 CQ 	 Q0
-END
-IMPDIHEDRALH
-# 	 NQHIH: number of improper dihedrals involving H atoms
- 	 0
-# 	 IQH 	 JQH 	 KQH 	 LQH 	 ICQH
-END
-IMPDIHEDRAL
-# 	 #  NQHI: number of improper dihedrals
- 	 0
-# 	 IQ 	 JQ 	 KQ 	 LQ 	 ICQ
-END
 LJPARAMETERS
 # 	 NRATT2: number of LJ interaction types = NRATT*(NRATT+1)/2
  	 3
@@ -209,67 +283,6 @@ LJPARAMETERS
 	1	1	4.043161e-06	2.713825e-03	1.000000e-100	1.000000e-100
 	1	2	3.534573e-07	4.951254e-04	1.000000e-100	1.000000e-100
 	2	2	3.089960e-08	9.033346e-05	1.000000e-100	1.000000e-100
-END
-ATOMTYPENAME
-2
-n16
-n2
-END
-SOLUTEATOM
-#   NRP: number of solute atoms
- 	 18
-#  ATNM: atom number
-#  MRES: residue number
-#  PANM: atom name of solute atom
-#   IAC: integer (van der Waals) atom type code
-#  MASS: mass of solute atom
-#    CG: charge of solute atom
-#   CGC: charge group code (0 or 1)
-#   INE: number of excluded atoms
-# INE14: number of 1-4 interactions
-# ATNM MRES PANM IAC     MASS       CG  CGC INE
-#                                           INE14
-	1	1	C1	1	12.01078	0	1	10	2	3	5	6	7	8
-											9	10	17	18
-										5	4	11	12	15	16
-	2	1	C2	1	12.01078	0	1	9	3	4	6	7	8	9
-											10	11	12
-										5	5	13	14	17	18
-	3	1	C3	1	12.01078	0	1	8	4	5	9	10	11	12
-											13	14
-										5	6	7	8	15	16
-	4	1	C4	1	12.01078	0	1	8	5	6	11	12	13	14
-											15	16
-										4	9	10	17	18
-	5	1	C5	1	12.01078	0	1	7	6	13	14	15	16	17
-											18
-										4	7	8	11	12
-	6	1	C6	1	12.01078	0	1	6	7	8	15	16	17	18
-										4	9	10	13	14
-	7	1	H1	2	1.007947	0	1	1	8
-										4	9	10	17	18
-	8	1	H2	2	1.007947	0	1	0
-										4	9	10	17	18
-	9	1	H3	2	1.007947	0	1	1	10
-										2	11	12
-	10	1	H4	2	1.007947	0	1	0
-										2	11	12
-	11	1	H5	2	1.007947	0	1	1	12
-										2	13	14
-	12	1	H6	2	1.007947	0	1	0
-										2	13	14
-	13	1	H7	2	1.007947	0	1	1	14
-										2	15	16
-	14	1	H8	2	1.007947	0	1	0
-										2	15	16
-	15	1	H9	2	1.007947	0	1	1	16
-										2	17	18
-	16	1	H10	2	1.007947	0	1	0
-										2	17	18
-	17	1	H11	2	1.007947	0	1	1	18
-										0
-	18	1	H12	2	1.007947	0	1	0
-										0
 END
 SOLUTEMOLECULES
 1
@@ -299,17 +312,4 @@ SOLVENTCONSTR
 # 	 NCONS: number of constraints
  	 0
 # 	 ICONS 	 JCONS 	 CONS
-END
-TOPVERSION
-2.0
-END
-PHYSICALCONSTANTS
-# FPEPSI: 1.0/(4.0*PI*EPS0) (EPS0 is the permittivity of vacuum)
-138.9354
-# HBAR: Planck's constant HBAR = H/(2* PI)
-0.0635078
-# SPDL: Speed of light (nm/ps)
-299792.458
-# BOLTZ: Boltzmann's constant kB
-0.00831441
 END
