@@ -2544,7 +2544,7 @@ class SOLUTEATOM(_iterable_topology_block):
                     if(int(INE14) >= 1):
                         INE14values = dump2[1:]
                         if(int(INE14) > 6):
-                            numberOfExtraLines = math.ceil(int(INE14)/6)
+                            numberOfExtraLines = math.ceil(int(INE14)/6) - 1
                             for _ in range(numberOfExtraLines):
                                 INE14values.extend(contentLines.pop(0).strip().split())
                     else:
