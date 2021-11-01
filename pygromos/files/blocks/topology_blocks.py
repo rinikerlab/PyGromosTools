@@ -2529,10 +2529,9 @@ class SOLUTEATOM(_iterable_topology_block):
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
                     if(int(INE) >= 1):
                         INEvalues = dump1[8:]
-                        if(int(INE) > 6):
-                            numberOfExtraLines = math.ceil(int(INE)/6) -1
-                            for _ in range(numberOfExtraLines):
-                                INEvalues.extend(contentLines.pop(0).strip().split())
+                        # keep reading in lines until we have all the data needed.
+                        while (int(INE) > len(INEvalues)):
+                            INEvalues.extend(contentLines.pop(0).strip().split())
                     else:
                         INEvalues = []
 
@@ -2543,10 +2542,9 @@ class SOLUTEATOM(_iterable_topology_block):
                     INE14 = dump2[0]
                     if(int(INE14) >= 1):
                         INE14values = dump2[1:]
-                        if(int(INE14) > 6):
-                            numberOfExtraLines = math.ceil(int(INE14)/6) - 1
-                            for _ in range(numberOfExtraLines):
-                                INE14values.extend(contentLines.pop(0).strip().split())
+                        # keep reading in lines until we have all the data needed.
+                        while (int(INE14) > len(INE14values)): 
+                            INE14values.extend(contentLines.pop(0).strip().split())
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
