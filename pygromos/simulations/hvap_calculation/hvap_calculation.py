@@ -198,5 +198,5 @@ class Hvap_calculation():
         self.groSys_liq_final = sys_md_liq
 
     def calc_hvap(self) -> float:
-        h_vap = self.groSys_liq_final.tre.get_Hvap(gas=self.groSys_gas_final.tre, nMolecules=self.num_molecules, temperature=self.temperature)
+        h_vap = self.groSys_liq_final.tre.get_Hvap(gas_traj=self.groSys_gas_final.tre, nMolecules=self.num_molecules, temperature=self.temperature)
         return h_vap

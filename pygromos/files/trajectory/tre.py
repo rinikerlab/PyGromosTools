@@ -21,6 +21,7 @@ import numpy as np
 
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_block_names_table
+from pygromos.analysis import energy_analysis as ea
 
 class Tre(traj._General_Trajectory):
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0, _ene_ana_names = gromos_2020_tre_block_names_table):
@@ -90,7 +91,8 @@ class Tre(traj._General_Trajectory):
         pd.DataFrame
             Dataframe with the densities for all time steps
         """
-        return self.database[["mass","volume"]].apply(lambda x: 1.66056 * x[0][0]/x[1][0], axis=1)
+        return self.database[["mass","volume"]].apply(lambda x: ea.get_density(mass=x[0][0], volume=x[1][0]), axis=1)
+
 
     def get_temperature(self) -> pd.DataFrame:
         """
@@ -103,18 +105,19 @@ class Tre(traj._General_Trajectory):
         """
         return self.database["temperature"].apply(lambda x: x[:,0])
 
-    def get_Hvap(self, gas, nMolecules=1, temperature=None) -> float:
-        #get gas nonbonded energy from multiple different gas arguments
+
+    def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_nonbonded_energy = 0
-        if type(gas) == type(self):
-            gas_nonbonded_energy = gas.get_totals_nonbonded().mean()
-        elif type(gas) == float:
-            gas_nonbonded_energy = gas
+        if type(gas_traj) == type(liq):
+            gas_nonbonded_energy = gas_traj.get_totals_nonbonded().mean()
+        elif type(gas_traj) == float:
+            gas_nonbonded_energy = gas_traj
         else:
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
-
-        # get liquid nonbonded energy
         liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
+
+        self.heat_vap = ea.get_Hvap(liq=liquid_nonbonded_energyself, gas_nonbonded_energy, )
+
 
         # calculate heat of vaporization
         rt_constant = 0.008314462618153239 * temperature # R in kilojoule_per_mole/kelvin * T
