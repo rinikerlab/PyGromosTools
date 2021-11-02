@@ -116,10 +116,6 @@ class Tre(traj._General_Trajectory):
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
         liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
 
-        self.heat_vap = ea.get_Hvap(liq=liquid_nonbonded_energyself, gas_nonbonded_energy, )
-
-
         # calculate heat of vaporization
-        rt_constant = 0.008314462618153239 * temperature # R in kilojoule_per_mole/kelvin * T
-        self.heat_vap = gas_nonbonded_energy - liquid_nonbonded_energyself/nMolecules + rt_constant
+        self.heat_vap = ea.get_Hvap(liq=liquid_nonbonded_energyself, gas=gas_nonbonded_energy, temperature=temperature, nMolecules=nMolecules)
         return self.heat_vap
