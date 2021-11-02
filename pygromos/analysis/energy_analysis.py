@@ -1,5 +1,6 @@
 import numpy as np
 
+from scipy import constants
 
 
 def get_density(mass:np.array, volume:np.array)->np.array:
@@ -18,7 +19,6 @@ def get_density(mass:np.array, volume:np.array)->np.array:
     """
     return 1.66056 * mass / volume
 
-from scipy import constants
 
 def get_Hvap(liq_nonbonded_energies:np.array, gas_nonbonded_energies:np.array,
              nMolecules=1, temperature=None, R=constants.R/1000) -> float:
