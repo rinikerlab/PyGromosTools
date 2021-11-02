@@ -23,6 +23,7 @@ dependencies:
   - sympy
   - scipy
   - rdkit
+  - mpmath
  ##Visualization
   - matplotlib
   - py3dmol
