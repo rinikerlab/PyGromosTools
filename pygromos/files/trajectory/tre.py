@@ -108,7 +108,7 @@ class Tre(traj._General_Trajectory):
 
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_nonbonded_energy = 0
-        if type(gas_traj) == type(liq):
+        if type(gas_traj) == type(self):
             gas_nonbonded_energy = gas_traj.get_totals_nonbonded().mean()
         elif type(gas_traj) == float:
             gas_nonbonded_energy = gas_traj
