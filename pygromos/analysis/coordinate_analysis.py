@@ -16,10 +16,7 @@ def rms(in_values)->float:
     float
         root mean square
     """
-    sum = 0
-    for i in in_values:
-        sum += np.sum(i**2)
-    return np.sqrt(sum/len(in_values))
+    return np.sqrt(np.sum(np.square(in_values))/len(in_values))
 
 def periodic_distance(vec:np.array, grid:np.array) -> np.array:
 
