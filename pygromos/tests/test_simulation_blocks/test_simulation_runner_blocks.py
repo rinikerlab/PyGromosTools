@@ -3,7 +3,7 @@ import unittest, numpy as np
 import pygromos.simulations.modules.general_simulation_modules
 import pygromos.simulations.modules.ti_modules
 from pygromos.simulations.modules import preset_simulation_modules
-from pygromos.hpc_queuing.submission_systems.dummy import DUMMY
+from pygromos.simulations.hpc_queuing.submission_systems import DUMMY
 
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.files.gromos_system.gromos_system import Gromos_System

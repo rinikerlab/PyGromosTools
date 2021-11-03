@@ -29,9 +29,9 @@ from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSys
+from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys
 from pygromos.simulations.modules.general_simulation_modules import simulation
-from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
+from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
@@ -135,32 +135,32 @@ class Hvap_calculation():
 
         #min
         print(self.groSys_gas.work_folder)
-        sys_emin_gas, jobID = simulation(in_gromos_system=self.groSys_gas, 
-                    project_dir=self.groSys_gas.work_folder,
-                    step_name="1_emin", 
-                    in_imd_path=self.imd_gas_min,
-                    submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do,
-                    verbose=self.verbose)
+        sys_emin_gas, jobID = simulation(in_gromos_system=self.groSys_gas,
+                                         project_dir=self.groSys_gas.work_folder,
+                                         step_name="1_emin",
+                                         in_imd_path=self.imd_gas_min,
+                                         submission_system=self.submissonSystem,
+                                         analysis_script=simulation_analysis.do,
+                                         verbose=self.verbose)
         print(self.groSys_gas.work_folder)
 
         #eq
-        sys_eq_gas, jobID = simulation(in_gromos_system=sys_emin_gas, 
-                    project_dir=self.groSys_gas.work_folder,
-                    step_name="2_eq", 
-                    in_imd_path=self.imd_gas_eq,
-                    submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do,
-                    verbose=self.verbose)
+        sys_eq_gas, jobID = simulation(in_gromos_system=sys_emin_gas,
+                                       project_dir=self.groSys_gas.work_folder,
+                                       step_name="2_eq",
+                                       in_imd_path=self.imd_gas_eq,
+                                       submission_system=self.submissonSystem,
+                                       analysis_script=simulation_analysis.do,
+                                       verbose=self.verbose)
 
         #sd
-        sys_sd_gas, jobID = simulation(in_gromos_system=sys_eq_gas, 
-                    project_dir=self.groSys_gas.work_folder,
-                    step_name="3_sd", 
-                    in_imd_path=self.imd_gas_sd,
-                    submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do,
-                    verbose=self.verbose)
+        sys_sd_gas, jobID = simulation(in_gromos_system=sys_eq_gas,
+                                       project_dir=self.groSys_gas.work_folder,
+                                       step_name="3_sd",
+                                       in_imd_path=self.imd_gas_sd,
+                                       submission_system=self.submissonSystem,
+                                       analysis_script=simulation_analysis.do,
+                                       verbose=self.verbose)
 
         self.groSys_gas_final = sys_sd_gas
 
@@ -169,31 +169,31 @@ class Hvap_calculation():
         self.groSys_liq.rebase_files()
 
         #minsys_emin_liq, jobID
-        sys_emin_liq, jobID = simulation(in_gromos_system=self.groSys_liq, 
-                    project_dir=self.groSys_liq.work_folder,
-                    step_name="1_emin", 
-                    in_imd_path=self.imd_liq_min,
-                    submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do,
-                    verbose=self.verbose)
+        sys_emin_liq, jobID = simulation(in_gromos_system=self.groSys_liq,
+                                         project_dir=self.groSys_liq.work_folder,
+                                         step_name="1_emin",
+                                         in_imd_path=self.imd_liq_min,
+                                         submission_system=self.submissonSystem,
+                                         analysis_script=simulation_analysis.do,
+                                         verbose=self.verbose)
 
         #eq
-        sys_eq_liq, jobID = simulation(in_gromos_system=sys_emin_liq, 
-                    project_dir=self.groSys_liq.work_folder,
-                    step_name="2_eq", 
-                    in_imd_path=self.imd_liq_eq,
-                    submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do,
-                    verbose=self.verbose)
+        sys_eq_liq, jobID = simulation(in_gromos_system=sys_emin_liq,
+                                       project_dir=self.groSys_liq.work_folder,
+                                       step_name="2_eq",
+                                       in_imd_path=self.imd_liq_eq,
+                                       submission_system=self.submissonSystem,
+                                       analysis_script=simulation_analysis.do,
+                                       verbose=self.verbose)
 
         #md
-        sys_md_liq, jobID = simulation(in_gromos_system=sys_eq_liq, 
-                    project_dir=self.groSys_liq.work_folder,
-                    step_name="3_sd", 
-                    in_imd_path=self.imd_liq_md,
-                    submission_system=self.submissonSystem,
-                    analysis_script=simulation_analysis.do,
-                    verbose=self.verbose)
+        sys_md_liq, jobID = simulation(in_gromos_system=sys_eq_liq,
+                                       project_dir=self.groSys_liq.work_folder,
+                                       step_name="3_sd",
+                                       in_imd_path=self.imd_liq_md,
+                                       submission_system=self.submissonSystem,
+                                       analysis_script=simulation_analysis.do,
+                                       verbose=self.verbose)
 
         self.groSys_liq_final = sys_md_liq
 

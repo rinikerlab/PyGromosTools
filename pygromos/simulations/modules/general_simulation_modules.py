@@ -12,10 +12,10 @@ from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.trajectory.trc import Trc
 from pygromos.files.trajectory.tre import Tre
 from pygromos.files.trajectory.trg import Trg
-from pygromos.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
-from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
-from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
-from pygromos.hpc_queuing.submission_systems.local import LOCAL
+from pygromos.simulations.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
+from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.utils import bash, utils
 from pygromos.utils.utils import spacer as spacer
 
@@ -147,8 +147,8 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
         })
         try:
             in_scheduler_script_path = utils.write_job_script(out_script_path=step_dir + "/schedule_MD_job.py",
-                                                             target_function=simulation_scheduler.do,
-                                                             variable_dict=MD_job_vars)
+                                                              target_function=simulation_scheduler.do,
+                                                              variable_dict=MD_job_vars)
         except Exception as err:
             raise Exception("Could not prepare the scheduling script\n\t" + "\n\t".join(map(str, err.args)))
     except Exception as err:
@@ -164,9 +164,9 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
             last_jobID = 0
         else:
             last_jobID = simulation_scheduler.do(in_simSystem=in_gromos_system, out_dir_path=out_simulation_dir,
-                                                    simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
-                                                    submission_system=submission_system, previous_job_ID=previous_simulation_run,
-                                                    analysis_script_path=in_analysis_script_path, verbose=verbose, verbose_lvl=verbose_lvl)
+                                                 simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
+                                                 submission_system=submission_system, previous_job_ID=previous_simulation_run,
+                                                 analysis_script_path=in_analysis_script_path, verbose=verbose, verbose_lvl=verbose_lvl)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not submit the commands\n\t"+"\n\t".join(map(str, err.args)))

@@ -7,10 +7,10 @@ This script schedules Simulations ons euler into the queue.
 import os, sys, traceback
 
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.hpc_queuing.job_scheduling.schedulers.scheduler_functions import chain_submission
-from pygromos.hpc_queuing.job_scheduling.workers.simulation_workers import simulation_run_worker as workerScript
-from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
-from pygromos.hpc_queuing.submission_systems.lsf import LSF
+from pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions import chain_submission
+from pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers import simulation_run_worker as workerScript
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF
 from pygromos.utils import bash, utils
 
 spacer = utils.spacer

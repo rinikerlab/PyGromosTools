@@ -1,10 +1,10 @@
-import unittest, os, tempfile
+import unittest, tempfile
 
-from pygromos.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
+from pygromos.simulations.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
 
 from pygromos.data.simulation_parameters_templates import template_md
 from pygromos.data.topology_templates import blank_topo_template
-from pygromos.hpc_queuing.submission_systems.dummy import DUMMY
+from pygromos.simulations.hpc_queuing.submission_systems import DUMMY
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 
 from pygromos.tests.in_testfiles import in_test_file_path
@@ -25,5 +25,5 @@ class test_MD_scheduler(unittest.TestCase):
        submission_system = self.submissionSystem()
 
        simulation_scheduler.do(in_simSystem=in_simSystem, out_dir_path=out_dir_path,
-                                 submission_system=submission_system,
-                                 simulation_run_num=2, verbose= True)
+                               submission_system=submission_system,
+                               simulation_run_num=2, verbose= True)

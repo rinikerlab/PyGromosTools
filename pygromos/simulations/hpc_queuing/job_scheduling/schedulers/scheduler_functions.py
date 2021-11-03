@@ -4,12 +4,11 @@ import os
 import pandas as pd
 
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
-from pygromos.hpc_queuing.submission_systems import lsf
-from pygromos.hpc_queuing.submission_systems.local import LOCAL
-from pygromos.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
+from pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
 from pygromos.utils import bash
-from pygromos.utils.utils import spacer, spacer3
+from pygromos.utils.utils import spacer3
 
 
 def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,

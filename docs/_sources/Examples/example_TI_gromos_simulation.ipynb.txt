@@ -37,7 +37,7 @@
     "import numpy as np\n",
     "import pygromos\n",
     "from pygromos.files.gromos_system import Gromos_System\n",
-    "from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
+    "from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
     "from pygromos.files.blocks.imd_blocks import PERTURBATION, WRITETRAJ\n",
     "\n",
     "from pygromos.utils import bash"
@@ -2350,7 +2350,7 @@
     "import os\n",
     "import numpy as np\n",
     "from pygromos.files.gromos_system import Gromos_System\n",
-    "from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
+    "from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
     "\n",
     "from pygromos.utils import bash\n",
     "sys_name = \"M030_to_6KET\"\n",

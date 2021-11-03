@@ -13,7 +13,7 @@ package_path = os.path.abspath(__file__+"/../../../../../..")
 print(package_path)
 sys.path.append(package_path)
 
-from pygromos.hpc_queuing.job_scheduling import file_management as fM
+from pygromos.simulations.hpc_queuing.job_scheduling import file_management as fM
 
 
 def do(in_simulation_dir: str, n_processes: int = 1, verbose: bool = True) -> None:

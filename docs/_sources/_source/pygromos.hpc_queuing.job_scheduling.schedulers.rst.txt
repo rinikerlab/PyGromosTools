@@ -7,7 +7,7 @@ Submodules
 pygromos.hpc\_queuing.job\_scheduling.schedulers.scheduler\_functions module
 ----------------------------------------------------------------------------
 
-.. automodule:: pygromos.hpc_queuing.job_scheduling.schedulers.scheduler_functions
+.. automodule:: pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions
    :members:
    :undoc-members:
    :show-inheritance:
@@ -15,7 +15,7 @@ pygromos.hpc\_queuing.job\_scheduling.schedulers.scheduler\_functions module
 pygromos.hpc\_queuing.job\_scheduling.schedulers.simulation\_scheduler module
 -----------------------------------------------------------------------------
 
-.. automodule:: pygromos.hpc_queuing.job_scheduling.schedulers.simulation_scheduler
+.. automodule:: pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler
    :members:
    :undoc-members:
    :show-inheritance:
@@ -23,7 +23,7 @@ pygromos.hpc\_queuing.job\_scheduling.schedulers.simulation\_scheduler module
 Module contents
 ---------------
 
-.. automodule:: pygromos.hpc_queuing.job_scheduling.schedulers
+.. automodule:: pygromos.simulations.hpc_queuing.job_scheduling.schedulers
    :members:
    :undoc-members:
    :show-inheritance:

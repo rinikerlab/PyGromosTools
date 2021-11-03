@@ -1,7 +1,7 @@
 import warnings
 from typing import Union, List
 
-from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 
 
 class DUMMY(_SubmissionSystem):
