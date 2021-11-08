@@ -72,6 +72,7 @@ class openforcefield2gromos():
         #create list of all forces
         self.molecule_force_list = []
         self.molecule_force_list = self.off.label_molecules(self.openFFTop)
+        self.openmm_system = self.off.create_openmm_system(self.openFFTop)
 
         # 1-3 / 1-4 exclusion lists
         self.exclusionList13 = dict()
@@ -300,7 +301,7 @@ class openforcefield2gromos():
                 PANM = element_symbol + str(panm_dict[element_symbol])
                 IAC = 0
                 MASS = self.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(u.dalton)
-                CG = 0
+                CG = self.openmm_system.getForce(1).getParticleParameters(int(key[0]))[0].value_in_unit(u.elementary_charge)
                 CGC = 1 
                 if str(key[0]) in self.exclusionList13:
                     openFFexList13 = list(self.exclusionList13[str(key[0])])
