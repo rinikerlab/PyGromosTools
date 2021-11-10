@@ -318,7 +318,7 @@ class openforcefield2gromos():
                 C6 = 2 * epsilon * (rmin**6)
                 C12 = epsilon * (rmin**12)
                 IACname = force.id
-                self.gromosTop.add_new_atom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, IACname=IACname)
+                self.gromosTop.add_new_atom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=0.5*C6, CS12=0.5*C12, IACname=IACname)
             moleculeItr += 1
 
     def convert_other_stuff(self):
