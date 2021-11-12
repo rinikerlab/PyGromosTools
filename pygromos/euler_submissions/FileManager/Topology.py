@@ -14,11 +14,15 @@ class Topology(_fileManagment_base_class):
     """
     top_path = None
     disres_path = None
+    posres_path = None
+    refpos_path = None
     pertubation_path = None
-    def __init__(self, top_path:str=None, disres_path:str=None, pertubation_path:str=None):
+    def __init__(self, top_path:str=None, disres_path:str=None, posres_path:str=None, refpos_path:str=None, pertubation_path:str=None):
         if (top_path != None):
             self.top_path = top_path
             self.disres_path = disres_path
+            self.disres_path = posres_path
+            self.disres_path = refpos_path
             self.pertubation_path = pertubation_path
         else:
             raise IOError("DID not get correct Constructor arguments in "+self.__class__.name)
@@ -33,6 +37,10 @@ class Topology(_fileManagment_base_class):
             coll.append(self.pertubation_path)
         if (self.disres_path != None):
             coll.append(self.disres_path)
+        if (self.posres_path != None):
+            coll.append(self.posres_path)
+        if (self.refpos_path != None):
+            coll.append(self.refpos_path)
 
         return coll
 
