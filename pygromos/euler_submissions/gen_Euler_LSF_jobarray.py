@@ -103,8 +103,8 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
         gromos_res = "        @distrest    ${DISRES}"
 
     else:
-        in_posres = in_system.top.in_posres
-        in_refpos = in_system.top.in_refpos
+        in_posres = in_system.top.posres_path
+        in_refpos = in_system.top.refpos_path
         
         rest_text = "POSRES="+in_posres+"\nREFPOS="+in_refpos+"\n"
         gromos_res  = "        @posresspec    ${POSRES}\\\n"
