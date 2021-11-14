@@ -923,7 +923,7 @@ class FORCE(_generic_imd_block):
             [description]
         """
         self.NEGR = len(energy_groups)
-        self.NRE = [energy_groups[last_atom] for last_atom in energy_groups]
+        self.NRE = [last_atom for last_atom in energy_groups]
 
     def __adapt_energy_groups(self, residues: Dict[str, Dict[int, int]]):
         """

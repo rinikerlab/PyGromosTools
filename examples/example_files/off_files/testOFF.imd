@@ -32,7 +32,7 @@ FORCE
 # 	 BONDS 	 ANGLES 	 IMPROPER 	 DIHEDRAL 	 ELECTROSTATIC 	 VDW
  	 0 	 1 	 1 	 1 	 1 	 1 	 
 # 	 NEGR 	 NRE
- 	 1 	 1 	 
+ 	 1 	 18 	 
 END
 INITIALISE
 # 	 NTIVEL 	 NTISHK 	 NTINHT 	 NTINHB
@@ -48,7 +48,7 @@ NONBONDED
 # 	 NLRELE
  	 1 	 
 # 	 APPAK 	 RCRF 	 EPSRF 	 NSLFEXCL
- 	 0 	 1.4 	 4.0 	 1 	 
+ 	 0 	 1.4 	 1.0 	 1 	 
 # 	 NSHAPE 	 ASHAPE 	 NA2CLC 	 TOLA2 	 EPSLS
  	 -1 	 1.4 	 2 	 1e-10 	 0 	 
 # 	 NKX 	 NKY 	 NKZ 	 KCUT
