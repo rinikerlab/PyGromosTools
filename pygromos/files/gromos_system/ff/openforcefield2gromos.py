@@ -173,76 +173,6 @@ class openforcefield2gromos():
         if not hasattr(self.gromosTop, "IMPDIHEDRAL"):
             self.gromosTop.add_block(blocktitle="IMPDIHEDRAL", content=[])
 
-    def createVdWexclusionList_backup(self) -> dict:
-        exclusionlist=dict()
-        for molecule in self.molecule_force_list:
-            for key in molecule["Bonds"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-            for key in molecule["Angles"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                exclusionlist[str(key[0])].add(key[2])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-                exclusionlist[str(key[1])].add(key[2])
-                if not str(key[2]) in exclusionlist.keys():
-                    exclusionlist[str(key[2])] = {key[0]}
-                exclusionlist[str(key[2])].add(key[0])
-                exclusionlist[str(key[2])].add(key[1])
-            for key in molecule["ProperTorsions"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                exclusionlist[str(key[0])].add(key[2])
-                exclusionlist[str(key[0])].add(key[3])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-                exclusionlist[str(key[1])].add(key[2])
-                exclusionlist[str(key[1])].add(key[3])
-                if not str(key[2]) in exclusionlist.keys():
-                    exclusionlist[str(key[2])] = {key[0]}
-                exclusionlist[str(key[2])].add(key[0])
-                exclusionlist[str(key[2])].add(key[1])
-                exclusionlist[str(key[2])].add(key[3])
-                if not str(key[3]) in exclusionlist.keys():
-                    exclusionlist[str(key[3])] = {key[0]}
-                exclusionlist[str(key[3])].add(key[0])
-                exclusionlist[str(key[3])].add(key[1])
-                exclusionlist[str(key[3])].add(key[2])
-            for key in molecule["ImproperTorsions"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                exclusionlist[str(key[0])].add(key[2])
-                exclusionlist[str(key[0])].add(key[3])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-                exclusionlist[str(key[1])].add(key[2])
-                exclusionlist[str(key[1])].add(key[3])
-                if not str(key[2]) in exclusionlist.keys():
-                    exclusionlist[str(key[2])] = {key[0]}
-                exclusionlist[str(key[2])].add(key[0])
-                exclusionlist[str(key[2])].add(key[1])
-                exclusionlist[str(key[2])].add(key[3])
-                if not str(key[3]) in exclusionlist.keys():
-                    exclusionlist[str(key[3])] = {key[0]}
-                exclusionlist[str(key[3])].add(key[0])
-                exclusionlist[str(key[3])].add(key[1])
-                exclusionlist[str(key[3])].add(key[2])
-            #now we should have added everything and we can start to delete
-            for key in exclusionlist:
-                for i in range(0, int(key) + 1):
-                    exclusionlist[key].discard(i)
-        return exclusionlist
 
     def createVdWexclusionList(self):
         bondDict=dict()
@@ -288,11 +218,13 @@ class openforcefield2gromos():
     def convertVdW(self):
         self.createVdWexclusionList()
         moleculeItr = 1
+        prev_atom_counter = 0
         for molecule in self.molecule_force_list:
             panm_dict = collections.defaultdict(int)
+            tot_len = len(molecule["vdW"])
             for key in molecule["vdW"]:
                 force = molecule["vdW"][key]
-                ATNM = int(key[0]) + 1
+                ATNM = int(key[0]) + 1 + prev_atom_counter
                 MRES = moleculeItr
                 # get element sympol: 
                 atomic_number = self.openFFmolecule.atoms[int(key[0])].atomic_number
@@ -302,7 +234,7 @@ class openforcefield2gromos():
                 IAC = 0
                 MASS = self.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(u.dalton)
                 CG = self.openmm_system.getForce(1).getParticleParameters(int(key[0]))[0].value_in_unit(u.elementary_charge)
-                CGC = 1 
+                CGC = 1 if (int(key[0])+1 == tot_len) else 0
                 if str(key[0]) in self.exclusionList13:
                     openFFexList13 = list(self.exclusionList13[str(key[0])])
                     INE = [int(x)+1 for x in openFFexList13]
@@ -320,6 +252,7 @@ class openforcefield2gromos():
                 IACname = force.id
                 self.gromosTop.add_new_atom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=0.5*C6, CS12=0.5*C12, IACname=IACname)
             moleculeItr += 1
+            prev_atom_counter += tot_len
 
     def convert_other_stuff(self):
         if not hasattr(self.gromosTop, "SOLUTEMOLECULES"):
