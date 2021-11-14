@@ -609,6 +609,16 @@ class Top(_general_gromos_file._general_gromos_file):
             for i in self.SOLUTEATOM.content:
                 mass += i.MASS
         return mass
+
+    def get_diff_to_top(self, top:TopType):
+        for block in self._block_order[1:]:
+            if hasattr(self, block):
+                if hasattr(top, block):
+                    if getattr(self, block).block_to_string() != getattr(top, block).block_to_string():
+                        print("Block " + block + " is different")
+                        print("self: " + str(getattr(self, block)))
+                        print("top: " + str(getattr(top, block)))
+                        print("\n")
         
 
         
