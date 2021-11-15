@@ -110,7 +110,7 @@ class openforcefield2gromos():
                 atomI=key[0]+1
                 atomJ=key[1]+1
                 atomK=key[2]+1
-                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.degree ** 2)) //TODO: proper conversion to quartic
+                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.degree ** 2)) #TODO: proper conversion to quartic
                 kh = force.k.value_in_unit(u.kilojoule / (u.mole * u.degree ** 2))
                 b0 = force.angle.value_in_unit(u.degree)
                 self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=False) #hQ
