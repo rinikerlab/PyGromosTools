@@ -21,8 +21,8 @@ class Topology(_fileManagment_base_class):
         if (top_path != None):
             self.top_path = top_path
             self.disres_path = disres_path
-            self.disres_path = posres_path
-            self.disres_path = refpos_path
+            self.posres_path = posres_path
+            self.refpos_path = refpos_path
             self.pertubation_path = pertubation_path
         else:
             raise IOError("DID not get correct Constructor arguments in "+self.__class__.name)
