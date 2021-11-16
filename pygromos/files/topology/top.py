@@ -156,17 +156,17 @@ class Top(_general_gromos_file._general_gromos_file):
         # add angles and angles with H
         for angle in top.BONDANGLE.content:
             angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
-            retTop.add_new_angle(k=angleType.CB, 
-                                kh=angleType.CHB, 
-                                b0=angleType.B0, 
+            retTop.add_new_angle(k=angleType.CT, 
+                                kh=angleType.CHT, 
+                                b0=angleType.T0, 
                                 atomI=angle.IT + atnmShift, 
                                 atomJ=angle.JT + atnmShift,
                                 atomK=angle.KT + atnmShift)
         for angle in top.BONDANGLEH.content:
             angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
-            retTop.add_new_angle(k=angleType.CB, 
-                                kh=angleType.CHB, 
-                                b0=angleType.B0, 
+            retTop.add_new_angle(k=angleType.CT, 
+                                kh=angleType.CHT, 
+                                b0=angleType.T0, 
                                 atomI=angle.IT + atnmShift, 
                                 atomJ=angle.JT + atnmShift,
                                 atomK=angle.KT + atnmShift, includesH=True)
@@ -348,13 +348,13 @@ class Top(_general_gromos_file._general_gromos_file):
         if convertToQuartic:
             k = self.harmonic2quarticAngleConversion(kh, b0)
         for angle_type in self.BONDANGLEBENDTYPE.content:
-            if angle_type.CB == k and angle_type.B0 == b0:
+            if angle_type.CT == k and angle_type.CHT == kh and angle_type.T0 == b0:
                 break
             else:
                 iterator += 1
         angle_type_number = iterator
         if iterator > len(self.BONDANGLEBENDTYPE.content):#angle type was not found -> add new bondtype
-            newBONDANGLEBENDTYPE = blocks.bondstretchtype_type(CB=k, CHB=kh, B0=b0)
+            newBONDANGLEBENDTYPE = blocks.bondanglebendtype_type(CT=k, CHT=kh, T0=b0)
             self.BONDANGLEBENDTYPE.content.append(newBONDANGLEBENDTYPE)
             self.BONDANGLEBENDTYPE.NBTY += 1
         
