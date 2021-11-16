@@ -265,7 +265,8 @@ class Gromos_System():
 
 
     def __deepcopy__(self, memo):
-        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder, readIn=False, verbose=self.verbose)
+        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder, readIn=False, verbose=False)
+        copy_obj.verbose = self.verbose
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
