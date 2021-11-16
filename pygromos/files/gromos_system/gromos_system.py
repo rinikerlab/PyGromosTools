@@ -677,7 +677,7 @@ class Gromos_System():
             sorted_energy_groups = {}
             for ind,key in enumerate(sorted(energy_groups)):
                 value = energy_groups[key]+last_atom_count
-                sorted_energy_groups.update({value:1+ind})
+                sorted_energy_groups.update({1+ind : value})
                 last_atom_count=value
 
         #adapt energy groups in IMD with sorted list of energy groups created above
