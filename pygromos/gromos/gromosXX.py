@@ -12,6 +12,7 @@ import time
 from typing import Union
 
 from pygromos.utils import bash
+from pygromos.gromos.utils import gromosTypeConverter
 
 class _Gromos:
     """
@@ -56,6 +57,7 @@ class _Gromos:
         else:
             return self._bin
 
+    @gromosTypeConverter
     def md_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
                    in_pert_topo_path:str=None, in_disres_path:str=None, in_posresspec_path:str=None, in_refpos_path:str=None,
                    nomp: int = 1, nmpi: int = 1,
@@ -210,10 +212,11 @@ class _Gromos:
 
         return log_file_path
 
-    def repex_mpi_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
-                      in_pert_topo_path: str = None, in_disres_path: str = None, in_posresspec_path: bool = False, in_refpos_path: bool = False,
-                      out_trc: bool = True, out_tre: bool = True, out_trs: bool = False, out_trg:bool = False,
-                      nomp: int = 1, nmpi: int = 1, verbose: bool = True) -> str:
+    @gromosTypeConverter
+    def repex_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
+                  in_pert_topo_path: str = None, in_disres_path: str = None, in_posresspec_path: bool = False, in_refpos_path: bool = False,
+                  out_trc: bool = True, out_tre: bool = True, out_trs: bool = False, out_trg:bool = False,
+                  nomp: int = 1, nmpi: int = 1, verbose: bool = True) -> str:
         """
         This function is a wrapper for gromosXX repex_mpi. You can directly execute the gromosXX repex_mpi in a bash enviroment here.
 
