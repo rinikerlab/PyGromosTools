@@ -369,9 +369,10 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BONDANGLE.NTHE += 1
 
     def harmonic2quarticAngleConversion(self, kh, b0):
+        b0rad = b0*math.pi/180
         kbT =  2.494323 #k boltzman * Temperature in kJ/mol
-        term1 = (math.cos(b0 + math.sqrt((kbT/kh))) - math.cos(b0))**2
-        term2 = (math.cos(b0 - math.sqrt((kbT/kh))) - math.cos(b0))**2
+        term1 = (math.cos(b0rad + math.sqrt((kbT/kh))) - math.cos(b0rad))**2
+        term2 = (math.cos(b0rad - math.sqrt((kbT/kh))) - math.cos(b0rad))**2
         return 2*kbT/(term1 + term2)
 
     def add_new_torsiondihedral(self, CP:float, PD:float, NP:int, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
