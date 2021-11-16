@@ -791,18 +791,21 @@ class MULTIBATH(_generic_imd_block):
             setattr(self, self._order[0][2][0], int(content[3].split()[0]))
             TEMP0 = []
             TAU = []
+            # Read in the temperatures of each temp bath
             for ind in range(5, 5+self.NBATHS):
                 fields = list(map(float, content[ind].split()))
                 TEMP0.append(fields[0])
                 TAU.append(fields[1])
             setattr(self, "TEMP0", TEMP0)
             setattr(self, "TAU", TAU)
+            # Read in DOFSET
             setattr(self, self._order[0][4][0], int(content[5+self.NBATHS+1].split()[0]))
-
+            
             LAST = []
             COMBATH=[]
             IRBATH=[]
-            for ind in range(10, 5+3+2*self.NBATHS):
+            # Read in the last atoms of each temp bath
+            for ind in range(5+3+self.NBATHS, 5+3+2*self.NBATHS):
                 fields = list(map(float, content[ind].split()))
                 LAST.append(fields[0])
                 COMBATH.append(fields[1])
@@ -998,7 +1001,6 @@ class FORCE(_generic_imd_block):
             NEGR:
             NRE (list):
         """
-
         if content is None:
             self.BONDS = bool(int(BONDS))
             self.ANGLES = bool(int(ANGLES))
@@ -1009,7 +1011,7 @@ class FORCE(_generic_imd_block):
             try:
                 self.NEGR = int(NEGR)
             except :
-                if(NEGR is list):
+                if(isinstance(NEGR, list)):
                     self.NEGR = int(NEGR[0])
                     NRE = NEGR[1:]+NRE
             self.NRE = NRE
