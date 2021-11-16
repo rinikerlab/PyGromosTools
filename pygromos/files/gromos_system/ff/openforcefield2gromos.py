@@ -72,6 +72,7 @@ class openforcefield2gromos():
         #create list of all forces
         self.molecule_force_list = []
         self.molecule_force_list = self.off.label_molecules(self.openFFTop)
+        self.openmm_system = self.off.create_openmm_system(self.openFFTop)
 
         # 1-3 / 1-4 exclusion lists
         self.exclusionList13 = dict()
@@ -109,10 +110,10 @@ class openforcefield2gromos():
                 atomI=key[0]+1
                 atomJ=key[1]+1
                 atomK=key[2]+1
-                k = force.k.value_in_unit(u.kilojoule / (u.mole * u.radian ** 2))
+                k = 0 #TODO: proper conversion to quartic
                 kh = force.k.value_in_unit(u.kilojoule / (u.mole * u.degree ** 2))
                 b0 = force.angle.value_in_unit(u.degree)
-                self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=False) #hQ
+                self.gromosTop.add_new_angle(k=k, kh=kh, b0=b0, atomI=atomI, atomJ=atomJ, atomK=atomK, includesH=False, convertToQuartic=True) #hQ
         if not hasattr(self.gromosTop, "BONDANGLEBENDTYPE"):
             self.gromosTop.add_block(blocktitle="BONDANGLEBENDTYPE", content=[])
         if not hasattr(self.gromosTop, "BONDANGLEH"):
@@ -133,7 +134,7 @@ class openforcefield2gromos():
                 phase_list = force.phase
                 per_list = force.periodicity
                 for t in range(len(k_list)):
-                    CP=k_list[t].value_in_unit(u.kilojoule/u.mole)
+                    CP=k_list[t].value_in_unit(u.kilojoule_per_mole)
                     PD=phase_list[t].value_in_unit(u.degree)
                     NP=per_list[t]
                     # convert negativ CP by phase shifting
@@ -172,76 +173,6 @@ class openforcefield2gromos():
         if not hasattr(self.gromosTop, "IMPDIHEDRAL"):
             self.gromosTop.add_block(blocktitle="IMPDIHEDRAL", content=[])
 
-    def createVdWexclusionList_backup(self) -> dict:
-        exclusionlist=dict()
-        for molecule in self.molecule_force_list:
-            for key in molecule["Bonds"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-            for key in molecule["Angles"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                exclusionlist[str(key[0])].add(key[2])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-                exclusionlist[str(key[1])].add(key[2])
-                if not str(key[2]) in exclusionlist.keys():
-                    exclusionlist[str(key[2])] = {key[0]}
-                exclusionlist[str(key[2])].add(key[0])
-                exclusionlist[str(key[2])].add(key[1])
-            for key in molecule["ProperTorsions"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                exclusionlist[str(key[0])].add(key[2])
-                exclusionlist[str(key[0])].add(key[3])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-                exclusionlist[str(key[1])].add(key[2])
-                exclusionlist[str(key[1])].add(key[3])
-                if not str(key[2]) in exclusionlist.keys():
-                    exclusionlist[str(key[2])] = {key[0]}
-                exclusionlist[str(key[2])].add(key[0])
-                exclusionlist[str(key[2])].add(key[1])
-                exclusionlist[str(key[2])].add(key[3])
-                if not str(key[3]) in exclusionlist.keys():
-                    exclusionlist[str(key[3])] = {key[0]}
-                exclusionlist[str(key[3])].add(key[0])
-                exclusionlist[str(key[3])].add(key[1])
-                exclusionlist[str(key[3])].add(key[2])
-            for key in molecule["ImproperTorsions"]:
-                if not str(key[0]) in exclusionlist.keys():
-                    exclusionlist[str(key[0])] = {key[1]}
-                exclusionlist[str(key[0])].add(key[1])
-                exclusionlist[str(key[0])].add(key[2])
-                exclusionlist[str(key[0])].add(key[3])
-                if not str(key[1]) in exclusionlist.keys():
-                    exclusionlist[str(key[1])] = {key[0]}
-                exclusionlist[str(key[1])].add(key[0])
-                exclusionlist[str(key[1])].add(key[2])
-                exclusionlist[str(key[1])].add(key[3])
-                if not str(key[2]) in exclusionlist.keys():
-                    exclusionlist[str(key[2])] = {key[0]}
-                exclusionlist[str(key[2])].add(key[0])
-                exclusionlist[str(key[2])].add(key[1])
-                exclusionlist[str(key[2])].add(key[3])
-                if not str(key[3]) in exclusionlist.keys():
-                    exclusionlist[str(key[3])] = {key[0]}
-                exclusionlist[str(key[3])].add(key[0])
-                exclusionlist[str(key[3])].add(key[1])
-                exclusionlist[str(key[3])].add(key[2])
-            #now we should have added everything and we can start to delete
-            for key in exclusionlist:
-                for i in range(0, int(key) + 1):
-                    exclusionlist[key].discard(i)
-        return exclusionlist
 
     def createVdWexclusionList(self):
         bondDict=dict()
@@ -287,11 +218,13 @@ class openforcefield2gromos():
     def convertVdW(self):
         self.createVdWexclusionList()
         moleculeItr = 1
+        prev_atom_counter = 0
         for molecule in self.molecule_force_list:
             panm_dict = collections.defaultdict(int)
+            tot_len = len(molecule["vdW"])
             for key in molecule["vdW"]:
                 force = molecule["vdW"][key]
-                ATNM = int(key[0]) + 1
+                ATNM = int(key[0]) + 1 + prev_atom_counter
                 MRES = moleculeItr
                 # get element sympol: 
                 atomic_number = self.openFFmolecule.atoms[int(key[0])].atomic_number
@@ -300,8 +233,8 @@ class openforcefield2gromos():
                 PANM = element_symbol + str(panm_dict[element_symbol])
                 IAC = 0
                 MASS = self.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(u.dalton)
-                CG = 0
-                CGC = 1 
+                CG = self.openmm_system.getForce(1).getParticleParameters(int(key[0]))[0].value_in_unit(u.elementary_charge)
+                CGC = 1 if (int(key[0])+1 == tot_len) else 0
                 if str(key[0]) in self.exclusionList13:
                     openFFexList13 = list(self.exclusionList13[str(key[0])])
                     INE = [int(x)+1 for x in openFFexList13]
@@ -316,9 +249,12 @@ class openforcefield2gromos():
                 rmin = 2 * force.rmin_half.value_in_unit(u.nanometer)
                 C6 = 2 * epsilon * (rmin**6)
                 C12 = epsilon * (rmin**12)
+                CS6 = 0.5 * C6 # factor 0.5 for 1-4 interaction. Standart in GROMOS and OpenFF
+                CS12 = 0.5 * C12 # factor 0.5 for 1-4 interaction. Standart in GROMOS and OpenFF
                 IACname = force.id
-                self.gromosTop.add_new_atom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, IACname=IACname)
+                self.gromosTop.add_new_atom(ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14, C6=C6, C12=C12, CS6=CS6, CS12=CS12, IACname=IACname)
             moleculeItr += 1
+            prev_atom_counter += tot_len
 
     def convert_other_stuff(self):
         if not hasattr(self.gromosTop, "SOLUTEMOLECULES"):

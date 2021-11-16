@@ -15,6 +15,7 @@ import os
 from typing import Dict, Union, List, Callable
 
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
+from pygromos.files.blocks import imd_blocks
 from pygromos.files.coord.refpos import Reference_Position
 from pygromos.files.coord.posres import Position_Restraints
 
@@ -676,7 +677,7 @@ class Gromos_System():
             sorted_energy_groups = {}
             for ind,key in enumerate(sorted(energy_groups)):
                 value = energy_groups[key]+last_atom_count
-                sorted_energy_groups.update({value:1+ind})
+                sorted_energy_groups.update({1+ind : value})
                 last_atom_count=value
 
         #adapt energy groups in IMD with sorted list of energy groups created above
@@ -710,6 +711,21 @@ class Gromos_System():
                     last_atom_count=value
             
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
+
+        ff_name = self.Forcefield.name
+        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off":
+            #adjust harmonic forces
+            if (hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None):
+                if self.verbose:
+                    print("Please make sure to use harmonic forces for simulations with OpenForceField torsions")
+            else:
+                setattr(self.imd,"COVALENTFORM", imd_blocks.COVALENTFORM(NTBBH=1, NTBAH=1, NTBDN=0))
+            #adjust amberscale for LJ forces
+            if (hasattr(self.imd, "AMBER") and not getattr(self.imd, "AMBER") is None):
+                if self.verbose:
+                    print("Please make sure to use amber LJ forces for simulations with OpenForceField LJ parameters")
+            else:
+                setattr(self.imd,"AMBER", imd_blocks.AMBER(AMBER=1, AMBSCAL=1.2))
 
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
