@@ -18,7 +18,7 @@ class NOE(_general_gromos_file._general_gromos_file):
 
     _orig_file_path:str
     _required_blocks = ["TITLE", "AVERAGE_NOE", "NOE_VIOLATIONS", "RESTRAINT_LEGEND"]
-
+    _gromos_file_ending = "noe"
     #POSSIBLE GROMOS BLOCKS
     TITLE: blocks.TITLE
     AVERAGE_NOE: pd.DataFrame

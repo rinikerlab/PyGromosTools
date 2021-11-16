@@ -24,6 +24,8 @@ from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_
 from pygromos.analysis import energy_analysis as ea
 
 class Tre(traj._General_Trajectory):
+    _gromos_file_ending:str = "tre"
+
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0, _ene_ana_names = gromos_2020_tre_block_names_table):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
         self.tre_block_name_table = _ene_ana_names

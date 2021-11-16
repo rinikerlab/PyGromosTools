@@ -22,7 +22,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.
 
     """
-
+    _gromos_file_ending: str = "repstat"
     SYSTEM: blocks.repex_system
     DATA: pd.DataFrame
 

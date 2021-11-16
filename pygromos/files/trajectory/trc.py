@@ -28,6 +28,7 @@ CnfType = TypeVar("Cnf")
 
 
 class Trc(traj._General_Trajectory):
+    _gromos_file_ending:str = "trc"
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
 

@@ -21,6 +21,7 @@ class _general_gromos_file():
     _required_blocks = ["TITLE"]
     _blocksset_names:List[str]
 
+    _gromos_file_ending : str
     #private
     _blocks:Dict[str, blocks._generic_gromos_block]
     _block_order: List[str] = []
