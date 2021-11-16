@@ -330,7 +330,7 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BOND.content.append(newBond)
             self.BOND.NBON += 1
 
-    def add_new_angle(self, k:float, kh:float, b0:float, atomI:int, atomJ:int, atomK:int, includesH:bool = False, verbose=False):
+    def add_new_angle(self, k:float, kh:float, b0:float, atomI:int, atomJ:int, atomK:int, includesH:bool = False, verbose=False, convertToQuartic=False):
         #check if all classes are ready, if not create
         if not hasattr(self, "BONDANGLEBENDTYPE"):
             self.add_block(blocktitle="BONDANGLEBENDTYPE", content=[], verbose=verbose)
@@ -345,6 +345,8 @@ class Top(_general_gromos_file._general_gromos_file):
         # TODO: add harmonic in the angle cosine force (CT)
         angle_type_number = 0
         iterator = 1
+        if convertToQuartic:
+            k = self.harmonic2quarticAngleConversion(kh, b0)
         for angle_type in self.BONDANGLEBENDTYPE.content:
             if angle_type.CB == k and angle_type.B0 == b0:
                 break
@@ -365,6 +367,12 @@ class Top(_general_gromos_file._general_gromos_file):
         else:
             self.BONDANGLE.content.append(newAngle)
             self.BONDANGLE.NTHE += 1
+
+    def harmonic2quarticAngleConversion(self, kh, b0):
+        kbT =  2.494323 #k boltzman * Temperature in kJ/mol
+        term1 = (math.cos(b0 + math.sqrt((kbT/kh))) - math.cos(b0))**2
+        term2 = (math.cos(b0 - math.sqrt((kbT/kh))) - math.cos(b0))**2
+        return 2*kbT/(term1 + term2)
 
     def add_new_torsiondihedral(self, CP:float, PD:float, NP:int, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
         #check if all classes are ready, if not create

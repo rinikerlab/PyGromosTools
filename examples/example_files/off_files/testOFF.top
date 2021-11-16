@@ -126,8 +126,8 @@ BONDANGLEBENDTYPE
 # 	 NBTY: number of angle types
  	 2
 # 	 CT 	 CHT 	 T0
-	1.35622e-01	1.35622e-01	1.16548e+02
-	1.24333e-01	1.24333e-01	1.15603e+02
+	1.32357e+00	1.35622e-01	1.16548e+02
+	1.89658e+00	1.24333e-01	1.15603e+02
 END
 BONDANGLEH
 # 	 NTHEH: number of bondangles involving a H
