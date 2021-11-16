@@ -103,9 +103,7 @@ def simulation(in_gromos_system:Gromos_System, project_dir:str,
                 print(spacer)
 
             #Write out, all non promised files
-            #TODO: REMOVE - print(in_gromos_system.all_file_paths)
-            in_gromos_system._update_all_file_paths()
-            in_gromos_system.write_files()
+            in_gromos_system.rebase_files()
             #TODO: REMOVE - print(in_gromos_system.all_file_paths)
 
             #Write Out Ana Script
