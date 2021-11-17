@@ -2527,11 +2527,14 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
-                    if(int(INE) >= 1):
+                    if(1 <= int(INE) <= 100):
                         INEvalues = dump1[8:]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE) > len(INEvalues)):
-                            INEvalues.extend(contentLines.pop(0).strip().split())
+                            try:
+                                INEvalues.extend(contentLines.pop(0).strip().split())
+                            except:
+                                break
                     else:
                         INEvalues = []
 
@@ -2540,11 +2543,14 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     INE14 = dump2[0]
-                    if(int(INE14) >= 1):
+                    if(1 <= int(INE14) <= 100):
                         INE14values = dump2[1:]
                         # keep reading in lines until we have all the data needed.
-                        while (int(INE14) > len(INE14values)): 
-                            INE14values.extend(contentLines.pop(0).strip().split())
+                        while (int(INE14) > len(INE14values)):
+                            try: 
+                                INE14values.extend(contentLines.pop(0).strip().split())
+                            except:
+                                break
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
