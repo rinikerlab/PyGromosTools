@@ -39,7 +39,7 @@ def nice_s_vals(svals:Iterable, base10=False) ->list:
     return nicer_labels
 
 class Imd(_general_gromos_file._general_gromos_file):
-    gromos_file_ending:str = "imd"
+    _gromos_file_ending:str = "imd"
 
     _orig_file_path:str
     path:str

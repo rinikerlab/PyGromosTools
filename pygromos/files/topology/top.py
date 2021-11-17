@@ -42,7 +42,7 @@ def check_top():
 
 #file Classes
 class Top(_general_gromos_file._general_gromos_file):
-    gromos_file_ending:str = "top"
+    _gromos_file_ending:str = "top"
 
     def __init__(self, in_value:(str or dict or None or TopType), _future_file:bool=False):
         if type(in_value) is str:

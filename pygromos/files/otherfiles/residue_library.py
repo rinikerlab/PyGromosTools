@@ -18,8 +18,9 @@ class residue_library(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", "RESIDUENAMELIB", "ATOMNAMELIB"]
     RESIDUENAMELIB: blocks.RESIDUENAMELIB
     ATOMNAMELIB: blocks.ATOMNAMELIB
-
     verbose : bool = False
+
+    _gromos_file_ending = "res"
 
     def __init__(self, in_value:Union[str, dict]=pdb_lib):
         """

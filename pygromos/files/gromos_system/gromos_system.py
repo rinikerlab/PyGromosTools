@@ -8,10 +8,12 @@ Author: Marc Lehner, Benjamin Ries
 """
 
 # imports
+import os
 import copy
+import inspect
+import functools
 import importlib
 import warnings
-import os
 from typing import Dict, Union, List, Callable
 
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
@@ -123,6 +125,9 @@ class Gromos_System():
 
         self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
         self._gromosXX = GromosXX(gromosXX_bin_dir=in_gromosXX_bin_dir)
+
+        #add functions of gromosPP to system
+        self.__bind_gromosPPFuncs()
 
         ## For HPC-Queueing
         self._future_promise= False
@@ -261,18 +266,23 @@ class Gromos_System():
         self._gromosPP = GromosPP(self._gromosPP_bin_dir)
         self._gromosXX = GromosXX(self._gromosXX_bin_dir)
 
+        self.__bind_gromosPPFuncs()
+
         #are promised files now present?
         self._check_promises()
 
-
     def __deepcopy__(self, memo):
-        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder, readIn=False, verbose=self.verbose)
+        copy_obj = self.__class__(system_name="Test", work_folder=self.work_folder, readIn=False, verbose=False)
+        copy_obj.verbose = self.verbose
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
     #def __copy__(self):
 
 
+
+    def copy(self):
+        return copy.deepcopy(self)
 
     """
         Properties
@@ -552,7 +562,7 @@ class Gromos_System():
                 if(file_obj._future_file):
                     if(self.verbose or True): warnings.warn("Did not change file path as its only promised " + str(file_obj.path))
                 else:
-                    file_obj.path = self._work_folder + "/" + self.name + "." + getattr(self, file_name).gromos_file_ending
+                    file_obj.path = self._work_folder + "/" + self.name + "." + getattr(self, file_name)._gromos_file_ending
 
     def rebase_files(self):
         if(not os.path.exists(self.work_folder) and os.path.exists(os.path.dirname(self.work_folder))):
@@ -850,3 +860,102 @@ class Gromos_System():
             obj.residue_list, obj.solute_info, obj.protein_info, obj.non_ligand_info, obj.solvent_info = obj._cnf.get_system_information()
         obj.checkpoint_path = path
         return obj
+
+
+    """
+    super privates - don't even read!
+    """
+    def __SystemConstructionAttributeFinder(self, func:callable) -> callable:
+        """
+            ** DECORATOR **
+
+            This decorator trys to find input parameters of the function in the gromossystem and will automatically assign those to the function call!
+            functional programming
+
+        Parameters
+        ----------
+        func : callable
+
+        Returns
+        -------
+        callable
+            returns the wrapped function
+
+        """
+
+        @functools.wraps(func)
+        def findGromosSystemAttributes(*args, **kwargs):
+            #print(func.__name__, args, kwargs)
+
+            # collect input parameters present in system/ replace them with
+            tmp_files = []
+            for k in inspect.signature(func).parameters:
+                attr_key = k.replace("in_", "").replace("_path", "")
+                #print(attr_key)
+                if ("in" in k and "path" in k and attr_key in dir(self)):
+                    grom_obj = getattr(self, attr_key)
+                    if (grom_obj.path is None):
+                        tmp_file_path = self.work_folder + "/tmp_file." + grom_obj._gromos_file_ending
+                        grom_obj.write(tmp_file_path)
+                        kwargs.update({k: tmp_file_path})
+                        tmp_files.append(tmp_file_path)
+                    else:
+                        grom_obj.write(grom_obj.path)  # make sure filestatus is good :)
+                        kwargs.update({k: grom_obj.path})
+
+            # execute function
+            r = func(*args, **kwargs)
+
+            # remove tmp_files
+            [bash.remove_file(p) for p in tmp_files]
+
+            return r
+        return findGromosSystemAttributes
+
+    def __SystemConstructionUpdater(self, func:callable) -> callable:
+        """
+            ** DECORATOR **
+            This decorator trys to find output parameters of the function in the gromossystem and will automatically update the state of those attributes!
+            functional programming
+
+        Parameters
+        ----------
+        func: callable
+            the function to be wrapped
+
+        Returns
+        -------
+        func
+
+        """
+
+        @functools.wraps(func)
+        def updateGromosSystem(*args, **kwargs):
+            #rint(func.__name__, args, kwargs)
+
+            # collect out_paths
+            update_dict = {}
+            for k in inspect.signature(func).parameters:
+                if ("out" in k and "path" in k):
+                    attr_key = k.replace("out_", "").replace("_path", "")
+                    kwargs.update({k: self.work_folder + "/tmp_file." + attr_key})
+                    update_dict.update({k: attr_key})
+
+            # execute function
+            r = func(*args, **kwargs)
+
+            # update attribute states and remove tmp files.
+            for k in update_dict:
+                setattr(self, update_dict[k], kwargs[k])
+                getattr(self, update_dict[k]).path = None
+                bash.remove_file(kwargs[k])
+
+            return r
+        return updateGromosSystem
+
+    def __bind_gromosPPFuncs(self):
+        if(not self._gromosPP is None):
+            func = [k for k in dir(self._gromosPP) if (not k.startswith("_") and k != "bin")]
+            v = {f: self.__SystemConstructionUpdater(self.__SystemConstructionAttributeFinder(getattr(self._gromosPP, f)))
+                 for f in func}
+            self.__dict__.update(v)

@@ -7,6 +7,7 @@ scipy>=1.5.2
 sympy>=1.6.2
 matplotlib
 rdkit
+mpmath
 
 jupyter>=1.0.0
 typing>=3.7.4.3

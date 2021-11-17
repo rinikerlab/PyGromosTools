@@ -25,6 +25,8 @@ class gromos_2020_trg_block_names_table():
     precalclam_subblock = ["nr_lambdas", "A_e_lj", "B_e_lj", "A_e_crf", "B_e_crf", "AB_kinetic", "AB_bond", "AB_angle", "AB_improper", "AB_disres", "AB_dihres", "AB_disfld",]
 
 class Trg(traj._General_Trajectory):
+    _gromos_file_ending:str = "trg"
+
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
         self.block_name_table = gromos_2020_trg_block_names_table

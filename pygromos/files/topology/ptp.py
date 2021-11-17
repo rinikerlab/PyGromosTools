@@ -12,7 +12,7 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
     MPERATOM: blocks.MPERTATOM
     PERTATOMPARAM:blocks.PERTATOMPARAM
 
-    gromos_file_ending:str = "ptp"
+    _gromos_file_ending:str = "ptp"
 
     def __init__(self, in_value:(str or dict)=None):
         super().__init__(in_value=in_value)

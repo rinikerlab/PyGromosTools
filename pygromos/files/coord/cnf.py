@@ -47,7 +47,7 @@ class Cnf(_general_gromos_file):
 
     # general
     _orig_file_path: str
-    gromos_file_ending: str = "cnf"
+    _gromos_file_ending: str = "cnf"
     residues: Dict[str, Dict[str, int]]
 
     # Standard Gromos blocks
