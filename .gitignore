@@ -118,3 +118,6 @@ ENV/
 #test output
 pygromos/tests/out_testresults/*
 pygromos/tests/in_testfiles/**out*
+
+##tutorial products
+examples/example_files
