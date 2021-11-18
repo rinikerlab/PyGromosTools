@@ -45,12 +45,36 @@ class Tre(traj._General_Trajectory):
         self.totals_total = self.database["totals"].apply(lambda x: x[0])
         return self.totals_total
 
-    def get_totals_bonded(self) -> pd.DataFrame:
+    def get_totals_totkin(self) -> pd.DataFrame:
         self.totals_bonded = self.database["totals"].apply(lambda x: x[1])
         return self.totals_bonded
 
-    def get_totals_nonbonded(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[2])
+    def get_totals_totcov(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[3])
+        return self.totals_nonbonded
+
+    def get_totals_totbond(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[4])
+        return self.totals_nonbonded
+
+    def get_totals_totangle(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[5])
+        return self.totals_nonbonded
+
+    def get_totals_totdihedral(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[7])
+        return self.totals_nonbonded
+
+    def get_totals_totnonbonded(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[9])
+        return self.totals_nonbonded
+
+    def get_totals_totlj(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[10])
+        return self.totals_nonbonded
+
+    def get_totals_totcrf(self) -> pd.DataFrame:
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[11])
         return self.totals_nonbonded
 
     def get_eds(self)->pd.DataFrame:
@@ -111,12 +135,12 @@ class Tre(traj._General_Trajectory):
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_nonbonded_energy = 0
         if type(gas_traj) == type(self):
-            gas_nonbonded_energy = gas_traj.get_totals_nonbonded().mean()
+            gas_nonbonded_energy = gas_traj.get_totals_totpot().mean()
         elif type(gas_traj) == float:
             gas_nonbonded_energy = gas_traj
         else:
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
-        liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
+        liquid_nonbonded_energyself = self.get_totals_totpot().mean()
 
         # calculate heat of vaporization
         self.heat_vap = ea.get_Hvap(liq=liquid_nonbonded_energyself, gas=gas_nonbonded_energy, temperature=temperature, nMolecules=nMolecules)
