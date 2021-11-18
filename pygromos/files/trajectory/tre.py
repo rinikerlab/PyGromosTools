@@ -42,39 +42,39 @@ class Tre(traj._General_Trajectory):
         return self.totals
 
     def get_totals_total(self) -> pd.DataFrame:
-        self.totals_total = self.database["totals"].apply(lambda x: x[0])
+        self.totals_total = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totene']])
         return self.totals_total
 
     def get_totals_totkin(self) -> pd.DataFrame:
-        self.totals_bonded = self.database["totals"].apply(lambda x: x[1])
+        self.totals_bonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totkin']])
         return self.totals_bonded
 
     def get_totals_totcov(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[3])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totcov']])
         return self.totals_nonbonded
 
     def get_totals_totbond(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[4])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totbond']])
         return self.totals_nonbonded
 
     def get_totals_totangle(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[5])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totangle']])
         return self.totals_nonbonded
 
     def get_totals_totdihedral(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[7])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totdihedral']])
         return self.totals_nonbonded
 
     def get_totals_totnonbonded(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[9])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totnonbonded']])
         return self.totals_nonbonded
 
     def get_totals_totlj(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[10])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totlj']])
         return self.totals_nonbonded
 
     def get_totals_totcrf(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[11])
+        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totcrfs']])
         return self.totals_nonbonded
 
     def get_eds(self)->pd.DataFrame:
