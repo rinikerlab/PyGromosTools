@@ -1012,10 +1012,15 @@ class Gromos_System():
                             *args, **kwargs):
             # execute function
             r = func(*args, **kwargs)
-
-            nIons, ion = kwargs['negative']
             top_cl = self.work_folder + "/aux_tmp.top"
-            sequence = (ion+" ")*nIons
+
+            sequence = ""
+            if("negative" in kwargs):
+                nIons, ion = kwargs['negative']
+                sequence += (ion+" ")*nIons
+            if("positive" in kwargs):
+                nIons, ion = kwargs['positive']
+                sequence += (ion+" ")*nIons
 
             self._gromosPP.make_top(in_building_block_lib_path=in_building_block_lib_path,
                             in_parameter_lib_path=in_parameter_lib_path,
