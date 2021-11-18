@@ -17,7 +17,7 @@ class gromos_2020_tre_block_names_table():
                              "totlj","totcrf","totls","totlspair","totlsreal","totlsk","totlsa","totlsself","totlssurf","totpolself","totspecial",
                              "totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle",
                              "totorder","totsymm",
-                             "eds_vr,entropy","totqm","totbsleus","totrdc","wip1","wip2","wip3","wip4","wip5","wip6"]
+                             "eds_vr,entropy","totqm","totbsleus","totrdc","wip1","wip2","wip3","wip4","wip5","wip6", "wip7"]
 
     eds_subblock_names_singleState = ["total", "nonbonded", "special", "offset"]
     eds_subblock_names = None #is generated on the fly in get_eds of TRE - depends on num_states -> simulation specific

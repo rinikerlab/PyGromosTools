@@ -12,7 +12,9 @@ import time
 from typing import Union
 
 from pygromos.utils import bash
+from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
+
 
 class _Gromos:
     """
@@ -191,7 +193,7 @@ class _Gromos:
         end_time = datetime.datetime.now()
         duration = end_time-start_time
 
-        time.sleep(2)
+        time.sleep(time_wait_s_for_filesystem)
         log_file = open(log_file_path, "a")
         log_file.write("\n\nREMARKS\n")
 
@@ -349,7 +351,7 @@ class _Gromos:
 
         #bash.execute(command, verbose=True)
         md_run = os.system(command_text)
-        time.sleep(2)
+        time.sleep(time_wait_s_for_filesystem)
         if verbose: end_time = time.ctime()
         if verbose: print("END: " + str(end_time))
         print("MDRUN OUT: ", md_run)

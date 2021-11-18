@@ -627,8 +627,8 @@ class _gromosPPbase:
             command_suffix+= " @minwall " + str(minwall)
 
         command= self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @solvent " + in_solvent_cnf_file_path + " " + command_suffix
-        print(command)
         p = bash.execute(command, verbose=verbose, catch_STD=out_cnf_path)
+
         return out_cnf_path
 
     @gromosTypeConverter
