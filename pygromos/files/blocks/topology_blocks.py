@@ -2527,7 +2527,7 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
-                    if(1 <= int(INE) <= 100):
+                    if(1 <= int(INE) <= 1000):
                         INEvalues = dump1[8:]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE) > len(INEvalues)):
@@ -2535,6 +2535,8 @@ class SOLUTEATOM(_iterable_topology_block):
                                 INEvalues.extend(contentLines.pop(0).strip().split())
                             except:
                                 break
+                    elif int(INE) > 1000:
+                        raise IOError("INE is greater than 1000")
                     else:
                         INEvalues = []
 
