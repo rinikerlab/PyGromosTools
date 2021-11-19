@@ -225,6 +225,20 @@ class Top(_general_gromos_file._general_gromos_file):
 
         return retTop
 
+    def _multiply_top(self, n_muliplication:int)->TopType:
+        # catch simple cases and create return top
+        if n_muliplication == 1:
+            return TopType(in_value=None)
+        retTop = deepcopy(self)
+        if n_muliplication is 1:
+            return retTop
+
+        for _ in range(n_muliplication):
+            #add RESNAME
+            for resname in self.RESNAME.content[1:]:
+                retTop.add_new_resname(resname[0])
+
+
     def read_file(self):
         #Read blocks to string
         data = parser.read_general_gromos_file(self._orig_file_path)
