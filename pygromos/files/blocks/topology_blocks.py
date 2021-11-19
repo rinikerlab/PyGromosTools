@@ -2487,7 +2487,6 @@ class RESNAME(_topology_block):
 class SOLUTEATOM(_iterable_topology_block):
     NRP: int
     table_header: Iterable[str] = ["IB", "JB", "ICB"]
-    _max_INE:int = 1000
     def __init__(self, content:(str or dict or None or type(SOLUTEATOM)),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
@@ -2528,34 +2527,42 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
-                    if(1 <= int(INE) <= self._max_INE):
+                    if(1 <= int(INE)):
                         INEvalues = dump1[8:]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE) > len(INEvalues)):
                             try:
-                                INEvalues.extend(contentLines.pop(0).strip().split())
+                                if (len(contentLines) == 0):
+                                    raise IOError("Not enough lines provided for multi line INE in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
+                                    INEvalues.extend(contentLines.pop(0).strip().split())
+                                else:
+                                    raise IOError("no intendation detected for mult line INE in SOLUTEATOM Block or too large number for INE\nATNM="+str(ATNM)+" MRES="+str(MRES))
                             except:
+                                raise IOError("Problem reading INE for ATNM="+str(ATNM)+" MRES="+str(MRES))
                                 break
-                    elif int(INE) > self._max_INE:
-                        raise IOError("INE is greater than "+str(self._max_INE)+"\nChange _max_INE if you know what you are doing")
                     else:
                         INEvalues = []
 
                 dump2 = contentLines.pop(0).strip().split()
                 if(len(dump2) < 1):
-                    raise IOError("Not enough arguments provided in SOLUTEATOM Block")
+                    raise IOError("Not enough arguments provided in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
                 else:
                     INE14 = dump2[0]
-                    if(1 <= int(INE14) <= self._max_INE):
+                    if(1 <= int(INE14)):
                         INE14values = dump2[1:]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE14) > len(INE14values)):
-                            try: 
-                                INE14values.extend(contentLines.pop(0).strip().split())
+                            try:
+                                if (len(contentLines) == 0):
+                                    raise IOError("Not enough lines provided for multi line INE14 in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
+                                    INE14values.extend(contentLines.pop(0).strip().split())
+                                else:
+                                    raise IOError("no intendation detected for mult line INE14 in SOLUTEATOM Block or too large number for INE14\nATNM="+str(ATNM)+" MRES="+str(MRES))
                             except:
+                                raise IOError("Problem reading INE14 for ATNM="+str(ATNM)+" MRES="+str(MRES))
                                 break
-                    elif int(INE14) > self._max_INE:
-                        raise IOError("INE14 is greater than "+str(self._max_INE+"\nChange _max_INE if you know what you are doing"))
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
