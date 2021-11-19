@@ -163,7 +163,7 @@ class _gromosPPbase:
         return out_path
 
     @gromosTypeConverter
-    def make_top(self, out_top_path:str, in_building_block_lib_path: str, in_parameter_lib_path: str, in_sequence:str, in_solvent:str= "H2O", additional_options="\n")->str:
+    def make_top(self, out_top_path:str, in_building_block_lib_path: str, in_parameter_lib_path: str, in_sequence:str, in_solvent:str= "H2O", additional_options="\n", _binary_name:str= "make_top")->str:
         """
         This wrapper uses make_top to generate a topology file.
 
@@ -199,7 +199,7 @@ class _gromosPPbase:
         #arg_file.write("\n".join(args))
         #arg_file.close()
         #"@f " + arg_path
-        command = self._bin +"make_top "+" ".join(args)
+        command = self._bin +_binary_name +" "+" ".join(args)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
@@ -1104,9 +1104,9 @@ class _gromosPPbase:
 
     @gromosTypeConverter
     def rgyr(self, out_rgyr_path:str, in_coord_path:str, in_top_path:str, atom_selection:str, periodic_boundary_condition:str="r cog", time:int=None, dt:int=None,  
-    binary_name:str= "rgyr", mass_weighted:bool=False)->str:
+    _binary_name:str= "rgyr", mass_weighted:bool=False)->str:
         """
-        This wrapper uses rgyr to compute the radius of gyration. 
+        This wrapper uses rgyr to compute the radius of gyration for a given atom selection. 
 
         Parameters
         ----------
@@ -1137,12 +1137,8 @@ class _gromosPPbase:
             args += "@time "+str(time)+" "
         if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
             args += " "+str(dt)+" "
-        #arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
-        #arg_file = open(arg_path, "w")
-        #arg_file.write("\n".join(args))
-        #arg_file.close()
-        #"@f " + arg_path
-        command = self._bin +"rgyr "+" ".join(args)
+	
+        command = self._bin +_binary_name+" "+" ".join(args)
         bash.execute(command, catch_STD=out_rgyr_path)
         return out_rgyr_path
 
