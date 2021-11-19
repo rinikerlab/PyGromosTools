@@ -1102,6 +1102,50 @@ class _gromosPPbase:
     def _gr962pdb(self):
         raise Exception('not implemented yet!')
 
+    @gromosTypeConverter
+    def rgyr(self, out_rgyr_path:str, in_coord_path:str, in_top_path:str, atom_selection:str, periodic_boundary_condition:str="r cog", time:int=None, dt:int=None,  
+    binary_name:str= "rgyr", mass_weighted:bool=False)->str:
+        """
+        This wrapper uses rgyr to compute the radius of gyration. 
+
+        Parameters
+        ----------
+        out_rgyr_path: str
+        in_coord_path: str
+        in_top_path: str
+        atom_selection: str
+        periodic_boundary_condition: str
+        time: int, optional
+        dt: int, optional
+
+        Returns
+        -------
+        str
+            returns out_rgyr_path
+
+        See Also
+        --------
+             For more information checkout the Gromos Manual
+        """
+
+        args = ["@topo " + in_top_path,
+                "@pbc " + periodic_boundary_condition,
+                "@atoms " + atom_selection,
+                "@traj " + in_coord_path]
+
+        if(not isinstance(time, type(None))):
+            args += "@time "+str(time)+" "
+        if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
+            args += " "+str(dt)+" "
+        #arg_path = os.path.dirname(out_top_path) + "/topargs.arg"
+        #arg_file = open(arg_path, "w")
+        #arg_file.write("\n".join(args))
+        #arg_file.close()
+        #"@f " + arg_path
+        command = self._bin +"rgyr "+" ".join(args)
+        bash.execute(command, catch_STD=out_rgyr_path)
+        return out_rgyr_path
+
 
 class GromosPP(_gromosPPbase):
     """
