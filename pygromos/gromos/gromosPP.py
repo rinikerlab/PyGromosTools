@@ -1104,7 +1104,7 @@ class _gromosPPbase:
 
     @gromosTypeConverter
     def rgyr(self, out_rgyr_path:str, in_coord_path:str, in_top_path:str, atom_selection:str, periodic_boundary_condition:str="r cog", time:int=None, dt:int=None,  
-    _binary_name:str= "rgyr", mass_weighted:bool=False)->str:
+    mass_weighted:bool=False, _binary_name:str= "rgyr")->str:
         """
         This wrapper uses rgyr to compute the radius of gyration for a given atom selection. 
 
@@ -1117,6 +1117,8 @@ class _gromosPPbase:
         periodic_boundary_condition: str
         time: int, optional
         dt: int, optional
+	mass_weighted:bool, optional
+	_binary_name: str, optional
 
         Returns
         -------
