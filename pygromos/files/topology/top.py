@@ -225,18 +225,134 @@ class Top(_general_gromos_file._general_gromos_file):
 
         return retTop
 
+    def __mul__(self, n_multiplication:int):
+        return self._multiply_top(n_multiplication)
+    
     def _multiply_top(self, n_muliplication:int)->TopType:
+
         # catch simple cases and create return top
-        if n_muliplication == 1:
+        if n_muliplication == 0:
             return TopType(in_value=None)
         retTop = deepcopy(self)
-        if n_muliplication is 1:
+        if n_muliplication == 1:
             return retTop
 
-        for _ in range(n_muliplication):
-            #add RESNAME
-            for resname in self.RESNAME.content[1:]:
-                retTop.add_new_resname(resname[0])
+        original_top = deepcopy(self) # for safe storage and reagsinment so that we can modifie self
+
+        n_muliplication -= 1 # -1 since first one is a deepcopy
+        atnmShift = 0 # init for number of atoms. Will be determined in SOLUTEATOM
+
+        ##start with additonal copies of all Blocks
+
+        #multiply RESNAME
+        if hasattr(self, "RESNAME") and len(self.RESNAME.content) > 0:
+            self.RESNAME.content[0][0] = str(int(self.RESNAME.content[0][0]) * n_muliplication)
+            for _ in range(n_muliplication):
+                retTop.RESNAME.content.extend(self.RESNAME.content[1:])
+
+        #multiply SOLUTEATOM
+        if hasattr(self, "SOLUTEATOM") and len(self.SOLUTEATOM.content) > 0:
+            atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
+            mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
+
+            int(retTop.SOLUTEATOM.NRP) *= n_muliplication
+
+            for i in range(n_muliplication):
+                for atom in self.SOLUTEATOM.content:
+                    atom.ATNM += atnmShift
+                    atom.MRES += mresShift
+                    atom.INEvalues = [str(int(i)+(atnmShift)) for i in atom.INEvalues] #TODO remove str/int conversion
+                    atom.INE14values = [str(int(i)+(atnmShift)) for i in atom.INE14values]
+                retTop.SOLUTEATOM.content.extend(self.SOLUTEATOM.content)
+
+        #multiply Bonds(H)
+        if hasattr(self, "BOND") and len(self.BOND.content) > 0:
+            int(retTop.BOND.NBON) *= n_muliplication
+            for i in range(n_muliplication):
+                for bond in self.BOND.content:
+                    bond.IB += atnmShift
+                    bond.JB += atnmShift
+                retTop.BOND.content.extend(self.BOND.content)
+        if hasattr(self, "BONDH") and len(self.BOND.content) > 0:
+            int(retTop.BONDH.NBONH) *= n_muliplication
+            for i in range(n_muliplication):
+                for bond in self.BONDH.content:
+                    bond.IB += atnmShift
+                    bond.JB += atnmShift
+                retTop.BONDH.content.extend(self.BONDH.content)
+            
+        #multiply Angles(H)
+        if hasattr(self, "BONDANGLE") and len(self.BONDANGLE.content) > 0:
+            int(retTop.BONDANGLE.NTHE) *= n_muliplication
+            for i in range(n_muliplication):
+                for angle in self.BONDANGLE.content:
+                    angle.IT += atnmShift
+                    angle.JT += atnmShift
+                    angle.KT += atnmShift
+                retTop.BONDANGLE.content.extend(self.BONDANGLE.content)
+        if hasattr(self, "BONDANGLEH") and len(self.BONDANGLEH.content) > 0:
+            int(retTop.BONDANGLEH.NTHEH) *= n_muliplication
+            for i in range(n_muliplication):
+                for angle in self.BONDANGLEH.content:
+                    angle.IT += atnmShift
+                    angle.JT += atnmShift
+                    angle.KT += atnmShift
+                retTop.BONDANGLEH.content.extend(self.BONDANGLEH.content)          
+
+        #multiply Impdihedrals(H)
+        if hasattr(self, "IMPDIHEDRAL") and len(self.IMPDIHEDRAL.content) > 0:
+            int(retTop.IMPDIHEDRAL.NQHI) *= n_muliplication
+            for i in range(n_muliplication):
+                for angle in self.IMPDIHEDRAL.content:
+                    angle.IQ += atnmShift
+                    angle.JQ += atnmShift
+                    angle.KQ += atnmShift
+                    angle.LQ += atnmShift
+                retTop.IMPDIHEDRAL.content.extend(self.IMPDIHEDRAL.content)
+        if hasattr(self, "IMPDIHEDRALH") and len(self.IMPDIHEDRALH.content) > 0:
+            int(retTop.IMPDIHEDRALH.NQHIH) *= n_muliplication
+            for i in range(n_muliplication):
+                for angle in self.IMPDIHEDRALH.content:
+                    angle.IQH += atnmShift
+                    angle.JQH += atnmShift
+                    angle.KQH += atnmShift
+                    angle.LQH += atnmShift
+                retTop.IMPDIHEDRALH.content.extend(self.IMPDIHEDRALH.content)
+
+        #multiply Torsions(H)
+        if hasattr(self, "DIHEDRAL") and len(self.DIHEDRAL.content) > 0:
+            int(retTop.DIHEDRAL.NPHI) *= n_muliplication
+            for i in range(n_muliplication):
+                for angle in self.DIHEDRAL.content:
+                    angle.IP += atnmShift
+                    angle.JP += atnmShift
+                    angle.KP += atnmShift
+                    angle.LP += atnmShift
+                retTop.DIHEDRAL.content.extend(self.DIHEDRAL.content)
+        if hasattr(self, "DIHEDRALH") and len(self.DIHEDRALH.content) > 0:
+            int(retTop.DIHEDRALH.NPHIH) *= n_muliplication
+            for i in range(n_muliplication):
+                for angle in self.DIHEDRALH.content:
+                    angle.IPH += atnmShift
+                    angle.JPH += atnmShift
+                    angle.KPH += atnmShift
+                    angle.LPH += atnmShift
+                retTop.DIHEDRALH.content.extend(self.DIHEDRALH.content)
+            
+        # multiply SOLUTEMOLECULES
+        #TODO: implement
+
+        # multiply TEMPERATUREGROUPS
+        #TODO: implement
+
+        # multiply PRESSUREGROUPS
+        #TODO: implement
+
+
+
+        # return and reset everything
+        self = original_top # restore original top
+        return retTop
 
 
     def read_file(self):
