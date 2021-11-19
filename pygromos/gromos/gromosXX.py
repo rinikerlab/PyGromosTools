@@ -15,7 +15,6 @@ from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
 
-
 class _Gromos:
     """
     GromosXX

@@ -284,6 +284,9 @@ class Gromos_System():
         return copy.deepcopy(self)
 
 
+    def copy(self):
+        return copy.deepcopy(self)
+
     """
         Properties
     """
@@ -900,12 +903,17 @@ class Gromos_System():
                 #print(attr_key)
                 if ("in" in k and "path" in k and attr_key in dir(self)):
                     grom_obj = getattr(self, attr_key)
+<<<<<<< HEAD
 
                     if(isinstance(grom_obj, str)):
                         kwargs.update({k: grom_obj})
 
                     elif(hasattr(grom_obj, "path") and grom_obj.path is None):
                         tmp_file_path = self.work_folder + "/tmp_in_file." + grom_obj._gromos_file_ending
+=======
+                    if (grom_obj.path is None):
+                        tmp_file_path = self.work_folder + "/tmp_file." + grom_obj._gromos_file_ending
+>>>>>>> main
                         grom_obj.write(tmp_file_path)
                         kwargs.update({k: tmp_file_path})
                         tmp_files.append(tmp_file_path)
@@ -920,7 +928,6 @@ class Gromos_System():
             [bash.remove_file(p) for p in tmp_files]
 
             return r
-
 
         # Override signature for usage in jupyter env or IDE
         sig = inspect.signature(func)
@@ -1049,13 +1056,11 @@ class Gromos_System():
         return generate_ion_top
 
 
-
     def __bind_gromosPPFuncs(self):
         if(not self._gromosPP is None):
             func = [k for k in dir(self._gromosPP) if (not k.startswith("_") and k != "bin")]
             v = {f: self.__SystemConstructionUpdater(self.__SystemConstructionAttributeFinder(getattr(self._gromosPP, f)))
                  for f in func}
-
             #this is clunky and needs to be removed in future
             rewrap = self.__ionDecorator(v['ion'])
             v.update({"ion": rewrap})

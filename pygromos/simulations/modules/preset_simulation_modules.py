@@ -16,7 +16,6 @@ def emin(in_gromos_system: Gromos_System, step_name: str = "emin", override_proj
          submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
          previous_simulation_run: int = None, _template_imd_path:str=template_emin,
          analysis_script: callable = simulation_analysis.do) -> Tuple[Gromos_System, int]:
-
     template_emin_control_dict = simulation_analysis.template_control_dict
     template_emin_control_dict['concat']['cat_trc'] = False
     template_emin_control_dict['concat']['cat_tre'] = False
