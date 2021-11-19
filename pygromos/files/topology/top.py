@@ -255,7 +255,7 @@ class Top(_general_gromos_file._general_gromos_file):
             atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
             mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
 
-            int(retTop.SOLUTEATOM.NRP) *= n_muliplication
+            retTop.SOLUTEATOM.NRP *= n_muliplication
 
             for i in range(n_muliplication):
                 for atom in self.SOLUTEATOM.content:
@@ -267,14 +267,14 @@ class Top(_general_gromos_file._general_gromos_file):
 
         #multiply Bonds(H)
         if hasattr(self, "BOND") and len(self.BOND.content) > 0:
-            int(retTop.BOND.NBON) *= n_muliplication
+            retTop.BOND.NBON *= n_muliplication
             for i in range(n_muliplication):
                 for bond in self.BOND.content:
                     bond.IB += atnmShift
                     bond.JB += atnmShift
                 retTop.BOND.content.extend(self.BOND.content)
         if hasattr(self, "BONDH") and len(self.BOND.content) > 0:
-            int(retTop.BONDH.NBONH) *= n_muliplication
+            retTop.BONDH.NBONH *= n_muliplication
             for i in range(n_muliplication):
                 for bond in self.BONDH.content:
                     bond.IB += atnmShift
@@ -283,7 +283,7 @@ class Top(_general_gromos_file._general_gromos_file):
             
         #multiply Angles(H)
         if hasattr(self, "BONDANGLE") and len(self.BONDANGLE.content) > 0:
-            int(retTop.BONDANGLE.NTHE) *= n_muliplication
+            retTop.BONDANGLE.NTHE *= n_muliplication
             for i in range(n_muliplication):
                 for angle in self.BONDANGLE.content:
                     angle.IT += atnmShift
@@ -291,7 +291,7 @@ class Top(_general_gromos_file._general_gromos_file):
                     angle.KT += atnmShift
                 retTop.BONDANGLE.content.extend(self.BONDANGLE.content)
         if hasattr(self, "BONDANGLEH") and len(self.BONDANGLEH.content) > 0:
-            int(retTop.BONDANGLEH.NTHEH) *= n_muliplication
+            retTop.BONDANGLEH.NTHEH *= n_muliplication
             for i in range(n_muliplication):
                 for angle in self.BONDANGLEH.content:
                     angle.IT += atnmShift
@@ -301,7 +301,7 @@ class Top(_general_gromos_file._general_gromos_file):
 
         #multiply Impdihedrals(H)
         if hasattr(self, "IMPDIHEDRAL") and len(self.IMPDIHEDRAL.content) > 0:
-            int(retTop.IMPDIHEDRAL.NQHI) *= n_muliplication
+            retTop.IMPDIHEDRAL.NQHI *= n_muliplication
             for i in range(n_muliplication):
                 for angle in self.IMPDIHEDRAL.content:
                     angle.IQ += atnmShift
@@ -310,7 +310,7 @@ class Top(_general_gromos_file._general_gromos_file):
                     angle.LQ += atnmShift
                 retTop.IMPDIHEDRAL.content.extend(self.IMPDIHEDRAL.content)
         if hasattr(self, "IMPDIHEDRALH") and len(self.IMPDIHEDRALH.content) > 0:
-            int(retTop.IMPDIHEDRALH.NQHIH) *= n_muliplication
+            retTop.IMPDIHEDRALH.NQHIH *= n_muliplication
             for i in range(n_muliplication):
                 for angle in self.IMPDIHEDRALH.content:
                     angle.IQH += atnmShift
@@ -321,7 +321,7 @@ class Top(_general_gromos_file._general_gromos_file):
 
         #multiply Torsions(H)
         if hasattr(self, "DIHEDRAL") and len(self.DIHEDRAL.content) > 0:
-            int(retTop.DIHEDRAL.NPHI) *= n_muliplication
+            retTop.DIHEDRAL.NPHI *= n_muliplication
             for i in range(n_muliplication):
                 for angle in self.DIHEDRAL.content:
                     angle.IP += atnmShift
@@ -330,7 +330,7 @@ class Top(_general_gromos_file._general_gromos_file):
                     angle.LP += atnmShift
                 retTop.DIHEDRAL.content.extend(self.DIHEDRAL.content)
         if hasattr(self, "DIHEDRALH") and len(self.DIHEDRALH.content) > 0:
-            int(retTop.DIHEDRALH.NPHIH) *= n_muliplication
+            retTop.DIHEDRALH.NPHIH *= n_muliplication
             for i in range(n_muliplication):
                 for angle in self.DIHEDRALH.content:
                     angle.IPH += atnmShift
