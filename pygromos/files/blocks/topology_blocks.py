@@ -2487,6 +2487,7 @@ class RESNAME(_topology_block):
 class SOLUTEATOM(_iterable_topology_block):
     NRP: int
     table_header: Iterable[str] = ["IB", "JB", "ICB"]
+    _max_INE:int = 1000
     def __init__(self, content:(str or dict or None or type(SOLUTEATOM)),
                  FORCEFIELD: FORCEFIELD = None,
                  MAKETOPVERSION: MAKETOPVERSION = None):
@@ -2527,7 +2528,7 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
-                    if(1 <= int(INE) <= 1000):
+                    if(1 <= int(INE) <= self._max_INE):
                         INEvalues = dump1[8:]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE) > len(INEvalues)):
@@ -2535,8 +2536,8 @@ class SOLUTEATOM(_iterable_topology_block):
                                 INEvalues.extend(contentLines.pop(0).strip().split())
                             except:
                                 break
-                    elif int(INE) > 1000:
-                        raise IOError("INE is greater than 1000")
+                    elif int(INE) > self._max_INE:
+                        raise IOError("INE is greater than "+str(self._max_INE)+"\nChange _max_INE if you know what you are doing")
                     else:
                         INEvalues = []
 
@@ -2545,7 +2546,7 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     INE14 = dump2[0]
-                    if(1 <= int(INE14) <= 100):
+                    if(1 <= int(INE14) <= self._max_INE):
                         INE14values = dump2[1:]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE14) > len(INE14values)):
@@ -2553,6 +2554,8 @@ class SOLUTEATOM(_iterable_topology_block):
                                 INE14values.extend(contentLines.pop(0).strip().split())
                             except:
                                 break
+                    elif int(INE14) > self._max_INE:
+                        raise IOError("INE14 is greater than "+str(self._max_INE+"\nChange _max_INE if you know what you are doing"))
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
