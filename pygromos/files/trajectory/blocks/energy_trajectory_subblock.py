@@ -23,6 +23,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
     # first define some static variables for the stupid gromos format
     num_energy_baths = 0
     num_force_groups = 0
+    num_nbforce_groups = 0
     num_num_states = 0
     num_temp_groups = 0
     num_lambdas = 0
@@ -36,6 +37,8 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
             num_subsubblocks = _general_pandas_energy_trajectory_subblock_numerated.num_energy_baths
         elif subsubblock_number_code == "force":
             num_subsubblocks = _general_pandas_energy_trajectory_subblock_numerated.num_force_groups
+        elif subsubblock_number_code == "nbforce":
+            num_subsubblocks = _general_pandas_energy_trajectory_subblock_numerated.num_nbforce_groups
         elif subsubblock_number_code == "states":
             num_subsubblocks = _general_pandas_energy_trajectory_subblock_numerated.num_num_states
         elif subsubblock_number_code == "lambda":
@@ -44,7 +47,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
             num_subsubblocks = _general_pandas_energy_trajectory_subblock_numerated.num_temp_groups
         else:
             raise KeyError("subblock number coder does not corresponde to variable")
-        
+
         # get the number of baths
         if num_subsubblocks == 0:
             try:
@@ -59,6 +62,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
                 _general_pandas_energy_trajectory_subblock_numerated.num_energy_baths = num_subsubblocks
             elif subsubblock_number_code == "force":
                 _general_pandas_energy_trajectory_subblock_numerated.num_force_groups = num_subsubblocks
+                _general_pandas_energy_trajectory_subblock_numerated.num_nbforce_groups = sum([x for x in range(1, num_subsubblocks+1)])
             elif subsubblock_number_code == "states":
                 _general_pandas_energy_trajectory_subblock_numerated.num_num_states = num_subsubblocks
             elif subsubblock_number_code == "lambda":
@@ -77,6 +81,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
 
     def to_dict(self) -> dict:
         return {self.blockName: self.matrix}
+
 
 
 class totals(_general_pandas_energy_trajectory_subblock):
@@ -105,7 +110,7 @@ class bonded(_general_pandas_energy_trajectory_subblock_numerated):
 
 class nonbonded(_general_pandas_energy_trajectory_subblock_numerated):
     def __init__(self, content):
-        super().__init__(content, subsubblock_number_code="force")
+        super().__init__(content, subsubblock_number_code="nbforce")
         self.blockName = "nonbonded"
     
     def to_dict(self) -> dict:
