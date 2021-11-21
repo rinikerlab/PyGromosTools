@@ -237,107 +237,108 @@ class Top(_general_gromos_file._general_gromos_file):
         if n_muliplication == 1:
             return retTop
 
-        original_top = deepcopy(self) # for safe storage and reagsinment so that we can modifie self
+        top = deepcopy(self) # for safe storage and reagsinment so that we can modifie
 
-        n_muliplication -= 1 # -1 since first one is a deepcopy
+        n_loops = n_muliplication - 1 # -1 since first one is a deepcopy
         atnmShift = 0 # init for number of atoms. Will be determined in SOLUTEATOM
+        mresShift = 0 # init for number of molecules. Will be determined in SOLUTEMOLECULES
 
         ##start with additonal copies of all Blocks
 
         #multiply RESNAME
-        if hasattr(self, "RESNAME") and len(self.RESNAME.content) > 0:
-            self.RESNAME.content[0][0] = str(int(self.RESNAME.content[0][0]) * n_muliplication)
-            for _ in range(n_muliplication):
-                retTop.RESNAME.content.extend(self.RESNAME.content[1:])
+        if hasattr(top, "RESNAME") and len(top.RESNAME.content) > 0:
+            retTop.RESNAME.content[0][0] = str(int(top.RESNAME.content[0][0]) * n_muliplication)
+            for _ in range(n_loops):
+                retTop.RESNAME.content.extend(top.RESNAME.content[1:])
 
         #multiply SOLUTEATOM
-        if hasattr(self, "SOLUTEATOM") and len(self.SOLUTEATOM.content) > 0:
-            atnmShift = retTop.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
-            mresShift = retTop.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
+        if hasattr(top, "SOLUTEATOM") and len(top.SOLUTEATOM.content) > 0:
+            atnmShift = top.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
+            mresShift = top.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
 
             retTop.SOLUTEATOM.NRP *= n_muliplication
 
-            for i in range(n_muliplication):
-                for atom in self.SOLUTEATOM.content:
+            for i in range(n_loops):
+                for atom in top.SOLUTEATOM.content:
                     atom.ATNM += atnmShift
                     atom.MRES += mresShift
                     atom.INEvalues = [str(int(i)+(atnmShift)) for i in atom.INEvalues] #TODO remove str/int conversion
                     atom.INE14values = [str(int(i)+(atnmShift)) for i in atom.INE14values]
-                retTop.SOLUTEATOM.content.extend(self.SOLUTEATOM.content)
+                    retTop.SOLUTEATOM.content.append(deepcopy(atom))
 
         #multiply Bonds(H)
-        if hasattr(self, "BOND") and len(self.BOND.content) > 0:
+        if hasattr(top, "BOND") and len(top.BOND.content) > 0:
             retTop.BOND.NBON *= n_muliplication
-            for i in range(n_muliplication):
-                for bond in self.BOND.content:
+            for i in range(n_loops):
+                for bond in top.BOND.content:
                     bond.IB += atnmShift
                     bond.JB += atnmShift
-                retTop.BOND.content.extend(self.BOND.content)
-        if hasattr(self, "BONDH") and len(self.BOND.content) > 0:
+                    retTop.BOND.content.append(deepcopy(bond))
+        if hasattr(top, "BONDH") and len(top.BOND.content) > 0:
             retTop.BONDH.NBONH *= n_muliplication
-            for i in range(n_muliplication):
-                for bond in self.BONDH.content:
+            for i in range(n_loops):
+                for bond in top.BONDH.content:
                     bond.IB += atnmShift
                     bond.JB += atnmShift
-                retTop.BONDH.content.extend(self.BONDH.content)
+                    retTop.BONDH.content.append(deepcopy(bond))
             
         #multiply Angles(H)
-        if hasattr(self, "BONDANGLE") and len(self.BONDANGLE.content) > 0:
+        if hasattr(top, "BONDANGLE") and len(top.BONDANGLE.content) > 0:
             retTop.BONDANGLE.NTHE *= n_muliplication
-            for i in range(n_muliplication):
-                for angle in self.BONDANGLE.content:
+            for i in range(n_loops):
+                for angle in top.BONDANGLE.content:
                     angle.IT += atnmShift
                     angle.JT += atnmShift
                     angle.KT += atnmShift
-                retTop.BONDANGLE.content.extend(self.BONDANGLE.content)
-        if hasattr(self, "BONDANGLEH") and len(self.BONDANGLEH.content) > 0:
+                    retTop.BONDANGLE.content.append(deepcopy(angle))
+        if hasattr(top, "BONDANGLEH") and len(top.BONDANGLEH.content) > 0:
             retTop.BONDANGLEH.NTHEH *= n_muliplication
-            for i in range(n_muliplication):
-                for angle in self.BONDANGLEH.content:
+            for i in range(n_loops):
+                for angle in top.BONDANGLEH.content:
                     angle.IT += atnmShift
                     angle.JT += atnmShift
                     angle.KT += atnmShift
-                retTop.BONDANGLEH.content.extend(self.BONDANGLEH.content)          
+                    retTop.BONDANGLEH.content.append(deepcopy(angle))     
 
         #multiply Impdihedrals(H)
-        if hasattr(self, "IMPDIHEDRAL") and len(self.IMPDIHEDRAL.content) > 0:
+        if hasattr(top, "IMPDIHEDRAL") and len(top.IMPDIHEDRAL.content) > 0:
             retTop.IMPDIHEDRAL.NQHI *= n_muliplication
-            for i in range(n_muliplication):
-                for angle in self.IMPDIHEDRAL.content:
+            for i in range(n_loops):
+                for angle in top.IMPDIHEDRAL.content:
                     angle.IQ += atnmShift
                     angle.JQ += atnmShift
                     angle.KQ += atnmShift
                     angle.LQ += atnmShift
-                retTop.IMPDIHEDRAL.content.extend(self.IMPDIHEDRAL.content)
-        if hasattr(self, "IMPDIHEDRALH") and len(self.IMPDIHEDRALH.content) > 0:
+                    retTop.IMPDIHEDRAL.content.append(deepcopy(angle))
+        if hasattr(top, "IMPDIHEDRALH") and len(top.IMPDIHEDRALH.content) > 0:
             retTop.IMPDIHEDRALH.NQHIH *= n_muliplication
-            for i in range(n_muliplication):
-                for angle in self.IMPDIHEDRALH.content:
+            for i in range(n_loops):
+                for angle in top.IMPDIHEDRALH.content:
                     angle.IQH += atnmShift
                     angle.JQH += atnmShift
                     angle.KQH += atnmShift
                     angle.LQH += atnmShift
-                retTop.IMPDIHEDRALH.content.extend(self.IMPDIHEDRALH.content)
+                    retTop.IMPDIHEDRALH.content.append(deepcopy(angle))
 
         #multiply Torsions(H)
-        if hasattr(self, "DIHEDRAL") and len(self.DIHEDRAL.content) > 0:
+        if hasattr(top, "DIHEDRAL") and len(top.DIHEDRAL.content) > 0:
             retTop.DIHEDRAL.NPHI *= n_muliplication
-            for i in range(n_muliplication):
-                for angle in self.DIHEDRAL.content:
+            for i in range(n_loops):
+                for angle in top.DIHEDRAL.content:
                     angle.IP += atnmShift
                     angle.JP += atnmShift
                     angle.KP += atnmShift
                     angle.LP += atnmShift
-                retTop.DIHEDRAL.content.extend(self.DIHEDRAL.content)
-        if hasattr(self, "DIHEDRALH") and len(self.DIHEDRALH.content) > 0:
+                    retTop.DIHEDRAL.content.append(deepcopy(angle))
+        if hasattr(top, "DIHEDRALH") and len(top.DIHEDRALH.content) > 0:
             retTop.DIHEDRALH.NPHIH *= n_muliplication
-            for i in range(n_muliplication):
-                for angle in self.DIHEDRALH.content:
+            for i in range(n_loops):
+                for angle in top.DIHEDRALH.content:
                     angle.IPH += atnmShift
                     angle.JPH += atnmShift
                     angle.KPH += atnmShift
                     angle.LPH += atnmShift
-                retTop.DIHEDRALH.content.extend(self.DIHEDRALH.content)
+                    retTop.DIHEDRALH.content.append(deepcopy(angle))
             
         # multiply SOLUTEMOLECULES
         #TODO: implement
@@ -350,8 +351,7 @@ class Top(_general_gromos_file._general_gromos_file):
 
 
 
-        # return and reset everything
-        self = original_top # restore original top
+        # return everything
         return retTop
 
 
