@@ -1127,7 +1127,7 @@ class _gromosPPbase:
         raise Exception('not implemented yet!')
 
     @gromosTypeConverter
-    def rgyr(self, out_rgyr_path:str, in_coord_path:str, in_top_path:str, atom_selection:str, periodic_boundary_condition:str="r cog", time:int=None, dt:int=None,  
+    def rgyr(self, out_rgyr_path:str, in_coord_path:str, in_top_path:str, atom_selection:str="1:a", periodic_boundary_condition:str="r cog", time:int=None, dt:int=None,  
     mass_weighted:bool=False, _binary_name:str= "rgyr")->str:
         """
         This wrapper uses rgyr to compute the radius of gyration for a given atom selection. 
@@ -1137,12 +1137,12 @@ class _gromosPPbase:
         out_rgyr_path: str
         in_coord_path: str
         in_top_path: str
-        atom_selection: str
-        periodic_boundary_condition: str
+        atom_selection: str, optional
+        periodic_boundary_condition: str, optional
         time: int, optional
         dt: int, optional
-	mass_weighted:bool, optional
-	_binary_name: str, optional
+	    mass_weighted:bool, optional
+	    _binary_name: str, optional
 
         Returns
         -------
@@ -1163,10 +1163,122 @@ class _gromosPPbase:
             args += "@time "+str(time)+" "
         if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
             args += " "+str(dt)+" "
+        if(not isinstance(mass_weighted, type(False))):
+            args += "@massweighted "
 	
         command = self._bin +_binary_name+" "+" ".join(args)
         bash.execute(command, catch_STD=out_rgyr_path)
         return out_rgyr_path
+
+
+    @gromosTypeConverter
+    def sasa(self, out_sasa_path:str, in_coord_path:str, in_top_path:str, atom_selection:str="1:a", sasa_atoms:str="1:a",
+    probe:str="4 1.4", periodic_boundary_condition:str="r cog", zslice:float=None, time:int=None, dt:int=None,
+    verbose:bool=False, _binary_name:str= "sasa")->str:
+        """
+        This wrapper uses sasa to compute the solvent accessible surface area (SASA) for a given atom selection. By default,
+        this is done for the first residue (1:a) with parameters for water (IAC type: 4, radius: 0.4 nm)
+
+        Parameters
+        ----------
+        out_sasa_path: str
+        in_coord_path: str
+        in_top_path: str
+        atom_selection: str, optional
+        sasa_atoms: str, optional
+        probe: str, optional
+        periodic_boundary_condition: str, optional
+        zslice: float, optional
+        time: int, optional
+        dt: int, optional
+        verbose: bool, optional
+     	_binary_name: str, optional
+
+        Returns
+        -------
+        str
+            returns out_sasa_path
+
+        See Also
+        --------
+             For more information checkout the Gromos Manual
+        """
+
+        args = ["@topo " + in_top_path,
+                "@pbc " + periodic_boundary_condition,
+                "@atoms " + atom_selection,
+                "@sasaatoms " + sasa_atoms,
+                "@probe " + probe,
+                "@traj " + in_coord_path]
+
+        if(not isinstance(time, type(None))):
+            args += "@time "+str(time)+" "
+        if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
+            args += " "+str(dt)+" "
+        if(not isinstance(zslice, type(None))):
+            args += "@zslice "+zslice+" "
+        if(not isinstance(verbose, type(False))):
+            args += "@verbose "
+	
+        command = self._bin +_binary_name+" "+" ".join(args)
+        bash.execute(command, catch_STD=out_sasa_path)
+        return out_sasa_path
+
+    @gromosTypeConverter
+    def filter(self, out_filter_path:str, in_coord_path:str, in_top_path:str, atom_selection:str=None, 
+    periodic_boundary_condition:str="r cog", cutoff:float=None, pairlist:str=None, select:str="1:a", reject:str=None,
+    time:int=None, dt:int=None, outformat:str=None, _binary_name:str= "filter")->str:
+        """
+        This wrapper uses filter to reduce a given trajectory to a selection of atoms. By default, only the first residue (1:a) is retained.
+
+        Parameters
+        ----------
+        out_filter_path: str
+        in_coord_path: str
+        in_top_path: str
+        atom_selection: str, optional
+        periodic_boundary_condition: str, optional
+        cutoff: float, optional
+        pairlist: str, optional
+        select: str, optional
+        reject: str, optional
+        time: int, optional
+        dt: int, optional
+        outformat: str, optional
+     	_binary_name: str, optional
+
+        Returns
+        -------
+        str
+            returns out_filter_path
+
+        See Also
+        --------
+             For more information checkout the Gromos Manual
+        """
+
+        args = ["@topo " + in_top_path,
+                "@pbc " + periodic_boundary_condition,
+                "@traj " + in_coord_path,
+                "@select " + select]
+
+        
+        if(not isinstance(cutoff, type(None))):
+            args += "@cutoff "+str(time)+" "
+        if(not isinstance(pairlist, type(None))):
+            args += "@pairlist "+pairlist+" "
+        if(not isinstance(atom_selection, type(None))):
+            args += "@atoms "+str(atom_selection)+" "
+        if(not isinstance(reject, type(None))):
+            args += "@reject "+reject+" "
+        if(not isinstance(time, type(None))):
+            args += "@time "+str(time)+" "
+        if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
+            args += " "+str(dt)+" "
+	
+        command = self._bin +_binary_name+" "+" ".join(args)
+        bash.execute(command, catch_STD=out_filter_path)
+        return out_filter_path
 
 
 class GromosPP(_gromosPPbase):
