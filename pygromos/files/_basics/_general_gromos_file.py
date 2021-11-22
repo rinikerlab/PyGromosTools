@@ -6,6 +6,8 @@ Author: Benjamin Schroeder
 """
 import os
 import copy
+import inspect
+import warnings
 from typing import List, Dict, Callable
 
 from pygromos.files.blocks import _all_blocks as blocks
@@ -154,11 +156,11 @@ class _general_gromos_file():
                         from pygromos.files.blocks import imd_blocks, topology_blocks
 
                         if(issubclass(self.__class__, Imd)):
-                            self.__setattr__(blocktitle, imd_blocks.__getattribute__(blocktitle)(**content))
+                            self.kwCreateBlock(blocktitle, content, imd_blocks)
                         elif(issubclass(self.__class__, Top)):
-                            self.__setattr__(blocktitle, topology_blocks.__getattribute__(blocktitle)(**content))
+                            self.kwCreateBlock(blocktitle, content, topology_blocks)
                         else:
-                            self.__setattr__(blocktitle, blocks.__getattribute__(blocktitle)(**content))
+                            self.kwCreateBlock(blocktitle, content, blocks)
                     
                         if verbose:
                             print("++++++++++++++++++++++++++++++")
@@ -185,6 +187,20 @@ class _general_gromos_file():
 
             else:
                 raise Exception("Not implemented")
+
+    def kwCreateBlock(self, blocktitle, content, blocks_lib):
+        block_type = blocks_lib.__getattribute__(blocktitle) #get the blocktype
+        sig = inspect.signature(block_type.__init__)    #block init signature
+        known_params = list(sig.parameters.keys())  #the params the function knows
+        known_content = {k:v for k,v in content.items() if(k in known_params)}
+        unknown_content = {k:v for k,v in content.items() if(not k in known_params)}
+
+        #construct class
+        self.__setattr__(blocktitle,block_type(**known_content))
+
+        if(len(unknown_content)>0): #add unkown parameters
+            warnings.warn("FOUND UNKOWN Parameters for "+str(block_type.__name__)+" adding these params: "+str(unknown_content))
+            [self.__getattribute__(blocktitle).__setattr__(k, v) for k, v in unknown_content.items()]
 
 
     def read_file(self)->Dict[str, any]:
