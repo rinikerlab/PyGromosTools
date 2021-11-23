@@ -228,7 +228,7 @@ class Top(_general_gromos_file._general_gromos_file):
     def __mul__(self, n_multiplication:int):
         return self.multiply_top(n_multiplication)
     
-    def multiply_top(self, n_muliplication:int, unifyGroups:bool = True)->TopType:
+    def multiply_top(self, n_muliplication:int, unifyGroups:bool = True, verbose=False)->TopType:
 
         # catch simple cases and create return top
         if n_muliplication == 0:
@@ -255,6 +255,10 @@ class Top(_general_gromos_file._general_gromos_file):
         if hasattr(top, "SOLUTEATOM") and len(top.SOLUTEATOM.content) > 0:
             atnmShift = top.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
             mresShift = top.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
+
+            if verbose:
+                print("atnmShift:", atnmShift)
+                print("mresShift:", mresShift)
 
             retTop.SOLUTEATOM.NRP *= n_muliplication
 
