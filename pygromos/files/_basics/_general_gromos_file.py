@@ -98,6 +98,19 @@ class _general_gromos_file():
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
+    def __eq__(self, __o: object) -> bool:
+        self_blocks = self.get_block_names()
+        other_blocks = __o.get_block_names()
+        if self_blocks != other_blocks:
+            return False
+        else:
+            for block in self_blocks:
+                if not getattr(self, block) == getattr(__o, block):
+                    return False
+            return True
+
+        
+
 
     def get_block_names(self)->List[str]:
         """get_block_names

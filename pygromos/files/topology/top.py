@@ -228,7 +228,7 @@ class Top(_general_gromos_file._general_gromos_file):
     def __mul__(self, n_multiplication:int):
         return self.multiply_top(n_multiplication)
     
-    def multiply_top(self, n_muliplication:int, unifyGroups:bool = True, verbose=False)->TopType:
+    def multiply_top(self, n_muliplication:int, unifyGroups:bool = False, verbose=False)->TopType:
 
         # catch simple cases and create return top
         if n_muliplication == 0:
@@ -349,25 +349,28 @@ class Top(_general_gromos_file._general_gromos_file):
             if unifyGroups and int(top.SOLUTEMOLECULES.content[0][0])==1:
                 retTop.SOLUTEMOLECULES.content[1][0] = str(int(retTop.SOLUTEMOLECULES.content[1][0]) * n_muliplication)
             else:
-                pass
-                # multiply SOLUTEMOLECULES
-                #TODO: implement
+                retTop.SOLUTEMOLECULES.content[0][0] = str(int(top.SOLUTEMOLECULES.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.SOLUTEMOLECULES.content[1]]
+                    retTop.SOLUTEMOLECULES.content.append(groups)
 
         if hasattr(top, "TEMPERATUREGROUPS"):
             if unifyGroups and int(top.TEMPERATUREGROUPS.content[0][0])==1:
                 retTop.TEMPERATUREGROUPS.content[1][0] = str(int(retTop.TEMPERATUREGROUPS.content[1][0]) * n_muliplication)
             else:
-                pass
-                # multiply TEMPERATUREGROUPS
-                #TODO: implement
+                retTop.TEMPERATUREGROUPS.content[0][0] = str(int(top.TEMPERATUREGROUPS.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.TEMPERATUREGROUPS.content[1]]
+                    retTop.TEMPERATUREGROUPS.content.append(groups)
 
         if hasattr(top, "PRESSUREGROUPS"):
             if unifyGroups and int(top.PRESSUREGROUPS.content[0][0])==1:
                 retTop.PRESSUREGROUPS.content[1][0] = str(int(retTop.PRESSUREGROUPS.content[1][0]) * n_muliplication)
             else:
-                pass
-                # multiply PRESSUREGROUPS
-                #TODO: implement
+                retTop.PRESSUREGROUPS.content[0][0] = str(int(top.PRESSUREGROUPS.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.PRESSUREGROUPS.content[1]]
+                    retTop.PRESSUREGROUPS.content.append(groups)
 
 
 

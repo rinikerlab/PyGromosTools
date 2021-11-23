@@ -51,6 +51,5 @@ class test_top_simple(general_file_tests):
         top_file = self.class_type(self.in_file_path)
         top_mul = top_file * 2
         top_add = top_file + top_file
-        # TODO: add check as soon as __eq__ is implemented
-        #assert top_mul == top_add
+        assert top_mul == top_add
         return 0
