@@ -226,9 +226,9 @@ class Top(_general_gromos_file._general_gromos_file):
         return retTop
 
     def __mul__(self, n_multiplication:int):
-        return self._multiply_top(n_multiplication)
+        return self.multiply_top(n_multiplication)
     
-    def _multiply_top(self, n_muliplication:int)->TopType:
+    def multiply_top(self, n_muliplication:int, unifyGroups:bool = True)->TopType:
 
         # catch simple cases and create return top
         if n_muliplication == 0:
@@ -339,15 +339,31 @@ class Top(_general_gromos_file._general_gromos_file):
                     angle.KPH += atnmShift
                     angle.LPH += atnmShift
                     retTop.DIHEDRALH.content.append(deepcopy(angle))
-            
-        # multiply SOLUTEMOLECULES
-        #TODO: implement
 
-        # multiply TEMPERATUREGROUPS
-        #TODO: implement
 
-        # multiply PRESSUREGROUPS
-        #TODO: implement
+        if hasattr(top, "SOLUTEMOLECULES"):
+            if unifyGroups and int(top.SOLUTEMOLECULES.content[0][0])==1:
+                retTop.SOLUTEMOLECULES.content[1][0] = str(int(retTop.SOLUTEMOLECULES.content[1][0]) * n_muliplication)
+            else:
+                pass
+                # multiply SOLUTEMOLECULES
+                #TODO: implement
+
+        if hasattr(top, "TEMPERATUREGROUPS"):
+            if unifyGroups and int(top.TEMPERATUREGROUPS.content[0][0])==1:
+                retTop.TEMPERATUREGROUPS.content[1][0] = str(int(retTop.TEMPERATUREGROUPS.content[1][0]) * n_muliplication)
+            else:
+                pass
+                # multiply TEMPERATUREGROUPS
+                #TODO: implement
+
+        if hasattr(top, "PRESSUREGROUPS"):
+            if unifyGroups and int(top.PRESSUREGROUPS.content[0][0])==1:
+                retTop.PRESSUREGROUPS.content[1][0] = str(int(retTop.PRESSUREGROUPS.content[1][0]) * n_muliplication)
+            else:
+                pass
+                # multiply PRESSUREGROUPS
+                #TODO: implement
 
 
 
