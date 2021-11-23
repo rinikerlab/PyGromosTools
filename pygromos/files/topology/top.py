@@ -262,8 +262,8 @@ class Top(_general_gromos_file._general_gromos_file):
                 for atom in top.SOLUTEATOM.content:
                     atom.ATNM += atnmShift
                     atom.MRES += mresShift
-                    atom.INEvalues = [str(int(i)+(atnmShift)) for i in atom.INEvalues] #TODO remove str/int conversion
-                    atom.INE14values = [str(int(i)+(atnmShift)) for i in atom.INE14values]
+                    atom.INEvalues = [i+atnmShift for i in atom.INEvalues] #TODO remove str/int conversion
+                    atom.INE14values = [i+atnmShift for i in atom.INE14values]
                     retTop.SOLUTEATOM.content.append(deepcopy(atom))
 
         #multiply Bonds(H)
