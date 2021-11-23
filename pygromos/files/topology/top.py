@@ -135,8 +135,8 @@ class Top(_general_gromos_file._general_gromos_file):
                                     MASS = atom.MASS,
                                     CG = atom.CG,
                                     CGC = atom.CGC,
-                                    INE = [str(int(x)+atnmShift) for x in atom.INEvalues],
-                                    INE14 = [str(int(x)+atnmShift) for x in atom.INE14values])
+                                    INE = [x+atnmShift for x in atom.INEvalues],
+                                    INE14 = [x+atnmShift for x in atom.INE14values])
 
         # add bonds and bonds with H
         for bond in top.BOND.content:
