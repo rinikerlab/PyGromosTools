@@ -203,7 +203,7 @@ class Top(_general_gromos_file._general_gromos_file):
                                         atomL=dihdrl.LQ + atnmShift)
         for dihdrl in top.IMPDIHEDRALH.content:
             dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQH - 1]
-            retTop.add_new_torsiondihedral(CQ=dihdrlType.CQ, 
+            retTop.add_new_impdihedral(CQ=dihdrlType.CQ, 
                                         Q0=dihdrlType.Q0, 
                                         atomI=dihdrl.IQH + atnmShift, 
                                         atomJ=dihdrl.JQH + atnmShift, 
