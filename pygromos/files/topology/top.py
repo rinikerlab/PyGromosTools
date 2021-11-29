@@ -135,8 +135,8 @@ class Top(_general_gromos_file._general_gromos_file):
                                     MASS = atom.MASS,
                                     CG = atom.CG,
                                     CGC = atom.CGC,
-                                    INE = [str(int(x)+atnmShift) for x in atom.INEvalues],
-                                    INE14 = [str(int(x)+atnmShift) for x in atom.INE14values])
+                                    INE = [x+atnmShift for x in atom.INEvalues],
+                                    INE14 = [x+atnmShift for x in atom.INE14values])
 
         # add bonds and bonds with H
         for bond in top.BOND.content:
@@ -203,7 +203,7 @@ class Top(_general_gromos_file._general_gromos_file):
                                         atomL=dihdrl.LQ + atnmShift)
         for dihdrl in top.IMPDIHEDRALH.content:
             dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQH - 1]
-            retTop.add_new_torsiondihedral(CQ=dihdrlType.CQ, 
+            retTop.add_new_impdihedral(CQ=dihdrlType.CQ, 
                                         Q0=dihdrlType.Q0, 
                                         atomI=dihdrl.IQH + atnmShift, 
                                         atomJ=dihdrl.JQH + atnmShift, 
@@ -224,6 +224,159 @@ class Top(_general_gromos_file._general_gromos_file):
             retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
 
         return retTop
+
+    def __mul__(self, n_multiplication:int):
+        return self.multiply_top(n_multiplication)
+    
+    def multiply_top(self, n_muliplication:int, unifyGroups:bool = False, verbose=False)->TopType:
+
+        # catch simple cases and create return top
+        if n_muliplication == 0:
+            return TopType(in_value=None)
+        retTop = deepcopy(self)
+        if n_muliplication == 1:
+            return retTop
+
+        top = deepcopy(self) # for safe storage and reagsinment so that we can modifie
+
+        n_loops = n_muliplication - 1 # -1 since first one is a deepcopy
+        atnmShift = 0 # init for number of atoms. Will be determined in SOLUTEATOM
+        mresShift = 0 # init for number of molecules. Will be determined in SOLUTEMOLECULES
+
+        ##start with additonal copies of all Blocks
+
+        #multiply RESNAME
+        if hasattr(top, "RESNAME") and len(top.RESNAME.content) > 0:
+            retTop.RESNAME.content[0][0] = str(int(top.RESNAME.content[0][0]) * n_muliplication)
+            for _ in range(n_loops):
+                retTop.RESNAME.content.extend(top.RESNAME.content[1:])
+
+        #multiply SOLUTEATOM
+        if hasattr(top, "SOLUTEATOM") and len(top.SOLUTEATOM.content) > 0:
+            atnmShift = top.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
+            mresShift = top.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
+
+            if verbose:
+                print("atnmShift:", atnmShift)
+                print("mresShift:", mresShift)
+
+            retTop.SOLUTEATOM.NRP *= n_muliplication
+
+            for i in range(n_loops):
+                for atom in top.SOLUTEATOM.content:
+                    atom.ATNM += atnmShift
+                    atom.MRES += mresShift
+                    atom.INEvalues = [i+atnmShift for i in atom.INEvalues] #TODO remove str/int conversion
+                    atom.INE14values = [i+atnmShift for i in atom.INE14values]
+                    retTop.SOLUTEATOM.content.append(deepcopy(atom))
+
+        #multiply Bonds(H)
+        if hasattr(top, "BOND") and len(top.BOND.content) > 0:
+            retTop.BOND.NBON *= n_muliplication
+            for i in range(n_loops):
+                for bond in top.BOND.content:
+                    bond.IB += atnmShift
+                    bond.JB += atnmShift
+                    retTop.BOND.content.append(deepcopy(bond))
+        if hasattr(top, "BONDH") and len(top.BOND.content) > 0:
+            retTop.BONDH.NBONH *= n_muliplication
+            for i in range(n_loops):
+                for bond in top.BONDH.content:
+                    bond.IB += atnmShift
+                    bond.JB += atnmShift
+                    retTop.BONDH.content.append(deepcopy(bond))
+            
+        #multiply Angles(H)
+        if hasattr(top, "BONDANGLE") and len(top.BONDANGLE.content) > 0:
+            retTop.BONDANGLE.NTHE *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.BONDANGLE.content:
+                    angle.IT += atnmShift
+                    angle.JT += atnmShift
+                    angle.KT += atnmShift
+                    retTop.BONDANGLE.content.append(deepcopy(angle))
+        if hasattr(top, "BONDANGLEH") and len(top.BONDANGLEH.content) > 0:
+            retTop.BONDANGLEH.NTHEH *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.BONDANGLEH.content:
+                    angle.IT += atnmShift
+                    angle.JT += atnmShift
+                    angle.KT += atnmShift
+                    retTop.BONDANGLEH.content.append(deepcopy(angle))     
+
+        #multiply Impdihedrals(H)
+        if hasattr(top, "IMPDIHEDRAL") and len(top.IMPDIHEDRAL.content) > 0:
+            retTop.IMPDIHEDRAL.NQHI *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.IMPDIHEDRAL.content:
+                    angle.IQ += atnmShift
+                    angle.JQ += atnmShift
+                    angle.KQ += atnmShift
+                    angle.LQ += atnmShift
+                    retTop.IMPDIHEDRAL.content.append(deepcopy(angle))
+        if hasattr(top, "IMPDIHEDRALH") and len(top.IMPDIHEDRALH.content) > 0:
+            retTop.IMPDIHEDRALH.NQHIH *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.IMPDIHEDRALH.content:
+                    angle.IQH += atnmShift
+                    angle.JQH += atnmShift
+                    angle.KQH += atnmShift
+                    angle.LQH += atnmShift
+                    retTop.IMPDIHEDRALH.content.append(deepcopy(angle))
+
+        #multiply Torsions(H)
+        if hasattr(top, "DIHEDRAL") and len(top.DIHEDRAL.content) > 0:
+            retTop.DIHEDRAL.NPHI *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.DIHEDRAL.content:
+                    angle.IP += atnmShift
+                    angle.JP += atnmShift
+                    angle.KP += atnmShift
+                    angle.LP += atnmShift
+                    retTop.DIHEDRAL.content.append(deepcopy(angle))
+        if hasattr(top, "DIHEDRALH") and len(top.DIHEDRALH.content) > 0:
+            retTop.DIHEDRALH.NPHIH *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.DIHEDRALH.content:
+                    angle.IPH += atnmShift
+                    angle.JPH += atnmShift
+                    angle.KPH += atnmShift
+                    angle.LPH += atnmShift
+                    retTop.DIHEDRALH.content.append(deepcopy(angle))
+
+
+        if hasattr(top, "SOLUTEMOLECULES"):
+            if unifyGroups and int(top.SOLUTEMOLECULES.content[0][0])==1:
+                retTop.SOLUTEMOLECULES.content[1][0] = str(int(retTop.SOLUTEMOLECULES.content[1][0]) * n_muliplication)
+            else:
+                retTop.SOLUTEMOLECULES.content[0][0] = str(int(top.SOLUTEMOLECULES.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.SOLUTEMOLECULES.content[1]]
+                    retTop.SOLUTEMOLECULES.content.append(groups)
+
+        if hasattr(top, "TEMPERATUREGROUPS"):
+            if unifyGroups and int(top.TEMPERATUREGROUPS.content[0][0])==1:
+                retTop.TEMPERATUREGROUPS.content[1][0] = str(int(retTop.TEMPERATUREGROUPS.content[1][0]) * n_muliplication)
+            else:
+                retTop.TEMPERATUREGROUPS.content[0][0] = str(int(top.TEMPERATUREGROUPS.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.TEMPERATUREGROUPS.content[1]]
+                    retTop.TEMPERATUREGROUPS.content.append(groups)
+
+        if hasattr(top, "PRESSUREGROUPS"):
+            if unifyGroups and int(top.PRESSUREGROUPS.content[0][0])==1:
+                retTop.PRESSUREGROUPS.content[1][0] = str(int(retTop.PRESSUREGROUPS.content[1][0]) * n_muliplication)
+            else:
+                retTop.PRESSUREGROUPS.content[0][0] = str(int(top.PRESSUREGROUPS.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.PRESSUREGROUPS.content[1]]
+                    retTop.PRESSUREGROUPS.content.append(groups)
+
+
+
+        # return everything
+        return retTop
+
 
     def read_file(self):
         #Read blocks to string

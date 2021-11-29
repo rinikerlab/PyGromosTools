@@ -43,3 +43,7 @@ class test_cnf(general_file_tests):
     def test_write_out(self):
         cnf_file = cnf.Cnf(in_file_path)
         cnf_file.write(out_path)
+
+    def test_visualize(self):
+        cnf_file = cnf.Cnf(in_file_path)
+        cnf_file.visualize()

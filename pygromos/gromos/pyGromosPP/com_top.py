@@ -51,16 +51,11 @@ def com_top(top1:Top, top2:Top, topo_multiplier:List[int]=[1,1], solvFrom1:bool=
     retTop=Top(in_value=None)
     
     if paramFrom1:
-        for i in range(topo_multiplier[0]):
-            retTop = retTop._add_top(top=top1, verbose=verbose)
-        for i in range(topo_multiplier[1]):
-            retTop = retTop._add_top(top=top2, solvFrom1=solvFrom1, verbose=verbose)
+        retTop = top1.multiply_top(topo_multiplier[0], verbose=verbose)
+        retTop =  retTop._add_top(top = top2.multiply_top(topo_multiplier[1], verbose=verbose), solvFrom1=solvFrom1, verbose=verbose)
     else:
-        for i in range(topo_multiplier[1]):
-            retTop = retTop._add_top(top=top2, verbose=verbose)
-        for i in range(topo_multiplier[0]):
-            retTop = retTop._add_top(top=top1, solvFrom1=solvFrom1, verbose=verbose)
-
+        retTop = top2.multiply_top(topo_multiplier[1], verbose=verbose)
+        retTop =  retTop._add_top(top = top1.multiply_top(topo_multiplier[0], verbose=verbose), solvFrom1=solvFrom1, verbose=verbose)
     return retTop
 
     

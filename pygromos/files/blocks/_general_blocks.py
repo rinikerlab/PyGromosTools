@@ -53,6 +53,12 @@ class _generic_gromos_block:
         block = type(self)(content=newContent)
         return block
 
+    def __eq__(self, __o: object) -> bool:
+        if self.block_to_string() == str(__o):
+            return True
+        else:
+            return False
+
 
     def _check_import_method(self, content:str = None):
         if(not content is None):

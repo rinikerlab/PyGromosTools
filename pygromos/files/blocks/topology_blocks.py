@@ -2528,14 +2528,14 @@ class SOLUTEATOM(_iterable_topology_block):
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
                     if(1 <= int(INE)):
-                        INEvalues = dump1[8:]
+                        INEvalues = [int(i) for i in dump1[8:]]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE) > len(INEvalues)):
                             try:
                                 if (len(contentLines) == 0):
                                     raise IOError("Not enough lines provided for multi line INE in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
                                 elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
-                                    INEvalues.extend(contentLines.pop(0).strip().split())
+                                    INEvalues.extend([int(i) for i in contentLines.pop(0).strip().split()])
                                 else:
                                     raise IOError("no intendation detected for mult line INE in SOLUTEATOM Block or too large number for INE\nATNM="+str(ATNM)+" MRES="+str(MRES))
                             except:
@@ -2550,14 +2550,14 @@ class SOLUTEATOM(_iterable_topology_block):
                 else:
                     INE14 = dump2[0]
                     if(1 <= int(INE14)):
-                        INE14values = dump2[1:]
+                        INE14values = [int(i) for i in dump2[1:]]
                         # keep reading in lines until we have all the data needed.
                         while (int(INE14) > len(INE14values)):
                             try:
                                 if (len(contentLines) == 0):
                                     raise IOError("Not enough lines provided for multi line INE14 in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
                                 elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
-                                    INE14values.extend(contentLines.pop(0).strip().split())
+                                    INE14values.extend([int(i) for i in contentLines.pop(0).strip().split()])
                                 else:
                                     raise IOError("no intendation detected for mult line INE14 in SOLUTEATOM Block or too large number for INE14\nATNM="+str(ATNM)+" MRES="+str(MRES))
                             except:
