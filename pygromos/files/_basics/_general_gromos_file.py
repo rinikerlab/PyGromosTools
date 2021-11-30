@@ -99,15 +99,21 @@ class _general_gromos_file():
         return copy_obj
 
     def __eq__(self, __o: object) -> bool:
-        self_blocks = self.get_block_names()
-        other_blocks = __o.get_block_names()
-        if self_blocks != other_blocks:
-            return False
-        else:
-            for block in self_blocks:
-                if not getattr(self, block) == getattr(__o, block):
-                    return False
+        if self is not None and __o is not None:
+            self_blocks = self.get_block_names()
+            other_blocks = __o.get_block_names()
+            if self_blocks != other_blocks:
+                return False
+            else:
+                for block in self_blocks:
+                    if not getattr(self, block) == getattr(__o, block):
+                        return False
+                return True
+        elif self is None and __o is None:
             return True
+        else:
+            return False
+        
 
         
 
