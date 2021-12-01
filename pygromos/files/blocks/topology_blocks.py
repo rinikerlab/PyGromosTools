@@ -1,4 +1,4 @@
-import re
+import re,copy
 import __main__
 from enum import Enum
 from typing import Union, Iterable, Tuple, List, Dict
@@ -655,6 +655,16 @@ class MPERTATOM(_generic_gromos_block):
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
 
+    def __deepcopy__(self, memodict={}):
+        new_obj = type(self)()
+        new_obj.NJLA = copy.deepcopy(self.NJLA)
+        new_obj.NPTB = copy.deepcopy(self.NPTB)
+        new_obj.STATEIDENTIFIERS = copy.deepcopy(self.STATEIDENTIFIERS)
+        new_obj.STATEATOMHEADER = copy.deepcopy(self.STATEATOMHEADER)
+        new_obj.STATEATOMS = copy.deepcopy(self.STATEATOMS)
+        new_obj.dummy_IAC = copy.deepcopy(self.dummy_IAC)
+        new_obj.dummy_CHARGE = copy.deepcopy(self.dummy_CHARGE)
+        return new_obj
 
     def read_content_from_str(self, content:List[str]):
         field = 0
