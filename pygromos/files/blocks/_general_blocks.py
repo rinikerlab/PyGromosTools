@@ -1,5 +1,6 @@
 from typing import Iterable, List
 from numbers import Number
+import copy
 
 # FIELDS
 class _generic_field():
@@ -52,6 +53,12 @@ class _generic_gromos_block:
         newContent= self.line_seperator.join(self.block_to_string().split(self.line_seperator)[1:-2])
         block = type(self)(content=newContent)
         return block
+
+    def __eq__(self, __o: object) -> bool:
+        if self.block_to_string() == str(__o):
+            return True
+        else:
+            return False
 
 
     def _check_import_method(self, content:str = None):
@@ -140,15 +147,17 @@ class TIMESTEP(_generic_gromos_block):
         if(t is None and step is None):
             super().__init__(used=used, name=name, content=content)
         elif(content is None):
-            super().__init__(used=used, name=name, content=[str(t)+"\t"+str(step)])
+            super().__init__(used=used, name=name, content=None)
+            self.t=t
+            self.step =step
 
         self.subcontent = subcontent
 
     def read_content_from_str(self, content:List[str]):
         content = content[0].strip().split()
         self.content = content
-        self.t = float(content[0])
-        self.step = float(content[1])
+        self.t = float(content[1])
+        self.step = float(content[0])
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
@@ -161,16 +170,34 @@ class TITLE(_generic_gromos_block):
     field_seperator:str = "\t"
     line_seperator:str = "\n"
     order = [[["content"]]]
+    pyGromosWatermark:str = "\t >>> Generated with PyGromosTools (riniker group) <<< "
 
     def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n", name="TITLE", used=True):
         super().__init__(used=used, name=name, content=content)
         self.field_seperator = field_seperator
         self.line_seperator = line_seperator
 
+    def __deepcopy__(self, memo):
+        block = type(self)(content=None)
+        block.content = copy.deepcopy(self.content)
+        return block
+
     def read_content_from_str(self, content:List[str]):
-        self.content = content
+        if type(content) == str:
+            self.content = [content]
+        else:
+            self.content = content
 
     def block_to_string(self) -> str:
+        result = ""
+        result += str(self.name) + self.line_seperator
+        result += "".join(self.content)
+        if (self.pyGromosWatermark not in self.content):
+            result += self.line_seperator+self.pyGromosWatermark+self.line_seperator
+        result += "END" + self.line_seperator
+        return result
+
+    def block_to_string_old(self) -> str:
         result = ""
         result += str(self.name) + "\n"#double
         result += "".join(self.content)

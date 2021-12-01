@@ -22,7 +22,7 @@ class Position_Restraints(Cnf):
     path:str
 
     # general
-    gromos_file_ending: str = "pos"
+    _gromos_file_ending: str = "pos"
     residues: Dict[str, Dict[str, int]]
 
     # Standard Gromos blocks

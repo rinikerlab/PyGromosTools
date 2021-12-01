@@ -47,7 +47,7 @@ class Cnf(_general_gromos_file):
 
     # general
     _orig_file_path: str
-    gromos_file_ending: str = "cnf"
+    _gromos_file_ending: str = "cnf"
     residues: Dict[str, Dict[str, int]]
 
     # Standard Gromos blocks
@@ -1021,3 +1021,46 @@ class Cnf(_general_gromos_file):
     def visualize(self):
         from pygromos.visualization.coordinates_visualization import show_cnf
         return  show_cnf(self)
+
+    def get_volume(self)->float:
+        """
+            This function calculates the volume of the cnf.
+
+        Returns
+        -------
+        float
+            volume of the cnf.
+
+        """
+        length = self.GENBOX.length
+        return length[0] * length[1] * length[2]
+
+    def get_density(self, mass=1, autoCalcMass=False)->float:
+        """
+            This function calculates the density of the cnf.
+
+        Returns
+        -------
+        float
+            density of the cnf.
+
+        """
+        if autoCalcMass:
+            mass = self.get_mass()
+        return 1.66056 / self.get_volume() * mass
+
+    def get_mass(self)->float:
+        """
+            This function calculates the mass of the cnf.
+
+        Returns
+        -------
+        float
+            mass of the cnf.
+
+        """
+        mass = 0
+        elemMassDict = {'H': 1.0079, 'C': 12.0107, 'N': 14.0067, 'O': 15.9994, 'P': 30.9738, 'S': 32.065, 'F': 18.998403163} #TODO: add all elements
+        for atom in self.POSITION:
+            mass += elemMassDict[atom.atomType[0]]
+        return mass

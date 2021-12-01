@@ -20,7 +20,7 @@ from pygromos.data import ff
 from pygromos.data.ff import Gromos2016H66
 from pygromos.data.ff import Gromos54A7
 
-if (importlib.util.find_spec("openforcefield") != None):
+if (importlib.util.find_spec("openff") != None):
     from openff.toolkit.typing.engines import smirnoff
     has_openff = True
 else:
@@ -70,6 +70,7 @@ class forcefield_system():
         else:
             filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.offxml')
             filelist.sort()
+            filelist.reverse()
             for f in filelist:
                 try:
                     self.off = smirnoff.ForceField(f)

@@ -1,4 +1,4 @@
-import re
+import re,copy
 import __main__
 from enum import Enum
 from typing import Union, Iterable, Tuple, List, Dict
@@ -655,6 +655,16 @@ class MPERTATOM(_generic_gromos_block):
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
 
+    def __deepcopy__(self, memodict={}):
+        new_obj = type(self)()
+        new_obj.NJLA = copy.deepcopy(self.NJLA)
+        new_obj.NPTB = copy.deepcopy(self.NPTB)
+        new_obj.STATEIDENTIFIERS = copy.deepcopy(self.STATEIDENTIFIERS)
+        new_obj.STATEATOMHEADER = copy.deepcopy(self.STATEATOMHEADER)
+        new_obj.STATEATOMS = copy.deepcopy(self.STATEATOMS)
+        new_obj.dummy_IAC = copy.deepcopy(self.dummy_IAC)
+        new_obj.dummy_CHARGE = copy.deepcopy(self.dummy_CHARGE)
+        return new_obj
 
     def read_content_from_str(self, content:List[str]):
         field = 0
@@ -2527,26 +2537,42 @@ class SOLUTEATOM(_iterable_topology_block):
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
-                    if(int(INE) >= 1):
-                        INEvalues = dump1[8:]
-                        if(int(INE) > 6):
-                            numberOfExtraLines = math.ceil(int(INE)/6) -1
-                            for _ in range(numberOfExtraLines):
-                                INEvalues.extend(contentLines.pop(0).strip().split())
+                    if(1 <= int(INE)):
+                        INEvalues = [int(i) for i in dump1[8:]]
+                        # keep reading in lines until we have all the data needed.
+                        while (int(INE) > len(INEvalues)):
+                            try:
+                                if (len(contentLines) == 0):
+                                    raise IOError("Not enough lines provided for multi line INE in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
+                                    INEvalues.extend([int(i) for i in contentLines.pop(0).strip().split()])
+                                else:
+                                    raise IOError("no intendation detected for mult line INE in SOLUTEATOM Block or too large number for INE\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                            except:
+                                raise IOError("Problem reading INE for ATNM="+str(ATNM)+" MRES="+str(MRES))
+                                break
                     else:
                         INEvalues = []
 
                 dump2 = contentLines.pop(0).strip().split()
                 if(len(dump2) < 1):
-                    raise IOError("Not enough arguments provided in SOLUTEATOM Block")
+                    raise IOError("Not enough arguments provided in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
                 else:
                     INE14 = dump2[0]
-                    if(int(INE14) >= 1):
-                        INE14values = dump2[1:]
-                        if(int(INE14) > 6):
-                            numberOfExtraLines = math.ceil(int(INE14)/6) - 1
-                            for _ in range(numberOfExtraLines):
-                                INE14values.extend(contentLines.pop(0).strip().split())
+                    if(1 <= int(INE14)):
+                        INE14values = [int(i) for i in dump2[1:]]
+                        # keep reading in lines until we have all the data needed.
+                        while (int(INE14) > len(INE14values)):
+                            try:
+                                if (len(contentLines) == 0):
+                                    raise IOError("Not enough lines provided for multi line INE14 in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
+                                    INE14values.extend([int(i) for i in contentLines.pop(0).strip().split()])
+                                else:
+                                    raise IOError("no intendation detected for mult line INE14 in SOLUTEATOM Block or too large number for INE14\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                            except:
+                                raise IOError("Problem reading INE14 for ATNM="+str(ATNM)+" MRES="+str(MRES))
+                                break
                     else:
                         INE14values = []
                 # pass everything to the subclass maker

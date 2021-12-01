@@ -6,7 +6,7 @@ from pygromos.files.blocks import topology_blocks as blocks
 
 class Distance_restraints(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", "DISTANCERESPEC"]
-    gromos_file_ending:str = "disres"
+    _gromos_file_ending:str = "disres"
 
     def __init__(self, in_value:(str or dict)=None):
         self.blocksset = []
