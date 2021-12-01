@@ -11,7 +11,7 @@ Subpackages
    pygromos.data
    pygromos.files
    pygromos.gromos
-   pygromos.hpc_queuing
+   pygromos.simulations.hpc_queuing
    pygromos.simulations
    pygromos.tests
    pygromos.utils

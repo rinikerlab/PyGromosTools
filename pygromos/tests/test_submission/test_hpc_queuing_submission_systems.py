@@ -1,8 +1,8 @@
 import unittest
-from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
-from pygromos.hpc_queuing.submission_systems.lsf import LSF
-from pygromos.hpc_queuing.submission_systems.local import LOCAL
-from pygromos.hpc_queuing.submission_systems.dummy import DUMMY
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF
+from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
+from pygromos.simulations.hpc_queuing.submission_systems import DUMMY
 
 
 class test_queuing_system(unittest.TestCase):

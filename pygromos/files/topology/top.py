@@ -42,7 +42,7 @@ def check_top():
 
 #file Classes
 class Top(_general_gromos_file._general_gromos_file):
-    gromos_file_ending:str = "top"
+    _gromos_file_ending:str = "top"
 
     def __init__(self, in_value:(str or dict or None or TopType), _future_file:bool=False):
         if type(in_value) is str:
@@ -135,8 +135,8 @@ class Top(_general_gromos_file._general_gromos_file):
                                     MASS = atom.MASS,
                                     CG = atom.CG,
                                     CGC = atom.CGC,
-                                    INE = [str(int(x)+atnmShift) for x in atom.INEvalues],
-                                    INE14 = [str(int(x)+atnmShift) for x in atom.INE14values])
+                                    INE = [x+atnmShift for x in atom.INEvalues],
+                                    INE14 = [x+atnmShift for x in atom.INE14values])
 
         # add bonds and bonds with H
         for bond in top.BOND.content:
@@ -156,17 +156,17 @@ class Top(_general_gromos_file._general_gromos_file):
         # add angles and angles with H
         for angle in top.BONDANGLE.content:
             angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
-            retTop.add_new_angle(k=angleType.CB, 
-                                kh=angleType.CHB, 
-                                b0=angleType.B0, 
+            retTop.add_new_angle(k=angleType.CT, 
+                                kh=angleType.CHT, 
+                                b0=angleType.T0, 
                                 atomI=angle.IT + atnmShift, 
                                 atomJ=angle.JT + atnmShift,
                                 atomK=angle.KT + atnmShift)
         for angle in top.BONDANGLEH.content:
             angleType = top.BONDANGLEBENDTYPE.content[angle.ICT - 1]
-            retTop.add_new_angle(k=angleType.CB, 
-                                kh=angleType.CHB, 
-                                b0=angleType.B0, 
+            retTop.add_new_angle(k=angleType.CT, 
+                                kh=angleType.CHT, 
+                                b0=angleType.T0, 
                                 atomI=angle.IT + atnmShift, 
                                 atomJ=angle.JT + atnmShift,
                                 atomK=angle.KT + atnmShift, includesH=True)
@@ -224,6 +224,159 @@ class Top(_general_gromos_file._general_gromos_file):
             retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
 
         return retTop
+
+    def __mul__(self, n_multiplication:int):
+        return self.multiply_top(n_multiplication)
+    
+    def multiply_top(self, n_muliplication:int, unifyGroups:bool = False, verbose=False)->TopType:
+
+        # catch simple cases and create return top
+        if n_muliplication == 0:
+            return TopType(in_value=None)
+        retTop = deepcopy(self)
+        if n_muliplication == 1:
+            return retTop
+
+        top = deepcopy(self) # for safe storage and reagsinment so that we can modifie
+
+        n_loops = n_muliplication - 1 # -1 since first one is a deepcopy
+        atnmShift = 0 # init for number of atoms. Will be determined in SOLUTEATOM
+        mresShift = 0 # init for number of molecules. Will be determined in SOLUTEMOLECULES
+
+        ##start with additonal copies of all Blocks
+
+        #multiply RESNAME
+        if hasattr(top, "RESNAME") and len(top.RESNAME.content) > 0:
+            retTop.RESNAME.content[0][0] = str(int(top.RESNAME.content[0][0]) * n_muliplication)
+            for _ in range(n_loops):
+                retTop.RESNAME.content.extend(top.RESNAME.content[1:])
+
+        #multiply SOLUTEATOM
+        if hasattr(top, "SOLUTEATOM") and len(top.SOLUTEATOM.content) > 0:
+            atnmShift = top.SOLUTEATOM.content[-1].ATNM #Number of atoms found in  top
+            mresShift = top.SOLUTEATOM.content[-1].MRES #Number of molecules found in top.
+
+            if verbose:
+                print("atnmShift:", atnmShift)
+                print("mresShift:", mresShift)
+
+            retTop.SOLUTEATOM.NRP *= n_muliplication
+
+            for i in range(n_loops):
+                for atom in top.SOLUTEATOM.content:
+                    atom.ATNM += atnmShift
+                    atom.MRES += mresShift
+                    atom.INEvalues = [i+atnmShift for i in atom.INEvalues] #TODO remove str/int conversion
+                    atom.INE14values = [i+atnmShift for i in atom.INE14values]
+                    retTop.SOLUTEATOM.content.append(deepcopy(atom))
+
+        #multiply Bonds(H)
+        if hasattr(top, "BOND") and len(top.BOND.content) > 0:
+            retTop.BOND.NBON *= n_muliplication
+            for i in range(n_loops):
+                for bond in top.BOND.content:
+                    bond.IB += atnmShift
+                    bond.JB += atnmShift
+                    retTop.BOND.content.append(deepcopy(bond))
+        if hasattr(top, "BONDH") and len(top.BOND.content) > 0:
+            retTop.BONDH.NBONH *= n_muliplication
+            for i in range(n_loops):
+                for bond in top.BONDH.content:
+                    bond.IB += atnmShift
+                    bond.JB += atnmShift
+                    retTop.BONDH.content.append(deepcopy(bond))
+            
+        #multiply Angles(H)
+        if hasattr(top, "BONDANGLE") and len(top.BONDANGLE.content) > 0:
+            retTop.BONDANGLE.NTHE *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.BONDANGLE.content:
+                    angle.IT += atnmShift
+                    angle.JT += atnmShift
+                    angle.KT += atnmShift
+                    retTop.BONDANGLE.content.append(deepcopy(angle))
+        if hasattr(top, "BONDANGLEH") and len(top.BONDANGLEH.content) > 0:
+            retTop.BONDANGLEH.NTHEH *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.BONDANGLEH.content:
+                    angle.IT += atnmShift
+                    angle.JT += atnmShift
+                    angle.KT += atnmShift
+                    retTop.BONDANGLEH.content.append(deepcopy(angle))     
+
+        #multiply Impdihedrals(H)
+        if hasattr(top, "IMPDIHEDRAL") and len(top.IMPDIHEDRAL.content) > 0:
+            retTop.IMPDIHEDRAL.NQHI *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.IMPDIHEDRAL.content:
+                    angle.IQ += atnmShift
+                    angle.JQ += atnmShift
+                    angle.KQ += atnmShift
+                    angle.LQ += atnmShift
+                    retTop.IMPDIHEDRAL.content.append(deepcopy(angle))
+        if hasattr(top, "IMPDIHEDRALH") and len(top.IMPDIHEDRALH.content) > 0:
+            retTop.IMPDIHEDRALH.NQHIH *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.IMPDIHEDRALH.content:
+                    angle.IQH += atnmShift
+                    angle.JQH += atnmShift
+                    angle.KQH += atnmShift
+                    angle.LQH += atnmShift
+                    retTop.IMPDIHEDRALH.content.append(deepcopy(angle))
+
+        #multiply Torsions(H)
+        if hasattr(top, "DIHEDRAL") and len(top.DIHEDRAL.content) > 0:
+            retTop.DIHEDRAL.NPHI *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.DIHEDRAL.content:
+                    angle.IP += atnmShift
+                    angle.JP += atnmShift
+                    angle.KP += atnmShift
+                    angle.LP += atnmShift
+                    retTop.DIHEDRAL.content.append(deepcopy(angle))
+        if hasattr(top, "DIHEDRALH") and len(top.DIHEDRALH.content) > 0:
+            retTop.DIHEDRALH.NPHIH *= n_muliplication
+            for i in range(n_loops):
+                for angle in top.DIHEDRALH.content:
+                    angle.IPH += atnmShift
+                    angle.JPH += atnmShift
+                    angle.KPH += atnmShift
+                    angle.LPH += atnmShift
+                    retTop.DIHEDRALH.content.append(deepcopy(angle))
+
+
+        if hasattr(top, "SOLUTEMOLECULES"):
+            if unifyGroups and int(top.SOLUTEMOLECULES.content[0][0])==1:
+                retTop.SOLUTEMOLECULES.content[1][0] = str(int(retTop.SOLUTEMOLECULES.content[1][0]) * n_muliplication)
+            else:
+                retTop.SOLUTEMOLECULES.content[0][0] = str(int(top.SOLUTEMOLECULES.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.SOLUTEMOLECULES.content[1]]
+                    retTop.SOLUTEMOLECULES.content.append(groups)
+
+        if hasattr(top, "TEMPERATUREGROUPS"):
+            if unifyGroups and int(top.TEMPERATUREGROUPS.content[0][0])==1:
+                retTop.TEMPERATUREGROUPS.content[1][0] = str(int(retTop.TEMPERATUREGROUPS.content[1][0]) * n_muliplication)
+            else:
+                retTop.TEMPERATUREGROUPS.content[0][0] = str(int(top.TEMPERATUREGROUPS.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.TEMPERATUREGROUPS.content[1]]
+                    retTop.TEMPERATUREGROUPS.content.append(groups)
+
+        if hasattr(top, "PRESSUREGROUPS"):
+            if unifyGroups and int(top.PRESSUREGROUPS.content[0][0])==1:
+                retTop.PRESSUREGROUPS.content[1][0] = str(int(retTop.PRESSUREGROUPS.content[1][0]) * n_muliplication)
+            else:
+                retTop.PRESSUREGROUPS.content[0][0] = str(int(top.PRESSUREGROUPS.content[0][0]) * n_muliplication)
+                for i in range(n_loops):
+                    groups = [str(int(i)+atnmShift) for i in top.PRESSUREGROUPS.content[1]]
+                    retTop.PRESSUREGROUPS.content.append(groups)
+
+
+
+        # return everything
+        return retTop
+
 
     def read_file(self):
         #Read blocks to string
@@ -330,7 +483,7 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BOND.content.append(newBond)
             self.BOND.NBON += 1
 
-    def add_new_angle(self, k:float, kh:float, b0:float, atomI:int, atomJ:int, atomK:int, includesH:bool = False, verbose=False):
+    def add_new_angle(self, k:float, kh:float, b0:float, atomI:int, atomJ:int, atomK:int, includesH:bool = False, verbose=False, convertToQuartic=False):
         #check if all classes are ready, if not create
         if not hasattr(self, "BONDANGLEBENDTYPE"):
             self.add_block(blocktitle="BONDANGLEBENDTYPE", content=[], verbose=verbose)
@@ -345,14 +498,16 @@ class Top(_general_gromos_file._general_gromos_file):
         # TODO: add harmonic in the angle cosine force (CT)
         angle_type_number = 0
         iterator = 1
+        if convertToQuartic:
+            k = self.harmonic2quarticAngleConversion(kh, b0)
         for angle_type in self.BONDANGLEBENDTYPE.content:
-            if angle_type.CB == k and angle_type.B0 == b0:
+            if angle_type.CT == k and angle_type.CHT == kh and angle_type.T0 == b0:
                 break
             else:
                 iterator += 1
         angle_type_number = iterator
         if iterator > len(self.BONDANGLEBENDTYPE.content):#angle type was not found -> add new bondtype
-            newBONDANGLEBENDTYPE = blocks.bondstretchtype_type(CB=k, CHB=kh, B0=b0)
+            newBONDANGLEBENDTYPE = blocks.bondanglebendtype_type(CT=k, CHT=kh, T0=b0)
             self.BONDANGLEBENDTYPE.content.append(newBONDANGLEBENDTYPE)
             self.BONDANGLEBENDTYPE.NBTY += 1
         
@@ -365,6 +520,31 @@ class Top(_general_gromos_file._general_gromos_file):
         else:
             self.BONDANGLE.content.append(newAngle)
             self.BONDANGLE.NTHE += 1
+
+    def harmonic2quarticAngleConversion(self, kh, b0):
+        """conversion of a harmonic bondanglebending force constant to a cubic in cosine/quartic one
+
+        Parameters
+        ----------
+        kh : float
+            harmonic bondanglebending force constant (CHT)
+        b0 : float
+            bondangle 0
+
+        Returns
+        -------
+        float
+            cubic in cosine force constant (CT)
+        """
+        # This conversion is taken from GROMOS manual II 18.1. Conversion of force constants
+
+        b0rad = b0*math.pi/180 #b0 in radians
+        kbT =  2.494323 #k boltzman * Temperature in kJ/mol
+
+        # cosine is radian, but harmonic force constant is in degree -> first cos inside has to be calculated in degree
+        term1 = (math.cos((b0 + math.sqrt((kbT/kh)))*math.pi/180) - math.cos(b0rad))**2
+        term2 = (math.cos((b0 - math.sqrt((kbT/kh)))*math.pi/180) - math.cos(b0rad))**2
+        return 2*kbT/(term1 + term2)
 
     def add_new_torsiondihedral(self, CP:float, PD:float, NP:int, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
         #check if all classes are ready, if not create
@@ -609,6 +789,16 @@ class Top(_general_gromos_file._general_gromos_file):
             for i in self.SOLUTEATOM.content:
                 mass += i.MASS
         return mass
+
+    def get_diff_to_top(self, top:TopType):
+        for block in self._block_order[1:]:
+            if hasattr(self, block):
+                if hasattr(top, block):
+                    if getattr(self, block).block_to_string() != getattr(top, block).block_to_string():
+                        print("Block " + block + " is different")
+                        print("self: " + str(getattr(self, block)))
+                        print("top: " + str(getattr(top, block)))
+                        print("\n")
         
 
         

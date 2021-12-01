@@ -152,7 +152,7 @@ Content
   .. code-block:: python
 
      from pygromos.files.gromos_system import Gromos_System
-     from pygromos.hpc_queuing.submission_systems.local import LOCAL as subSystem
+     from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem
      from pygromos.simulations.modules.preset_simulation_modules import emin
 
      #define file paths
@@ -175,7 +175,7 @@ Content
   .. code-block:: python
 
      from pygromos.files.gromos_system import Gromos_System
-     from pygromos.hpc_queuing.submission_systems.lsf import LSF as subSystem
+     from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSystem
      from pygromos.simulations.modules.preset_simulation_modules import emin
 
      #define file paths

@@ -20,12 +20,15 @@ import numpy as np
 from typing import TypeVar, Union
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
+from pygromos.analysis import coordinate_analysis as ca
 
 TrcType = TypeVar("Trc")
 CnfType = TypeVar("Cnf")
 
 
+
 class Trc(traj._General_Trajectory):
+    _gromos_file_ending:str = "trc"
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
 
@@ -45,7 +48,7 @@ class Trc(traj._General_Trajectory):
         -------
         pd.DataFrame
         """
-        return self.database[["POS_"+str(atomI),"POS_"+str(atomJ)]].apply(lambda x: np.sqrt(np.sum((x[1]-x[0])**2)), axis=1)
+        return self.database[["POS_"+str(atomI),"POS_"+str(atomJ)]].apply(lambda x: ca.calculate_distance(x[0], x[1]), axis=1)
 
 
     def get_atom_pair_distance_mean(self, atomI:int, atomJ:int) -> float:
@@ -178,22 +181,6 @@ class Trc(traj._General_Trajectory):
     def radial_distribution(self, atomsFrom, atomsTo) -> pd.DataFrame:
         pass
 
-    def _rms(self, in_values)->float:
-        """helper function for RMSD. Calculates the root mean square for a array of (position/velocity) arrays
-
-        Parameters
-        ----------
-        in_values : np.array of np.arrays
-
-        Returns
-        -------
-        float
-            root mean square
-        """
-        sum = 0
-        for i in in_values:
-            sum += np.sum(i**2)
-        return np.sqrt(sum/len(in_values))
 
     def rmsd(self, ref_cnf: Union[int, TrcType]) -> pd.DataFrame:
         """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
@@ -222,7 +209,7 @@ class Trc(traj._General_Trajectory):
                 raise IndexError("ref_cnf value was recognized as integer but is too large")
         else:
             raise ValueError("ref_cnf type not supported")
-        return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: self._rms(x), axis=1)
+        return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: ca.rms(x), axis=1)
 
     def get_pdb(self, cnf:str, exclude_resn=["SOLV"])->str:
         pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
@@ -309,17 +296,11 @@ class Trc(traj._General_Trajectory):
             out_file.close()
             return out_path
 
+
     def visualize(self, cnf:CnfType):
         from pygromos.visualization.coordinates_visualization import show_coordinate_traj
         return show_coordinate_traj(self, cnf=cnf)
 
-    def _periodic_distance(self, vec:np.array, grid:np.array) -> np.array:
-        for i in range(3):
-            if vec[i] > (grid[i] / 2):
-                vec[i] = grid[i] - vec[i]
-            elif vec[i] < (grid[i] / 2):
-                vec[i] = grid[i] + vec[i]
-        return vec
 
     def cog_reframe(self, cnf:CnfType, index_list:list=[1]):
         # create mask for cog calculation
@@ -332,7 +313,7 @@ class Trc(traj._General_Trajectory):
         #print("Grid", grid)
 
         # cog calculation: select POS -> apply pbc -> average all positions
-        pbc_pos = self.database[col_list].applymap(lambda x: self._periodic_distance(x, grid))
+        pbc_pos = self.database[col_list].applymap(lambda x: ca._periodic_distance(x, grid))
         cog = pbc_pos.sum(axis=1) / len(col_list)
         #print("COG:", cog)
 

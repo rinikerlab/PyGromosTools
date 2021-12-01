@@ -20,10 +20,10 @@ from pygromos.files.topology.top import Top
 from pygromos.files.gromos_system.ff.serenityff.serenityff_data import serenityff_C12, serenityff_C6
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-if(importlib.util.find_spec("openforcefield") == None):
+if(importlib.util.find_spec("openff") == None):
     raise ImportError("SerenityFF is not enabled without openFF toolkit package! Please install openFF toolkit.")
 else:
-    from openforcefield.topology import Molecule
+    from openff.toolkit.topology import Molecule
     from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
 
 

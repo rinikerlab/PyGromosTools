@@ -19,7 +19,7 @@ STEP
 END
 BOUNDCOND
 #      NTB    NDFMIN
-         0         3
+         0         0
 END
 FORCE
 #      NTF array
@@ -44,7 +44,7 @@ NONBONDED
 # NLRELE
          1
 #  APPAK    RCRF   EPSRF    NSLFEXCL
-         0       1.4        4.0         1
+         0       1.4        1.0         1
 # NSHAPE  ASHAPE  NA2CLC   TOLA2   EPSLS
         -1       1.4         2     1e-10         0
 #    NKX     NKY     NKZ   KCUT

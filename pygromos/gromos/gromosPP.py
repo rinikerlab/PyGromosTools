@@ -5,16 +5,19 @@ Description:
 Author: Benjamin Schroeder
 """
 
-import os, glob
+import os
 from typing import Union
 
 import pandas as pd
 from typing import List
 from numbers import Number
+
 from pygromos.utils import bash
 from pygromos.data import pdb_lib
 from pygromos.data.ff.Gromos2016H66 import ifp, mtb
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
+from pygromos.gromos.utils import gromosTypeConverter
+
 
 
 class _gromosPPbase:
@@ -70,7 +73,7 @@ class _gromosPPbase:
         else:
             return self._bin
 
-
+    @gromosTypeConverter
     def pdb2gromos(self, in_pdb_path:str, in_top_path:str, out_cnf_path:str=None, in_lib_path:str=pdb_lib, _binary_name:str= "pdb2g96", verbose:bool = False)->str:
         """
         This is a wrapper for pdb2gromos. It executes the gromosPP binary.
@@ -111,7 +114,8 @@ class _gromosPPbase:
         if (verbose): print(p.stdout.readlines())
 
         return out_cnf_path
-    
+
+    @gromosTypeConverter
     def pdb2seq(self, in_pdb_path:str, out_path:str= "", pH:float=7.4, select:str = "ALL", gff:str = "54a7", add_head:str= "NH3+", add_tail:str= "COO-", _binary:str= "pdb2seq")->str:
         """
         This function is translating a pdb into a sequence file, that can be used to generate for example topologies.
@@ -158,7 +162,8 @@ class _gromosPPbase:
         bash.execute(command)
         return out_path
 
-    def make_top(self, out_top_path:str, in_building_block_lib_path: str, in_parameter_lib_path: str, in_sequence:str, in_solvent:str= "H2O", additional_options="\n")->str:
+    @gromosTypeConverter
+    def make_top(self, out_top_path:str, in_building_block_lib_path: str, in_parameter_lib_path: str, in_sequence:str, in_solvent:str= "H2O", additional_options="\n", _binary_name:str= "make_top")->str:
         """
         This wrapper uses make_top to generate a topology file.
 
@@ -194,10 +199,11 @@ class _gromosPPbase:
         #arg_file.write("\n".join(args))
         #arg_file.close()
         #"@f " + arg_path
-        command = self._bin +"make_top "+" ".join(args)
+        command = self._bin +_binary_name +" "+" ".join(args)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
+    @gromosTypeConverter
     def com_top(self, in_topo_paths:(str or List[str]), topo_multiplier:(int or List[int])=1, out_top_path:str= "combined_out.top",
                 take_topology_params_of_file:int=1, take_solvent_parameters_of_file:int=1,
                 _binary_name:str="com_top")->str: #Todo: also take lists as input ! bschroed
@@ -235,6 +241,7 @@ class _gromosPPbase:
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
+    @gromosTypeConverter
     def dfmult(self, in_endstate_file_paths: List[str], in_reference_state_file_path:str, out_file_path:str= "dfmult_temp.out",
                temperature:float=298, _binary_name:str= "dfmult", verbose:bool=False)->str:
         """
@@ -273,6 +280,7 @@ class _gromosPPbase:
 
         return out_file_path
 
+    @gromosTypeConverter
     def frameout(self, in_top_path:str, in_coord_path:str, periodic_boundary_condition:str,
                  out_file_path:str=None, out_file_format:str=None, single_file:bool=None,
                  gather:(int or str)=None, include:str= "SOLUTE",
@@ -382,6 +390,7 @@ class _gromosPPbase:
 
         return out_file_path
 
+    @gromosTypeConverter
     def ene_ana(self, in_ene_ana_library_path: str, in_en_file_paths: str, in_properties: str,
                 out_energy_folder_path: str, out_files_prefix: str = None, out_files_suffix: str = None,
                 in_topo: str = None, time: float = None, single_file: bool = False,return_outstat_also:bool=False,
@@ -548,6 +557,7 @@ class _gromosPPbase:
         else:
             return result_files
 
+    @gromosTypeConverter
     def protonate(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
                   tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
         """
@@ -575,6 +585,7 @@ class _gromosPPbase:
         
         return out_cnf_path
 
+    @gromosTypeConverter
     def sim_box(self, in_top_path:str, in_cnf_path:str, in_solvent_cnf_file_path:str, out_cnf_path:str= "",
                 periodic_boundary_condition: str = "r", gathering_method:str=None, minwall:float=0.8, threshold:float=None, rotate:str=None,
                 boxsize:float=None, _binary_name="sim_box", verbose=False)->str:
@@ -620,6 +631,7 @@ class _gromosPPbase:
         p = bash.execute(command, verbose=verbose, catch_STD=out_cnf_path)
         return out_cnf_path
 
+    @gromosTypeConverter
     def ran_box(self, in_top_path:str, in_cnf_path:str, out_cnf_path:str= "",
                 periodic_boundary_condition: str = "r", nmolecule:int = 1, dens:float = 1.0, threshold:float=None, layer:bool = False, 
                 boxsize:float=None, fixfirst:bool = False, seed:float=None, _binary_name="ran_box", verbose=False, return_command_only=False)->str:
@@ -647,7 +659,7 @@ class _gromosPPbase:
         else:
             return command
 
-
+    @gromosTypeConverter
     def build_box(self, in_top_path:str, in_cnf_path:str, out_cnf_path:str= "",
                 periodic_boundary_condition: str = "r", nmolecule:int = 1, dens:float = 1.0, _binary_name="build_box", verbose=False, return_command_only=False)->str:
 
@@ -661,8 +673,8 @@ class _gromosPPbase:
             return out_cnf_path
         else:
             return command
-    
 
+    @gromosTypeConverter
     def tser(self, in_trc_path:str, in_top_path:str, out_csv_path:str, property:str,
              periodic_boundary_condition:str= "r", time:float = None, solvent:str=None,
              normalise_distribution:bool=False, skip_first_n_frames:int=0, take_each_nth_frame:int=1,
@@ -709,6 +721,7 @@ class _gromosPPbase:
         bash.execute(command)
         return out_csv_path
 
+    @gromosTypeConverter
     def red_top(self, in_top_path:str, atom_selection:str, out_top_path:str, _binary_name:str= "red_top")->str:
         """
             red_top is a gromos tool to reduce a gromos tool to a certain selection.
@@ -729,6 +742,7 @@ class _gromosPPbase:
         bash.execute(command)
         return out_top_path
 
+    @gromosTypeConverter
     def prep_eds(self, in_top_paths:List[str], number_of_eds_states:int, param_top_index:int=1, solv_top_index:int=1,
                  out_file_path:str= "dev", _binary_name:str= "prep_eds", verbose:bool=False)->(str, str):
         """
@@ -771,6 +785,7 @@ class _gromosPPbase:
 
         return out_top, out_ptp
 
+    @gromosTypeConverter
     def prep_noe(self, in_top_path:str, in_noe_path:str, in_library_path:str, out_path:str,
                  dish:float=0.1, disc:float=0.153,
                  title:str="NOE", _binary_name:str= "prep_noe",
@@ -828,6 +843,7 @@ class _gromosPPbase:
 
         return out_path
 
+    @gromosTypeConverter
     def rmsf(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r", _binary_name:str= "rmsf")->str:
         """
             this is a wrapper for gromosPP rmsf programm. (Root mean square fluctuation
@@ -863,6 +879,7 @@ class _gromosPPbase:
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
+    @gromosTypeConverter
     def rmsd(self, in_top_path:str, in_trcs:Union[str, List[str]], atom_selection:str, out_file_path:str, pbc: str= "r", _binary_name:str= "rmsd")->str:
         """
 
@@ -889,6 +906,7 @@ class _gromosPPbase:
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
+    @gromosTypeConverter
     def cog(self, in_top_path:str, in_trcs:Union[str, List[str]], out_file_path:str,
             atom_selection:str=None, outformat:str=None, cog_com:str=None,
             add_repl:str=None, solv:str=None, nthframe:str=None,
@@ -951,7 +969,7 @@ class _gromosPPbase:
 
         return out_file_path
 
-
+    @gromosTypeConverter
     def noe(self,  in_top_path:str, in_noe_path:str, in_traj_path:str, out_path:str,
                 pbc:str="v", gathering:str="cog",
             _binary_name:str= "noe", verbose:bool=False) -> str:
@@ -994,7 +1012,7 @@ class _gromosPPbase:
 
         return out_path
 
-
+    @gromosTypeConverter
     def jval(self,  in_top_path:str, in_jval_path:str, in_traj_path:(str, List[str]), out_path:str,
               pbc:str="v", gathering:str="cog",
               timeseries:bool=False, rmsd:bool = False, time:float = None,
@@ -1057,6 +1075,7 @@ class _gromosPPbase:
 
         return out_path
 
+    @gromosTypeConverter
     def ion(self, in_top_path:str,in_cnf_path:str, out_cnf_path:str,
                 periodic_boundary_condition:str="v",
             negative:list=None, positive:list=None,
@@ -1082,6 +1101,48 @@ class _gromosPPbase:
     #To implement
     def _gr962pdb(self):
         raise Exception('not implemented yet!')
+
+    @gromosTypeConverter
+    def rgyr(self, out_rgyr_path:str, in_coord_path:str, in_top_path:str, atom_selection:str, periodic_boundary_condition:str="r cog", time:int=None, dt:int=None,  
+    mass_weighted:bool=False, _binary_name:str= "rgyr")->str:
+        """
+        This wrapper uses rgyr to compute the radius of gyration for a given atom selection. 
+
+        Parameters
+        ----------
+        out_rgyr_path: str
+        in_coord_path: str
+        in_top_path: str
+        atom_selection: str
+        periodic_boundary_condition: str
+        time: int, optional
+        dt: int, optional
+	mass_weighted:bool, optional
+	_binary_name: str, optional
+
+        Returns
+        -------
+        str
+            returns out_rgyr_path
+
+        See Also
+        --------
+             For more information checkout the Gromos Manual
+        """
+
+        args = ["@topo " + in_top_path,
+                "@pbc " + periodic_boundary_condition,
+                "@atoms " + atom_selection,
+                "@traj " + in_coord_path]
+
+        if(not isinstance(time, type(None))):
+            args += "@time "+str(time)+" "
+        if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
+            args += " "+str(dt)+" "
+	
+        command = self._bin +_binary_name+" "+" ".join(args)
+        bash.execute(command, catch_STD=out_rgyr_path)
+        return out_rgyr_path
 
 
 class GromosPP(_gromosPPbase):

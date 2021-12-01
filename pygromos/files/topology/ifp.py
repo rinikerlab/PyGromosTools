@@ -9,7 +9,7 @@ from pygromos.files._basics import _general_gromos_file, parser
 from typing import Union
 
 class ifp(_general_gromos_file._general_gromos_file):
-
+    _gromos_file_ending = "ifp"
     def __init__(self, in_value:Union[str, dict]):
         super().__init__(in_value=in_value)
 

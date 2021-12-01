@@ -6,12 +6,11 @@ from collections import OrderedDict
 from typing import List
 import numpy as np
 
-from pygromos.data.simulation_parameters_templates import template_sd
 from pygromos.files.blocks.imd_blocks import PERTURBATION, PRECALCLAM
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
-from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
-from pygromos.hpc_queuing.submission_systems.local import LOCAL
+from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.utils import bash
 

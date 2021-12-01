@@ -186,7 +186,7 @@ def write_job_script(out_script_path: str, target_function: callable, variable_d
     cmd_options = ""
 
     from pygromos.files.gromos_system.gromos_system import Gromos_System
-    from pygromos.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+    from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 
     missed_keys = []
     for key in s.parameters:

@@ -21,6 +21,7 @@ class Repdat(pd.DataFrame):  #
 
 
     """
+    _gromos_file_ending = "restat"
 
     #pandas specific parameters:
     @property

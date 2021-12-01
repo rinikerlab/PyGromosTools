@@ -2,7 +2,6 @@ name: pygromosDev
 channels:
   - rdkit
   - conda-forge
-  - omnia
   - defaults
 dependencies:
   # Base depends
@@ -20,14 +19,14 @@ dependencies:
   - ipywidgets
   -
   #science
-  - openforcefield = 0.8.3
+  - openforcefield
   - pandas
   - pytables
   - numpy
   - sympy
   - scipy
   - rdkit
-  - test_env.yaml
+  - mpmath
  ##Visualization
   - matplotlib
   - py3dmol

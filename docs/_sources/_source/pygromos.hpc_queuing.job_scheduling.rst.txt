@@ -7,8 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   pygromos.hpc_queuing.job_scheduling.schedulers
-   pygromos.hpc_queuing.job_scheduling.workers
+   pygromos.simulations.hpc_queuing.job_scheduling.schedulers
+   pygromos.simulations.hpc_queuing.job_scheduling.workers
 
 Submodules
 ----------
@@ -16,7 +16,7 @@ Submodules
 pygromos.hpc\_queuing.job\_scheduling.file\_management module
 -------------------------------------------------------------
 
-.. automodule:: pygromos.hpc_queuing.job_scheduling.file_management
+.. automodule:: pygromos.simulations.hpc_queuing.job_scheduling.file_management
    :members:
    :undoc-members:
    :show-inheritance:
@@ -24,7 +24,7 @@ pygromos.hpc\_queuing.job\_scheduling.file\_management module
 pygromos.hpc\_queuing.job\_scheduling.module\_functions module
 --------------------------------------------------------------
 
-.. automodule:: pygromos.hpc_queuing.job_scheduling.module_functions
+.. automodule:: pygromos.simulations.hpc_queuing.job_scheduling.module_functions
    :members:
    :undoc-members:
    :show-inheritance:
@@ -32,7 +32,7 @@ pygromos.hpc\_queuing.job\_scheduling.module\_functions module
 Module contents
 ---------------
 
-.. automodule:: pygromos.hpc_queuing.job_scheduling
+.. automodule:: pygromos.simulations.hpc_queuing.job_scheduling
    :members:
    :undoc-members:
    :show-inheritance:

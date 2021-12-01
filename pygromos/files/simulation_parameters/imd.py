@@ -39,7 +39,7 @@ def nice_s_vals(svals:Iterable, base10=False) ->list:
     return nicer_labels
 
 class Imd(_general_gromos_file._general_gromos_file):
-    gromos_file_ending:str = "imd"
+    _gromos_file_ending:str = "imd"
 
     _orig_file_path:str
     path:str
@@ -94,15 +94,7 @@ class Imd(_general_gromos_file._general_gromos_file):
             try:
                 self.add_block(blocktitle=key, content=sub_content)
             except Exception as err:
-                try:
-                    print("THE NEW REEDS BLOCK?")
-                    if (key == "REPLICA_EDS"):  # TODO: remove as soon as new block is established! or change to old >)
-                        self.add_block(blocktitle="NEW_REPLICA_EDS", content=sub_content)
-                        self.REPLICA_EDS = self.NEW_REPLICA_EDS
-                    else:
-                        raise IOError("Could not read in imd " + key + " block!\n values: \n\t" + str(sub_content) + "\n\n" + "\n\t".join(err.args))
-                except Exception as err:
-                    raise IOError("could not read in reeds_imd "+key+" block!\n values: \n\t"+str(sub_content)+"\n\n"+"\n\t".join(err.args))
+                raise Exception("Error while reading file: " + str(err))
         return {}
 
     def edit_EDS(self, NUMSTATES:int, S:float, EIR:list, EDS:int=1, ALPHLJ:float=0.0, ALPHC:float=0.0, FUNCTIONAL:int=1):
