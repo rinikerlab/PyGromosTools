@@ -211,7 +211,6 @@ class Trc(traj._General_Trajectory):
             raise ValueError("ref_cnf type not supported")
         return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: ca.rms(x), axis=1)
 
-
     def get_pdb(self, cnf:str, exclude_resn=["SOLV"])->str:
         pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
 
@@ -241,7 +240,6 @@ class Trc(traj._General_Trajectory):
                                       dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
             pdb_str+= remark_line + "\n".join(frame_positions) + '\nENDMDL\n'
         return pdb_str
-
 
     def write_pdb(self, out_path:str, cnf_file:str):
             """

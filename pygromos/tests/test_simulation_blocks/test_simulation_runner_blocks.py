@@ -49,6 +49,7 @@ class test_simulation_blocks(unittest.TestCase):
 
     def test_ti_sampling(self):
         from pygromos.data.simulation_parameters_templates import template_md
+
         self.gromSystem.imd = template_md
         pygromos.simulations.modules.ti_modules.TI_sampling(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
                                                             lambda_values = np.arange(0, 1.1, 0.1), subSystem = self.submissionSystem,
