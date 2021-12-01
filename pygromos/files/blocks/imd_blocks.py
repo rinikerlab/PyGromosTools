@@ -1048,14 +1048,18 @@ class FORCE(_generic_imd_block):
 
     def adapt_energy_groups(self, energy_groups: Dict[int, int]):
         """
-
+            Change the Force groups.
+            
         Parameters
         ----------
         residues : Dict[int, int]
-            [description]
+            the dictionary contains the forceGroups with the ID of the respective last atom.
+
+           {forceGroupID: lastAtom} = {1:12, 2:26, 3:128}
         """
         self.NEGR = len(energy_groups)
-        self.NRE = [int(energy_groups[last_atom]) for last_atom in energy_groups]
+        self.NRE = [int(energy_groups[forceGroupID]) for forceGroupID in sorted(energy_groups)]
+
 
     def __adapt_energy_groups(self, residues: Dict[str, Dict[int, int]]):
         """
