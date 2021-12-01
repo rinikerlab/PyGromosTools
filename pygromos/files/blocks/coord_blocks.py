@@ -124,7 +124,6 @@ class POSITION(_iterable_gromos_block):
             raise Exception("Generic Block did not understand the type of content \n content: \n"+str(content))
 
     def read_content_from_str(self, content:List[str]):
-
         lines = list(map(lambda x: x.split(), content))
         self.content = [blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]),
                         yp=float(x[5]), zp=float(x[6])) for x in list(map(lambda x: x.split(), content)) if(not x[0] == "#")]
@@ -224,13 +223,23 @@ class REFPOSITION(_iterable_gromos_block):
             every element in this list is of atom position obj
 
         """
-        super().__init__(used=True, name="REFPOSITION")
-        self.content = content
+        super().__init__(used=True, name="REFPOSITION", content=content)
+
+    def _check_import_method(self, content: str):
+        if (isinstance(content, list) and all([isinstance(x, atomP) for x in content])):
+            self.content = content
+        elif isinstance(content, str):
+            self.read_content_from_str(content=content.split(self.line_seperator))
+        elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+            self.read_content_from_str(content=content)
+        elif content is None:
+            self.content = []
+        else:
+            raise Exception("Generic Block did not understand the type of content \n content: \n"+str(content))
 
     def read_content_from_str(self, content:List[str]):
         self.content = [blocks.coords.atomP(resID=int(x[0]), resName=str(x[1]), atomType=str(x[2]), atomID=int(x[3]), xp=float(x[4]),
-                        yp=float(x[5]), zp=float(x[6])) for x in list(map(lambda x: x.split(), content))  if(not x[0] == "#")]
-
+                        yp=float(x[5]), zp=float(x[6])) for x in list(map(lambda x: x.split(), content)) if(not x[0] == "#")]
 
 class LATTICESHIFTS(_iterable_gromos_block):
     """

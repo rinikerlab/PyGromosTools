@@ -73,7 +73,7 @@ def show_coordinate_traj(trc:Trc, cnf: Cnf):
         view.setStyle({'resn': aminoA}, {"cartoon": {'arrows': True, 'tubes': True, 'style': 'oval'}})
     view.setStyle({'resn': ions}, {"sphere": {"color": "lightgreen", "radius": 0.7}})  # ions
 
-    view.animate({"loop":"forward"})
+    view.animate({"loop":"forward", "reps":1})
 
     view.zoomTo()
     return view

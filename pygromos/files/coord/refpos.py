@@ -14,7 +14,7 @@ class Reference_Position(Cnf):
     path:str
 
     # general
-    gromos_file_ending: str = "rpf"
+    _gromos_file_ending: str = "rpf"
     residues: Dict[str, Dict[str, int]]
 
     # Standard Gromos blocks

@@ -129,10 +129,12 @@ def chain_submission(simSystem:Gromos_System,
             bash.make_folder(tmp_outdir)
 
             # build COMMANDS:
-            prefix_command += " sleep 60s "
+            prefix_command += ""
+            if(len(prefix_command)>1):
+                prefix_command += " && "
 
             # MAIN commands
-            md_script_command = prefix_command + " && "
+            md_script_command = prefix_command
             md_script_command += "python3 " + worker_script + " "
             md_script_command += "-out_dir " + tmp_outdir + " "
             md_script_command += "-in_cnf_path " + simSystem.cnf.path + " "
