@@ -26,7 +26,7 @@ import time
 from pygromos.gromos.pyGromosPP.ran_box import ran_box
 from pygromos.gromos.pyGromosPP.com_top import com_top
 from pygromos.files.gromos_system.gromos_system import Gromos_System
-from pygromos.simulations.hvap_calculation import hvap_input_files
+from pygromos.simulations.approaches.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys
