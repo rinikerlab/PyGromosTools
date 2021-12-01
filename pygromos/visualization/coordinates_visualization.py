@@ -12,7 +12,7 @@ def show_cnf(cnf: Cnf):
 
     view=py3Dmol.view(width=400, height=400)
 
-    solute = [resn[:3] for resn in cnf.residues if(cCNF !="SOLV")]
+    solute = [resn[:3] for resn in cnf.residues if(resn !="SOLV")]
     if(len([res for res in solute if(res in three_letter_aa_lib)])>15 or "SOLV" in cnf.residues):
         pos = []
         for atomP in cCNF.POSITION:
