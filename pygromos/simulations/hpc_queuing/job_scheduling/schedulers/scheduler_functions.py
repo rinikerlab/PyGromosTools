@@ -129,47 +129,54 @@ def chain_submission(simSystem:Gromos_System,
             bash.make_folder(tmp_outdir)
 
             # build COMMANDS:
-            prefix_command += " sleep 60s "
-
-            # MAIN commands
-            md_script_command = prefix_command + " && "
-            md_script_command += "python3 " + worker_script + " "
-            md_script_command += "-out_dir " + tmp_outdir + " "
-            md_script_command += "-in_cnf_path " + simSystem.cnf.path + " "
-            md_script_command += "-in_imd_path " + simSystem.imd.path + " "
-            md_script_command += "-in_top_path " + simSystem.top.path + " "
-            md_script_command += "-runID " + str(runID) + " "
-
+            prefix_command += "sleep 60s"
+                
+            # We will write the arguments to the python script in a bash array 
+            # to make it simpler to read in our input files. 
+ 
+            md_args = "md_args=(\n"
+        
+            md_args += "-out_dir " + tmp_outdir + "\n"
+            md_args += "-in_cnf_path " + simSystem.cnf.path + "\n"
+            md_args += "-in_imd_path " + simSystem.imd.path + "\n"
+            md_args += "-in_top_path " + simSystem.top.path + "\n"
+            md_args += "-runID " + str(runID) + "\n"
+            
             ## OPTIONAL ARGS
             if (not simSystem.disres is None):
-                md_script_command += "-in_disres_path " + simSystem.disres.path + " "
+                md_args += "-in_disres_path " + simSystem.disres.path + "\n"
             if (not simSystem.ptp is None):
-                md_script_command += "-in_perttopo_path " + simSystem.ptp.path + " "
+                md_args += "-in_perttopo_path " + simSystem.ptp.path + "\n"
             if (not simSystem.refpos is None):
-                md_script_command += "-in_refpos_path " + simSystem.refpos.path + " "
+                md_args += "-in_refpos_path " + simSystem.refpos.path + "\n"
             if (not simSystem.posres is None):
-                md_script_command += "-in_posres_path " + simSystem.posres.path + " "
+                md_args += "-in_posres_path " + simSystem.posres.path + "\n"
 
-            #if(out_trg)
-
-            md_script_command += "-nmpi " + str(job_submission_system.nmpi) + " "
-            md_script_command += "-nomp " + str(job_submission_system.nomp) + " "
-            md_script_command += "-initialize_first_run "+str(initialize_first_run)+ " "
-            md_script_command += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + " "
+            md_args += "-nmpi " + str(job_submission_system.nmpi) + "\n"
+            md_args += "-nomp " + str(job_submission_system.nomp) + "\n"
+            md_args += "-initialize_first_run "+str(initialize_first_run)+ "\n"
+            md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"
             if(not work_dir is None):
-                md_script_command += "-work_dir " + str(work_dir) + " "
-
+                md_args += "-work_dir " + str(work_dir) + "\n"
+            
+            # Output files 
             if(hasattr(simSystem.imd, "WRITETRAJ")):
                 if(simSystem.imd.WRITETRAJ.NTWX > 0):
-                    md_script_command += "-out_trc "+str(True)+" "
+                    md_args += "-out_trc "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWE > 0):
-                    md_script_command += "-out_tre "+str(True)+" "
+                    md_args += "-out_tre "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWV > 0):
-                    md_script_command += "-out_trv "+str(True)+" "
+                    md_args += "-out_trv "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWF > 0):
-                    md_script_command += "-out_trf "+str(True)+" "
+                    md_args += "-out_trf "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWG > 0):
-                    md_script_command += "-out_trg "+str(True)+" "
+                    md_args += "-out_trg "+str(True)+ "\n"
+ 
+            md_args += ")\n" # closing the bash array which stores all results.
+
+            # MAIN commands
+            md_script_command = prefix_command + "\n\n" + md_args + "\n"
+            md_script_command += "python3 " + worker_script + "  \"${md_args[@]}\" \n"
 
             if(verbose) and verbose_lvl >= 2: print("COMMAND: ", md_script_command)
 
