@@ -181,6 +181,7 @@ def chain_submission(simSystem:Gromos_System,
             if(verbose) and verbose_lvl >= 2: print("COMMAND: ", md_script_command)
 
             ## POST COMMAND
+            
             clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
             clean_up_command = "python3 " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
                 tmp_outdir) + " -n_processes " + str(clean_up_processes)
@@ -202,23 +203,6 @@ def chain_submission(simSystem:Gromos_System,
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
 
-            try:
-                # schedule - simulation cleanup:
-                ##this mainly tars files.
-                if (verbose) and verbose_lvl >= 2: print("\tCLEANING")
-                outLog = tmp_outdir + "/" + out_prefix + "_cleanUp.out"
-                errLog = tmp_outdir + "/" + out_prefix + "_cleanUp.err"
-                clean_id = job_submission_system.submit_to_queue(command=clean_up_command,
-                                                                 jobName=tmp_jobname + "_cleanUP",
-                                                                 queue_after_jobID=previous_job_ID,
-                                                                 outLog=outLog,
-                                                                 errLog=errLog,)
-
-                if verbose: print("CLEANING ID: ", previous_job_ID)
-
-            except ValueError as err:  # job already in the queue
-                raise ValueError("ERROR during submission of clean-up command of "+str(tmp_jobname)+"_cleanUP:\n"+"\n".join(err.args))
-
             # OPTIONAL schedule - analysis inbetween.
             if (runID > 1 and run_analysis_script_every_x_runs != 0 and
                     runID % run_analysis_script_every_x_runs == 0
@@ -233,7 +217,7 @@ def chain_submission(simSystem:Gromos_System,
                     ana_id = job_submission_system.submit_to_queue(command=in_analysis_script_path,
                                                                    jobName=tmp_ana_jobname,
                                                                    outLog=outLog, errLog=errLog,
-                                                                   queue_after_jobID=clean_id,
+                                                                   queue_after_jobID=previous_job_id,
                                                                    verbose=verbose)
                     if (verbose) and verbose_lvl >= 2: print("\n")
                 except ValueError as err:  # job already in the queue
@@ -241,7 +225,7 @@ def chain_submission(simSystem:Gromos_System,
                     print("\n".join(err.args))
         else:
             if(verbose) and verbose_lvl >= 2: print("Did not submit!")
-            clean_id = None
+        
         if (verbose) and verbose_lvl >= 2: print("\n")
         if (verbose) and verbose_lvl >= 2: print("job_postprocess ")
         prefix_command = ""
@@ -249,5 +233,6 @@ def chain_submission(simSystem:Gromos_System,
         #Resulting cnf is provided to use it in further approaches.
         simSystem.cnf = tmp_out_cnf
 
-    previous_job_ID = clean_id if (ana_id is None) else ana_id
+    if (ana_id is not None) : previous_job_ID = ana_id
+        
     return previous_job_ID, tmp_jobname, simSystem

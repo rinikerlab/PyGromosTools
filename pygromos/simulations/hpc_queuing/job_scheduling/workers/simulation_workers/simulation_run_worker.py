@@ -10,7 +10,7 @@ from pygromos.files.simulation_parameters import imd
 from pygromos.utils import bash as bash
 from pygromos.utils.utils import spacer3 as spacer, dynamic_parser
 
-
+import pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.clean_up_simulation_files as zip_files
 
 def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str, runID:int=1,
          in_perttopo_path: str = None, in_disres_path: str= None, in_posres_path:str = None, in_refpos_path:str=None,
@@ -153,6 +153,11 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         except Exception as err:
             print("Failed! process returned: \n Err: \n" + "\n".join(err.args))
             md_failed = True
+        
+        # zip the files after the simulation.
+        n_cpu_zip = nmpi if nmpi >= nomp else nomp
+        zip_files.do(in_simulation_dir=work_dir, n_processes=n_cpu_zip)    
+
 
         if (out_dir != work_dir):
             bash.move_file(work_dir + "/*", out_dir)
