@@ -558,8 +558,8 @@ class _gromosPPbase:
             return result_files
 
     @gromosTypeConverter
-    def protonate(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
-                  tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
+    def gch(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
+            tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
         """
                     This function protonates a coordinate file.
 
@@ -584,6 +584,30 @@ class _gromosPPbase:
         bash.execute(command, catch_STD=out_cnf_path)
         
         return out_cnf_path
+
+    def add_hydrogens(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
+            tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
+        """
+                    This function protonates a coordinate file.
+
+        Parameters
+        ----------
+        in_cnf_path :   str
+        in_top_path :  str
+        out_cnf_path :  str
+        tolerance : float, optional
+        periodic_boundary_condition : str, optional
+        gathering : str, optional
+        _binary_name :    str, optional
+
+        Returns
+        -------
+            out_cnf_path
+
+        """
+        self.gch( in_cnf_path=in_cnf_path, in_top_path=in_top_path, out_cnf_path=out_cnf_path,
+            tolerance=tolerance, periodic_boundary_condition=periodic_boundary_condition, gathering=gathering, _binary_name=_binary_name)
+
 
     @gromosTypeConverter
     def sim_box(self, in_top_path:str, in_cnf_path:str, in_solvent_cnf_file_path:str, out_cnf_path:str= "",
@@ -627,8 +651,8 @@ class _gromosPPbase:
             command_suffix+= " @minwall " + str(minwall)
 
         command= self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @solvent " + in_solvent_cnf_file_path + " " + command_suffix
-        print(command)
         p = bash.execute(command, verbose=verbose, catch_STD=out_cnf_path)
+
         return out_cnf_path
 
     @gromosTypeConverter

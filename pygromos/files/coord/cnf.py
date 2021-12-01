@@ -1050,7 +1050,7 @@ class Cnf(_general_gromos_file):
 
     def visualize(self):
         from pygromos.visualization.coordinates_visualization import show_cnf
-        return  show_cnf(self)
+        return show_cnf(self)
 
     def get_volume(self)->float:
         """

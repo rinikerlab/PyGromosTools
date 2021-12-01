@@ -12,7 +12,7 @@ import io, os, glob, time, warnings
 
 import subprocess as sub
 from typing import List, Dict, Union
-
+from pygromos.utils.utils import time_wait_s_for_filesystem
 
 #################################
 #   General functions:
@@ -39,11 +39,11 @@ def wait_for_fileSystem(check_paths: (str, List[str]), regex_mode:bool=False, ma
         it = 0
         waiting = True
         while (waiting and it < max_waiting_iterations):
-            time.sleep(1)
             if(regex_mode):
                 waiting = len(glob.glob(check_path)) <= 0
             else:
                 waiting = not os.path.exists(check_path)
+            time.sleep(time_wait_s_for_filesystem)
             it += 1
         if (waiting):
             raise IOError("Could not find file: " + check_path)
@@ -800,7 +800,7 @@ def execute_old(command: (str or List[str]), verbose: bool = False, ignore_retur
 
         try:
             while p.poll() is None:
-                time.sleep(0.02)
+                time.sleep(time_wait_s_for_filesystem)
         except KeyboardInterrupt:
             p.kill()
 

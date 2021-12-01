@@ -313,7 +313,7 @@ class Trc(traj._General_Trajectory):
         #print("Grid", grid)
 
         # cog calculation: select POS -> apply pbc -> average all positions
-        pbc_pos = self.database[col_list].applymap(lambda x: ca._periodic_distance(x, grid))
+        pbc_pos = self.database[col_list].applymap(lambda x: ca.periodic_distance(x, grid))
         cog = pbc_pos.sum(axis=1) / len(col_list)
         #print("COG:", cog)
 
@@ -324,7 +324,7 @@ class Trc(traj._General_Trajectory):
         # shift all positions
         posList = [x for x in self.database.columns if x.startswith('POS_')]
         for ind, idx in enumerate(posList):
-            self.database[idx] = self.database[idx].apply(lambda x: self._periodic_distance(x, grid))  # + boxCenter
+            self.database[idx] = self.database[idx].apply(lambda x: ca.periodic_distance(x, grid))  # + boxCenter
 
 """
     @classmethod

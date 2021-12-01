@@ -14,6 +14,7 @@ import inspect
 import functools
 import importlib
 import warnings
+from pygromos.data.ff import Gromos54A7
 from typing import Dict, Union, List, Callable
 
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
@@ -87,7 +88,7 @@ class Gromos_System():
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
                  rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
-                 auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=True):
+                 auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=False):
         """
 
         Parameters
@@ -277,8 +278,10 @@ class Gromos_System():
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
-    #def __copy__(self):
 
+    def copy(self, no_traj:bool=True):
+
+        return copy.deepcopy(self)
 
 
     def copy(self):
@@ -503,6 +506,7 @@ class Gromos_System():
         gen_cmd = "#Generate "+ self.__class__.__name__+ "\n"
         gen_cmd += "from " + self.__module__ + " import "+ self.__class__.__name__+" as "+ self.__class__.__name__+"_obj"+ "\n"
         gen_cmd += var_name+" = "+__class__.__name__+"_obj(work_folder=\""+self.work_folder+"\", system_name=\""+self.name+"\")\n"
+
         for arg, path in self.all_file_paths.items():
             gen_cmd+= str(var_name)+"."+str(arg)+" = \""+str(path)+"\"\n"
         gen_cmd+="\n"
@@ -631,6 +635,9 @@ class Gromos_System():
     def rdkit2GromosName(self) -> str:
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
 
+    def prepare_for_simulation(self, not_ligand_residues:List[str]=[]):
+        self.adapt_imd(not_ligand_residues=not_ligand_residues)
+
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
         #Get residues
         if(self.cnf._future_file and self.residue_list is None
@@ -664,7 +671,7 @@ class Gromos_System():
         energy_groups = {}
 
         if(self._single_energy_group):
-            energy_groups = { self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
+            energy_groups = {self.solute_info.number_of_atoms + self.protein_info.number_of_atoms + self.non_ligand_info.number_of_atoms + self.solvent_info.number_of_atoms:1}
         else:
             #solute
             if(self.solute_info.number_of_atoms>0):
@@ -740,6 +747,8 @@ class Gromos_System():
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
         self.refpos = self.cnf.gen_refpos()
+
+
 
 
     """
@@ -894,8 +903,17 @@ class Gromos_System():
                 #print(attr_key)
                 if ("in" in k and "path" in k and attr_key in dir(self)):
                     grom_obj = getattr(self, attr_key)
+<<<<<<< HEAD
+
+                    if(isinstance(grom_obj, str)):
+                        kwargs.update({k: grom_obj})
+
+                    elif(hasattr(grom_obj, "path") and grom_obj.path is None):
+                        tmp_file_path = self.work_folder + "/tmp_in_file." + grom_obj._gromos_file_ending
+=======
                     if (grom_obj.path is None):
                         tmp_file_path = self.work_folder + "/tmp_file." + grom_obj._gromos_file_ending
+>>>>>>> main
                         grom_obj.write(tmp_file_path)
                         kwargs.update({k: tmp_file_path})
                         tmp_files.append(tmp_file_path)
@@ -910,6 +928,19 @@ class Gromos_System():
             [bash.remove_file(p) for p in tmp_files]
 
             return r
+
+        # Override signature for usage in jupyter env or IDE
+        sig = inspect.signature(func)
+        red_params = []
+        for key, par in sig.parameters.items():
+            attr_key = key.replace("in_", "").replace("_path", "")
+            if ("in" in key and "path" in key and attr_key in dir(self)):
+                continue
+            else:
+                red_params.append(par)
+        red_sig = sig.replace(parameters=red_params)
+        findGromosSystemAttributes.__signature__ = red_sig
+
         return findGromosSystemAttributes
 
     def __SystemConstructionUpdater(self, func:callable) -> callable:
@@ -938,7 +969,7 @@ class Gromos_System():
             for k in inspect.signature(func).parameters:
                 if ("out" in k and "path" in k):
                     attr_key = k.replace("out_", "").replace("_path", "")
-                    kwargs.update({k: self.work_folder + "/tmp_file." + attr_key})
+                    kwargs.update({k: self.work_folder + "/tmp_out_file." + attr_key})
                     update_dict.update({k: attr_key})
 
             # execute function
@@ -951,11 +982,88 @@ class Gromos_System():
                 bash.remove_file(kwargs[k])
 
             return r
+
+        # Override signature for usage in jupyter env or IDE
+        sig = inspect.signature(func)
+        red_params = []
+        for key, par in sig.parameters.items():
+            if ("out" in key and "path" in key):
+                continue
+            else:
+                red_params.append(par)
+        red_sig = sig.replace(parameters=red_params)
+        updateGromosSystem.__signature__ = red_sig
+
         return updateGromosSystem
+
+    def __ionDecorator(self, func: callable) -> callable:
+        """
+            ** DECORATOR **
+            This Helper Decorator should be removed soon! it helps with gromosPP ion,
+            to add the ion params to the topology. -> Convenience for tech debt
+
+        Parameters
+        ----------
+        func: callable
+            the function to be wrapped
+
+        Returns
+        -------
+        func
+
+        """
+
+        @functools.wraps(func)
+        def generate_ion_top(in_building_block_lib_path=Gromos54A7.mtb,
+                             in_parameter_lib_path=Gromos54A7.ifp,
+                            *args, **kwargs):
+            # execute function
+            r = func(*args, **kwargs)
+            top_cl = self.work_folder + "/aux_tmp.top"
+
+            sequence = ""
+            if("negative" in kwargs):
+                nIons, ion = kwargs['negative']
+                sequence += (ion+" ")*nIons
+            if("positive" in kwargs):
+                nIons, ion = kwargs['positive']
+                sequence += (ion+" ")*nIons
+
+            self._gromosPP.make_top(in_building_block_lib_path=in_building_block_lib_path,
+                            in_parameter_lib_path=in_parameter_lib_path,
+                            in_sequence=sequence,
+                            in_solvent="H2O",
+                            out_top_path=top_cl)
+            self.top += Top(top_cl)
+            bash.remove_file(top_cl)
+
+            return r
+
+
+        # Override signature for usage in jupyter env or IDE
+        sig = inspect.signature(func)
+        sig2 = inspect.signature(self._gromosPP.make_top)
+
+        red_params = [sig2.parameters['in_building_block_lib_path']]
+        red_params.append(sig2.parameters['in_parameter_lib_path'])
+        red_params.extend(list(sig.parameters.values()))
+
+
+        red_sig = sig.replace(parameters=red_params)
+        generate_ion_top.__signature__ = red_sig
+
+
+        return generate_ion_top
+
 
     def __bind_gromosPPFuncs(self):
         if(not self._gromosPP is None):
             func = [k for k in dir(self._gromosPP) if (not k.startswith("_") and k != "bin")]
             v = {f: self.__SystemConstructionUpdater(self.__SystemConstructionAttributeFinder(getattr(self._gromosPP, f)))
                  for f in func}
+            #this is clunky and needs to be removed in future
+            rewrap = self.__ionDecorator(v['ion'])
+            v.update({"ion": rewrap})
+
             self.__dict__.update(v)
+

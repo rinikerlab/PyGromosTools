@@ -36,6 +36,7 @@ from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers im
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
+from pygromos.utils.utils import time_wait_s_for_filesystem
 
 class Hvap_calculation():
     def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="54A7"), gromosXX:str=None, gromosPP:str=None, useGromosPlsPls:bool=True, verbose:bool=True) -> None:
@@ -111,7 +112,7 @@ class Hvap_calculation():
                 self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
                 tempTop = Top(in_value=self.work_folder+"/temp.top")
                 tempTop.write(out_path=self.work_folder+"temp.top")
-                time.sleep(1) #wait for file to write and close
+                time.sleep(time_wait_s_for_filesystem) #wait for file to write and close
                 self.groSys_liq.top = tempTop
             except:
                 self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
@@ -124,7 +125,7 @@ class Hvap_calculation():
             self.gromosPP.ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density, threshold=0.1, layer=True)
         else:
             ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
-        time.sleep(3) #wait for file to write and close 
+        time.sleep(time_wait_s_for_filesystem) #wait for file to write and close
         self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
 
         #reset liq system
@@ -135,8 +136,8 @@ class Hvap_calculation():
 
         #min
         print(self.groSys_gas.work_folder)
-        sys_emin_gas, jobID = simulation(in_gromos_system=self.groSys_gas,
-                                         project_dir=self.groSys_gas.work_folder,
+        sys_emin_gas, jobID = simulation(in_gromos_simulation_system=self.groSys_gas,
+                                         override_project_dir=self.groSys_gas.work_folder,
                                          step_name="1_emin",
                                          in_imd_path=self.imd_gas_min,
                                          submission_system=self.submissonSystem,
@@ -145,8 +146,8 @@ class Hvap_calculation():
         print(self.groSys_gas.work_folder)
 
         #eq
-        sys_eq_gas, jobID = simulation(in_gromos_system=sys_emin_gas,
-                                       project_dir=self.groSys_gas.work_folder,
+        sys_eq_gas, jobID = simulation(in_gromos_simulation_system=sys_emin_gas,
+                                       override_project_dir=self.groSys_gas.work_folder,
                                        step_name="2_eq",
                                        in_imd_path=self.imd_gas_eq,
                                        submission_system=self.submissonSystem,
@@ -154,8 +155,8 @@ class Hvap_calculation():
                                        verbose=self.verbose)
 
         #sd
-        sys_sd_gas, jobID = simulation(in_gromos_system=sys_eq_gas,
-                                       project_dir=self.groSys_gas.work_folder,
+        sys_sd_gas, jobID = simulation(in_gromos_simulation_system=sys_eq_gas,
+                                       override_project_dir=self.groSys_gas.work_folder,
                                        step_name="3_sd",
                                        in_imd_path=self.imd_gas_sd,
                                        submission_system=self.submissonSystem,
@@ -169,8 +170,8 @@ class Hvap_calculation():
         self.groSys_liq.rebase_files()
 
         #minsys_emin_liq, jobID
-        sys_emin_liq, jobID = simulation(in_gromos_system=self.groSys_liq,
-                                         project_dir=self.groSys_liq.work_folder,
+        sys_emin_liq, jobID = simulation(in_gromos_simulation_system=self.groSys_liq,
+                                         override_project_dir=self.groSys_liq.work_folder,
                                          step_name="1_emin",
                                          in_imd_path=self.imd_liq_min,
                                          submission_system=self.submissonSystem,
@@ -178,8 +179,8 @@ class Hvap_calculation():
                                          verbose=self.verbose)
 
         #eq
-        sys_eq_liq, jobID = simulation(in_gromos_system=sys_emin_liq,
-                                       project_dir=self.groSys_liq.work_folder,
+        sys_eq_liq, jobID = simulation(in_gromos_simulation_system=sys_emin_liq,
+                                       override_project_dir=self.groSys_liq.work_folder,
                                        step_name="2_eq",
                                        in_imd_path=self.imd_liq_eq,
                                        submission_system=self.submissonSystem,
@@ -187,8 +188,8 @@ class Hvap_calculation():
                                        verbose=self.verbose)
 
         #md
-        sys_md_liq, jobID = simulation(in_gromos_system=sys_eq_liq,
-                                       project_dir=self.groSys_liq.work_folder,
+        sys_md_liq, jobID = simulation(in_gromos_simulation_system=sys_eq_liq,
+                                       override_project_dir=self.groSys_liq.work_folder,
                                        step_name="3_sd",
                                        in_imd_path=self.imd_liq_md,
                                        submission_system=self.submissonSystem,

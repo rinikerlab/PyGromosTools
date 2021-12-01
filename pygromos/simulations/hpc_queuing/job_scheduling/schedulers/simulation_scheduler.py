@@ -54,7 +54,7 @@ def do(in_simSystem: Gromos_System,
     try:
         if (verbose): print("Script: ", __file__)
 
-        if (verbose): print(spacer+"Simulation PREPERATION\n"+spacer+"\n")
+        if (verbose and verbose_lvl > 2): print(spacer+"Simulation PREPERATION\n"+spacer+"\n")
 
         # Outdir
         bash.make_folder(out_dir_path)  # final output_folder
