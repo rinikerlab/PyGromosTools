@@ -11,6 +11,7 @@ from typing import List, Dict
 
 from pygromos.files import blocks
 from pygromos.files.blocks import topology_blocks as tb
+from pygromos.files.blocks import pertubation_blocks as pb
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
 import re
 
@@ -275,8 +276,8 @@ def read_ptp(in_path:str)->Dict:
     def  _read_ptp_subblock(blocks):
         result_data = {}
         for block in blocks:
-            if (block in ["TITLE", "PERTATOMPARAM", "MPERTATOM"]):
-                atom_block = getattr(tb, block)(content= blocks[block])
+            if (hasattr(pb, block)):
+                atom_block = getattr(pb, block)(content= blocks[block])
                 result_data.update({block: atom_block})
             else:
                 raise IOError("PTP parser does not know block: "+str(block)+"\n with content: "+"\n".join(blocks[block]))

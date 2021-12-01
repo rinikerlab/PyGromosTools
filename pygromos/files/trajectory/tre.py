@@ -129,18 +129,25 @@ class Tre(traj._General_Trajectory):
         pd.DataFrame
             pandas dataframe with all temperatures
         """
-        return self.database["temperature"].apply(lambda x: x[:,0])
+
+        tmps = []
+        for i, row in self.database.iterrows():
+            row_d = {"TIMESTEP_time": row["TIMESTEP_time"], "TIMESTEP_step": row["TIMESTEP_step"]}
+            row_d.update({"bath" + str(i + 1): temp for i, temp in enumerate(row["temperature"][:, 0])})
+            tmps.append(row_d)
+
+        return pd.DataFrame(tmps)
 
 
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_nonbonded_energy = 0
         if type(gas_traj) == type(self):
-            gas_nonbonded_energy = gas_traj.get_totals_totpot().mean()
+            gas_nonbonded_energy = gas_traj.get_totals_nonbonded().mean()
         elif type(gas_traj) == float:
             gas_nonbonded_energy = gas_traj
         else:
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
-        liquid_nonbonded_energyself = self.get_totals_totpot().mean()
+        liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
 
         # calculate heat of vaporization
         self.heat_vap = ea.get_Hvap(liq=liquid_nonbonded_energyself, gas=gas_nonbonded_energy, temperature=temperature, nMolecules=nMolecules)

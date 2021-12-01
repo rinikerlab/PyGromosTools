@@ -3,7 +3,7 @@ import os
 
 import __main__
 
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from typing import Dict, List, Tuple, Union
 from typing import TypeVar
 import numpy as np
@@ -888,9 +888,16 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4,4,4], angles=[90,90,90]))
 
-    def get_pdb(self)->str:
+    def get_pdb(self, rdkit_ready:bool=False, connectivity_top=None)->str:
         """
             translate cnf to pdb.
+
+        Parameters
+        ----------
+        rdkit_ready: bool, optional
+            str output was tested with RDKIT (default: False)
+        connectivity_top: top.Top, optional
+            if the pygromos top class is provided (containing a BOND block), then the pdb gets a connect block.
 
         Returns
         -------
@@ -898,28 +905,51 @@ class Cnf(_general_gromos_file):
             pdb str.
 
         """
-
-        # 2) CONSTUCT PDB BLOCKS
-        # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = "ATOM  {:>5d} {:<4}{:1}{:<4} {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
-
-        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
+        dummy_occupancy = dummy_bfactor = dummy_charge = dummy_mass = 0.0
         dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
 
-        frame_positions = []
-        for ind, atom in enumerate(self.POSITION):
-            frame_positions.append(
-                pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(
-                    atom.resID), dummy_insertion_code, atom.xp * 10, atom.yp * 10, atom.zp * 10, dummy_occupancy,
-                                  dummy_bfactor,
-                                  dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
+        if(rdkit_ready):
+            format_str = "HETATM {:>4} {:>4} {:>3}   {:>3}      {:>6.3f}  {:>6.3f}  {:>6.3f}  {:>2.2f}  {:>2.2f}          {:>2}"
 
-        pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
-        pdb_str += "\n".join(frame_positions) + '\n'
-        pdb_str += '\nEND'
+            frame_positions = []
+            for pos in self.POSITION:
+                frame_positions.append(format_str.format(pos.atomID, pos.atomType, pos.resName[:3], pos.resID, pos.xp * 10,
+                                             pos.yp * 10, pos.zp * 10, dummy_mass, int(dummy_charge), pos.atomType))
+
+            pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
+            pdb_str += "\n".join(frame_positions)
+
+        else:
+            # 2) CONSTUCT PDB BLOCKS
+            # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
+            pdb_format = "ATOM  {:>5d} {:<4}{:1}{:<4} {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+
+            frame_positions = []
+            for ind, atom in enumerate(self.POSITION):
+                frame_positions.append(
+                    pdb_format.format(atom.atomID, atom.atomType, dummy_alt_location, atom.resName, dummy_chain, int(
+                        atom.resID), dummy_insertion_code, atom.xp * 10, atom.yp * 10, atom.zp * 10, dummy_occupancy,
+                                      dummy_bfactor,
+                                      dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
+
+            pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
+            pdb_str += "\n".join(frame_positions) + '\n'
 
         #future:
         ##add bond block with top optionally
+        if(connectivity_top is not None and hasattr(connectivity_top, "BOND") and connectivity_top.BOND is not None):
+            connection_block = defaultdict(list)
+            for bond in connectivity_top.BOND:
+                connection_block[bond.IB].append(bond.JB)
+
+            out_str = ""
+            for atomI in sorted(connection_block):
+                connections = connection_block[atomI]
+                substr = "".join([" {:>4}" for i in range(len(connections))])
+                out_str += ("CONECT {:>4}" + substr).format(atomI, *connections) + "\n"
+            pdb_str+=out_str
+
+        pdb_str += '\nEND'
 
         return pdb_str
 
@@ -1020,7 +1050,7 @@ class Cnf(_general_gromos_file):
 
     def visualize(self):
         from pygromos.visualization.coordinates_visualization import show_cnf
-        return  show_cnf(self)
+        return show_cnf(self)
 
     def get_volume(self)->float:
         """

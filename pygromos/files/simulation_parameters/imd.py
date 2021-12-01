@@ -6,6 +6,7 @@ Author: Kay Schaller & Benjamin Schroeder
 """
 import numpy as np
 from numbers import Number
+import copy, json
 from typing import List, Dict, NamedTuple, Iterable
 from collections import namedtuple
 
@@ -94,15 +95,7 @@ class Imd(_general_gromos_file._general_gromos_file):
             try:
                 self.add_block(blocktitle=key, content=sub_content)
             except Exception as err:
-                try:
-                    print("THE NEW REEDS BLOCK?")
-                    if (key == "REPLICA_EDS"):  # TODO: remove as soon as new block is established! or change to old >)
-                        self.add_block(blocktitle="NEW_REPLICA_EDS", content=sub_content)
-                        self.REPLICA_EDS = self.NEW_REPLICA_EDS
-                    else:
-                        raise IOError("Could not read in imd " + key + " block!\n values: \n\t" + str(sub_content) + "\n\n" + "\n\t".join(err.args))
-                except Exception as err:
-                    raise IOError("could not read in reeds_imd "+key+" block!\n values: \n\t"+str(sub_content)+"\n\n"+"\n\t".join(err.args))
+                raise Exception("Error while reading file: " + str(err))
         return {}
 
     def edit_EDS(self, NUMSTATES:int, S:float, EIR:list, EDS:int=1, ALPHLJ:float=0.0, ALPHC:float=0.0, FUNCTIONAL:int=1):
@@ -210,3 +203,13 @@ class Imd(_general_gromos_file._general_gromos_file):
         if (isinstance(EDS_STAT_OUT, (str, int, bool))):
             reeds_block.EDS_STAT_OUT = EDS_STAT_OUT
 
+
+    def write_json(self,out_path:str):
+        d = copy.deepcopy(vars(self))
+
+        for v in vars(self):
+            if (isinstance(d[v], (blocks.TITLE, blocks._generic_imd_block, blocks._generic_gromos_block)) or issubclass(d[v].__class__,  _general_gromos_file._general_gromos_file)):
+                d.update({v: vars(d[v])})
+
+        json.dump(d, open(out_path, "w"))
+        return out_path
