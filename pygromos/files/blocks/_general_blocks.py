@@ -168,6 +168,7 @@ class TITLE(_generic_gromos_block):
     field_seperator:str = "\t"
     line_seperator:str = "\n"
     order = [[["content"]]]
+    pyGromosWatermark:str = "\t >>> Generated with PyGromosTools (riniker group) <<< "
 
     def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n", name="TITLE", used=True):
         super().__init__(used=used, name=name, content=content)
@@ -189,8 +190,8 @@ class TITLE(_generic_gromos_block):
         result = ""
         result += str(self.name) + self.line_seperator
         result += "".join(self.content)
-        if ("\t >>> Generated with PygromosTools (riniker group) <<< " not in self.content):
-            result += self.line_seperator+"\t >>> Generated with PygromosTools (riniker group) <<< "+self.line_seperator
+        if (self.pyGromosWatermark not in self.content):
+            result += self.line_seperator+self.pyGromosWatermark+self.line_seperator
         result += "END" + self.line_seperator
         return result
 
