@@ -86,7 +86,7 @@ class test_tre(traj_standard_tests):
         lam_ene = t.get_precalclam()
         print(lam_ene, lam_ene.shape)
         self.assertEqual(lam_ene.nr_lambdas[0], 2, msg="Number of lambdas should be two")
-        self.assertEqual(lam_ene.shape, (500,25), msg="The traj should have 500 timesteps and 23 fields for precalclam")
+        self.assertEqual(lam_ene.shape, (5,25), msg="The traj should have 5 timesteps and 23 fields for precalclam")
 
 
 class test_trg(traj_standard_tests):
