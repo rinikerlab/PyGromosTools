@@ -147,15 +147,17 @@ class TIMESTEP(_generic_gromos_block):
         if(t is None and step is None):
             super().__init__(used=used, name=name, content=content)
         elif(content is None):
-            super().__init__(used=used, name=name, content=[str(t)+"\t"+str(step)])
+            super().__init__(used=used, name=name, content=None)
+            self.t=t
+            self.step =step
 
         self.subcontent = subcontent
 
     def read_content_from_str(self, content:List[str]):
         content = content[0].strip().split()
         self.content = content
-        self.t = float(content[0])
-        self.step = float(content[1])
+        self.t = float(content[1])
+        self.step = float(content[0])
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
