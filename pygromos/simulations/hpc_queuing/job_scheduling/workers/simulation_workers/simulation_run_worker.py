@@ -70,8 +70,16 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         if (not os.path.isdir(work_dir)):
             bash.make_folder(work_dir)
     print("workDIR: " + str(work_dir))
-    os.chdir(work_dir)
+    
+    # Check if the calculation is running on multiple nodes:
+    hosts = os.environ['LSB_HOSTS'].split()
+    multi_node = True if len(hosts) > 1 else False
 
+    # run a euler script to create tmpdir on all nodes
+    if multi_node: os.system('remote_tmpdir create')
+    
+    os.chdir(work_dir)
+    
     #Prepare IMD file:
     tmp_prefix = os.path.basename(out_dir)
     tmp_imd_path = out_dir+"/"+tmp_prefix+".imd"
@@ -157,15 +165,17 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         # zip the files after the simulation.
         n_cpu_zip = nmpi if nmpi >= nomp else nomp
         zip_files.do(in_simulation_dir=work_dir, n_processes=n_cpu_zip)    
-
-
+        
+        # Copy the files back to the proper directory when calc occured on scratch
+    
         if (out_dir != work_dir):
-            bash.move_file(work_dir + "/*", out_dir)
-
-        # post simulation cleanup
-        if (not (work_dir is None or work_dir == "None") and work_dir != out_dir and not "TMPDIR" in os.environ):
-            bash.remove_folder(work_dir, verbose=True)
-
+            if not multi_node:
+                bash.move_file(work_dir + "/*", out_dir)
+            else: 
+                for host in hosts:
+                    command = 'ssh ' + host + '  \"cp ${TMPDIR}/* ' + out_dir + '\"'
+                    os.system(command)
+            os.system('remote_tmpdir delete') # Works for both multi or single node                
 
     except Exception as err:
         print("\nFailed during simulations: ", file=sys.stderr)
