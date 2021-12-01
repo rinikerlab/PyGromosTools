@@ -136,15 +136,12 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
             cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
             cnf_file.write(in_cnf_path)
 
-
-        out_prefix = out_dir+"/"+tmp_prefix
-
         try:
             omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
                                      in_pert_topo_path=in_perttopo_path, in_disres_path=in_disres_path,
                                      in_posresspec_path=in_posres_path, in_refpos_path=in_refpos_path,
                                      nmpi=nmpi, nomp=nomp,
-                                     out_prefix=out_prefix,
+                                     out_prefix=tmp_prefix,
                                      out_tre=out_tre, out_trc=out_trc,
                                      out_trg=out_trg, out_trs=out_trs, out_trf=out_trf, out_trv=out_trv,
                                      verbose=True)
