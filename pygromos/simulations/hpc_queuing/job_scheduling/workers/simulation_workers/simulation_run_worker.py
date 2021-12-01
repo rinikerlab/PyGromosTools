@@ -173,7 +173,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
                 bash.move_file(work_dir + "/*", out_dir)
             else: 
                 for host in hosts:
-                    command = 'ssh ' + host + '  \"cp ${TMPDIR}/* ' + out_dir + '\"'
+                    command = 'ssh ' + host + '  \"mv ${TMPDIR}/* ' + out_dir + '\"'
                     os.system(command)
             os.system('remote_tmpdir delete') # Works for both multi or single node                
 
