@@ -129,7 +129,7 @@ def chain_submission(simSystem:Gromos_System,
             bash.make_folder(tmp_outdir)
 
             # build COMMANDS:
-            prefix_command += "sleep 60s"
+            prefix_command += "sleep 5s"
                 
             # We will write the arguments to the python script in a bash array 
             # to make it simpler to read in our input files. 

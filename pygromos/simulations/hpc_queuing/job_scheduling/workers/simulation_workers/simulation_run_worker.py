@@ -60,19 +60,20 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     """
 
     # WORKDIR SetUP
-    if (not (work_dir is None or work_dir == "None") and "TMPDIR" in os.environ):
+    if (work_dir is None or work_dir == "None") and "TMPDIR" in os.environ:
         work_dir = os.environ["TMPDIR"]
         print("using TmpDir")
-    elif (work_dir  is None or work_dir == "None"):
+    else:
         print("Could not find TMPDIR!\n Switched to outdir for work")
         work_dir = out_dir
-
-        if (not os.path.isdir(work_dir)):
-            bash.make_folder(work_dir)
+        if (not os.path.isdir(work_dir)): bash.make_folder(work_dir)
     print("workDIR: " + str(work_dir))
     
     # Check if the calculation is running on multiple nodes:
-    hosts = os.environ['LSB_HOSTS'].split()
+    if 'LSB_HOSTS' in os.environ:
+        hosts = os.environ['LSB_HOSTS'].split()
+    else:
+        hosts = []
     multi_node = True if len(hosts) > 1 else False
 
     # run a euler script to create tmpdir on all nodes
@@ -89,7 +90,6 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     ###StochDyn
     is_stochastic_dynamics_sim = False
     is_vacuum = False
-    print(type(imd_file.BOUNDCOND.NTB))
     if(imd_file.BOUNDCOND.NTB == 0):
         is_vacuum = True
 
@@ -127,7 +127,6 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         if (is_stochastic_dynamics_sim or is_vacuum):
             imd_file.INITIALISE.NTISHI = 1
 
-        print(imd_file.INITIALISE.NTISHI, imd_file.BOUNDCOND.NTB, is_vacuum)
     ##Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)
 
@@ -164,10 +163,10 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         
         # zip the files after the simulation.
         n_cpu_zip = nmpi if nmpi >= nomp else nomp
-        zip_files.do(in_simulation_dir=work_dir, n_processes=n_cpu_zip)    
-        
+        if not multi_node:
+            zip_files.do(in_simulation_dir=work_dir, n_processes=n_cpu_zip)    
+
         # Copy the files back to the proper directory when calc occured on scratch
-    
         if (out_dir != work_dir):
             if not multi_node:
                 bash.move_file(work_dir + "/*", out_dir)
@@ -176,17 +175,19 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
                     command = 'ssh ' + host + '  \"mv ${TMPDIR}/* ' + out_dir + '\"'
                     os.system(command)
             os.system('remote_tmpdir delete') # Works for both multi or single node                
+        
+        # Note: If job is multi-node, it is simpler to zip things in out_dir after copying back
+        if multi_node: zip_files.do(in_simulation_dir=out_dir, n_processes=n_cpu_zip)
 
     except Exception as err:
         print("\nFailed during simulations: ", file=sys.stderr)
         print(type(err), file=sys.stderr)
         print(err.args, file=sys.stderr)
-        exit(1)
+        sys.exit(1)
     if(md_failed):
-        print("\nFailed during simulations: \n Checkout: \n "+str(out_prefix)+".omd", file=sys.stderr)
-        exit(1)
-    exit(0)
-
+        print("\nFailed during simulations: \n Checkout: \n "+str(tmp_prefix)+".omd", file=sys.stderr)
+        sys.exit(1)
+    sys.exit(0)
 
 if __name__ == "__main__":
     # INPUT JUGGELING

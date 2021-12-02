@@ -138,7 +138,7 @@ class LSF(_SubmissionSystem):
             bash.execute("chmod +x " + command_file_path, env=self._enviroment)
         
         # To test multinode option: uncomment line below and make sure nmpi > 1
-        #submission_string += " -R \"span[ptile=1]\" "
+        # submission_string += " -R \"span[ptile=1]\" "
 
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
