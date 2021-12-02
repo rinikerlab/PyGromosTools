@@ -60,7 +60,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     """
 
     # WORKDIR SetUP
-    if (not (work_dir is None or work_dir == "None") and "TMPDIR" in os.environ):
+    if ((work_dir is None or work_dir == "None") and "TMPDIR" in os.environ):
         work_dir = os.environ["TMPDIR"]
         print("using TmpDir")
     elif (work_dir  is None or work_dir == "None"):
