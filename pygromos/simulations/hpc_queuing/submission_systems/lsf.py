@@ -13,7 +13,7 @@ class LSF(_SubmissionSystem):
     """
 
     _dummy:bool=False
-    _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
+    _refresh_job_queue_list_all_s: int = 3 # update the job-queue list every x seconds
     _job_queue_time_stamp: datetime
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
@@ -136,6 +136,9 @@ class LSF(_SubmissionSystem):
             command = command_file_path
 
             bash.execute("chmod +x " + command_file_path, env=self._enviroment)
+        
+        # To test multinode option: uncomment line below and make sure nmpi > 1
+        #submission_string += " -R \"span[ptile=1]\" "
 
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
