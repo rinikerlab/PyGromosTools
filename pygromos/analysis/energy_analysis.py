@@ -3,7 +3,7 @@ import numpy as np
 from scipy import constants
 
 
-def get_density(mass:np.array, volume:np.array, atomu=1/constants.Avogadro*10)->np.array:
+def get_density(mass:np.array, volume:np.array, atomu=1/constants.Avogadro*10e23)->np.array:
     """
     Calculate the density
 
