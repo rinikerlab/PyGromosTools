@@ -42,40 +42,44 @@ class Tre(traj._General_Trajectory):
         return self.totals
 
     def get_totals_total(self) -> pd.DataFrame:
-        self.totals_total = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totene']])
+        self.totals_total = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totene')])
         return self.totals_total
 
     def get_totals_totkin(self) -> pd.DataFrame:
-        self.totals_bonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totkin']])
-        return self.totals_bonded
+        self.totals_totkin = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totkin')])
+        return self.totals_totkin
+    
+    def get_totals_totpot(self) -> pd.DataFrame:
+        self.totals_totpot= self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totpot')])
+        return self.totals_totpot
 
     def get_totals_totcov(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totcov']])
-        return self.totals_nonbonded
+        self.totals_totcov = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totcov')])
+        return self.totals_totcov
 
-    def get_totals_totbond(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totbond']])
-        return self.totals_nonbonded
+    def get_totals_totbonded(self) -> pd.DataFrame:
+        self.totals_totbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totbond')])
+        return self.totals_totbonded
 
     def get_totals_totangle(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totangle']])
-        return self.totals_nonbonded
+        self.totals_totangle = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totangle')])
+        return self.totals_totangle
 
     def get_totals_totdihedral(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totdihedral']])
-        return self.totals_nonbonded
+        self.totals_totdihedral = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totdihedral')])
+        return self.totals_totdihedral
 
     def get_totals_totnonbonded(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totnonbonded']])
-        return self.totals_nonbonded
+        self.totals_totnonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totnonbonded')])
+        return self.totals_totnonbonded
 
     def get_totals_totlj(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totlj']])
-        return self.totals_nonbonded
+        self.totals_totlj = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totlj')])
+        return self.totals_totlj
 
     def get_totals_totcrf(self) -> pd.DataFrame:
-        self.totals_nonbonded = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index['totcrfs']])
-        return self.totals_nonbonded
+        self.totals_totcrf = self.database["totals"].apply(lambda x: x[self.tre_block_name_table.totals_subblock_names.index('totcrfs')])
+        return self.totals_totcrf
 
     def get_eds(self)->pd.DataFrame:
         num_states = self.database["eds"][0][0]
@@ -140,15 +144,19 @@ class Tre(traj._General_Trajectory):
 
 
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
-        gas_nonbonded_energy = 0
+        gas_totpot_energy = 0
         if type(gas_traj) == type(self):
-            gas_nonbonded_energy = gas_traj.get_totals_nonbonded().mean()
+            gas_totpot_energy = gas_traj.get_totals_totpot().mean()
         elif type(gas_traj) == float:
-            gas_nonbonded_energy = gas_traj
+            gas_totpot_energy = gas_traj
         else:
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
-        liquid_nonbonded_energyself = self.get_totals_nonbonded().mean()
+        liq_totpot_energy = self.get_totals_totpot().mean()
+
+        #get temperature from liq trajectory if not given
+        if temperature is None:
+            temperature = float(self.get_temperature().mean()[0])
 
         # calculate heat of vaporization
-        self.heat_vap = ea.get_Hvap(liq=liquid_nonbonded_energyself, gas=gas_nonbonded_energy, temperature=temperature, nMolecules=nMolecules)
+        self.heat_vap = ea.get_Hvap(liq_totpot_energy=liq_totpot_energy, gas_totpot_energy=gas_totpot_energy, temperature=temperature, nMolecules=nMolecules)
         return self.heat_vap
