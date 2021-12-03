@@ -146,6 +146,10 @@ class Tre(traj._General_Trajectory):
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
         liq_totpot_energy = self.get_totals_totpot().mean()
 
+        #get temperature from liq trajectory if not given
+        if temperature is None:
+            temperature = float(self.get_temperature().mean()[0])
+
         # calculate heat of vaporization
-        self.heat_vap = ea.get_Hvap(liq=liq_totpot_energy, gas=gas_totpot_energy, temperature=temperature, nMolecules=nMolecules)
+        self.heat_vap = ea.get_Hvap(liq_totpot_energy=liq_totpot_energy, gas_totpot_energy=gas_totpot_energy, temperature=temperature, nMolecules=nMolecules)
         return self.heat_vap
