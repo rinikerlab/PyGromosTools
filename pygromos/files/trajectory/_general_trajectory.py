@@ -101,7 +101,7 @@ class _General_Trajectory():
         traj.database = self.database.copy(deep=True)
         return traj
 
-    def add_traj(self, traj, skip_new_0=True):
+    def add_traj(self, traj, skip_new_0=False):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 
         Parameters
@@ -130,6 +130,7 @@ class _General_Trajectory():
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
         new_traj.database = self.database.append(new_data, ignore_index=True)
+        del new_data
         return new_traj
 
     def _read_from_file(self, input_path:str, auto_save:bool=True, stride:int=1, skip:int=0):
