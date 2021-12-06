@@ -101,12 +101,22 @@ class _General_Trajectory():
         traj.database = self.database.copy(deep=True)
         return traj
 
-    def add_traj(self, traj, skip_new_0=False):
+    def add_traj(self, traj, skip_new_0=False, auto_detect_skip=True, correct_time=True):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 
         Parameters
         ----------
         traj : trajectory of the same format and type as the base class
+            the trajectory to be added to the base class
+
+        skip_new_0 : bool
+            if True, the first frame of the new trajectory will be skipped. This will override the auto_detect argument
+
+        auto_detect_skip : bool
+            compares the time of the first frame of the new trajectory to the time of the last frame of the base class and skips the frame if they are the same
+
+        correct_time : bool
+            if True, the time of the new trajectory will be corrected to continue after the last frame of the base class
 
         Returns
         -------
@@ -123,10 +133,17 @@ class _General_Trajectory():
         time_offset = float(self.database.TIMESTEP_time.iloc[-1])
         # copy and modify second trajectory
         new_data = traj.database.copy(deep=True)
-        new_data.TIMESTEP_step += step_offset
-        new_data.TIMESTEP_time += time_offset
+        
         if skip_new_0:
             new_data = new_data.iloc[1:]
+        elif auto_detect_skip:
+            if all(new_data.iloc[0].iloc[2:] == self.database.iloc[-1].iloc[2:]): #check if the firstStep==lastStep without considering the time
+                new_data = new_data.iloc[1:]
+
+        if correct_time:
+            new_data.TIMESTEP_step += step_offset
+            new_data.TIMESTEP_time += time_offset
+
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
         new_traj.database = self.database.append(new_data, ignore_index=True)
