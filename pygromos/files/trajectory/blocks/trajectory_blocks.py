@@ -5,6 +5,9 @@ class _general_pandas_trajectory_block():
     def __init__(self, content):
         self.content = content
 
+    def __eq__(self, __o: object) -> bool:
+        return (self.content == __o.content) and (self.__class__ == __o.__class__)
+
     def to_dict(self)->dict:
         return {"default_block": self.content}  #Only use for Debuging
 
