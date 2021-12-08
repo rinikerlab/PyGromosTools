@@ -137,7 +137,7 @@ class _General_Trajectory():
         if skip_new_0:
             new_data = new_data.iloc[1:]
         elif auto_detect_skip:
-            if all(new_data.iloc[0].iloc[2:].equals(self.database.iloc[-1].iloc[2:])): #check if the firstStep==lastStep without considering the time
+            if (new_data.iloc[0].iloc[2:].equals(self.database.iloc[-1].iloc[2:])): #check if the firstStep==lastStep without considering the time
                 new_data = new_data.iloc[1:]
 
         if correct_time:
