@@ -22,6 +22,7 @@ TODO: MTL: implement, check, test
 #imports
 import collections, os, re
 import pandas
+import numpy
 import pathlib
 
 from pygromos.files.trajectory.blocks import trajectory_blocks as blocks
@@ -137,8 +138,11 @@ class _General_Trajectory():
         if skip_new_0:
             new_data = new_data.iloc[1:]
         elif auto_detect_skip:
-            if (new_data.iloc[0].iloc[2:].equals(self.database.iloc[-1].iloc[2:])): #check if the firstStep==lastStep without considering the time
-                new_data = new_data.iloc[1:]
+            new_frame = new_data.iloc[0].iloc[2:]
+            old_frame = self.database.iloc[-1].iloc[2:]
+            if (new_frame.equals(old_frame)) and new_frame.keys() == old_frame.keys(): #check if the firstStep==lastStep without considering the time
+                if all([numpy.allclose(new_frame[x], old_frame[x]) for x in new_frame.keys()]):
+                    new_data = new_data.iloc[1:]
 
         if correct_time:
             new_data.TIMESTEP_step += step_offset
