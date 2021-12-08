@@ -17,7 +17,7 @@ class _general_pandas_energy_trajectory_subblock():
                 self.list.append(j)
 
     def to_dict(self)->dict:
-        return {self.blockName: np.array(self.list).astype(np.float)}
+        return {self.blockName: np.array(self.list, dtype=np.float64)}
 
 class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energy_trajectory_subblock):
     # first define some static variables for the stupid gromos format
@@ -74,7 +74,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
             self.extra_line_for_num += 1
         # loop over all energy baths, import the data and format to numpy matrix
         for itr_line in range(num_subsubblocks):
-            new_line = np.array(self.content[itr_line + self.extra_line_for_num]).astype(np.float)
+            new_line = np.array(self.content[itr_line + self.extra_line_for_num], dtype=np.float64)
             self.matrixList.append(new_line)  
 
         self.matrix = np.array(self.matrixList)

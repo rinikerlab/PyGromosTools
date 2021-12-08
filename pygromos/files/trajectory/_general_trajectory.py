@@ -85,7 +85,7 @@ class _General_Trajectory():
         return str(self)
 
     def __add__(self, traj):
-        return self.add_traj(traj, skip_new_0=True)
+        return self.add_traj(traj, skip_new_0=False, auto_detect_skip=True)
 
     def __copy__(self):
         traj = type(self)(input_value=None)
