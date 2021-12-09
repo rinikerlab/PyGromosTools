@@ -74,10 +74,10 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
             self.extra_line_for_num += 1
         # loop over all energy baths, import the data and format to numpy matrix
         for itr_line in range(num_subsubblocks):
-            new_line = np.array(self.content[itr_line + self.extra_line_for_num], dtype=np.float64)
+            new_line = self.content[itr_line + self.extra_line_for_num]
             self.matrixList.append(new_line)  
 
-        self.matrix = np.array(self.matrixList)
+        self.matrix = np.array(self.matrixList, dtype=np.float64)
 
     def to_dict(self) -> dict:
         return {self.blockName: self.matrix}
