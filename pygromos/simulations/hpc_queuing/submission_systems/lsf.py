@@ -6,6 +6,7 @@ from typing import Union, List
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.utils import bash
 
+from pygromos.utils.utils import time_wait_s_for_filesystem
 
 class LSF(_SubmissionSystem):
     """LSF
@@ -18,6 +19,7 @@ class LSF(_SubmissionSystem):
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
                  verbose: bool = False, enviroment=None):
+        time_wait_s_for_filesystem=1.5
         super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str, jobName: str, outLog=None, errLog=None, queue_after_jobID: int = None,

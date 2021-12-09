@@ -203,25 +203,25 @@ class Top(_general_gromos_file._general_gromos_file):
                                         atomL=dihdrl.LQ + atnmShift)
         for dihdrl in top.IMPDIHEDRALH.content:
             dihdrlType = top.IMPDIHEDRALTYPE.content[dihdrl.ICQH - 1]
-            retTop.add_new_impdihedral(CQ=dihdrlType.CQ, 
-                                        Q0=dihdrlType.Q0, 
-                                        atomI=dihdrl.IQH + atnmShift, 
-                                        atomJ=dihdrl.JQH + atnmShift, 
-                                        atomK=dihdrl.KQH + atnmShift, 
-                                        atomL=dihdrl.LQH + atnmShift,
-                                        includesH=True)
+            retTop.add_new_impdihedral(CQ=dihdrlType.CQ,
+                                        Q0=dihdrlType.Q0,
+                                       atomI=dihdrl.IQH + atnmShift,
+                                       atomJ=dihdrl.JQH + atnmShift,
+                                       atomK=dihdrl.KQH + atnmShift,
+                                       atomL=dihdrl.LQH + atnmShift,
+                                       includesH=True)
 
         # add SOLUTEMOLECULES
         for solmol in top.SOLUTEMOLECULES.content[1:]:
-            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift))
+            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift+1))
 
         # add TEMPERATUREGROUPS
         for solmol in top.TEMPERATUREGROUPS.content[1:]:
-            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift))
+            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift+1))
 
         # add PRESSUREGROUPS
         for solmol in top.PRESSUREGROUPS.content[1:]:
-            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
+            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift+1))
 
         return retTop
 

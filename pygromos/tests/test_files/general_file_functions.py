@@ -25,3 +25,14 @@ class general_file_tests(unittest.TestCase):
         obj_copy = copy.deepcopy(obj_file)
 
         print(obj_copy)
+
+    def test_equality(self):
+        obj_file_1 = self.class_type(self.in_file_path)
+        obj_file_2 = self.class_type(self.in_file_path)
+        self.assertEqual(obj_file_1, obj_file_2)
+
+    def test_equalAfterCopy(self):
+        obj_file = self.class_type(self.in_file_path)
+        obj_copy = copy.deepcopy(obj_file)
+        #TODO fix
+        self.assertEqual(obj_file, obj_copy)

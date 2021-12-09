@@ -32,7 +32,7 @@ class _generic_imd_block(_generic_gromos_block):
 
                     try:
                         if isinstance(attribute, (str, Number, bool)):  # One element field
-                            if(isinstance(attribute, bool)):
+                            if(isinstance(attribute, (bool, int))):
                                 attribute = int(attribute)
                             elif (isinstance(attribute, float)):  # supress scientific notation for floats!
                                 attribute = format(attribute, "f")
@@ -42,11 +42,7 @@ class _generic_imd_block(_generic_gromos_block):
                             if (all([isinstance(x, str) for x in attribute])):
                                 result += self.field_seperator.join(attribute) + self.field_seperator
                             elif (all([isinstance(x, Number) for x in attribute])):
-                                if (isinstance(attribute[0], float)):
-                                    result += self.field_seperator.join(
-                                        map(lambda x: format(x, "f"), attribute)) + self.field_seperator
-                                else:
-                                    result += self.field_seperator.join(map(str, attribute)) + self.field_seperator
+                                result += self.field_seperator.join(map(str, attribute)) + self.field_seperator
                             else:
                                 raise ValueError(
                                     "could not Interpret list:  " + str(element) + "\t\n" + str(attribute) + "\nEOF\n")
@@ -845,7 +841,7 @@ class MULTIBATH(_generic_imd_block):
                 raise ValueError("Temperatures are not the same, this is not implemented in adapt multibath!")
             T = self.TEMP0[0]
         else:
-            self.TEMP0 = [T for x in range(len(self.TEMP0))]
+            self.TEMP0 = [float(T) for x in range(len(self.TEMP0))]
 
         if (TAU == None):
             if (any([self.TAU[0] != T_test for T_test in self.TAU])):
@@ -853,15 +849,15 @@ class MULTIBATH(_generic_imd_block):
 
             TAU = self.TAU[0]
         else:
-            self.TAU = [TAU for x in range(len(self.TAU))]
+            self.TAU = [float(TAU) for x in range(len(self.TAU))]
 
         if (algorithm == None):
             pass
         else:
-            self.ALGORITHM = algorithm
+            self.ALGORITHM = int(algorithm)
             
         if (num != None):
-            self.NUM = num
+            self.NUM = int(num)
 
         # TODO implementation not correct with com_bath and irbath! Works for super simple cases though
         #print("MBATH")
@@ -872,19 +868,20 @@ class MULTIBATH(_generic_imd_block):
         #print(set(last_atoms_bath.values()))
         self.NBATHS = len(set(last_atoms_bath.values()))
         self.DOFSET = len(last_atoms_bath)
-        self.LAST = [last_atom for last_atom in last_atoms_bath]
-        self.COMBATH = [last_atoms_bath[last_atom] for last_atom in last_atoms_bath]
-        self.IRBATH = [last_atoms_bath[last_atom] for last_atom in last_atoms_bath]
+        self.LAST = [int(last_atom) for last_atom in last_atoms_bath]
+        self.COMBATH = [int(last_atoms_bath[last_atom]) for last_atom in last_atoms_bath]
+        self.IRBATH = [int(last_atoms_bath[last_atom]) for last_atom in last_atoms_bath]
 
         if (self.NBATHS != len(self.TEMP0)):
-            self.TEMP0 = [self.TEMP0[0] for x in range(self.NBATHS)]
-            self.TAU = [self.TAU[0] for x in range(self.NBATHS)]
+            self.TEMP0 = [float(self.TEMP0[0]) for x in range(self.NBATHS)]
+            self.TAU = [float(self.TAU[0]) for x in range(self.NBATHS)]
+
 
     def block_to_string(self) -> str:
         result = ""
         result += str(self.name) + "\n"
         result += "# " + self.field_seperator.join(self._order[0][0]) + "\n"
-        result += "  " + str(self.ALGORITHM) + "\n"
+        result += "  " + str(int(self.ALGORITHM)) + "\n"
         
         if(self.ALGORITHM == "2"):
             if(self.NUM is None):
@@ -894,16 +891,16 @@ class MULTIBATH(_generic_imd_block):
             result += "  " + str(self.NUM) + "\n"
             
         result += "# " + self.field_seperator.join(self._order[0][2]) + "\n"
-        result += "  " + str(self.NBATHS) + "\n"
+        result += "  " + str(int(self.NBATHS)) + "\n"
         result += "# " + self.field_seperator.join(self._order[0][3]) + "\n"
         for index in range(len(self.TEMP0)):
-            result += "  " + str(self.TEMP0[index]) + self.field_seperator + str(self.TAU[index]) + "\n"
+            result += "  " + str(float(self.TEMP0[index])) + self.field_seperator + str(float(self.TAU[index])) + "\n"
         result += "# " + self.field_seperator.join(map(str, self._order[0][4])) + "\n"
-        result += "  " + str(self.DOFSET) + "\n"
+        result += "  " + str(int(self.DOFSET)) + "\n"
         result += "# " + self.field_seperator.join(map(str, self._order[0][5])) + "\n"
         for index in range(len(self.LAST)):
-            result += "  " + str(self.LAST[index]) + self.field_seperator + str(self.COMBATH[index]) + self.field_seperator + str(
-                self.IRBATH[index]) + "\n"
+            result += "  " + str(int(self.LAST[index])) + self.field_seperator + str(int(self.COMBATH[index])) + self.field_seperator + str(
+                int(self.IRBATH[index])) + "\n"
         result += "END\n"
         return result
 
@@ -1045,20 +1042,24 @@ class FORCE(_generic_imd_block):
                 fields.remove('')
             self._parse_key_content(keyLineNumb=0, contentlines=[fields])
             setattr(self, self._order[0][1][0], int(content[3].split()[0]))
-            setattr(self, self._order[0][1][1], list(map(float, content[3].split()[1:])))
+            setattr(self, self._order[0][1][1], list(map(int, content[3].split()[1:])))
         except Exception as err:
             raise IOError("Could not parse FORCE block!\n"+str(err.args))
 
     def adapt_energy_groups(self, energy_groups: Dict[int, int]):
         """
-
+            Change the Force groups.
+            
         Parameters
         ----------
         residues : Dict[int, int]
-            [description]
+            the dictionary contains the forceGroups with the ID of the respective last atom.
+
+           {forceGroupID: lastAtom} = {1:12, 2:26, 3:128}
         """
         self.NEGR = len(energy_groups)
-        self.NRE = [energy_groups[last_atom] for last_atom in energy_groups]
+        self.NRE = [int(energy_groups[forceGroupID]) for forceGroupID in sorted(energy_groups)]
+
 
     def __adapt_energy_groups(self, residues: Dict[str, Dict[int, int]]):
         """
@@ -1328,6 +1329,7 @@ class NONBONDED(_generic_imd_block):
                  NFDORD: int=0, NALIAS: int=0, NSPORD: int=0, NQEVAL: int=0, FACCUR: float=0, NRDGRD: bool=False, NWRGRD: bool=False,
                  NLRLJ: bool=False, SLVDNS: float=0, content=None):
         super().__init__(used=True, content=content)
+
         if content is None:
             self.NLRELE = NLRELE
             self.APPAK = APPAK
@@ -1527,6 +1529,7 @@ class EDS(_generic_imd_block):
 
         except Exception as err:
             raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
+
 
 class DISTANCERES(_generic_imd_block):
     """DISTANCERES Block

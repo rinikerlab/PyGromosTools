@@ -172,7 +172,7 @@ def chain_submission(simSystem:Gromos_System,
                 if(simSystem.imd.WRITETRAJ.NTWG > 0):
                     md_args += "-out_trg "+str(True)+ "\n"
  
-            md_args += ")\n" # closing the bash array which stores all results.
+            md_args += ")\n" # closing the bash array which stores all arguments.
 
             # MAIN commands
             md_script_command = prefix_command + "\n\n" + md_args + "\n"

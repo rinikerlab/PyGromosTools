@@ -80,7 +80,7 @@ def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: s
             }
         }
     })
-    return simulation(in_gromos_system=in_gromos_system, project_dir=project_dir, previous_simulation_run=previous_simulation_run,
+    return simulation(in_gromos_simulation_system=in_gromos_system, override_project_dir=project_dir, previous_simulation_run=previous_simulation_run,
                       step_name=step_name, in_imd_path=in_imd_path, submission_system=submission_system,
                       simulation_runs=simulation_runs, equilibration_runs=equilibration_runs, analysis_control_dict=template_control_dict,
                       analysis_script=analysis_script)
