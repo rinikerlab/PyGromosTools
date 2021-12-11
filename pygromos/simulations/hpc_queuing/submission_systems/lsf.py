@@ -17,8 +17,8 @@ class LSF(_SubmissionSystem):
     _job_queue_time_stamp: datetime
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
-                 verbose: bool = False, enviroment=None, allow_double_submission:bool=False):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment)
+                 verbose: bool = False, enviroment=None, block_double_submission:bool=True):
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment, block_double_submission=block_double_submission)
 
     def submit_to_queue(self, command: str, jobName: str, outLog=None, errLog=None, queue_after_jobID: int = None,
                         force_queue_start_after: bool = False,
@@ -73,7 +73,7 @@ class LSF(_SubmissionSystem):
         submission_string = ""
 
         # QUEUE checking to not double submit
-        if (not self._allow_double_submission and self.submission):
+        if (self._block_double_submission and self.submission):
             if (self.verbose): print('check queue')
             ids = list(self.search_queue_for_jobname(jobName).index)
 
@@ -238,7 +238,7 @@ class LSF(_SubmissionSystem):
             self.verbose = verbose
 
         # QUEUE checking to not double submit
-        if (self.submission and not self._allow_double_submission):
+        if (self.submission and self._block_double_submission):
             if (self.verbose): print('check queue')
             ids = self.search_queue_for_jobname(jobName)
 

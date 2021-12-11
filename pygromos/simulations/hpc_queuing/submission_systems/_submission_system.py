@@ -13,7 +13,7 @@ class _SubmissionSystem:
 
     def __init__(self, submission: bool = False,
                  nmpi: int = 1, nomp: int = 1, max_storage: float = 1000, job_duration: str = "24:00",
-                 verbose: bool = False, enviroment=None, allow_double_submission:bool=False):
+                 verbose: bool = False, enviroment=None, block_double_submission:bool=True):
         """
             Construct a submission system with required parameters.
 
@@ -42,7 +42,7 @@ class _SubmissionSystem:
         self._nomp = nomp
         self._max_storage = max_storage
         self._enviroment = enviroment
-        self._allow_double_submission = allow_double_submission
+        self._block_double_submission = block_double_submission
 
     def submit_to_queue(self, **kargs) -> Union[int, None]:
         """submit_to_queue
