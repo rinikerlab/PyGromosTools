@@ -13,12 +13,11 @@ from pygromos.utils.utils import spacer3
 
 def do_skip_job(tmp_out_cnf: str, simSystem: Gromos_System,
                 tmp_jobname: str, job_submission_system: _SubmissionSystem, previous_job: int,
-                do_not_doubly_submit_to_queue: bool = True, 
                 verbose: bool = True, verbose_lvl:int = 1):
 
     # Check if job with same name is already in the queue!
     if (verbose) and verbose_lvl >= 2: print("Checking if jobs was already submitted or done")
-    if (do_not_doubly_submit_to_queue):  # can we find an job with this name in the queue?
+    if (job_submission_system._allow_double_submission):  # can we find an job with this name in the queue?
         if (verbose) and verbose_lvl >= 2: print("Checking for jobs with name: " + tmp_jobname)
         queued_job_ids = job_submission_system.search_queue_for_jobname(job_name=tmp_jobname)
         
@@ -67,7 +66,7 @@ def chain_submission(simSystem:Gromos_System,
                      chain_job_repetitions: int, worker_script: str,
                      job_submission_system: _SubmissionSystem, jobname: str,
                      run_analysis_script_every_x_runs: int = 0, in_analysis_script_path: str = "",
-                     do_not_doubly_submit_to_queue: bool = True, start_run_index: int = 1,
+                     start_run_index: int = 1,
                      prefix_command: str = "", previous_job_ID: int = None, work_dir: str = None,
                      initialize_first_run: bool = True, reinitialize: bool = False,
                      verbose: bool = False, verbose_lvl:int = 1):
@@ -121,7 +120,6 @@ def chain_submission(simSystem:Gromos_System,
 
         # Checks if run should be skipped!
         do_skip, previous_job_ID = do_skip_job(tmp_out_cnf=tmp_out_cnf, simSystem=simSystem,
-                                               do_not_doubly_submit_to_queue=do_not_doubly_submit_to_queue,
                                                tmp_jobname=tmp_jobname, job_submission_system=job_submission_system,
                                                previous_job=previous_job_ID, verbose=verbose)
 

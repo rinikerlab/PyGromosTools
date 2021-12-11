@@ -17,11 +17,11 @@ class LSF(_SubmissionSystem):
     _job_queue_time_stamp: datetime
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
-                 verbose: bool = False, enviroment=None):
+                 verbose: bool = False, enviroment=None, allow_double_submission:bool=False):
         super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str, jobName: str, outLog=None, errLog=None, queue_after_jobID: int = None,
-                        do_not_doubly_submit_to_queue: bool = False, force_queue_start_after: bool = False,
+                        force_queue_start_after: bool = False,
                         projectName: str = None, jobGroup: str = None, priority=None, begin_mail: bool = False,
                         end_mail: bool = False, post_execution_command: str = None, submit_from_dir: str = None,
                         sumbit_from_file: bool = True, verbose: bool = None) -> Union[int, None]:
@@ -73,7 +73,7 @@ class LSF(_SubmissionSystem):
         submission_string = ""
 
         # QUEUE checking to not double submit
-        if (do_not_doubly_submit_to_queue and self.submission):
+        if (not self._allow_double_submission and self.submission):
             if (self.verbose): print('check queue')
             ids = list(self.search_queue_for_jobname(jobName).index)
 
@@ -166,7 +166,6 @@ class LSF(_SubmissionSystem):
                                   start_Job: int, end_job: int, jobLim: int = None,
                                   outLog=None, errLog=None, submit_from_dir: str = None,
                                   queue_after_jobID: int = None, force_queue_start_after: bool = False,
-                                  do_not_doubly_submit_to_queue: bool = True,
                                   jobGroup: str = None,
                                   begin_mail: bool = False, end_mail: bool = False,
                                   verbose: bool = None,) -> Union[int, None]:
@@ -239,7 +238,7 @@ class LSF(_SubmissionSystem):
             self.verbose = verbose
 
         # QUEUE checking to not double submit
-        if (self.submission and do_not_doubly_submit_to_queue):
+        if (self.submission and not self._allow_double_submission):
             if (self.verbose): print('check queue')
             ids = self.search_queue_for_jobname(jobName)
 
