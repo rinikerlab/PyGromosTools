@@ -17,8 +17,8 @@ class LSF(_SubmissionSystem):
     _job_queue_time_stamp: datetime
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
-                 verbose: bool = False, enviroment=None, block_double_submission:bool=True):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment, block_double_submission=block_double_submission)
+                 verbose: bool = False, enviroment=None, block_double_submission:bool=True, chain_prefix:str="done"):
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment, block_double_submission=block_double_submission, chain_prefix=chain_prefix)
 
     def submit_to_queue(self, command: str, jobName: str, outLog=None, errLog=None, queue_after_jobID: int = None,
                         force_queue_start_after: bool = False,
@@ -42,7 +42,7 @@ class LSF(_SubmissionSystem):
         queue_after_jobID: int, optional
             shall this job be queued after another one?
         force_queue_start_after: bool, optional
-            shall this job start after another job, no matter the exit state?
+            !!! DEPRECIATED !!! use chain_prefix instead
         projectName :  NOT IMPLEMENTED AT THE MOMENT
         jobGroup :  NOT IMPLEMENTED AT THE MOMENT
         priority :  NOT IMPLEMENTED AT THE MOMENT
@@ -112,10 +112,7 @@ class LSF(_SubmissionSystem):
             submission_string += " -R rusage[mem=" + str(self.max_storage) + "] "
 
         if (isinstance(queue_after_jobID, (int, str)) and (queue_after_jobID != 0 or queue_after_jobID != "0")):
-            prefix = "done"
-            if (force_queue_start_after):
-                prefix = "ended"
-            submission_string += " -w \"" + prefix + "(" + str(queue_after_jobID) + ")\" "
+            submission_string += " -w \"" + self.chain_prefix + "(" + str(queue_after_jobID) + ")\" "
 
         if (begin_mail):
             submission_string += " -B "
