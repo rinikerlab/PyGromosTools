@@ -188,7 +188,7 @@ def chain_submission(simSystem:Gromos_System,
                                                                         submit_from_dir=tmp_outdir,
                                                                         queue_after_jobID=previous_job_ID,
                                                                         outLog=outLog, errLog=errLog,
-                                                                        sumbit_from_file=True, verbose=verbose)
+                                                                        sumbit_from_file=True)
                 if verbose: print("SIMULATION ID: ", previous_job_ID)
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
@@ -224,8 +224,7 @@ def chain_submission(simSystem:Gromos_System,
                     ana_id = job_submission_system.submit_to_queue(command=in_analysis_script_path,
                                                                    jobName=tmp_ana_jobname,
                                                                    outLog=outLog, errLog=errLog,
-                                                                   queue_after_jobID=clean_id,
-                                                                   verbose=verbose)
+                                                                   queue_after_jobID=clean_id)
                     if (verbose) and verbose_lvl >= 2: print("\n")
                 except ValueError as err:  # job already in the queue
                     print("ERROR during submission of analysis command of "+str(tmp_ana_jobname)+":\n")

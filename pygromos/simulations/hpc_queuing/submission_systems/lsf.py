@@ -16,15 +16,37 @@ class LSF(_SubmissionSystem):
     _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
     _job_queue_time_stamp: datetime
 
-    def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00", max_storage: float = 1000,
-                 verbose: bool = False, enviroment=None, block_double_submission:bool=True, chain_prefix:str="done"):
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, max_storage=max_storage, submission=submission, enviroment=enviroment, block_double_submission=block_double_submission, chain_prefix=chain_prefix)
+    def __init__(self, 
+                        submission: bool = True, 
+                        nomp: int = 1, 
+                        nmpi: int = 1, 
+                        job_duration: str = "24:00", 
+                        max_storage: float = 1000,
+                        verbose: bool = False, 
+                        enviroment=None, 
+                        block_double_submission:bool=True, 
+                        chain_prefix:str="done", 
+                        begin_mail:bool=False, 
+                        end_mail:bool=False):
+        super().__init__(verbose=verbose, 
+                        nmpi=nmpi, nomp=nomp, 
+                        job_duration=job_duration, 
+                        max_storage=max_storage, 
+                        submission=submission, 
+                        enviroment=enviroment, 
+                        block_double_submission=block_double_submission, 
+                        chain_prefix=chain_prefix, 
+                        begin_mail=begin_mail, 
+                        end_mail=end_mail)
 
-    def submit_to_queue(self, command: str, jobName: str, outLog=None, errLog=None, queue_after_jobID: int = None,
-                        force_queue_start_after: bool = False,
-                        projectName: str = None, jobGroup: str = None, priority=None, begin_mail: bool = False,
-                        end_mail: bool = False, post_execution_command: str = None, submit_from_dir: str = None,
-                        sumbit_from_file: bool = True, verbose: bool = None) -> Union[int, None]:
+    def submit_to_queue(self, command: str, 
+                        jobName: str, 
+                        outLog=None, 
+                        errLog=None, 
+                        queue_after_jobID: int = None, 
+                        post_execution_command: str = None, 
+                        submit_from_dir: str = None,
+                        sumbit_from_file: bool = True) -> Union[int, None]:
         """
             This function submits the given command to the LSF QUEUE
 
@@ -64,10 +86,6 @@ class LSF(_SubmissionSystem):
         """
         # job_properties:Job_properties=None, <- currently not usd
         orig_dir = os.getcwd()
-
-        # required parsing will be removed in future:
-        if (not verbose is None):
-            self.verbose = verbose
 
         # generate submission_string:
         submission_string = ""
@@ -114,9 +132,9 @@ class LSF(_SubmissionSystem):
         if (isinstance(queue_after_jobID, (int, str)) and (queue_after_jobID != 0 or queue_after_jobID != "0")):
             submission_string += " -w \"" + self.chain_prefix + "(" + str(queue_after_jobID) + ")\" "
 
-        if (begin_mail):
+        if (self.begin_mail):
             submission_string += " -B "
-        if (end_mail):
+        if (self.end_mail):
             submission_string += " -N "
 
         if (self.nomp > 1):
@@ -159,13 +177,16 @@ class LSF(_SubmissionSystem):
         os.chdir(orig_dir)
         return int(job_id)
 
-    def submit_jobAarray_to_queue(self, command: str, jobName: str,
-                                  start_Job: int, end_job: int, jobLim: int = None,
-                                  outLog=None, errLog=None, submit_from_dir: str = None,
-                                  queue_after_jobID: int = None, force_queue_start_after: bool = False,
-                                  jobGroup: str = None,
-                                  begin_mail: bool = False, end_mail: bool = False,
-                                  verbose: bool = None,) -> Union[int, None]:
+    def submit_jobAarray_to_queue(self, command: str, 
+                                  jobName: str,
+                                  start_Job: int, 
+                                  end_job: int, 
+                                  jobLim: int = None,
+                                  outLog=None, 
+                                  errLog=None, 
+                                  submit_from_dir: str = None,
+                                  queue_after_jobID: int = None,
+                                  jobGroup: str = None) -> Union[int, None]:
         """
         This functioncan be used for submission of a job array. The ammount of jobs is determined by  the difference:
                     end_Job-start_Job
@@ -198,18 +219,9 @@ class LSF(_SubmissionSystem):
             Max memory per core.
         queue_after_jobID: int, optional
             shall this job be queued after another one?
-        force_queue_start_after: bool, optional
-            shall this job start after another job, no matter the exit state?
         projectName :  NOT IMPLEMENTED AT THE MOMENT
         jobGroup :  NOT IMPLEMENTED AT THE MOMENT
         priority :  NOT IMPLEMENTED AT THE MOMENT
-        begin_mail :    bool, optional
-            send a mail when job starts
-        end_mail :  bool, optional
-            send a mail, when job is finished
-        verbose:    bool, optional
-            WARNING! - Will be removed in Future! use attribute verbose or constructor! WARNING!
-            print out some messages
         dummyTesting:   bool, optional
             WARNING! - Will be removed in Future! use attribute or constructor as submission! WARNING!
             do not submit the job to the queue.
@@ -229,10 +241,6 @@ class LSF(_SubmissionSystem):
         ChildProcessError
             if submission to queue via bash fails an Child Process Error is raised.
         """
-
-        # required parsing will be removed in future:
-        if (not verbose is None):
-            self.verbose = verbose
 
         # QUEUE checking to not double submit
         if (self.submission and self._block_double_submission):
@@ -275,14 +283,11 @@ class LSF(_SubmissionSystem):
             submission_string += " -R \"rusage[mem=" + str(self.max_storage) + "]\" "
 
         if (isinstance(queue_after_jobID, (int, str))):
-            prefix = "\"done"
-            if (force_queue_start_after):
-                prefix = "\"ended"
-            submission_string += " -w " + prefix + "(" + str(queue_after_jobID) + ")\" "
+            submission_string += " -w " + self.chain_prefix + "(" + str(queue_after_jobID) + ")\" "
 
-        if (begin_mail):
+        if (self.begin_mail):
             submission_string += " -B "
-        if (end_mail):
+        if (self.end_mail):
             submission_string += " -N "
 
         if (self.nomp > 1):

@@ -156,8 +156,10 @@ def do(in_simSystem: Gromos_System,
 
 
 
-            ana_previous_job_ID = submission_system.submit_to_queue("python3 "+analysis_script_path, jobName=tmp_jobname,
-                                                                outLog=ana_log, queue_after_jobID=previous_job_ID, verbose=True)
+            ana_previous_job_ID = submission_system.submit_to_queue("python3 "+analysis_script_path, 
+                                                                jobName=tmp_jobname,
+                                                                outLog=ana_log, 
+                                                                queue_after_jobID=previous_job_ID)
 
             if (verbose): print("ANA jobID: " + str(previous_job_ID))
 

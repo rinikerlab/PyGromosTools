@@ -13,7 +13,7 @@ class _SubmissionSystem:
 
     def __init__(self, submission: bool = False,
                  nmpi: int = 1, nomp: int = 1, max_storage: float = 1000, job_duration: str = "24:00",
-                 verbose: bool = False, enviroment=None, block_double_submission:bool=True, chain_prefix:str="done"):
+                 verbose: bool = False, enviroment=None, block_double_submission:bool=True, chain_prefix:str="done", begin_mail:bool=False, end_mail:bool=False):
         """
             Construct a submission system with required parameters.
 
@@ -49,6 +49,8 @@ class _SubmissionSystem:
         self._enviroment = enviroment
         self._block_double_submission = block_double_submission
         self.chain_prefix = chain_prefix
+        self.begin_mail = begin_mail
+        self.end_mail = end_mail
 
     def submit_to_queue(self, **kargs) -> Union[int, None]:
         """submit_to_queue
