@@ -3219,3 +3219,34 @@ class CONSTRAINT(_topology_table_block):
         result += super().block_to_string()
         result += "END\n"
         return result
+
+class SCALEDINTERACTIONS(_generic_gromos_block):
+    def __init__(self, values=None, content=None):
+        """
+        Not exactly sure what these parameters do
+        """
+
+        if (content is None):
+            super().__init__(used=True, name=__class__.__name__)
+            self.values = values
+        else:
+            super().__init__(used=True, name="SCALEDINTERACTIONS", content=content)
+
+    def block_to_string(self) -> str:
+
+        result = self.name + self.line_seperator
+        for i, v in enumerate(self.values):
+            result += str(v) + self.field_seperator
+            if not i:
+                result += self.line_seperator
+        result += self.line_seperator + "END\n"
+        return result
+
+    def read_content_from_str(self, content):
+        # values
+        values = []
+        values.append(content[0])
+        for v in content[1].split():
+            values.append(v)
+
+        self.values = values

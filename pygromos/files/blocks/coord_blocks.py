@@ -184,8 +184,13 @@ class STOCHINT(_iterable_gromos_block):
         result+= "#"+self.field_seperator+self.field_seperator.join(self.table_header)+ "\n"
         for x in self.content:
             result += x.to_string()
-        result += "# seed\n"
-        result+= self.seed
+        result += "# seed \n"
+
+        # Check which format the seed has and adjust accordingly
+        if "\n" in self.seed:
+            result += self.seed
+        else:
+            result += self.seed + "\n"
         result += "END\n"
 
         return result

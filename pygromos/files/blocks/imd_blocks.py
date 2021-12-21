@@ -1045,7 +1045,7 @@ class FORCE(_generic_imd_block):
                 fields.remove('')
             self._parse_key_content(keyLineNumb=0, contentlines=[fields])
             setattr(self, self._order[0][1][0], int(content[3].split()[0]))
-            setattr(self, self._order[0][1][1], list(map(float, content[3].split()[1:])))
+            setattr(self, self._order[0][1][1], list(map(int, content[3].split()[1:])))
         except Exception as err:
             raise IOError("Could not parse FORCE block!\n"+str(err.args))
 
@@ -1880,3 +1880,20 @@ class ROTTRANS(_generic_imd_block):
             self.RTC = RTC
             self.RTCLAST = RTCLAST
 
+class RANDOMNUMBERS(_generic_imd_block):
+    """
+    Random Numbers Block
+    """
+    name: str = "RANDOMNUMBERS"
+
+    NTRNG: int
+    NTGSL: int
+
+    _order = [[["NTRNG"],
+               ["NTGSL"]]]
+
+    def __init__(self, NTRNG: int=0, NTGSL: int=0, content=None):
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.NTRNG = int(NTRNG)
+            self.NTGSL = int(NTGSL)

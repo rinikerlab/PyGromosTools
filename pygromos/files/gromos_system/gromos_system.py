@@ -180,7 +180,7 @@ class Gromos_System():
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
 
-        
+        self.adapt_imd_automatically = adapt_imd_automatically
         if(adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
             self.adapt_imd()
 
@@ -632,6 +632,10 @@ class Gromos_System():
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
 
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
+        if not self.adapt_imd_automatically:
+            return 0
+        else:
+            warnings.warn("IMD File has been altered")
         #Get residues
         if(self.cnf._future_file and self.residue_list is None
             and self.solute_info is None
