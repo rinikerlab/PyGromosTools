@@ -26,19 +26,19 @@ class test_simulation_blocks(unittest.TestCase):
     def test_smulation(self):
         from pygromos.data.simulation_parameters_templates import template_md
         self.gromSystem.imd = template_md
-        pygromos.simulations.modules.general_simulation_modules.simulation(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
+        pygromos.simulations.modules.general_simulation_modules.simulation(in_gromos_simulation_system=self.gromSystem, override_project_dir=self.tmp_test_dir,
                                                                            submission_system=self.submissionSystem)
 
     def test_emin(self):
-        preset_simulation_modules.emin(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
+        preset_simulation_modules.emin(in_gromos_system=self.gromSystem, override_project_dir=self.tmp_test_dir,
                                        submission_system=self.submissionSystem)
 
     def test_sd(self):
-        preset_simulation_modules.sd(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
+        preset_simulation_modules.sd(in_gromos_system=self.gromSystem, override_project_dir=self.tmp_test_dir,
                                      submission_system=self.submissionSystem)
 
     def test_md(self):
-        preset_simulation_modules.md(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
+        preset_simulation_modules.md(in_gromos_system=self.gromSystem, override_project_dir=self.tmp_test_dir,
                                      submission_system=self.submissionSystem)
 
     def test_lam_window(self):
@@ -49,6 +49,7 @@ class test_simulation_blocks(unittest.TestCase):
 
     def test_ti_sampling(self):
         from pygromos.data.simulation_parameters_templates import template_md
+
         self.gromSystem.imd = template_md
         pygromos.simulations.modules.ti_modules.TI_sampling(in_gromos_system=self.gromSystem, project_dir=self.tmp_test_dir,
                                                             lambda_values = np.arange(0, 1.1, 0.1), subSystem = self.submissionSystem,

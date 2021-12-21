@@ -2,6 +2,7 @@ import warnings
 from typing import Union, List
 
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.utils.utils import time_wait_s_for_filesystem
 
 
 class DUMMY(_SubmissionSystem):
@@ -11,6 +12,7 @@ class DUMMY(_SubmissionSystem):
 
     def __init__(self, verbose: bool = False, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
                  submission: bool = True, enviroment=None):
+        time_wait_s_for_filesystem=0
         super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str, **kwargs) -> Union[int, None]:

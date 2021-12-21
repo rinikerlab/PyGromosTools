@@ -6,6 +6,7 @@ Author: Kay Schaller & Benjamin Schroeder
 """
 import numpy as np
 from numbers import Number
+import copy, json
 from typing import List, Dict, NamedTuple, Iterable
 from collections import namedtuple
 
@@ -202,3 +203,13 @@ class Imd(_general_gromos_file._general_gromos_file):
         if (isinstance(EDS_STAT_OUT, (str, int, bool))):
             reeds_block.EDS_STAT_OUT = EDS_STAT_OUT
 
+
+    def write_json(self,out_path:str):
+        d = copy.deepcopy(vars(self))
+
+        for v in vars(self):
+            if (isinstance(d[v], (blocks.TITLE, blocks._generic_imd_block, blocks._generic_gromos_block)) or issubclass(d[v].__class__,  _general_gromos_file._general_gromos_file)):
+                d.update({v: vars(d[v])})
+
+        json.dump(d, open(out_path, "w"))
+        return out_path

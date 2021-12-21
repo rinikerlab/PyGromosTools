@@ -13,6 +13,7 @@ package_path = os.path.abspath(__file__+"/../../../../../..")
 print(package_path)
 sys.path.append(package_path)
 
+from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.simulations.hpc_queuing.job_scheduling import file_management as fM
 
 
@@ -32,7 +33,7 @@ def do(in_simulation_dir: str, n_processes: int = 1, verbose: bool = True) -> No
     None
     """
     import time
-    time.sleep(3)
+    time.sleep(time_wait_s_for_filesystem)
     # compress files:
     if (verbose): print("Search Files START", "\n")
     trx_files = glob.glob(in_simulation_dir + "/*.tr?")

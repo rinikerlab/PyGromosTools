@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import time
 package_path = os.path.abspath(__file__+"/../../../../../..")
 print(package_path)
 sys.path.append(package_path)
@@ -8,7 +9,7 @@ sys.path.append(package_path)
 from pygromos.gromos import gromosXX as mdGromosXX
 from pygromos.files.simulation_parameters import imd
 from pygromos.utils import bash as bash
-from pygromos.utils.utils import spacer3 as spacer, dynamic_parser
+from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_for_filesystem
 
 
 
@@ -58,7 +59,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         return number
 
     """
-
+    time.sleep(time_wait_s_for_filesystem)
     # WORKDIR SetUP
     if ((work_dir is None or work_dir == "None") and "TMPDIR" in os.environ):
         work_dir = os.environ["TMPDIR"]

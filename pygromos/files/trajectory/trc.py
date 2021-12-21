@@ -211,7 +211,6 @@ class Trc(traj._General_Trajectory):
             raise ValueError("ref_cnf type not supported")
         return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: ca.rms(x), axis=1)
 
-
     def get_pdb(self, cnf:str, exclude_resn=["SOLV"])->str:
         pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
 
@@ -241,7 +240,6 @@ class Trc(traj._General_Trajectory):
                                       dummy_segment, atom.atomType, int(dummy_charge)))  # times *10 because pdb is in A
             pdb_str+= remark_line + "\n".join(frame_positions) + '\nENDMDL\n'
         return pdb_str
-
 
     def write_pdb(self, out_path:str, cnf_file:str):
             """
@@ -315,7 +313,7 @@ class Trc(traj._General_Trajectory):
         #print("Grid", grid)
 
         # cog calculation: select POS -> apply pbc -> average all positions
-        pbc_pos = self.database[col_list].applymap(lambda x: ca._periodic_distance(x, grid))
+        pbc_pos = self.database[col_list].applymap(lambda x: ca.periodic_distance(x, grid))
         cog = pbc_pos.sum(axis=1) / len(col_list)
         #print("COG:", cog)
 
@@ -326,7 +324,7 @@ class Trc(traj._General_Trajectory):
         # shift all positions
         posList = [x for x in self.database.columns if x.startswith('POS_')]
         for ind, idx in enumerate(posList):
-            self.database[idx] = self.database[idx].apply(lambda x: self._periodic_distance(x, grid))  # + boxCenter
+            self.database[idx] = self.database[idx].apply(lambda x: ca.periodic_distance(x, grid))  # + boxCenter
 
 """
     @classmethod

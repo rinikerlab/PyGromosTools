@@ -133,7 +133,14 @@ class Tre(traj._General_Trajectory):
         pd.DataFrame
             pandas dataframe with all temperatures
         """
-        return self.database["temperature"].apply(lambda x: x[:,0])
+
+        tmps = []
+        for i, row in self.database.iterrows():
+            row_d = {"TIMESTEP_time": row["TIMESTEP_time"], "TIMESTEP_step": row["TIMESTEP_step"]}
+            row_d.update({"bath" + str(i + 1): temp for i, temp in enumerate(row["temperature"][:, 0])})
+            tmps.append(row_d)
+
+        return pd.DataFrame(tmps)
 
 
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:

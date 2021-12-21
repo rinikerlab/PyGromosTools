@@ -4,6 +4,7 @@ import pandas as pd
 from typing import Union, List
 
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.utils import bash
 
 
@@ -14,6 +15,7 @@ class LOCAL(_SubmissionSystem):
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
                  verbose: bool = False, enviroment=None):
+        time_wait_s_for_filesystem=0
         super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
 
     def submit_to_queue(self, command: str, jobName: str = "local", submit_from_dir: str = None,

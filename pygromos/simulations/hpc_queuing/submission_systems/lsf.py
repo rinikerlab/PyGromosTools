@@ -6,6 +6,7 @@ from typing import Union, List
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.utils import bash
 
+from pygromos.utils.utils import time_wait_s_for_filesystem
 
 class LSF(_SubmissionSystem):
     """LSF
