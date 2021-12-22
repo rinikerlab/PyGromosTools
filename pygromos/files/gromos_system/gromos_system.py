@@ -903,17 +903,12 @@ class Gromos_System():
                 #print(attr_key)
                 if ("in" in k and "path" in k and attr_key in dir(self)):
                     grom_obj = getattr(self, attr_key)
-<<<<<<< HEAD
 
                     if(isinstance(grom_obj, str)):
                         kwargs.update({k: grom_obj})
 
                     elif(hasattr(grom_obj, "path") and grom_obj.path is None):
                         tmp_file_path = self.work_folder + "/tmp_in_file." + grom_obj._gromos_file_ending
-=======
-                    if (grom_obj.path is None):
-                        tmp_file_path = self.work_folder + "/tmp_file." + grom_obj._gromos_file_ending
->>>>>>> main
                         grom_obj.write(tmp_file_path)
                         kwargs.update({k: tmp_file_path})
                         tmp_files.append(tmp_file_path)
