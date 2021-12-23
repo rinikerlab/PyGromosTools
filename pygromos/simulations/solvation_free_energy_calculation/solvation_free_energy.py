@@ -716,7 +716,7 @@ class Solvation_free_energy_calculation:
 
         # Add PERTURBATION Block
         pert_block = PERTURBATION(NTG=1, NRDGL=0, RLAM=0, DLAMT=0,
-                                  ALPHLJ=0.5, ALPHC=0.5, NLAM=1, NSCALE=1)
+                                  ALPHLJ=0.5, ALPHC=0.5, NLAM=1, NSCALE=0)
         ti_imd.add_block(block=pert_block)
         print("TI imd",ti_imd)
         return ti_imd
