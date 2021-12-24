@@ -45,7 +45,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
             lam_system.imd.add_block(block=precalc_lam_block)
 
         # Submit
-        out_gromos_system, jobID = _TI_lam_step(in_gromos_system=lam_system, project_dir=work_dir,
+        out_gromos_system = _TI_lam_step(in_gromos_system=lam_system, project_dir=work_dir,
                                                 step_name=lam_system.name, submission_system=subSystem,
                                                 in_imd_path=None,
                                                 simulation_runs=n_simulation_repetitions,
@@ -54,7 +54,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
         out_gromos_system.save(out_gromos_system.work_folder + "/sd_out_system.obj")
         lam_systems.append(out_gromos_system)
 
-    return lam_system, jobID
+    return lam_system, out_gromos_system._last_jobID
 
 
 def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=None,
