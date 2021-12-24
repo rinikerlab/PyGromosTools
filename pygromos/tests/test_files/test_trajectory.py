@@ -17,17 +17,17 @@ class traj_standard_tests(unittest.TestCase):
 
     # Constructors
     def test_constructor_empty(self):
-        t = self.class_name(input_value=None)
+        t = self.class_name(input_value=None, auto_save=False)
         print(t)
 
     def test_constructor_trg_file_path(self):
-        t = self.class_name(input_value=self.in_file_path)
+        t = self.class_name(input_value=self.in_file_path, auto_save=False)
         print(t)
         print(t.database.columns)
         print(t.database.head())
 
     def test_constructor_trg_h5_file_path(self):
-        t = self.class_name(input_value=self.in_file_path)
+        t = self.class_name(input_value=self.in_file_path, auto_save=False)
         print(t)
 
     def test_write(self):
@@ -37,7 +37,7 @@ class traj_standard_tests(unittest.TestCase):
             pass
 
     def setUp(self) -> None:
-        self.t1 = self.class_name(input_value=self.in_file_path)
+        self.t1 = self.class_name(input_value=self.in_file_path, auto_save=False)
 
     def test_add(self):
         if("traj_standard_tests" == self.__class__.__name__):
@@ -66,14 +66,14 @@ class test_tre(traj_standard_tests):
     outpath = root_out + "/out_tre1.tre.h5"
 
     def test_get_totals(self):
-        t = self.class_name(input_value=self.in_file_path)
+        t = self.class_name(input_value=self.in_file_path, auto_save=False)
         t.tre_block_name_table = ene_fields.gromos_2015_tre_block_names_table
         tots_ene = t.get_totals()
         print(tots_ene)
         pass
 
     def test_get_eds(self):
-        t = self.class_name(input_value=self.in_file_eds_path)
+        t = self.class_name(input_value=self.in_file_eds_path, auto_save=False)
         eds_ene = t.get_eds()
         print(eds_ene.shape)
 
@@ -82,7 +82,7 @@ class test_tre(traj_standard_tests):
         pass
 
     def test_get_lam(self):
-        t = self.class_name(input_value=self.in_file_lam_path)
+        t = self.class_name(input_value=self.in_file_lam_path, auto_save=False)
         lam_ene = t.get_precalclam()
         print(lam_ene, lam_ene.shape)
         self.assertEqual(lam_ene.nr_lambdas[0], 2, msg="Number of lambdas should be two")
@@ -106,6 +106,6 @@ class test_trg(traj_standard_tests):
         print(lambdas)
 
     def test_get_precalclam(self):
-        t = self.class_name(input_value=self.in_file_path)
+        t = self.class_name(input_value=self.in_file_path, auto_save=False)
         precalclam = t.get_precalclam()
         print(precalclam)
