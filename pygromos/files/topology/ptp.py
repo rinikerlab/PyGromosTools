@@ -1,4 +1,5 @@
 import warnings
+from copy import deepcopy
 
 import pygromos.files.blocks.pertubation_blocks
 from pygromos.files._basics import _general_gromos_file, parser
@@ -22,6 +23,10 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
 
     def __init__(self, in_value:(str or dict)=None):
         super().__init__(in_value=in_value)
+
+        #TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks
+        for block in sorted(self.get_block_names()):
+            setattr(self, block, deepcopy(getattr(self, block)))
 
 
     def read_blocks(self):
