@@ -352,9 +352,9 @@ class LSF(_SubmissionSystem):
             # try getting the lsf queue
             if (not self._dummy):
                 try:
-                        out_process = bash.execute("bjobs -w", catch_STD=True)
+                        out_process = bash.execute("bjobs -w | grep $HOSTNAME", catch_STD=True)
                         job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                        out_process = bash.execute("bjobs -wd", catch_STD=True)
+                        out_process = bash.execute("bjobs -wd | grep $HOSTNAME", catch_STD=True)
                         job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
                         self._job_queue_time_stamp = datetime.now()
                 except Exception as err:
