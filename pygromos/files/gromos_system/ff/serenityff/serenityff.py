@@ -69,6 +69,7 @@ class serenityff():
                 raise Exception("WIP")
 
     def _pattern_matching_for_one_element(self, element:str="H") -> dict():
+        
         #TODO: add C12 support
         return_dict = collections.defaultdict(list)
         for pattern in reversed(self.C6_pattern[element]):
@@ -83,11 +84,16 @@ class serenityff():
                     idx = atom.GetIdx()
 
             #get all matches
-            matches = self.mol.GetSubstructMatches(mol_pattern)
+            matches = self.mol.GetSubstructMatches(mol_pattern, uniquify=False)
             if len(matches) >= 1:
                 for match in matches:
                     idx_in_rdkmol = match[idx]
                     return_dict[idx_in_rdkmol] = [element + str(pattern[1]), pattern[2]]
+                    if element == "C":
+                        print("----------------")
+                        print(idx_in_rdkmol)
+                        print(Chem.MolToSmarts(mol_pattern))
+                        print("----------------")        
         return return_dict
                     
                 
