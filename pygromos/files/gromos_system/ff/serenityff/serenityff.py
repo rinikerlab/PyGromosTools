@@ -88,12 +88,7 @@ class serenityff():
             if len(matches) >= 1:
                 for match in matches:
                     idx_in_rdkmol = match[idx]
-                    return_dict[idx_in_rdkmol] = [element + str(pattern[1]), pattern[2]]
-                    if element == "C":
-                        print("----------------")
-                        print(idx_in_rdkmol)
-                        print(Chem.MolToSmarts(mol_pattern))
-                        print("----------------")        
+                    return_dict[idx_in_rdkmol] = [element + str(pattern[1]), pattern[2]]     
         return return_dict
                     
                 
