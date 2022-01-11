@@ -1257,26 +1257,29 @@ class _gromosPPbase:
              For more information checkout the Gromos Manual
         """
 
-        args = ["@topo " + in_top_path,
-                "@pbc " + periodic_boundary_condition,
-                "@traj " + in_coord_path,
-                "@select " + select]
+        args = [f"@topo {in_top_path} ",
+                f"@pbc {periodic_boundary_condition} ",
+                f"@traj {in_coord_path} ",
+                f"@select {select} "]
 
         
         if(not isinstance(cutoff, type(None))):
-            args += "@cutoff "+str(time)+" "
+            args += f"@cutoff {cutoff} "
         if(not isinstance(pairlist, type(None))):
-            args += "@pairlist "+pairlist+" "
+            args += f"@pairlist {pairlist} "
         if(not isinstance(atom_selection, type(None))):
-            args += "@atoms "+str(atom_selection)+" "
+            args += f"@atoms {atom_selection} "
         if(not isinstance(reject, type(None))):
-            args += "@reject "+reject+" "
+            args += f"@reject {reject} "
         if(not isinstance(time, type(None))):
-            args += "@time "+str(time)+" "
+            args += f" @time {time} "
         if(not isinstance(time, type(None)) and not isinstance(dt, type(None))):
-            args += " "+str(dt)+" "
-	
-        command = self._bin +_binary_name+" "+" ".join(args)
+            args += f"{dt} "
+        if(not isinstance(outformat, type(None))):
+            args += f" @outformat {outformat} "
+
+        args_str = "".join(args)
+        command = f"{self._bin} {_binary_name} {args_str}"
         bash.execute(command, catch_STD=out_filter_path)
         return out_filter_path
 
