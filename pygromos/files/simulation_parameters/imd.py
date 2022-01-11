@@ -45,7 +45,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
     _orig_file_path:str
     path:str
-    _required_blocks = ["TITLE", "SYSTEM", "STEP", "BOUNDCOND", "FORCE", "CONSTRAINT", "PAIRLIST", "NONBONDED"] # Not jet implemented
+    _required_blocks = ["TITLE", "SYSTEM", "STEP", "BOUNDCOND", "FORCE", "CONSTRAINT", "PAIRLIST", "NONBONDED"] # Not yet implemented
 
     #POSSIBLE GROMOS BLOCKS
     TITLE: blocks.TITLE
