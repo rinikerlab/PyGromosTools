@@ -77,6 +77,8 @@ class Imd(_general_gromos_file._general_gromos_file):
     REPLICA_EDS: blocks.REPLICA_EDS = None
     NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
 
+    QMMM: blocks.QMMM = None
+
     def __init__(self, in_value:str, _future_file:bool=False):
         super().__init__(in_value=in_value, _future_file=_future_file)
 

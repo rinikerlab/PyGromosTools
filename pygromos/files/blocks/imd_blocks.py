@@ -1512,7 +1512,7 @@ class QMMM(_generic_imd_block):
 
     _order = [[["NTQMMM", "NTQMSW", "RCUTQ", "NTWQMMM", "QMLJ", "MMSCAL"]]]
 
-    def __init__(self, NTQMMM:int, NTQMSW:int, RCUTQ:float, NTWQMMM:int, QMLJ:int, MMSCAL:float, content=None):
+    def __init__(self, NTQMMM:int=0, NTQMSW:int=0, RCUTQ:float=0.0, NTWQMMM:int=0, QMLJ:int=0, MMSCAL:float=-1.0, content=None):
         super().__init__(used=True, content=content)
         if content is None:
             self.NTQMMM = int(NTQMMM)

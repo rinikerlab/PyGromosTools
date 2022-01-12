@@ -1,6 +1,7 @@
 #from pygromos.files.gromos_system.gromos_system import Gromos_System
 #from pygromos.simulations.modules.preset_simulation_modules import emin, md
 from pygromos.files.qmmm.qmmm import QMMM
+from pygromos.files.simulation_parameters.imd import Imd
 
 def simulation():
     # binaries
@@ -34,11 +35,33 @@ def simulation():
     md(new_system, equilibration_runs=2, simulation_runs=5)
 
 def qmmm():
-    QMMM("/home/fpultar/Documents/calc/mdfptools-test/qmmm/test.qmmm")
+    qmmm_file = QMMM("/home/fpultar/Documents/calc/mdfptools-test/qmmm/test.qmmm")
+
+def imd():
+    imd_path = "/home/fpultar/Documents/calc/pygromos-qmmm/md.imd"
+    imd_file = Imd(imd_path)
+    print(imd_file.QMMM.NTQMMM)
+    print(imd_file.QMMM.NTQMSW)
+    print(imd_file.QMMM.MMSCAL)
+    print()
+
+    imd_file.QMMM.NTQMSW = 4
+
+    print(imd_file.QMMM.NTQMMM)
+    print(imd_file.QMMM.NTQMSW)
+    print(imd_file.QMMM.MMSCAL)
+    print()
+
+    imd_file.TITLE.content = "Felix File"
+    print(imd_file.TITLE.content)
+    print()
+
+    print(imd_file)
 
 def main():
     # simulation()
     qmmm()
+    # imd()
 
 if __name__ == "__main__":
     main()
