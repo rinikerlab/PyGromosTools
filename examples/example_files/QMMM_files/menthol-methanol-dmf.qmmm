@@ -2,6 +2,7 @@ TITLE
 menthol-methanol-dmf, qmmm specification file
 END
 QMZONE
+#name                           A     B     C
 H                               1     1     0
 C                               6     2     0
 H                               1     3     0
