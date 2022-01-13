@@ -31,11 +31,12 @@ def simulation():
 
     print(system)
     print(new_system)
-    #new_system.imd = None
-    #new_system.top = in_top_path
-    #new_system.cnf = "/home/fpultar/Documents/calc/pygromos/menthol-dmf/emin/analysis/data/emin.cnf"
+
+    new_system.imd = None
+    new_system.top = in_top_path
+    new_system.cnf = "/home/fpultar/Documents/calc/pygromos/menthol-dmf/emin/analysis/data/emin.cnf"
     
-    #md(new_system, equilibration_runs=2, simulation_runs=5)
+    md(new_system, equilibration_runs=2, simulation_runs=5)
 
 def qmmm():
     qmmm_file = QMMM("/home/fpultar/Documents/calc/mdfptools-test/qmmm/xphos-methanol-dmf.qmmm")
