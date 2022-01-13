@@ -1,8 +1,3 @@
-import numpy as np
-from numbers import Number
-import copy, json
-from typing import List, Dict, NamedTuple, Iterable
-from collections import namedtuple
 from copy import deepcopy
 
 from pygromos.files._basics import _general_gromos_file, parser
