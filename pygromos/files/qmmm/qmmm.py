@@ -43,10 +43,13 @@ class QMMM(_general_gromos_file._general_gromos_file):
         return text
 
     def read_file(self):
-        data = parser.read_imd(self._orig_file_path)
-        for key, sub_content in data.items():
-            try:
-                self.add_block(blocktitle=key, content=sub_content)
-            except Exception as err:
-                raise Exception("Error while reading file: " + str(err))
-        return {}
+        #Read blocks to string
+        data = parser.read_general_gromos_file(self._orig_file_path)
+
+        #translate the string subblocks
+        blocks = {}
+        for block_title in data:
+            #print(block_title)
+            self.add_block(blocktitle=block_title, content=data[block_title])
+            blocks.update({block_title: self.__getattribute__(block_title)})
+        return blocks
