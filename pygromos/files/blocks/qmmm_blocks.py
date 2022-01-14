@@ -1,6 +1,5 @@
-import os
 from typing import Iterable, Union
-from pygromos.files.blocks._general_blocks import TITLE, _generic_gromos_block, _generic_field
+from pygromos.files.blocks._general_blocks import TITLE, _generic_field
 from pygromos.files.blocks.topology_blocks import _topology_table_block, _topology_block
 
 # forward declarations
