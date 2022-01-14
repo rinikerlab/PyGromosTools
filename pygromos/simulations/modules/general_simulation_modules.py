@@ -25,7 +25,7 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
                submission_system:_SubmissionSystem=LOCAL(), simulation_runs:int=1, equilibration_runs:int = 0,
                previous_simulation_run:int=None, force_simulation:bool=False,
                analysis_script:callable = simulation_analysis.do, analysis_control_dict:dict = None,
-               verbose:bool = True, verbose_lvl:int=1, _template_imd_path:str=None) -> Tuple[Gromos_System, int]:
+               verbose:bool = True, verbose_lvl:int=1, _template_imd_path:str=None) -> Gromos_System:
     """
         This function is a generic simulation block, that can be used to run and schedule simulations.
 
