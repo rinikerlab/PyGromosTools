@@ -8,11 +8,20 @@ TITLE: TITLE = TITLE
 
 class qmzone_field(_generic_field):
     def __init__(self, QMEN: str, QMEI: int, QMEZ: int, QMEB: int):
-        # Write comment line
-        # QMEN (QM element name), indicates the atom identifier for this position
-        # QMEI (QM element iterator), specifies an iterator over the atom positions
-        # QMEZ (QM element Z), specifies the nuclear charge Z of the atom position
-        # QMEB (QM element bond), specifies whether a bond can be broken or not (== 0).
+        """
+        One line of the QMZONE block
+
+        Parameters
+        ----------
+        QMEN : str
+            (QM element name), indicates the atom identifier for this position
+        QMEI : int
+            (QM element iterator), specifies an iterator over the atom positions
+        QMEZ : int
+            (QM element Z), specifies the nuclear charge Z of the atom position
+        QMEB : int
+            (QM element bond), specifies whether a bond can be broken or not (== 0)
+        """
         self.QMEN = QMEN
         self.QMEI = QMEI
         self.QMEZ = QMEZ
