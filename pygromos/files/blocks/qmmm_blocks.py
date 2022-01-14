@@ -1,3 +1,4 @@
+import os
 from typing import Iterable, Union
 from pygromos.files.blocks._general_blocks import TITLE, _generic_gromos_block, _generic_field
 from pygromos.files.blocks.topology_blocks import _topology_table_block, _topology_block
@@ -37,8 +38,29 @@ class QMZONE(_topology_table_block):
         return result
 
 class QMUNIT(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content:(str or dict or None or __class__), A:float=1, B:float=1, C:float=1, D:float=1):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
+        if content is None:
+            self.A = A
+            self.B = B
+            self.C = C
+            self.D = D
+
+    def read_content_from_str(self, content: str):
+        super().read_content_from_str(content)
+        try:
+            self.A = float(self.content[0][0])
+            self.B = float(self.content[0][1])
+            self.C = float(self.content[0][2])
+            self.D = float(self.content[0][3])
+        except IOError as e:
+            print("Error while reading QMUNIT block: " + str(e))
+
+    def block_to_string(self) -> str:   
+        result = self.name + "\n"
+        result += str(self.A) + self.field_seperator + str(self.B) + self.field_seperator + str(self.C) + self.field_seperator + str(self.D) + self.line_seperator
+        result += "END\n"
+        return result
 
 class XTBELEMENTS(_topology_block):
     def __init__(self, content:(str or dict or None or __class__)):
