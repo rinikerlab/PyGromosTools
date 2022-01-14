@@ -36,9 +36,15 @@ O                              30     8     0
 H                              31     1     0
 END
 QMUNIT
-5.2918E-2    2625.50    1.0    0.1
+# QLGL         QEGE       QCGC    QIGI 
+  5.2918E-2    2625.50    1.0     0.1
 END
-XTBELEMENTS
+ORCAELEMENTS
+1
+6
+8
+END
+MNDOELEMENTS
 1
 6
 8

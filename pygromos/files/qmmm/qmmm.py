@@ -1,4 +1,6 @@
 from copy import deepcopy
+from typing import List
+import warnings
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import qmmm_blocks as blocks
@@ -17,8 +19,15 @@ class QMMM(_general_gromos_file._general_gromos_file):
     QMZONE: blocks.QMZONE
     QMUNIT: blocks.QMUNIT
 
-    XTBELEMENTS: blocks.XTBELEMENTS = None
+    # One of those blocks should be available
+    # Consult the Gromos documentation for more details
+    # Also consult the corresponding QMMM block in imd files 
+    MNDOELEMENTS: blocks.MNDOELEMENTS = None
+    TURBOMOLEELEMENTS: blocks.TURBOMOLEELEMENTS = None
+    DFTBELEMENTS: blocks.DFTBELEMENTS = None
+    MOPACELEMENTS: blocks.MOPACELEMENTS = None
     ORCAELEMENTS: blocks.ORCAELEMENTS = None
+    XTBELEMENTS: blocks.XTBELEMENTS = None
 
     def __init__(self, in_value:str, _future_file:bool=False):
         super().__init__(in_value=in_value, _future_file=_future_file)
@@ -26,6 +35,9 @@ class QMMM(_general_gromos_file._general_gromos_file):
         #TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks
         for block in sorted(self.get_block_names()):
             setattr(self, block, deepcopy(getattr(self, block)))
+
+        # Perform some sanity checks
+        self._health_check()
 
     def __str__(self):
         text = ""
@@ -44,7 +56,22 @@ class QMMM(_general_gromos_file._general_gromos_file):
         #translate the string subblocks
         blocks = {}
         for block_title in data:
-            #print(block_title)
             self.add_block(blocktitle=block_title, content=data[block_title])
             blocks.update({block_title: self.__getattribute__(block_title)})
         return blocks
+
+    def get_qm_engines(self)->List[str]:
+        # Returns the QM engine used
+        # Actually returns a list of strings (in case the user wanted for some reason specify more than one engine)
+        engine = [element.replace("ELEMENTS", "") for element in self.get_block_names() if element.endswith("ELEMENTS")]
+        return engine
+
+    def _health_check(self):
+        # Runs tests on the integrity of the file
+        # and spits out warnings
+        # members = [attr for attr in dir(self) if not callable(getattr(self, attr)) and attr.endswith("ELEMENTS")] 
+        members = [element for element in self.get_block_names() if element.endswith("ELEMENTS")]
+        if(len(members) > 1):
+            warnings.warn("Declaration of more than one (QMENGINE)ELEMENTS blocks in QM/MM specification file detected: " + ", ".join(members))
+        elif(len(members) < 1):
+            warnings.warn("No (QMENGINE)ELEMENTS block in QM/MM specification file detected.")
