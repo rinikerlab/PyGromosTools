@@ -32,7 +32,7 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
     Parameters
     ----------
     in_gromos_simulation_system : Gromos_System
-        gromos system that contains the iformation of the files, that are required for the simulation run.
+        gromos system that contains the information of the files, that are required for the simulation run.
     override_project_dir : str
         parent project directory
     step_name :  str, optional
