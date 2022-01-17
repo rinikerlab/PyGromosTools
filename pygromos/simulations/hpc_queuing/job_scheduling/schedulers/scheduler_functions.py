@@ -187,7 +187,7 @@ def chain_submission(simSystem:Gromos_System,
                 if (verbose): print("\tSIMULATION")
                 os.chdir(tmp_outdir)
                 sub_job = Submission_job(command=md_script_command, 
-                                        job_name=tmp_jobname,
+                                        jobName=tmp_jobname,
                                         submit_from_dir=tmp_outdir,
                                         queue_after_jobID=previous_job_ID,
                                         outLog=tmp_outdir + "/" + out_prefix + "_md.out",
@@ -203,7 +203,7 @@ def chain_submission(simSystem:Gromos_System,
                 ##this mainly tars files.
                 if (verbose) and verbose_lvl >= 2: print("\tCLEANING")
                 sub_job = Submission_job(command=clean_up_command,
-                                        job_name=tmp_jobname + "_cleanup",
+                                        jobName=tmp_jobname + "_cleanup",
                                         queue_after_jobID=previous_job_ID,
                                         outLog=tmp_outdir + "/" + out_prefix + "_cleanup.out",
                                         errLog=tmp_outdir + "/" + out_prefix + "_cleanup.err")
