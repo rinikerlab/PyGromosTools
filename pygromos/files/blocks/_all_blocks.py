@@ -1,5 +1,6 @@
 from pygromos.files.blocks.coord_blocks import *
 from pygromos.files.blocks.imd_blocks import *
+from pygromos.files.blocks.qmmm_blocks import *
 from pygromos.files.blocks.topology_blocks import *
 from pygromos.files.blocks.pertubation_blocks import *
 from pygromos.files.blocks.replica_exchange_blocks import *

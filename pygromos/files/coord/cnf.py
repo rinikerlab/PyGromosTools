@@ -73,6 +73,7 @@ class Cnf(_general_gromos_file):
         if type(in_value) == Chem.rdchem.Mol:
             super().__init__(in_value=None, _future_file=_future_file)
             self.createRDKITconf(mol=in_value)
+            self.residues = self.get_residues(verbose=verbose)
         #general import
         else:
             super().__init__(in_value=in_value, _future_file=_future_file)
