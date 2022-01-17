@@ -17,7 +17,6 @@ class test_queuing_system(unittest.TestCase):
 
     def test_submit(self):
         sub_job = Submission_job(jobName="test_job", command="echo \" WUHAHAHA\"")
-
         self.SubmissionSystem.submit_to_queue(sub_job=sub_job)
 
     def test_submit_jobAarray_to_queue(self):
@@ -26,14 +25,13 @@ class test_queuing_system(unittest.TestCase):
                                 command="echo \" WUHAHAHA\"",
                                 start_job=1,
                                 end_job=1)
-
         self.SubmissionSystem.submit_jobAarray_to_queue(sub_job=sub_job)
 
+    def test_submit_jobAarray_to_queue1_10(self):
         sub_job2 = Submission_job(jobName="test_job", 
                                 command="echo \" WUHAHAHA\"",
                                 start_job=1,
                                 end_job=10)
-
         self.SubmissionSystem.submit_jobAarray_to_queue(sub_job=sub_job2)
 
     def test_search_queue_for_jobname(self):

@@ -10,6 +10,7 @@ from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions import chain_submission
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers import simulation_run_worker as workerScript
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF
 from pygromos.utils import bash, utils
 
@@ -154,12 +155,11 @@ def do(in_simSystem: Gromos_System,
             if (verbose): print(ana_log)
             if (verbose): print(analysis_script_path)
 
-
-
-            ana_previous_job_ID = submission_system.submit_to_queue("python3 "+analysis_script_path, 
-                                                                jobName=tmp_jobname,
-                                                                outLog=ana_log, 
-                                                                queue_after_jobID=previous_job_ID)
+            sub_job = Submission_job(command="python3 "+analysis_script_path,
+                                    jobName=tmp_jobname,
+                                    outLog=ana_log,
+                                    queue_after_jobID=previous_job_ID)
+            ana_previous_job_ID = submission_system.submit_to_queue(sub_job)
 
             if (verbose): print("ANA jobID: " + str(previous_job_ID))
 

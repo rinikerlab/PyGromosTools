@@ -1,10 +1,12 @@
 import glob
 import os
+from re import sub
 
 import pandas as pd
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
 from pygromos.utils import bash
@@ -184,13 +186,14 @@ def chain_submission(simSystem:Gromos_System,
             try:
                 if (verbose): print("\tSIMULATION")
                 os.chdir(tmp_outdir)
-                outLog = tmp_outdir + "/" + out_prefix + "_md.out"
-                errLog = tmp_outdir + "/" + out_prefix + "_md.err"
-                previous_job_ID = job_submission_system.submit_to_queue(command=md_script_command, jobName=tmp_jobname,
-                                                                        submit_from_dir=tmp_outdir,
-                                                                        queue_after_jobID=previous_job_ID,
-                                                                        outLog=outLog, errLog=errLog,
-                                                                        sumbit_from_file=True)
+                sub_job = Submission_job(command=md_script_command, 
+                                        job_name=tmp_jobname,
+                                        submit_from_dir=tmp_outdir,
+                                        queue_after_jobID=previous_job_ID,
+                                        outLog=tmp_outdir + "/" + out_prefix + "_md.out",
+                                        errLog=tmp_outdir + "/" + out_prefix + "_md.err",
+                                        sumbit_from_file=True)
+                previous_job_ID = job_submission_system.submit_to_queue(sub_job)
                 if verbose: print("SIMULATION ID: ", previous_job_ID)
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
@@ -199,13 +202,12 @@ def chain_submission(simSystem:Gromos_System,
                 # schedule - simulation cleanup:
                 ##this mainly tars files.
                 if (verbose) and verbose_lvl >= 2: print("\tCLEANING")
-                outLog = tmp_outdir + "/" + out_prefix + "_cleanUp.out"
-                errLog = tmp_outdir + "/" + out_prefix + "_cleanUp.err"
-                clean_id = job_submission_system.submit_to_queue(command=clean_up_command,
-                                                                 jobName=tmp_jobname + "_cleanUP",
-                                                                 queue_after_jobID=previous_job_ID,
-                                                                 outLog=outLog,
-                                                                 errLog=errLog,)
+                sub_job = Submission_job(command=clean_up_command,
+                                        job_name=tmp_jobname + "_cleanup",
+                                        queue_after_jobID=previous_job_ID,
+                                        outLog=tmp_outdir + "/" + out_prefix + "_cleanup.out",
+                                        errLog=tmp_outdir + "/" + out_prefix + "_cleanup.err")
+                clean_id = job_submission_system.submit_to_queue(sub_job)
 
                 if verbose: print("CLEANING ID: ", previous_job_ID)
 
@@ -218,18 +220,16 @@ def chain_submission(simSystem:Gromos_System,
                     and runID < chain_job_repetitions):
 
                 if (verbose) and verbose_lvl >= 2: print("\tINBETWEEN ANALYSIS")
-                tmp_ana_jobname = jobname + "_intermediate_ana_run_" + str(runID)
-                outLog = tmp_outdir + "/" + out_prefix + "_inbetweenAna.out"
-                errLog = tmp_outdir + "/" + out_prefix + "_inbetweenAna.err"
-
+                sub_job = Submission_job(command=in_analysis_script_path,
+                                        jobName=jobname + "_intermediate_ana_run_" + str(runID),
+                                        outLog=tmp_outdir + "/" + out_prefix + "_inbetweenAna.out",
+                                        errLog=tmp_outdir + "/" + out_prefix + "_inbetweenAna.err",
+                                        queue_after_jobID=clean_id)
                 try:
-                    ana_id = job_submission_system.submit_to_queue(command=in_analysis_script_path,
-                                                                   jobName=tmp_ana_jobname,
-                                                                   outLog=outLog, errLog=errLog,
-                                                                   queue_after_jobID=clean_id)
+                    ana_id = job_submission_system.submit_to_queue(sub_job)
                     if (verbose) and verbose_lvl >= 2: print("\n")
                 except ValueError as err:  # job already in the queue
-                    print("ERROR during submission of analysis command of "+str(tmp_ana_jobname)+":\n")
+                    print("ERROR during submission of analysis command of "+sub_job.jobName+":\n")
                     print("\n".join(err.args))
         else:
             if(verbose) and verbose_lvl >= 2: print("Did not submit!")
