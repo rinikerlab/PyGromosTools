@@ -1,9 +1,6 @@
-
-
-"""
-File:            submission_job: parameter class for job submission
-
-Description:
+class Submission_job():
+    """
+    Description:
     This class stores parameters for the submission of jobs. It is used by the submission_systems:
     - submission dummy
     - submission local
@@ -13,11 +10,8 @@ Description:
 
     It should provide an easy way to modify jobs, even from high level modules (e.g. the simulation module like TI, EMIN, ...).
 
-Author: Marc Lehner
-"""
-
-
-class Submission_job():
+    Author: Marc Lehner
+    """
     def __init__(self, command: str = None, 
                         jobName: str = None, 
                         outLog: str=None, 
