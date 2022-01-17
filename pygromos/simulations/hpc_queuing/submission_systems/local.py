@@ -1,7 +1,7 @@
 import os
 import warnings
 import pandas as pd
-from typing import Union, List
+from typing import List
 
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
