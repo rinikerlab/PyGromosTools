@@ -4,8 +4,9 @@ import pandas as pd
 from typing import Union, List
 
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
-from pygromos.utils import bash
+from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
+from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
 
 class LSF(_SubmissionSystem):
@@ -40,48 +41,14 @@ class LSF(_SubmissionSystem):
                         begin_mail=begin_mail, 
                         end_mail=end_mail)
 
-    def submit_to_queue(self, command: str, 
-                        jobName: str, 
-                        outLog=None, 
-                        errLog=None, 
-                        queue_after_jobID: int = None, 
-                        post_execution_command: str = None, 
-                        submit_from_dir: str = None,
-                        sumbit_from_file: bool = True) -> Union[int, None]:
+    def submit_to_queue(self, sub_job:Submission_job) -> int:
         """
             This function submits the given command to the LSF QUEUE
 
         Parameters
         ----------
-        command : str
-            command to be executed
-        jobName : str
-            name of the job in the queue
-        outLog: str, optional
-            out std-out log path
-        errLog: str, optional
-            out std-err log path
-        submit_from_dir
-        queue_after_jobID: int, optional
-            shall this job be queued after another one?
-        force_queue_start_after: bool, optional
-            !!! DEPRECIATED !!! use chain_prefix instead
-        projectName :  NOT IMPLEMENTED AT THE MOMENT
-        jobGroup :  NOT IMPLEMENTED AT THE MOMENT
-        priority :  NOT IMPLEMENTED AT THE MOMENT
-        begin_mail :    bool, optional
-            send a mail when job starts
-        end_mail :  bool, optional
-            send a mail, when job is finished
-        post_execution_command: str, optional
-            command which will be executed after the execution of command
-        do_not_doubly_submit_to_queue:  bool, optional
-            if True: script checks the submission queue and looks for an identical job_name. than raises ValueError if it is already submitted. (default: True)
-        verbose:    bool, optional
-            WARNING! - Will be removed in Future! use attribute verbose or constructor! WARNING!
-            print out some messages
-        stupid_mode
-        Returns
+        submission_job : Submission_job
+            the job to be submitted
         -------
 
         """
@@ -94,34 +61,34 @@ class LSF(_SubmissionSystem):
         # QUEUE checking to not double submit
         if (self._block_double_submission and self.submission):
             if (self.verbose): print('check queue')
-            ids = list(self.search_queue_for_jobname(jobName).index)
+            ids = list(self.search_queue_for_jobname(sub_job.jobName).index)
 
             if (len(ids) > 0):
                 if (self.verbose): print(
-                    "\tSKIP - FOUND JOB: \t\t" + "\n\t\t".join(map(str, ids)) + "\n\t\t with jobname: " + jobName)
+                    "\tSKIP - FOUND JOB: \t\t" + "\n\t\t".join(map(str, ids)) + "\n\t\t with jobname: " + sub_job.jobName)
                 return ids[0]
 
-        if (isinstance(submit_from_dir, str) and os.path.isdir(submit_from_dir)):
-            os.chdir(submit_from_dir)
-            command_file_path = submit_from_dir + "/job_" + str(jobName) + ".sh"
+        if (isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir)):
+            os.chdir(sub_job.submit_from_dir)
+            command_file_path = sub_job.submit_from_dir + "/job_" + str(sub_job.jobName) + ".sh"
         else:
-            command_file_path = "./job_" + str(jobName) + ".sh"
+            command_file_path = "./job_" + str(sub_job.jobName) + ".sh"
 
         submission_string += "bsub "
-        submission_string += " -J" + jobName + " "
+        submission_string += " -J" + sub_job.jobName + " "
         submission_string += " -W " + str(self.job_duration) + " "
 
-        if (not isinstance(post_execution_command, type(None))):
-            submission_string += "-Ep \"" + post_execution_command + "\" "
+        if (not isinstance(sub_job.post_execution_command, type(None))):
+            submission_string += "-Ep \"" + sub_job.post_execution_command + "\" "
 
-        if (not isinstance(outLog, str) and not isinstance(errLog, str)):
-            outLog = jobName + ".out"
+        if (not isinstance(sub_job.outLog, str) and not isinstance(sub_job.errLog, str)):
+            outLog = sub_job.jobName + ".out"
             submission_string += " -o " + outLog
-        elif (isinstance(outLog, str)):
-            submission_string += " -o " + outLog
+        elif (isinstance(sub_job.outLog, str)):
+            submission_string += " -o " + sub_job.outLog
 
-        if (isinstance(errLog, str)):
-            submission_string += " -e " + errLog
+        if (isinstance(sub_job.errLog, str)):
+            submission_string += " -e " + sub_job.errLog
 
         nCPU = self.nmpi * self.nomp
         submission_string += " -n " + str(nCPU) + " "
@@ -130,8 +97,8 @@ class LSF(_SubmissionSystem):
         if (isinstance(self.max_storage, int)):
             submission_string += " -R rusage[mem=" + str(self.max_storage) + "] "
 
-        if (isinstance(queue_after_jobID, (int, str)) and (queue_after_jobID != 0 or queue_after_jobID != "0")):
-            submission_string += " -w \"" + self.chain_prefix + "(" + str(queue_after_jobID) + ")\" "
+        if (isinstance(sub_job.queue_after_jobID, (int, str)) and (sub_job.queue_after_jobID != 0 or sub_job.queue_after_jobID != "0")):
+            submission_string += " -w \"" + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ")\" "
 
         if (self.begin_mail):
             submission_string += " -B "
@@ -139,11 +106,11 @@ class LSF(_SubmissionSystem):
             submission_string += " -N "
 
         if (self.nomp > 1):
-            command = "\"export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + command + "\""
+            command = "\"export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + "\""
         else:
-            command = "\n " + command.strip() + ""
+            command = "\n " + sub_job.command.strip() + ""
 
-        if (sumbit_from_file):
+        if (sub_job.sumbit_from_file):
             if (self.verbose): print("writing tmp-submission-file to: ", command_file_path)
             command_file = open(command_file_path, "w")
             command_file.write("#!/bin/bash\n")
@@ -176,18 +143,10 @@ class LSF(_SubmissionSystem):
             job_id = -1
 
         os.chdir(orig_dir)
+        sub_job.jobID = job_id
         return int(job_id)
 
-    def submit_jobAarray_to_queue(self, command: str, 
-                                  jobName: str,
-                                  start_Job: int, 
-                                  end_job: int, 
-                                  jobLim: int = None,
-                                  outLog=None, 
-                                  errLog=None, 
-                                  submit_from_dir: str = None,
-                                  queue_after_jobID: int = None,
-                                  jobGroup: str = None) -> Union[int, None]:
+    def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
         """
         This functioncan be used for submission of a job array. The ammount of jobs is determined by  the difference:
                     end_Job-start_Job
@@ -195,87 +154,49 @@ class LSF(_SubmissionSystem):
 
         Parameters
         ----------
-        command : str
-            command to be executed
-        jobName : str
-            name of the job in the queue
-        start_Job: int
-            starting job_id
-        end_job: int
-            ending job_id
-        jobLim: int, optional
-            limits the in parallel execute of job arrays.
-        duration: str, optional
-            this string defines the max job-run duration like HHH:MM (default: 04:00)
-        outLog: str, optional
-            out std-out log path
-        errLog: str, optional
-            out std-err log path
-        submit_from_dir
-        nmpi :  int, optional
-            integer number of mpi cores (default: 1)
-        nomp :  int, optional
-            integer number of omp cores (default: 1)
-        maxStorage : int, optional
-            Max memory per core.
-        queue_after_jobID: int, optional
-            shall this job be queued after another one?
-        projectName :  NOT IMPLEMENTED AT THE MOMENT
-        jobGroup :  NOT IMPLEMENTED AT THE MOMENT
-        priority :  NOT IMPLEMENTED AT THE MOMENT
-        dummyTesting:   bool, optional
-            WARNING! - Will be removed in Future! use attribute or constructor as submission! WARNING!
-            do not submit the job to the queue.
-        do_not_doubly_submit_to_queue:  bool, optional - NOT IMPLEMENTED AT THE MOMENT
-            if True: script checks the submission queue and looks for an identical job_name. than raises ValueError if it is already submitted. (default: True)
-
+        sub_job: Submission_job
+            the job to be submitted
 
         Returns
         -------
-         Union[int, None]
+         int
             return job ID
 
-        Raises
-        ------
-        ValueError
-            if job already submitted a Value Error is raised
-        ChildProcessError
-            if submission to queue via bash fails an Child Process Error is raised.
         """
 
         # QUEUE checking to not double submit
         if (self.submission and self._block_double_submission):
             if (self.verbose): print('check queue')
-            ids = self.search_queue_for_jobname(jobName)
+            ids = self.search_queue_for_jobname(sub_job.jobName)
 
             if (len(ids) > 0):
                 if (self.verbose): print(
-                    "\tSKIP - FOUND JOB: \t\t" + "\n\t\t".join(map(str, ids)) + "\n\t\t with jobname: " + jobName)
+                    "\tSKIP - FOUND JOB: \t\t" + "\n\t\t".join(map(str, ids)) + "\n\t\t with jobname: " + sub_job.jobName)
                 return ids[0]
 
         # generate submission_string:
         submission_string = ""
-        if (isinstance(submit_from_dir, str) and os.path.isdir(submit_from_dir)):
-            submission_string += "cd " + submit_from_dir + " && "
+        if (isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir)):
+            submission_string += "cd " + sub_job.submit_from_dir + " && "
 
-        if (jobLim is None):
-            jobLim = end_job - start_Job
+        if (sub_job.jobLim is None):
+            jobLim = sub_job.end_job - sub_job.start_Job
 
-        jobName = str(jobName) + "[" + str(start_Job) + "-" + str(end_job) + "]%" + str(jobLim)
+        jobName = str(sub_job.jobName) + "[" + str(sub_job.start_Job) + "-" + str(sub_job.end_job) + "]%" + str(jobLim)
 
         submission_string += "bsub -J \" " + jobName + " \" -W \"" + str(self.job_duration) + "\" "
 
-        if (isinstance(jobGroup, str)):
-            submission_string += " -g " + jobGroup + " "
+        if (isinstance(sub_job.jobGroup, str)):
+            submission_string += " -g " + sub_job.jobGroup + " "
 
-        if (not isinstance(outLog, str) and not isinstance(errLog, str)):
+        if (not isinstance(sub_job.outLog, str) and not isinstance(sub_job.errLog, str)):
             outLog = jobName + ".out"
             submission_string += " -oo " + outLog
-        elif (isinstance(outLog, str)):
-            submission_string += " -oo " + outLog
+        elif (isinstance(sub_job.outLog, str)):
+            submission_string += " -oo " + sub_job.outLog
 
-        if (isinstance(errLog, str)):
-            submission_string += " -eo " + errLog
+        if (isinstance(sub_job.errLog, str)):
+            submission_string += " -eo " + sub_job.errLog
 
         nCPU = self.nmpi * self.nomp
         submission_string += " -n " + str(nCPU) + " "
@@ -283,8 +204,8 @@ class LSF(_SubmissionSystem):
         if (isinstance(self.max_storage, int)):
             submission_string += " -R \"rusage[mem=" + str(self.max_storage) + "]\" "
 
-        if (isinstance(queue_after_jobID, (int, str))):
-            submission_string += " -w " + self.chain_prefix + "(" + str(queue_after_jobID) + ")\" "
+        if (isinstance(sub_job.queue_after_jobID, (int, str))):
+            submission_string += " -w " + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ")\" "
 
         if (self.begin_mail):
             submission_string += " -B "
@@ -292,9 +213,9 @@ class LSF(_SubmissionSystem):
             submission_string += " -N "
 
         if (self.nomp > 1):
-            command = " \" export OMP_NUM_THREADS=" + str(self.nomp) + " && " + command + "\""
+            command = " \" export OMP_NUM_THREADS=" + str(self.nomp) + " && " + sub_job.command + "\""
         else:
-            command = " \"" + command + "\""
+            command = " \"" + sub_job.command + "\""
 
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
@@ -315,7 +236,8 @@ class LSF(_SubmissionSystem):
             except:
                 raise ChildProcessError("could not submit this command: \n" + " ".join(submission_string))
         else:
-            job_id = 0
+            job_id = -1
+        sub_job.jobID = job_id
         return int(job_id)
 
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
