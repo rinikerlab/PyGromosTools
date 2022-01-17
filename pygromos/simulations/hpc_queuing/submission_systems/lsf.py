@@ -149,7 +149,7 @@ class LSF(_SubmissionSystem):
     def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
         """
         This functioncan be used for submission of a job array. The ammount of jobs is determined by  the difference:
-                    end_Job-start_Job
+                    end_job-start_job
         An array index variable is defined called ${JOBID} inside the command representing job x in the array.
 
         Parameters
@@ -180,9 +180,9 @@ class LSF(_SubmissionSystem):
             submission_string += "cd " + sub_job.submit_from_dir + " && "
 
         if (sub_job.jobLim is None):
-            jobLim = sub_job.end_job - sub_job.start_Job
+            jobLim = sub_job.end_job - sub_job.start_job
 
-        jobName = str(sub_job.jobName) + "[" + str(sub_job.start_Job) + "-" + str(sub_job.end_job) + "]%" + str(jobLim)
+        jobName = str(sub_job.jobName) + "[" + str(sub_job.start_job) + "-" + str(sub_job.end_job) + "]%" + str(jobLim)
 
         submission_string += "bsub -J \" " + jobName + " \" -W \"" + str(self.job_duration) + "\" "
 

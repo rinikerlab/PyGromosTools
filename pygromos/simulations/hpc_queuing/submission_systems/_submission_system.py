@@ -85,6 +85,9 @@ class _SubmissionSystem:
             self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", job_duration=\""+str(self.job_duration)+"\")\n\n"
         return gen_cmd
 
+    def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
+        return []
+
     def search_queue_for_jobname(self, job_name: str, regex:bool=False, **kwargs)->pd.DataFrame:
         """get_jobs_from_queue
 

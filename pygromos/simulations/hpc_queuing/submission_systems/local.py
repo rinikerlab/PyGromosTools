@@ -91,7 +91,7 @@ class LOCAL(_SubmissionSystem):
         if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
         if (self.submission):
             try:
-                for jobID in range(sub_job.start_Job, sub_job.end_job + 1):
+                for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                     std_out_buff = bash.execute(command="export JOBID=" + str(jobID) + " && " + command, env=self._enviroment)
                     std_out = "\n".join(std_out_buff.readlines())
                     if self.verbose: print("sdtout : " + str(std_out))

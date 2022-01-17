@@ -24,6 +24,7 @@ class Submission_job():
                         errLog: str=None, 
                         start_job: int = None, 
                         end_job: int = None,
+                        jobLim:int = None,
                         queue_after_jobID: int = None, 
                         post_execution_command: str = None, 
                         submit_from_dir: str = None,
@@ -36,6 +37,7 @@ class Submission_job():
         self._errLog = errLog
         self._start_job = start_job
         self._end_job = end_job
+        self._jobLim = jobLim
         self._queue_after_jobID = queue_after_jobID
         self._post_execution_command = post_execution_command
         self._submit_from_dir = submit_from_dir
@@ -79,6 +81,17 @@ class Submission_job():
         return self._end_job
 
     @property
+    def jobLim(self) -> int:
+        return self._jobLim
+
+    @jobLim.setter
+    def jobLim(self, jobLim: int) -> None:
+        if isinstance(jobLim, int):
+            self._jobLim = jobLim
+        else:
+            raise ValueError("jobLim must be an int")
+
+    @property
     def queue_after_jobID(self) -> int:
         return self._queue_after_jobID
     
@@ -101,3 +114,10 @@ class Submission_job():
     @property
     def jobID(self) -> int:
         return self._jobID
+
+    @jobID.setter
+    def jobID(self, jobID: int) -> None:
+        if isinstance(jobID, int):
+            self._jobID = jobID
+        else:
+            raise ValueError("jobID must be an int")
