@@ -1,6 +1,8 @@
 from typing import List, Union
 import pandas as pd
 
+from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
+
 class _SubmissionSystem:
     verbose: bool
     submission: bool
@@ -52,23 +54,11 @@ class _SubmissionSystem:
         self.begin_mail = begin_mail
         self.end_mail = end_mail
 
-    def submit_to_queue(self, **kargs) -> Union[int, None]:
-        """submit_to_queue
-            This function submits a str command to the submission system.
+    def submit_to_queue(self, sub_job:Submission_job) -> int:
+        return -1
 
-        Parameters
-        ----------
-        command : str
-            command to be submitted
-        kwargs
-
-        Returns
-        -------
-        int, None
-            if a job was submitted the jobID is returned else None.
-
-        """
-        raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
+    def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
+        return -1
 
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
         """
@@ -111,7 +101,7 @@ class _SubmissionSystem:
         NotImplementedError
             Needs to be implemented in subclasses
         """
-
+        
         raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
 
     def search_queue_for_jobid(self, job_id: int, **kwargs)->pd.DataFrame:
