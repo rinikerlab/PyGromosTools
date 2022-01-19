@@ -71,6 +71,9 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Playground script
+script.py
+
 # pyenv
 .python-version
 
