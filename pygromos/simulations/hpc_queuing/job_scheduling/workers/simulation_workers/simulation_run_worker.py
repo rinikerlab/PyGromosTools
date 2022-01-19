@@ -3,7 +3,7 @@ import os
 import sys
 import time
 package_path = os.path.abspath(__file__+"/../../../../../..")
-print(package_path)
+# print(package_path)
 sys.path.append(package_path)
 
 from pygromos.gromos import gromosXX as mdGromosXX

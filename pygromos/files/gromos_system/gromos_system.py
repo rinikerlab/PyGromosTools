@@ -280,7 +280,6 @@ class Gromos_System():
 
 
     def copy(self, no_traj:bool=True):
-
         return copy.deepcopy(self)
 
 
@@ -298,6 +297,10 @@ class Gromos_System():
     def work_folder(self, work_folder:str):
         self._work_folder = work_folder
         self._update_all_file_paths()
+
+    # Updates the work folder without updating all file paths
+    def work_folder_no_update(self, work_folder:str):
+        self._work_folder = work_folder
 
     @property
     def name(self)->str:

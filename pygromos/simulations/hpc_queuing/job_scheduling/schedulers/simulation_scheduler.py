@@ -151,7 +151,7 @@ def do(in_simSystem: Gromos_System,
             tmp_jobname = in_simSystem.name + "_ana"
 
             ana_log = os.path.dirname(analysis_script_path) + "/ana_out.log"
-            if (verbose): print(spacer + "\n submit Final AnaLysis part \n")
+            if (verbose): print(spacer + "\n submit final analysis part \n")
             if (verbose): print(ana_log)
             if (verbose): print(analysis_script_path)
 

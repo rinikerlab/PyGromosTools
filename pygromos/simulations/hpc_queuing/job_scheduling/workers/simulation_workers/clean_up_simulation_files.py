@@ -10,7 +10,7 @@ import argparse
 import glob
 import os, sys
 package_path = os.path.abspath(__file__+"/../../../../../..")
-print(package_path)
+# print(package_path)
 sys.path.append(package_path)
 
 from pygromos.utils.utils import time_wait_s_for_filesystem
