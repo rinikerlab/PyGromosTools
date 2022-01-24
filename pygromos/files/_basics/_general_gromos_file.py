@@ -10,8 +10,6 @@ import inspect
 import warnings
 from typing import List, Dict, Callable
 
-from attr import has
-
 from pygromos.files.blocks import _all_blocks as blocks
 
 
