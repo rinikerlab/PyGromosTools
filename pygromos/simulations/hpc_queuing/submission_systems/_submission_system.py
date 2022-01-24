@@ -1,6 +1,8 @@
 from typing import List, Union
 import pandas as pd
 
+from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
+
 class _SubmissionSystem:
     verbose: bool
     submission: bool
@@ -13,7 +15,7 @@ class _SubmissionSystem:
 
     def __init__(self, submission: bool = False,
                  nmpi: int = 1, nomp: int = 1, max_storage: float = 1000, job_duration: str = "24:00",
-                 verbose: bool = False, enviroment=None):
+                 verbose: bool = False, enviroment=None, block_double_submission:bool=True, chain_prefix:str="done", begin_mail:bool=False, end_mail:bool=False):
         """
             Construct a submission system with required parameters.
 
@@ -33,6 +35,11 @@ class _SubmissionSystem:
             let me write you a book!  (default: False)
         enviroment: dict, optional
             here you can pass environment variables as dict{varname: value} (default: None)
+        block_double_submission: bool, optional
+            if a job with the same name is already in the queue, it will not be submitted again. (default: True)
+        chain_prefix: str, optional
+            the mode with witch jobs are chained together (default: "done") 
+            (options: "done", "exit", "ended", "started", "post_done", "post_err")
         """
         self.verbose = verbose
         self.submission = submission
@@ -42,24 +49,16 @@ class _SubmissionSystem:
         self._nomp = nomp
         self._max_storage = max_storage
         self._enviroment = enviroment
+        self._block_double_submission = block_double_submission
+        self.chain_prefix = chain_prefix
+        self.begin_mail = begin_mail
+        self.end_mail = end_mail
 
-    def submit_to_queue(self, **kargs) -> Union[int, None]:
-        """submit_to_queue
-            This function submits a str command to the submission system.
+    def submit_to_queue(self, sub_job:Submission_job) -> int:
+        return -1
 
-        Parameters
-        ----------
-        command : str
-            command to be submitted
-        kwargs
-
-        Returns
-        -------
-        int, None
-            if a job was submitted the jobID is returned else None.
-
-        """
-        raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
+    def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
+        return -1
 
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
         """
@@ -86,6 +85,9 @@ class _SubmissionSystem:
             self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", job_duration=\""+str(self.job_duration)+"\")\n\n"
         return gen_cmd
 
+    def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
+        return []
+
     def search_queue_for_jobname(self, job_name: str, regex:bool=False, **kwargs)->pd.DataFrame:
         """get_jobs_from_queue
 
@@ -102,7 +104,7 @@ class _SubmissionSystem:
         NotImplementedError
             Needs to be implemented in subclasses
         """
-
+        
         raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
 
     def search_queue_for_jobid(self, job_id: int, **kwargs)->pd.DataFrame:

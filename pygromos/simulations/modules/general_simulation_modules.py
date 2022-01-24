@@ -219,7 +219,10 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             gromos_system.trg._future_file = True
             gromos_system.trg.path = final_trg_file
 
-    gromos_system.work_folder = init_work_folder
+    # Set work_folder to initial work folder path to avoid nested simulations
+    # However, do not update all file names (work_folder_no_update) to avoid
+    # compromising the file system structure
+    gromos_system.work_folder_no_update(init_work_folder)
     gromos_system._last_jobID = last_jobID
 
     return gromos_system

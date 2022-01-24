@@ -207,6 +207,21 @@ class _general_gromos_file():
             else:
                 raise Exception("Not implemented")
 
+    def delete_block(self, blockName: str):
+        """
+        delete_block
+            This method deletes a block from a gromos file object.
+
+        Parameters
+        ----------
+        blockName :    str
+            title of a block
+        """
+        if blockName in self._blocksset_names:
+            self._blocksset_names.remove(blockName)
+        if hasattr(self, blockName):
+            delattr(self, blockName)
+
     def kwCreateBlock(self, blocktitle, content, blocks_lib):
         block_type = blocks_lib.__getattribute__(blocktitle) #get the blocktype
         sig = inspect.signature(block_type.__init__)    #block init signature

@@ -10,6 +10,7 @@ from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions import chain_submission
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers import simulation_run_worker as workerScript
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
+from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF
 from pygromos.utils import bash, utils
 
@@ -126,8 +127,7 @@ def do(in_simSystem: Gromos_System,
                              out_dir_path= out_dir_path, out_prefix=tmp_outprefix,
                              jobname=tmp_jobname,
                              chain_job_repetitions=equilibration_run_num, worker_script=workerScript.__file__,
-                             job_submission_system=submission_system,
-                             do_not_doubly_submit_to_queue=no_double_submit, start_run_index = 1,
+                             job_submission_system=submission_system, start_run_index = 1,
                              prefix_command =  "", previous_job_ID = previous_job_ID, work_dir = work_dir,
                              initialize_first_run = True, reinitialize = False,
                              verbose = job_verb)
@@ -142,7 +142,6 @@ def do(in_simSystem: Gromos_System,
                          chain_job_repetitions=equilibration_run_num + simulation_run_num, start_run_index = equilibration_run_num+1,
                          worker_script=workerScript.__file__,
                          job_submission_system=submission_system,
-                         do_not_doubly_submit_to_queue=no_double_submit,
                          prefix_command =  "", previous_job_ID = previous_job_ID, work_dir = None,
                          initialize_first_run= False, reinitialize= False,
                          verbose = job_verb)
@@ -152,14 +151,15 @@ def do(in_simSystem: Gromos_System,
             tmp_jobname = in_simSystem.name + "_ana"
 
             ana_log = os.path.dirname(analysis_script_path) + "/ana_out.log"
-            if (verbose): print(spacer + "\n submit Final AnaLysis part \n")
+            if (verbose): print(spacer + "\n submit final analysis part \n")
             if (verbose): print(ana_log)
             if (verbose): print(analysis_script_path)
 
-
-
-            ana_previous_job_ID = submission_system.submit_to_queue("python3 "+analysis_script_path, jobName=tmp_jobname,
-                                                                outLog=ana_log, queue_after_jobID=previous_job_ID, verbose=True)
+            sub_job = Submission_job(command="python3 "+analysis_script_path,
+                                    jobName=tmp_jobname,
+                                    outLog=ana_log,
+                                    queue_after_jobID=previous_job_ID)
+            ana_previous_job_ID = submission_system.submit_to_queue(sub_job)
 
             if (verbose): print("ANA jobID: " + str(previous_job_ID))
 
