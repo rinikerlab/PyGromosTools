@@ -10,6 +10,8 @@ import inspect
 import warnings
 from typing import List, Dict, Callable
 
+from attr import has
+
 from pygromos.files.blocks import _all_blocks as blocks
 
 
@@ -208,8 +210,19 @@ class _general_gromos_file():
                 raise Exception("Not implemented")
 
     def delete_block(self, blockName: str):
-        self._blocksset_names.remove(blockName)
-        setattr(self, blockName, None)
+        """
+        delete_block
+            This method deletes a block from a gromos file object.
+
+        Parameters
+        ----------
+        blockName :    str
+            title of a block
+        """
+        if blockName in self._blocksset_names:
+            self._blocksset_names.remove(blockName)
+        if hasattr(self, blockName):
+            delattr(self, blockName)
 
     def kwCreateBlock(self, blocktitle, content, blocks_lib):
         block_type = blocks_lib.__getattribute__(blocktitle) #get the blocktype
