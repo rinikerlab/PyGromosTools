@@ -84,9 +84,6 @@ class Cnf(_general_gromos_file):
     """
         Manage coordinates
     """
-    def delete_block(self, blockName: str):
-        self._blocksset_names.remove(blockName)
-        setattr(self, blockName, None)
 
     def add_empty_box(self):
         self.add_block(block=GENBOX())

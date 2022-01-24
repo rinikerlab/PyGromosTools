@@ -207,6 +207,10 @@ class _general_gromos_file():
             else:
                 raise Exception("Not implemented")
 
+    def delete_block(self, blockName: str):
+        self._blocksset_names.remove(blockName)
+        setattr(self, blockName, None)
+
     def kwCreateBlock(self, blocktitle, content, blocks_lib):
         block_type = blocks_lib.__getattribute__(blocktitle) #get the blocktype
         sig = inspect.signature(block_type.__init__)    #block init signature
