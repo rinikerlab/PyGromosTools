@@ -111,6 +111,9 @@ class LSF(_SubmissionSystem):
         if (isinstance(self.max_storage, int)):
             submission_string += " -R rusage[mem=" + str(self.max_storage) + "] "
 
+        #PMK test
+        #submission_string += " -R select[hname!='host06-x12']"
+
         if (isinstance(queue_after_jobID, (int, str)) and (queue_after_jobID != 0 or queue_after_jobID != "0")):
             prefix = "done"
             if (force_queue_start_after):

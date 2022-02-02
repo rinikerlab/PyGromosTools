@@ -758,15 +758,28 @@ class Solvation_free_energy_calculation:
             system_name = self.system_name + "_L" + str(rlam) + "_" + str(iteration)
             path = self.groSys_liq.work_folder + "/ti/" + system_name + "/" + system_name + "/"
 
-            # Extract files
-            command = "tar" + " "
-            command += "-xf" + " "
-            command += path + "simulation.tar "
-            command += "-C " + path
-            bash.execute(command, verbose=True)
+            if os.path.isfile(path + "simulation.tar"):
+                sim_tar_exists = True
+                print('tar exsists')
+                # Extract files
+                command = "tar" + " "
+                command += "-xf" + " "
+                command += path + "simulation.tar "
+                command += "-C " + path
+                bash.execute(command, verbose=False)
+            else:
+                sim_tar_exists = False
+
 
             # get trg info
-            trg = Trg(path + "simulation/" + system_name + "_1/" + system_name + "_1.trg.gz")
+            if os.path.isfile(path + "simulation/" + system_name + "_1/" + system_name + "_1.trg.gz"):
+                trg = Trg(path + "simulation/" + system_name + "_1/" + system_name + "_1.trg.gz")
+            elif os.path.isfile(path + "simulation/" + system_name + "_1/" + system_name + "_1.trg"):
+                warnings.warn('Simulation did not finish correctly using limited data!')
+                trg = Trg(path + "simulation/" + system_name + "_1/" + system_name + "_1.trg")
+            else:
+                print(path + "simulation/" + system_name + "_1/" + system_name)
+                exit('No Files have been found')
             # if l == 10:
             #     print([trg.database.totals[i][2] for i in range(len(trg.database.totals))])
             #     exit()
@@ -774,13 +787,17 @@ class Solvation_free_energy_calculation:
             dhdls = [trg.database.totals[i][2] for i in range(len(trg.database.totals))]
 
             # Remove simulation directory
-            bash.remove_file(path + "simulation", recursive=True)
+            if sim_tar_exists:
+                bash.remove_file(path + "simulation", recursive=True)
 
             # Get values
             lambdas.append(rlam)
             averages.append(np.mean(dhdls))
             rmsds.append(ee(dhdls).calculate_rmsd())
             ees.append(ee(dhdls).calculate_ee())
+            # if l==19:
+            #     break
+            #print(np.mean(dhdls))
 
         Metrics["Lambda"] = lambdas
         Metrics["avg"] = averages
