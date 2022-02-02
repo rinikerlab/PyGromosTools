@@ -403,6 +403,15 @@ class Top(_general_gromos_file._general_gromos_file):
             return int(self.ATOMTYPENAME.content[0][0])
 
     def add_new_atomtype(self, name:str, verbose=False):
+        """add a atomtype to ATOMTYPENAME block
+
+        Parameters
+        ----------
+        name : str
+            new atomtype name
+        verbose : bool, optional
+            by default False
+        """
         if not hasattr(self, "ATOMTYPENAME"):
             defaultContent=['0', 'Dummy']
             self.add_block(blocktitle="ATOMTYPENAME", content=defaultContent, verbose=verbose)
@@ -415,6 +424,15 @@ class Top(_general_gromos_file._general_gromos_file):
         self.ATOMTYPENAME.content[0][0] = str(int(self.ATOMTYPENAME.content[0][0])+1)
 
     def add_new_resname(self, name:str, verbose=False):
+        """add a resname to the RESNAME block
+
+        Parameters
+        ----------
+        name : str
+            resname name
+        verbose : bool, optional
+            by default False
+        """
         if not hasattr(self, "RESNAME"):
             defaultContent=['0', 'Dummy']
             self.add_block(blocktitle="RESNAME", content=defaultContent, verbose=verbose)
@@ -427,6 +445,8 @@ class Top(_general_gromos_file._general_gromos_file):
         self.RESNAME.content[0][0] = str(int(self.RESNAME.content[0][0])+1)
 
     def add_new_soluteatom(self, ATNM:int=0, MRES:int=0, PANM:str="", IAC:int=0, MASS:float=0, CG:float=0, CGC:int=0, INE:list=[], INE14:list=[], verbose=False):
+        """add a soluteatom to the SOLUTEATOM block
+        """
         if not hasattr(self, "SOLUTEATOM"):
             self.add_block(blocktitle="SOLUTEATOM", content=[], verbose=verbose)
             self.SOLUTEATOM.NRP = 0
@@ -445,6 +465,21 @@ class Top(_general_gromos_file._general_gromos_file):
 
 
     def add_new_bond(self, k:float, b0:float, atomI:int, atomJ:int, includesH:bool = False, verbose=False):
+        """add a bond between atom I and J to the BOND block
+
+        Parameters
+        ----------
+        k : float
+            force konstant
+        b0 : float
+            distance at which the force is 0
+        atomI : int
+            atom I
+        atomJ : int
+            atom J
+        includesH : bool, optional
+            wheter it should be added to BOND or BONDH, by default False
+        """
         #check if all classes are ready, if not create
         if not hasattr(self, "BONDSTRETCHTYPE"):
             self.add_block(blocktitle="BONDSTRETCHTYPE", content=list(), verbose=verbose)
@@ -484,6 +519,27 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BOND.NBON += 1
 
     def add_new_angle(self, k:float, kh:float, b0:float, atomI:int, atomJ:int, atomK:int, includesH:bool = False, verbose=False, convertToQuartic=False):
+        """add a angle between atom I, J and K to the ANGLE block
+
+        Parameters
+        ----------
+        k : float
+            force konstant
+        kh : float
+            force konstant harmonic
+        b0 : float
+            angle at which the force is 0
+        atomI : int
+            atom I
+        atomJ : int
+            atom J
+        atomK : int
+            atom K
+        includesH : bool, optional
+            ANGLE or ANGLEH, by default False
+        convertToQuartic : bool, optional
+            auto convert, by default False
+        """
         #check if all classes are ready, if not create
         if not hasattr(self, "BONDANGLEBENDTYPE"):
             self.add_block(blocktitle="BONDANGLEBENDTYPE", content=[], verbose=verbose)
@@ -547,6 +603,27 @@ class Top(_general_gromos_file._general_gromos_file):
         return 2*kbT/(term1 + term2)
 
     def add_new_torsiondihedral(self, CP:float, PD:float, NP:int, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
+        """add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block
+
+        Parameters
+        ----------
+        CP : float
+            force constant
+        PD : float
+            phase
+        NP : int
+            multiplicity
+        atomI : int
+            atom I
+        atomJ : int
+            atom J
+        atomK : int
+            atom K
+        atomL : int
+            atom L
+        includesH : bool, optional
+            DIHEDRAL or DIHEDRALH, by default False
+        """
         #check if all classes are ready, if not create
         if not hasattr(self, "TORSDIHEDRALTYPE"):
             self.add_block(blocktitle="TORSDIHEDRALTYPE", content=[], verbose=verbose)
@@ -581,6 +658,15 @@ class Top(_general_gromos_file._general_gromos_file):
 
     
     def add_new_impdihedral_type(self, CQ:float, Q0:float, verbose=False):
+        """add a new impodihedraltype
+
+        Parameters
+        ----------
+        CQ : float
+            force constant
+        Q0 : float
+            Q0
+        """
         #check if all classes are ready, if not create
         if not hasattr(self, "IMPDIHEDRALTYPE"):
             self.add_block(blocktitle="IMPDIHEDRALTYPE", content=[], verbose=verbose)
@@ -590,6 +676,25 @@ class Top(_general_gromos_file._general_gromos_file):
 
 
     def add_new_impdihedral(self, CQ:float, Q0:float, atomI:int, atomJ:int, atomK:int, atomL:int, includesH:bool = False, verbose=False):
+        """add a new impdihedral
+
+        Parameters
+        ----------
+        CQ : float
+            force constant
+        Q0 : float
+            Q0
+        atomI : int
+            atom I
+        atomJ : int
+            atom J
+        atomK : int
+            atom K
+        atomL : int
+            atom L
+        includesH : bool, optional
+            IMPDIHEDRALH or IMPDIHEDRAL, by default False
+        """
         #check if all classes are ready, if not create
         if not hasattr(self, "IMPDIHEDRALTYPE"):
             self.add_block(blocktitle="IMPDIHEDRALTYPE", content=[], verbose=verbose)
@@ -626,6 +731,21 @@ class Top(_general_gromos_file._general_gromos_file):
         raise NotImplementedError("Who needs this???? Could you plox implement it. UwU")
 
     def add_new_LJparameter(self, C6:float, C12:float, CS6:float=0, CS12:float=0, combination_rule:str="geometric", verbose=False, AddATOMTYPENAME:str=None, lowerBound:float=1e-100):
+        """add a LJ entry to the LJ parameter block
+
+        Parameters
+        ----------
+        C6 : float
+        C12 : float
+        CS6 : float, optional
+        CS12 : float, optional
+        combination_rule : str, optional
+            no other options supported rigth now, by default "geometric"
+        AddATOMTYPENAME : str, optional
+            if not None a new atomtype is made, by default None
+        lowerBound : float, optional
+            saftey, by default 1e-100
+        """
         if not hasattr(self, "LJPARAMETERS"):
             self.add_block(blocktitle="LJPARAMETERS", content=[], verbose=verbose)
             self.LJPARAMETERS.NRATT2 = 0
@@ -667,6 +787,7 @@ class Top(_general_gromos_file._general_gromos_file):
 
 
     def find_LJparameterNumber(self, C12:float, C6:float) -> int:
+        """find the LJ parameter number"""
         if not hasattr(self, "LJPARAMETERS"):
             return 0
         elif self.LJPARAMETERS.NRATT2 < 1:
@@ -678,6 +799,13 @@ class Top(_general_gromos_file._general_gromos_file):
             return 0 # LJ parameter not found
 
     def get_LJparameter_from_IAC(self, IAC:int):
+        """get the LJ parameter from the IAC number
+
+        Parameters
+        ----------
+        IAC : int
+            [description]
+        """
         if not hasattr(self, "LJPARAMETERS"):
             raise Exception("no LJPARAMETERS block to search in")
         if (IAC**2 - 1) > self.LJPARAMETERS.NRATT2:
@@ -686,6 +814,39 @@ class Top(_general_gromos_file._general_gromos_file):
 
 
     def add_new_atom(self, ATNM:int=0, MRES:int=0, PANM:str='_', IAC:int=1, MASS:float=1.0, CG:int=0, CGC:int=1, INE:list=[], INE14:list=[], verbose=False, C6:float=None, C12:float=None, CS6:float=0, CS12:float=0, IACname:str=None):
+        """add a atom to a system (with creating a new atomtype if needed and adding LJ parameters if needed)
+
+        Parameters
+        ----------
+        ATNM : int, optional
+            number of the atom in the system, by default 0
+        MRES : int, optional
+            residue number, by default 0
+        PANM : str, optional
+            name of the atom, by default '_'
+        IAC : int, optional
+            atomtype number of the atom, by default 1
+        MASS : float, optional
+            mass of the atom, by default 1.0
+        CG : int, optional
+            charge of the atom, by default 0
+        CGC : int, optional
+            charge group bool, by default 1
+        INE : list, optional
+            INE list, by default []
+        INE14 : list, optional
+            INE14 list, by default []
+        C6 : float, optional
+            C6 value, by default None
+        C12 : float, optional
+            C12 value, by default None
+        CS6 : float, optional
+            CS6 value, by default 0
+        CS12 : float, optional
+            CS12 value, by default 0
+        IACname : str, optional
+            new IACname if NONE PANM is used, by default None
+        """
         if IACname is None:
             IACname = PANM
         

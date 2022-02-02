@@ -5,10 +5,12 @@ on:
     branches:
       - "main"
       - "PyGromosTools_V1"
+      - "release3"
   pull_request:
     branches:
       - "main"
       - "PyGromosTools_V1"
+      - "release3"
   schedule:
     # Nightly tests run on master by default:
     #   Scheduled workflows run on the latest commit on the default or base branch.
