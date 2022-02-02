@@ -132,9 +132,9 @@ class LSF(_SubmissionSystem):
                 # next sopt_job is queued with id:
                 id_start = std_out.find("<")
                 id_end = std_out.find(">")
-                job_id = str(std_out[id_start + 1:id_end]).strip()
+                job_id = int(str(std_out[id_start + 1:id_end]).strip())
                 if self.verbose: print("process returned id: " + str(job_id))
-                if (job_id == "" and job_id.isalnum()):
+                if (str(job_id) == "" and job_id.isalnum()):
                     raise ValueError("Did not get at job ID!")
             except:
                 raise ChildProcessError("could not submit this command: \n" +
@@ -144,7 +144,7 @@ class LSF(_SubmissionSystem):
 
         os.chdir(orig_dir)
         sub_job.jobID = job_id
-        return int(job_id)
+        return job_id
 
     def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
         """
