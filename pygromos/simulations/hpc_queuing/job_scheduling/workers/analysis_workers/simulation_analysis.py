@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os, sys
 package_path = os.path.abspath(__file__+"/../../../../../..")
-print(package_path)
+# print(package_path)
 sys.path.append(package_path)
 
 import warnings

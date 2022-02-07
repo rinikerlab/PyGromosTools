@@ -83,7 +83,7 @@ class serenityff():
                     idx = atom.GetIdx()
 
             #get all matches
-            matches = self.mol.GetSubstructMatches(mol_pattern)
+            matches = self.mol.GetSubstructMatches(mol_pattern, uniquify=False)
             if len(matches) >= 1:
                 for match in matches:
                     idx_in_rdkmol = match[idx]

@@ -34,7 +34,7 @@ MULTIBATH
 #   DOFSET: number of distiguishable sets of d.o.f.
          1
 # LAST(1 ... DOFSET)  COMBATH(1 ... DOFSET)  IRBATH(1 ... DOFSET)
-      xxx         1         1
+      1         1         1
 END
 PRESSURESCALE
 # COUPLE   SCALE    COMP      TAUP  VIRIAL
@@ -51,7 +51,7 @@ FORCE
 # bonds    angles   imp.     dihe     charge nonbonded
   0        1        1        1        1        1
 # NEGR    NRE(1)    NRE(2)    ...      NRE(NEGR)
-     1    xxx
+     1    1
 END
 CONSTRAINT
 # NTC
