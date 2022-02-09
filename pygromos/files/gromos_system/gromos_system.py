@@ -118,8 +118,9 @@ class Gromos_System():
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.checkpoint_path = None
+        self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
-
+        
         #GromosFunctionality
         self._gromosPP_bin_dir = in_gromosPP_bin_dir
         self._gromosXX_bin_dir = in_gromosXX_bin_dir
@@ -182,7 +183,7 @@ class Gromos_System():
             self.cnf = Cnf(in_value=self.mol)
 
         
-        if(adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
+        if(self.adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
             self.adapt_imd()
 
         #misc
@@ -389,11 +390,11 @@ class Gromos_System():
         return self._imd
 
     @imd.setter
-    def imd(self, input_value:Union[str, Imd], adapt_imd_automatically:bool=True):
+    def imd(self, input_value:Union[str, Imd]):
         if(isinstance(input_value, str)):
             if(os.path.exists(input_value) or self._future_promise):
                 self._imd = Imd(in_value=input_value)
-                if (adapt_imd_automatically
+                if (self.adapt_imd_automatically
                     and not (self.cnf._future_file
                         and (self.residue_list is None
                              or self.solute_info is None))):
