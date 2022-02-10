@@ -12,8 +12,6 @@ from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_
 
 import pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.clean_up_simulation_files as zip_files
 
-from distutils import util
-
 def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str, runID:int=1,
          in_perttopo_path: str = None, in_disres_path: str= None, in_posres_path:str = None, in_refpos_path:str=None,
          out_trc:bool=False, out_tre: bool=False,
