@@ -7,7 +7,6 @@ from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
-from pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers import clean_up_simulation_files
 from pygromos.utils import bash
 from pygromos.utils.utils import spacer3
 
@@ -131,54 +130,64 @@ def chain_submission(simSystem:Gromos_System,
             prefix_command += ""
             if(len(prefix_command)>1):
                 prefix_command += " && "
-
-            # MAIN commands
-            md_script_command = prefix_command
-            md_script_command += "python3 " + worker_script + " "
-            md_script_command += "-out_dir " + tmp_outdir + " "
-            md_script_command += "-in_cnf_path " + simSystem.cnf.path + " "
-            md_script_command += "-in_imd_path " + simSystem.imd.path + " "
-            md_script_command += "-in_top_path " + simSystem.top.path + " "
-            md_script_command += "-runID " + str(runID) + " "
+            
+            # We will write the arguments to the python script in a bash array 
+            # to make it simpler to read in our input files. 
+            
+            md_args = "md_args=(\n"
+        
+            md_args += "-out_dir " + tmp_outdir + "\n"
+            md_args += "-in_cnf_path " + simSystem.cnf.path + "\n"
+            md_args += "-in_imd_path " + simSystem.imd.path + "\n"
+            md_args += "-in_top_path " + simSystem.top.path + "\n"
+            md_args += "-runID " + str(runID) + "\n"
 
             ## OPTIONAL ARGS
             if (not simSystem.disres is None):
-                md_script_command += "-in_disres_path " + simSystem.disres.path + " "
+                md_args += "-in_disres_path " + simSystem.disres.path + "\n"
             if (not simSystem.ptp is None):
-                md_script_command += "-in_perttopo_path " + simSystem.ptp.path + " "
+                md_args += "-in_perttopo_path " + simSystem.ptp.path + "\n"
             if (not simSystem.refpos is None):
-                md_script_command += "-in_refpos_path " + simSystem.refpos.path + " "
+                md_args += "-in_refpos_path " + simSystem.refpos.path + "\n"
             if (not simSystem.posres is None):
-                md_script_command += "-in_posres_path " + simSystem.posres.path + " "
-
-            #if(out_trg)
-
-            md_script_command += "-nmpi " + str(job_submission_system.nmpi) + " "
-            md_script_command += "-nomp " + str(job_submission_system.nomp) + " "
-            md_script_command += "-initialize_first_run "+str(initialize_first_run)+ " "
-            md_script_command += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + " "
-            if(not work_dir is None):
-                md_script_command += "-work_dir " + str(work_dir) + " "
+                md_args += "-in_posres_path " + simSystem.posres.path + "\n"
+            
+            md_args += "-nmpi " + str(job_submission_system.nmpi) + "\n"
+            md_args += "-nomp " + str(job_submission_system.nomp) + "\n"
+            md_args += "-initialize_first_run "+str(initialize_first_run)+ "\n"
+            md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"        
+    
+            if(work_dir is not None):
+                md_args += "-work_dir " + str(work_dir) + "\n"
 
             if(hasattr(simSystem.imd, "WRITETRAJ")):
                 if(simSystem.imd.WRITETRAJ.NTWX > 0):
-                    md_script_command += "-out_trc "+str(True)+" "
+                    md_args += "-out_trc "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWE > 0):
-                    md_script_command += "-out_tre "+str(True)+" "
+                    md_args += "-out_tre "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWV > 0):
-                    md_script_command += "-out_trv "+str(True)+" "
+                    md_args += "-out_trv "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWF > 0):
-                    md_script_command += "-out_trf "+str(True)+" "
+                    md_args += "-out_trf "+str(True)+ "\n"
                 if(simSystem.imd.WRITETRAJ.NTWG > 0):
-                    md_script_command += "-out_trg "+str(True)+" "
+                    md_args += "-out_trg "+str(True)+ "\n"
 
             if(verbose) and verbose_lvl >= 2: print("COMMAND: ", md_script_command)
+            
+            md_args += ")\n" # closing the bash array which stores all arguments.
+            
+            # add zip option here
+ 
+            # MAIN commands
+            md_script_command = prefix_command + "\n\n" + md_args + "\n"
+            md_script_command += "python3 " + worker_script + "  \"${md_args[@]}\" \n"    
 
             ## POST COMMAND
-            clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
-            clean_up_command = "python3 " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
-                tmp_outdir) + " -n_processes " + str(clean_up_processes)
-
+            #clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
+            #clean_up_command = "python3 " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
+            #    tmp_outdir) + " -n_processes " + str(clean_up_processes)
+            
+        
             if verbose: print("PREVIOUS ID: ", previous_job_ID)
 
             # SCHEDULE THE COMMANDS
@@ -197,22 +206,6 @@ def chain_submission(simSystem:Gromos_System,
             except ValueError as err:  # job already in the queue
                 raise ValueError("ERROR during submission of main job "+str(tmp_jobname)+":\n"+"\n".join(err.args))
 
-            try:
-                # schedule - simulation cleanup:
-                ##this mainly tars files.
-                if (verbose) and verbose_lvl >= 2: print("\tCLEANING")
-                sub_job = Submission_job(command=clean_up_command,
-                                        jobName=tmp_jobname + "_cleanup",
-                                        queue_after_jobID=previous_job_ID,
-                                        outLog=tmp_outdir + "/" + out_prefix + "_cleanup.out",
-                                        errLog=tmp_outdir + "/" + out_prefix + "_cleanup.err")
-                clean_id = job_submission_system.submit_to_queue(sub_job)
-
-                if verbose: print("CLEANING ID: ", previous_job_ID)
-
-            except ValueError as err:  # job already in the queue
-                raise ValueError("ERROR during submission of clean-up command of "+str(tmp_jobname)+"_cleanUP:\n"+"\n".join(err.args))
-
             # OPTIONAL schedule - analysis inbetween.
             if (runID > 1 and run_analysis_script_every_x_runs != 0 and
                     runID % run_analysis_script_every_x_runs == 0
@@ -223,7 +216,7 @@ def chain_submission(simSystem:Gromos_System,
                                         jobName=jobname + "_intermediate_ana_run_" + str(runID),
                                         outLog=tmp_outdir + "/" + out_prefix + "_inbetweenAna.out",
                                         errLog=tmp_outdir + "/" + out_prefix + "_inbetweenAna.err",
-                                        queue_after_jobID=clean_id)
+                                        queue_after_jobID=previous_job_ID)
                 try:
                     ana_id = job_submission_system.submit_to_queue(sub_job)
                     if (verbose) and verbose_lvl >= 2: print("\n")
@@ -232,7 +225,6 @@ def chain_submission(simSystem:Gromos_System,
                     print("\n".join(err.args))
         else:
             if(verbose) and verbose_lvl >= 2: print("Did not submit!")
-            clean_id = None
         if (verbose) and verbose_lvl >= 2: print("\n")
         if (verbose) and verbose_lvl >= 2: print("job_postprocess ")
         prefix_command = ""
@@ -240,5 +232,6 @@ def chain_submission(simSystem:Gromos_System,
         #Resulting cnf is provided to use it in further approaches.
         simSystem.cnf = tmp_out_cnf
 
-    previous_job_ID = clean_id if (ana_id is None) else ana_id
+    if (ana_id is not None) : previous_job_ID = ana_id
+      
     return previous_job_ID, tmp_jobname, simSystem
