@@ -196,6 +196,5 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 if __name__ == "__main__":
     # INPUT JUGGELING
     args = dynamic_parser(work, title="Run MD-Worker")
-    print (args)
     # WORK Command
     work(**vars(args))
