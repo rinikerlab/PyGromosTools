@@ -16,9 +16,9 @@ class LOCAL(_SubmissionSystem):
     """
 
     def __init__(self, submission: bool = True, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
-                 verbose: bool = False, enviroment=None):
+                 verbose: bool = False, enviroment=None, zip_trajectories: bool = True):
         time_wait_s_for_filesystem=0
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
+        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment, zip_trajectories=zip_trajectories)
 
     def submit_to_queue(self, sub_job:Submission_job) -> int:
         """

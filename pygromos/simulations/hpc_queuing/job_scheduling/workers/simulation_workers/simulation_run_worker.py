@@ -12,13 +12,15 @@ from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_
 
 import pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.clean_up_simulation_files as zip_files
 
+from distutils import util
+
 def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str, runID:int=1,
          in_perttopo_path: str = None, in_disres_path: str= None, in_posres_path:str = None, in_refpos_path:str=None,
          out_trc:bool=False, out_tre: bool=False,
          out_trg: bool = False, out_trv: bool = False, out_trf: bool = False, out_trs: bool = False,
          nmpi: int = 1, nomp: int = 1,
          reinitialize: bool = False, initialize_first_run:bool = True,
-         gromosXX_bin_dir: str = None, work_dir: str = None, **kwargs):
+         gromosXX_bin_dir: str = None, work_dir: str = None, zip_trajectories: bool = True, **kwargs):
     """
     Executed by repex_EDS_long_production_run as workers
 
@@ -52,6 +54,9 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
          path to gromos binary directory
     work_dir : str, optional
          work directory
+    zip_trajectories: bool
+        determines whether trajectories are zipped
+
     Returns
     -------
     int
@@ -75,7 +80,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     else:
         hosts = []
     multi_node = True if len(hosts) > 1 else False
-
+    
     # run a euler script to create tmpdir on all nodes
     if multi_node: os.system('remote_tmpdir create')
     
@@ -163,7 +168,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         
         # zip the files after the simulation.
         n_cpu_zip = nmpi if nmpi >= nomp else nomp
-        if not multi_node:
+        if not multi_node and zip_trajectories:
             zip_files.do(in_simulation_dir=work_dir, n_processes=n_cpu_zip)    
 
         # Copy the files back to the proper directory when calc occured on scratch
@@ -177,7 +182,8 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
             os.system('remote_tmpdir delete') # Works for both multi or single node                
         
         # Note: If job is multi-node, it is simpler to zip things in out_dir after copying back
-        if multi_node: zip_files.do(in_simulation_dir=out_dir, n_processes=n_cpu_zip)
+        if multi_node and zip_trajectories: 
+            zip_files.do(in_simulation_dir=out_dir, n_processes=n_cpu_zip)
 
     except Exception as err:
         print("\nFailed during simulations: ", file=sys.stderr)
@@ -192,5 +198,6 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 if __name__ == "__main__":
     # INPUT JUGGELING
     args = dynamic_parser(work, title="Run MD-Worker")
+    print (args)
     # WORK Command
     work(**vars(args))

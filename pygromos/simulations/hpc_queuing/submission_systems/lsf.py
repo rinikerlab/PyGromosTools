@@ -30,7 +30,8 @@ class LSF(_SubmissionSystem):
                         bjobs_only_same_host:bool=False, 
                         chain_prefix:str="done", 
                         begin_mail:bool=False, 
-                        end_mail:bool=False):
+                        end_mail:bool=False, 
+                        zip_trajectories: bool = True):
         # general settings for the submission system
         super().__init__(verbose=verbose, 
                         nmpi=nmpi, nomp=nomp, 
@@ -41,7 +42,8 @@ class LSF(_SubmissionSystem):
                         block_double_submission=block_double_submission, 
                         chain_prefix=chain_prefix, 
                         begin_mail=begin_mail, 
-                        end_mail=end_mail)
+                        end_mail=end_mail, 
+                        zip_trajectories=zip_trajectories)
         # Only LSF specific settings:
         self.bjobs_only_same_host = bjobs_only_same_host
 

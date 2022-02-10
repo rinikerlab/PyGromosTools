@@ -174,6 +174,8 @@ def chain_submission(simSystem:Gromos_System,
 
             if(verbose) and verbose_lvl >= 2: print("COMMAND: ", md_script_command)
             
+            md_args += "-zip_trajectories " + str(job_submission_system.zip_trajectories) + "\n"
+
             md_args += ")\n" # closing the bash array which stores all arguments.
             
             # add zip option here
@@ -182,12 +184,6 @@ def chain_submission(simSystem:Gromos_System,
             md_script_command = prefix_command + "\n\n" + md_args + "\n"
             md_script_command += "python3 " + worker_script + "  \"${md_args[@]}\" \n"    
 
-            ## POST COMMAND
-            #clean_up_processes = job_submission_system.nomp if (job_submission_system.nomp > job_submission_system.nmpi) else job_submission_system.nmpi
-            #clean_up_command = "python3 " + str(clean_up_simulation_files.__file__) + "  -in_simulation_dir " + str(
-            #    tmp_outdir) + " -n_processes " + str(clean_up_processes)
-            
-        
             if verbose: print("PREVIOUS ID: ", previous_job_ID)
 
             # SCHEDULE THE COMMANDS
