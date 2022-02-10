@@ -8,6 +8,7 @@ import inspect
 import math
 import os
 from typing import Dict, List
+from xmlrpc.client import Boolean
 
 spacer0 = "!" * 90 + "\n"
 spacer = "#" * 80 + "\n"
@@ -24,6 +25,16 @@ def _cartesian_distance(x1: float, x2: float, y1: float, y2: float, z1: float, z
 """
 File and submission
 """
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def dynamic_parser(func: callable, title: str):
     """
@@ -57,6 +68,8 @@ def dynamic_parser(func: callable, title: str):
         index = args.args.index(argument)
         required = True if (index < total_required) else False
         default = None if (required) else args.defaults[index - total_required]
+        if argument_type is bool:
+            argument_type = str2bool
         parser.add_argument('-' + argument, type=argument_type, required=required, default=default)
 
     args, unkown_args = parser.parse_known_args()
