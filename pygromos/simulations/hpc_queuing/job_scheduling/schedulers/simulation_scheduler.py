@@ -23,7 +23,7 @@ def do(in_simSystem: Gromos_System,
        work_dir: str = None,
        analysis_script_path: str = None,
        submission_system:_SubmissionSystem = LSF(),
-       previous_job_ID: int = None, no_double_submit:bool=True,
+       previous_job_ID: int = None, no_double_submit:bool=False,
        verbose: bool = True, verbose_lvl:int=1):
     """
 
