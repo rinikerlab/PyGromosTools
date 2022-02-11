@@ -100,35 +100,38 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         if (imd_file.STOCHDYN.NTSD):
             is_stochastic_dynamics_sim = True
 
-    if (reinitialize or (initialize_first_run and runID == 1)):
-        imd_file.INITIALISE.NTIVEL = 1
-        imd_file.INITIALISE.NTISHK = 0
-        imd_file.INITIALISE.NTINHT = 0
-        imd_file.INITIALISE.NTINHB = 0
-        imd_file.INITIALISE.NTISHI = 0
-        imd_file.INITIALISE.NTIRTC = 0
-        imd_file.INITIALISE.NTICOM = 0
-        imd_file.INITIALISE.NTISTI = 0
-
-        if (is_stochastic_dynamics_sim):
-            imd_file.INITIALISE.NTISHI = 1
-            imd_file.INITIALISE.NTISTI = 1
-        else:
-            imd_file.INITIALISE.NTISHK = 3
-            imd_file.INITIALISE.NTISHI = 1
-
+    if (True): #emin
+        pass
     else:
-        imd_file.INITIALISE.NTIVEL = 0
-        imd_file.INITIALISE.NTISHK = 0
-        imd_file.INITIALISE.NTINHT = 0
-        imd_file.INITIALISE.NTINHB = 0
-        imd_file.INITIALISE.NTISHI = 0
-        imd_file.INITIALISE.NTIRTC = 0
-        imd_file.INITIALISE.NTICOM = 0
-        imd_file.INITIALISE.NTISTI = 0
+        if (reinitialize or (initialize_first_run and runID == 1)):
+            imd_file.INITIALISE.NTIVEL = 1
+            imd_file.INITIALISE.NTISHK = 0
+            imd_file.INITIALISE.NTINHT = 0
+            imd_file.INITIALISE.NTINHB = 0
+            imd_file.INITIALISE.NTISHI = 0
+            imd_file.INITIALISE.NTIRTC = 0
+            imd_file.INITIALISE.NTICOM = 0
+            imd_file.INITIALISE.NTISTI = 0
 
-        if (is_stochastic_dynamics_sim or is_vacuum):
-            imd_file.INITIALISE.NTISHI = 1
+            if (is_stochastic_dynamics_sim):
+                imd_file.INITIALISE.NTISHI = 1
+                imd_file.INITIALISE.NTISTI = 1
+            else:
+                imd_file.INITIALISE.NTISHK = 3
+                imd_file.INITIALISE.NTISHI = 1
+
+        else:
+            imd_file.INITIALISE.NTIVEL = 0
+            imd_file.INITIALISE.NTISHK = 0
+            imd_file.INITIALISE.NTINHT = 0
+            imd_file.INITIALISE.NTINHB = 0
+            imd_file.INITIALISE.NTISHI = 0
+            imd_file.INITIALISE.NTIRTC = 0
+            imd_file.INITIALISE.NTICOM = 0
+            imd_file.INITIALISE.NTISTI = 0
+
+            if (is_stochastic_dynamics_sim or is_vacuum):
+                imd_file.INITIALISE.NTISHI = 1
 
     ##Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)
