@@ -148,6 +148,8 @@ def chain_submission(simSystem:Gromos_System,
                 md_script_command += "-in_perttopo_path " + simSystem.ptp.path + " "
             if (not simSystem.refpos is None):
                 md_script_command += "-in_refpos_path " + simSystem.refpos.path + " "
+            if (not simSystem.qmmm is None):
+                md_script_command += "-in_qmmm_path " + simSystem.qmmm.path + " "
             if (not simSystem.posres is None):
                 md_script_command += "-in_posres_path " + simSystem.posres.path + " "
 

@@ -31,7 +31,10 @@ class qmzone_field(_generic_field):
         self.QMEB = int(QMEB)
 
     def to_string(self):
-        str_line = str(self.QMEN) + "\t\t\t\t\t" + str(self.QMEI) + "\t" + str(self.QMEZ) + "\t" + str(self.QMEB) +"\n"
+        # the first 24 characters or so are ignored by Gromos
+        # use spaces instead of tabs and format the resulting
+        # table nicely using ljust and rjust
+        str_line = str(self.QMEN).ljust(27) + str(self.QMEI).rjust(6) + str(self.QMEZ).rjust(6) + str(self.QMEB).rjust(6) + "\n"
         return str_line
 
 
@@ -44,8 +47,13 @@ class QMZONE(_topology_table_block):
         super().__init__(content=content, FORCEFIELD=None, MAKETOPVERSION=None)
 
     def block_to_string(self) -> str:
-        result = self.name + "\n"
-        result += super().block_to_string()
+        result = self.name + "\n" # QMZONE
+        result += f"{self.comment_char} {self.table_header[0]}".ljust(27)
+        for element in self.table_header[1:]:
+            result += element.rjust(6)
+        result += "\n"
+        for element in self.content:
+            result += element.to_string()
         result += "END\n"
         return result
 
@@ -86,10 +94,10 @@ class QMUNIT(_topology_block):
             print("Error while reading QMUNIT block: " + str(e))
 
     def block_to_string(self) -> str:   
-        result = self.name + "\n"
-        result += self.comment_char + self.field_seperator
-        for element in self.table_header:
-            result += element + self.field_seperator
+        result = self.name + "\n" # QMUNIT
+        result += f"{self.comment_char} {self.table_header[0]}".ljust(17)
+        for element in self.table_header[1:]:
+            result += element.ljust(15)
         result += "\n"
         result += str(self.QLGL) + self.field_seperator + str(self.QEGE) + self.field_seperator + str(self.QCGC) + self.field_seperator + str(self.QIGI) + self.line_seperator
         result += "END\n"

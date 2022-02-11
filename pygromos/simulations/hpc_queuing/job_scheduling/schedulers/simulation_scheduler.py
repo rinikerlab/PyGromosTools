@@ -95,6 +95,8 @@ def do(in_simSystem: Gromos_System,
             check_path_dependencies_paths.append(in_simSystem.posres.path)
         if (not in_simSystem.refpos is None):
             check_path_dependencies_paths.append(in_simSystem.refpos.path)
+        if (not in_simSystem.qmmm is None):
+            check_path_dependencies_paths.append(in_simSystem.qmmm.path)
 
             #prepared_imd = bash.copy_file(in_simSystem.imd.path, prepared_imd) #Todo: Remove? @bschroed
 

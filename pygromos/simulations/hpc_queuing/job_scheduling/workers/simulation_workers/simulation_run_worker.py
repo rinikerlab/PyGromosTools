@@ -15,7 +15,7 @@ from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_
 
 def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str, runID:int=1,
          in_perttopo_path: str = None, in_disres_path: str= None, in_posres_path:str = None, in_refpos_path:str=None,
-         out_trc:bool=False, out_tre: bool=False,
+         in_qmmm_path:str=None, out_trc:bool=False, out_tre: bool=False,
          out_trg: bool = False, out_trv: bool = False, out_trf: bool = False, out_trs: bool = False,
          nmpi: int = 1, nomp: int = 1,
          reinitialize: bool = False, initialize_first_run:bool = True,
@@ -37,6 +37,8 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         input pertubation
     in_disres_path : str
         input disres
+    in_qmmm_path : str
+        input qmmm
     nmpi : int, optional
         number of mpi cores (def.=1)
     nomp : int, optional
@@ -144,7 +146,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
             omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
                                      in_pert_topo_path=in_perttopo_path, in_disres_path=in_disres_path,
                                      in_posresspec_path=in_posres_path, in_refpos_path=in_refpos_path,
-                                     nmpi=nmpi, nomp=nomp,
+                                     in_qmmm_path=in_qmmm_path, nmpi=nmpi, nomp=nomp,
                                      out_prefix=out_prefix,
                                      out_tre=out_tre, out_trc=out_trc,
                                      out_trg=out_trg, out_trs=out_trs, out_trf=out_trf, out_trv=out_trv,

@@ -61,7 +61,7 @@ class _Gromos:
     @gromosTypeConverter
     def md_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
                    in_pert_topo_path:str=None, in_disres_path:str=None, in_posresspec_path:str=None, in_refpos_path:str=None,
-                   nomp: int = 1, nmpi: int = 1,
+                   in_qmmm_path:str=None, nomp: int = 1, nmpi: int = 1,
                    out_trc: bool = False, out_tre: bool = False, out_trv: bool = False, out_trf: bool = False,
                    out_trs: bool = False, out_trg:bool = False,
                    verbose:bool = False) -> str:
@@ -162,6 +162,9 @@ class _Gromos:
 
         if not in_refpos_path is None:
             command += ["@refpos", str(in_refpos_path)]
+
+        if not in_qmmm_path is None:
+            command += ["@qmmm", str(in_qmmm_path)]
 
         if isinstance(out_prefix, str):
             command += ["@fin", str(out_prefix) + ".cnf"]
