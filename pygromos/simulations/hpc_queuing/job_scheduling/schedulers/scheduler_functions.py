@@ -2,6 +2,7 @@ import glob
 import os
 
 import pandas as pd
+from pygromos.files.coord.cnf import Cnf
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
@@ -226,7 +227,7 @@ def chain_submission(simSystem:Gromos_System,
         prefix_command = ""
 
         #Resulting cnf is provided to use it in further approaches.
-        simSystem.cnf = tmp_out_cnf
+        simSystem.cnf = Cnf(tmp_out_cnf, _future_file=True)
 
     if (ana_id is not None) : previous_job_ID = ana_id
       
