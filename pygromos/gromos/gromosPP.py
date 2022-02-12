@@ -561,7 +561,7 @@ class _gromosPPbase:
     def gch(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
             tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
         """
-                    This function protonates a coordinate file.
+                    This function adds reasonable hydrogenpositions a coordinate file.
 
         Parameters
         ----------
