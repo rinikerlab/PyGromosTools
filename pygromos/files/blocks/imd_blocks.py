@@ -335,8 +335,6 @@ class REPLICA(_generic_imd_block):
 
 
 
-
-
 class NEW_REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
 
@@ -542,7 +540,7 @@ class BOUNDCOND(_generic_imd_block):
             self.NTB = int(NTB)
             self.NDFMIN = int(NDFMIN)
 
-    
+
 class STOCHDYN(_generic_imd_block):
     """Stochastic Dynamics block
 
@@ -1671,17 +1669,30 @@ class PRINTOUT(_generic_imd_block):
 
 class ENERGYMIN(_generic_imd_block):
     """ENERGYMIN block
-
+        This block takes care of managing the Energyminimization controls.
+        
         Attributes
         ----------
         NTEM:   int
+            controls energy minimisation mode.
+            0: do not do energy minimisation (default)
+            1: steepest-descent minimisation
+            2: Fletcher-Reeves conjugate-gradient minimisation
+            3: Polak-Ribiere conjugate-gradient minimisation
         NCYC:   int
+            >0 number of steps before resetting the conjugate-gradient search direction
+            =0 reset only if the energy grows in the search direction
         DELE:   float
+            >0.0 energy threshold for convergence
+            >0.0 (conjugate-gradient) RMS force threshold for convergence
         DX0:    float
+            >0.0 initial step size
         DXM:    float
+            >0.0 maximum step size
         NMIN:   float
+            >0 minimum number of minimisation steps
         FLIM:   float
-
+            >=0.0 limit force to maximum value (FLIM > 0.0 is not recommended)
     """
     name = "ENERGYMIN"
 
@@ -1695,7 +1706,7 @@ class ENERGYMIN(_generic_imd_block):
 
     _order = [["NTEM    NCYC    DELE    DX0     DXM   NMIN   FLIM".split()]]
 
-    def __init__(self, NTEM=0, NCYC=0, DELE=0, DX0=0, DXM=0, NMIN=0, FLIM=0, content=None):
+    def __init__(self, NTEM:int=0, NCYC:int=0, DELE:float=0, DX0:float=0, DXM:float=0, NMIN:int=0, FLIM:float=0, content=None):
         super().__init__(used=True, content=content)
         if content is None:
             self.NTEM = NTEM
@@ -1705,7 +1716,6 @@ class ENERGYMIN(_generic_imd_block):
             self.DXM = DXM
             self.NMIN = NMIN
             self.FLIM = FLIM
-
 
 class WRITETRAJ(_generic_imd_block):
     """WRITETRAJ

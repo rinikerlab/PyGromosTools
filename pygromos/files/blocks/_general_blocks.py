@@ -171,7 +171,7 @@ class TITLE(_generic_gromos_block):
     field_seperator:str = "\t"
     line_seperator:str = "\n"
     order = [[["content"]]]
-    pyGromosWatermark:str = "\t >>> Generated with PyGromosTools (riniker group) <<< "
+    pyGromosWatermark:str = ">>> Generated with PyGromosTools (riniker group) <<<"
 
     def __init__(self, content:str, field_seperator:str="\t", line_seperator:str="\n", name="TITLE", used=True):
         super().__init__(used=used, name=name, content=content)
@@ -193,21 +193,9 @@ class TITLE(_generic_gromos_block):
         result = ""
         result += str(self.name) + self.line_seperator
         result += "".join(self.content)
-        if (self.pyGromosWatermark not in self.content):
-            result += self.line_seperator+self.pyGromosWatermark+self.line_seperator
+        if (self.pyGromosWatermark not in result):
+            result += self.line_seperator+self.field_seperator+self.pyGromosWatermark+self.line_seperator
         result += "END" + self.line_seperator
-        return result
-
-    def block_to_string_old(self) -> str:
-        result = ""
-        result += str(self.name) + "\n"#double
-        result += "".join(self.content)
-        if ("\t >>> Generated with python lib function_libs utilities. (riniker group)\n" not in self.content):
-            result += "\n\t >>> Generated with python lib function_libs utilities. (riniker group)\n"
-            result += "\t >>> line_seperator: " + repr(self.line_seperator) + "\t field_seperator: " + repr(
-                self.field_seperator) +"\t comments_char: " + repr(
-                self.comment_char) + "\n"
-        result += "END\n"#double
         return result
 
 class TRAJ(_iterable_gromos_block):
