@@ -541,7 +541,7 @@ class Gromos_System():
     def gromosPP(self)->GromosPP:
         return self._gromosPP
 
-    @gromosXX.setter
+    @gromosPP.setter
     def gromosPP(self, input_value:Union[str, GromosPP]):
         if(isinstance(input_value, str)):
             if(os.path.exists(input_value)):
