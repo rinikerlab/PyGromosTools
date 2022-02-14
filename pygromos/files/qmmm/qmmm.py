@@ -64,15 +64,21 @@ class QMMM(_general_gromos_file._general_gromos_file):
         return blocks
 
     def get_qm_engines(self)->List[str]:
-        # Returns the QM engine used
-        # Actually returns a list of strings (in case the user wanted for some reason specify more than one engine)
+        """
+        Returns the QM engine used
+        Returns
+        -------
+        List[str]
+            A list of strings (in case the user wanted for some reason specify more than one engine)
+        """
         engine = [element.replace("ELEMENTS", "") for element in self.get_block_names() if element.endswith("ELEMENTS")]
         return engine
 
     def _health_check(self):
-        # Runs tests on the integrity of the file
-        # and spits out warnings
-        # members = [attr for attr in dir(self) if not callable(getattr(self, attr)) and attr.endswith("ELEMENTS")] 
+        """
+        Runs tests on the integrity of the file and spits out warnings
+        members = [attr for attr in dir(self) if not callable(getattr(self, attr)) and attr.endswith("ELEMENTS")] 
+        """
         members = [element for element in self.get_block_names() if element.endswith("ELEMENTS")]
         if(len(members) > 1):
             warnings.warn("Declaration of more than one (QMENGINE)ELEMENTS blocks in QM/MM specification file detected: " + ", ".join(members))
