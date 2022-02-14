@@ -34,7 +34,7 @@ class LOCAL(_SubmissionSystem):
             command_file_path = "./job_" + str(sub_job.jobName) + ".sh"
 
         if (self.nomp > 1):
-            command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + ""
+            command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command.strip() + ""
         else:
             command = sub_job.command.strip()
 
