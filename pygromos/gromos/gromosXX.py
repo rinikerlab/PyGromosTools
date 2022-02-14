@@ -140,7 +140,7 @@ class _Gromos:
         elif(nmpi > 1):
             command += ["mpirun -n " + str(nmpi*nomp)+" "] # --loadbalance  " --cpus-per-proc " +  + " "
             command += [self._bin + "md_mpi"]
-        elif(nomp > 1):
+        elif(nomp >= 1):
             command += ["export OMP_NUM_THREADS=" + str(nomp) + "  && "]
             command += [self._bin + "md"]
         else:
