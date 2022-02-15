@@ -636,7 +636,7 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
-    def get_last_atom(self)->int:
+    def get_last_atomID(self)->int:
         """get_last atom
             A very simple convenience function that returns the last atom
 
