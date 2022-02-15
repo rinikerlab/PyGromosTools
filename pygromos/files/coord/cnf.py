@@ -636,6 +636,17 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
+    def get_last_atom(self)->int:
+        """get_last atom
+            A very simple convenience function that returns the last atom
+
+        Returns
+        -------
+        int 
+            Returns the last atom of the system.
+        """
+        return self.POSITION.content[-1].atomID
+
     def center_of_geometry(self, selectedAtoms:list=None) -> list:
         """calculates the center of geometry for asingle molecule or the selected Atoms
 
