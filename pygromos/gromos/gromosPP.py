@@ -612,30 +612,51 @@ class _gromosPPbase:
     @gromosTypeConverter
     def sim_box(self, in_top_path:str, in_cnf_path:str, in_solvent_cnf_file_path:str, out_cnf_path:str= "",
                 periodic_boundary_condition: str = "r", gathering_method:str=None, minwall:float=0.8, threshold:float=None, rotate:str=None,
-                boxsize:float=None, _binary_name="sim_box", verbose=False)->str:
+                boxsize:bool=False, _binary_name="sim_box", verbose=False)->str:
         """
-            This wrapper wraps sim_box programm of gromos. It can be used to set a system box and solvate the box.
+        When simulating a molecule in solution or in a crystal containing solvent 
+        molecules, the atomic coordinates of the solvent molecules are to be
+        generated, if they are not available from experiment. Program sim_box can 
+        solvate a solute in a pre-equilibrated box of solvent molecules. The file
+        specifying the solvent configuration should contain a BOX block with the
+        dimensions corresponding to the pre-equilibrated density. The solvent 
+        topology is read from the solvent block in the specified topology.
 
         Parameters
         ----------
-        in_top_path :   str
-        in_cnf_path :   str
-        in_solvent_cnf_file_path :   str
-        periodic_boundary_condition :   str, optional
-        out_cnf_path :  str, optional
-        minwall :   float, optional
-            minimal box wall distance to solute molecule.
-        threshold :   float, optional
-        rotate :   float, optional
-        boxsize :   float, optional
-        gathering_method :    str, optional
-        _binary_name :  str, optional
+        in_top_path : str
+            the path to the input topology file (.top)
+        in_cnf_path : str
+            the path to the input coordinate file (.cnf), which shall be solvated
+        in_solvent_cnf_file_path : str
+            the path to the input coordinate file of the solvent  (.cnf), that shall be used to solvate (checkout pygromos.data.solvent_coordinates for templates)
+        out_cnf_path : str, optional
+            the path to the resulting coordinate (.cnf) file, by default ""
+        periodic_boundary_condition : str, optional
+            describes the boundary condition of the given system in the cnf. (r - rectangle, v - vacuum, ), by default "r"
+        gathering_method : str, optional
+            the gathering method to be used, by default None
+        minwall : float, optional
+            minimum solute to wall distance, by default 0.8
+        threshold : float, optional
+            minimum solvent-solute distance, by default None ->  0.23 nm
+        rotate : str, optional
+            rotate solute: biggest axis along z, second along y, by default None
+        boxsize : bool, optional
+            use boxsize specified in solute coordinate file, by default False
+        _binary_name : str, optional
+            name of the binary, by default "sim_box"
+        verbose : bool, optional
+            stay a while and listen!, by default False
 
         Returns
         -------
         str
-            out_cnf_path
+            return the path to the resulting cnf path.
         """
+        
+        
+     
         command_suffix = ""
         if(out_cnf_path== ""):
             out_cnf_path = os.path.dirname(in_cnf_path) + "/" + str(os.path.splitext(os.path.basename(in_cnf_path))[0]) + "_solvent.cnf"
@@ -643,8 +664,8 @@ class _gromosPPbase:
             command_suffix+= " @rotate "
         if(gathering_method!=None):
             command_suffix+= " @gather " + str(gathering_method)
-        if(boxsize!=None):
-            command_suffix+= " @boxsize "+str(boxsize)
+        if(boxsize):
+            command_suffix+= " @boxsize "
         if(threshold!=None):
             command_suffix+= " @thresh "+str(threshold)
         if(minwall!=None):
@@ -1103,8 +1124,56 @@ class _gromosPPbase:
     def ion(self, in_top_path:str,in_cnf_path:str, out_cnf_path:str,
                 periodic_boundary_condition:str="v",
             negative:list=None, positive:list=None,
-            potential:float=0.8, mindist:float=0.8, _binary_name = "ion", verbose:bool=False
-            ):
+            potential:float=0.8, mindist:float=0.8, 
+            random_seed: int=None, exclude:str=None,
+            _binary_name = "ion", verbose:bool=False
+            )->str:
+        """
+        When simulating a charged solute in solution, one may wish to include
+        counter-ions in the molecular system in order to obtain a neutral system, or
+        a system with a specific ionic strength. The program ion can replace solvent
+        molecules by atomic ions by placing the
+        ion at the position of the first atom of a solvent molecule. Substitution of
+        solvent molecules by positive or negative ions can be performed by selecting
+        the solvent positions with the lowest or highest Coulomb potential, respectively,
+        or by random selection. In order to prevent two ions being placed too
+        close together, a sphere around each inserted ion can be specified from which
+        no solvent molecules will be substituted by additional ions. In addition, the user can
+        specify specific water molecules that should not be considered for
+        replacement.
+
+        Parameters
+        ----------
+        in_top_path : str
+            the path to the input topology file (.top)
+        in_cnf_path : str
+            the path to the input coordinate file (.cnf), to which the ions shall be added
+        out_cnf_path : str
+            the path to the resulting coordinate (.cnf) file
+        periodic_boundary_condition : str, optional
+            describes the boundary condition of the given system in the cnf. (r - rectangle, v - vacuum, ). a gathering method can be optionally added with a whitespace seperation., by default "v"
+        negative : list, optional
+            the first element of the list is the number of ions and the second element of the list is the type of ion, optionally a third element can be passed giving the residue name, by default None
+        positive : list, optional
+            the first element of the list is the number of ions and the second element of the list is the type of ion, optionally a third element can be passed giving the residue name, by default None
+        potential : float, optional
+            cutoff for potential calculation[nm], by default 0.8
+        mindist : float, optional
+            minimum distance between ions[nm], by default 0.8
+        random_seed : int, optional
+            provide the used random seed, by default None
+        exclude : str, optional
+            if you want to exclude solvent molecules, define a gromos selection here, by default None
+        _binary_name : str, optional
+            the program name, by default "ion"
+        verbose : bool, optional
+            stay a while and listen, by default False
+
+        Returns
+        -------
+        str
+            returns the resulting cnf-file path
+        """
         optional_args = []
         if(not positive is None):
             opt = "@positive "+" ".join(map(str, positive))
@@ -1113,6 +1182,15 @@ class _gromosPPbase:
         if(not negative is None):
             opt = "@negative "+" ".join(map(str, negative))
             optional_args.append(opt)
+
+        if(not random_seed is None):
+            opt = "@random "+" ".join(map(str, random_seed))
+            optional_args.append(opt)
+
+        if(not exclude is None):
+            opt = "@exclude "+" ".join(map(str, exclude))
+            optional_args.append(opt)
+
 
         command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @pbc " + periodic_boundary_condition+" "
         command+= "@potential "+str(potential)+" @mindist "+str(mindist)+" "+" ".join(optional_args)

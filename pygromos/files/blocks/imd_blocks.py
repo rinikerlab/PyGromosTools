@@ -518,12 +518,18 @@ class REPLICA_EDS(_generic_imd_block):
 class BOUNDCOND(_generic_imd_block):
     """Boundary Condition Block
 
-        This block controles
+        This block describes the boundary condition of the coordinate system.
 
     Attributes
     ----------
-    NTB:    int
-    NDFMIN: int
+        NTB : int, optional
+            Boundary conditions, by default 0
+            -1 : truncated octahedral
+             0 : vacuum
+             1 : rectangular
+             2 : triclinic
+        NDFMIN : int, optional
+            number of degrees of freedom subtracted for temperature, by default 0
 
     """
 
@@ -910,12 +916,21 @@ class PRESSURESCALE(_generic_imd_block):
         Attributes
         -----------
         COUPLE: int
+            off(0), calc(1), scale(2)
         SCALE:  int
+            off(0), iso(1), aniso(2), full(3), semianiso(4)
         COMP:   float
+            compessibility
         TAUP:   float
+            coupling strength
         VIRIAL: int
+            none(0), atomic(1), group(2)
         SEMIANISOTROPIC:    List[int]
+            (semianisotropic couplings: X, Y, Z)
+            e.g. 1 1 2: x and y jointly coupled and z separately coupled
+            e.g. 0 0 1: constant area (xy-plane) and z coupled to a bath
         PRES0:  List[List[float]]
+            reference pressure
 
     """
     name: str = "PRESSURESCALE"
@@ -1617,12 +1632,26 @@ class DISTANCERES(_generic_imd_block):
 class POSITIONRES(_generic_imd_block):
     """POSITIONRES block
 
+            This block allows the managment of the Position Restraints during the Simulation.
+            
         Attributes
         ----------
         NTPOR:
+            0..3 controls atom positions re(con)straining.
+            0: no position re(con)straints (default)
+            1: restraining with force constant CPOR
+            2: restraining with force constant CPOR weighted by atomic B-factors
+            3: constraining
         NTPORB:
+            0,1 controls reading of reference positions and B-factors
+            0: read reference positions from startup file.
+            1: read reference positions and B-factors from special file
         NTPORS:
+            0,1 controls scaling of reference positions upon pressure scaling
+            0: do not scale reference positions
+            1: scale reference positions
         CPOR:
+            >= 0 position restraining force constant
     """
 
     name = "POSITIONRES"
@@ -1645,11 +1674,15 @@ class POSITIONRES(_generic_imd_block):
 
 class PRINTOUT(_generic_imd_block):
     """PRINTOUT block
-
+    
+        This Block manages the output frequency into the .omd/std-out file.
+        
     Attributes
     ----------
     NTPR: int
+        print out energies, etc. every NTPR steps
     NTPP: int
+        =1 perform dihedral angle transition monitoring
 
     """
     name: str = "PRINTOUT"
@@ -1720,15 +1753,44 @@ class ENERGYMIN(_generic_imd_block):
 class WRITETRAJ(_generic_imd_block):
     """WRITETRAJ
 
+        The WRITETRAJ Block manages the output frequency of GROMOS. Here you can determine how often a file should be written.
+
     Attributes
     ----------
     NTWX:   int
+        controls writing of coordinate trajectory
+        0: no coordinate trajectory is written (default)
+        >0: write solute and solvent coordinates every NTWX steps
+        <0: write solute coordinates every |NTWX| steps
     NTWSE:   int
+        >= 0 selection criteria for coordinate trajectory writing
+        0: write normal coordinate trajectory
+        >0: write minimum-energy coordinate and energy trajectory (based on the
+        energy entry selected by NTWSE and as blocks of length NTWX)
+        (see configuration/energy.cc or ene_ana library for indices)
     NTWV:   int
+        controls writing of velocity trajectory
+        0: no velocity trajectory is written (default)
+        >0: write solute and solvent velocities every NTWV steps
+        <0: write solute velocities every |NTWV| steps
     NTWF:   int
+        controls writing of force trajectory
+        0: no force trajectory is written (default)
+        >0: write solute and solvent forces every NTWF steps
+        <0: write solute forces every |NTWF| steps
     NTWE:   int
+        >= 0 controls writing of energy trajectory
+        0: no energy trajectory is written (default)
+        >0: write energy trajectory every NTWE steps
     NTWG:   int
+        >= 0 controls writing of free energy trajectory
+        0: no free energy trajectory is written (default)
+        >0: write free energy trajectory every NTWG steps
     NTWB:   int
+        >= 0 controls writing of block-averaged energy trajectory
+        0: no block averaged energy trajectory is written (default)
+        >0: write block-averaged energy variables every |NTWB| steps
+            (and free energies if NTWG > 0) trajectory
     """
     name = "WRITETRAJ"
 
@@ -1794,11 +1856,23 @@ class AMBER(_generic_imd_block):
 class COVALENTFORM(_generic_imd_block):
     """COVALENTFORM Block
 
+            The COVALENTFORM Block manages the functional form of the Bonded contributions to the force field.
+            It is optional in an imd file to define the block.
+            
         Attributes
         ----------
         NTBBH:  int
+            0,1 controls bond-stretching potential
+            0: quartic form (default)
+            1: harmonic form
         NTBAH:  int
+            0,1 controls bond-angle bending potential
+            0: cosine-harmonic (default)
+            1: harmonic
         NTBDN:  int
+            0,1 controls torsional dihedral potential
+            0: arbitrary phase shifts (default)
+            1: phase shifts limited to 0 and 180 degrees.
     """
 
     name = "COVALENTFORM"
