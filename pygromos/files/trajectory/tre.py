@@ -18,6 +18,7 @@ TODO: add ene_ana functions
 #imports
 import pandas as pd
 import numpy as np
+from typing import Tuple, Dict
 
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_block_names_table
@@ -25,6 +26,7 @@ from pygromos.analysis import energy_analysis as ea
 
 class Tre(traj._General_Trajectory):
     _gromos_file_ending:str = "tre"
+    contributions_names:Tuple[str] = ("VdW", "Culomb", "Special", "?")
 
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0, _ene_ana_names = gromos_2020_tre_block_names_table):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
@@ -106,6 +108,60 @@ class Tre(traj._General_Trajectory):
         self.precalclam = pd.DataFrame(data=np.stack(self.database["precalclam"].to_numpy()), columns=self.tre_block_name_table.lam_subblock_names)
         return self.precalclam
 
+    def get_nonbondedForceGroupContributions(self)->Dict[int, Dict[int, pd.DataFrame]]:
+        """
+            This function returns a nice formatted dictionary for the nonbonded Contributions according to the Force groups of the tre file.
+
+        Returns
+        -------
+        Dict[int, Dict[int, pd.DataFrame]]
+            The dictionary containing the nonbonded contributions of the single ForceGroups with each other.
+            Dict[ForceGroupI, Dict[ForceGroupJ, NonbondedEnergyContribs]]
+
+        Raises
+        ------
+        ValueError
+            _description_
+        """
+        #Check contibution_dimensionalities
+        nFFContributions = self.database.nonbonded[0].shape[1]
+        if(nFFContributions!=len(self.contributions_names)):
+            raise ValueError("The dimensionality of the NonbondedContributions is not corresponding to the expected dimensionality.\n expected: "+str(len(contributions_names))+" \t found: "+str(nFFContributions))
+        
+        #Get the number of force groups:
+        nForceGroup = self._get_numberOfForceGroupsFromNonbondeds()
+        
+        #Generate dictionary for the different contributions
+        t = 0
+        forceGroupNonbondedContributions = {}
+        for i in range(1, 1+nForceGroup):
+            forceGroupNonbondedContributions[i]={}
+            for j in range(1, 1+nForceGroup):
+                forceGroupNonbondedContributions[i][j]=pd.DataFrame(list(self.database.nonbonded.apply(lambda x: x[i+j-2])), columns=self.contributions_names)
+                t+=1
+        
+        return forceGroupNonbondedContributions
+    
+    def _get_numberOfForceGroupsFromNonbondeds(self)->int:
+        """
+            This function gets the number of Force groups in the simulation from the nonbonded block.
+        
+        Returns
+        -------
+        int
+            number of ForceGroups used for this tre.
+        """
+        nForceGroupDim = self.database.nonbonded[0].shape[0]
+
+        r=0
+        for nForceGroup in range(1,nForceGroupDim+1):
+            r+=nForceGroup
+            if(r == nForceGroupDim):
+                return nForceGroup
+            elif(r>nForceGroupDim):
+                raise Exception("That should not happen!")
+            
+        
     """--------------------------------------------------------------
     Additional predefined function for common analysis
     -----------------------------------------------------------------

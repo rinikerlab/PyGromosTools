@@ -90,27 +90,57 @@ class Gromos_System():
                  rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
                  auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=False):
         """
+            The Gromos_System class is the central unit of PyGromosTools for files and states. 
+            With this class all files can be read-in or the files can be automatically generated from smiles.
+            Additionally to that can all gromos++ functions be used from the Gromos System, so system generation can be easily accomplished.
+            
 
         Parameters
         ----------
-        work_folder
-        system_name
-        in_smiles
-        in_top_path
-        in_cnf_path
-        in_imd_path
-        in_disres_path
-        in_ptp_path
-        in_posres_path
-        in_refpos_path
-        in_gromosXX_bin_dir
-        in_gromosPP_bin_dir
-        rdkitMol
-        readIn
-        Forcefield
-        auto_convert
-        adapt_imd_automatically
+        work_folder : str
+            This gives the initial working folder for the system.
+        system_name : str
+            the name of the system, also used as file prefix
+        in_smiles : str, optional
+            Molecule input SMILES for file generation, by default None
+        in_top_path : str, optional
+            input Gromos topology path (.top), by default None
+        in_cnf_path : str, optional
+            input Gromos coordinate path (.cnf), by default None
+        in_imd_path : str, optional
+            input Gromos simulation parameters path (.imd), by default None
+        in_disres_path : str, optional
+            input Gromos distance restraint path (.disres), by default None
+        in_ptp_path : str, optional
+            input pertubation file for free energy calculations (.ptp), by default None
+        in_posres_path : str, optional
+            input position restraints file (.por), by default None
+        in_refpos_path : str, optional
+            input reference position file (.rpf), by default None
+        in_gromosXX_bin_dir : str, optional
+            path to the binary dir of GromosXX, by default None -> uses the set binaries in the PATH variable
+        in_gromosPP_bin_dir : str, optional
+            path to the binary dir of GromosPP, by default None -> uses the set binaries in the PATH variable
+        rdkitMol : Chem.rdchem.Mol, optional
+            input rdkit Molecule, by default None
+        readIn : bool, optional
+            readIn all provided files?, by default True
+        Forcefield : forcefield_system, optional
+            input PyGromos - forcefield Class , by default forcefield_system()
+        auto_convert : bool, optional
+            automatically convert rdkit MOL and smiles to gromos files, by default False
+        adapt_imd_automatically : bool, optional
+            adjust the input imd file to the GromosSystem, by default True
+        verbose : bool, optional
+            Stay a while and listen!, by default False
+
+        Raises
+        ------
+        Warning
+            Rises warning if files are not present.
         """
+        
+
         self.hasData = False
         self._name = system_name
         self._work_folder = work_folder
@@ -751,8 +781,6 @@ class Gromos_System():
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
         self.refpos = self.cnf.gen_refpos()
-
-
 
 
     """
