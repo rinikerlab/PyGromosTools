@@ -303,28 +303,20 @@ class Trc(traj._General_Trajectory):
 
 
     def cog_reframe(self, cnf:CnfType, index_list:list=[1]):
+        # calculate average box size
+        grid = np.array(cnf.GENBOX.length)/2
+
         # create mask for cog calculation
         col_list = [x for x in self.database.columns if ("POS" in x)]
-
-        # calculate average box size
-        grid = self.database["length"].mean()
-        grid = np.array( cnf.GENBOX.length) / 2
-
-        #print("Grid", grid)
-
         # cog calculation: select POS -> apply pbc -> average all positions
         pbc_pos = self.database[col_list].applymap(lambda x: ca.periodic_distance(x, grid))
-        cog = pbc_pos.sum(axis=1) / len(col_list)
+        #cog = pbc_pos.sum(axis=1) / len(col_list)
         #print("COG:", cog)
 
-        # box center
-        boxCenter = self.database["length"] / 2
-        #print("box_center:", boxCenter.shape, boxCenter[0])
-
         # shift all positions
-        posList = [x for x in self.database.columns if x.startswith('POS_')]
+        posList = [x for x in self.database[col_list]]
         for ind, idx in enumerate(posList):
-            self.database[idx] = self.database[idx].apply(lambda x: ca.periodic_distance(x, grid))  # + boxCenter
+            self.database[idx] = self.database[idx].apply(lambda x: ca.periodic_distance(x, grid))
 
 """
     @classmethod
