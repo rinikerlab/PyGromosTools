@@ -26,10 +26,13 @@ class LSF(_SubmissionSystem):
                         max_storage: float = 1000,
                         verbose: bool = False, 
                         enviroment=None, 
-                        block_double_submission:bool=True, 
+                        block_double_submission:bool=True,
+                        bjobs_only_same_host:bool=False, 
                         chain_prefix:str="done", 
                         begin_mail:bool=False, 
-                        end_mail:bool=False):
+                        end_mail:bool=False, 
+                        zip_trajectories: bool = True):
+        # general settings for the submission system
         super().__init__(verbose=verbose, 
                         nmpi=nmpi, nomp=nomp, 
                         job_duration=job_duration, 
@@ -39,7 +42,10 @@ class LSF(_SubmissionSystem):
                         block_double_submission=block_double_submission, 
                         chain_prefix=chain_prefix, 
                         begin_mail=begin_mail, 
-                        end_mail=end_mail)
+                        end_mail=end_mail, 
+                        zip_trajectories=zip_trajectories)
+        # Only LSF specific settings:
+        self.bjobs_only_same_host = bjobs_only_same_host
 
     def submit_to_queue(self, sub_job:Submission_job) -> int:
         """
@@ -276,9 +282,18 @@ class LSF(_SubmissionSystem):
             # try getting the lsf queue
             if (not self._dummy):
                 try:
-                        out_process = bash.execute("bjobs -w", catch_STD=True)
+                        #get all running and pending jobs
+                        if self.bjobs_only_same_host:
+                            out_process = bash.execute("bjobs -w", catch_STD=True)
+                        else:
+                            out_process = bash.execute("bjobs -w | grep '$HOSTNAME\|JOBID'", catch_STD=True)
                         job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                        out_process = bash.execute("bjobs -wd", catch_STD=True)
+                        
+                        #get all finished jobs
+                        if self.bjobs_only_same_host:
+                            out_process = bash.execute("bjobs -wd", catch_STD=True)
+                        else:
+                            out_process = bash.execute("bjobs -wd | grep '$HOSTNAME\|JOBID'", catch_STD=True)
                         job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
                         self._job_queue_time_stamp = datetime.now()
                 except Exception as err:
