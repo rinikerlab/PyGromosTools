@@ -714,6 +714,11 @@ class MULTIBATH(_generic_imd_block):
     Attributes
     ----------
     ALGORITHM:  int
+        temperature coupling algorithm
+        weak-coupling(0)
+        nose-hoover(1)
+        nose-hoover-chains(2)	num
+        (where num is the number of chains to use)
     NUM: int, optional
         Mumber of chains in Nosé Hoover chains scheme [only specify when needed]
     NBATHS: int
