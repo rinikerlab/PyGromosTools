@@ -137,7 +137,7 @@ class Tre(traj._General_Trajectory):
         for i in range(1, 1+nForceGroup):
             forceGroupNonbondedContributions[i]={}
             for j in range(1, 1+nForceGroup):
-                forceGroupNonbondedContributions[i][j]=pd.DataFrame(list(energy_traj.database.nonbonded.apply(lambda x: x[i+j-2])), columns=self.contributions_names)
+                forceGroupNonbondedContributions[i][j]=pd.DataFrame(list(self.database.nonbonded.apply(lambda x: x[i+j-2])), columns=self.contributions_names)
                 t+=1
         
         return forceGroupNonbondedContributions
@@ -156,9 +156,9 @@ class Tre(traj._General_Trajectory):
         r=0
         for nForceGroup in range(1,nForceGroupDim+1):
             r+=nForceGroup
-            if(r == nForceGroupDims):
+            if(r == nForceGroupDim):
                 return nForceGroup
-            elif(r>nForceGroupDims):
+            elif(r>nForceGroupDim):
                 raise Exception("That should not happen!")
             
         
