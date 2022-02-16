@@ -209,7 +209,7 @@ class Trc(traj._General_Trajectory):
                 raise IndexError("ref_cnf value was recognized as integer but is too large")
         else:
             raise ValueError("ref_cnf type not supported")
-        return self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: ca.rms(x), axis=1)
+        return pd.DataFrame(list(self.database.iloc[:,pos_mask].sub(to_sub).apply(lambda x: ca.rms(x), axis=1)), columns=["x", "y", "z"])
 
     def get_pdb(self, cnf:str, exclude_resn=["SOLV"])->str:
         pdb_format = "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
