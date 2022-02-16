@@ -20,6 +20,7 @@ from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
 from pygromos.files.trajectory.trc import Trc
 from pygromos.files.blocks.coord_blocks import GENBOX
+from pygromos.analysis import coordinate_analysis as ca
 
 Reference_Position = TypeVar("refpos.Reference_Position")
 Position_Restraints = TypeVar("posres.Position_Restraints")
@@ -100,7 +101,7 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
-    
+
     def write(self, out_path: str) -> str:
         # write out
         out_file = open(out_path, "w")
@@ -564,6 +565,17 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
+    def get_atom_coordinates(self)->np.array:
+        """
+            This function returns a np.array containing all system coordinates.
+
+        Returns
+        -------
+        np.array
+            dims are atoms[x,y,z]
+        """
+        return np.array([(a.xp, a.yp, a.zp) for a in self.POSITION])
+    
     def get_atoms_distance(self, atomI: (int or tuple) = None, atomJ: int = None,
                            atoms: (list or dict) = None) -> float or list:
 
@@ -702,32 +714,102 @@ class Cnf(_general_gromos_file):
                 atom.yp = atom.yp - 10 ** (-7) * ind
                 atom.zp = atom.zp - 10 ** (-7) * ind
 
+    def get_volume(self)->float:
+        """
+            This function calculates the volume of the cnf.
+
+        Returns
+        -------
+        float
+            volume of the cnf.
+
+        """
+        length = self.GENBOX.length
+        return length[0] * length[1] * length[2]
+
+    def get_density(self, mass=1, autoCalcMass=False)->float:
+        """
+            This function calculates the density of the cnf.
+
+        Returns
+        -------
+        float
+            density of the cnf.
+
+        """
+        if autoCalcMass:
+            mass = self.get_mass()
+        return 1.66056 / self.get_volume() * mass
+
+    def get_mass(self)->float:
+        """
+            This function calculates the mass of the cnf.
+
+        Returns
+        -------
+        float
+            mass of the cnf.
+
+        """
+        mass = 0
+        elemMassDict = {'H': 1.0079, 'C': 12.0107, 'N': 14.0067, 'O': 15.9994, 'P': 30.9738, 'S': 32.065, 'F': 18.998403163} #TODO: add all elements
+        for atom in self.POSITION:
+            mass += elemMassDict[atom.atomType[0]]
+        return mass
+
+    def shift_periodic_boundary(self):
+        """
+            This function is shifting the coordinates such that the solute molecule is centered, if it is placed in the corners.
+            However, this function might break down with more complicated situations. Careful the function is not fail safe ;)
+        """
+        grid = np.array(self.GENBOX.length)
+
+        tmp_pos = []
+        for aP in self.POSITION:
+            new_pos = ca.periodic_shift([aP.xp, aP.yp, aP.zp], grid)
+            tmp_pos.append(new_pos)
+
+        #shift total coords to minimal 0
+        tmp_pos = np.array(tmp_pos)-min(tmp_pos)
+
+        #write new pos:
+        result_pos = []
+        for new_pos, aP in zip(tmp_pos, self.POSITION):
+            result_pos.append(blocks.atomP(xp=new_pos[0], yp=new_pos[1], zp=new_pos[2],
+                                    resID=aP.resID, resName=aP.resName, atomType=aP.atomType,
+                                    atomID=aP.atomID))
+
+        self.POSITION = result_pos
 
 
     """
         generate further file
     """
-    def generate_position_restraints(self, out_path_prefix: str, residues: dict or list, verbose: bool = False) -> \
-    Tuple[str, str]:
+    
+    def generate_position_restraints(self, out_path_prefix: str, residues: dict or list, verbose: bool = False) -> Tuple[str, str]:
         """
+            This function generates position restraints for the selected residues.
 
         Parameters
         ----------
-        out_path_prefix
-        residues
-
-        parameters - Not implemented yet
-
-        verbose
+        out_path_prefix : str
+             target path prefix for the out files.
+        residues : dict or list
+            residues to be restrained (dict containing resname:[res ids] or list of resnames or residue IDs)
+        verbose : bool, optional
+            Loud and noisy, by default False
 
         Returns
         -------
-
+        Tuple[str, str]
+            return the two resulting paths to the generated files.
         """
-        possrespec = self.write_possrespec(out_path=out_path_prefix + ".por", residues=residues, verbose=verbose)
+
+
+        posres = self.write_possrespec(out_path=out_path_prefix + ".por", residues=residues, verbose=verbose)
         refpos = self.write_refpos(out_path=out_path_prefix + ".rpf")
 
-        return possrespec, refpos
+        return posres, refpos
 
     def gen_possrespec(self, residues: Union[dict or list], keep_residues:bool=True, verbose: bool = False) -> Position_Restraints:
         """
@@ -1050,45 +1132,3 @@ class Cnf(_general_gromos_file):
         from pygromos.visualization.coordinates_visualization import show_cnf
         return show_cnf(self)
 
-    def get_volume(self)->float:
-        """
-            This function calculates the volume of the cnf.
-
-        Returns
-        -------
-        float
-            volume of the cnf.
-
-        """
-        length = self.GENBOX.length
-        return length[0] * length[1] * length[2]
-
-    def get_density(self, mass=1, autoCalcMass=False)->float:
-        """
-            This function calculates the density of the cnf.
-
-        Returns
-        -------
-        float
-            density of the cnf.
-
-        """
-        if autoCalcMass:
-            mass = self.get_mass()
-        return 1.66056 / self.get_volume() * mass
-
-    def get_mass(self)->float:
-        """
-            This function calculates the mass of the cnf.
-
-        Returns
-        -------
-        float
-            mass of the cnf.
-
-        """
-        mass = 0
-        elemMassDict = {'H': 1.0079, 'C': 12.0107, 'N': 14.0067, 'O': 15.9994, 'P': 30.9738, 'S': 32.065, 'F': 18.998403163} #TODO: add all elements
-        for atom in self.POSITION:
-            mass += elemMassDict[atom.atomType[0]]
-        return mass
