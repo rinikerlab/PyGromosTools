@@ -1,10 +1,9 @@
 """
-File:            openforcefield2gromos
+File:            ambertools_pipeline
 Warnings: this class is WIP!
-TODO:REWORK
 Description:
-    This is a super class to convert from a openforcfield topology to a gromos topology
-Author: Marc Lehner
+    This is a class to parameterize a molecule with ambertools
+Author: Salomé Rieder
 """
 
 #imports
