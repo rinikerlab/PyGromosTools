@@ -11,6 +11,7 @@ from typing import Union
 import pandas as pd
 from typing import List
 from numbers import Number
+import inspect
 
 from pygromos.utils import bash
 from pygromos.data import pdb_lib
@@ -73,6 +74,150 @@ class _gromosPPbase:
         else:
             return self._bin
 
+    @gromosTypeConverter
+    def bin_box():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def build_box(self, in_top_path:str, in_cnf_path:str, out_cnf_path:str= "",
+                periodic_boundary_condition: str = "r", nmolecule:int = 1, dens:float = 1.0, _binary_name="build_box", verbose=False, return_command_only=False)->str:
+
+        if(out_cnf_path== ""):
+            out_cnf_path = os.path.dirname(in_cnf_path) + "/" + str(os.path.splitext(os.path.basename(in_cnf_path))[0]) + "_ran-box.cnf"
+
+        command= self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " > " + out_cnf_path + " \n"
+        if not return_command_only:
+            print(command)
+            std_out = bash.execute(command, verbose=verbose)
+            return out_cnf_path
+        else:
+            return command
+
+    @gromosTypeConverter
+    def check_box():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def check_top():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def com_top(self, in_topo_paths:(str or List[str]), topo_multiplier:(int or List[int])=1, out_top_path:str= "combined_out.top",
+                take_topology_params_of_file:int=1, take_solvent_parameters_of_file:int=1,
+                _binary_name:str="com_top")->str: #Todo: also take lists as input ! bschroed
+        """
+        Combine multiple topologies
+        Parameters
+        ----------
+        in_topo_paths : (str or List[str])
+        out_top_path : str, optional
+        take_topology_params_of_file :  int, optional
+        take_solvent_parameters_of_file :   int, optional
+        _binary_name :  str, optional
+
+        Returns
+        -------
+        str
+            output file_path
+
+        See Also
+        --------
+        make_top
+             For more information checkout the Gromos Manual
+        """
+        if(len(in_topo_paths)==1 and type(in_topo_paths[0])==list):
+            in_topo_paths = in_topo_paths[0]
+        if(not out_top_path.endswith(".top")):
+            out_top_path+= ".top"
+
+        if(isinstance(in_topo_paths, list) and isinstance(topo_multiplier, int)):
+            topo_multiplier = [topo_multiplier for x in range(len(in_topo_paths))]
+
+        topo_argument = gromosBashSyntaxParser.multiplyArgumentParser(in_topo_paths, topo_multiplier)
+
+        command = self._bin + _binary_name + " @topo " + topo_argument + " @param " + str(take_topology_params_of_file) + " @solv " + str(take_solvent_parameters_of_file)
+        bash.execute(command, catch_STD=out_top_path)
+        return out_top_path
+
+    @gromosTypeConverter
+    def check_top():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def copy_box():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def cry():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def duplicate():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def explode():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def gca():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+
+    @gromosTypeConverter
+    def gch(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
+            tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
+        """
+                    This function protonates a coordinate file.
+
+        Parameters
+        ----------
+        in_cnf_path :   str
+        in_top_path :  str
+        out_cnf_path :  str
+        tolerance : float, optional
+        periodic_boundary_condition : str, optional
+        gathering : str, optional
+        _binary_name :    str, optional
+
+        Returns
+        -------
+            out_cnf_path
+
+        """
+        command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @tol " + str(tolerance) + "  " \
+                                  "@pbc " + periodic_boundary_condition +" " + gathering
+
+        bash.execute(command, catch_STD=out_cnf_path)
+        
+        return out_cnf_path
+    
+    @gromosTypeConverter
+    def ion(self, in_top_path:str,in_cnf_path:str, out_cnf_path:str,
+                periodic_boundary_condition:str="v",
+            negative:list=None, positive:list=None,
+            potential:float=0.8, mindist:float=0.8, _binary_name = "ion", verbose:bool=False
+            ):
+        optional_args = []
+        if(not positive is None):
+            opt = "@positive "+" ".join(map(str, positive))
+            optional_args.append(opt)
+
+        if(not negative is None):
+            opt = "@negative "+" ".join(map(str, negative))
+            optional_args.append(opt)
+
+        command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @pbc " + periodic_boundary_condition+" "
+        command+= "@potential "+str(potential)+" @mindist "+str(mindist)+" "+" ".join(optional_args)
+
+        if(verbose): print(command)
+        bash.execute(command, catch_STD=out_cnf_path)
+
+        return out_cnf_path
+
+    @gromosTypeConverter
+    def link_top():
+        raise NotImplementedError(f"gromos++ program {inspect.stack()[0][3]} not wrapped yet.")
+    
     @gromosTypeConverter
     def pdb2gromos(self, in_pdb_path:str, in_top_path:str, out_cnf_path:str=None, in_lib_path:str=pdb_lib, _binary_name:str= "pdb2g96", verbose:bool = False)->str:
         """
@@ -200,44 +345,6 @@ class _gromosPPbase:
         #arg_file.close()
         #"@f " + arg_path
         command = self._bin +_binary_name +" "+" ".join(args)
-        bash.execute(command, catch_STD=out_top_path)
-        return out_top_path
-
-    @gromosTypeConverter
-    def com_top(self, in_topo_paths:(str or List[str]), topo_multiplier:(int or List[int])=1, out_top_path:str= "combined_out.top",
-                take_topology_params_of_file:int=1, take_solvent_parameters_of_file:int=1,
-                _binary_name:str="com_top")->str: #Todo: also take lists as input ! bschroed
-        """
-        Combine multiple topologies
-        Parameters
-        ----------
-        in_topo_paths : (str or List[str])
-        out_top_path : str, optional
-        take_topology_params_of_file :  int, optional
-        take_solvent_parameters_of_file :   int, optional
-        _binary_name :  str, optional
-
-        Returns
-        -------
-        str
-            output file_path
-
-        See Also
-        --------
-        make_top
-             For more information checkout the Gromos Manual
-        """
-        if(len(in_topo_paths)==1 and type(in_topo_paths[0])==list):
-            in_topo_paths = in_topo_paths[0]
-        if(not out_top_path.endswith(".top")):
-            out_top_path+= ".top"
-
-        if(isinstance(in_topo_paths, list) and isinstance(topo_multiplier, int)):
-            topo_multiplier = [topo_multiplier for x in range(len(in_topo_paths))]
-
-        topo_argument = gromosBashSyntaxParser.multiplyArgumentParser(in_topo_paths, topo_multiplier)
-
-        command = self._bin + _binary_name + " @topo " + topo_argument + " @param " + str(take_topology_params_of_file) + " @solv " + str(take_solvent_parameters_of_file)
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
@@ -557,34 +664,6 @@ class _gromosPPbase:
         else:
             return result_files
 
-    @gromosTypeConverter
-    def gch(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
-            tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
-        """
-                    This function protonates a coordinate file.
-
-        Parameters
-        ----------
-        in_cnf_path :   str
-        in_top_path :  str
-        out_cnf_path :  str
-        tolerance : float, optional
-        periodic_boundary_condition : str, optional
-        gathering : str, optional
-        _binary_name :    str, optional
-
-        Returns
-        -------
-            out_cnf_path
-
-        """
-        command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @tol " + str(tolerance) + "  " \
-                                  "@pbc " + periodic_boundary_condition +" " + gathering
-
-        bash.execute(command, catch_STD=out_cnf_path)
-        
-        return out_cnf_path
-
     def add_hydrogens(self, in_cnf_path:str, in_top_path:str, out_cnf_path:str,
             tolerance:float=0.1, periodic_boundary_condition:str="v", gathering:str="cog", _binary_name="gch") -> str:
         """
@@ -676,21 +755,6 @@ class _gromosPPbase:
 
 
         command= self._bin + _binary_name + " @topo " + in_top_path + " @pbc " + periodic_boundary_condition + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " " + command_suffix + " > " + out_cnf_path + " \n"
-        if not return_command_only:
-            print(command)
-            std_out = bash.execute(command, verbose=verbose)
-            return out_cnf_path
-        else:
-            return command
-
-    @gromosTypeConverter
-    def build_box(self, in_top_path:str, in_cnf_path:str, out_cnf_path:str= "",
-                periodic_boundary_condition: str = "r", nmolecule:int = 1, dens:float = 1.0, _binary_name="build_box", verbose=False, return_command_only=False)->str:
-
-        if(out_cnf_path== ""):
-            out_cnf_path = os.path.dirname(in_cnf_path) + "/" + str(os.path.splitext(os.path.basename(in_cnf_path))[0]) + "_ran-box.cnf"
-
-        command= self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @nsm " + str(nmolecule) + " @dens " + str(dens) + " > " + out_cnf_path + " \n"
         if not return_command_only:
             print(command)
             std_out = bash.execute(command, verbose=verbose)
@@ -1098,29 +1162,6 @@ class _gromosPPbase:
         if (verbose): print(ret.readlines())
 
         return out_path
-
-    @gromosTypeConverter
-    def ion(self, in_top_path:str,in_cnf_path:str, out_cnf_path:str,
-                periodic_boundary_condition:str="v",
-            negative:list=None, positive:list=None,
-            potential:float=0.8, mindist:float=0.8, _binary_name = "ion", verbose:bool=False
-            ):
-        optional_args = []
-        if(not positive is None):
-            opt = "@positive "+" ".join(map(str, positive))
-            optional_args.append(opt)
-
-        if(not negative is None):
-            opt = "@negative "+" ".join(map(str, negative))
-            optional_args.append(opt)
-
-        command = self._bin + _binary_name + " @topo " + in_top_path + " @pos " + in_cnf_path + " @pbc " + periodic_boundary_condition+" "
-        command+= "@potential "+str(potential)+" @mindist "+str(mindist)+" "+" ".join(optional_args)
-
-        if(verbose): print(command)
-        bash.execute(command, catch_STD=out_cnf_path)
-
-        return out_cnf_path
 
     #To implement
     def _gr962pdb(self):
