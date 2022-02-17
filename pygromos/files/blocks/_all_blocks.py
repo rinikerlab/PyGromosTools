@@ -6,6 +6,7 @@ from pygromos.files.blocks.pertubation_blocks import *
 from pygromos.files.blocks.replica_exchange_blocks import *
 from pygromos.files.blocks.energy_blocks import *
 from pygromos.files.blocks.miscBlocks import *
+from pygromos.files.blocks.mtb_blocks import *
 
 from pygromos.files.blocks._general_blocks import *
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
