@@ -225,7 +225,7 @@ class Trc(traj._General_Trajectory):
         pos_cols = [col for col in self.database.columns if ("POS" in col)]
         for ind, time_step in self.database.iterrows():
             pos_lines = time_step[pos_cols]
-            remark_line = "REMARK\t" + str(time_step["TIMESTEP_step"]) + "\t" + str(
+            remark_line = "REMARK\t" + str(time_step["step"]) + "\t" + str(
                 time_step["time"]) + "\nMODEL\n"
             frame_positions = []
             for ind, coord_set in enumerate(pos_lines):
