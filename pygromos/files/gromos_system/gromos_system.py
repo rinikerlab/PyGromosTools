@@ -739,7 +739,7 @@ class Gromos_System():
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
         ff_name = self.Forcefield.name
-        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off":
+        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name = "amberff_gaff":
             #adjust harmonic forces
             if (hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None):
                 if self.verbose:
@@ -752,8 +752,6 @@ class Gromos_System():
                     print("Please make sure to use amber LJ forces for simulations with OpenForceField LJ parameters")
             else:
                 setattr(self.imd,"AMBER", imd_blocks.AMBER(AMBER=1, AMBSCAL=1.2))
-
-        # TODO: here
 
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
