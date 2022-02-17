@@ -29,6 +29,7 @@ from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
+
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
@@ -49,6 +50,8 @@ if (importlib.util.find_spec("openff") != None):
     has_openff = True
 else:
     has_openff = False
+
+from pygromos.files.gromos_system.ff.ambertools_pipeline import ambertools_pipeline
 
 skip = {"solute_info":cnf.solute_infos,
         "protein_info":cnf.protein_infos,
@@ -86,7 +89,8 @@ class Gromos_System():
                  in_top_path: str = None, in_cnf_path: str = None, in_imd_path: str = None,
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
                  in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
-                 rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
+                 rdkitMol: Chem.rdchem.Mol = None, in_mol2_file: str=None,
+                 readIn=True, Forcefield:forcefield_system=forcefield_system(), 
                  auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=True):
         """
 
@@ -114,6 +118,7 @@ class Gromos_System():
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
+        self.in_mol2_file = in_mol2_file
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.checkpoint_path = None
@@ -133,7 +138,7 @@ class Gromos_System():
         self._future_promise= False
         self._future_promised_files = []
 
-        if (in_smiles == None and rdkitMol == None) or readIn == False:
+        if (in_smiles == None and rdkitMol == None and in_mol2_file == None) or readIn == False:
             if verbose: warnings.warn("No data provided to gromos_system\nmanual work needed")
 
         # import files:
@@ -163,6 +168,12 @@ class Gromos_System():
             AllChem.EmbedMolecule(self.mol)
             AllChem.UFFOptimizeMolecule(self.mol)
             self.hasData = True
+
+        if in_mol2_file:
+            self.mol = Chem.MolFromMol2File(in_mol2_file)
+            self.hasData = True
+
+        print(rdkitMol)
 
         # import  molecule from RDKit
         if rdkitMol:
@@ -606,7 +617,7 @@ class Gromos_System():
                 self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
                 self.top = Top(in_value=out)
             else:
-                warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
+                warnings.warn("could not find a gromosPP version. Please provide a valid version for Gromos auto system generation")
              
         elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
             if not has_openff:
@@ -624,6 +635,11 @@ class Gromos_System():
                 self.serenityff.create_top(C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges)
                 self.serenityff.top.make_ordered()
                 self.top = self.serenityff.top
+
+        elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
+            if (self.in_mol2_file == None):
+                raise TypeError("To use amberff_gaff, please provide a mol2 file")
+            ambertools_pipeline(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield)
 
         else:
             raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
@@ -736,6 +752,8 @@ class Gromos_System():
                     print("Please make sure to use amber LJ forces for simulations with OpenForceField LJ parameters")
             else:
                 setattr(self.imd,"AMBER", imd_blocks.AMBER(AMBER=1, AMBSCAL=1.2))
+
+        # TODO: here
 
     def generate_posres(self, residues:list=[], keep_residues:bool=True, verbose:bool=False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
