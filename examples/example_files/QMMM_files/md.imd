@@ -1,7 +1,4 @@
 TITLE
-        Automatically generated input file
-        dsidler Sat Oct 21 10:51:41 2017
-
 	 >>> Generated with PyGromosTools (riniker group) <<< 
 END
 BOUNDCOND
@@ -95,6 +92,6 @@ WRITETRAJ
  	 200 	 0 	 0 	 0 	 100 	 0 	 0 	 
 END
 QMMM
-# 	 NTQMMM    NTQMSW   RCUTQ    NTWQMMM    QMLJ    MMSCAL
- 	 1         5        1.4      0          0       -1.
+#        NTQMMM    NTQMSW   RCUTQ    NTWQMMM    QMLJ    MMSCAL
+         1         5        1.4      0          0       -1.
 END

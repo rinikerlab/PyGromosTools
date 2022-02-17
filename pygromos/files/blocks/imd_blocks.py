@@ -714,6 +714,11 @@ class MULTIBATH(_generic_imd_block):
     Attributes
     ----------
     ALGORITHM:  int
+        temperature coupling algorithm
+        weak-coupling(0)
+        nose-hoover(1)
+        nose-hoover-chains(2)	num
+        (where num is the number of chains to use)
     NUM: int, optional
         Mumber of chains in Nosé Hoover chains scheme [only specify when needed]
     NBATHS: int
@@ -752,7 +757,7 @@ class MULTIBATH(_generic_imd_block):
                                 ["DOFSET"], ["LAST(1 ... DOFSET)", "COMBATH(1 ... DOFSET)", "IRBATH(1 ... DOFSET)"]]]
                                 #num is not part of the imd file!?
 
-    def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=0,
+    def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=[],
                  COMBATH: List[int]=[],
                  IRBATH: List[int]=[], NUM: int = None, content=None):
         if content is None:

@@ -37,7 +37,10 @@ class QMMM(_general_gromos_file._general_gromos_file):
             setattr(self, block, deepcopy(getattr(self, block)))
 
         # Perform some sanity checks
-        self._health_check()
+        # only if not a future file and if there is at least one block
+        # (to avoid being run while deep_copy)
+        if(not _future_file and len(self.get_block_names()) > 0):
+            self._health_check()
 
     def __str__(self):
         text = ""
@@ -63,7 +66,7 @@ class QMMM(_general_gromos_file._general_gromos_file):
     def get_qm_engines(self)->List[str]:
         """
         Returns the QM engine used
-
+        
         Returns
         -------
         List[str]
