@@ -133,7 +133,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     else:
         imd_file.INITIALISE.NTIVEL = 0 if(hasattr(cnf_file, "VELOCITY")) else 1
         imd_file.INITIALISE.NTISHK = 0 if(hasattr(imd_file, "CONSTRAINT") and imd_file.CONSTRAINT.NTC > 0) else 1
-        imd_file.INITIALISE.NTINHT = 0 if(hasattr(imd_file, "MULTIBATH") and imd_file.MULTIBATH.ALGORITHM < 1) else 1
+        imd_file.INITIALISE.NTINHT = 0 #if(hasattr(imd_file, "MULTIBATH") and imd_file.MULTIBATH.ALGORITHM < 2) else 1
         imd_file.INITIALISE.NTINHB = 0 #if(hasattr(imd_file, "PRESSURESCALE") and imd_file.PRESSURESCALE < 1) else 1
         imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
         imd_file.INITIALISE.NTIRTC = 0

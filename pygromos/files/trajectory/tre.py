@@ -25,20 +25,31 @@ from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_
 from pygromos.analysis import energy_analysis as ea
 
 class Tre(traj._General_Trajectory):
+    """
+        The Tre files are results from Gromos simulations, that store all the calculated energies and properties during the simulation.
+
+    """
     _gromos_file_ending:str = "tre"
     _contributions_nonbonded_names: Tuple[str] = ("Lennard-Jones", "Coulomb/RF", "lattice sum real",  "lattice sum reciproc")
     _contributions_bonded_names: Tuple[str] = ("bond", "angle", "improper", "dihedral", "crossdihedral")
-    _contributions_temp_baths: Tuple[str] = ("kinetic total", "centre of mass", "internal/rotational")
+    _contributions_baths: Tuple[str] = ("kinetic total", "centre of mass", "internal/rotational")
     _contributions_special: Tuple[str]  = ("constraints", "pos. restraints", "dist. restraints", "disfield res", "dihe. restr.", "SASA", "SASA volume","jvalue","rdc","local elevation", "path integral", "angle restraint")
-
+    _contributions_temperature: Tuple[str] = ('total', 'com', 'ir', 'scaling factor')
+    
     def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0, _ene_ana_names = gromos_2020_tre_block_names_table):
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
         self.tre_block_name_table = _ene_ana_names
-
+        self.time = self.database.time
+        self.step = self.database.step
 
     """--------------------------------------------------------------
     Basic getters for Subblocks and Subsubblocks
     -----------------------------------------------------------------
+    
+        The following functions, return well formated values from the tre trajectories.
+    
+    
+      ENERGY03 - fields:
     """
 
     def get_totals(self) -> pd.DataFrame:
@@ -81,13 +92,63 @@ class Tre(traj._General_Trajectory):
         self.totnonbonded = self.get_totals()['totnonbonded']
         return self.totnonbonded
 
-    def get_totals_totlj(self) -> pd.DataFrame:
+    def get_totlj(self) -> pd.DataFrame:
         self.totlj = self.get_totals()['totlj']
         return self.totlj
 
-    def get_totals_totcrf(self) -> pd.DataFrame:
+    def get_totcrf(self) -> pd.DataFrame:
         self.totcrf = self.get_totals()['totcrf']
         return self.totcrf
+
+    def get_baths(self)->pd.DataFrame:  #CHECK THIS
+        return self._set_data(attibute_name='baths',
+                              rows_name="baths",
+                              field_names=self._contributions_baths)
+
+    def get_bondedContributions(self)->Dict[int,pd.DataFrame]:
+        return self._set_data(attibute_name='bondedContributions',
+                            rows_name="bonded",
+                            field_names=self._contributions_bonded_names)
+
+    def get_nonbondedContributions(self)->Dict[int, Dict[int, pd.DataFrame]]:
+        """
+            This function returns a nice formatted dictionary for the nonbonded Contributions according to the Force groups of the tre file.
+
+        Returns
+        -------
+        Dict[int, Dict[int, pd.DataFrame]]
+            The dictionary containing the nonbonded contributions of the single ForceGroups with each other.
+            Dict[ForceGroupI, Dict[ForceGroupJ, NonbondedEnergyContribs]]
+
+        Raises
+        ------
+        ValueError
+            returns Value error, if the dimensionality of the different contributions does not fit to the _nonbonded_contribution_names.
+        """
+        if(not hasattr(self, "forceGroupNonbondedContributions")):
+            #Check contibution_dimensionalities
+            nFFContributions = self.database.nonbonded[0].shape[1]
+            if(nFFContributions!=len(self._contributions_nonbonded_names)):
+                raise ValueError("The dimensionality of the NonbondedContributions is not corresponding to the expected dimensionality.\n expected: "+str(len(_contributions_nonbonded_names))+" \t found: "+str(nFFContributions))
+            
+            #Get the number of force groups:
+            nForceGroup = self._get_numberOfForceGroupsFromNonbondeds()
+            
+            #Generate dictionary for the different contributions
+            t = 0
+            forceGroupNonbondedContributions = {}
+            for i in range(1, 1+nForceGroup):
+                forceGroupNonbondedContributions[i]={}
+                for j in range(1, 1+nForceGroup):
+                    forceGroupNonbondedContributions[i][j]=pd.DataFrame(list(self.database.nonbonded.apply(lambda x: x[i+j-2])), columns=self._contributions_nonbonded_names)
+                    t+=1
+            self.forceGroupNonbondedContributions = forceGroupNonbondedContributions
+        return self.forceGroupNonbondedContributions
+
+    def get_specialContributions(self)->Dict[int,pd.DataFrame]:    #CHECK THIS
+        return self._set_data(attibute_name='specialContributions',
+                              rows_name="special",
+                              field_names=self._contributions_special)
 
     def get_eds(self)->pd.DataFrame:
         """
@@ -137,48 +198,49 @@ class Tre(traj._General_Trajectory):
         
         return self.precalclam
 
-    def get_nonbondedForceGroupContributions(self)->Dict[int, Dict[int, pd.DataFrame]]:
+    """
+      VOLUMEPRESSURE03 - fields:
+    """
+    def get_mass(self)->pd.Series:
+        return pd.Series(map(float, self.database.mass), name="mass", index=self.database.time)
+    
+    def get_temperature_Info(self)->Dict[int,pd.DataFrame]:
+        return self._set_data(attibute_name='temperatureInfo',
+                        rows_name="temperature",
+                        field_names=self._contributions_temperature)
+        
+    def get_temperature(self) -> pd.DataFrame:  #CHECK THIS - tempcontrib:total             com               ir                scaling factor
         """
-            This function returns a nice formatted dictionary for the nonbonded Contributions according to the Force groups of the tre file.
+        Get the temperature in Kelvin for all temperature baths for every time step
 
         Returns
         -------
-        Dict[int, Dict[int, pd.DataFrame]]
-            The dictionary containing the nonbonded contributions of the single ForceGroups with each other.
-            Dict[ForceGroupI, Dict[ForceGroupJ, NonbondedEnergyContribs]]
-
-        Raises
-        ------
-        ValueError
-            returns Value error, if the dimensionality of the different contributions does not fit to the _nonbonded_contribution_names.
+        pd.DataFrame
+            pandas dataframe with all temperatures
         """
-        if(not hasattr(self, "forceGroupNonbondedContributions")):
-            #Check contibution_dimensionalities
-            nFFContributions = self.database.nonbonded[0].shape[1]
-            if(nFFContributions!=len(self._contributions_nonbonded_names)):
-                raise ValueError("The dimensionality of the NonbondedContributions is not corresponding to the expected dimensionality.\n expected: "+str(len(contributions_names))+" \t found: "+str(nFFContributions))
-            
-            #Get the number of force groups:
-            nForceGroup = self._get_numberOfForceGroupsFromNonbondeds()
-            
-            #Generate dictionary for the different contributions
-            t = 0
-            forceGroupNonbondedContributions = {}
-            for i in range(1, 1+nForceGroup):
-                forceGroupNonbondedContributions[i]={}
-                for j in range(1, 1+nForceGroup):
-                    forceGroupNonbondedContributions[i][j]=pd.DataFrame(list(self.database.nonbonded.apply(lambda x: x[i+j-2])), columns=self.contributions_names)
-                    t+=1
-            self.forceGroupNonbondedContributions = forceGroupNonbondedContributions
-        return self.forceGroupNonbondedContributions
 
-    def get_bondedContributions(self)->Dict[int,pd.DataFrame]:
-        if(not hasattr(self, "bondedContributions")):
-            self.bondedContributions = pd.DataFrame(list(map(lambda x: list(x[0]), list(self.database.bonded))),
-                        columns=self._contributions_bonded_names,
-                        index=self.database.time)
-        return self.bondedContributions
+        tmps = []
+        for i, row in self.database.iterrows():
+            row_d = {"bath" + str(i + 1): temp for i, temp in enumerate(row["temperature"][:, 0])}
+            tmps.append(row_d)
 
+        return pd.DataFrame(tmps, index=self.database.time)
+
+    """    
+      UTILS
+    """
+    def _set_data(self, attibute_name:str, rows_name:str, field_names:Tuple[str]):
+        if(not hasattr(self, attibute_name)):       
+            nDimGroups = self.database[rows_name][0].shape[0]
+            
+            setattr(self, attibute_name, {})
+            for i in range(nDimGroups):
+                getattr(self, attibute_name).update({i: pd.DataFrame(list(map(lambda x: list(x[i]), list(self.database[rows_name]))),
+                        columns=field_names,
+                        index=self.database.time)})
+        return getattr(self, attibute_name)
+
+        
     def _get_numberOfForceGroupsFromNonbondeds(self)->int:
         """
             This function gets the number of Force groups in the simulation from the nonbonded block.
@@ -216,36 +278,6 @@ class Tre(traj._General_Trajectory):
         """
         return pd.Series(list(self.database[["mass","volume"]].apply(lambda x: ea.get_density(mass=x[0][0], volume=x[1][0]), axis=1)), 
                          index=self.database.time, name="density")
-
-
-
-    def get_temperature(self) -> pd.DataFrame:  #CHECK THIS - tempcontrib:total             com               ir                scaling factor
-        """
-        Get the temperature in Kelvin for all temperature baths for every time step
-
-        Returns
-        -------
-        pd.DataFrame
-            pandas dataframe with all temperatures
-        """
-
-        tmps = []
-        for i, row in self.database.iterrows():
-            row_d = {"bath" + str(i + 1): temp for i, temp in enumerate(row["temperature"][:, 0])}
-            tmps.append(row_d)
-
-        return pd.DataFrame(tmps, index=self.database.time)
-
-    def get_baths(self)->pd.DataFrame:  #CHECK THIS
-        _contributions_temp_baths
-
-    def get_special(self)->pd.DataFrame:    #CHECK THIS
-        if(not hasattr(self, "specialContributions")):
-            self.specialContributions = pd.DataFrame(list(map(lambda x: list(x[0]), list(self.database.special))),
-                        columns=self._contributions_special,
-                        index=self.database.time)
-        return self.specialContributions
-        
 
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_totpot_energy = 0
