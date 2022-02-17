@@ -130,8 +130,8 @@ class _General_Trajectory():
             raise Warning("trajectories database shapes do not match!\n Please check if this is expected\n"
                           "first shape: "+str(self.database.shape)+"\tsecond shape: "+str(traj.database.shape)+"\n")
         # get end data from first trajectory
-        step_offset = int(self.database.TIMESTEP_step.iloc[-1])
-        time_offset = float(self.database.TIMESTEP_time.iloc[-1])
+        step_offset = int(self.database.step.iloc[-1])
+        time_offset = float(self.database.time.iloc[-1])
         # copy and modify second trajectory
         new_data = traj.database.copy(deep=True)
         
@@ -145,8 +145,8 @@ class _General_Trajectory():
                     new_data = new_data.iloc[1:]
 
         if correct_time:
-            new_data.TIMESTEP_step += step_offset
-            new_data.TIMESTEP_time += time_offset
+            new_data.step += step_offset
+            new_data.time += time_offset
 
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
