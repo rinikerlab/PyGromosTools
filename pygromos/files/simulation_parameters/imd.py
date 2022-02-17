@@ -57,27 +57,27 @@ class Imd(_general_gromos_file._general_gromos_file):
     SYSTEM: blocks.SYSTEM
     FORCE: blocks.FORCE
 
-    ENERGYMIN: blocks.ENERGYMIN = None
-    EDS:blocks.EDS=None
+    ENERGYMIN: blocks.ENERGYMIN
+    EDS:blocks.EDS
 
-    CONSTRAINT: blocks.CONSTRAINT = None
-    BOUNDCOND: blocks.BOUNDCOND = None
-    COMTRANSROT: blocks.COMTRANSROT = None
+    CONSTRAINT: blocks.CONSTRAINT
+    BOUNDCOND: blocks.BOUNDCOND
+    COMTRANSROT: blocks.COMTRANSROT
 
-    PRESSURESCALE: blocks.PRESSURESCALE = None
-    MULTIBATH: blocks.MULTIBATH = None
+    PRESSURESCALE: blocks.PRESSURESCALE
+    MULTIBATH: blocks.MULTIBATH
 
-    PAIRLIST: blocks.PAIRLIST = None
-    NONBONDED: blocks.NONBONDED = None
+    PAIRLIST: blocks.PAIRLIST
+    NONBONDED: blocks.NONBONDED
 
-    POSITIONRES: blocks.POSITIONRES = None
-    DISTANCERES: blocks.DISTANCERES = None
-    INITIALISE: blocks.INITIALISE = None
+    POSITIONRES: blocks.POSITIONRES
+    DISTANCERES: blocks.DISTANCERES
+    INITIALISE: blocks.INITIALISE
 
-    REPLICA_EDS: blocks.REPLICA_EDS = None
-    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
+    REPLICA_EDS: blocks.REPLICA_EDS
+    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS
 
-    QMMM: blocks.QMMM = None
+    QMMM: blocks.QMMM
 
     def __init__(self, in_value:str, _future_file:bool=False):
         super().__init__(in_value=in_value, _future_file=_future_file)

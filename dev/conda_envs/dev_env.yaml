@@ -7,19 +7,16 @@ dependencies:
   # Base depends
   - python
   - pip
-  -
   # Testing
   - pytest
   - pytest-cov
   - codecov
-  -
   #meta
   - typing
   - tqdm
   - ipywidgets
-  -
   #science
-  - openforcefield
+  - openff-toolkit
   - pandas
   - pytables
   - numpy
