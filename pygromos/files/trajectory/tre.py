@@ -21,7 +21,7 @@ import numpy as np
 from typing import Tuple, Dict
 
 import pygromos.files.trajectory._general_trajectory as traj
-from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_block_names_table
+from pygromos.files.trajectory.tre_field_libs.ene_fields import gromos_2020_tre_block_names_table,gromos_tre_block_names_table
 from pygromos.analysis import energy_analysis as ea
 
 class Tre(traj._General_Trajectory):
@@ -36,11 +36,31 @@ class Tre(traj._General_Trajectory):
     _contributions_special: Tuple[str]  = ("constraints", "pos. restraints", "dist. restraints", "disfield res", "dihe. restr.", "SASA", "SASA volume","jvalue","rdc","local elevation", "path integral", "angle restraint")
     _contributions_temperature: Tuple[str] = ('total', 'com', 'ir', 'scaling factor')
     
-    def __init__(self, input_value: str or None, auto_save=True, stride:int=1, skip:int=0, _ene_ana_names = gromos_2020_tre_block_names_table):
+    def __init__(self, input_value: (str, None), auto_save=True, stride:int=1, skip:int=0, _ene_ana_names:gromos_tre_block_names_table = gromos_2020_tre_block_names_table):
+        """
+            Build a Gromos energy trajectory file (.tre) 
+
+        Parameters
+        ----------
+        input_value : str,None
+            The input value can be None, or a string path to the .tre/.tre.gz file.
+        auto_save : bool, optional
+            automatically save the file, by default True
+        stride : int, optional
+            only read every x value, by default 1
+        skip : int, optional
+            skip the first x timesteps, by default 0
+        _ene_ana_names : gromos_tre_block_names_table, optional
+            get the field names after the provided standard., by default gromos_2020_tre_block_names_table
+        """
         super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
         self.tre_block_name_table = _ene_ana_names
-        self.time = self.database.time
-        self.step = self.database.step
+        
+        if("time" in self.database.columns):
+            self.time = self.database.time
+        if("step" in self.database.columns):
+            self.step = self.database.step
+
 
     """--------------------------------------------------------------
     Basic getters for Subblocks and Subsubblocks
@@ -53,6 +73,9 @@ class Tre(traj._General_Trajectory):
     """
 
     def get_totals(self) -> pd.DataFrame:
+        """
+            get all totals of the system
+        """
         #print(self.database["totals"][0].shape, self.database["totals"][0])
         if(not hasattr(self, "totals")):
             self.totals = pd.DataFrame(data =np.stack(self.database["totals"].to_numpy()), index=self.database.time, columns=self.tre_block_name_table.totals_subblock_names)
@@ -61,51 +84,87 @@ class Tre(traj._General_Trajectory):
         return self.totals
 
     def get_totene(self) -> pd.DataFrame:
-        self.totene = self.get_totals()['totene']
+        """
+            get the total System energy / per time
+        """
+        self.totene = self.get_totals()['totene'] 
         return self.totene
 
     def get_totkin(self) -> pd.DataFrame:
+        """
+            get the total kinetic Energy / per time
+        """
         self.totkin = self.get_totals()['totkin']
         return self.totkin
 
     def get_totpot(self) -> pd.DataFrame:
+        """
+            get the total potential Energy / per time
+        """
         self.totpot = self.get_totals()['totpot']
         return self.totpot
 
     def get_totcov(self) -> pd.DataFrame:
+        """
+            get the total covalent contribution/ per time
+        """
         self.totcov = self.get_totals()['totcov']
         return self.totcov
 
     def get_totbonded(self) -> pd.DataFrame:
+        """
+            get the total bonded contribution/ per time
+        """
         self.totbonded = self.get_totals()['totbond']
         return self.totbonded
 
     def get_totangle(self) -> pd.DataFrame:
+        """
+            get the total angle contribution/ per time
+        """
         self.totangle = self.get_totals()['totangle']
         return self.totangle
 
     def get_totdihedral(self) -> pd.DataFrame:
+        """
+            get the total dihedral contribution/ per time
+        """
         self.totdihedral = self.get_totals()['totdihedral']
         return self.totdihedral
 
     def get_totnonbonded(self) -> pd.DataFrame:
+        """
+            get the total nonbonded contribution/ per time
+        """
         self.totnonbonded = self.get_totals()['totnonbonded']
         return self.totnonbonded
 
     def get_totlj(self) -> pd.DataFrame:
+        """
+            get the total lennard jones contribution/ per time
+        """
         self.totlj = self.get_totals()['totlj']
         return self.totlj
 
-    def get_totcrf(self) -> pd.DataFrame:
+    def get_totcrf(self) -> pd.DataFrame:        
+        """
+            get the total columbic reactionfield contribution/ per time
+        """
         self.totcrf = self.get_totals()['totcrf']
         return self.totcrf
 
-    def get_baths(self)->pd.DataFrame:  #CHECK THIS
+    def get_baths(self)->pd.DataFrame:
+        """ 
+            extract data of the baths block
+        """
         return self._set_data(attibute_name='baths',
                               rows_name="baths",
                               field_names=self._contributions_baths)
 
     def get_bondedContributions(self)->Dict[int,pd.DataFrame]:
+        """ 
+            extract data of the bonded block
+        """
         return self._set_data(attibute_name='bondedContributions',
                             rows_name="bonded",
                             field_names=self._contributions_bonded_names)
@@ -146,6 +205,9 @@ class Tre(traj._General_Trajectory):
         return self.forceGroupNonbondedContributions
 
     def get_specialContributions(self)->Dict[int,pd.DataFrame]:    #CHECK THIS
+        """ 
+            extract data of the special block
+        """
         return self._set_data(attibute_name='specialContributions',
                               rows_name="special",
                               field_names=self._contributions_special)
@@ -202,9 +264,25 @@ class Tre(traj._General_Trajectory):
       VOLUMEPRESSURE03 - fields:
     """
     def get_mass(self)->pd.Series:
+        """
+            returns the systems mass per timestep
+
+        Returns
+        -------
+        pd.Series
+            series of mass per time
+        """
         return pd.Series(map(float, self.database.mass), name="mass", index=self.database.time)
     
     def get_temperature_Info(self)->Dict[int,pd.DataFrame]:
+        """
+            temperature baths
+
+        Returns
+        -------
+        Dict[int,pd.DataFrame]
+            returns the full info of the temperature baths per bath
+        """
         return self._set_data(attibute_name='temperatureInfo',
                         rows_name="temperature",
                         field_names=self._contributions_temperature)
@@ -229,7 +307,24 @@ class Tre(traj._General_Trajectory):
     """    
       UTILS
     """
-    def _set_data(self, attibute_name:str, rows_name:str, field_names:Tuple[str]):
+    def _set_data(self, attibute_name:str, rows_name:str, field_names:Tuple[str])->pd.DataFrame:
+        """_summary_
+            This function extracts generially the information of a column per time
+            
+        Parameters
+        ----------
+        attibute_name : str
+            name of the target attribute
+        rows_name : str
+            name of the block, that shall be extracted
+        field_names : Tuple[str]
+            name of the fields in each row
+            
+        Returns
+        -------
+        pd.DataFrame
+            contains the extracted information
+        """
         if(not hasattr(self, attibute_name)):       
             nDimGroups = self.database[rows_name][0].shape[0]
             
