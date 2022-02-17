@@ -1,4 +1,5 @@
 TITLE
+Demonstration of a Gromos imd file containing a QMMM block
 	 >>> Generated with PyGromosTools (riniker group) <<< 
 END
 BOUNDCOND
@@ -21,7 +22,7 @@ FORCE
 # 	 BONDS 	 ANGLES 	 IMPROPER 	 DIHEDRAL 	 ELECTROSTATIC 	 VDW
  	 0 	 1 	 1 	 1 	 1 	 1 	 
 # 	 NEGR 	 NRE
- 	 1 	 3613 	 
+ 	 1 	 1951 	 
 END
 INITIALISE
 # 	 NTIVEL 	 NTISHK 	 NTINHT 	 NTINHB
@@ -43,7 +44,7 @@ MULTIBATH
 # DOFSET
   1
 # LAST(1 ... DOFSET) 	 COMBATH(1 ... DOFSET) 	 IRBATH(1 ... DOFSET)
-  3613 	 1 	 1
+  1951 	 1 	 1
 END
 NONBONDED
 # 	 NLRELE
@@ -79,6 +80,10 @@ PRINTOUT
 # 	 NTPR 	 NTPP
  	 10 	 0 	 
 END
+QMMM
+# 	 NTQMMM 	 NTQMSW 	 RCUTQ 	 NTWQMMM 	 QMLJ 	 MMSCAL
+ 	 1 	 4 	 1.400000 	 0 	 0 	 -1.000000 	 
+END
 STEP
 # 	 NSTLIM 	 T 	 DT
  	 100000 	 0.000000 	 0.002000 	 
@@ -90,8 +95,4 @@ END
 WRITETRAJ
 # 	 NTWX 	 NTWSE 	 NTWV 	 NTWF 	 NTWE 	 NTWG 	 NTWB
  	 200 	 0 	 0 	 0 	 100 	 0 	 0 	 
-END
-QMMM
-#        NTQMMM    NTQMSW   RCUTQ    NTWQMMM    QMLJ    MMSCAL
-         1         5        1.4      0          0       -1.
 END

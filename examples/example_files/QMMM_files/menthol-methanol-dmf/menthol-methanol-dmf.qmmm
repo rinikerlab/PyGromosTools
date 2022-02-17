@@ -1,5 +1,10 @@
 TITLE
-menthol-methanol-dmf, qmmm specification file
+Custom file header
+	 >>> Generated with PyGromosTools (riniker group) <<< 
+END
+QMUNIT
+# QLGL           QEGE           QCGC           QIGI           
+0.052918 	 2625.5 	 1.0 	 0.1
 END
 QMZONE
 # QMEN                       QMEI  QMEZ  QMEB
@@ -35,12 +40,15 @@ H                              29     1     0
 O                              30     8     0
 H                              31     1     0
 END
-QMUNIT
-# QLGL         QEGE       QCGC    QIGI 
-  5.2918E-2    2625.50    1.0     0.1
-END
 XTBELEMENTS
 1
+2
+3
+4
+5
 6
+7
 8
+9
+10
 END

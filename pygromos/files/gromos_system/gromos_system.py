@@ -1,10 +1,14 @@
 """
-File:            gromos++ system folder managment
-Warnings: this class is WIP!
+File:            gromos_system.py
+Warnings:        this class is WIP!
 
 Description:
-    This is a super class for the collection of all gromos files used inside a project
-Author: Marc Lehner, Benjamin Ries
+
+This is a super class for the collection of all Gromos files used inside a project. 
+Bundle files with the system's topology, coordinates, input parameters, etc. and
+start your simulations from here. 
+
+Author: Marc Lehner, Benjamin Ries, Felix Pultar
 """
 
 # imports
@@ -24,6 +28,7 @@ from pygromos.files.coord.posres import Position_Restraints
 
 from pygromos.files.coord import cnf
 from pygromos.files.coord.cnf import Cnf
+from pygromos.files.qmmm.qmmm import QMMM
 from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.files.topology.disres import Disres
@@ -56,7 +61,6 @@ skip = {"solute_info":cnf.solute_infos,
         "non_ligand_info": cnf.non_ligand_infos,
         "solvent_info": cnf.solvent_infos}
 
-
 class Gromos_System():
     required_files = {"imd": Imd,
                       "top": Top,
@@ -64,7 +68,8 @@ class Gromos_System():
     optional_files = {"disres": Disres,
                       "ptp": Pertubation_topology,
                       "posres": Position_Restraints,
-                      "refpos": Reference_Position}
+                      "refpos": Reference_Position,
+                      "qmmm": QMMM}
 
     residue_list:Dict
     solute_info:cnf.solute_infos
@@ -86,7 +91,7 @@ class Gromos_System():
     def __init__(self, work_folder: str, system_name: str, in_smiles: str = None,
                  in_top_path: str = None, in_cnf_path: str = None, in_imd_path: str = None,
                  in_disres_path: str = None, in_ptp_path: str = None, in_posres_path:str = None, in_refpos_path:str=None,
-                 in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
+                 in_qmmm_path: str = None, in_gromosXX_bin_dir:str = None, in_gromosPP_bin_dir:str=None,
                  rdkitMol: Chem.rdchem.Mol = None, readIn=True, Forcefield:forcefield_system=forcefield_system(), 
                  auto_convert:bool=False, adapt_imd_automatically:bool=True, verbose:bool=False):
         """
@@ -115,6 +120,8 @@ class Gromos_System():
             input pertubation file for free energy calculations (.ptp), by default None
         in_posres_path : str, optional
             input position restraints file (.por), by default None
+        in_qmmm_path: str, optional
+            qmmm parameter file (.qmmm), by default None
         in_refpos_path : str, optional
             input reference position file (.rpf), by default None
         in_gromosXX_bin_dir : str, optional
@@ -175,6 +182,7 @@ class Gromos_System():
                         "disres": in_disres_path,
                         "posres": in_posres_path, 
                         "refpos": in_refpos_path,
+                        "qmmm": in_qmmm_path
                         }
         self.parse_attribute_files(file_mapping, readIn=readIn, verbose=verbose)
 
@@ -213,7 +221,9 @@ class Gromos_System():
             self.cnf = Cnf(in_value=self.mol)
 
         
-        if(self.adapt_imd_automatically and not self._cnf._future_file and not  self.imd._future_file):
+        # decide if the imd should be adapted (force groups etc.)
+        # assert if the respective option is activated and cnf/imd files do actually exist
+        if(self.adapt_imd_automatically and not self._cnf._future_file and not self.imd._future_file):
             self.adapt_imd()
 
         #misc
@@ -421,13 +431,15 @@ class Gromos_System():
 
     @imd.setter
     def imd(self, input_value:Union[str, Imd]):
+        # Make sure the new Imd (str or Imd object) is updated only if the option
+        # has been enabled (adapt_imd_automatically) and actually has coordinates
+        # data that could be used to adapt the imd
+        is_adaptable = self.adapt_imd_automatically and not (self.cnf._future_file
+                       and (self.residue_list is None or self.solute_info is None))
         if(isinstance(input_value, str)):
             if(os.path.exists(input_value) or self._future_promise):
                 self._imd = Imd(in_value=input_value)
-                if (self.adapt_imd_automatically
-                    and not (self.cnf._future_file
-                        and (self.residue_list is None
-                             or self.solute_info is None))):
+                if (is_adaptable):
                     self.adapt_imd()
             elif(self._future_promise):
                 self._imd = Imd(in_value=input_value, _future_file=self._future_promise)
@@ -437,13 +449,15 @@ class Gromos_System():
                 raise FileNotFoundError("Could not find file: "+str(input_value))
         elif(isinstance(input_value, Imd)):
             self._imd = input_value
+            if (is_adaptable):
+                self.adapt_imd()
         elif(input_value is None):
             self._imd = None
         else:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
     @property
-    def refpos(self)->Imd:
+    def refpos(self)->Reference_Position:
         return self._refpos
 
     @refpos.setter
@@ -517,12 +531,62 @@ class Gromos_System():
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
     @property
+    def qmmm(self)->QMMM:
+        return self._qmmm
+
+    @qmmm.setter
+    def qmmm(self, input_value:Union[str, QMMM]):
+        if(isinstance(input_value, str)):
+            if(os.path.exists(input_value) or self._future_promise):
+                self._qmmm = QMMM(in_value=input_value)
+            else:
+                raise FileNotFoundError("Could not find file: " + str(input_value))
+        elif(isinstance(input_value, QMMM)):
+            self._qmmm = input_value
+        elif(input_value is None):
+            self._qmmm = None
+        else:
+            raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
+    
+    @property
     def gromosXX(self)->GromosXX:
         return self._gromosXX
+
+    @gromosXX.setter
+    def gromosXX(self, input_value:Union[str, GromosXX]):
+        if(isinstance(input_value, str)):
+            if(os.path.exists(input_value)):
+                self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
+                self._gromosXX_bin_dir = input_value
+            else:
+                raise FileNotFoundError("Could not find file: " + str(input_value))
+        elif(isinstance(input_value, GromosXX)):
+            self._gromosXX = input_value
+            self._gromosXX_bin_dir = input_value.bin
+        elif(input_value is None):
+            self._gromosXX = None
+        else:
+            raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
     @property
     def gromosPP(self)->GromosPP:
         return self._gromosPP
+
+    @gromosPP.setter
+    def gromosPP(self, input_value:Union[str, GromosPP]):
+        if(isinstance(input_value, str)):
+            if(os.path.exists(input_value)):
+                self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
+                self._gromosPP_bin_dir = input_value
+            else:
+                raise FileNotFoundError("Could not find file: " + str(input_value))
+        elif(isinstance(input_value, GromosPP)):
+            self._gromosPP = input_value
+            self._gromosPP_bin_dir = input_value.bin
+        elif(input_value is None):
+            self._gromosPP = None
+        else:
+            raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
 
     """
@@ -531,7 +595,6 @@ class Gromos_System():
 
     """
     System generation
-    
     """
     def get_script_generation_command(self, var_name:str=None, var_prefixes:str ="")->str:
         if(var_name is None):
@@ -673,7 +736,7 @@ class Gromos_System():
         self.adapt_imd(not_ligand_residues=not_ligand_residues)
 
     def adapt_imd(self, not_ligand_residues:List[str]=[]):
-        #Get residues
+        # Get residues
         if(self.cnf._future_file and self.residue_list is None
             and self.solute_info is None
             and self.protein_info is None
@@ -804,13 +867,13 @@ class Gromos_System():
     def write_files(self, cnf:bool=False, imd:bool=False,
                     top: bool = False, ptp:bool=False,
                     disres:bool=False, posres: bool = False, refpos: bool = False,
-                    mol: bool = False,
+                    qmmm:bool=False, mol: bool = False,
                     all:bool=True,
                     verbose:bool=False):
         if(all):
             control = {k.replace("_", ""): all for k in self._all_files_key}
         else:
-            control = {"top": top, "imd": imd, "cnf": cnf, "ptp":ptp, "disres":disres, "posres":posres, "refpos":refpos}
+            control = {"top": top, "imd": imd, "cnf": cnf, "ptp":ptp, "disres":disres, "posres":posres, "refpos":refpos, "qmmm":qmmm}
 
         for file_name in control:
             if (control[file_name] and hasattr(self, file_name) and (not getattr(self, file_name) is None)):
