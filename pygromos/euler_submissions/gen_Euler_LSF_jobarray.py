@@ -1,3 +1,4 @@
+import os
 from pygromos.euler_submissions.FileManager import Simulation_System as sys
 
 
@@ -51,7 +52,7 @@ def build_jobarray(script_out_path:str, output_dir:str, run_script:str, array_le
         script_text += (
             "\necho \"start ANA\"\n"
             "ANASCRIPT=\""+analysis_script+"\"\n"
-            "jobID=$(bsub  -w \""+chaining_prefix+"(${jobID})\" -n "+str(analysis_processors)+" -W "+analysis_duration+" -e ${BASEDIR}/${JOBNAME}_ana.err -o ${BASEDIR}/${JOBNAME}_ana.out -J \"${JOBNAME}_ana\" < ${ANASCRIPT} | cut -d \"<\" -f2 | cut -d \">\" -f1)\n"
+            "jobID=$(bsub  -w \""+chaining_prefix+"(${jobID})\" -n "+str(analysis_processors)+" -W "+analysis_duration+" -e ${BASEDIR}/../${JOBNAME}_ana.err -o ${BASEDIR}/../${JOBNAME}_ana.out -J \"${JOBNAME}_ana\" < ${ANASCRIPT} | cut -d \"<\" -f2 | cut -d \">\" -f1)\n"
             "echo \"$jobID\"\n"
         )
 
@@ -109,8 +110,8 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "\n"
     "SPACE=\"/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\"\n"
     "echo -e \"$SPACE \n START Script index.rst: ${LSB_JOBINDEX}\"\n"
-    "# first we set svome variables\n"
-    "NAME=\"benjamin\"\n"
+    "# first we set some variables\n"
+    "NAME=\""+os.environ['USER']+"\"\n"
     "OUTPREFIX=" + job_name +"\n"
     "CORES=" + str(cores) +"\n"
     "RUNID=$LSB_JOBINDEX"
@@ -122,9 +123,12 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "\n"
 
     "#INPUT FILES\n"
-    "TOPO=" + in_top +"\n"
-    "DISRES=" + in_disres +"\n"
-    "PTTOPO=" + in_ptp +"\n"
+    "TOPO=" + in_top +"\n")
+    
+    if in_disres is not None:
+        script_text += "DISRES=" + in_disres +"\n"
+    
+    script_text+=("PTTOPO=" + in_ptp +"\n"
     "INIMD=" + in_imd +"_${RUNID}.imd\n"
     "INPUTCRD=" + in_cnf +"\n"
     "\n"
@@ -139,7 +143,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     
     "#RUN:\n"
     "echo -e \"OUTPUT PREFIX: $OUTPREFIX\"\n" 
-    "echo -e \"$SPACE\n STARTING SImulation executed by $NAME \n $(date)\"\n"
+    "echo -e \"$SPACE\n STARTING Simulation executed by $NAME \n $(date)\"\n"
     "TMPOUTPREFIXEQ=${OUTPREFIX}_1_${RUNID}\n"
     "\n"
     
@@ -148,9 +152,10 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "        @topo        ${TOPO} \\\n"
     "        @conf        ${INPUTCRD} \\\n"
     "        @input       ${INIMD} \\\n"
-    "        @pttopo      ${PTTOPO} \\\n"
-    "        @distrest    ${DISRES} \\\n"
-    "        @fin         ${TMPOUTPREFIXEQ}.cnf \\\n"
+    "        @pttopo      ${PTTOPO} \\\n")
+    if in_disres is not None:
+        script_text += "        @distrest    ${DISRES} \\\n"
+    script_text +=("        @fin         ${TMPOUTPREFIXEQ}.cnf \\\n"
     "        @trc         ${TMPOUTPREFIXEQ}.trc \\\n"
     "        @tre         ${TMPOUTPREFIXEQ}.tre \\\n"
     "         >  ${TMPOUTPREFIXEQ}.omd\n"

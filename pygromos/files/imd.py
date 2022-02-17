@@ -40,7 +40,8 @@ def nice_s_vals(svals:Iterable, base10=False) ->list:
                 nicer_labels.append("")
     else:
         for val in svals:
-            nicer_labels.append(round(float(val), str(val).count("0")+2))
+            # nicer_labels.append(round(float(val), str(val).count("0")+2)) # old line
+            nicer_labels.append(round(float(val), 5))
     return nicer_labels
 
 class Imd(_general_gromos_file._general_gromos_file):
@@ -240,7 +241,7 @@ class Imd(_general_gromos_file._general_gromos_file):
         NamedTuple
             non_ligands
         """
-
+        
         #Build Up new list
         ##Criterium, when a ligand is considered
         if(isinstance(ligand_resn_prefix, str)):
@@ -248,7 +249,6 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         #print(ligand_resn_prefix)
         ligand_residue = lambda res: ((res != "SOLV" and (res not in aa.three_letter_aa_lib and res != "prot")) and not res in not_ligand_residues ) or (type(ligand_resn_prefix) != type(None) and res in ligand_resn_prefix)
-        #print(ligand_residue)
 
         ##get ligand parameters
         ###Avoid multi ligands with same resi name!
