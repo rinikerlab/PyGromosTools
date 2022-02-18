@@ -45,7 +45,7 @@ class ambertools_pipeline():
         # convert AMBER files to GROMOS
         self.amber2gromos()
 
-        if(clean):
+        if(self.clean):
             self.cleanup
 
         os.chdir(current_dir)
@@ -139,21 +139,30 @@ class ambertools_pipeline():
         os.chdir('..')
 
     def amber2gromos(self):
-        self.gromos_topology = self.mol2_name + ".top"
+        if(self.solvate):
+            self.gromos_topology = self.mol2_name + "_" + self.solventbox + ".top"
+        else:
+            self.gromos_topology = self.mol2_name + ".top"
         spc_template = os.path.dirname(os.path.abspath(topology_templates.__file__)) + "/spc.top"
         self.gromosPP.amber2gromos(ambertop = self.prm_file, solvent = spc_template, out_path = self.gromos_topology)
+        self.gromos_topology = os.path.abspath(self.gromos_topology)
         print("converted topology saved to " + self.gromos_topology)
 
         pdb2g96_lib = os.path.dirname(os.path.abspath(data.__file__)) + "/pdb2g96.lib"
-        self.gromos_coordinates = self.mol2_name + ".cnf"
-        self.gromosPP.pdb2gromos(in_top_path = self.gromos_topology, in_pdb_path = self.pdb_file, in_lib_path = pdb2g96_lib, out_cnf_path = self.gromos_coordinates)
-        print("converted coordinates saved to " + self.gromos_coordinates)
+        if(self.solvate):
+            self.gromos_coordinate_file = self.mol2_name + "_" + self.solventbox + ".cnf"
+        else:
+            self.gromos_coordinate_file = self.mol2_name + ".cnf"
+        self.gromosPP.pdb2gromos(in_top_path = self.gromos_topology, in_pdb_path = self.pdb_file, in_lib_path = pdb2g96_lib, out_cnf_path = self.gromos_coordinate_file)
+        self.gromos_coordinate_file = os.path.abspath(self.gromos_coordinate_file)
+        print("converted coordinates saved to " + self.gromos_coordinate_file)
 
     def get_gromos_topology(self):
         return self.gromos_topology
 
-    def get_gromos_coordinates(self):
-        return self.gromos_coordinates
+    def get_gromos_coordinate_file(self):
+        print(self.gromos_coordinate_file)
+        return self.gromos_coordinate_file
 
     def cleanup(self):
         os.rmdir(self.tleap_dir)
