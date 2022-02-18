@@ -24,9 +24,13 @@ class ambertools_pipeline():
     # don't remove temporary directories after execution by default
     clean = False
 
-    def __init__(self, in_mol2_file: str, mol: Chem.rdchem.Mol, gromosPP, forcefield: forcefield_system = None):
+    def __init__(self, in_mol2_file: str, mol: Chem.rdchem.Mol, gromosPP, forcefield: forcefield_system = None, work_folder: str = "."):
 
-        self.in_mol2_file = in_mol2_file
+        self.in_mol2_file = os.path.abspath(in_mol2_file)
+
+        current_dir = os.getcwd()
+        os.chdir(work_folder)
+
         self.mol = mol
         self.Forcefield = forcefield
         self.gromosPP = gromosPP
@@ -43,6 +47,8 @@ class ambertools_pipeline():
 
         if(clean):
             self.cleanup
+
+        os.chdir(current_dir)
 
     def antechamber(self):
         self.antechamber_dir = "antechamber_tmp"

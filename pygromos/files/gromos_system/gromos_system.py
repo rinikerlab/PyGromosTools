@@ -637,7 +637,7 @@ class Gromos_System():
         elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
             if (self.in_mol2_file == None):
                 raise TypeError("To use amberff_gaff, please provide a mol2 file")
-            ambertools = ambertools_pipeline(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield, gromosPP = self.gromosPP)
+            ambertools = ambertools_pipeline(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield, gromosPP = self.gromosPP, work_folder = self.work_folder)
             self.top = Top(ambertools.get_gromos_topology())
             self.cnf = Cnf(ambertools.get_gromos_coordinates())
 
