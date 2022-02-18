@@ -970,6 +970,50 @@ class _gromosPPbase:
         return out_file_path
 
     @gromosTypeConverter
+    def amber2gromos(self, ambertop:str, solvent:str, ljscaling: float = 2.0,
+            chargegroups: str=None, atomic_chargegroups: bool = False,
+            out_path: str = "topology.top",
+            _binary_name:str= "amber2gromos", verbose:bool=False)->None:
+        """
+
+        
+        Parameters
+        ----------
+        ambertop : str
+            path to AMBER molecular topology file
+        solvent : str
+            path to GROMOS topology file with solvent
+        ljscaling : float, optional
+            scaling factor for LJ parameters (default: 2.0)
+        atomic_chargegroups : bool, optional
+            assign each atom to its own chargegroup (default: False)
+        chargegroups : str, optional
+            path to chargegroup file
+        _binary_name : str, otpional
+            binary name of gromosPP programm (default: amber2gromos)
+
+        Returns
+        -------
+        str
+            converted GROMOS topology
+        """
+
+        additional_options = [""]
+        if(not ljscaling is None):
+            additional_options += [" @ljscaling ", str(ljscaling)]
+        if(not atomic_chargegroups is None):
+            additional_options += [" @atomic_chargegroups ", str(int(atomic_chargegroups)) ]
+        if(not chargegroups is None):
+            additional_options += [" @chargegroups ", chargegroups ]
+
+        additional_options = " ".join(map(str, additional_options))
+
+        command = ([self._bin + _binary_name, " @ambertop ", ambertop, "@solvent", solvent, additional_options, " \n"])
+
+        if(verbose): print(command)
+        bash.execute(command, catch_STD=out_path, verbose=verbose)
+
+    @gromosTypeConverter
     def noe(self,  in_top_path:str, in_noe_path:str, in_traj_path:str, out_path:str,
                 pbc:str="v", gathering:str="cog",
             _binary_name:str= "noe", verbose:bool=False) -> str:

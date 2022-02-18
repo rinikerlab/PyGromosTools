@@ -173,15 +173,13 @@ class Gromos_System():
             self.mol = Chem.MolFromMol2File(in_mol2_file)
             self.hasData = True
 
-        print(rdkitMol)
-
         # import  molecule from RDKit
         if rdkitMol:
             self.mol = rdkitMol
             self.smiles = Chem.MolToSmiles(self.mol)
             self.hasData = True
 
-        # automate all conversions for rdkit mols if possible
+        # automate all conversions for rdkit mols or mol2 if possible
         if auto_convert:
             if self.hasData:
                 self.auto_convert()
@@ -639,7 +637,9 @@ class Gromos_System():
         elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
             if (self.in_mol2_file == None):
                 raise TypeError("To use amberff_gaff, please provide a mol2 file")
-            ambertools_pipeline(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield)
+            ambertools = ambertools_pipeline(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield, gromosPP = self.gromosPP)
+            self.top = Top(ambertools.get_gromos_topology())
+            self.cnf = Cnf(ambertools.get_gromos_coordinates())
 
         else:
             raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
@@ -739,7 +739,7 @@ class Gromos_System():
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
         ff_name = self.Forcefield.name
-        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name = "amberff_gaff":
+        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
             #adjust harmonic forces
             if (hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None):
                 if self.verbose:

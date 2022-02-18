@@ -7,24 +7,33 @@ Author: Salomé Rieder
 """
 
 #imports
-import importlib
+import subprocess
 from pygromos.files.topology.top import Top
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.data import topology_templates
+from pygromos import data
 import os
 from rdkit import Chem
 
 class ambertools_pipeline():
-    def __init__(self, in_mol2_file: str, mol: Chem.rdchem.Mol, forcefield: forcefield_system = None):
+    # static variables to control solvation
+    solvate = False
+    solventbox = "TIP3PBOX"
+
+    def __init__(self, in_mol2_file: str, mol: Chem.rdchem.Mol, gromosPP, forcefield: forcefield_system = None):
 
         self.in_mol2_file = in_mol2_file
         self.mol = mol
         self.Forcefield = forcefield
+        self.gromosPP = gromosPP
+
+        self.mol2_name = ''.join(os.path.basename(self.in_mol2_file).split('.')[:-1])
 
         self.antechamber()
         self.parmchk()
         self.tleap()
+        self.amber2gromos()
 
     def antechamber(self):
         self.antechamber_dir = "antechamber_tmp"
@@ -33,17 +42,23 @@ class ambertools_pipeline():
         os.chdir(self.antechamber_dir)
 
         net_charge = Chem.rdmolops.GetFormalCharge(self.mol)
-        self.antechamber_mol2 = os.path.basename(self.in_mol2_file)
+        
+        self.antechamber_out_mol2 = self.mol2_name + ".mol2"
 
-        command = self.Forcefield.amber_bindir + "/antechamber"\
-                    + " -i " + self.in_mol2_file \
-                    + " -fi mol2" \
-                    + " -o " + self.antechamber_mol2 \
-                    + " -fo mol2 -s 2 -c bcc " \
-                    + " -nc " + str(net_charge)
+        command = [self.Forcefield.amber_bindir + "/antechamber"]
+        command.extend(["-i",self.in_mol2_file])
+        command.extend(["-fi","mol2"])
+        command.extend(["-o",self.antechamber_out_mol2])
+        command.extend(["-fo","mol2"])
+        command.extend(["-s","2"])
+        command.extend(["-c","bcc"])
+        command.extend(["-nc",str(net_charge)])
 
         print(command)
-        os.system(command)
+        success = not subprocess.call(command)
+        if(not success):
+            raise RuntimeError("execution of parmchk2 not successful for: " + ' '.join(command))
+
         os.chdir('..')
 
     def parmchk(self):
@@ -52,15 +67,17 @@ class ambertools_pipeline():
         self.parmchk_dir = os.path.abspath(self.parmchk_dir)
         os.chdir(self.parmchk_dir)
 
-        self.parmchk_frcmod = ''.join(self.antechamber_mol2.split('.')[:-1]) + ".frcmod"
+        self.parmchk_out_frcmod = self.mol2_name + ".frcmod"
 
-        command = self.Forcefield.amber_bindir + "/parmchk2" \
-                    + " -i " + self.antechamber_dir \
-                    + "/" + os.path.basename(self.in_mol2_file) \
-                    + " -f mol2 -o " + self.parmchk_frcmod
+        command = [self.Forcefield.amber_bindir + "/parmchk2"]
+        command.extend(["-i",self.antechamber_dir + "/" + self.antechamber_out_mol2])
+        command.extend(["-f","mol2"])
+        command.extend(["-o",self.parmchk_out_frcmod])
 
         print(command)
-        os.system(command)
+        success = not subprocess.call(command)
+        if(not success):
+            raise RuntimeError("execution of parmchk2 not successful for: " + ' '.join(command))
         os.chdir('..')
 
     def tleap(self):
@@ -69,15 +86,56 @@ class ambertools_pipeline():
         self.tleap_dir = os.path.abspath(self.tleap_dir)
         os.chdir(self.tleap_dir)
 
-        cmd_file = open("tleap.cmd", "w")
+        cmd_file_name = self.mol2_name + ".cmd"
+        cmd_file = open(cmd_file_name, "w")
+        self.prm_file = self.tleap_dir + "/" + self.mol2_name + ".leap.prm"
+        self.crd_file = self.tleap_dir + "/" + self.mol2_name + ".leap.crd"
+        self.pdb_file = self.tleap_dir + "/" + self.mol2_name + ".leap.pdb"
+
         for leaprc in self.Forcefield.leaprc_files:
             cmd_file.write("source " + leaprc + "\n")
 
+        for frcmod in self.Forcefield.frcmod_files:
+            cmd_file.write("loadamberparams " + frcmod + "\n")
+
         cmd_file.write("set default pbradii mbondi\n")
         cmd_file.write("set default nocenter on\n")
+        cmd_file.write("frcmod_" + self.mol2_name + " = loadamberparams " + self.parmchk_dir + "/" + self.parmchk_out_frcmod + "\n")
+        cmd_file.write(self.mol2_name + " = loadmol2 " + self.antechamber_dir + "/" + self.antechamber_out_mol2 + "\n")
 
-        #command = self.Forcefield.amber_bindir + "/tleap"
+        if(self.solvate):
+            cmd_file.write("solvateBox " + self.mol2_name + " " + self.solventbox + " 14 0.75\n")
+            self.prm_file = ''.join(self.prm_file.split('.')[:-1]) + "_" + self.solventbox + ".prm"
+            self.crd_file = ''.join(self.crd_file.split('.')[:-1]) + "_" + self.solventbox + ".crd"
+            self.pdb_file = ''.join(self.pdb_file.split('.')[:-1]) + "_" + self.solventbox + ".pdb"
+        
+        cmd_file.write("saveamberparm " + self.mol2_name + " " + self.prm_file + " " + self.crd_file + "\n")
+        cmd_file.write("savepdb " + self.mol2_name + " " + self.pdb_file + "\n")
+        cmd_file.write("quit\n")
+        cmd_file.close()
 
-        #print(command)
-        #os.system(command)
+        command = [self.Forcefield.amber_bindir + "/tleap"]
+        command.extend(['-f',cmd_file_name])
+
+        print(command)
+        success = not subprocess.call(command)
+        if(not success):
+            raise RuntimeError("execution of parmchk2 not successful for: " + ' '.join(command))
         os.chdir('..')
+
+    def amber2gromos(self):
+        self.gromos_topology = self.mol2_name + ".top"
+        spc_template = os.path.dirname(os.path.abspath(topology_templates.__file__)) + "/spc.top"
+        self.gromosPP.amber2gromos(ambertop = self.prm_file, solvent = spc_template, out_path = self.gromos_topology)
+        print("converted topology saved to " + self.gromos_topology)
+
+        pdb2g96_lib = os.path.dirname(os.path.abspath(data.__file__)) + "/pdb2g96.lib"
+        self.gromos_coordinates = self.mol2_name + ".cnf"
+        self.gromosPP.pdb2gromos(in_top_path = self.gromos_topology, in_pdb_path = self.pdb_file, in_lib_path = pdb2g96_lib, out_cnf_path = self.gromos_coordinates)
+        print("converted coordinates saved to " + self.gromos_coordinates)
+
+    def get_gromos_topology(self):
+        return self.gromos_topology
+
+    def get_gromos_coordinates(self):
+        return self.gromos_coordinates
