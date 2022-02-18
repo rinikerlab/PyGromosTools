@@ -2,7 +2,7 @@
 File:            ambertools_pipeline
 Warnings: this class is WIP!
 Description:
-    This is a class to parameterize a molecule with ambertools
+    This is a class to parameterize a molecule with ambertools. Generates a GROMOS top and cnf file.
 Author: Salomé Rieder
 """
 
@@ -21,6 +21,9 @@ class ambertools_pipeline():
     solvate = False
     solventbox = "TIP3PBOX"
 
+    # don't remove temporary directories after execution by default
+    clean = False
+
     def __init__(self, in_mol2_file: str, mol: Chem.rdchem.Mol, gromosPP, forcefield: forcefield_system = None):
 
         self.in_mol2_file = in_mol2_file
@@ -30,10 +33,16 @@ class ambertools_pipeline():
 
         self.mol2_name = ''.join(os.path.basename(self.in_mol2_file).split('.')[:-1])
 
+        # ambertools pipeline to generate pdb, crd and prm files
         self.antechamber()
         self.parmchk()
         self.tleap()
+
+        # convert AMBER files to GROMOS
         self.amber2gromos()
+
+        if(clean):
+            self.cleanup
 
     def antechamber(self):
         self.antechamber_dir = "antechamber_tmp"
@@ -139,3 +148,8 @@ class ambertools_pipeline():
 
     def get_gromos_coordinates(self):
         return self.gromos_coordinates
+
+    def cleanup(self):
+        os.rmdir(self.tleap_dir)
+        os.rmdir(self.antechamber_dir)
+        os.rmdir(self.parmchk_dir)
