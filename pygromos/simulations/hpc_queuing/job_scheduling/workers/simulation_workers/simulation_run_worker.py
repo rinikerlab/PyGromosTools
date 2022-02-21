@@ -121,10 +121,8 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
                  imd_file.INITIALISE.NTISHK = 0 if(imd_file.CONSTRAINT.NTC > 0) else 1
          
         if(hasattr(imd_file, "MULTIBATH")):
-                 imd_file.INITIALISE.NTINHT = 0 if(imd_file.MULTIBATH.ALGORITHM < 1) else 1
+                 imd_file.INITIALISE.NTINHT = 0 if(imd_file.MULTIBATH.ALGORITHM <= 1) else 1
                   
-        if(hasattr(imd_file, "PRESSURESCALE")):
-                 imd_file.INITIALISE.NTINHB = 0  if(imd_file.PRESSURESCALE < 1) else 1
                   
         imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
 
@@ -134,10 +132,6 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 
         if (is_stochastic_dynamics_sim):
             imd_file.INITIALISE.NTISTI = 1
-        elif(is_energymin_sim):
-            pass
-        else:
-            imd_file.INITIALISE.NTISHK = 3
 
     elif(initialize_first_run and runID > 1):
         imd_file.INITIALISE.NTIVEL = 0
