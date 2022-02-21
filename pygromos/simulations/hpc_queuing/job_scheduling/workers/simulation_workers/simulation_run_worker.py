@@ -96,11 +96,12 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     imd_file = imd.Imd(in_imd_path)
     cnf_file = cnf.Cnf(in_cnf_path)
 
-    ##check init_block
-    ###StochDyn
+    ##check init_block - if specified!
+    ###What kind of simulation
     is_stochastic_dynamics_sim = False
     is_vacuum = False
     is_energymin_sim = False
+
     if(imd_file.BOUNDCOND.NTB == 0):
         is_vacuum = True
 
@@ -111,33 +112,39 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     if(hasattr(imd_file, "ENERGYMIN")):
         if (imd_file.ENERGYMIN.NTEM > 0):
             is_energymin_sim = True
-
+            
+    #Adapt Initializations:
     if (reinitialize or (initialize_first_run and runID == 1)):
         imd_file.INITIALISE.NTIVEL = 1
-        imd_file.INITIALISE.NTISHK = 0
-        imd_file.INITIALISE.NTINHT = 0
-        imd_file.INITIALISE.NTINHB = 0
-        imd_file.INITIALISE.NTISHI = 0
+
+        if(hasattr(imd_file, "CONSTRAINT")):
+                 imd_file.INITIALISE.NTISHK = 0 if( and imd_file.CONSTRAINT.NTC > 0) else 1
+         
+        if(hasattr(imd_file, "MULTIBATH")):
+                 imd_file.INITIALISE.NTINHT = 0 if(imd_file.MULTIBATH.ALGORITHM < 1) else 1
+                  
+        if(hasattr(imd_file, "PRESSURESCALE")):
+                 imd_file.INITIALISE.NTINHB = 0  if( and imd_file.PRESSURESCALE < 1) else 1
+                  
+        imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
+
         imd_file.INITIALISE.NTIRTC = 0
         imd_file.INITIALISE.NTICOM = 0
         imd_file.INITIALISE.NTISTI = 0
 
         if (is_stochastic_dynamics_sim):
-            imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
             imd_file.INITIALISE.NTISTI = 1
         elif(is_energymin_sim):
-            imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
-            
+            pass
         else:
             imd_file.INITIALISE.NTISHK = 3
-            imd_file.INITIALISE.NTISHI = 1
 
-    else:
-        imd_file.INITIALISE.NTIVEL = 0 if(hasattr(cnf_file, "VELOCITY")) else 1
-        imd_file.INITIALISE.NTISHK = 0 if(hasattr(imd_file, "CONSTRAINT") and imd_file.CONSTRAINT.NTC > 0) else 1
-        imd_file.INITIALISE.NTINHT = 0 if(hasattr(imd_file, "MULTIBATH") and imd_file.MULTIBATH.ALGORITHM < 1) else 1
-        imd_file.INITIALISE.NTINHB = 0 #if(hasattr(imd_file, "PRESSURESCALE") and imd_file.PRESSURESCALE < 1) else 1
-        imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
+    elif(initialize_first_run and runID > 1):
+        imd_file.INITIALISE.NTIVEL = 0
+        imd_file.INITIALISE.NTISHI = 0 
+        imd_file.INITIALISE.NTISHK = 0 
+        imd_file.INITIALISE.NTINHT = 0 
+        imd_file.INITIALISE.NTINHB = 0
         imd_file.INITIALISE.NTIRTC = 0
         imd_file.INITIALISE.NTICOM = 0
         imd_file.INITIALISE.NTISTI = 0
