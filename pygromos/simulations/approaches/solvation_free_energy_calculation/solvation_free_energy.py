@@ -47,7 +47,7 @@ from pygromos.files.blocks.topology_blocks import pertubation_lam_state, atom_la
     TITLE, SCALEDINTERACTIONS
 from pygromos.files.blocks.imd_blocks import PRESSURESCALE, PERTURBATION, MULTIBATH
 from pygromos.files.blocks.imd_blocks import RANDOMNUMBERS
-from pygromos.analysis.error_estimate import ee
+from pygromos.analysis.error_estimate import error_estimator
 from pygromos.utils import bash
 import scipy.integrate as integrate
 import pandas as pd
@@ -793,8 +793,8 @@ class Solvation_free_energy_calculation:
             # Get values
             lambdas.append(rlam)
             averages.append(np.mean(dhdls))
-            rmsds.append(ee(dhdls).calculate_rmsd())
-            ees.append(ee(dhdls).calculate_ee())
+            rmsds.append(error_estimator(dhdls).calculate_rmsd())
+            ees.append(error_estimator(dhdls).calculate_error_estimate())
 
 
         Metrics["Lambda"] = lambdas

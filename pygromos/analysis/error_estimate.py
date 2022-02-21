@@ -11,7 +11,7 @@ Author: Paul Katzberger
 from typing import List
 import numpy as np
 
-class ee:
+class error_estimator:
     '''
     Class to calculate the Error Estimate as implemented in ene_ana
     '''
@@ -49,7 +49,7 @@ class ee:
 
         return np.sqrt(msd)
 
-    def calculate_ee(self):
+    def calculate_error_estimate(self):
         '''
         Calculation of the Error Estimate as in ene_ana
         Returns
