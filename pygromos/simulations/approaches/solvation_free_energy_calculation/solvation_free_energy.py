@@ -1,6 +1,10 @@
 """
 File: automatic calculation of Solvation Free Energies
-Warnings: this class is WIP!
+Tests: this class has been tested for a limited set of compounds and the "openforcefield" forcefield.
+The code wast tested and results were in line with literature results [1], BUT:
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND! *
+
+[1]: Kashef Ol Gheta, Sadra & Wang, Shuzhe & Acree, William & Hünenberger, Philippe. (2021). Evaluation of nine condensed-phase force fields of the GROMOS, CHARMM, OPLS, AMBER, and OpenFF families against experimental cross-solvation free energies. Physical Chemistry Chemical Physics. 23. 10.1039/D1CP00215E.
 
 Description:
     For a given gromos_system (or smiles) the solvation Free Energy is automaticaly calculated.
@@ -15,29 +19,26 @@ Description:
         6) Calculate solvation free energies by integrating over the different lambda points
 
 Author: Paul Katzberger
+email: paul.katzberger@phys.chem.ethz.ch
 """
 
 # Imports
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 from openff.toolkit.topology import Molecule
-from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
 from pygromos.files.topology.top import Top
 from pygromos.files.coord import Cnf
 from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
-from pygromos.utils import bash
 from rdkit import Chem
 import os
 import numpy as np
 import warnings
-from copy import deepcopy
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys_local
 from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSys_lsf
-from pygromos.simulations.modules.preset_simulation_modules import emin
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
 from pygromos.simulations.modules.preset_simulation_modules import sd
 from pygromos.files.simulation_parameters.imd import Imd
-from pygromos.files.blocks.imd_blocks import COVALENTFORM, COMTRANSROT, AMBER
+from pygromos.files.blocks.imd_blocks import COVALENTFORM, AMBER
 from pygromos.gromos.pyGromosPP.ran_box import ran_box
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
@@ -182,9 +183,9 @@ class Solvation_free_energy_calculation:
 
         '''
         self.create_liq()
-        emin_sys, jobID = self.minimize_liq(gromos_system=self.groSys_liq,prev_JobID=-1)
-        eq_sys, jobID = self.eq_liq(gromos_system=emin_sys,prev_JobID=jobID)
-        ti_sys, jobID = self.ti_liq(gromos_system=eq_sys,prev_JobID=jobID)
+        emin_sys, jobID = self.minimize_liq(in_gromos_simulation_system=self.groSys_liq, prev_JobID=-1)
+        eq_sys, jobID = self.eq_liq(in_gromos_simulation_system=emin_sys, prev_JobID=jobID)
+        ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID)
         self.calculate_solvation_free_energy(ti_sys,jobID)
 
     def create_liq(self):
@@ -228,12 +229,12 @@ class Solvation_free_energy_calculation:
         # reset liq system
         self.groSys_liq.rebase_files()
 
-    def minimize_liq(self, gromos_system: Gromos_System, prev_JobID: int):
+    def minimize_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int):
         '''
         Minimize Liquide
         Parameters
         ----------
-        gromos_system : Gromos_System
+        in_gromos_simulation_system : Gromos_System
             input Gromos System to minimize
         prev_JobID
             previous jobID to wait for
@@ -244,24 +245,24 @@ class Solvation_free_energy_calculation:
         jobID : int
             ID of submitted job for the next job to wait for (only relevant for LSF)
         '''
-        gromos_system.adapt_imd_automatically = False
-        gromos_system.imd = self.imd_liq_min
-        emin_sys = simulation(in_gromos_simulation_system=gromos_system, override_project_dir=self.groSys_liq.work_folder,
-                                     step_name=self.system_name + "_emin",
-                                     submission_system=self.submissonSystem,
-                                     analysis_script=simulation_analysis.do,
-                                     verbose=self.verbose)
+        in_gromos_simulation_system.adapt_imd_automatically = False
+        in_gromos_simulation_system.imd = self.imd_liq_min
+        emin_sys = simulation(in_gromos_simulation_system=in_gromos_simulation_system, override_project_dir=self.groSys_liq.work_folder,
+                              step_name=self.system_name + "_emin",
+                              submission_system=self.submissonSystem,
+                              analysis_script=simulation_analysis.do,
+                              verbose=self.verbose)
 
         return emin_sys, emin_sys._last_jobID
 
-    def equilibration_gromos_system_step(self, gromos_system: Gromos_System, NTIVAL: int = 0, NTISHI: int = 0,
+    def equilibration_gromos_system_step(self, in_gromos_simulation_system: Gromos_System, NTIVAL: int = 0, NTISHI: int = 0,
                                          TEMPI: float = 0, TEMPO: float = 0, prevID: int = -1, run_name: str = "",
                                          natoms: int = 0):
         '''
         Perform one step in equilibration routine
         Parameters
         ----------
-        gromos_system : Gromos_System
+        in_gromos_simulation_system : Gromos_System
             Gromos System to work on
         NTIVAL : int
             NTIVAL Parameter to set
@@ -325,27 +326,27 @@ class Solvation_free_energy_calculation:
         eq_imd.randomize_seed()
 
         if prevID == -1:
-            md_sys = simulation(in_gromos_simulation_system=gromos_system, override_project_dir=self.groSys_liq.work_folder,
-                                       step_name="eq" + run_name, in_imd_path=eq_imd,
-                                       submission_system=self.submissonSystem,
-                                       analysis_script=simulation_analysis.do,
-                                       verbose=self.verbose)
+            md_sys = simulation(in_gromos_simulation_system=in_gromos_simulation_system, override_project_dir=self.groSys_liq.work_folder,
+                                step_name="eq" + run_name, in_imd_path=eq_imd,
+                                submission_system=self.submissonSystem,
+                                analysis_script=simulation_analysis.do,
+                                verbose=self.verbose)
         else:
-            md_sys = simulation(in_gromos_simulation_system=gromos_system, override_project_dir=self.groSys_liq.work_folder,
-                                       step_name="eq" + run_name, in_imd_path=eq_imd,
-                                       submission_system=self.submissonSystem,
-                                       analysis_script=simulation_analysis.do,
-                                       verbose=self.verbose, previous_simulation_run=prevID)
+            md_sys = simulation(in_gromos_simulation_system=in_gromos_simulation_system, override_project_dir=self.groSys_liq.work_folder,
+                                step_name="eq" + run_name, in_imd_path=eq_imd,
+                                submission_system=self.submissonSystem,
+                                analysis_script=simulation_analysis.do,
+                                verbose=self.verbose, previous_simulation_run=prevID)
 
         return md_sys, md_sys._last_jobID
 
-    def eq_liq(self, gromos_system: Gromos_System, prev_JobID: int):
+    def eq_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int):
         '''
         Function to equilibrate the liquid following a 5 step scheme by sequentially calling
         self.equilibration_gromos_system_step() with different paramteres
         Parameters
         ----------
-        gromos_system : Gromos_System
+        in_gromos_simulation_system : Gromos_System
             Gromos System to use (normally energy minimized system)
         prev_JobID : int
             ID of previous run for LSF queue
@@ -355,38 +356,38 @@ class Solvation_free_energy_calculation:
 
         '''
         # Start equilibration
-        gromos_system.imd = Imd(template_md)
+        in_gromos_simulation_system.imd = Imd(template_md)
 
         # Equilibrate system and pass on for next step
-        eq_sys1, JobID1 = self.equilibration_gromos_system_step(gromos_system=gromos_system, NTIVAL=1, NTISHI=1, TEMPI=60,
+        eq_sys1, JobID1 = self.equilibration_gromos_system_step(in_gromos_simulation_system=in_gromos_simulation_system, NTIVAL=1, NTISHI=1, TEMPI=60,
                                                                 TEMPO=60,
                                                                 prevID=prev_JobID, run_name=self.system_name + "_eq_1",
                                                                 natoms=self.num_atoms * self.num_molecules)
-        eq_sys2, JobID2 = self.equilibration_gromos_system_step(gromos_system=eq_sys1, NTIVAL=0, NTISHI=0, TEMPI=0,
+        eq_sys2, JobID2 = self.equilibration_gromos_system_step(in_gromos_simulation_system=eq_sys1, NTIVAL=0, NTISHI=0, TEMPI=0,
                                                                 TEMPO=120,
                                                                 prevID=JobID1, run_name=self.system_name + "_eq_2",
                                                                 natoms=self.num_atoms * self.num_molecules)
-        eq_sys3, JobID3 = self.equilibration_gromos_system_step(gromos_system=eq_sys2, NTIVAL=0, NTISHI=0, TEMPI=0,
+        eq_sys3, JobID3 = self.equilibration_gromos_system_step(in_gromos_simulation_system=eq_sys2, NTIVAL=0, NTISHI=0, TEMPI=0,
                                                                 TEMPO=180,
                                                                 prevID=JobID2, run_name=self.system_name + "_eq_3",
                                                                 natoms=self.num_atoms * self.num_molecules)
-        eq_sys4, JobID4 = self.equilibration_gromos_system_step(gromos_system=eq_sys3, NTIVAL=0, NTISHI=0, TEMPI=0,
+        eq_sys4, JobID4 = self.equilibration_gromos_system_step(in_gromos_simulation_system=eq_sys3, NTIVAL=0, NTISHI=0, TEMPI=0,
                                                                 TEMPO=240,
                                                                 prevID=JobID3, run_name=self.system_name + "_eq_4",
                                                                 natoms=self.num_atoms * self.num_molecules)
-        eq_sys5, JobID5 = self.equilibration_gromos_system_step(gromos_system=eq_sys4, NTIVAL=0, NTISHI=0, TEMPI=0,
+        eq_sys5, JobID5 = self.equilibration_gromos_system_step(in_gromos_simulation_system=eq_sys4, NTIVAL=0, NTISHI=0, TEMPI=0,
                                                                 TEMPO=285,
                                                                 prevID=JobID4, run_name=self.system_name + "_eq_5",
                                                                 natoms=self.num_atoms * self.num_molecules)
 
         return eq_sys5, JobID5
 
-    def ti_liq(self, gromos_system: Gromos_System, prev_JobID: int, n_points:int = 21):
+    def ti_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int, n_points:int = 21):
         '''
         Perform TI of Liquid
         Parameters
         ----------
-        gromos_system : Gromos_System
+        in_gromos_simulation_system : Gromos_System
             Gromos system to start TI with
         prev_JobID : int
             job ID of previous job to wait for (in LSF queue)
@@ -399,7 +400,7 @@ class Solvation_free_energy_calculation:
             ID of last submitted job (WARNING it could be that this job finishes before some others manual check needed)
         '''
         # First generate ptp file
-        gromos_system = self.add_ptp_file(gromos_system)
+        in_gromos_simulation_system = self.add_ptp_file(in_gromos_simulation_system)
 
         # Set up dictunaries
         systems = {}
@@ -428,9 +429,8 @@ class Solvation_free_energy_calculation:
             # First run has longer equilibration time and different naming scheme
             if rlam == 0:
                 system_name = self.system_name + "_L" + str(rlam) + "_" + str(iteration)
-                c_ti_sys0_prep = self.set_up_ti_lambda_run(gromos_system=gromos_system, NSTLIM=175000, RLAM=rlam,
-                                                        system_name=system_name)
-                print(c_ti_sys0_prep.imd)
+                c_ti_sys0_prep = self.set_up_ti_lambda_run(in_gromos_simulation_system=in_gromos_simulation_system, NSTLIM=175000, RLAM=rlam,
+                                                           system_name=system_name)
                 c_ti_sys0_prep.adapt_imd_automatically = False
                 c_ti_sys0 = sd(in_gromos_system=c_ti_sys0_prep, override_project_dir=ti_dir + system_name,
                                       step_name=system_name, submission_system=self.submissonSystem,
@@ -444,7 +444,7 @@ class Solvation_free_energy_calculation:
                 previous_system_name = self.system_name + "_L" + str(previous_rlam) + "_0"
 
                 # Setup second step
-                c_ti_sys0_prep = self.set_up_ti_lambda_run(gromos_system=systems[previous_system_name], NSTLIM=25000,
+                c_ti_sys0_prep = self.set_up_ti_lambda_run(in_gromos_simulation_system=systems[previous_system_name], NSTLIM=25000,
                                                            RLAM=rlam,
                                                            system_name=system_name)
                 c_ti_sys0 = sd(in_gromos_system=c_ti_sys0_prep, override_project_dir=ti_dir + system_name,
@@ -463,9 +463,9 @@ class Solvation_free_energy_calculation:
             previous_system_name = self.system_name + "_L" + str(rlam) + "_" + str(iteration - 1)
 
             # Setup second step
-            c_ti_sys1_prep = self.set_up_ti_lambda_run(gromos_system=systems[previous_system_name], NSTLIM=25000,
-                                                    RLAM=rlam,
-                                                  system_name=system_name)
+            c_ti_sys1_prep = self.set_up_ti_lambda_run(in_gromos_simulation_system=systems[previous_system_name], NSTLIM=25000,
+                                                       RLAM=rlam,
+                                                       system_name=system_name)
             c_ti_sys1 = sd(in_gromos_system=c_ti_sys1_prep, override_project_dir=ti_dir + system_name,
                                   step_name=system_name, submission_system=self.submissonSystem,
                                   previous_simulation_run=jobIDs[previous_system_name])
@@ -479,9 +479,9 @@ class Solvation_free_energy_calculation:
             system_name = self.system_name + "_L" + str(rlam) + "_" + str(iteration)
             previous_system_name = self.system_name + "_L" + str(rlam) + "_" + str(iteration - 1)
 
-            c_ti_sys2_prep = self.set_up_ti_lambda_run(gromos_system=systems[previous_system_name], NSTLIM=500000,
-                                                   RLAM=rlam,
-                                                  system_name=system_name)
+            c_ti_sys2_prep = self.set_up_ti_lambda_run(in_gromos_simulation_system=systems[previous_system_name], NSTLIM=500000,
+                                                       RLAM=rlam,
+                                                       system_name=system_name)
             c_ti_sys2 = sd(in_gromos_system=c_ti_sys2_prep, override_project_dir=ti_dir + system_name,
                                   step_name=system_name, submission_system=self.submissonSystem,
                                   previous_simulation_run=jobIDs[previous_system_name])
@@ -494,13 +494,13 @@ class Solvation_free_energy_calculation:
 
         return JobID, c_ti_sys2
 
-    def set_up_ti_lambda_run(self, gromos_system: Gromos_System, NSTLIM: int = 0, RLAM: float = 0,
+    def set_up_ti_lambda_run(self, in_gromos_simulation_system: Gromos_System, NSTLIM: int = 0, RLAM: float = 0,
                              system_name: str = ""):
         '''
         Setup on TI run by setting the lambda value and steps
         Parameters
         ----------
-        gromos_system : Gromos_System
+        in_gromos_simulation_system : Gromos_System
             Gromos System to work with
         NSTLIM : int
             NSTLIM step parameter to use
@@ -515,32 +515,31 @@ class Solvation_free_energy_calculation:
             Prepared Gromos System
         '''
         # Do not change imd automatically
-        gromos_system.adapt_imd_automatically = False
+        in_gromos_simulation_system.adapt_imd_automatically = False
 
         # Setup storage
         ti_dir = self.groSys_liq.work_folder + "/ti/"
 
         # Rename System and set storage path
-        gromos_system.imd = self.imd_liq_ti
-        gromos_system.name = system_name
-        gromos_system.work_folder = ti_dir + system_name
+        in_gromos_simulation_system.imd = self.imd_liq_ti
+        in_gromos_simulation_system.name = system_name
+        in_gromos_simulation_system.work_folder = ti_dir + system_name
 
         # Set number of steps and Lambda Parameter
-        gromos_system.imd.STEP.NSTLIM = NSTLIM
-        gromos_system.imd.PERTURBATION.RLAM = RLAM
+        in_gromos_simulation_system.imd.STEP.NSTLIM = NSTLIM
+        in_gromos_simulation_system.imd.PERTURBATION.RLAM = RLAM
 
         # Save files
-        gromos_system.rebase_files()
+        in_gromos_simulation_system.rebase_files()
 
-        print('Setup imd',gromos_system.imd)
-        return gromos_system
+        return in_gromos_simulation_system
 
-    def add_ptp_file(self, gromos_system: Gromos_System):
+    def add_ptp_file(self, in_gromos_simulation_system: Gromos_System):
         '''
         Function to generate a perturbation Topology
         Parameters
         ----------
-        gromos_system : Gromos_System
+        in_gromos_simulation_system : Gromos_System
             Gromos system to add perturbation Topology to
 
         Returns
@@ -553,7 +552,7 @@ class Solvation_free_energy_calculation:
         pert_atoms = []
 
         # Set only atoms of the first molecule
-        for atom_line in gromos_system.top.SOLUTEATOM[:self.num_atoms]:
+        for atom_line in in_gromos_simulation_system.top.SOLUTEATOM[:self.num_atoms]:
             # Get atoms and the correct states
             states = {}
             phys_state = pertubation_lam_state(IAC=atom_line.IAC, MASS=atom_line.MASS, CHARGE=atom_line.CG)
@@ -569,15 +568,15 @@ class Solvation_free_energy_calculation:
         pert_atom_block = PERTATOMPARAM(pert_atoms)
 
         # Generate ptp file
-        gromos_system.ptp = Pertubation_topology(in_value=None)
-        gromos_system.ptp.PERTATOMPARAM = pert_atom_block
-        gromos_system.ptp.TITLE = TITLE("Automatic generated pertubation file. For Solvation Free Energy calculation")
+        in_gromos_simulation_system.ptp = Pertubation_topology(in_value=None)
+        in_gromos_simulation_system.ptp.PERTATOMPARAM = pert_atom_block
+        in_gromos_simulation_system.ptp.TITLE = TITLE("Automatic generated pertubation file. For Solvation Free Energy calculation")
 
         content_dict = [1, 1, 2, 1, 0]
         scaled = SCALEDINTERACTIONS(values=content_dict)
-        gromos_system.ptp.add_block(block=scaled)
+        in_gromos_simulation_system.ptp.add_block(block=scaled)
 
-        return gromos_system
+        return in_gromos_simulation_system
 
     def create_liq_min_imd(self):
         """
@@ -724,7 +723,6 @@ class Solvation_free_energy_calculation:
         pert_block = PERTURBATION(NTG=1, NRDGL=0, RLAM=0, DLAMT=0,
                                   ALPHLJ=0.5, ALPHC=0.5, NLAM=1, NSCALE=1)
         ti_imd.add_block(block=pert_block)
-        print("TI imd",ti_imd)
         return ti_imd
 
     def calculate_solvation_free_energy(self,n_points : int = 21):
@@ -766,7 +764,6 @@ class Solvation_free_energy_calculation:
 
             if os.path.isfile(path + "simulation.tar"):
                 sim_tar_exists = True
-                print('tar exsists')
                 # Extract files
                 command = "tar" + " "
                 command += "-xf" + " "
@@ -786,10 +783,7 @@ class Solvation_free_energy_calculation:
             else:
                 print(path + "simulation/" + system_name + "_1/" + system_name)
                 exit('No Files have been found')
-            # if l == 10:
-            #     print([trg.database.totals[i][2] for i in range(len(trg.database.totals))])
-            #     exit()
-            # Get dhdl
+
             dhdls = [trg.database.totals[i][2] for i in range(len(trg.database.totals))]
 
             # Remove simulation directory
@@ -801,9 +795,7 @@ class Solvation_free_energy_calculation:
             averages.append(np.mean(dhdls))
             rmsds.append(ee(dhdls).calculate_rmsd())
             ees.append(ee(dhdls).calculate_ee())
-            # if l==19:
-            #     break
-            #print(np.mean(dhdls))
+
 
         Metrics["Lambda"] = lambdas
         Metrics["avg"] = averages
