@@ -12,3 +12,4 @@ class test_imd_block(unittest.TestCase):
         test3 = imd_blocks.PRESSURESCALE(COUPLE=1, SCALE = 2, COMP =1, TAUP = 1, VIRIAL = 3, SEMIANISOTROPIC= [4],
                                                                 PRES0 = [[1,0,0],[0,1,0],[0,0,1]])
 
+        test4 = imd_blocks.RANDOMNUMBERS(NTRNG=0,NTGSL=0)
