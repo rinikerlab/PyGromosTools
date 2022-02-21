@@ -1,8 +1,11 @@
 import re
 from enum import Enum
-from typing import Union, Iterable, List
+from typing import Union, Iterable, List, Dict, Tuple
+from collections import namedtuple
 import inspect
 import math
+import numpy as np
+from numbers import Number
 
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
@@ -2652,3 +2655,306 @@ class CONSTRAINT(_topology_table_block):
         result += super().block_to_string()
         result += "END\n"
         return result
+
+pertubation_lam_state = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
+
+class atom_lam_pertubation_state(_generic_field):
+    state_format_pattern = " {:>5} {:>5} {:>10.5f}"
+
+    def __init__(self, NR:int, RES:int, NAME:str, STATES:Dict[int, pertubation_lam_state], ALPHLJ:float=1.0, ALPHCRF:float=1.0):
+        self.NR = int(NR)
+        self.RES = int(RES)
+        self.NAME = NAME
+        self.STATES = STATES
+        self.ALPHLJ = float(ALPHLJ)
+        self.ALPHCRF = float(ALPHCRF)
+
+    def to_string(self):
+        state_str = "".join([self.state_format_pattern.format(int(self.STATES[x].IAC),float(self.STATES[x].MASS), float(self.STATES[x].CHARGE)) for x in sorted(self.STATES)])
+        format_str = "{:>5} {:>5} {:>5}"+state_str+" {:10.5f} {:10.5f}\n"
+        return format_str.format(self.NR, self.RES,  self.NAME, self.ALPHLJ, self.ALPHCRF)
+
+class PERTATOMPARAM(_generic_gromos_block):
+    def __init__(self, STATEATOMS:List[atom_lam_pertubation_state]=None,
+                 STATEATOMHEADER: Tuple[str]= None,
+                 NJLA: int=None, STATEIDENTIFIERS=None,
+                 dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
+
+
+        self.NPTB = 2
+        self.dummy_IAC = dummy_IAC
+        self.dummy_CHARGE = dummy_CHARGE
+
+        if(content is None):
+            if(STATEATOMHEADER is None):
+                self.STATEATOMHEADER = ["NR", "RES",   "NAME",]
+                self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+            else:
+                self.STATEATOMHEADER = STATEATOMHEADER
+
+
+            if(STATEATOMS is None):
+                self.STATEATOMS = []
+            else:
+                self.STATEATOMS = []
+                self.NJLA = 0
+
+                self.add_state_atoms(STATEATOMS)
+            super().__init__(used=True, name=__class__.__name__)
+        else:
+            super().__init__(used=True, name=__class__.__name__, content=content)
+
+        # You can check yourself :)
+        if(not NJLA is None and not len(STATEATOMS)==NJLA):
+            raise ValueError("NJLA must be equal to the length of STATEATOMS! NJLA="+str(NJLA)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
+
+    def read_content_from_str(self, content:List[str]):
+        field = 0
+        NJLA = None
+        STATEIDENTIFIERS = None
+        STATEATOMHEADER = None
+        STATEATOMS = []
+        first = True
+        stdid = False
+        for line in content:
+            if ("#" in line):
+                comment = line
+                if("state_identifiers" in line):
+                    stdid=True
+                elif(stdid):
+                    STATEIDENTIFIERS = line.replace("#", "").split()
+                    stdid=False
+                continue
+            else:
+                if (field > 0):
+                    if(first):
+                        STATEATOMHEADER = ["NR",  "RES", "NAME",]
+                        [STATEATOMHEADER.extend(["IAC" + str(x), "MASS" + str(x), "CHARGE" + str(x)]) for x in range(1, 3)]
+                        STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
+                        first = False
+
+                    state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
+                    final_state_line = {key: state_line[key] for key in state_line if
+                                        (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
+                    states = {x: pertubation_lam_state(IAC=int(round(float(state_line["IAC" + str(x)]))),
+                                                          MASS=float(state_line["MASS" + str(x)]),
+                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
+
+                    final_state_line.update({"STATES":states})
+                    STATEATOMS.append(atom_lam_pertubation_state(**final_state_line))
+
+                elif (field == 0):
+                    NJLA = int(line.strip())
+                field += 1
+
+        self.NJLA = NJLA
+        self.STATEIDENTIFIERS = STATEIDENTIFIERS
+        self.STATEATOMHEADER = STATEATOMHEADER
+        self.STATEATOMS = STATEATOMS
+
+    @property
+    def nStates(self)->int:
+        return self.NPTB
+
+    @property
+    def nTotalStateAtoms(self)->int:
+        return self.NJLA
+
+    @property
+    def states(self)->dict:
+        return {self.STATEIDENTIFIERS[state-1]: {atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)} for state in range(1, self.NPTB+1)}
+
+    """
+    ADD FUNCTIONS
+    """
+    def add_state_atoms(self, state_atoms: List[atom_lam_pertubation_state]):
+        """
+        This function can add states and atoms, but also overwrite state values of existing atoms.
+        If a new state is defined only for a subset of atoms, all other atoms are set to the default dummy.
+        If a new atom misses a state definition, this state will be set to dummy.
+        Parameters
+        ----------
+        state_atoms: List[atom_eds_pertubation_state]
+        """
+
+        #some preperations:
+        pre_dummy_state = lambda atomMass: pertubation_lam_state(IAC=self.dummy_IAC, MASS=atomMass,CHARGE=self.dummy_CHARGE)
+        insert_id = self.STATEATOMHEADER.index("ALPHLJ")
+
+        #find all new states
+        keys = np.array([list(natom.STATES.keys()) for natom in state_atoms], ndmin=1)
+        unique_stateIDs = np.unique(np.concatenate(keys))
+        ## Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
+        unique_states = list(map(str, [ "state"+str(x) if isinstance(x, Number) else x for x in unique_stateIDs]))
+
+        #insert new state IDs
+        off = 0
+        for unique_state in unique_stateIDs:
+            self.STATEATOMHEADER.insert(insert_id+off, "IAC"+str(unique_state))
+            self.STATEATOMHEADER.insert(insert_id+off+1, "mass"+str(unique_state))
+            self.STATEATOMHEADER.insert(insert_id+off+2, "CHARGE"+str(unique_state))
+            off+=3
+
+        #add new state names
+        if(hasattr(self, "STATEIDENTIFIERS")):
+            self.STATEIDENTIFIERS.extend(unique_states)
+            self.NPTB += len(unique_states)
+        else:
+            self.STATEIDENTIFIERS = unique_states
+            self.NPTB = len(unique_states)
+        #increase the number of new states
+
+
+        #1. Update already present atoms:
+        atomIDs = [atom.NR for atom in state_atoms]
+        for atom in self.STATEATOMS:
+            atom.STATES.update({key: val for key, val in atom.STATES.items()})
+            possible_masses = [val.MASS for key, val in atom.STATES.items() if(val.MASS >0)]
+            dummy_state = pre_dummy_state(atomMass=possible_masses[0])
+
+            if(atom.NR in atomIDs):
+                new_atom = state_atoms[atomIDs.index(atom.NR)]
+
+                atom.NAME = new_atom.NAME
+                atom.STATES.update({key: val for key, val in new_atom.STATES.items()})
+                possible_masses = [val.MASS for key, val in new_atom.STATES.items() if(val.MASS >0)]
+                #add missing dummies
+                #print(unique_stateIDs)
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+
+                #remove present atom
+                del atomIDs[atomIDs.index(atom.NR)]
+
+            else:
+                #add missing dummies
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+
+
+        #2. add new atoms
+        new_atoms = [atom for atom in state_atoms if (atom.NR in atomIDs)]
+        for atom in new_atoms:
+            atom.STATES.update({key: val for key, val in atom.STATES.items()})
+            possible_masses = [val.MASS for key, val in atom.STATES.items() if(val.MASS >0)]
+            dummy_state = pre_dummy_state(atomMass=possible_masses[0])
+
+            atom.STATES.update({key:dummy_state for key in range(1, self.NPTB+1) if (key not in atom.STATES)})
+            self.STATEATOMS.append(atom)
+            self.NJLA +=1
+
+    """
+    DELETING FUNCTIONS
+    """
+    def delete_state(self, stateIDs:(int, List[int])=None, stateNames:(str, List[str])=None):
+        """
+        This function deletes an state column.
+        Parameters
+        ----------
+        stateIDs: int
+            number of the state
+        Returns
+        -------
+        """
+        if(not stateIDs is None):
+            if(isinstance(stateIDs, int)):
+                stateIDs = [stateIDs]
+
+            for state in stateIDs:
+                for atom in self.STATEATOMS:
+                    if(state in atom.STATES):
+                        del atom.STATES[state]
+                del self.STATEIDENTIFIERS[state - 1]
+                self.STATEATOMHEADER = [x for x in self.STATEATOMHEADER if
+                                        (not x == "IAC" + str(state) and not "CHARGE" + str(state) == x)]
+
+            self.NPTB-=len(set(stateIDs))
+
+        elif(not stateNames is None):
+            if(isinstance(stateNames, str)):
+                stateNames = [stateNames]
+
+            for stateN in stateNames:
+                #print(stateN)
+                stateID = self.STATEIDENTIFIERS.index(stateN)+1
+
+                for atom in self.STATEATOMS:
+                        if(stateID in atom.STATES):
+                            del atom.STATES[stateID]
+
+                del self.STATEIDENTIFIERS[stateID-1]
+                self.STATEATOMHEADER = [x for x in self.STATEATOMHEADER if( not x == "IAC"+str(stateID) and not "CHARGE"+str(stateID) == x)]
+            self.NPTB -= len(set(stateNames))
+
+        elif(not stateNames is None and not stateIDs is None):
+            raise Exception("Please give either stateNames or stateIDs")
+
+    def delete_atom(self, atomNR:(int, List[int])):
+        """
+        This function removes atom lines from the ptp file.
+        Parameters
+        ----------
+        atomNR: int
+            atom to be removed.
+        """
+        if(isinstance(atomNR, int)):
+            atomNR = [atomNR]
+
+        ind_offset = 0
+        new_STATEATOMS = []
+        for ind, atom in enumerate(self.STATEATOMS):
+            if (atom.NR in atomNR):
+                continue
+            else:
+                new_STATEATOMS.append(atom)
+
+        self.STATEATOMS = new_STATEATOMS
+        self.NJLA -= len(atomNR)
+
+
+    """
+    STR FUNCTIONS
+    """
+    def _state_STATEATOMHEADER_str(self):
+        state_format_pattern = "{:>5} {:>5} {:>5}"+"".join([" {:>5}{:>5}{:>10}"for x in range(self.NPTB)])+"    {:10} {:10}"
+        return state_format_pattern.format(*self.STATEATOMHEADER)
+
+    def block_to_string(self) -> str:
+        result = self.name + self.line_seperator
+        result += "# NJLA " + self.field_seperator + "NPTB = " + self.field_seperator + str(self.NPTB) + self.field_seperator+ self.line_seperator
+        result += self.field_seperator + str(self.NJLA)+self.line_seperator
+        result += "# state_identifiers" + self.line_seperator
+        result += "# "+self.field_seperator + self.field_seperator.join(map(str, self.STATEIDENTIFIERS)) + self.line_seperator
+        result += "# " + self._state_STATEATOMHEADER_str() + self.line_seperator
+        result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
+        result += "END"+self.line_seperator
+        return result
+
+class SCALEDINTERACTIONS(_generic_gromos_block):
+    def __init__(self, values=None, content=None):
+        """
+        Not exactly sure what these parameters do
+        """
+
+        if (content is None):
+            super().__init__(used=True, name=__class__.__name__)
+            self.values = values
+        else:
+            super().__init__(used=True, name="SCALEDINTERACTIONS", content=content)
+
+    def block_to_string(self) -> str:
+
+        result = self.name + self.line_seperator
+        for i, v in enumerate(self.values):
+            result += str(v) + self.field_seperator
+            if not i:
+                result += self.line_seperator
+        result += self.line_seperator + "END\n"
+        return result
+
+    def read_content_from_str(self, content):
+        # values
+        values = []
+        values.append(content[0])
+        for v in content[1].split():
+            values.append(v)
+
+        self.values = values
