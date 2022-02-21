@@ -23,7 +23,7 @@ from pygromos.utils.utils import spacer as spacer, time_wait_s_for_filesystem
 def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:str=None,
                step_name:str="sim", in_imd_path:str = None,
                submission_system:_SubmissionSystem=LOCAL(), simulation_runs:int=1, equilibration_runs:int = 0,
-               previous_simulation_run:int=None, force_simulation:bool=False,
+               previous_simulation_run:int=None, force_simulation:bool=False, initialize_first_run= False, reinitialize_every_run= False,
                analysis_script:callable = simulation_analysis.do, analysis_control_dict:dict = None,
                verbose:bool = True, verbose_lvl:int=1, _template_imd_path:str=None) -> Gromos_System:
     """
@@ -146,6 +146,8 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             "equilibration_run_num": equilibration_runs,
             "submission_system": submission_system,
             "analysis_script_path": in_analysis_script_path,
+            "initialize_first_run": initialize_first_run,
+            "reinitialize": reinitialize_every_run,
             "verbose": verbose,
             "verbose_lvl": verbose_lvl
         })
@@ -170,6 +172,7 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             last_jobID = simulation_scheduler.do(in_simSystem=gromos_system, out_dir_path=out_simulation_dir,
                                                  simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
                                                  submission_system=submission_system, previous_job_ID=previous_simulation_run,
+                                                 initialize_first_run= initialize_first_run, reinitialize= reinitialize_every_run,
                                                  analysis_script_path=in_analysis_script_path, verbose=verbose, verbose_lvl=verbose_lvl)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
