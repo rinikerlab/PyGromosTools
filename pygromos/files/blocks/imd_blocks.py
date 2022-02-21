@@ -1926,3 +1926,20 @@ class ROTTRANS(_generic_imd_block):
             self.RTC = RTC
             self.RTCLAST = RTCLAST
 
+class RANDOMNUMBERS(_generic_imd_block):
+    """
+    Random Numbers Block
+    """
+    name: str = "RANDOMNUMBERS"
+
+    NTRNG: int
+    NTGSL: int
+
+    _order = [[["NTRNG"],
+               ["NTGSL"]]]
+
+    def __init__(self, NTRNG: int=0, NTGSL: int=0, content=None):
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.NTRNG = int(NTRNG)
+            self.NTGSL = int(NTGSL)

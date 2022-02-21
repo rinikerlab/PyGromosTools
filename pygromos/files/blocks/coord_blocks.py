@@ -185,8 +185,9 @@ class STOCHINT(_iterable_gromos_block):
             result += x.to_string()
         result += "# seed\n"
         result+= self.seed
+        if result[-1] != '\n':
+            result += '\n'
         result += "END\n"
-
         return result
 
     def read_content_from_str(self, content:List[str]):
