@@ -80,11 +80,11 @@ class Gromos_System():
     _future_promise:bool #for interest if multiple jobs shall be chained.
     _future_promised_files:list
 
-    _single_multibath:bool  = False
-    _single_energy_group:bool = False
+    _single_multibath:bool
+    _single_energy_group:bool
 
-    _gromosPP_bin_dir : Union[None, str] = None
-    _gromosXX_bin_dir : Union[None, str] = None
+    _gromosPP_bin_dir : Union[None, str]
+    _gromosXX_bin_dir : Union[None, str]
     _gromosPP : GromosPP
     _gromosXX : GromosXX
 
