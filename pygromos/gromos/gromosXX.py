@@ -15,6 +15,8 @@ from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
 
+from pygromos.files.simulation_parameters.imd import Imd
+
 class _Gromos:
     """
     GromosXX
@@ -217,7 +219,7 @@ class _Gromos:
     def repex_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
                   in_pert_topo_path: str = None, in_disres_path: str = None, in_posresspec_path: bool = False, in_refpos_path: bool = False,
                   out_trc: bool = True, out_tre: bool = True, out_trs: bool = False, out_trg:bool = False,
-                  nomp: int = 1, nmpi: int = 1, verbose: bool = True) -> str:
+                  out_trf: bool = False, out_trv: bool = False, nomp: int = 1, nmpi: int = 1, verbose: bool = True) -> str:
         """
         This function is a wrapper for gromosXX repex_mpi. You can directly execute the gromosXX repex_mpi in a bash enviroment here.
 
@@ -268,6 +270,7 @@ class _Gromos:
 
         out_trg :   bool, optional
                     do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)
+        
 
         queueing_systems : NONE
             This var is not in use yet! - under development
@@ -287,7 +290,7 @@ class _Gromos:
         md_run, md_mpi_run
 
         """
-
+        
         if (nomp > 1):  # OMP Hybrid sopt_job?
             command = ["export OMP_NUM_THREADS=" + str(nomp) + " && mpirun -n " + str(nmpi) + " --loadbalance --cpus-per-proc " + str(nomp) + " "]
         else:
@@ -300,6 +303,11 @@ class _Gromos:
             command += ["@topo", str(in_topo_path)]
         else:
             raise IOError("Did not get an input top file. Got: " + in_topo_path)
+        
+        # Read input to see what to give as coordinate object
+        imd = Imd(in_imd_path)
+        if (hasattr(imd, 'REEDS') and imd.REEDS.CONT) or (hasattr(imd, 'REPLICA') is not None and imd.REPLICA.CONT):
+            in_coord_path = str(in_coord_path).replace("_1.cnf", ".cnf")
 
         if in_coord_path:
             command += ["@conf", str(in_coord_path)]
@@ -334,6 +342,10 @@ class _Gromos:
                 command += ["@tre", str(out_prefix + ".tre")]
             if out_trg:
                 command += ["@trg", str(out_prefix + ".trg")]
+            if out_trf:
+                command += ["@trf", str(out_prefix + ".trf")]
+            if out_trv:
+                command += ["@trv", str(out_prefix + ".trv")]
 
             command += ["@repout", str(out_prefix + "_repout.dat")]
             command += ["@repdat", str(out_prefix + "_repdat.dat")]
