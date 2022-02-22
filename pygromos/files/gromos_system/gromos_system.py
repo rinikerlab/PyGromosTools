@@ -220,7 +220,21 @@ class Gromos_System():
 
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
-
+            #TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
+            if (self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7"):
+                if self.gromosPP is not None and bash.command_exists(self.gromosPP.bin+"/pdb2g96"):
+                    try:
+                        from pygromos.files.blocks.coord_blocks import atomP
+                        new_pos = [atomP(xp=atom.xp, yp=atom.yp, zp=atom.zp, 
+                                        resID=atom.resID, atomType=atom.atomType+str(i+1), atomID=atom.atomID,
+                                        resName=self.Forcefield.mol_name) for i, atom in enumerate(self.cnf.POSITION)]
+                        self.cnf.POSITION = new_pos
+                        self.cnf.write_pdb(self.work_folder+"/tmp.pdb")
+                        self.pdb2gromos(self.work_folder+"/tmp.pdb")
+                        self.add_hydrogens()
+                    except:
+                        raise Warning("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
+            
         
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
