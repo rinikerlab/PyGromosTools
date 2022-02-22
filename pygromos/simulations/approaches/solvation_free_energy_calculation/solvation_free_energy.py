@@ -666,11 +666,6 @@ class Solvation_free_energy_calculation:
         ti_imd.FORCE.NEGR = 2
         ti_imd.FORCE.NRE = [int(self.num_atoms), int(self.num_molecules * self.num_atoms)]
 
-        # Adjust covalentform
-        ti_imd.COVALENTFORM.NTBBH = 0
-        ti_imd.COVALENTFORM.NTBAH = 0
-        ti_imd.COVALENTFORM.NTBDN = 0
-
         # Adjust Constraint
         ti_imd.CONSTRAINT.NTC = 3
 
