@@ -35,7 +35,7 @@ from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.gromos import GromosXX, GromosPP
+from pygromos.gromos import GromosXX, GromosPP, gromosXX
 from pygromos.utils import bash, utils
 
 import pickle, io
@@ -80,11 +80,11 @@ class Gromos_System():
     _future_promise:bool #for interest if multiple jobs shall be chained.
     _future_promised_files:list
 
-    _single_multibath:bool  = False
-    _single_energy_group:bool = False
+    _single_multibath:bool
+    _single_energy_group:bool
 
-    _gromosPP_bin_dir : Union[None, str] = None
-    _gromosXX_bin_dir : Union[None, str] = None
+    _gromosPP_bin_dir : Union[None, str]
+    _gromosXX_bin_dir : Union[None, str]
     _gromosPP : GromosPP
     _gromosXX : GromosXX
 
@@ -157,13 +157,14 @@ class Gromos_System():
         self.checkpoint_path = None
         self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
-        
-        #GromosFunctionality
-        self._gromosPP_bin_dir = in_gromosPP_bin_dir
-        self._gromosXX_bin_dir = in_gromosXX_bin_dir
 
-        self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
-        self._gromosXX = GromosXX(gromosXX_bin_dir=in_gromosXX_bin_dir)
+        self._single_multibath = False
+        self._single_energy_group = False
+
+        # use setter functions that perform additional sanity checks
+        # and also set the correct directory paths
+        self.gromosPP = in_gromosPP_bin_dir
+        self.gromosXX = in_gromosXX_bin_dir
 
         #add functions of gromosPP to system
         self.__bind_gromosPPFuncs()
@@ -239,8 +240,8 @@ class Gromos_System():
         msg += "WORKDIR: " + self._work_folder + "\n"
         msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
         msg += "\n"
-        msg += "GromosXX_bin: " + str(self._gromosXX.bin) + "\n"
-        msg += "GromosPP_bin: " + str(self._gromosPP.bin) + "\n"
+        msg += "GromosXX_bin: " + str(self.gromosXX_bin_dir) + "\n" 
+        msg += "GromosPP_bin: " + str(self.gromosPP_bin_dir) + "\n"
         msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
         msg += "FUTURE PROMISE: "+str(self._future_promise)+"\n"
         if(hasattr(self, "solute_info")
@@ -549,24 +550,42 @@ class Gromos_System():
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
     
     @property
+    def gromosXX_bin_dir(self)->str:
+        return self._gromosXX_bin_dir
+
+    @gromosXX_bin_dir.setter
+    def gromosXX_bin_dir(self, path:str):
+        self.gromosXX = path
+
+    @property
+    def gromosPP_bin_dir(self)->str:
+        return self._gromosPP_bin_dir
+
+    @gromosPP_bin_dir.setter
+    def gromosPP_bin_dir(self, path:str):
+        self.gromosPP = path
+    
+    @property
     def gromosXX(self)->GromosXX:
         return self._gromosXX
 
     @gromosXX.setter
     def gromosXX(self, input_value:Union[str, GromosXX]):
         if(isinstance(input_value, str)):
-            if(os.path.exists(input_value)):
+            # check if path to GromosXX binary is a valid directory and if md binary is present
+            if(bash.directory_exists(input_value) and bash.command_exists(f"{input_value}/md")):
                 self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
                 self._gromosXX_bin_dir = input_value
             else:
-                raise FileNotFoundError("Could not find file: " + str(input_value))
+                raise FileNotFoundError(f"{str(input_value)} is not a valid directory.")
         elif(isinstance(input_value, GromosXX)):
             self._gromosXX = input_value
             self._gromosXX_bin_dir = input_value.bin
         elif(input_value is None):
             self._gromosXX = None
+            self._gromosXX_bin_dir = None
         else:
-            raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
+            raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
 
     @property
     def gromosPP(self)->GromosPP:
@@ -575,16 +594,18 @@ class Gromos_System():
     @gromosPP.setter
     def gromosPP(self, input_value:Union[str, GromosPP]):
         if(isinstance(input_value, str)):
-            if(os.path.exists(input_value)):
+            # check if path to GromosPP binaries is a valid directory and if at least one is present
+            if(bash.directory_exists(input_value) and bash.command_exists(f"{input_value}/make_top")):
                 self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
                 self._gromosPP_bin_dir = input_value
             else:
-                raise FileNotFoundError("Could not find file: " + str(input_value))
+                raise FileNotFoundError(f"{str(input_value)} is not a valid directory.")
         elif(isinstance(input_value, GromosPP)):
             self._gromosPP = input_value
             self._gromosPP_bin_dir = input_value.bin
         elif(input_value is None):
             self._gromosPP = None
+            self._gromosPP_bin_dir = None
         else:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
@@ -703,11 +724,11 @@ class Gromos_System():
             else:
                 name = self.Forcefield.mol_name
             # make top
-            if self._gromosPP._isValid:
+            if bash.command_exists(f"{self.gromosPP_bin_dir}/make_top"):
                 self.gromosPP.make_top(out_top_path=out, in_building_block_lib_path=mtb_temp, in_parameter_lib_path=ifp_temp, in_sequence=name)
                 self.top = Top(in_value=out)
             else:
-                warnings.warn("could notfind a gromosPP version. Please provide a valid version for Gromos auto system generation")
+                warnings.warn("could not find a gromosPP version. Please provide a valid version for Gromos auto system generation")
              
         elif self.Forcefield.name == "smirnoff" or self.Forcefield.name == "off" or self.Forcefield.name == "openforcefield":
             if not has_openff:
