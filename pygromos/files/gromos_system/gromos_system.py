@@ -35,7 +35,7 @@ from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.gromos import GromosXX, GromosPP
+from pygromos.gromos import GromosXX, GromosPP, gromosXX
 from pygromos.utils import bash, utils
 
 import pickle, io
@@ -240,8 +240,8 @@ class Gromos_System():
         msg += "WORKDIR: " + self._work_folder + "\n"
         msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
         msg += "\n"
-        msg += "GromosXX_bin: " + str(self._gromosXX.bin) + "\n"
-        msg += "GromosPP_bin: " + str(self._gromosPP.bin) + "\n"
+        msg += "GromosXX_bin: " + str(self.gromosXX_bin_dir) + "\n" 
+        msg += "GromosPP_bin: " + str(self.gromosPP_bin_dir) + "\n"
         msg += "FILES: \n\t"+"\n\t".join([str(key)+": "+str(val) for key,val in self.all_file_paths.items()])+"\n"
         msg += "FUTURE PROMISE: "+str(self._future_promise)+"\n"
         if(hasattr(self, "solute_info")
@@ -548,6 +548,22 @@ class Gromos_System():
             self._qmmm = None
         else:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
+    
+    @property
+    def gromosXX_bin_dir(self)->str:
+        return self._gromosXX_bin_dir
+
+    @gromosXX_bin_dir.setter
+    def gromosXX_bin_dir(self, path:str):
+        self.gromosXX = path
+
+    @property
+    def gromosPP_bin_dir(self)->str:
+        return self._gromosPP_bin_dir
+
+    @gromosPP_bin_dir.setter
+    def gromosPP_bin_dir(self, path:str):
+        self.gromosPP = path
     
     @property
     def gromosXX(self)->GromosXX:
