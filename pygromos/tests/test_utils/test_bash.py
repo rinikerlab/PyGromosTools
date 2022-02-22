@@ -36,7 +36,7 @@ def test_is_directory():
 
 def test_is_file():
     expected_outcome = True
-    returned_outcome = bash.is_file("pygromos/tests/test_utils/test_bash.py")
+    returned_outcome = bash.is_file(__file__)
 
     assert isinstance(returned_outcome, bool)
     assert expected_outcome == returned_outcome
@@ -50,7 +50,7 @@ def test_directory_exists():
 
 def test_file_exists():
     expected_outcome = True
-    returned_outcome = bash.file_exists("pygromos/tests/test_utils/test_bash.py")
+    returned_outcome = bash.file_exists(__file__)
 
     assert isinstance(returned_outcome, bool)
     assert expected_outcome == returned_outcome
