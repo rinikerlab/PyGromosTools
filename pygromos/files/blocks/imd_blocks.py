@@ -293,12 +293,12 @@ class REPLICA(_generic_imd_block):
                  CONT: bool=False, content=None):
         super().__init__(used=True, content=content)
         if content is None:
-            self.RETL = bool(RETL)
+            self.RETL = int(RETL)
 
             self.NRET = int(NRET)
             self.RET = RET
 
-            self.LRESCALE = bool(LRESCALE)
+            self.LRESCALE = int(LRESCALE)
 
             self.NRELAM = int(NRELAM)
             self.RELAM = RELAM
@@ -306,7 +306,7 @@ class REPLICA(_generic_imd_block):
 
             self.NRETRIAL = int(NRETRIAL)
             self.NREQUIL = int(NREQUIL)
-            self.CONT = bool(CONT)
+            self.CONT = int(CONT)
 
     def read_content_from_str(self, content: List[str]):
         try:
@@ -317,7 +317,6 @@ class REPLICA(_generic_imd_block):
                 setattr(self, "RET", T_values)
             else:
                 raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
-            
             setattr(self, "LRESCALE", int(content[7].split()[0]))
             setattr(self, "NRELAM", int(content[9].split()[0]))
             lambda_val =  list(map(float, content[11].split()))
@@ -333,8 +332,6 @@ class REPLICA(_generic_imd_block):
             [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
         except Exception as err:
             raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
-
-
 
 class NEW_REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
