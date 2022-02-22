@@ -21,7 +21,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
          in_qmmm_path:str=None, out_trc:bool=False, out_tre: bool=False,
          out_trg: bool = False, out_trv: bool = False, out_trf: bool = False, out_trs: bool = False,
          nmpi: int = 1, nomp: int = 1,
-         reinitialize: bool = False, initialize_first_run:bool = True,
+         reinitialize_every_run: bool = False, initialize_first_run:bool = True,
          gromosXX_bin_dir: str = None, work_dir: str = None, zip_trajectories: bool = True, **kwargs):
     """
     Executed by repex_EDS_long_production_run as workers
@@ -114,17 +114,15 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
             is_energymin_sim = True
             
     #Adapt Initializations:
-    if (reinitialize or (initialize_first_run and runID == 1)):
+    if (reinitialize_every_run or (initialize_first_run and runID == 1)):
         imd_file.INITIALISE.NTIVEL = 1
 
         if(hasattr(imd_file, "CONSTRAINT")):
                  imd_file.INITIALISE.NTISHK = 0 if(imd_file.CONSTRAINT.NTC > 0) else 1
          
         if(hasattr(imd_file, "MULTIBATH")):
-                 imd_file.INITIALISE.NTINHT = 0 if(imd_file.MULTIBATH.ALGORITHM < 1) else 1
+                 imd_file.INITIALISE.NTINHT = 0 if(imd_file.MULTIBATH.ALGORITHM <= 1) else 1
                   
-        if(hasattr(imd_file, "PRESSURESCALE")):
-                 imd_file.INITIALISE.NTINHB = 0  if(imd_file.PRESSURESCALE < 1) else 1
                   
         imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
 
@@ -134,10 +132,6 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 
         if (is_stochastic_dynamics_sim):
             imd_file.INITIALISE.NTISTI = 1
-        elif(is_energymin_sim):
-            pass
-        else:
-            imd_file.INITIALISE.NTISHK = 3
 
     elif(initialize_first_run and runID > 1):
         imd_file.INITIALISE.NTIVEL = 0

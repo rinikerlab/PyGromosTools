@@ -21,6 +21,7 @@ def do(in_simSystem: Gromos_System,
        simulation_run_num: int,
        equilibration_run_num: int = 0,
        work_dir: str = None,
+       initialize_first_run= False, reinitialize_every_run= False,
        analysis_script_path: str = None,
        submission_system:_SubmissionSystem = LSF(),
        previous_job_ID: int = None, no_double_submit:bool=False,
@@ -131,7 +132,7 @@ def do(in_simSystem: Gromos_System,
                              chain_job_repetitions=equilibration_run_num, worker_script=workerScript.__file__,
                              job_submission_system=submission_system, start_run_index = 1,
                              prefix_command =  "", previous_job_ID = previous_job_ID, work_dir = work_dir,
-                             initialize_first_run = True, reinitialize = False,
+                             initialize_first_run = initialize_first_run, reinitialize_every_run = reinitialize_every_run,
                              verbose = job_verb)
 
         ## MD
@@ -145,7 +146,7 @@ def do(in_simSystem: Gromos_System,
                          worker_script=workerScript.__file__,
                          job_submission_system=submission_system,
                          prefix_command =  "", previous_job_ID = previous_job_ID, work_dir = None,
-                         initialize_first_run= False, reinitialize= False,
+                         initialize_first_run= initialize_first_run, reinitialize_every_run= reinitialize_every_run,
                          verbose = job_verb)
 
         ana_previous_job_ID = previous_job_ID
