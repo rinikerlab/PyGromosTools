@@ -567,6 +567,7 @@ class Gromos_System():
             self._gromosXX_bin_dir = input_value.bin
         elif(input_value is None):
             self._gromosXX = None
+            self._gromosXX_bin_dir = None
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
 
@@ -588,6 +589,7 @@ class Gromos_System():
             self._gromosPP_bin_dir = input_value.bin
         elif(input_value is None):
             self._gromosPP = None
+            self._gromosPP_bin_dir = None
         else:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
