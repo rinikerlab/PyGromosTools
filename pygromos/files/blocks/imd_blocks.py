@@ -757,7 +757,7 @@ class MULTIBATH(_generic_imd_block):
                                 ["DOFSET"], ["LAST(1 ... DOFSET)", "COMBATH(1 ... DOFSET)", "IRBATH(1 ... DOFSET)"]]]
                                 #num is not part of the imd file!?
 
-    def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=0,
+    def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=[],
                  COMBATH: List[int]=[],
                  IRBATH: List[int]=[], NUM: int = None, content=None):
         if content is None:
@@ -2015,3 +2015,20 @@ class ROTTRANS(_generic_imd_block):
             self.RTC = RTC
             self.RTCLAST = RTCLAST
 
+class RANDOMNUMBERS(_generic_imd_block):
+    """
+    Random Numbers Block
+    """
+    name: str = "RANDOMNUMBERS"
+
+    NTRNG: int
+    NTGSL: int
+
+    _order = [[["NTRNG"],
+               ["NTGSL"]]]
+
+    def __init__(self, NTRNG: int=0, NTGSL: int=0, content=None):
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.NTRNG = int(NTRNG)
+            self.NTGSL = int(NTGSL)

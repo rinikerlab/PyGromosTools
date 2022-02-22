@@ -213,15 +213,15 @@ class Top(_general_gromos_file._general_gromos_file):
 
         # add SOLUTEMOLECULES
         for solmol in top.SOLUTEMOLECULES.content[1:]:
-            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift+1))
+            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift))
 
         # add TEMPERATUREGROUPS
         for solmol in top.TEMPERATUREGROUPS.content[1:]:
-            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift+1))
+            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift))
 
         # add PRESSUREGROUPS
         for solmol in top.PRESSUREGROUPS.content[1:]:
-            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift+1))
+            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
 
         return retTop
 
