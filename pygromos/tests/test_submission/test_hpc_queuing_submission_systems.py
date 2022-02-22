@@ -1,3 +1,4 @@
+from tabnanny import verbose
 import unittest
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
@@ -9,7 +10,7 @@ from pygromos.simulations.hpc_queuing.submission_systems.dummy import DUMMY
 
 class test_queuing_system(unittest.TestCase):
     file_class = _SubmissionSystem
-    verbose = True
+    verbose = False
     submission = True
 
     def test_construct(self):

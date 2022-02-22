@@ -21,9 +21,9 @@ class test_MD_scheduler(unittest.TestCase):
 
        in_simSystem = Gromos_System(system_name="test_do", work_folder=out_dir_path,
                                      in_top_path=blank_topo_template, in_cnf_path=in_cnf, in_imd_path=template_md,
-                                    in_gromosXX_bin_dir=None, in_gromosPP_bin_dir=None)
-       submission_system = self.submissionSystem()
+                                    in_gromosXX_bin_dir=None, in_gromosPP_bin_dir=None, verbose=False)
+       submission_system = self.submissionSystem(verbose=False)
 
        simulation_scheduler.do(in_simSystem=in_simSystem, out_dir_path=out_dir_path,
                                submission_system=submission_system,
-                               simulation_run_num=2, verbose= True)
+                               simulation_run_num=2, verbose= False)
