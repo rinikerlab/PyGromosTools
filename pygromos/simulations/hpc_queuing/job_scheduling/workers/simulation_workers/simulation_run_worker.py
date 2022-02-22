@@ -21,7 +21,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
          in_qmmm_path:str=None, out_trc:bool=False, out_tre: bool=False,
          out_trg: bool = False, out_trv: bool = False, out_trf: bool = False, out_trs: bool = False,
          nmpi: int = 1, nomp: int = 1,
-         reinitialize: bool = False, initialize_first_run:bool = True,
+         reinitialize_every_run: bool = False, initialize_first_run:bool = True,
          gromosXX_bin_dir: str = None, work_dir: str = None, zip_trajectories: bool = True, **kwargs):
     """
     Executed by repex_EDS_long_production_run as workers
@@ -114,7 +114,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
             is_energymin_sim = True
             
     #Adapt Initializations:
-    if (reinitialize or (initialize_first_run and runID == 1)):
+    if (reinitialize_every_run or (initialize_first_run and runID == 1)):
         imd_file.INITIALISE.NTIVEL = 1
 
         if(hasattr(imd_file, "CONSTRAINT")):

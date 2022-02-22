@@ -147,7 +147,7 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             "submission_system": submission_system,
             "analysis_script_path": in_analysis_script_path,
             "initialize_first_run": initialize_first_run,
-            "reinitialize": reinitialize_every_run,
+            "reinitialize_every_run": reinitialize_every_run,
             "verbose": verbose,
             "verbose_lvl": verbose_lvl
         })
@@ -172,7 +172,7 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             last_jobID = simulation_scheduler.do(in_simSystem=gromos_system, out_dir_path=out_simulation_dir,
                                                  simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
                                                  submission_system=submission_system, previous_job_ID=previous_simulation_run,
-                                                 initialize_first_run= initialize_first_run, reinitialize= reinitialize_every_run,
+                                                 initialize_first_run= initialize_first_run, reinitialize_every_run= reinitialize_every_run,
                                                  analysis_script_path=in_analysis_script_path, verbose=verbose, verbose_lvl=verbose_lvl)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())

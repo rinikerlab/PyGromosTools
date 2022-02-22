@@ -68,7 +68,7 @@ def chain_submission(simSystem:Gromos_System,
                      run_analysis_script_every_x_runs: int = 0, in_analysis_script_path: str = "",
                      start_run_index: int = 1,
                      prefix_command: str = "", previous_job_ID: int = None, work_dir: str = None,
-                     initialize_first_run: bool = True, reinitialize: bool = False,
+                     initialize_first_run: bool = True, reinitialize_every_run: bool = False,
                      verbose: bool = False, verbose_lvl:int = 1):
     """
 
@@ -91,7 +91,7 @@ def chain_submission(simSystem:Gromos_System,
     previous_job_ID
     work_dir
     initialize_first_run
-    reinitialize
+    reinitialize_every_run
         initialize_first_run must be False
     verbose
 
@@ -157,6 +157,7 @@ def chain_submission(simSystem:Gromos_System,
             md_args += "-nmpi " + str(job_submission_system.nmpi) + "\n"
             md_args += "-nomp " + str(job_submission_system.nomp) + "\n"
             md_args += "-initialize_first_run "+str(initialize_first_run)+ "\n"
+            md_args += "-reinitialize_every_run "+str(reinitialize_every_run)+ "\n"
             md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"        
     
             if(work_dir is not None):
