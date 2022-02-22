@@ -222,7 +222,7 @@ class Gromos_System():
             self.cnf = Cnf(in_value=self.mol)
             #TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
             if (self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7"):
-                if bash.command_exists(self.gromosPP.bin+"/pdb2g96"):
+                if self.gromosPP is not None and bash.command_exists(self.gromosPP.bin+"/pdb2g96"):
                     try:
                         from pygromos.files.blocks.coord_blocks import atomP
                         new_pos = [atomP(xp=atom.xp, yp=atom.yp, zp=atom.zp, 
