@@ -9,6 +9,7 @@ Description
 """
 
 import io, os, glob, time, warnings
+import shutil
 
 import subprocess as sub
 from typing import List, Dict, Union
@@ -827,3 +828,97 @@ def execute_old(command: (str or List[str]), verbose: bool = False, ignore_retur
 
 def execute(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False, env:dict=None):
     return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
+
+
+def which(command:str)->str:
+    """Finds the full path of a command.
+
+    Args:
+        command (str): Name of the command.
+
+    Returns:
+        str: Full path of the command.
+    """
+
+    return shutil.which(command)
+
+def command_exists(command:str)->bool:
+    """Does the command exists in the current system / path?
+
+    Args:
+        command (str): Name of the command.
+
+    Returns:
+        bool: Does command exists or not.
+    """
+
+    path = which(command)
+
+    if (path is None):
+        return False
+    return True
+
+def path_exists(path:str)->bool:
+    """Does the provided path exists? Gives no information on whether
+    it is a directory or a file.
+
+    Args:
+        path (str): Path of the file or directory.
+
+    Returns:
+        bool: Does path exists or not.
+    """
+    return os.path.exists(path)
+
+def is_directory(path:str)->bool:
+    """Is the provided path a directory.
+
+    Args:
+        path (str): Path of the file or directory.
+
+    Returns:
+        bool: Is a directory or not.
+    """
+    return os.path.isdir(path)
+
+def is_file(path:str)->bool:
+    """Is the provided path a file.
+
+    Args:
+        path (str): Path of the file or directory.
+
+    Returns:
+        bool: Is a file or not.
+    """
+    return os.path.isfile(path)
+
+def directory_exists(path:str)->bool:
+    """Tests whether the provided path is valid and 
+    also is a directory. Returns false if either condition
+    is not fullfilled.
+
+    Args:
+        path (str): Path of the file or directory.
+
+    Returns:
+        bool: Is a directory with a valid path or not.
+    """
+    if (is_directory(path) and path_exists(path)):
+        return True
+    return False
+
+def file_exists(path:str)->bool:
+    """Tests whether the provided path is valid and 
+    also is a file. Returns false if either condition
+    is not fullfilled.
+
+    Args:
+        path (str): Path of the file or directory.
+
+    Returns:
+        bool: Is a file with a valid path or not
+    """
+    
+    if (is_file(path) and path_exists(path)):
+        return True
+    return False

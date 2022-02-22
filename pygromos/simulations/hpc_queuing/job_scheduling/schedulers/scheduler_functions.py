@@ -1,5 +1,6 @@
 import glob
 import os
+import warnings
 
 import pandas as pd
 
@@ -157,8 +158,13 @@ def chain_submission(simSystem:Gromos_System,
             md_args += "-nmpi " + str(job_submission_system.nmpi) + "\n"
             md_args += "-nomp " + str(job_submission_system.nomp) + "\n"
             md_args += "-initialize_first_run "+str(initialize_first_run)+ "\n"
-            md_args += "-reinitialize_every_run "+str(reinitialize_every_run)+ "\n"
-            md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"        
+            md_args += "-reinitialize_every_run "+str(reinitialize_every_run)+ "\n"        
+            if simSystem.gromosXX is not None:
+                md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"
+            else:
+                md_args += "-gromosXX_bin_dir None \n"
+                if verbose:
+                    warnings.warn("gromosXX_bin_dir is None \n If you want to simulate something please add a existing gromos bin\n")   
     
             if(work_dir is not None):
                 md_args += "-work_dir " + str(work_dir) + "\n"
