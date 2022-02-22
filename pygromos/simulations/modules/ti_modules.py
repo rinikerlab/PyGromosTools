@@ -17,7 +17,7 @@ from pygromos.utils import bash
 
 def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="lambda_sampling",
                 lambda_values: List[float] = np.arange(0, 1.1, 0.1), subSystem: _SubmissionSystem = LOCAL(),
-                n_simulation_repetitions: int = 3, n_equilibrations: int = 1):
+                n_simulation_repetitions: int = 3, n_equilibrations: int = 1, verbose=True):
 
     work_dir = bash.make_folder(project_dir + "/" + step_name)
     in_gromos_system.save(work_dir)
@@ -49,7 +49,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
                                                 step_name=lam_system.name, submission_system=subSystem,
                                                 in_imd_path=None,
                                                 simulation_runs=n_simulation_repetitions,
-                                                equilibration_runs=n_equilibrations)
+                                                equilibration_runs=n_equilibrations, verbose=verbose)
 
         out_gromos_system.save(out_gromos_system.work_folder + "/sd_out_system.obj")
         lam_systems.append(out_gromos_system)
@@ -59,7 +59,7 @@ def TI_sampling(in_gromos_system: Gromos_System, project_dir: str, step_name="la
 
 def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: str = "lam", in_imd_path=None,
                  submission_system: _SubmissionSystem = LOCAL(), simulation_runs: int = 1, equilibration_runs: int = 0,
-                 previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do) ->(Gromos_System, int):
+                 previous_simulation_run: int = None, analysis_script: callable = simulation_analysis.do, verbose=True) ->(Gromos_System, int):
     template_control_dict = OrderedDict({
         "concat": {"do": True,
                    "sub": {
@@ -83,4 +83,4 @@ def _TI_lam_step(in_gromos_system: Gromos_System, project_dir: str, step_name: s
     return simulation(in_gromos_simulation_system=in_gromos_system, override_project_dir=project_dir, previous_simulation_run=previous_simulation_run,
                       step_name=step_name, in_imd_path=in_imd_path, submission_system=submission_system,
                       simulation_runs=simulation_runs, equilibration_runs=equilibration_runs, analysis_control_dict=template_control_dict,
-                      analysis_script=analysis_script)
+                      analysis_script=analysis_script, verbose=verbose)
