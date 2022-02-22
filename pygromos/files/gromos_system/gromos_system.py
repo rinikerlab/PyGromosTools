@@ -157,13 +157,14 @@ class Gromos_System():
         self.checkpoint_path = None
         self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
-        
-        #GromosFunctionality
-        self._gromosPP_bin_dir = in_gromosPP_bin_dir
-        self._gromosXX_bin_dir = in_gromosXX_bin_dir
 
-        self._gromosPP = GromosPP(gromosPP_bin_dir=in_gromosPP_bin_dir)
-        self._gromosXX = GromosXX(gromosXX_bin_dir=in_gromosXX_bin_dir)
+        self._single_multibath = False
+        self._single_energy_group = False
+
+        # use setter functions that perform additional sanity checks
+        # and also set the correct directory paths
+        self.gromosPP = in_gromosPP_bin_dir
+        self.gromosXX = in_gromosXX_bin_dir
 
         #add functions of gromosPP to system
         self.__bind_gromosPPFuncs()
@@ -555,18 +556,19 @@ class Gromos_System():
     @gromosXX.setter
     def gromosXX(self, input_value:Union[str, GromosXX]):
         if(isinstance(input_value, str)):
-            if(os.path.exists(input_value)):
+            # check if path to GromosXX binary is a valid directory and if md binary is present
+            if(bash.directory_exists(input_value) and bash.command_exists(f"{input_value}/md")):
                 self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
                 self._gromosXX_bin_dir = input_value
             else:
-                raise FileNotFoundError("Could not find file: " + str(input_value))
+                raise FileNotFoundError(f"{str(input_value)} is not a valid directory.")
         elif(isinstance(input_value, GromosXX)):
             self._gromosXX = input_value
             self._gromosXX_bin_dir = input_value.bin
         elif(input_value is None):
             self._gromosXX = None
         else:
-            raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
+            raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
 
     @property
     def gromosPP(self)->GromosPP:
@@ -575,11 +577,12 @@ class Gromos_System():
     @gromosPP.setter
     def gromosPP(self, input_value:Union[str, GromosPP]):
         if(isinstance(input_value, str)):
-            if(os.path.exists(input_value)):
+            # check if path to GromosPP binaries is a valid directory and if at least one is present
+            if(bash.directory_exists(input_value) and bash.command_exists(f"{input_value}/make_top")):
                 self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
                 self._gromosPP_bin_dir = input_value
             else:
-                raise FileNotFoundError("Could not find file: " + str(input_value))
+                raise FileNotFoundError(f"{str(input_value)} is not a valid directory.")
         elif(isinstance(input_value, GromosPP)):
             self._gromosPP = input_value
             self._gromosPP_bin_dir = input_value.bin
