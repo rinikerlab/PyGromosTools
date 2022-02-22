@@ -1,4 +1,10 @@
-class gromos_2015_tre_block_names_table():
+from typing import List
+class gromos_tre_block_names_table():
+    totals_subblock_names:List[str]
+    eds_subblock_names_singleState:List[str]
+    lam_subblock_names_singleLam:List[str]
+    
+class gromos_2015_tre_block_names_table(gromos_tre_block_names_table):
     totals_subblock_names = ["totene","totkin","totpot","totcov","totbond","totangle","totimproper","totdihedral","totcrossdihedral","totnonbonded",
                              "totlj","totcrf","totls","totlspair","totlsreal","totlsk","totlsa","totlsself","totlssurf","totpolself","totspecial",
                              "totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle",
@@ -12,7 +18,7 @@ class gromos_2015_tre_block_names_table():
     lam_subblock_names = None #is generated on the fly in get_eds of TRE - depends on num_states -> simulation specific
 
 
-class gromos_2020_tre_block_names_table():
+class gromos_2020_tre_block_names_table(gromos_tre_block_names_table):
     totals_subblock_names = ["totene","totkin","totpot","totcov","totbond","totangle","totimproper","totdihedral","totcrossdihedral","totnonbonded",
                              "totlj","totcrf","totls","totlspair","totlsreal","totlsk","totlsa","totlsself","totlssurf","totpolself","totspecial",
                              "totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle",
@@ -26,7 +32,7 @@ class gromos_2020_tre_block_names_table():
     lam_subblock_names = None #is generated on the fly in get_eds of TRE - depends on num_states -> simulation specific
 
 
-class gromos_2021_tre_block_names_table():
+class gromos_2021_tre_block_names_table(gromos_tre_block_names_table):
     totals_subblock_names = ["totene","totkin","totpot","totcov","totbond","totangle","totimproper","totdihedral","totcrossdihedral","totnonbonded",
                              "totlj","totcrf","totls","totlspair","totlsreal","totlsk","totlsa","totlsself","totlssurf","totpolself","totspecial",
                              "totsasa","totsasavol","totconstraint","totdisres","totdisfieldres","totdihres","totposres","totjval","totxray","totle",

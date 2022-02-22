@@ -130,8 +130,10 @@ class _General_Trajectory():
             raise Warning("trajectories database shapes do not match!\n Please check if this is expected\n"
                           "first shape: "+str(self.database.shape)+"\tsecond shape: "+str(traj.database.shape)+"\n")
         # get end data from first trajectory
-        step_offset = int(self.database.TIMESTEP_step.iloc[-1])
-        time_offset = float(self.database.TIMESTEP_time.iloc[-1])
+        step_offset = int(self.database.step.iloc[-1])
+        time_offset = float(self.database.time.iloc[-1])
+        delta_time_self = self.get_time_step()
+        
         # copy and modify second trajectory
         new_data = traj.database.copy(deep=True)
         
@@ -143,10 +145,14 @@ class _General_Trajectory():
             if (new_frame.equals(old_frame)) and new_frame.keys() == old_frame.keys(): #check if the firstStep==lastStep without considering the time
                 if all([numpy.allclose(new_frame[x], old_frame[x]) for x in new_frame.keys()]):
                     new_data = new_data.iloc[1:]
+            elif correct_time:
+                if delta_time_self == traj.get_time_step():
+                    time_offset += delta_time_self
+                    
 
         if correct_time:
-            new_data.TIMESTEP_step += step_offset
-            new_data.TIMESTEP_time += time_offset
+            new_data.step += step_offset
+            new_data.time += time_offset
 
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
@@ -264,6 +270,15 @@ class _General_Trajectory():
         self.database.to_hdf(path_or_buf=output_path, key=output_path.split(".")[-1]) #TODO: @Marc is the key arg here correct, or rather not using it?
         self.path = output_path
         return output_path
+
+    def get_time_step(self):
+        if len(self.database) == 0:
+            return 0
+        elif len(self.database) == 1:
+            return float(self.database.time.iloc[-1])
+        else:
+            return float(self.database.time.iloc[-1]) - float(self.database.time.iloc[-2])
+
 
 
         

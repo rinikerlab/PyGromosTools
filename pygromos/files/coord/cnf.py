@@ -1117,11 +1117,11 @@ class Cnf(_general_gromos_file):
         dict = {}
 
         if hasattr(self,"TIMESTEP"):
-            dict["TIMESTEP_step"] = self.TIMESTEP.step
-            dict["TIMESTEP_time"] = self.TIMESTEP.t
+            dict["step"] = self.TIMESTEP.step
+            dict["time"] = self.TIMESTEP.t
         else:
-            dict["TIMESTEP_step"] = 0
-            dict["TIMESTEP_time"] = 0
+            dict["step"] = 0
+            dict["time"] = 0
         
         if hasattr(self,"POSITION"):
             for pos in self.POSITION:

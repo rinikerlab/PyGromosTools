@@ -65,7 +65,7 @@ class TIMESTEP(_general_pandas_trajectory_block):
         self.time = float(entries[1])
 
     def to_dict(self) -> dict:
-        return {"TIMESTEP_step":self.step, "TIMESTEP_time":self.time}
+        return {"step":self.step, "time":self.time}
 
 """
 TRC Blocks:

@@ -83,7 +83,7 @@ class Trc(traj._General_Trajectory):
         pd.DataFrame
         """
         return (self.database["POS_"+str(atomI)]-self.database["POS_"+str(atomI)].shift())[1:]
-    
+
 
     def get_atom_movement_length_series(self, atomI:int, periodicBoundary=False) -> pd.DataFrame:
         """
@@ -181,7 +181,6 @@ class Trc(traj._General_Trajectory):
     def radial_distribution(self, atomsFrom, atomsTo) -> pd.DataFrame:
         pass
 
-
     def rmsd(self, ref_cnf: Union[int, TrcType]) -> pd.DataFrame:
         """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
 
@@ -226,8 +225,8 @@ class Trc(traj._General_Trajectory):
         pos_cols = [col for col in self.database.columns if ("POS" in col)]
         for ind, time_step in self.database.iterrows():
             pos_lines = time_step[pos_cols]
-            remark_line = "REMARK\t" + str(time_step["TIMESTEP_step"]) + "\t" + str(
-                time_step["TIMESTEP_time"]) + "\nMODEL\n"
+            remark_line = "REMARK\t" + str(time_step["step"]) + "\t" + str(
+                time_step["time"]) + "\nMODEL\n"
             frame_positions = []
             for ind, coord_set in enumerate(pos_lines):
                 atom = cnf.POSITION[ind]
@@ -283,7 +282,7 @@ class Trc(traj._General_Trajectory):
             pos_cols = [col for col in self.database.columns if("POS" in col)]
             for ind, time_step in self.database.iterrows():
                 pos_lines = time_step[pos_cols]
-                remark_line="REMARK\t"+str(time_step["TIMESTEP_step"])+"\t"+str(time_step["TIMESTEP_time"])+"\nMODEL\n"
+                remark_line="REMARK\t"+str(time_step["step"])+"\t"+str(time_step["time"])+"\nMODEL\n"
                 frame_positions = []
                 for ind ,coord_set in enumerate(pos_lines):
                     atom =cnf.POSITION[ind]
