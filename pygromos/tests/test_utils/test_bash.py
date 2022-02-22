@@ -29,14 +29,14 @@ def test_path_exists():
 
 def test_is_directory():
     expected_outcome = True
-    returned_outcome = bash.is_directory("pygromos")
+    returned_outcome = bash.is_directory(os.getcwd())
 
     assert isinstance(returned_outcome, bool)
     assert expected_outcome == returned_outcome
 
 def test_is_file():
     expected_outcome = True
-    returned_outcome = bash.is_file("LICENSE")
+    returned_outcome = bash.is_file("pygromos/tests/test_utils/test_bash.py")
 
     assert isinstance(returned_outcome, bool)
     assert expected_outcome == returned_outcome
@@ -50,7 +50,7 @@ def test_directory_exists():
 
 def test_file_exists():
     expected_outcome = True
-    returned_outcome = bash.file_exists("LICENSE")
+    returned_outcome = bash.file_exists("pygromos/tests/test_utils/test_bash.py")
 
     assert isinstance(returned_outcome, bool)
     assert expected_outcome == returned_outcome
