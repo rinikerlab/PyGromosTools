@@ -109,6 +109,7 @@ class Gromos_System():
         in_gromosXX_bin_dir
         in_gromosPP_bin_dir
         rdkitMol
+        in_mol2_file
         readIn
         Forcefield
         auto_convert

@@ -1,6 +1,5 @@
 """
 File:            ambertools_pipeline
-Warnings: this class is WIP!
 Description:
     This is a class to parameterize a molecule with ambertools. Generates a GROMOS top and cnf file.
 Author: Salomé Rieder
@@ -13,6 +12,7 @@ from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.data import topology_templates
 from pygromos import data
+from pygromos.gromos import GromosPP
 import os
 from rdkit import Chem
 
@@ -24,7 +24,28 @@ class ambertools_pipeline():
     # don't remove temporary directories after execution by default
     clean = False
 
-    def __init__(self, in_mol2_file: str, mol: Chem.rdchem.Mol, gromosPP, forcefield: forcefield_system = None, work_folder: str = "."):
+    def __init__(self, 
+                    in_mol2_file: str, 
+                    mol: Chem.rdchem.Mol, 
+                    gromosPP: GromosPP,
+                    forcefield: forcefield_system,
+                    work_folder: str = "."):
+        """
+        uses the ambertools programs antechamber, parmchk, and tleap together with
+        the GROMOS++ program amber2gromos to generate a GROMOS topology and coordinate file
+        for a given molecule
+
+        Parameters
+        ----------
+        in_mol2_file : str
+            mol2 file for molecule to be parameterized
+        mol: Chem.rdchem.Mol
+            rdkit molecule of the molecule in in_mol2_file
+        gromosPP: GromosPP
+        forcefield: forcefield_system
+        work_folder: str, optional
+            where to generate the topology + cnf (default: ".")
+        """
 
         self.in_mol2_file = os.path.abspath(in_mol2_file)
 
@@ -51,6 +72,9 @@ class ambertools_pipeline():
         os.chdir(current_dir)
 
     def antechamber(self):
+        """
+        executes the ambertools program antechamber
+        """
         self.antechamber_dir = "antechamber_tmp"
         os.makedirs(self.antechamber_dir, exist_ok = True)
         self.antechamber_dir = os.path.abspath(self.antechamber_dir)
@@ -77,6 +101,9 @@ class ambertools_pipeline():
         os.chdir('..')
 
     def parmchk(self):
+        """
+        executes the ambertools program parmchk
+        """
         self.parmchk_dir = "parmchk_tmp"
         os.makedirs(self.parmchk_dir, exist_ok = True)
         self.parmchk_dir = os.path.abspath(self.parmchk_dir)
@@ -96,6 +123,9 @@ class ambertools_pipeline():
         os.chdir('..')
 
     def tleap(self):
+        """
+        executes the ambertools program tleap
+        """
         self.tleap_dir = "tleap_tmp"
         os.makedirs(self.tleap_dir, exist_ok = True)
         self.tleap_dir = os.path.abspath(self.tleap_dir)
@@ -139,6 +169,9 @@ class ambertools_pipeline():
         os.chdir('..')
 
     def amber2gromos(self):
+        """
+        converts an AMBER (GAFF) parameter and crd file to a GROMOS top and cnf file
+        """
         if(self.solvate):
             self.gromos_topology = self.mol2_name + "_" + self.solventbox + ".top"
         else:
@@ -157,14 +190,29 @@ class ambertools_pipeline():
         self.gromos_coordinate_file = os.path.abspath(self.gromos_coordinate_file)
         print("converted coordinates saved to " + self.gromos_coordinate_file)
 
-    def get_gromos_topology(self):
+    def get_gromos_topology(self) -> str:
+        """
+        Returns
+        -------
+        str
+            returns the path to the converted GROMOS topology
+        """
         return self.gromos_topology
 
     def get_gromos_coordinate_file(self):
+        """
+        Returns
+        -------
+        str
+            returns the path to the converted GROMOS coordinate file
+        """
         print(self.gromos_coordinate_file)
         return self.gromos_coordinate_file
 
     def cleanup(self):
+        """
+        removes temporary parmchk, antechamber, and tleap directories
+        """
         os.rmdir(self.tleap_dir)
         os.rmdir(self.antechamber_dir)
         os.rmdir(self.parmchk_dir)
