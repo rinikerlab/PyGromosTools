@@ -293,12 +293,12 @@ class REPLICA(_generic_imd_block):
                  CONT: bool=False, content=None):
         super().__init__(used=True, content=content)
         if content is None:
-            self.RETL = int(RETL)
+            self.RETL = bool(RETL)
 
             self.NRET = int(NRET)
             self.RET = RET
 
-            self.LRESCALE = int(LRESCALE)
+            self.LRESCALE = bool(LRESCALE)
 
             self.NRELAM = int(NRELAM)
             self.RELAM = RELAM
@@ -306,7 +306,7 @@ class REPLICA(_generic_imd_block):
 
             self.NRETRIAL = int(NRETRIAL)
             self.NREQUIL = int(NREQUIL)
-            self.CONT = int(CONT)
+            self.CONT = bool(CONT)
 
     def read_content_from_str(self, content: List[str]):
         try:
