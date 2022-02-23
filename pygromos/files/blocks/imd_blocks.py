@@ -4,6 +4,7 @@ from typing import List, Dict
 
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
+from pygromos.utils.utils import str2bool
 
 # forward declarations
 TITLE: TITLE = TITLE
@@ -288,7 +289,7 @@ class REPLICA(_generic_imd_block):
     _order = [[["RETL"], ["NRET"], ["RET(1 ... NRET)"], ["LRESCALE"],
                ["NRELAM"], ["RELAM(1 ... NRELAM)"], ["RETS(1 ... NRELAM)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
 
-    def __init__(self, RETL: bool=False, NRET: int=0, RET: List[float]=[],  LRESCALE: int=0, NRELAM: int=0, RELAM: List[float]=[], RETS: List[float]=[], 
+    def __init__(self, RETL: bool=False, NRET: int=0, RET: List[float]=[],  LRESCALE: bool= False, NRELAM: int=0, RELAM: List[float]=[], RETS: List[float]=[], 
                  NRETRIAL: int=0, NREQUIL: int=0,
                  CONT: bool=False, content=None):
         super().__init__(used=True, content=content)
@@ -310,14 +311,15 @@ class REPLICA(_generic_imd_block):
 
     def read_content_from_str(self, content: List[str]):
         try:
-            setattr(self, "RETL", int(content[1].split()[0]))
+            setattr(self, "RETL", str2bool(content[1].split()[0]))
             setattr(self, "NRET", int(content[3].split()[0]))
             T_values =  list(map(float, content[5].split()))
             if(len(T_values)== self.NRET):
                 setattr(self, "RET", T_values)
             else:
                 raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
-            setattr(self, "LRESCALE", int(content[7].split()[0]))
+            print (content[7])
+            setattr(self, "LRESCALE", str2bool(content[7].split()[0]))
             setattr(self, "NRELAM", int(content[9].split()[0]))
             lambda_val =  list(map(float, content[11].split()))
             if(len(lambda_val)== self.NRELAM):
@@ -404,7 +406,7 @@ class REPLICA_EDS(_generic_imd_block):
 
     def read_content_from_str(self, content: List[str]):
         try:
-            setattr(self, "REEDS", int(content[1].split()[0]))
+            setattr(self, "REEDS", str2bool(content[1].split()[0]))
             setattr(self, "NRES", int(content[3].split()[0]))
             setattr(self, "NUMSTATES", int(content[3].split()[1]))
             setattr(self, "NEOFF", int(content[3].split()[2]))
