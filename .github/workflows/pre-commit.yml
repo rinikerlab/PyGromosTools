@@ -3,7 +3,7 @@ name: pre-commit
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [main, release3, PyGromosTools_V1]
 
 jobs:
   pre-commit:
