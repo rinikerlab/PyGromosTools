@@ -5,14 +5,16 @@ from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 
 from pygromos.tests.in_testfiles import in_test_file_path
-root_in = in_test_file_path+"/qmmm"
-in_path_imd = root_in+"/md.imd"
-in_path_qmmm = root_in+"/menthol-methanol-dmf.qmmm"
+
+root_in = in_test_file_path + "/qmmm"
+in_path_imd = root_in + "/md.imd"
+in_path_qmmm = root_in + "/menthol-methanol-dmf.qmmm"
 
 from pygromos.tests.test_files import out_test_root_dir
+
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="qmmm_")
-out_path_imd = root_out+"/out_qmmm.imd"
-out_path_qmmm = root_out+"/out_qmmm.qmmm"
+out_path_imd = root_out + "/out_qmmm.imd"
+out_path_qmmm = root_out + "/out_qmmm.qmmm"
 
 
 class test_qmmm_imd(general_file_tests):
@@ -35,6 +37,7 @@ class test_qmmm_imd(general_file_tests):
         imd_file.TITLE.content = "NEW TEST!"
         imd_file.write(out_path_imd)
         return 0
+
 
 class test_qmmm(general_file_tests):
     __test__ = True

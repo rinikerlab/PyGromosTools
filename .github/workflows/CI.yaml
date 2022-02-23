@@ -42,7 +42,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         environment-file:  dev/conda_envs/test_env.yaml
         channels: conda-forge,defaults
-        
+
         activate-environment: test
         auto-update-conda: true
         auto-activate-base: false
@@ -63,12 +63,11 @@ jobs:
       shell: bash -l {0}
 
       run: |
-        pytest -v --color=yes pygromos/tests/ --cov=pygromos --cov-report=xml 
-        
+        pytest -v --color=yes pygromos/tests/ --cov=pygromos --cov-report=xml
+
     - name: CodeCov
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
-    

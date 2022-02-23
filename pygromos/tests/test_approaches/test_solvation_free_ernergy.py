@@ -1,24 +1,30 @@
-from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation_free_energy import Solvation_free_energy_calculation
+from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation_free_energy import (
+    Solvation_free_energy_calculation,
+)
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 import numpy as np
 import unittest
 
+
 class test_sfe(unittest.TestCase):
-    smiles = 'c1ccccc1'
-    workfolder = '/tmp/test_solvation_free_energy'
+    smiles = "c1ccccc1"
+    workfolder = "/tmp/test_solvation_free_energy"
     number_of_atoms = 12
 
-    sf = Solvation_free_energy_calculation(input_system=smiles,  # Gromos_System, SMILES (str) or rdkit Mol
-                                           work_folder=workfolder,  # Folder to do calculations in
-                                           system_name=smiles,
-                                           # Name of the system (does not need to be smiles but convenient)
-                                           forcefield=forcefield_system("openforcefield"),  # Force field to use
-                                           density=789,  # density of the liquid in kg/L
-                                           num_molecules=512,  # number of molecules used for the calculation
-                                           num_atoms=number_of_atoms,  # number of atoms in one molecule
-                                           nmpi=1, nomp=1,  # number of mpi and omp cores
-                                           subsystem="local",  # Subsystem to use for calculation local or lsf
-                                           amberscaling=True)  # Whether to use amberscaling (for openforcefield recommended)
+    sf = Solvation_free_energy_calculation(
+        input_system=smiles,  # Gromos_System, SMILES (str) or rdkit Mol
+        work_folder=workfolder,  # Folder to do calculations in
+        system_name=smiles,
+        # Name of the system (does not need to be smiles but convenient)
+        forcefield=forcefield_system("openforcefield"),  # Force field to use
+        density=789,  # density of the liquid in kg/L
+        num_molecules=512,  # number of molecules used for the calculation
+        num_atoms=number_of_atoms,  # number of atoms in one molecule
+        nmpi=1,
+        nomp=1,  # number of mpi and omp cores
+        subsystem="local",  # Subsystem to use for calculation local or lsf
+        amberscaling=True,
+    )  # Whether to use amberscaling (for openforcefield recommended)
 
     def test_constructor(self):
         print(self.sf)
@@ -43,4 +49,3 @@ class test_sfe(unittest.TestCase):
 
     def test_box_generation(self):
         self.sf.create_liq()
-

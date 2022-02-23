@@ -110,11 +110,11 @@ Content
 # Build gromos System:
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                               system_name=sys_name, work_folder=root_in_dir)
-             
+
 # Run Emin
   emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                           step_name=step_name, submission_system=subSystem())
-      
+
   ```
 
   Run on LSF-Cluster:
@@ -133,12 +133,12 @@ Content
 # Build gromos System:
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                             system_name=sys_name, work_folder=root_in_dir)
-             
+
 # Run Emin
   sub_system = subSystem(nmpi=4) # allows parallelization
   emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                           step_name=step_name, submission_system=sub_system)
-      
+
   ```
 
 * Other utilities:
@@ -164,7 +164,6 @@ see INSTALL.md file for more informations
 Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder
 
 ### Acknowledgements
- 
-Project based on the 
-[Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.
 
+Project based on the
+[Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.
