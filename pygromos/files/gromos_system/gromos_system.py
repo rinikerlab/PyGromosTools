@@ -96,7 +96,14 @@ class Gromos_System:
         self,
         work_folder: str,
         system_name: str,
-        in_smiles: str = None,
+
+        rdkitMol: Chem.rdchem.Mol = None,
+        readIn=True,
+        Forcefield: forcefield_system = forcefield_system(),
+        auto_convert: bool = False,
+        adapt_imd_automatically: bool = True,
+        verbose: bool = False,
+                in_smiles: str = None,
         in_top_path: str = None,
         in_cnf_path: str = None,
         in_imd_path: str = None,
@@ -107,12 +114,6 @@ class Gromos_System:
         in_qmmm_path: str = None,
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
-        rdkitMol: Chem.rdchem.Mol = None,
-        readIn=True,
-        Forcefield: forcefield_system = forcefield_system(),
-        auto_convert: bool = False,
-        adapt_imd_automatically: bool = True,
-        verbose: bool = False,
     ):
         """
             The Gromos_System class is the central unit of PyGromosTools for files and states.
