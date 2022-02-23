@@ -9,6 +9,7 @@ Bundle files with the system's topology, coordinates, input parameters, etc. and
 start your simulations from here.
 
 Author: Marc Lehner, Benjamin Ries, Felix Pultar
+test
 """
 
 # imports
@@ -96,14 +97,13 @@ class Gromos_System:
         self,
         work_folder: str,
         system_name: str,
-
         rdkitMol: Chem.rdchem.Mol = None,
         readIn=True,
         Forcefield: forcefield_system = forcefield_system(),
         auto_convert: bool = False,
         adapt_imd_automatically: bool = True,
         verbose: bool = False,
-                in_smiles: str = None,
+        in_smiles: str = None,
         in_top_path: str = None,
         in_cnf_path: str = None,
         in_imd_path: str = None,
