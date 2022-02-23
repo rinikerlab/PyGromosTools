@@ -13,8 +13,8 @@ from pygromos.files.top.disres import Disres
 
 def generate_dual_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=False, generate_distance_restraints:bool=True)->Tuple[Cnf, Top, Ptp, Disres]:
     """
-        This function generates a Gromos System, according to the dual topology paradigm. 
-        In this process a coordinate, topology and pertubation file will be generated. 
+        This function generates a Gromos System, according to the dual topology paradigm.
+        In this process a coordinate, topology and pertubation file will be generated.
         Additionally a distance restraint file will be generated with RestraintMaker.
         
         The definition of the dual topology follows the description in:
@@ -41,8 +41,12 @@ def generate_dual_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=Fal
     pass
 
 def generate_hybrid_topology_approach(cnfs:List[Cnf], tops:List[Cnf], atomMapping:List=None, eds:bool=False)->Tuple[Cnf, Top, Ptp]:
-    """_summary_
-
+    """
+        This function generates a Gromos System, according to the hybrid topology paradigm.
+        In this process a coordinate, topology and pertubation file will be generated.
+        A atomMapping for the different regions (single topology region/dual topology region) can be provided.
+        If no mapping is provided, the function will automatically generate an MCS and estimate the single and dual topology regions.
+        
         The definition of the hybrid topology follows the description in:
             RestraintMaker: A Graph-Based Approach to Select Distance Restraints in Free-Energy Calculations with Dual Topology
             Benjamin Ries$^\text{\dag}$, Salomé Rieder$^\text{\dag}$, Clemens Rhiner, Philippe H. Hünenberger$^\text{*}$ and Sereina Riniker$^\text{*}$ (2022, JCAMD)
@@ -65,8 +69,12 @@ def generate_hybrid_topology_approach(cnfs:List[Cnf], tops:List[Cnf], atomMappin
     """
     pass
 
-def generate_single_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=False)->Tuple[Cnf, Top, Ptp]:
-    """_summary_
+def generate_single_topology_approach(cnfs:List[Cnf], tops:List[Top], atomMapping:List=None, eds:bool=False)->Tuple[Cnf, Top, Ptp]:
+    """
+        This function generates a Gromos System, according to the single topology paradigm.
+        In this process a coordinate, topology and pertubation file will be generated.
+        An atomMapping for the single-topology regio can be provided. 
+        If no mapping is provided, the function will automatically generate an MCS and estimate the molecule overlaps.
 
         The definition of the single topology follows the description in:
             RestraintMaker: A Graph-Based Approach to Select Distance Restraints in Free-Energy Calculations with Dual Topology
@@ -78,6 +86,8 @@ def generate_single_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=F
         The cnf files of the single end-states (for protein-ligands FE -> [ligandA.cnf, ligandB.cnf, ...])
     tops : List[Top]
         The top files of the single end-states (for protein-ligands FE -> [ligandA.top, ligandB.top, ...])
+    atomMapping : List, optional
+        The mapping of the atoms for the different end-states, by default None
     eds : bool, optional
         If you want do perform a eds simulation set True, as the ptp blocks vary between eds and lambda dependent calculations, by default False
 
