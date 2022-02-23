@@ -317,6 +317,7 @@ class REPLICA(_generic_imd_block):
                 setattr(self, "RET", T_values)
             else:
                 raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
+            setattr(self, "LRESCALE", int(content[7].split()[0]))
             setattr(self, "NRELAM", int(content[9].split()[0]))
             lambda_val =  list(map(float, content[11].split()))
             if(len(lambda_val)== self.NRELAM):
@@ -329,11 +330,8 @@ class REPLICA(_generic_imd_block):
             else:
                 raise IOError("REPLICA: NRELAM was not equal to the number of lambda timestep values (RETS) in IMD!")
             [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
-
         except Exception as err:
             raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
-
-
 
 class NEW_REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
