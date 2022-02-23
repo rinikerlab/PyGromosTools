@@ -20,6 +20,7 @@ class AlchemicalFE_System(Gromos_System):
     """ 
         The Alchemical Free Energy Systems, should help to quickly setup and run FE simulations.
     
+    Warning: This is right now just a concept! Needs to be further developed!
     Todo: Consider how to insert the FF-Conversions for single topologies (e.g. amber2Gromos)
 
     """
