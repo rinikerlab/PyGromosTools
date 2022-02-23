@@ -294,20 +294,27 @@ class REPLICA(_generic_imd_block):
                  CONT: bool=False, content=None):
         super().__init__(used=True, content=content)
         if content is None:
-            self.RETL = bool(RETL)
+            if isinstance(RETL, str):
+                self.RETL = str2bool(RETL)
+            else: self.RETL = bool(RETL)
 
             self.NRET = int(NRET)
             self.RET = RET
-
-            self.LRESCALE = bool(LRESCALE)
-
+            
+            if isinstance(LRESCALE, str):
+                self.LRESCALE = str2bool(LRESCALE)
+            else :self.LRESCALE = bool(LRESCALE)
+            
             self.NRELAM = int(NRELAM)
             self.RELAM = RELAM
             self.RETS = RETS
 
             self.NRETRIAL = int(NRETRIAL)
             self.NREQUIL = int(NREQUIL)
-            self.CONT = bool(CONT)
+            
+            if isinstance(CONT, str):
+                self.CONT = str2bool(CONT)
+            else: self.CONT = bool(CONT)
 
     def read_content_from_str(self, content: List[str]):
         try:
@@ -377,8 +384,8 @@ class REPLICA_EDS(_generic_imd_block):
 
     NRETRIAL: int
     NREQUIL: int
-    EDS_STAT_OUT: int
     CONT: bool
+    EDS_STAT_OUT: int
     PERIODIC: int
 
     _order = [[["REEDS"], ["NRES", "NUMSTATES",  "NEOFF"], ["RES(1 ... NRES)"],
@@ -389,8 +396,11 @@ class REPLICA_EDS(_generic_imd_block):
                  EDS_STAT_OUT: int=0, CONT: bool=False, PERIODIC: int=0, content=None):
         super().__init__(used=True, content=content)
         if content is None:
-            self.REEDS = bool(REEDS)
-
+            
+            if isinstance(REEDS, str):
+                self.REEDS = str2bool(REEDS)
+            else: self.REEDS = bool(REEDS)
+ 
             self.NRES = int(NRES)
             self.NEOFF = int(NEOFF)
             self.NUMSTATES = int(NUMSTATES)
@@ -400,7 +410,11 @@ class REPLICA_EDS(_generic_imd_block):
 
             self.NRETRIAL = int(NRETRIAL)
             self.NREQUIL = int(NREQUIL)
-            self.CONT = bool(CONT)
+            
+            if isinstance(CONT, str):
+                self.CONT = str2bool(CONT)
+            else: self.CONT = bool(CONT)
+
             self.EDS_STAT_OUT = int(EDS_STAT_OUT)
             self.PERIODIC = int(PERIODIC)
 
