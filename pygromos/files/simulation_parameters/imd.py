@@ -75,8 +75,6 @@ class Imd(_general_gromos_file._general_gromos_file):
     INITIALISE: blocks.INITIALISE
 
     REPLICA_EDS: blocks.REPLICA_EDS
-    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS
-    
     REPLICA: blocks.REPLICA
 
     QMMM: blocks.QMMM
@@ -134,9 +132,6 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         # specific relations are rescued here
         reeds_block = self.REPLICA_EDS
-        print(type(reeds_block))
-
-
         if(isinstance(REEDS, bool)):
             reeds_block.REEDS = REEDS
 
@@ -179,7 +174,6 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         if(isinstance(EIR, (Number , Iterable))):
             EIR_matrix = []
-            print(EIR)
             # single number
             if isinstance(EIR, Number):  # depends on SVALS and NRES
                 EIR_vector = [str(EIR) for x in range(reeds_block.NUMSTATES)]

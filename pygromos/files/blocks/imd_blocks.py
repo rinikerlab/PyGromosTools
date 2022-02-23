@@ -333,7 +333,7 @@ class REPLICA(_generic_imd_block):
         except Exception as err:
             raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
 
-class NEW_REPLICA_EDS(_generic_imd_block):
+class REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
 
         This block is controlling the REPLICA_EDS settings in  gromos and is basically a mixture of EDS and RE block. (Don't use them when using this block!)
@@ -406,94 +406,8 @@ class NEW_REPLICA_EDS(_generic_imd_block):
         try:
             setattr(self, "REEDS", int(content[1].split()[0]))
             setattr(self, "NRES", int(content[3].split()[0]))
-            setattr(self, "NEOFF", int(content[3].split()[1]))
-            setattr(self, "NUMSTATES", int(content[3].split()[2]))
-            s_values =  list(map(float, content[5].split()))
-            if(len(s_values)== self.NRES):
-                setattr(self, "RES", s_values)
-            else:
-                raise IOError("REPLICA_EDS: NRES was not equal to the number of s-values in IMD!")
-            EIR = []
-            for ind in range(7, 7+self.NUMSTATES):
-                EIR_line = list(map(float, content[ind].split()))
-                if(len(EIR_line) != self.NRES):
-                    raise IOError("REPLICA_EDS: NRES was not equal to the number of EIRs given in IMD!")
-                EIR.append(EIR_line)
-            setattr(self, "EIR", EIR)
-            [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
-
-        except Exception as err:
-            raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
-
-
-class REPLICA_EDS(_generic_imd_block):
-    name: str = "REPLICA_EDS"
-
-    REEDS: bool
-
-    NRES: int
-    NUMSTATES: int
-
-    RES: List[float]
-    EIR: List[float]
-
-    NRETRIAL: int
-    NREQUIL: int
-    EDS_STAT_OUT: int
-    CONT: bool
-
-    _order = [[["REEDS"], ["NRES", "NUMSTATES"], ["RES(1 ... NRES)"],
-               ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT"]]]
-
-    def __init__(self, REEDS: bool=True, NRES: int=0, NUMSTATES: int=0, RES: List[float]=[0], EIR: List[List[float]]=[[0]], NRETRIAL: int=0,
-                 NREQUIL: int=0,
-                 EDS_STAT_OUT: int=0, CONT: bool=True, content=None):
-        """REPLICA_EDS Block
-
-            This block is controlling the REPLICA_EDS settings in  gromos and is basically a mixture of EDS and RE block. (Don't use them when using this block!)
-
-        Attributes
-        ----------
-        REEDS:  bool
-            Shall REEDS be activated?
-        NRES:   int
-            Number of s-Values
-        NUMSTATES:  int
-            Number of EDS-states
-
-        RES:    List[float]
-            s_values for all replicas
-        EIR:    List[List[float]]
-            energy offsets for all replicas and all states  List[List[float]] = REPLICA[EDS_STATE[EIR]]
-        NERTRIAL: int
-            How many replica exchanges trials should be executed? (NRETRIAL*STEP.NSTLIM == total simulation time)
-        NREQUIL: int
-            How many equilibration runs shall be exectured? (NREQUIL*STEP.NSTLIM == total simulation time)
-        EDS_STAT_OUT: int
-            Shall the replica exchange information be outputted? (__future__ frequency of output.)
-        CONT: bool
-            Is this a continuation run?
-        """
-        super().__init__(used=True, content=content)
-        if content is None:
-            self.REEDS = REEDS
-
-            self.NRES = NRES
-            self.NUMSTATES = NUMSTATES
-
-            self.RES = RES
-            self.EIR = EIR
-
-            self.NRETRIAL = NRETRIAL
-            self.NREQUIL = NREQUIL
-            self.CONT = CONT
-            self.EDS_STAT_OUT = EDS_STAT_OUT
-
-    def read_content_from_str(self, content: List[str]):
-        try:
-            setattr(self, "REEDS", int(content[1].split()[0]))
-            setattr(self, "NRES", int(content[3].split()[0]))
             setattr(self, "NUMSTATES", int(content[3].split()[1]))
+            setattr(self, "NEOFF", int(content[3].split()[2]))
             s_values =  list(map(float, content[5].split()))
             if(len(s_values)== self.NRES):
                 setattr(self, "RES", s_values)
@@ -510,8 +424,6 @@ class REPLICA_EDS(_generic_imd_block):
 
         except Exception as err:
             raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
-
-
 
 class BOUNDCOND(_generic_imd_block):
     """Boundary Condition Block
