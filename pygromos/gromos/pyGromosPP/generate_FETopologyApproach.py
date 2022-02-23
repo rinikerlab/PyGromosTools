@@ -11,7 +11,7 @@ from pygromos.files.top.disres import Disres
 
 
 
-def generate_dual_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=False, generate_distance_restraints:bool=True)->Tuple[Cnf, Top, Ptp, Disres]:
+def generate_dual_topology_approach(endstate_cnfs:List[Cnf], endstate_tops:List[Top], eds_simulation:bool=False, generate_distance_restraints:bool=True)->Tuple[Cnf, Top, Ptp, Disres]:
     """
         This function generates a Gromos System, according to the dual topology paradigm.
         In this process a coordinate, topology and pertubation file will be generated.
@@ -23,11 +23,11 @@ def generate_dual_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=Fal
 
     Parameters
     ----------
-    cnfs : List[Cnf]
+    endstate_cnfs : List[Cnf]
         The cnf files of the single end-states (for protein-ligands FE -> [ligandA.cnf, ligandB.cnf, ...])
-    tops : List[Top]
+    endstate_tops : List[Top]
         The top files of the single end-states (for protein-ligands FE -> [ligandA.top, ligandB.top, ...])
-    eds : bool, optional
+    eds_simulation : bool, optional
         If you want do perform a eds simulation set True, as the ptp blocks vary between eds and lambda dependent calculations, by default False
     generate_distance_restraints : bool, optional
         If True, the dual topology approach will additionally contain distance restrained following the linked dual topology principal. 
@@ -40,7 +40,7 @@ def generate_dual_topology_approach(cnfs:List[Cnf], tops:List[Top], eds:bool=Fal
     """
     pass
 
-def generate_hybrid_topology_approach(cnfs:List[Cnf], tops:List[Cnf], atomMapping:List=None, eds:bool=False)->Tuple[Cnf, Top, Ptp]:
+def generate_hybrid_topology_approach(endstate_cnfs:List[Cnf], endstate_tops:List[Cnf], atom_mapping:List=None, eds_simulation:bool=False)->Tuple[Cnf, Top, Ptp]:
     """
         This function generates a Gromos System, according to the hybrid topology paradigm.
         In this process a coordinate, topology and pertubation file will be generated.
@@ -53,13 +53,13 @@ def generate_hybrid_topology_approach(cnfs:List[Cnf], tops:List[Cnf], atomMappin
 
     Parameters
     ----------
-    cnfs : List[Cnf]
+    endstate_cnfs : List[Cnf]
         The cnf files of the single end-states (for protein-ligands FE -> [ligandA.cnf, ligandB.cnf, ...])
-    tops : List[Top]
+    endstate_tops : List[Top]
         The top files of the single end-states (for protein-ligands FE -> [ligandA.top, ligandB.top, ...])
-    atomMapping : List, optional
+    atom_mapping : List, optional
         The mapping of the atoms for the different end-states, by default None
-    eds : bool, optional
+    eds_simulation : bool, optional
         If you want do perform a eds simulation set True, as the ptp blocks vary between eds and lambda dependent calculations, by default False
 
     Returns
@@ -69,7 +69,7 @@ def generate_hybrid_topology_approach(cnfs:List[Cnf], tops:List[Cnf], atomMappin
     """
     pass
 
-def generate_single_topology_approach(cnfs:List[Cnf], tops:List[Top], atomMapping:List=None, eds:bool=False)->Tuple[Cnf, Top, Ptp]:
+def generate_single_topology_approach(endstate_cnfs:List[Cnf], endstate_tops:List[Top], atom_mapping:List=None, eds_simulation:bool=False)->Tuple[Cnf, Top, Ptp]:
     """
         This function generates a Gromos System, according to the single topology paradigm.
         In this process a coordinate, topology and pertubation file will be generated.
@@ -82,13 +82,13 @@ def generate_single_topology_approach(cnfs:List[Cnf], tops:List[Top], atomMappin
 
     Parameters
     ----------
-    cnfs : List[Cnf]
+    endstate_cnfs : List[Cnf]
         The cnf files of the single end-states (for protein-ligands FE -> [ligandA.cnf, ligandB.cnf, ...])
-    tops : List[Top]
+    endstate_tops : List[Top]
         The top files of the single end-states (for protein-ligands FE -> [ligandA.top, ligandB.top, ...])
-    atomMapping : List, optional
+    atom_mapping : List, optional
         The mapping of the atoms for the different end-states, by default None
-    eds : bool, optional
+    eds_simulation : bool, optional
         If you want do perform a eds simulation set True, as the ptp blocks vary between eds and lambda dependent calculations, by default False
 
 
