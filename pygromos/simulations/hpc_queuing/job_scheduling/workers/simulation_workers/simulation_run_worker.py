@@ -11,6 +11,8 @@ from pygromos.gromos import gromosXX as mdGromosXX
 from pygromos.files.simulation_parameters import imd
 from pygromos.files.coord import cnf
 
+import glob
+
 from pygromos.utils import bash as bash
 from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_for_filesystem
 
@@ -71,7 +73,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     # WORKDIR SetUP
     if (work_dir is None or work_dir == "None") and "TMPDIR" in os.environ:
         work_dir = os.environ["TMPDIR"]
-        print("using TmpDir")
+        print("using TMPDIR")
     else:
         print("Could not find TMPDIR!\n Switched to outdir for work")
         work_dir = out_dir
@@ -94,7 +96,17 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     tmp_prefix = os.path.basename(out_dir)
     tmp_imd_path = out_dir+"/"+tmp_prefix+".imd"
     imd_file = imd.Imd(in_imd_path)
-    cnf_file = cnf.Cnf(in_cnf_path)
+    
+    is_repex_run = True if (hasattr(imd_file, "REPLICA") and imd_file.REPLICA is not None) \ 
+                        or (hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None) else False
+
+    #Prepare CNF file(s):
+    
+    if is_repex_run:
+        cnf_paths = glob.glob(in_cnf_path.replace("1.cnf", "*.cnf")) 
+        cnf_file = cnf.Cnf(cnf_paths[0]) # used to make sure imd/cnf is in sync
+    else: 
+        cnf_file = cnf.Cnf(in_cnf_path)
 
     ##check init_block - if specified!
     ###What kind of simulation
@@ -122,7 +134,6 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
          
         if(hasattr(imd_file, "MULTIBATH")):
                  imd_file.INITIALISE.NTINHT = 0 if(imd_file.MULTIBATH.ALGORITHM <= 1) else 1
-                  
                   
         imd_file.INITIALISE.NTISHI = 0 if(hasattr(cnf_file, "LATTICESHIFT")) else 1
 
@@ -155,11 +166,30 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         print(spacer + "\n start MD " + str(os.path.basename(tmp_imd_path)) + "\n")
 
         #TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!
-        if(hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
+        if is_repex_run: # do the workaround for each cnf one by one
+            for tmp_cnf_path in cnfs_paths:
+                tmp_cnf = cnf.Cnf(tmp_cnf_path)
+                if hasattr(tmp_cnf, "GENBOX") and any([math.isnan(x) for x in tmp_cnf.GENBOX.euler])):
+                    tmp_cnf.GENBOX.euler = [0.0, 0.0, 0.0]
+                    tmp_cnf.write(tmp_cnf_path)
+    
+        elif:(hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
             cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
             cnf_file.write(in_cnf_path)
+        
+        # Start the execution of the gromosXX binary
         try:
-            omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
+            if is_repex_run:
+                omd_file_path = gromosXX.repex_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
+                                      in_pert_topo_path=in_perttopo_path, in_disres_path=in_disres_path,
+                                      in_posresspec_path=in_posres_path, in_refpos_path=in_refpos_path,
+                                      nmpi=nmpi, nomp=nomp,
+                                      out_prefix=tmp_prefix,
+                                      out_tre=out_tre, out_trc=out_trc,
+                                      out_trg=out_trg, out_trs=out_trs, out_trf=out_trf, out_trv=out_trv,
+                                      verbose=True)
+            else:
+                omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
                                      in_pert_topo_path=in_perttopo_path, in_disres_path=in_disres_path,
                                      in_posresspec_path=in_posres_path, in_refpos_path=in_refpos_path,
                                      in_qmmm_path=in_qmmm_path, nmpi=nmpi, nomp=nomp,
