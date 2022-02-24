@@ -97,13 +97,15 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     tmp_imd_path = out_dir+"/"+tmp_prefix+".imd"
     imd_file = imd.Imd(in_imd_path)
     
-    is_repex_run = True if (hasattr(imd_file, "REPLICA") and imd_file.REPLICA is not None) \ 
-                        or (hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None) else False
+    if ( (hasattr(imd_file, "REPLICA") and imd_file.REPLICA is not None) or 
+         (hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None) ): 
+        is_repex_run = True   
+    else: is_repex_run = False
 
     #Prepare CNF file(s):
     
     if is_repex_run:
-        cnf_paths = glob.glob(in_cnf_path.replace("1.cnf", "*.cnf")) 
+        cnf_paths = sorted(glob.glob(in_cnf_path.replace("1.cnf", "*.cnf"))) 
         cnf_file = cnf.Cnf(cnf_paths[0]) # used to make sure imd/cnf is in sync
     else: 
         cnf_file = cnf.Cnf(in_cnf_path)
@@ -167,13 +169,13 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 
         #TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!
         if is_repex_run: # do the workaround for each cnf one by one
-            for tmp_cnf_path in cnfs_paths:
+            for tmp_cnf_path in cnf_paths:
                 tmp_cnf = cnf.Cnf(tmp_cnf_path)
-                if hasattr(tmp_cnf, "GENBOX") and any([math.isnan(x) for x in tmp_cnf.GENBOX.euler])):
+                if hasattr(tmp_cnf, "GENBOX") and any([math.isnan(x) for x in tmp_cnf.GENBOX.euler]):
                     tmp_cnf.GENBOX.euler = [0.0, 0.0, 0.0]
                     tmp_cnf.write(tmp_cnf_path)
     
-        elif:(hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler])):
+        elif hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler]):
             cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
             cnf_file.write(in_cnf_path)
         
