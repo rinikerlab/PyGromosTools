@@ -46,6 +46,9 @@ class Trc_new(mdtraj.Trajectory):
         top_cnf_path=None,
     ):
 
+        if xyz is str:
+            self._block_map = self._generate_blockMap(in_trc_path=xyz)
+
         if traj_path is not None:  # is str and traj_path.endswith('.trc.gz') and not top_cnf_path is None):
             trc = Trc(traj_path)
 
@@ -64,7 +67,7 @@ class Trc_new(mdtraj.Trajectory):
 
     rmsd = lambda self, x: mdtraj.rmsd(self, self, x)
 
-    def generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
+    def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
         block_map = {}
         with open(in_trc_path, "r") as file_handle:
             inBlock = False
