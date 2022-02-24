@@ -22,13 +22,13 @@ from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.analysis import coordinate_analysis as ca
 from pygromos.files.coord import Cnf
+from pygromos.files.blocks._general_blocks import TITLE
+
 import nglview as nj
 import mdtraj
 
-
 TrcType = TypeVar("Trc")
 CnfType = TypeVar("Cnf")
-from pygromos.files.blocks._general_blocks import TITLE
 
 
 class Trc_new(mdtraj.Trajectory):
