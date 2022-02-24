@@ -694,30 +694,20 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
-<<<<<<< HEAD
-    def get_last_atomID(self) -> int:
-=======
+
     def get_last_atomID(self)->int:
->>>>>>> release3
         """get_last atom
             A very simple convenience function that returns the last atom
 
         Returns
         -------
-<<<<<<< HEAD
         int
-=======
-        int 
->>>>>>> release3
             Returns the last atom of the system.
         """
         return self.POSITION.content[-1].atomID
 
-<<<<<<< HEAD
-    def center_of_geometry(self, selectedAtoms: list = None) -> list:
-=======
+
     def center_of_geometry(self, selectedAtoms:list=None) -> list:
->>>>>>> release3
         """calculates the center of geometry for asingle molecule or the selected Atoms
 
         Returns
@@ -1059,11 +1049,8 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-<<<<<<< HEAD
-    def get_pdb(self, rdkit_ready: bool = True, connectivity_top=None) -> str:
-=======
+
     def get_pdb(self, rdkit_ready:bool=True, connectivity_top=None)->str:
->>>>>>> release3
         """
             translate cnf to pdb.
 
