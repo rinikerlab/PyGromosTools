@@ -325,7 +325,6 @@ class REPLICA(_generic_imd_block):
                 setattr(self, "RET", T_values)
             else:
                 raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
-            print (content[7])
             setattr(self, "LRESCALE", str2bool(content[7].split()[0]))
             setattr(self, "NRELAM", int(content[9].split()[0]))
             lambda_val =  list(map(float, content[11].split()))
