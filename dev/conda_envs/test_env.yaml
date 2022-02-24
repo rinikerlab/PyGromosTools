@@ -25,5 +25,6 @@ dependencies:
   - mdtraj
   - rdkit
   ## Visualization
+  - matplotlib
   - py3dmol #to be removed! soon after merge of new visualize
   - nglview
