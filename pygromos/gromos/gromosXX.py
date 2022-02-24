@@ -16,6 +16,7 @@ from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
 
 from pygromos.files.simulation_parameters.imd import Imd
+import glob
 
 class _Gromos:
     """
@@ -318,14 +319,20 @@ class _Gromos:
             raise IOError("Did not get an input imd file. Got: " + in_imd_path)
 
         # Input cnf file depends if we have the CONT keyword or not
-        # assumes with CONT == 1 we always give the cnf from the first
-        # replica as the template
+        # with CONT == 1, the convention is to give the name of the
+        # file without the "_1" extension 
+
         imd = Imd(in_imd_path)
         if hasattr(imd, "REPLICA") and imd.REPLICA is not None and imd.REPLICA.CONT:
-            in_coord_path = str(in_coord_path).replace("_1.cnf", ".cnf")
+            tmp_path = "/".join(os.path.abspath(in_coord_path).split('/')[:-1])
+            in_coord_path = sorted(glob.glob(tmp_path +'/*.cnf'))[0]
+            in_coord_path = in_coord_path.replace("_1.cnf", ".cnf")
+
         elif hasattr(imd, "REPLICA_EDS") and imd.REPLICA_EDS is not None and imd.REPLICA_EDS.CONT:
-            in_coord_path = str(in_coord_path).replace("_1.cnf", ".cnf")
-        
+            tmp_path = "/".join(os.path.abspath(in_coord_path).split('/')[:-1])
+            in_coord_path = sorted(glob.glob(tmp_path +'/*.cnf'))[0]
+            in_coord_path = in_coord_path.replace("_1.cnf", ".cnf")
+
         if in_coord_path:
             command += ["@conf", str(in_coord_path)]
         else:

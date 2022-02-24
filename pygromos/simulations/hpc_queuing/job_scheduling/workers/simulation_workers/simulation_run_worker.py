@@ -97,16 +97,20 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
     tmp_imd_path = out_dir+"/"+tmp_prefix+".imd"
     imd_file = imd.Imd(in_imd_path)
     
-    if ( (hasattr(imd_file, "REPLICA") and imd_file.REPLICA is not None) or 
-         (hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None) ): 
-        is_repex_run = True   
+    if hasattr(imd_file, "REPLICA") and imd_file.REPLICA is not None:
+        is_repex_run = True
+        num_replicas = int(imd_file.REPLICA.NRELAM * imd_file.REPLICA.NRET)
+    elif hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None: 
+        is_repex_run = True
+        num_replicas = int(imd_file.REPLICA_EDS.NRES)
     else: is_repex_run = False
 
     #Prepare CNF file(s):
     
     if is_repex_run:
-        cnf_paths = sorted(glob.glob(in_cnf_path.replace("1.cnf", "*.cnf"))) 
-        cnf_file = cnf.Cnf(cnf_paths[0]) # used to make sure imd/cnf is in sync
+        tmp_path = "/".join(os.path.abspath(in_cnf_path).split('/')[:-1])
+        in_coord_paths = sorted(glob.glob(tmp_path +'/*.cnf'))
+        cnf_file = cnf.Cnf(in_coord_paths[0]) # used to make sure imd/cnf is in sync
     else: 
         cnf_file = cnf.Cnf(in_cnf_path)
 
@@ -158,6 +162,13 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 
         if (is_stochastic_dynamics_sim or is_vacuum):
             imd_file.INITIALISE.NTISHI = 1
+    
+    # For RE-EDS / REPEX simulations, also change the CONT option to 1
+    
+    if (hasattr(imd_file, "REPLICA") and runID > 1):
+        imd_file.REPLICA.CONT = 1
+    if (hasattr(imd_file, "REPLICA_EDS") and runID > 1):
+        imd_file.REPLICA_EDS.CONT = 1
 
     ##Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)
@@ -169,7 +180,7 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
 
         #TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!
         if is_repex_run: # do the workaround for each cnf one by one
-            for tmp_cnf_path in cnf_paths:
+            for tmp_cnf_path in in_coord_paths:
                 tmp_cnf = cnf.Cnf(tmp_cnf_path)
                 if hasattr(tmp_cnf, "GENBOX") and any([math.isnan(x) for x in tmp_cnf.GENBOX.euler]):
                     tmp_cnf.GENBOX.euler = [0.0, 0.0, 0.0]
@@ -190,6 +201,12 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
                                       out_tre=out_tre, out_trc=out_trc,
                                       out_trg=out_trg, out_trs=out_trs, out_trf=out_trf, out_trv=out_trv,
                                       verbose=True)
+                
+                print("Waiting to find all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
+                out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
+                print (out_cnf_paths)
+                for ocp in out_cnf_paths: bash.wait_for_fileSystem(ocp)
+
             else:
                 omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
                                      in_pert_topo_path=in_perttopo_path, in_disres_path=in_disres_path,
@@ -200,8 +217,8 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
                                      out_trg=out_trg, out_trs=out_trs, out_trf=out_trf, out_trv=out_trv,
                                      verbose=True)
 
-            print("Waiting to find: ", omd_file_path.replace(".omd", ".cnf"))
-            bash.wait_for_fileSystem(omd_file_path.replace(".omd", ".cnf"))
+                print("Waiting to find: ", omd_file_path.replace(".omd", ".cnf"))
+                bash.wait_for_fileSystem(omd_file_path.replace(".omd", ".cnf"))
 
             md_failed = False
         except Exception as err:
