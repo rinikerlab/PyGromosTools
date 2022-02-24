@@ -317,6 +317,7 @@ class REPLICA(_generic_imd_block):
                 setattr(self, "RET", T_values)
             else:
                 raise IOError("REPLICA: NRET was not equal to the number of Temperatures (RET) in IMD!")
+            setattr(self, "LRESCALE", int(content[7].split()[0]))
             setattr(self, "NRELAM", int(content[9].split()[0]))
             lambda_val =  list(map(float, content[11].split()))
             if(len(lambda_val)== self.NRELAM):
@@ -329,11 +330,8 @@ class REPLICA(_generic_imd_block):
             else:
                 raise IOError("REPLICA: NRELAM was not equal to the number of lambda timestep values (RETS) in IMD!")
             [setattr(self, key, int(value)) for key, value in zip(self._order[0][-1], content[-1].split()) ]
-
         except Exception as err:
             raise IOError("Could not parse block from str - "+__class__.__name__+"\n"+str(err.args))
-
-
 
 class NEW_REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
@@ -757,7 +755,7 @@ class MULTIBATH(_generic_imd_block):
                                 ["DOFSET"], ["LAST(1 ... DOFSET)", "COMBATH(1 ... DOFSET)", "IRBATH(1 ... DOFSET)"]]]
                                 #num is not part of the imd file!?
 
-    def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=0,
+    def __init__(self, ALGORITHM: int=0, NBATHS: int=0, TEMP0: List[float]=[], TAU: List[float]=[], DOFSET: int=0, LAST: List[int]=[],
                  COMBATH: List[int]=[],
                  IRBATH: List[int]=[], NUM: int = None, content=None):
         if content is None:
@@ -2015,3 +2013,20 @@ class ROTTRANS(_generic_imd_block):
             self.RTC = RTC
             self.RTCLAST = RTCLAST
 
+class RANDOMNUMBERS(_generic_imd_block):
+    """
+    Random Numbers Block
+    """
+    name: str = "RANDOMNUMBERS"
+
+    NTRNG: int
+    NTGSL: int
+
+    _order = [[["NTRNG"],
+               ["NTGSL"]]]
+
+    def __init__(self, NTRNG: int=0, NTGSL: int=0, content=None):
+        super().__init__(used=True, content=content)
+        if content is None:
+            self.NTRNG = int(NTRNG)
+            self.NTGSL = int(NTGSL)

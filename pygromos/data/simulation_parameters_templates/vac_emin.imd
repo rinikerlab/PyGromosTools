@@ -19,7 +19,7 @@ ENERGYMIN
 END
 FORCE
 # 	 BONDS 	 ANGLES 	 IMPROPER 	 DIHEDRAL 	 ELECTROSTATIC 	 VDW
- 	 1 	 1 	 1 	 1 	 1 	 1 	 
+ 	 0 	 1 	 1 	 1 	 1 	 1 	 
 # 	 NEGR 	 NRE
  	 1 	 1 	 
 END

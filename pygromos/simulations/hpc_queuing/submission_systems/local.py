@@ -33,10 +33,12 @@ class LOCAL(_SubmissionSystem):
         else:
             command_file_path = "./job_" + str(sub_job.jobName) + ".sh"
 
-        if (self.nomp > 1):
+        sub_job.command = sub_job.command.strip() # remove trailing linebreaks
+
+        if (self.nomp >= 1):
             command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + ""
         else:
-            command = sub_job.command.strip()
+            command = sub_job.command
 
         if (sub_job.sumbit_from_file):
             command_file = open(command_file_path, "w")

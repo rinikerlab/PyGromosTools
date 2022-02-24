@@ -111,10 +111,12 @@ class LSF(_SubmissionSystem):
         if (self.end_mail):
             submission_string += " -N "
 
-        if (self.nomp > 1):
+        sub_job.command = sub_job.command.strip() # remove trailing line breaks
+        
+        if (self.nomp >= 1):
             command = "\"export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + "\""
         else:
-            command = "\n " + sub_job.command.strip() + ""
+            command = "\n " + sub_job.command + ""
 
         if (sub_job.sumbit_from_file):
             if (self.verbose): print("writing tmp-submission-file to: ", command_file_path)

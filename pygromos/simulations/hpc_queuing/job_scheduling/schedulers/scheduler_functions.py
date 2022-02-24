@@ -1,7 +1,9 @@
 import glob
 import os
+import warnings
 
 import pandas as pd
+from pygromos.files.coord.cnf import Cnf
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
@@ -68,7 +70,7 @@ def chain_submission(simSystem:Gromos_System,
                      run_analysis_script_every_x_runs: int = 0, in_analysis_script_path: str = "",
                      start_run_index: int = 1,
                      prefix_command: str = "", previous_job_ID: int = None, work_dir: str = None,
-                     initialize_first_run: bool = True, reinitialize: bool = False,
+                     initialize_first_run: bool = True, reinitialize_every_run: bool = False,
                      verbose: bool = False, verbose_lvl:int = 1):
     """
 
@@ -91,7 +93,7 @@ def chain_submission(simSystem:Gromos_System,
     previous_job_ID
     work_dir
     initialize_first_run
-    reinitialize
+    reinitialize_every_run
         initialize_first_run must be False
     verbose
 
@@ -149,13 +151,21 @@ def chain_submission(simSystem:Gromos_System,
                 md_args += "-in_perttopo_path " + simSystem.ptp.path + "\n"
             if (not simSystem.refpos is None):
                 md_args += "-in_refpos_path " + simSystem.refpos.path + "\n"
+            if (not simSystem.qmmm is None):
+                md_args += "-in_qmmm_path " + simSystem.qmmm.path + " "
             if (not simSystem.posres is None):
                 md_args += "-in_posres_path " + simSystem.posres.path + "\n"
             
             md_args += "-nmpi " + str(job_submission_system.nmpi) + "\n"
             md_args += "-nomp " + str(job_submission_system.nomp) + "\n"
             md_args += "-initialize_first_run "+str(initialize_first_run)+ "\n"
-            md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"        
+            md_args += "-reinitialize_every_run "+str(reinitialize_every_run)+ "\n"        
+            if simSystem.gromosXX is not None:
+                md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"
+            else:
+                md_args += "-gromosXX_bin_dir None \n"
+                if verbose:
+                    warnings.warn("gromosXX_bin_dir is None \n If you want to simulate something please add a existing gromos bin\n")   
     
             if(work_dir is not None):
                 md_args += "-work_dir " + str(work_dir) + "\n"
@@ -226,7 +236,7 @@ def chain_submission(simSystem:Gromos_System,
         prefix_command = ""
 
         #Resulting cnf is provided to use it in further approaches.
-        simSystem.cnf = tmp_out_cnf
+        simSystem.cnf = Cnf(tmp_out_cnf, _future_file=True)
 
     if (ana_id is not None) : previous_job_ID = ana_id
       
