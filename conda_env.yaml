@@ -1,4 +1,4 @@
-name: pygromosTest
+name: pygromos
 channels:
   - conda-forge
   - defaults
@@ -8,11 +8,12 @@ dependencies:
   - pip
   ## Testing
   - pytest
-  - pytest-cov
-  - codecov
   ## Meta
   - typing
   - pre-commit
+  - jupyter
+  - tqdm
+  - ipywidgets
   # Science
   - mpmath
   - pandas
@@ -26,5 +27,4 @@ dependencies:
   - rdkit
   ## Visualization
   - matplotlib
-  - py3dmol #to be removed! soon after merge of new visualize
   - nglview

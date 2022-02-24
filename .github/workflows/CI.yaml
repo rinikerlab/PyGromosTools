@@ -43,7 +43,7 @@ jobs:
         environment-file:  dev/conda_envs/test_env.yaml
         channels: conda-forge,defaults
 
-        activate-environment: test
+        activate-environment: pygromosTest
         auto-update-conda: true
         auto-activate-base: false
         show-channel-urls: true
