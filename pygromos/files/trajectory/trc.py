@@ -20,7 +20,9 @@ import numpy as np
 from typing import TypeVar, Union, Dict
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
+from pygromos.files.coord.cnf import Cnf
 from pygromos.analysis import coordinate_analysis as ca
+
 from pygromos.files.blocks._general_blocks import TITLE
 
 import nglview as nj
@@ -30,7 +32,7 @@ TrcType = TypeVar("Trc")
 CnfType = TypeVar("Cnf")
 
 
-class Trc_new(mdtraj.Trajectory):
+class Trc(mdtraj.Trajectory):
     # Attributes
     TITLE: TITLE
 
@@ -42,27 +44,62 @@ class Trc_new(mdtraj.Trajectory):
         unitcell_lengths=None,
         unitcell_angles=None,
         traj_path=None,
-        top_cnf_path=None,
+        in_cnf : [str,Cnf]=None,
     ):
+        if not (traj_path is None and in_cnf is None):
+            #Parse TRC
+            if isinstance(traj_path, str):
+                xyz, time, step = self.parse_trc_efficiently(traj_path)
 
-        if xyz is str:
-            self._block_map = self._generate_blockMap(in_trc_path=xyz)
-
-        if traj_path is not None:  # is str and traj_path.endswith('.trc.gz') and not top_cnf_path is None):
-            trc = Trc(traj_path)
-
-            num_frames = len(trc.database.index)
-            num_atoms = len(trc.database.columns) - 6
-
-            xyz = np.concatenate(np.concatenate(trc.database.values[:num_frames, 2 : num_atoms + 2])).reshape(
-                (num_frames, num_atoms, 3)
-            )
-            cnf = Cnf(top_cnf_path)
-            cnf.write_pdb("/localhome/kpaul/pygromosday/test.pdb")
+            #Topology from Cnf
+            if isinstance(in_cnf, str):
+                in_cnf = Cnf(in_cnf)
+            in_cnf.write_pdb("/localhome/kpaul/pygromosday/test.pdb")
             single = mdtraj.load_pdb("/localhome/kpaul/pygromosday/test.pdb")
-            super().__init__(xyz=xyz, topology=single.topology)
+
+
+            super().__init__(xyz=xyz, topology=single.topology, time=time)
+            self._step = step
         else:
             super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+
+    def parse_trc_efficiently(self, traj_path:str)->(np.array, np.array, np.array):
+        self._block_map = self._generate_blockMap(in_trc_path=traj_path)
+
+        #build block mapping
+        rep_time = 1
+        start = self._block_map['TIMESTEP']
+        title = self._block_map['TITLE']
+        end = start + self._block_map['POSITIONRED'] - 1
+        timestep_block_length = sum([self._block_map[key] for key in self._block_map if (not key in ["TITLE", "commentLines"])])
+        chunk = self._block_map['POSITIONRED'] - self._block_map['commentLines'] - 2 + 1
+
+        ##block mapping logic
+        rows = lambda x: not (
+                (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end)) or (
+                x - title) % timestep_block_length == rep_time) if x > title else True
+
+        #parsing
+        data = []
+        time = []
+        step = []
+        for b in pd.read_table(
+                traj_path,
+                delim_whitespace=True, skiprows=rows, names=['x', 'y', 'z'], chunksize=chunk, comment="#"):
+            data.append(b.values[1:, :])
+            time.append(b.values[0, 1])
+            step.append(b.values[0, 0])
+
+        #make np.Arrays
+        xyz = np.array(data)
+        time = np.array(time)
+        step = np.array(step)
+
+        return xyz, step,time
+
+    @property
+    def step(self)->np.array:
+        return self._step
 
     rmsd = lambda self, x: mdtraj.rmsd(self, self, x)
 
@@ -73,10 +110,15 @@ class Trc_new(mdtraj.Trajectory):
             inTitleBlock = False
             blockKey = None
             nLines = 0
+            nCommentLines = 0
             titleStr = []
 
             while True:
-                line = file_handle.readline()
+                line = file_handle.readline().strip()
+
+                if(line.startswith("#")):
+                    nCommentLines+=1
+
                 if "END" == line.strip():
                     block_map.update({blockKey: nLines})
                     if blockKey == TITLE.__name__:
@@ -94,365 +136,19 @@ class Trc_new(mdtraj.Trajectory):
                 elif inTitleBlock:
                     titleStr.append(line)
                 nLines += 1
+
         if not hasattr(self, TITLE.__name__):
             self.TITLE = TITLE(content="Empty TITLE")
+
+        block_map.update({"commentLines":nCommentLines})
+
         return block_map
 
     @property
     def view(self, re_create: bool = False) -> nj.NGLWidget:
-        if self._view == None or re_create:
+        if not hasattr(self, '_view') or isinstance(self, "_view", nj.NGLWidget) or re_create:
             self._view = nj.show_mdtraj(self)
         return self._view
 
-
-class Trc(traj._General_Trajectory):
-    _gromos_file_ending: str = "trc"
-
-    def __init__(self, input_value: str or None, auto_save=True, stride: int = 1, skip: int = 0):
-        super().__init__(input_value, auto_save=auto_save, stride=stride, skip=skip)
-
-    def get_atom_pair_distance_series(self, atomI: int, atomJ: int, periodicBoundary=False) -> pd.DataFrame:
-        """
-        creates a series with the euclidian distance for the atom pair i-j for every time step
-
-        Parameters
-        ----------
-        atomI : int
-        atomJ : int
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self.database[["POS_" + str(atomI), "POS_" + str(atomJ)]].apply(
-            lambda x: ca.calculate_distance(x[0], x[1]), axis=1
-        )
-
-    def get_atom_pair_distance_mean(self, atomI: int, atomJ: int) -> float:
-        """
-        creates the mean of the euclidian distances for every timestep between the atoms i and j
-
-        Parameters
-        ----------
-        atomI : int
-        atomJ : int
-
-        Returns
-        -------
-        float
-        """
-        return self.get_atom_pair_distance_series(atomI=atomI, atomJ=atomJ).mean()
-
-    def get_atom_movement_series(self, atomI: int, periodicBoundary=False) -> pd.DataFrame:
-        """
-        for every time step the difference to the last coordinates is calculated for an atom i
-        Returns the euclidian difference to the last step as a numpy array
-
-        Parameters
-        ----------
-        atomI : int
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return (self.database["POS_" + str(atomI)] - self.database["POS_" + str(atomI)].shift())[1:]
-
-    def get_atom_movement_length_series(self, atomI: int, periodicBoundary=False) -> pd.DataFrame:
-        """
-        for every timestep the total euclidian difference to the last time step is calculate for atom i
-
-        Parameters
-        ----------
-        atomI : int
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self.get_atom_movement_series(atomI=atomI, periodicBoundary=periodicBoundary).apply(
-            lambda x: np.sqrt(np.sum(x**2))
-        )
-
-    def get_atom_movement_length_mean(self, atomI: int, periodicBoundary=False) -> float:
-        """
-        The average euclidian movement between to consecutive timesteps is calculated for atom i
-
-        Parameters
-        ----------
-        atomI : int
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        float
-        """
-        return self.get_atom_movement_length_series(atomI=atomI, periodicBoundary=periodicBoundary).mean()
-
-    def get_atom_movement_length_total(self, atomI: int, periodicBoundary=False) -> float:
-        """
-        The total euclidian movement between to consecutive timesteps is calculated for atom i
-
-        Parameters
-        ----------
-        atomI : int
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        float
-        """
-        return self.get_atom_movement_length_series(atomI=atomI, periodicBoundary=periodicBoundary).sum()
-
-    def get_cog_movement_vector_series_for_atom_group(self, atoms: list, periodicBoundary=False) -> pd.DataFrame:
-        """
-        Calculate the movemnt vector between to consecutive time steps for the center of geometry defined by a list of atoms
-
-        Parameters
-        ----------
-        atoms : list[int]
-            the list of atoms defining the center of geometry
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        pd.DataFrame
-            numpy array with the movement vector for every time step
-        """
-        # create a local copy which can be modified
-        temp_database = self.database.copy()
-        # create the difference to the last time step for every atom i in the list atoms
-        for i in atoms:
-            temp_database["mix" + str(i)] = temp_database["POS_" + str(i)] - temp_database["POS_" + str(i)].shift()
-        # calculate vector to cog
-        return temp_database[["mix" + str(i) for i in atoms]][1:].sum(axis=1).apply(lambda x: x / len(atoms))
-
-    def get_cog_movement_total_series_for_atom_group(self, atoms: list, periodicBoundary=False) -> pd.DataFrame:
-        """
-        Calculate the total movemnt between to consecutive time steps for the center of geometry defined by a list of atoms
-
-        Parameters
-        ----------
-        atoms : list[int]
-            the list of atoms defining the center of geometry
-        periodicBoundary : bool, optional
-            WIP
-
-        Returns
-        -------
-        pd.DataFrame
-            total movement (float) for every time step
-        """
-        return self.get_cog_movement_vector_series_for_atom_group(atoms=atoms, periodicBoundary=periodicBoundary).apply(
-            lambda x: np.sqrt(np.sum(x**2))
-        )
-
-    def radial_distribution(self, atomsFrom, atomsTo) -> pd.DataFrame:
-        pass
-
-    def rmsd(self, ref_cnf: Union[int, TrcType]) -> pd.DataFrame:
-        """Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self
-
-        Parameters
-        ----------
-        ref_cnf : trajectoy or frame (int) to use as reference
-            This is the reference configuration. If a int (n) is provide the nth frame will be used
-
-        Returns
-        -------
-        pd.DataFrame
-            RMSD for every frame
-        """
-        if type(ref_cnf) == pd.DataFrame or type(ref_cnf) == pd.Series:
-            if ref_cnf.ndim == 1:
-                pos_mask = self.database.columns.str.startswith("POS_")
-                to_sub = ref_cnf.iloc[pos_mask]
-                if pos_mask.size != ref_cnf.size:
-                    raise DataError("ref_cnf and Positons do not match")
-        elif type(ref_cnf) == int:
-            if ref_cnf <= self.database.ndim:
-                pos_mask = self.database.columns.str.startswith("POS_")
-                to_sub = self.database.iloc[ref_cnf, pos_mask]
-            else:
-                raise IndexError("ref_cnf value was recognized as integer but is too large")
-        else:
-            raise ValueError("ref_cnf type not supported")
-        return pd.DataFrame(
-            list(self.database.iloc[:, pos_mask].sub(to_sub).apply(lambda x: ca.rms(x), axis=1)),
-            columns=["x", "y", "z"],
-        )
-
-    def get_pdb(self, cnf: str, exclude_resn=["SOLV"]) -> str:
-        pdb_format = (
-            "ATOM  {:>5d}  {:<3}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
-        )
-
-        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
-        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
-
-        # 3) CONVERT FILE
-        if isinstance(self.TITLE, list):
-            TITLE = "\n".join(self.TITLE)
-        else:
-            TITLE = self.TITLE
-        pdb_str = "TITLE " + TITLE + "\n"
-        pos_cols = [col for col in self.database.columns if ("POS" in col)]
-        for ind, time_step in self.database.iterrows():
-            pos_lines = time_step[pos_cols]
-            remark_line = "REMARK\t" + str(time_step["step"]) + "\t" + str(time_step["time"]) + "\nMODEL\n"
-            frame_positions = []
-            for ind, coord_set in enumerate(pos_lines):
-                atom = cnf.POSITION[ind]
-                if atom.resName in exclude_resn:
-                    continue
-                frame_positions.append(
-                    pdb_format.format(
-                        atom.atomID,
-                        atom.atomType,
-                        dummy_alt_location,
-                        atom.resName,
-                        dummy_chain,
-                        int(atom.resID),
-                        dummy_insertion_code,
-                        coord_set[0] * 10,
-                        coord_set[1] * 10,
-                        coord_set[2] * 10,
-                        dummy_occupancy,
-                        dummy_bfactor,
-                        dummy_segment,
-                        atom.atomType,
-                        int(dummy_charge),
-                    )
-                )  # times *10 because pdb is in A
-            pdb_str += remark_line + "\n".join(frame_positions) + "\nENDMDL\n"
-        return pdb_str
-
-    def write_pdb(self, out_path: str, cnf_file: str):
-        """
-            This function converts the atom POS db of the traj into a pdb traj.
-
-        Parameters
-        ----------
-        atoms : t.List[Atom]
-            List of atoms
-        Returns
-        -------
-        t.List[str]
-             pdb strings of that molecule
-        """
-        # 1) INPUT PARSING
-        from pygromos.files.coord.cnf import Cnf  # avoid circular import
-
-        if isinstance(cnf_file, str):
-            cnf = Cnf(cnf_file)
-        elif isinstance(cnf_file, Cnf):
-            cnf = cnf_file
-        else:
-            raise ValueError("Did not understand the Value of cnf_file. Must be str to a cnf file or a cnf_file.")
-
-        if isinstance(out_path, str):
-            if os.path.exists(os.path.dirname(out_path)):
-                out_file = open(out_path, "w")
-            else:
-                raise IOError("Could not find directory to write to: " + str(os.path.dirname(out_path)))
-        else:
-            raise ValueError("Did not understand the Value of out_path. Must be str.")
-
-        # 2) CONSTUCT PDB BLOCKS
-        # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = (
-            "ATOM  {:>5d}  {:<2}{:1}{:>3}  {:1}{:>3d}{:1}   {:>7.3f}{:>7.3f}{:>7.3f}{:>5}{:>6}{:<3}{:>2} {:>2d}"
-        )
-        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
-        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
-
-        # 3) CONVERT FILE
-        # TODO: Inefficient!
-        out_file.write("TITLE " + self.TITLE + "\n")
-        pos_cols = [col for col in self.database.columns if ("POS" in col)]
-        for ind, time_step in self.database.iterrows():
-            pos_lines = time_step[pos_cols]
-            remark_line = "REMARK\t" + str(time_step["step"]) + "\t" + str(time_step["time"]) + "\nMODEL\n"
-            frame_positions = []
-            for ind, coord_set in enumerate(pos_lines):
-                atom = cnf.POSITION[ind]
-                frame_positions.append(
-                    pdb_format.format(
-                        atom.atomID,
-                        atom.atomType,
-                        dummy_alt_location,
-                        atom.resName,
-                        dummy_chain,
-                        int(atom.resID),
-                        dummy_insertion_code,
-                        coord_set[0] * 10,
-                        coord_set[1] * 10,
-                        coord_set[2] * 10,
-                        dummy_occupancy,
-                        dummy_bfactor,
-                        dummy_segment,
-                        atom.atomType,
-                        int(dummy_charge),
-                    )
-                )  # times *10 because pdb is in A
-            out_file.write(remark_line + "\n".join(frame_positions) + "\nENDMDL\n")
-        out_file.write("\nEND")
-        out_file.close()
-        return out_path
-
-    def visualize(self, cnf: CnfType):
-        from pygromos.visualization.coordinates_visualization import show_coordinate_traj
-
-        return show_coordinate_traj(self, cnf=cnf)
-
-    def cog_reframe(self, cnf: CnfType, index_list: list = [1]):
-        # calculate average box size
-        grid = np.array(cnf.GENBOX.length) / 2
-
-        # create mask for cog calculation
-        col_list = [x for x in self.database.columns if ("POS" in x)]
-        # cog calculation: select POS -> apply pbc -> average all positions
-        pbc_pos = self.database[col_list].applymap(lambda x: ca.periodic_distance(x, grid))
-        # cog = pbc_pos.sum(axis=1) / len(col_list)
-        # print("COG:", cog)
-
-        # shift all positions
-        posList = [x for x in self.database[col_list]]
-        for ind, idx in enumerate(posList):
-            self.database[idx] = self.database[idx].apply(lambda x: ca.periodic_distance(x, grid))
-
-
-"""
-    @classmethod
-    def cnfs_to_trc(cls, cnfs:Iterable[str], title=None, start_time:float=0.0, dt:float=0.002 ):
-        return cls(input=cls._cnf_to_trc_dict(cnfs, start_time=start_time, dt=dt), title=title)
-
-    @classmethod
-    def _cnf_to_trc_dict(cls, cnfs:Iterable[str], start_time:float=0.0, dt:float=0.002)->List[Dict]:
-
-        time = start_time
-        out_frames_list:List[Dict] = []
-        for steps, cnf_path in enumerate(cnfs):
-            cnf = Cnf(cnf_path)
-            frame_traj = {'steps': steps, 'time': time, "POSITIONRED": []}
-            block_str = ""
-            for atom in sorted(cnf.POSITION, key=lambda at: at.atomID):
-                if (atom.atomID % 10 == 0): block_str += "#\t" + str(atom.atomID) + "\n"
-                block_str += "\t" + str(atom.xp) + "\t" + str(atom.yp) + "\t" + str(atom.zp) + "\n"
-            frame_traj.update({"POSITIONRED": block_str})
-            frame_traj.update({"GENBOX": str(cnf.GENBOX).replace("GENBOX\n", "").replace("END\n", "")}) #a bit hacky
-
-            out_frames_list.append(frame_traj)
-            time += dt
-
-        return out_frames_list
-"""
+    def write_trc(self):
+        raise NotImplemented("Not Implemented")
