@@ -133,7 +133,7 @@ class _General_Trajectory():
         step_offset = int(self.database.step.iloc[-1])
         time_offset = float(self.database.time.iloc[-1])
         delta_time_self = self.get_time_step()
-        
+
         # copy and modify second trajectory
         new_data = traj.database.copy(deep=True)
         
