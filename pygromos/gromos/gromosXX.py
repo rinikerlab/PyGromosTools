@@ -312,22 +312,24 @@ class _Gromos:
         else:
             raise IOError("Did not get an input top file. Got: " + in_topo_path)
         
-        # Input cnf file depends if we have the CONT keyword or not
-        # assumes with CONT == 1 we always give the cnf from the first
-        # replica as the template 
-        if (hasattr(imd, 'REPLICA_EDS') and imd.REPLICA_EDS.CONT) or \
-           (hasattr(imd, 'REPLICA') and imd.REPLICA.CONT):
-            in_coord_path = str(in_coord_path).replace("_1.cnf", ".cnf")
-
-        if in_coord_path:
-            command += ["@conf", str(in_coord_path)]
-        else:
-            raise IOError("Did not get an input coord file. Got: " + in_coord_path)
-
         if in_imd_path:
             command += ["@input", str(in_imd_path)]
         else:
             raise IOError("Did not get an input imd file. Got: " + in_imd_path)
+
+        # Input cnf file depends if we have the CONT keyword or not
+        # assumes with CONT == 1 we always give the cnf from the first
+        # replica as the template
+        imd = Imd(in_imd_path)
+        if hasattr(imd, "REPLICA") and imd.REPLICA is not None and imd.REPLICA.CONT:
+            in_coord_path = str(in_coord_path).replace("_1.cnf", ".cnf")
+        elif hasattr(imd, "REPLICA_EDS") and imd.REPLICA_EDS is not None and imd.REPLICA_EDS.CONT:
+            in_coord_path = str(in_coord_path).replace("_1.cnf", ".cnf")
+        
+        if in_coord_path:
+            command += ["@conf", str(in_coord_path)]
+        else:
+            raise IOError("Did not get an input coord file. Got: " + in_coord_path)
 
         if in_pert_topo_path:
             command += ["@pttopo", str(in_pert_topo_path)]
