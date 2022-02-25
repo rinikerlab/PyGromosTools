@@ -1,14 +1,14 @@
 TITLE
-Automatic generated pertubation file. 
+Automatic generated pertubation file.
 	 >>> Generated with python lib function_libs utilities. (riniker group)
 	 >>> line_seperator: '\n'	 field_seperator: '\t'	 comments_char: '#'
 END
 PERTATOMPARAM
-# NJLA  	 NPTB =  	 2 	 
+# NJLA  	 NPTB =  	 2
  	 26
 # state_identifiers
 #  	 state1 	 state2
-#    NR   RES  NAME  IAC1mass1   CHARGE1  IAC2mass2   CHARGE2    ALPHLJ     ALPHCRF   
+#    NR   RES  NAME  IAC1mass1   CHARGE1  IAC2mass2   CHARGE2    ALPHLJ     ALPHCRF
     1     1    C9    16 15.035    0.05200    22 15.035    0.00000    1.00000    1.00000
     2     1    C6    64 12.011    0.21300    22 12.011    0.00000    1.00000    1.00000
     3     1    C2    64 12.011   -0.43400    22 12.011    0.00000    1.00000    1.00000

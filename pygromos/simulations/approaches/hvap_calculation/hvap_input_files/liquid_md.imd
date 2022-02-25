@@ -105,7 +105,7 @@ END
 # Default : 1.2
 # AMBER AMBSCAL
 #      1      1.2
-#END 
+#END
 PRINTOUT
 #NTPR: print out energies, etc. every NTPR steps
 #NTPP: =1 perform dihedral angle transition monitoring

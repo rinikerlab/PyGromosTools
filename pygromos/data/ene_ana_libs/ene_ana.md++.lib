@@ -29,7 +29,7 @@ ENERTRJ
     subblock NONBONDED matrix_NUM_ENERGY_GROUPS 4
     subblock SPECIAL NUM_ENERGY_GROUPS 11
     size NUM_EDS_STATES
-    subblock EDS NUM_EDS_STATES 4 
+    subblock EDS NUM_EDS_STATES 4
     size NUM_LAMBDAS
     subblock PRECALCLAM NUM_LAMBDAS 11
     subblock ABDIH 1 2
@@ -74,7 +74,7 @@ VARIABLES
 # the MASS which (if not present in the energy trajectory) will be calculated
 # from the topology (if inputflag @topo is given).
 #
-# Additional properties can be defined here as a direct mapping of a known 
+# Additional properties can be defined here as a direct mapping of a known
 # property or as an expression of such properties. Make sure that variables
 # and operators are always seperated by spaces. Multi-line expressions are
 # allowed.
@@ -155,21 +155,21 @@ solvtemp3 = TEMPERATURE[3][1]
 # Hvap = Ugas - Uliq + RT
 #
 # where Ugas and Uliq are the total potential energies
-# of a single molecule in the gas and liquid phase, respectively, 
+# of a single molecule in the gas and liquid phase, respectively,
 # R denotes the gas constant and T the absolute temperature.
-# To calculate Hvap from an energy trajectory obtained 
-# from a condensed phase simulation, Ugas = GASENER 
+# To calculate Hvap from an energy trajectory obtained
+# from a condensed phase simulation, Ugas = GASENER
 # has to be provided (e.g. from a separate simulation)
-# along with the number of molecules, NUMMOL, in the box  
+# along with the number of molecules, NUMMOL, in the box
 # and the temperature TEMP, e.g:
 #
 # TEMP = 300.0
 # GASENER = 0
 # NUMMOL = 512
 # hvap = GASENER - ENER[3] / NUMMOL + BOLTZ * TEMP
-# 
-# Alternatively the temperature can be made available 
-# from the appropriate entry in the TEMPERATURE 
+#
+# Alternatively the temperature can be made available
+# from the appropriate entry in the TEMPERATURE
 # subblock.
 #
 # VISCOSITY (used by visco program)
@@ -182,5 +182,4 @@ offP3 = PRESSURE[9]
 offP4 = PRESSURE[7]
 offP5 = PRESSURE[10]
 offP6 = PRESSURE[11]
-END 
-
+END

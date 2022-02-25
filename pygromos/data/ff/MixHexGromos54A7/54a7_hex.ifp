@@ -20,12 +20,12 @@ PHH, 06.06.2011: Small correction in comments (carbohydrate dihedrals) - data un
 PHH, 09.11.2011: Reintroduced a FORCEFIELD block in all GROMOS11 files.
 PHH, 26.06.2012: Introduced MAKETOPVERSION blocks in all GROMOS11 files
 PHH, 08.04.2013: Upon conversion of 45A4 to 53A5, which involved a renumbering of the
-                 dihedral-angle types, type 37 was mapped to renumbered dihedral type 3 
-                 (sugar: O5-C5-C6-O6, omega-tilde dihedral, for residue with syn C4,C5 
-                 like Gal, 1-fold term), but with an incorrect force constant of 4.97 
-                 instead of 6.66; this is now corrected in the ifp files of 53A5 and 
-                 later versions (dihedral type 3 is not used in any other residue; 
-                 this problem does not affect the new carbohydrate force field 
+                 dihedral-angle types, type 37 was mapped to renumbered dihedral type 3
+                 (sugar: O5-C5-C6-O6, omega-tilde dihedral, for residue with syn C4,C5
+                 like Gal, 1-fold term), but with an incorrect force constant of 4.97
+                 instead of 6.66; this is now corrected in the ifp files of 53A5 and
+                 later versions (dihedral type 3 is not used in any other residue;
+                 this problem does not affect the new carbohydrate force field
                  56A6@CARBO, which does not use this dihedral)
 END
 FORCEFIELD

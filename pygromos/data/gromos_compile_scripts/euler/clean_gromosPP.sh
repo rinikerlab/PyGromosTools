@@ -4,6 +4,6 @@ buildPATH=you/want/gromos/here/build_gromosXX
 
 cd ${SRCPATH}
 rm LINUX/* -r
-rmdir LINUX 
+rmdir LINUX
 rm ${buildPATH}/* -r
 rmdir ${buildPATH}
