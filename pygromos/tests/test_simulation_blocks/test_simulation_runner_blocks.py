@@ -1,3 +1,4 @@
+from tabnanny import verbose
 import unittest, numpy as np
 
 import pygromos.simulations.modules.general_simulation_modules
@@ -12,7 +13,8 @@ from pygromos.tests.test_simulation_blocks import out_test_root_dir
 
 
 class test_simulation_blocks(unittest.TestCase):
-    submissionSystem = DUMMY()
+    verbose = False
+    submissionSystem = DUMMY(verbose=False)
     sim_block = preset_simulation_modules.emin
     input_cnf_path = in_test_file_path + "/small_system/6J29.cnf"
     input_top_path = in_test_file_path + "/small_system/6J29.top"
@@ -24,6 +26,7 @@ class test_simulation_blocks(unittest.TestCase):
             system_name=str(__name__),
             in_cnf_path=self.input_cnf_path,
             in_top_path=self.input_top_path,
+            verbose=self.verbose,
         )
 
         print(self.gromSystem)
@@ -36,6 +39,7 @@ class test_simulation_blocks(unittest.TestCase):
             in_gromos_simulation_system=self.gromSystem,
             override_project_dir=self.tmp_test_dir,
             submission_system=self.submissionSystem,
+            verbose=self.verbose,
         )
 
     def test_emin(self):
@@ -43,6 +47,7 @@ class test_simulation_blocks(unittest.TestCase):
             in_gromos_system=self.gromSystem,
             override_project_dir=self.tmp_test_dir,
             submission_system=self.submissionSystem,
+            verbose=self.verbose,
         )
 
     def test_sd(self):
@@ -50,6 +55,7 @@ class test_simulation_blocks(unittest.TestCase):
             in_gromos_system=self.gromSystem,
             override_project_dir=self.tmp_test_dir,
             submission_system=self.submissionSystem,
+            verbose=self.verbose,
         )
 
     def test_md(self):
@@ -57,6 +63,7 @@ class test_simulation_blocks(unittest.TestCase):
             in_gromos_system=self.gromSystem,
             override_project_dir=self.tmp_test_dir,
             submission_system=self.submissionSystem,
+            verbose=self.verbose,
         )
 
     def test_lam_window(self):
@@ -67,6 +74,7 @@ class test_simulation_blocks(unittest.TestCase):
             project_dir=self.tmp_test_dir,
             in_imd_path=imd_templates.template_md,
             submission_system=self.submissionSystem,
+            verbose=self.verbose,
         )
 
     def test_ti_sampling(self):
@@ -80,4 +88,5 @@ class test_simulation_blocks(unittest.TestCase):
             subSystem=self.submissionSystem,
             n_productions=3,
             n_equilibrations=1,
+            verbose=self.verbose,
         )

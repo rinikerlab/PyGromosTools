@@ -29,6 +29,7 @@ class test_MD_scheduler(unittest.TestCase):
             in_imd_path=template_md,
             in_gromosXX_bin_dir=None,
             in_gromosPP_bin_dir=None,
+            verbose=False,
         )
         submission_system = self.submissionSystem()
 
@@ -37,5 +38,5 @@ class test_MD_scheduler(unittest.TestCase):
             out_dir_path=out_dir_path,
             submission_system=submission_system,
             simulation_run_num=2,
-            verbose=True,
+            verbose=False,
         )
