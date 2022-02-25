@@ -12,14 +12,14 @@ import pandas as pd
 from typing import List
 from numbers import Number
 
-from pygromos.utils import bash
+from pygromos.utils import bash, compiledProgram
 from pygromos.data import pdb_lib
 from pygromos.data.ff.Gromos2016H66 import ifp, mtb
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos.utils import gromosTypeConverter
 
 
-class _gromosPPbase:
+class _gromosPPbase(compiledProgram._compiled_programm):
     """
     GromosPP
 
@@ -32,9 +32,7 @@ class _gromosPPbase:
         This is the path to the folder containing the binaries of gromosPP. If None, the bash enviroment variables  will be used.
     """
 
-    _bin: str = ""
     _isValid: bool = False
-    __dont_check_bin: bool = False
 
     def __init__(self, gromosPP_bin_dir: str = None):
         """
@@ -51,7 +49,7 @@ class _gromosPPbase:
         )
         self.__doc__ = self.__doc__ + functions_text
 
-        self._bin = self._check_gromos_binDir(gromosPP_bin_dir)
+        self._bin = self._check_binary_dir(in_bin_dir=gromosPP_bin_dir, test_programm="pdb2g96")
 
         try:
             self.make_top(
@@ -76,25 +74,7 @@ class _gromosPPbase:
 
     @bin.setter
     def bin(self, in_bin_dir: str):
-        self._bin = _check_gromos_binDir(in_bin_dir)
-
-    def _check_gromos_binDir(self, in_bin_dir: str):
-        if (
-            isinstance(in_bin_dir, str)
-            and bash.directory_exists(in_bin_dir)
-            and bash.command_exists(f"{in_bin_dir}/pdb2g96")
-        ):
-            return in_bin_dir + "/"
-        elif self.__dont_check_bin or (in_bin_dir is None and bash.command_exists("pdb2g96")):
-            return None
-        else:
-            raise IOError(
-                "No "
-                + __name__
-                + " binary directory could be found! Please make sure you compiled "
-                + __name__
-                + " and either pass the path to the binary directory or set the PATH variable"
-            )
+        self._bin = self._check_binary_dir(in_bin_dir=in_bin_dir, test_programm="pdb2g96")
 
     """
         GromosPP Programms

@@ -11,12 +11,12 @@ import datetime
 import time
 from typing import Union
 
-from pygromos.utils import bash
+from pygromos.utils import bash, compiledProgram
 from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
 
 
-class _Gromos:
+class _Gromos(compiledProgram._compiled_programm):
     """
     GromosXX
 
@@ -27,9 +27,6 @@ class _Gromos:
     bin :   str, optional
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
-
-    _bin: str = ""
-    __dont_check_bin: bool = False
 
     def __init__(self, gromosXX_bin_dir: str = None):
         """
@@ -46,7 +43,7 @@ class _Gromos:
         )
         self.__doc__ = self.__doc__ + functions_text
 
-        self._bin = self._check_gromos_binDir(gromosXX_bin_dir)
+        self._bin = self._check_binary_dir(in_bin_dir=gromosXX_bin_dir, test_programm="md")
 
     def __str__(self):
         return self.__doc__
@@ -63,25 +60,7 @@ class _Gromos:
 
     @bin.setter
     def bin(self, in_bin_dir: str):
-        self._bin = _check_gromos_binDir(in_bin_dir)
-
-    def _check_gromos_binDir(self, in_bin_dir: str):
-        if (
-            isinstance(in_bin_dir, str)
-            and bash.directory_exists(in_bin_dir)
-            and bash.command_exists(f"{in_bin_dir}/pdb2g96")
-        ):  # move to GromosXX class
-            return in_bin_dir + "/"
-        elif self.__dont_check_bin or (in_bin_dir is None and bash.command_exists("pdb2g96")):
-            return None
-        else:
-            raise IOError(
-                "No "
-                + __name__
-                + " binary directory could be found! Please make sure you compiled "
-                + __name__
-                + " and either pass the path to the binary directory or set the PATH variable"
-            )
+        self._bin = self._check_binary_dir(in_bin_dir=gromosXX_bin_dir, test_programm="md")
 
     """
         GromosXX Programms
