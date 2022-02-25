@@ -14,9 +14,11 @@ TODO: add support for rdkit conformers
 """
 
 # imports
-import os
+import tempfile
+import mdtraj
 import pandas as pd
 import numpy as np
+import nglview as nj
 from typing import TypeVar, Union, Dict
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
@@ -25,11 +27,8 @@ from pygromos.analysis import coordinate_analysis as ca
 
 from pygromos.files.blocks._general_blocks import TITLE
 
-import nglview as nj
-import mdtraj
 
 TrcType = TypeVar("Trc")
-CnfType = TypeVar("Cnf")
 
 
 class Trc(mdtraj.Trajectory):
@@ -44,61 +43,72 @@ class Trc(mdtraj.Trajectory):
         unitcell_lengths=None,
         unitcell_angles=None,
         traj_path=None,
-        in_cnf : [str,Cnf]=None,
+        in_cnf: [str, Cnf] = None,
     ):
         if not (traj_path is None and in_cnf is None):
-            #Parse TRC
+            # Parse TRC
             if isinstance(traj_path, str):
                 xyz, time, step = self.parse_trc_efficiently(traj_path)
 
-            #Topology from Cnf
+            # Topology from Cnf
             if isinstance(in_cnf, str):
                 in_cnf = Cnf(in_cnf)
-            in_cnf.write_pdb("/localhome/kpaul/pygromosday/test.pdb")
-            single = mdtraj.load_pdb("/localhome/kpaul/pygromosday/test.pdb")
 
+            # Topo tmp file
+            tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
+            in_cnf.write_pdb(tmpFile.name)
+            single = mdtraj.load_pdb(tmpFile.name)
+            # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
+            tmpFile.close()
 
             super().__init__(xyz=xyz, topology=single.topology, time=time)
             self._step = step
         else:
             super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
 
-    def parse_trc_efficiently(self, traj_path:str)->(np.array, np.array, np.array):
+    def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)
 
-        #build block mapping
+        # build block mapping
         rep_time = 1
-        start = self._block_map['TIMESTEP']
-        title = self._block_map['TITLE']
-        end = start + self._block_map['POSITIONRED'] - 1
-        timestep_block_length = sum([self._block_map[key] for key in self._block_map if (not key in ["TITLE", "commentLines"])])
-        chunk = self._block_map['POSITIONRED'] - self._block_map['commentLines'] - 2 + 1
+        start = self._block_map["TIMESTEP"]
+        title = self._block_map["TITLE"]
+        end = start + self._block_map["POSITIONRED"] - 1
+        timestep_block_length = sum(
+            [self._block_map[key] for key in self._block_map if (not key in ["TITLE", "commentLines"])]
+        )
+        chunk = self._block_map["POSITIONRED"] - self._block_map["commentLines"] - 2 + 1
 
         ##block mapping logic
-        rows = lambda x: not (
-                (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end)) or (
-                x - title) % timestep_block_length == rep_time) if x > title else True
+        rows = (
+            lambda x: not (
+                (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
+                or (x - title) % timestep_block_length == rep_time
+            )
+            if x > title
+            else True
+        )
 
-        #parsing
+        # parsing
         data = []
         time = []
         step = []
         for b in pd.read_table(
-                traj_path,
-                delim_whitespace=True, skiprows=rows, names=['x', 'y', 'z'], chunksize=chunk, comment="#"):
+            traj_path, delim_whitespace=True, skiprows=rows, names=["x", "y", "z"], chunksize=chunk, comment="#"
+        ):
             data.append(b.values[1:, :])
             time.append(b.values[0, 1])
             step.append(b.values[0, 0])
 
-        #make np.Arrays
+        # make np.Arrays
         xyz = np.array(data)
         time = np.array(time)
         step = np.array(step)
 
-        return xyz, step,time
+        return xyz, step, time
 
     @property
-    def step(self)->np.array:
+    def step(self) -> np.array:
         return self._step
 
     rmsd = lambda self, x: mdtraj.rmsd(self, self, x)
@@ -116,8 +126,8 @@ class Trc(mdtraj.Trajectory):
             while True:
                 line = file_handle.readline().strip()
 
-                if(line.startswith("#")):
-                    nCommentLines+=1
+                if line.startswith("#"):
+                    nCommentLines += 1
 
                 if "END" == line.strip():
                     block_map.update({blockKey: nLines})
@@ -140,14 +150,19 @@ class Trc(mdtraj.Trajectory):
         if not hasattr(self, TITLE.__name__):
             self.TITLE = TITLE(content="Empty TITLE")
 
-        block_map.update({"commentLines":nCommentLines})
+        block_map.update({"commentLines": nCommentLines})
 
         return block_map
 
     @property
-    def view(self, re_create: bool = False) -> nj.NGLWidget:
-        if not hasattr(self, '_view') or isinstance(self, "_view", nj.NGLWidget) or re_create:
-            self._view = nj.show_mdtraj(self)
+    def view(self) -> nj.NGLWidget:
+        if not hasattr(self, "_view") or not (hasattr(self, "_view") and isinstance(self._view, nj.NGLWidget)):
+            return self.recreate_view()
+        else:
+            return self._view
+
+    def recreate_view(self) -> nj.NGLWidget:
+        self._view = nj.show_mdtraj(self)
         return self._view
 
     def write_trc(self):
