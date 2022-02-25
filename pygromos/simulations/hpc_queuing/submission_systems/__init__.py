@@ -6,9 +6,9 @@ from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF
 
 
 def get_submission_system(testing: bool = False):
-    if (testing):
+    if testing:
         return DUMMY
-    if ("eu" in socket.gethostname()):
+    if "eu" in socket.gethostname():
         return LSF
     else:
         return LOCAL

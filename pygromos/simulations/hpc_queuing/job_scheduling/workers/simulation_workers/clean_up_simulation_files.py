@@ -9,7 +9,8 @@ It should be hanged in after each simulation step.
 import argparse
 import glob
 import os, sys
-package_path = os.path.abspath(__file__+"/../../../../../..")
+
+package_path = os.path.abspath(__file__ + "/../../../../../..")
 # print(package_path)
 sys.path.append(package_path)
 
@@ -33,20 +34,25 @@ def do(in_simulation_dir: str, n_processes: int = 1, verbose: bool = True) -> No
     None
     """
     import time
+
     time.sleep(time_wait_s_for_filesystem)
     # compress files:
-    if (verbose): print("Search Files START", "\n")
+    if verbose:
+        print("Search Files START", "\n")
     trx_files = glob.glob(in_simulation_dir + "/*.tr?")
 
-    if (verbose): print("Found tr?s: ", trx_files, "\n")
+    if verbose:
+        print("Found tr?s: ", trx_files, "\n")
 
-    if (len(trx_files) == 0):
+    if len(trx_files) == 0:
         exit(0)
     else:
-        if (verbose): print("COMPRESS START\n")
+        if verbose:
+            print("COMPRESS START\n")
         fM.compress_files(trx_files, n_processes=n_processes)
 
-        if (verbose): print("COMPRESS DONE\n")
+        if verbose:
+            print("COMPRESS DONE\n")
 
     # do more?
 
@@ -54,14 +60,16 @@ def do(in_simulation_dir: str, n_processes: int = 1, verbose: bool = True) -> No
 if __name__ == "__main__":
     # INPUT JUGGELING
     parser = argparse.ArgumentParser(description="Run Gromos after simulation cleanup\n\n" + str(__doc__))
-    parser.add_argument('-in_simulation_dir', type=str, required=True,
-                        help="give the simulation directory path of a gromos simulation.")
-    parser.add_argument('-n_processes', type=int, required=False, default=1,
-                        help="give the number of process for parallelisation.")
+    parser.add_argument(
+        "-in_simulation_dir", type=str, required=True, help="give the simulation directory path of a gromos simulation."
+    )
+    parser.add_argument(
+        "-n_processes", type=int, required=False, default=1, help="give the number of process for parallelisation."
+    )
 
     args, unkown_args = parser.parse_known_args()
 
-    if (len(unkown_args) > 0):
+    if len(unkown_args) > 0:
         print("ERROR FOUND UNKNOWN ARG")
         parser.print_help()
         raise IOError("Parser does not know following arguments:\n\t" + "\n\t".join(unkown_args))

@@ -9,45 +9,51 @@ from pygromos.simulations.hpc_queuing.submission_systems.submission_job import S
 from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
 
+
 class LSF(_SubmissionSystem):
     """LSF
-        This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.
+    This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.
     """
 
-    _dummy:bool=False
-    _refresh_job_queue_list_all_s: int = 60 # update the job-queue list every x seconds
+    _dummy: bool = False
+    _refresh_job_queue_list_all_s: int = 60  # update the job-queue list every x seconds
     _job_queue_time_stamp: datetime
 
-    def __init__(self, 
-                        submission: bool = True, 
-                        nomp: int = 1, 
-                        nmpi: int = 1, 
-                        job_duration: str = "24:00", 
-                        max_storage: float = 1000,
-                        verbose: bool = False, 
-                        enviroment=None, 
-                        block_double_submission:bool=True,
-                        bjobs_only_same_host:bool=False, 
-                        chain_prefix:str="done", 
-                        begin_mail:bool=False, 
-                        end_mail:bool=False, 
-                        zip_trajectories: bool = True):
+    def __init__(
+        self,
+        submission: bool = True,
+        nomp: int = 1,
+        nmpi: int = 1,
+        job_duration: str = "24:00",
+        max_storage: float = 1000,
+        verbose: bool = False,
+        enviroment=None,
+        block_double_submission: bool = True,
+        bjobs_only_same_host: bool = False,
+        chain_prefix: str = "done",
+        begin_mail: bool = False,
+        end_mail: bool = False,
+        zip_trajectories: bool = True,
+    ):
         # general settings for the submission system
-        super().__init__(verbose=verbose, 
-                        nmpi=nmpi, nomp=nomp, 
-                        job_duration=job_duration, 
-                        max_storage=max_storage, 
-                        submission=submission, 
-                        enviroment=enviroment, 
-                        block_double_submission=block_double_submission, 
-                        chain_prefix=chain_prefix, 
-                        begin_mail=begin_mail, 
-                        end_mail=end_mail, 
-                        zip_trajectories=zip_trajectories)
+        super().__init__(
+            verbose=verbose,
+            nmpi=nmpi,
+            nomp=nomp,
+            job_duration=job_duration,
+            max_storage=max_storage,
+            submission=submission,
+            enviroment=enviroment,
+            block_double_submission=block_double_submission,
+            chain_prefix=chain_prefix,
+            begin_mail=begin_mail,
+            end_mail=end_mail,
+            zip_trajectories=zip_trajectories,
+        )
         # Only LSF specific settings:
         self.bjobs_only_same_host = bjobs_only_same_host
 
-    def submit_to_queue(self, sub_job:Submission_job) -> int:
+    def submit_to_queue(self, sub_job: Submission_job) -> int:
         """
             This function submits the given command to the LSF QUEUE
 
@@ -65,16 +71,22 @@ class LSF(_SubmissionSystem):
         submission_string = ""
 
         # QUEUE checking to not double submit
-        if (self._block_double_submission and self.submission):
-            if (self.verbose): print('check queue')
+        if self._block_double_submission and self.submission:
+            if self.verbose:
+                print("check queue")
             ids = list(self.search_queue_for_jobname(sub_job.jobName).index)
 
-            if (len(ids) > 0):
-                if (self.verbose): print(
-                    "\tSKIP - FOUND JOB: \t\t" + "\n\t\t".join(map(str, ids)) + "\n\t\t with jobname: " + sub_job.jobName)
+            if len(ids) > 0:
+                if self.verbose:
+                    print(
+                        "\tSKIP - FOUND JOB: \t\t"
+                        + "\n\t\t".join(map(str, ids))
+                        + "\n\t\t with jobname: "
+                        + sub_job.jobName
+                    )
                 return ids[0]
 
-        if (isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir)):
+        if isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir):
             os.chdir(sub_job.submit_from_dir)
             command_file_path = sub_job.submit_from_dir + "/job_" + str(sub_job.jobName) + ".sh"
         else:
@@ -84,42 +96,45 @@ class LSF(_SubmissionSystem):
         submission_string += " -J" + sub_job.jobName + " "
         submission_string += " -W " + str(self.job_duration) + " "
 
-        if (not isinstance(sub_job.post_execution_command, type(None))):
-            submission_string += "-Ep \"" + sub_job.post_execution_command + "\" "
+        if not isinstance(sub_job.post_execution_command, type(None)):
+            submission_string += '-Ep "' + sub_job.post_execution_command + '" '
 
-        if (not isinstance(sub_job.outLog, str) and not isinstance(sub_job.errLog, str)):
+        if not isinstance(sub_job.outLog, str) and not isinstance(sub_job.errLog, str):
             outLog = sub_job.jobName + ".out"
             submission_string += " -o " + outLog
-        elif (isinstance(sub_job.outLog, str)):
+        elif isinstance(sub_job.outLog, str):
             submission_string += " -o " + sub_job.outLog
 
-        if (isinstance(sub_job.errLog, str)):
+        if isinstance(sub_job.errLog, str):
             submission_string += " -e " + sub_job.errLog
 
         nCPU = self.nmpi * self.nomp
         submission_string += " -n " + str(nCPU) + " "
         add_string = ""
         # add_string= "-R \"select[model==XeonGold_5118 || model==XeonGold_6150 || model==XeonE3_1585Lv5 || model==XeonE3_1284Lv4 || model==XeonE7_8867v3 || model == XeonGold_6140 || model==XeonGold_6150 ]\""
-        if (isinstance(self.max_storage, int)):
+        if isinstance(self.max_storage, int):
             submission_string += " -R rusage[mem=" + str(self.max_storage) + "] "
 
-        if (isinstance(sub_job.queue_after_jobID, (int, str)) and (sub_job.queue_after_jobID != 0 or sub_job.queue_after_jobID != "0")):
-            submission_string += " -w \"" + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ")\" "
+        if isinstance(sub_job.queue_after_jobID, (int, str)) and (
+            sub_job.queue_after_jobID != 0 or sub_job.queue_after_jobID != "0"
+        ):
+            submission_string += ' -w "' + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ')" '
 
-        if (self.begin_mail):
+        if self.begin_mail:
             submission_string += " -B "
-        if (self.end_mail):
+        if self.end_mail:
             submission_string += " -N "
 
-        sub_job.command = sub_job.command.strip() # remove trailing line breaks
-        
-        if (self.nomp >= 1):
-            command = "\"export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + "\""
+        sub_job.command = sub_job.command.strip()  # remove trailing line breaks
+
+        if self.nomp >= 1:
+            command = '"export OMP_NUM_THREADS=' + str(self.nomp) + ";\n " + sub_job.command + '"'
         else:
             command = "\n " + sub_job.command + ""
 
-        if (sub_job.sumbit_from_file):
-            if (self.verbose): print("writing tmp-submission-file to: ", command_file_path)
+        if sub_job.sumbit_from_file:
+            if self.verbose:
+                print("writing tmp-submission-file to: ", command_file_path)
             command_file = open(command_file_path, "w")
             command_file.write("#!/bin/bash\n")
             command_file.write(command + ";\n")
@@ -131,8 +146,9 @@ class LSF(_SubmissionSystem):
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
 
-        if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
-        if (self.submission and not self._dummy):
+        if self.verbose:
+            print("Submission Command: \t", " ".join(submission_string))
+        if self.submission and not self._dummy:
             try:
                 out_process = bash.execute(command=submission_string, catch_STD=True, env=self._enviroment)
                 std_out = "\n".join(map(str, out_process.stdout.readlines()))
@@ -140,13 +156,13 @@ class LSF(_SubmissionSystem):
                 # next sopt_job is queued with id:
                 id_start = std_out.find("<")
                 id_end = std_out.find(">")
-                job_id = int(str(std_out[id_start + 1:id_end]).strip())
-                if self.verbose: print("process returned id: " + str(job_id))
-                if (str(job_id) == "" and job_id.isalnum()):
+                job_id = int(str(std_out[id_start + 1 : id_end]).strip())
+                if self.verbose:
+                    print("process returned id: " + str(job_id))
+                if str(job_id) == "" and job_id.isalnum():
                     raise ValueError("Did not get at job ID!")
             except:
-                raise ChildProcessError("could not submit this command: \n" +
-                                        str(submission_string))
+                raise ChildProcessError("could not submit this command: \n" + str(submission_string))
         else:
             job_id = -1
 
@@ -154,7 +170,7 @@ class LSF(_SubmissionSystem):
         sub_job.jobID = job_id
         return job_id
 
-    def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
+    def submit_jobAarray_to_queue(self, sub_job: Submission_job) -> int:
         """
         This functioncan be used for submission of a job array. The ammount of jobs is determined by  the difference:
                     end_job-start_job
@@ -173,63 +189,70 @@ class LSF(_SubmissionSystem):
         """
 
         # QUEUE checking to not double submit
-        if (self.submission and self._block_double_submission):
-            if (self.verbose): print('check queue')
+        if self.submission and self._block_double_submission:
+            if self.verbose:
+                print("check queue")
             ids = self.search_queue_for_jobname(sub_job.jobName)
 
-            if (len(ids) > 0):
-                if (self.verbose): print(
-                    "\tSKIP - FOUND JOB: \t\t" + "\n\t\t".join(map(str, ids)) + "\n\t\t with jobname: " + sub_job.jobName)
+            if len(ids) > 0:
+                if self.verbose:
+                    print(
+                        "\tSKIP - FOUND JOB: \t\t"
+                        + "\n\t\t".join(map(str, ids))
+                        + "\n\t\t with jobname: "
+                        + sub_job.jobName
+                    )
                 return ids[0]
 
         # generate submission_string:
         submission_string = ""
-        if (isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir)):
+        if isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir):
             submission_string += "cd " + sub_job.submit_from_dir + " && "
 
-        if (sub_job.jobLim is None):
+        if sub_job.jobLim is None:
             jobLim = sub_job.end_job - sub_job.start_job
 
         jobName = str(sub_job.jobName) + "[" + str(sub_job.start_job) + "-" + str(sub_job.end_job) + "]%" + str(jobLim)
 
-        submission_string += "bsub -J \" " + jobName + " \" -W \"" + str(self.job_duration) + "\" "
+        submission_string += 'bsub -J " ' + jobName + ' " -W "' + str(self.job_duration) + '" '
 
-        if (isinstance(sub_job.jobGroup, str)):
+        if isinstance(sub_job.jobGroup, str):
             submission_string += " -g " + sub_job.jobGroup + " "
 
-        if (not isinstance(sub_job.outLog, str) and not isinstance(sub_job.errLog, str)):
+        if not isinstance(sub_job.outLog, str) and not isinstance(sub_job.errLog, str):
             outLog = jobName + ".out"
             submission_string += " -oo " + outLog
-        elif (isinstance(sub_job.outLog, str)):
+        elif isinstance(sub_job.outLog, str):
             submission_string += " -oo " + sub_job.outLog
 
-        if (isinstance(sub_job.errLog, str)):
+        if isinstance(sub_job.errLog, str):
             submission_string += " -eo " + sub_job.errLog
 
         nCPU = self.nmpi * self.nomp
         submission_string += " -n " + str(nCPU) + " "
 
-        if (isinstance(self.max_storage, int)):
-            submission_string += " -R \"rusage[mem=" + str(self.max_storage) + "]\" "
+        if isinstance(self.max_storage, int):
+            submission_string += ' -R "rusage[mem=' + str(self.max_storage) + ']" '
 
-        if (isinstance(sub_job.queue_after_jobID, (int, str))):
-            submission_string += " -w " + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ")\" "
+        if isinstance(sub_job.queue_after_jobID, (int, str)):
+            submission_string += " -w " + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ')" '
 
-        if (self.begin_mail):
+        if self.begin_mail:
             submission_string += " -B "
-        if (self.end_mail):
+        if self.end_mail:
             submission_string += " -N "
 
-        if (self.nomp > 1):
-            command = " \" export OMP_NUM_THREADS=" + str(self.nomp) + " && " + sub_job.command + "\""
+        if self.nomp > 1:
+            command = ' " export OMP_NUM_THREADS=' + str(self.nomp) + " && " + sub_job.command + '"'
         else:
-            command = " \"" + sub_job.command + "\""
+            command = ' "' + sub_job.command + '"'
 
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
 
-        if (self.verbose): print("Submission Command: \t", " ".join(submission_string))
-        if (self.submission and not self._dummy):
+        if self.verbose:
+            print("Submission Command: \t", " ".join(submission_string))
+        if self.submission and not self._dummy:
             try:
                 std_out_buff = bash.execute(command=submission_string, env=self._enviroment)
                 std_out = "\n".join(std_out_buff.readlines())
@@ -237,9 +260,10 @@ class LSF(_SubmissionSystem):
                 # next sopt_job is queued with id:
                 id_start = std_out.find("<")
                 id_end = std_out.find(">")
-                job_id = str(std_out[id_start + 1:id_end]).strip()
-                if self.verbose: print("process returned id: " + str(job_id))
-                if (job_id == "" and job_id.isalnum()):
+                job_id = str(std_out[id_start + 1 : id_end]).strip()
+                if self.verbose:
+                    print("process returned id: " + str(job_id))
+                if job_id == "" and job_id.isalnum():
                     raise ValueError("Did not get at job ID!")
             except:
                 raise ChildProcessError("could not submit this command: \n" + " ".join(submission_string))
@@ -250,20 +274,36 @@ class LSF(_SubmissionSystem):
 
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
         name = self.__class__.__name__
-        if (var_name is None):
+        if var_name is None:
             var_name = var_prefixes + name
 
         gen_cmd = "#Generate " + name + "\n"
         gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
-        gen_cmd += var_name + " = " + name + "_obj(submission=" + str(self.submission) + ", verbose=" + str(
-            self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", max_storage="+str(
-            self.max_storage)+", job_duration=\""+str(self.job_duration)+"\")\n\n"
+        gen_cmd += (
+            var_name
+            + " = "
+            + name
+            + "_obj(submission="
+            + str(self.submission)
+            + ", verbose="
+            + str(self.verbose)
+            + ", nmpi="
+            + str(self.nmpi)
+            + ", nomp="
+            + str(self.nomp)
+            + ", max_storage="
+            + str(self.max_storage)
+            + ', job_duration="'
+            + str(self.job_duration)
+            + '")\n\n'
+        )
         return gen_cmd
 
     """
         Job Queue Managment
     """
-    def get_queued_jobs(self)->pd.DataFrame:
+
+    def get_queued_jobs(self) -> pd.DataFrame:
         """
             This function updates the job-list of the queueing system in the class.
 
@@ -274,30 +314,32 @@ class LSF(_SubmissionSystem):
         """
         # Do we need an update of the job list?
         check_job_list = True
-        if (hasattr(self, "_job_queue_time_stamp")):
+        if hasattr(self, "_job_queue_time_stamp"):
             last_update = datetime.now() - self._job_queue_time_stamp
             check_job_list = last_update.seconds > self._refresh_job_queue_list_all_s
-        if(not self.submission): #shortcut to reduce queue calls!
-           self.job_queue_list = pd.DataFrame(columns=["JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()])
-           return self.job_queue_list
-        if (check_job_list):
+        if not self.submission:  # shortcut to reduce queue calls!
+            self.job_queue_list = pd.DataFrame(
+                columns=["JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()]
+            )
+            return self.job_queue_list
+        if check_job_list:
             # try getting the lsf queue
-            if (not self._dummy):
+            if not self._dummy:
                 try:
-                        #get all running and pending jobs
-                        if self.bjobs_only_same_host:
-                            out_process = bash.execute("bjobs -w", catch_STD=True)
-                        else:
-                            out_process = bash.execute("bjobs -w | grep '$HOSTNAME\|JOBID'", catch_STD=True)
-                        job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                        
-                        #get all finished jobs
-                        if self.bjobs_only_same_host:
-                            out_process = bash.execute("bjobs -wd", catch_STD=True)
-                        else:
-                            out_process = bash.execute("bjobs -wd | grep '$HOSTNAME\|JOBID'", catch_STD=True)
-                        job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
-                        self._job_queue_time_stamp = datetime.now()
+                    # get all running and pending jobs
+                    if self.bjobs_only_same_host:
+                        out_process = bash.execute("bjobs -w", catch_STD=True)
+                    else:
+                        out_process = bash.execute("bjobs -w | grep '$HOSTNAME\|JOBID'", catch_STD=True)
+                    job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+
+                    # get all finished jobs
+                    if self.bjobs_only_same_host:
+                        out_process = bash.execute("bjobs -wd", catch_STD=True)
+                    else:
+                        out_process = bash.execute("bjobs -wd | grep '$HOSTNAME\|JOBID'", catch_STD=True)
+                    job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
+                    self._job_queue_time_stamp = datetime.now()
                 except Exception as err:
                     raise Exception("Could not get job_list!\nerr:\n" + "\n".join(err.args))
             else:
@@ -307,9 +349,9 @@ class LSF(_SubmissionSystem):
             # format information:
             jlist = list(map(lambda x: x.strip().split(), job_list_str))
             jlist_fin = list(map(lambda x: x.strip().split(), job_list_finished_str))
-            if(len(jlist) > 1):
+            if len(jlist) > 1:
                 header = jlist[0]
-                jobs = jlist[1:]+jlist_fin[1:]
+                jobs = jlist[1:] + jlist_fin[1:]
 
                 jobs_dict = {}
                 for job in jobs:
@@ -320,24 +362,30 @@ class LSF(_SubmissionSystem):
                     from_host = job[4]
                     exec_host = job[5]
                     job_name = " ".join(job[6:-3])
-                    submit_time = datetime.strptime(str(datetime.now().year) + " " + " ".join(job[-3:]), '%Y %b %d %H:%M')
+                    submit_time = datetime.strptime(
+                        str(datetime.now().year) + " " + " ".join(job[-3:]), "%Y %b %d %H:%M"
+                    )
                     values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
                     jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
 
                 self.job_queue_list = pd.DataFrame(jobs_dict, index=None).T
             else:
-                self.job_queue_list = pd.DataFrame(columns=["JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()])
+                self.job_queue_list = pd.DataFrame(
+                    columns=[
+                        "JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()
+                    ]
+                )
         else:
-            if (self.verbose):
+            if self.verbose:
                 print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
             pass
         return self.job_queue_list
 
-    def search_queue_for_jobid(self, job_id:int)->pd.DataFrame:
+    def search_queue_for_jobid(self, job_id: int) -> pd.DataFrame:
         self.get_queued_jobs()
         return self.job_queue_list.where(self.job_queue_list.JOBID == job_id).dropna()
 
-    def search_queue_for_jobname(self, job_name:str, regex:bool=False)->pd.DataFrame:
+    def search_queue_for_jobname(self, job_name: str, regex: bool = False) -> pd.DataFrame:
         """search_queue_for_jobname
 
             this jobs searches the job queue for a certain job name.
@@ -354,16 +402,16 @@ class LSF(_SubmissionSystem):
         """
 
         self.get_queued_jobs()
-        if(regex):
+        if regex:
             return self.job_queue_list.where(self.job_queue_list.JOB_NAME.str.match(job_name)).dropna()
         else:
             return self.job_queue_list.where(self.job_queue_list.JOB_NAME == job_name).dropna()
 
-
     """
         kill jobs
     """
-    def kill_jobs(self, job_name:str=None, regex:bool=False, job_ids: Union[List[int], int]=None):
+
+    def kill_jobs(self, job_name: str = None, regex: bool = False, job_ids: Union[List[int], int] = None):
         """
             this function can be used to terminate or remove pending jobs from the queue.
         Parameters
@@ -377,20 +425,20 @@ class LSF(_SubmissionSystem):
 
         """
 
-        if(not job_name is None):
+        if not job_name is None:
             job_ids = list(self.search_queue_for_jobname(job_name, regex=regex).index)
-        elif(not job_ids is None):
-            if(isinstance(job_ids, int)):
+        elif not job_ids is None:
+            if isinstance(job_ids, int):
                 job_ids = [job_ids]
         else:
             raise ValueError("Please provide either job_name or job_ids!")
 
-        if(self.verbose):
-            print("Stopping: "+", ".join(map(str, job_ids)))
+        if self.verbose:
+            print("Stopping: " + ", ".join(map(str, job_ids)))
         try:
-            bash.execute('bkill '+ " ".join(map(str, job_ids)))
+            bash.execute("bkill " + " ".join(map(str, job_ids)))
         except Exception as err:
-            if(any(["Job has already finished" in x for x in err.args])):
+            if any(["Job has already finished" in x for x in err.args]):
                 print("Job has already finished")
             else:
                 raise ChildProcessError("could not execute this command: \n" + str(err.args))

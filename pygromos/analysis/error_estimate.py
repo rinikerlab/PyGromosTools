@@ -11,18 +11,20 @@ Author: Paul Katzberger
 from typing import List
 import numpy as np
 
+
 class error_estimator:
-    '''
+    """
     Class to calculate the Error Estimate as implemented in ene_ana
-    '''
-    def __init__(self,values:List[float]):
-        '''
+    """
+
+    def __init__(self, values: List[float]):
+        """
         Initialize calculation
         Parameters
         ----------
         values : List[float]
             list of ordered values for which the error should be estimated
-        '''
+        """
         # Prepare blocks
         self.values = values
         self.blksz = 50
@@ -31,38 +33,38 @@ class error_estimator:
         self.d_blocksize = []
 
     def calculate_rmsd(self):
-        '''
+        """
         Calculate rmsd
         Returns
         -------
         rmsd : float
             rmsd of values
-        '''
+        """
         sum = 0
         ssum = 0
         for v in self.values:
             sum += v
-            ssum += v*v
+            ssum += v * v
         sum /= len(self.values)
         ssum /= len(self.values)
-        msd = ssum - sum*sum
+        msd = ssum - sum * sum
 
         return np.sqrt(msd)
 
     def calculate_error_estimate(self):
-        '''
+        """
         Calculation of the Error Estimate as in ene_ana
         Returns
         -------
         d_ee : float
             Error Estimate for provided list
-        '''
+        """
         # Setup Blocks
-        while(4*self.blksz < self.d_counter):
+        while 4 * self.blksz < self.d_counter:
             self.d_blocksize.append(int(self.blksz))
             self.old = int(self.blksz)
-            while(self.old==int(self.blksz)):
-                self.blksz = self.blksz*1.07177
+            while self.old == int(self.blksz):
+                self.blksz = self.blksz * 1.07177
 
         # Set start Variables
         Nblocks = len(self.d_blocksize)
@@ -75,14 +77,14 @@ class error_estimator:
         x = np.zeros(Nblocks)
 
         for j in range(Nblocks):
-            Nblcki= self.d_counter // self.d_blocksize[j]
+            Nblcki = self.d_counter // self.d_blocksize[j]
 
-            rmsd2=0
+            rmsd2 = 0
             for i in range(Nblcki):
                 start = i * self.d_blocksize[j]
-                end = (i+1) * self.d_blocksize[j]
+                end = (i + 1) * self.d_blocksize[j]
                 ave = np.mean(self.values[start:end])
-                rmsd2 += (ave-runave) * (ave-runave)
+                rmsd2 += (ave - runave) * (ave - runave)
 
             rmsd2 = rmsd2 / Nblcki
 
@@ -95,12 +97,12 @@ class error_estimator:
         for i in range(Nblocks):
             sx += x[i]
             sf += fit[i]
-            sfx += x[i]*fit[i]
-            sxx += x[i]*x[i]
+            sfx += x[i] * fit[i]
+            sxx += x[i] * x[i]
 
-        a = (sf*sx/Nblocks-sfx)/(sx*sx/Nblocks - sxx)
-        b = (sf - a*sx)/Nblocks
+        a = (sf * sx / Nblocks - sfx) / (sx * sx / Nblocks - sxx)
+        b = (sf - a * sx) / Nblocks
 
-        d_ee = np.sqrt(b/self.d_counter)*runrmsd
+        d_ee = np.sqrt(b / self.d_counter) * runrmsd
 
         return d_ee
