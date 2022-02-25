@@ -15,6 +15,7 @@ from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
 
+
 class _Gromos:
     """
     GromosXX
@@ -26,6 +27,7 @@ class _Gromos:
     bin :   str, optional
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
+
     _bin: str = ""
 
     def __init__(self, gromosXX_bin_dir: str = None):
@@ -37,34 +39,71 @@ class _Gromos:
         gromosXX_bin_dir :   str, optional
             This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
         """
-        #lazy me - doc text for functions:
-        functions_text = "\n    Methods:\n    ---------\n" + "\n".join(["\t" + x for x in dir(self) if (not x.startswith("_") and callable(getattr(self, x)))])
-        self.__doc__ = self.__doc__+functions_text
+        # lazy me - doc text for functions:
+        functions_text = "\n    Methods:\n    ---------\n" + "\n".join(
+            ["\t" + x for x in dir(self) if (not x.startswith("_") and callable(getattr(self, x)))]
+        )
+        self.__doc__ = self.__doc__ + functions_text
 
-        if (isinstance(gromosXX_bin_dir, type(None)) or gromosXX_bin_dir == "None"):
-            self._bin = ""
-        else:
-            self._bin = gromosXX_bin_dir + "/"
+        self._bin = self._check_gromos_binDir(gromosXX_bin_dir)
 
     def __str__(self):
         return self.__doc__
+
     def __repr__(self):
         return self.__str__()
 
     @property
-    def bin(self)->Union[str, None]:
-        if(not hasattr(self, "_bin") or self._bin == ""):
+    def bin(self) -> Union[str, None]:
+        if not hasattr(self, "_bin") or self._bin == "":
             return None
         else:
             return self._bin
 
+    def _check_gromos_binDir(self, in_bind_dir: str):
+        if (
+            isinstance(in_bin_dir, str)
+            and bash.directory_exists(in_bind_dir)
+            and bash.command_exists(f"{in_bind_dir}/pdb2g96")
+        ):  # move to GromosXX class
+            return in_bind_dir + "/"
+        elif in_bind_dir is None and bash.command_exists("pdb2g96"):
+            return None
+        else:
+            raise IOError(
+                "No "
+                + __name__
+                + " binary directory could be found! Please make sure you compiled "
+                + __name__
+                + " and either pass the path to the binary directory or set the PATH variable"
+            )
+
+    @bin.setter
+    def bin(self, in_bin_dir: str):
+        self._bin = _check_gromos_binDir(in_bin_dir)
+
     @gromosTypeConverter
-    def md_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
-                   in_pert_topo_path:str=None, in_disres_path:str=None, in_posresspec_path:str=None, in_refpos_path:str=None,
-                   in_qmmm_path:str=None, nomp: int = 1, nmpi: int = 1,
-                   out_trc: bool = False, out_tre: bool = False, out_trv: bool = False, out_trf: bool = False,
-                   out_trs: bool = False, out_trg:bool = False,
-                   verbose:bool = False) -> str:
+    def md_run(
+        self,
+        in_topo_path: str,
+        in_coord_path: str,
+        in_imd_path: str,
+        out_prefix: str,
+        in_pert_topo_path: str = None,
+        in_disres_path: str = None,
+        in_posresspec_path: str = None,
+        in_refpos_path: str = None,
+        in_qmmm_path: str = None,
+        nomp: int = 1,
+        nmpi: int = 1,
+        out_trc: bool = False,
+        out_tre: bool = False,
+        out_trv: bool = False,
+        out_trf: bool = False,
+        out_trs: bool = False,
+        out_trg: bool = False,
+        verbose: bool = False,
+    ) -> str:
         """
         This function is a wrapper for gromosXX md_mpi. You can directly execute the gromosXX md_mpi in a bash enviroment here.
 
@@ -133,14 +172,14 @@ class _Gromos:
 
         """
 
-        #BUILD UP str. Command
+        # BUILD UP str. Command
         command = []
-        if(nmpi > 1 and nomp > 1):
+        if nmpi > 1 and nomp > 1:
             raise ValueError("There are no Hybrid NMPI and NOMP jobs possible with gromos!")
-        elif(nmpi > 1):
-            command += ["mpirun -n " + str(nmpi*nomp)+" "] # --loadbalance  " --cpus-per-proc " +  + " "
+        elif nmpi > 1:
+            command += ["mpirun -n " + str(nmpi * nomp) + " "]  # --loadbalance  " --cpus-per-proc " +  + " "
             command += [self._bin + "md_mpi"]
-        elif(nomp >= 1):
+        elif nomp >= 1:
             command += ["export OMP_NUM_THREADS=" + str(nomp) + "  && "]
             command += [self._bin + "md"]
         else:
@@ -183,24 +222,25 @@ class _Gromos:
             if out_trg:
                 command += ["@trg", str(out_prefix) + ".trg"]
         else:
-            raise ValueError("Outprefix needs to be string got: "+type(out_prefix)+" - "+str(out_prefix))
+            raise ValueError("Outprefix needs to be string got: " + type(out_prefix) + " - " + str(out_prefix))
 
         command_text = " ".join(command) + " > " + log_file_path + "\n"
-        if verbose: print("COMMAND: ", command_text)
+        if verbose:
+            print("COMMAND: ", command_text)
 
         start_time = datetime.datetime.now()
         process = bash.execute(command_text)
         md_run_return = process.poll()
-        #bash.wait_for_fileSystem(out_prefix+".cnf")
+        # bash.wait_for_fileSystem(out_prefix+".cnf")
         end_time = datetime.datetime.now()
-        duration = end_time-start_time
+        duration = end_time - start_time
 
         time.sleep(time_wait_s_for_filesystem)
         log_file = open(log_file_path, "a")
         log_file.write("\n\nREMARKS\n")
 
         failed = False
-        if (md_run_return == 0):
+        if md_run_return == 0:
             log_file.write("\tRUN:\tSUCESSFUL\n")
         else:
             log_file.write("\tRUN:\tFAILED\n")
@@ -211,16 +251,30 @@ class _Gromos:
         log_file.write("END\n")
         log_file.close()
 
-        if (md_run_return!=0):
+        if md_run_return != 0:
             raise ChildProcessError("GromosXX MD Run Failed!\n\nLOG:" + "\n".join(open(log_file_path, "r").readlines()))
 
         return log_file_path
 
     @gromosTypeConverter
-    def repex_run(self, in_topo_path: str, in_coord_path: str, in_imd_path: str, out_prefix: str,
-                  in_pert_topo_path: str = None, in_disres_path: str = None, in_posresspec_path: bool = False, in_refpos_path: bool = False,
-                  out_trc: bool = True, out_tre: bool = True, out_trs: bool = False, out_trg:bool = False,
-                  nomp: int = 1, nmpi: int = 1, verbose: bool = True) -> str:
+    def repex_run(
+        self,
+        in_topo_path: str,
+        in_coord_path: str,
+        in_imd_path: str,
+        out_prefix: str,
+        in_pert_topo_path: str = None,
+        in_disres_path: str = None,
+        in_posresspec_path: bool = False,
+        in_refpos_path: bool = False,
+        out_trc: bool = True,
+        out_tre: bool = True,
+        out_trs: bool = False,
+        out_trg: bool = False,
+        nomp: int = 1,
+        nmpi: int = 1,
+        verbose: bool = True,
+    ) -> str:
         """
         This function is a wrapper for gromosXX repex_mpi. You can directly execute the gromosXX repex_mpi in a bash enviroment here.
 
@@ -291,8 +345,16 @@ class _Gromos:
 
         """
 
-        if (nomp > 1):  # OMP Hybrid sopt_job?
-            command = ["export OMP_NUM_THREADS=" + str(nomp) + " && mpirun -n " + str(nmpi) + " --loadbalance --cpus-per-proc " + str(nomp) + " "]
+        if nomp > 1:  # OMP Hybrid sopt_job?
+            command = [
+                "export OMP_NUM_THREADS="
+                + str(nomp)
+                + " && mpirun -n "
+                + str(nmpi)
+                + " --loadbalance --cpus-per-proc "
+                + str(nomp)
+                + " "
+            ]
         else:
             command = ["mpirun", "-n ", str(nmpi)]
 
@@ -344,24 +406,28 @@ class _Gromos:
         log_file_path = out_prefix + ".omd"
         command_text = " ".join(command) + " >> " + log_file_path + "\n"
 
-        if verbose: print(command_text)
+        if verbose:
+            print(command_text)
 
-        os.system("echo \"\" >" + str(log_file_path))
+        os.system('echo "" >' + str(log_file_path))
 
-        if verbose: start_time = time.ctime()
-        if verbose: print("START: " + str(start_time))
+        if verbose:
+            start_time = time.ctime()
+        if verbose:
+            print("START: " + str(start_time))
 
-        #bash.execute(command, verbose=True)
+        # bash.execute(command, verbose=True)
         md_run = os.system(command_text)
         time.sleep(time_wait_s_for_filesystem)
-        if verbose: end_time = time.ctime()
-        if verbose: print("END: " + str(end_time))
+        if verbose:
+            end_time = time.ctime()
+        if verbose:
+            print("END: " + str(end_time))
         print("MDRUN OUT: ", md_run)
-        #if (md_run != 0):
+        # if (md_run != 0):
         #    raise ChildProcessError("GromosXX REPEX Run Failed!\n \t return value: " + str(md_run) + "\n\tLOG:" + "\n\t\t".join(open(log_file_path, "r").readlines()))
 
         return log_file_path
-
 
 
 class GromosXX(_Gromos):
