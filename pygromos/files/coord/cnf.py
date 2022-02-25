@@ -1,7 +1,9 @@
-import copy
-import os
-
 import __main__
+import os
+import copy
+import mdtraj
+import tempfile
+import nglview as nj
 
 from collections import namedtuple, defaultdict
 from typing import Dict, List, Tuple, Union
@@ -694,8 +696,7 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
-
-    def get_last_atomID(self)->int:
+    def get_last_atomID(self) -> int:
         """get_last atom
             A very simple convenience function that returns the last atom
 
@@ -706,8 +707,7 @@ class Cnf(_general_gromos_file):
         """
         return self.POSITION.content[-1].atomID
 
-
-    def center_of_geometry(self, selectedAtoms:list=None) -> list:
+    def center_of_geometry(self, selectedAtoms: list = None) -> list:
         """calculates the center of geometry for asingle molecule or the selected Atoms
 
         Returns
@@ -1049,8 +1049,7 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-
-    def get_pdb(self, rdkit_ready:bool=True, connectivity_top=None)->str:
+    def get_pdb(self, rdkit_ready: bool = False, connectivity_top=None) -> str:
         """
             translate cnf to pdb.
 
@@ -1088,7 +1087,7 @@ class Cnf(_general_gromos_file):
                         pos.zp * 10,
                         dummy_mass,
                         int(dummy_charge),
-                        pos.atomType,
+                        pos.atomType[0],
                     )
                 )
 
@@ -1203,7 +1202,20 @@ class Cnf(_general_gromos_file):
         visualize
     """
 
-    def visualize(self):
-        from pygromos.visualization.coordinates_visualization import show_cnf
+    @property
+    def view(self) -> nj.NGLWidget:
+        if not hasattr(self, "_view") or not (hasattr(self, "_view") and isinstance(self._view, nj.NGLWidget)):
+            return self.recreate_view()
+        else:
+            return self._view
 
-        return show_cnf(self)
+    def recreate_view(self) -> nj.NGLWidget:
+        # Topo tmp file
+        tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
+        self.write_pdb(tmpFile.name)
+        single = mdtraj.load_pdb(tmpFile.name)
+        # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
+        tmpFile.close()
+
+        self._view = nj.show_mdtraj(single)
+        return self._view
