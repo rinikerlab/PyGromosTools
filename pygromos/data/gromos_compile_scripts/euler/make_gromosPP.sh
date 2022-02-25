@@ -13,11 +13,11 @@ cd $PLSPATH
 cd LINUX
 make -j8
 make install
-~                                                                                                                                                                                                                                             
-~                                                                                                                                                                                                                                             
-~                                                                                                                                                                                                                                             
-~                                                                                                                                                                                                                                             
-~                                                                                                                                                                                                                                             
-~                                                                                                                                                                                                                                             
-~                                                                                                                                                                                                                                             
-~                                              
+~
+~
+~
+~
+~
+~
+~
+~

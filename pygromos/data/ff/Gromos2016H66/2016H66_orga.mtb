@@ -2,25 +2,25 @@ TITLE
 File          : 2016H66_orga.mtb
 Force field   : 2016H66 (condensed-phase simulations)
 Reference     : B.A.C. Horta, P.T. Merz, P.F.J. Fuchs, J. Dolenc, S. Riniker & P.H. Hunenberger
-                A GROMOS-compatible force field for small organic molecules in the condensed 
+                A GROMOS-compatible force field for small organic molecules in the condensed
                 phase: The 2016H66 parameter set; J. Chem. Theory. Comput. 2016
 File content  : molecular topology building blocks (small organic molecules)
 Format        : GROMOS11
 Initial file  : BACH/Rio+PHH/Zuerich, May 2016
 Time stamp    : PHH, Sun May 29 09:54:41 CEST 2016
-Remark        : The force field 2016H66 was calibrated and validated for 57 organic liquids 
-                + 5 nucleic acid bases (see mtb file "_orga", which also contains the solvent cyclohexane); 
-                biomolecular files are also provided as described in the Appendix of Suppl Mat A of 
+Remark        : The force field 2016H66 was calibrated and validated for 57 organic liquids
+                + 5 nucleic acid bases (see mtb file "_orga", which also contains the solvent cyclohexane);
+                biomolecular files are also provided as described in the Appendix of Suppl Mat A of
                 the above reference (see also the headers of the individual mtb files); however
                 ************************************************************************************
                 ******    keep in mind that this biomolecular component has only undergone    ******
                 ******          preliminary tests and not yet a thorough validation!          ******
                 ************************************************************************************
-Remark        : make_top must recognize negative dihedral-angle type codes in patches, 
-                which indicate that, if present, an existing dihedral angle with the given type 
+Remark        : make_top must recognize negative dihedral-angle type codes in patches,
+                which indicate that, if present, an existing dihedral angle with the given type
                 code must be removed (used in HO2C, HO3C, HO4C, HO6C and C1OH patches for
-                carbohydrates to delete existing T2 or T6/T7 dihedrals assuming a OC instead of 
-                a OH); for this reason 
+                carbohydrates to delete existing T2 or T6/T7 dihedrals assuming a OC instead of
+                a OH); for this reason
                 ************************************************************************************
                 ****** topologies must be built using a make_top version of June 2012 or later *****
                 ************************************************************************************
@@ -43,8 +43,8 @@ END
 # ----- Auxiliary mtb file: small organic molecules
 #       This file contains 63 blocks
 #
-# These are molecules relevant for the parametrization and calibration of 
-# 2016H66 in Horta et al. 2016 (the 2016H66 article), namely: one solvent 
+# These are molecules relevant for the parametrization and calibration of
+# 2016H66 in Horta et al. 2016 (the 2016H66 article), namely: one solvent
 # (CHE, used for solvation free-energy calculations), 57 organic liquids
 # and 5 methylated nucleic-acid bases.
 #
@@ -3038,7 +3038,7 @@ PHT
                                            8   10   11   12   13
     2 O1      3   16   -0.70000   0   7    3    4    5    6   10   12
                                           13
-    3 H1     21    1    0.41000   1   0    
+    3 H1     21    1    0.41000   1   0
     4 C2     12   12   -0.12980   0   8    5    6    7    8    9   10
                                           12   13
     5 H2     20    1    0.12980   1   4    6    7    8   12
@@ -3310,10 +3310,10 @@ MADE
 #ATOM                               MAE MSAE
 # atoms
 #ATOM ANM  IACM MASS        CGMICGM MAE MSAE
-    1 C9M    16    5    0.00000   1   7    2    3    4   12   13   14   
+    1 C9M    16    5    0.00000   1   7    2    3    4   12   13   14
                                           15
     2 N9      9   14   -0.20000   0   8    3    4    5    8   12   13
-                                          14   15   
+                                          14   15
     3 C4     12   12    0.20000   1  10    4    5    6    7    8    9
                                           12   13   14   15
     4 N3      9   14   -0.56000   0   7    5    6    7    8   12   13
@@ -3422,14 +3422,14 @@ MGUA
 #ATOM                               MAE MSAE
 # atoms
 #ATOM ANM  IACM MASS        CGMICGM MAE MSAE
-    1 C9M    16    5    0.00000   1   7    2    3    4   13   14   15   
+    1 C9M    16    5    0.00000   1   7    2    3    4   13   14   15
                                           16
-    2 N9      9   14   -0.20000   0   8    3    4    5   11   13   14   
+    2 N9      9   14   -0.20000   0   8    3    4    5   11   13   14
                                           15   16
-    3 C4     12   12    0.20000   1  10    4    5    6    9   11   12  
+    3 C4     12   12    0.20000   1  10    4    5    6    9   11   12
                                           13   14   15   16
-    4 N3      9   14   -0.53000   0   8    5    6    9   10   11   13  
-                                         14   15   
+    4 N3      9   14   -0.53000   0   8    5    6    9   10   11   13
+                                         14   15
     5 C2     12   12    0.53000   1   8    6    7    8    9   10   11
                                           12   13
     6 N2      7   14   -0.80000    0   5    7    8    9   10   11
@@ -3496,7 +3496,7 @@ MGUA
    14   15   16   36
 # improper dihedrals
 # NIDA
-   19 
+   19
 #  IB   JB   KB   LB  MCB
     2    1    3   15    1
     3    2    4   13    1
@@ -3516,7 +3516,7 @@ MGUA
     9   11   13    3    1
    13    3    4    5    1
    13   14   15    2    1
-   15    2    3   13    1 
+   15    2    3   13    1
 # dihedrals
 # NDA
    1
@@ -3533,28 +3533,28 @@ MTBUILDBLSOLUTE
 MTHY
 # number of atoms, number of preceding exclusions
 # NMAT,NLIN
-   12   0 
+   12   0
 # preceding exclusions
 #ATOM                               MAE MSAE
 # atoms
 #ATOM ANM  IACM MASS        CGMICGM MAE MSAE
     1 C1M    16    5    0.00000   1   7    2    3   4    5    6   7   11
     2 N1      9   14   -0.20000   0   9    3   4    5    6    7   8    9
-                                           11   12   
-    3 C6     12   12    0.10000   0   8    4    5    6    7   9  10   11     
-                                           12                             
-    4 H6     20    1    0.10000   1   4    5    9   11   12 
-    5 C2     12   12    0.48000   0   6    6    7    8    9   10 11    
-    6 O2      1   16   -0.48000   1   3    7    8    9 
-    7 N3      9   14   -0.32000   0   5    8    9   10   11   12  
-    8 H3     21    1    0.32000   1   3    9   10   11  
+                                           11   12
+    3 C6     12   12    0.10000   0   8    4    5    6    7   9  10   11
+                                           12
+    4 H6     20    1    0.10000   1   4    5    9   11   12
+    5 C2     12   12    0.48000   0   6    6    7    8    9   10 11
+    6 O2      1   16   -0.48000   1   3    7    8    9
+    7 N3      9   14   -0.32000   0   5    8    9   10   11   12
+    8 H3     21    1    0.32000   1   3    9   10   11
     9 C4     12   12    0.48000   0   3   10   11   12
-   10 O4      1   16   -0.48000   1   2   11   12 
-   11 C5     12   12    0.00000   0   1   12  
+   10 O4      1   16   -0.48000   1   2   11   12
+   11 C5     12   12    0.00000   0   1   12
    12 C5M    16    5    0.00000   1   0
 # bonds
 #  NB
-   12 
+   12
 #  IB   JB  MCB
     1    2   23
     2    3   17
@@ -3608,7 +3608,7 @@ MTHY
    11    3    9   12    1
 # dihedrals
 # NDA
-    0 
+    0
 #  IB   JB   KB   LB  MCB
 # LJ exceptions
 # NEX
@@ -3626,7 +3626,7 @@ MCYT
 #ATOM                               MAE MSAE
 # atoms
 #ATOM ANM  IACM MASS        CGMICGM MAE MSAE
-    1 C1M    16    5    0.00000   1   7    2    3    4    5    6    7   
+    1 C1M    16    5    0.00000   1   7    2    3    4    5    6    7
                                           12
     2 N1      9   14   -0.20000   0   8    3    4    5    6    7    8
                                           12   13
@@ -3637,7 +3637,7 @@ MCYT
     6 O2      1   16   -0.44000   1   2    7    8
     7 N3      9   14   -0.53000   0   4    8    9   12   13
     8 C4     12   12    0.53000   1   5    9   10   11   12   13
-    9 N4      7   14   -0.80000   0   4   10   11   12   13   
+    9 N4      7   14   -0.80000   0   4   10   11   12   13
    10 H41    21    1    0.40000   0   1   11
    11 H42    21    1    0.40000  1   0
    12 C5     12   12   -0.10000   0   1   13
@@ -3721,10 +3721,10 @@ MURA
 #ATOM                               MAE MSAE
 # atoms
 #ATOM ANM  IACM MASS        CGMICGM MAE MSAE
-    1 C1M    16    5    0.00000   1   7    2    3    4   5   6   7   
+    1 C1M    16    5    0.00000   1   7    2    3    4   5   6   7
                                           11
     2 N1      9   14   -0.20000   0   9    3    4    5   6   7   8
-                                           9   11   12   
+                                           9   11   12
     3 C6     12   12    0.10000   0   8    4    5    6   7   9  10
                                           11   12
     4 H6     20    1    0.10000   1   4    5    9   11   12

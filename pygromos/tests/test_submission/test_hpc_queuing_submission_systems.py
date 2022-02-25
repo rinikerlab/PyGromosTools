@@ -16,25 +16,19 @@ class test_queuing_system(unittest.TestCase):
         subSys = self.file_class(verbose=self.verbose, submission=self.submission)
 
     def test_submit(self):
-        sub_job = Submission_job(jobName="test_job", command="echo \" WUHAHAHA\"")
+        sub_job = Submission_job(jobName="test_job", command='echo " WUHAHAHA"')
         subSys = self.file_class(verbose=self.verbose, submission=self.submission)
         subSys.submit_to_queue(sub_job=sub_job)
 
     def test_submit_jobAarray_to_queue(self):
 
-        sub_job = Submission_job(jobName="test_job", 
-                                command="echo \" WUHAHAHA\"",
-                                start_job=1,
-                                end_job=1)
-                                
+        sub_job = Submission_job(jobName="test_job", command='echo " WUHAHAHA"', start_job=1, end_job=1)
+
         subSys = self.file_class(verbose=self.verbose, submission=self.submission)
         subSys.submit_jobAarray_to_queue(sub_job=sub_job)
 
     def test_submit_jobAarray_to_queue1_10(self):
-        sub_job2 = Submission_job(jobName="test_job", 
-                                command="echo \" WUHAHAHA\"",
-                                start_job=1,
-                                end_job=10)
+        sub_job2 = Submission_job(jobName="test_job", command='echo " WUHAHAHA"', start_job=1, end_job=10)
         subSys = self.file_class(verbose=self.verbose, submission=self.submission)
         subSys.submit_jobAarray_to_queue(sub_job=sub_job2)
 
@@ -52,12 +46,15 @@ class test_queuing_system(unittest.TestCase):
         subSys = self.file_class(verbose=self.verbose, submission=self.submission)
         subSys.get_jobs_from_queue(job_text=get_jobs_with)
 
+
 class test_DUMMY(test_queuing_system):
     file_class = DUMMY
+
 
 class test_LOCAL(test_queuing_system):
     submission = False
     file_class = LOCAL
+
 
 class test_LSF(test_queuing_system):
     submission = False

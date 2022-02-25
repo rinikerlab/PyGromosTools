@@ -6,4 +6,3 @@ cd $SRCPATH
 cd LINUX
 make -j8
 make install # -d
-

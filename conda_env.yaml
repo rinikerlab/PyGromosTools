@@ -1,0 +1,30 @@
+name: pygromos
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # Base depends
+  - python
+  - pip
+  ## Testing
+  - pytest
+  ## Meta
+  - typing
+  - pre-commit
+  - jupyter
+  - tqdm
+  - ipywidgets
+  # Science
+  - mpmath
+  - pandas
+  - pytables
+  - numpy
+  - sympy
+  - scipy
+  ## Chemie
+  - openff-toolkit = 0.10.0
+  - mdtraj
+  - rdkit
+  ## Visualization
+  - matplotlib
+  - nglview

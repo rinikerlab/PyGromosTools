@@ -4,66 +4,66 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>pygromos.files.topology.top &mdash; PyGromosTools  documentation</title>
-  
 
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>pygromos.files.topology.top &mdash; PyGromosTools  documentation</title>
+
+
+
   <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
 
-  
-  
 
-  
-  
 
-  
 
-  
+
+
+
+
+
+
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
+
+
       <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
         <script src="../../../../_static/jquery.js"></script>
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
+
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
-    
+
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../../search.html" />
 </head>
 
 <body class="wy-body-for-nav">
 
-   
+
   <div class="wy-grid-for-nav">
-    
+
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
-          
+
+
             <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
-          
 
-          
+
+
           </a>
 
-          
-            
-            
-          
 
-          
+
+
+
+
+
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,17 +72,17 @@
   </form>
 </div>
 
-          
+
         </div>
 
-        
+
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+
+
+
+
+
+
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
@@ -90,29 +90,29 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
 </ul>
 
-            
-          
+
+
         </div>
-        
+
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-      
+
       <nav class="wy-nav-top" aria-label="top navigation">
-        
+
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../index.html">PyGromosTools</a>
-        
+
       </nav>
 
 
       <div class="wy-nav-content">
-        
+
         <div class="rst-content">
-        
-          
+
+
 
 
 
@@ -133,26 +133,26 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-    
+
       <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
+
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
-        
+
       <li>pygromos.files.topology.top</li>
-    
-    
+
+
       <li class="wy-breadcrumbs-aside">
-        
+
       </li>
-    
+
   </ul>
 
-  
+
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+
   <h1>Source code for pygromos.files.topology.top</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">File:            gromos++ topo file functions</span>
@@ -258,7 +258,7 @@
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">atomT</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">top</span><span class="o">.</span><span class="n">ATOMTYPENAME</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span> <span class="c1">#new atomtypes to find names for</span>
             <span class="n">foundAtomType</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">for</span> <span class="n">mainIdx</span><span class="p">,</span> <span class="n">mainAtomT</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">retTop</span><span class="o">.</span><span class="n">ATOMTYPENAME</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span> <span class="c1">#AtomTypes in self to match against</span>
-                <span class="k">if</span> <span class="n">atomT</span> <span class="o">==</span> <span class="n">mainAtomT</span><span class="p">:</span> 
+                <span class="k">if</span> <span class="n">atomT</span> <span class="o">==</span> <span class="n">mainAtomT</span><span class="p">:</span>
                     <span class="n">foundAtomType</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="n">atomTypeShift</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">mainIdx</span><span class="o">+</span><span class="mi">1</span><span class="p">})</span>
                     <span class="k">break</span>
@@ -299,73 +299,73 @@
         <span class="c1"># add bonds and bonds with H</span>
         <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">BOND</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">bondType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDSTRETCHTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">bond</span><span class="o">.</span><span class="n">ICB</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_bond</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span> 
-                                <span class="n">b0</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span> 
-                                <span class="n">atomI</span><span class="o">=</span><span class="n">bond</span><span class="o">.</span><span class="n">IB</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_bond</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span>
+                                <span class="n">b0</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span>
+                                <span class="n">atomI</span><span class="o">=</span><span class="n">bond</span><span class="o">.</span><span class="n">IB</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">atomJ</span><span class="o">=</span><span class="n">bond</span><span class="o">.</span><span class="n">JB</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDH</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">bondType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDSTRETCHTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">bond</span><span class="o">.</span><span class="n">ICB</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_bond</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span> 
-                                <span class="n">b0</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span> 
-                                <span class="n">atomI</span><span class="o">=</span><span class="n">bond</span><span class="o">.</span><span class="n">IB</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_bond</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span>
+                                <span class="n">b0</span><span class="o">=</span><span class="n">bondType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span>
+                                <span class="n">atomI</span><span class="o">=</span><span class="n">bond</span><span class="o">.</span><span class="n">IB</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">atomJ</span><span class="o">=</span><span class="n">bond</span><span class="o">.</span><span class="n">JB</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">includesH</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># add angles and angles with H</span>
         <span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDANGLE</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">angleType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDANGLEBENDTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">angle</span><span class="o">.</span><span class="n">ICT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_angle</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CB</span><span class="p">,</span> 
-                                <span class="n">kh</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span> 
-                                <span class="n">b0</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span> 
-                                <span class="n">atomI</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">IT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_angle</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CB</span><span class="p">,</span>
+                                <span class="n">kh</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span>
+                                <span class="n">b0</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span>
+                                <span class="n">atomI</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">IT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">atomJ</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">JT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">atomK</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">KT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDANGLEH</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">angleType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">BONDANGLEBENDTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">angle</span><span class="o">.</span><span class="n">ICT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_angle</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CB</span><span class="p">,</span> 
-                                <span class="n">kh</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span> 
-                                <span class="n">b0</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span> 
-                                <span class="n">atomI</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">IT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_angle</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CB</span><span class="p">,</span>
+                                <span class="n">kh</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">CHB</span><span class="p">,</span>
+                                <span class="n">b0</span><span class="o">=</span><span class="n">angleType</span><span class="o">.</span><span class="n">B0</span><span class="p">,</span>
+                                <span class="n">atomI</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">IT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">atomJ</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">JT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                 <span class="n">atomK</span><span class="o">=</span><span class="n">angle</span><span class="o">.</span><span class="n">KT</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> <span class="n">includesH</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># add diheadrals and diheadrals with H</span>
         <span class="k">for</span> <span class="n">dihdrl</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">DIHEDRAL</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">dihdrlType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">TORSDIHEDRALTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">ICP</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span><span class="n">CP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CP</span><span class="p">,</span> 
-                                        <span class="n">PD</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">PD</span><span class="p">,</span> 
-                                        <span class="n">NP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">NP</span><span class="p">,</span> 
-                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span><span class="n">CP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CP</span><span class="p">,</span>
+                                        <span class="n">PD</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">PD</span><span class="p">,</span>
+                                        <span class="n">NP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">NP</span><span class="p">,</span>
+                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                         <span class="n">atomL</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">LP</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">dihdrl</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">DIHEDRALH</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">dihdrlType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">TORSDIHEDRALTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">ICPH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span><span class="n">CP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CP</span><span class="p">,</span> 
-                                        <span class="n">PD</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">PD</span><span class="p">,</span> 
-                                        <span class="n">NP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">NP</span><span class="p">,</span> 
-                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span><span class="n">CP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CP</span><span class="p">,</span>
+                                        <span class="n">PD</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">PD</span><span class="p">,</span>
+                                        <span class="n">NP</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">NP</span><span class="p">,</span>
+                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                         <span class="n">atomL</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">LPH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                         <span class="n">includesH</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># add impdihedrals with and without H</span>
         <span class="k">for</span> <span class="n">dihdrl</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">IMPDIHEDRAL</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">dihdrlType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">IMPDIHEDRALTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">ICQ</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_impdihedral</span><span class="p">(</span><span class="n">CQ</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CQ</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_impdihedral</span><span class="p">(</span><span class="n">CQ</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CQ</span><span class="p">,</span>
                                         <span class="n">Q0</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">Q0</span><span class="p">,</span>
-                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                         <span class="n">atomL</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">LQ</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">dihdrl</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">IMPDIHEDRALH</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="n">dihdrlType</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">IMPDIHEDRALTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">ICQH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span><span class="n">CQ</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CQ</span><span class="p">,</span> 
-                                        <span class="n">Q0</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">Q0</span><span class="p">,</span> 
-                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
-                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span> 
+            <span class="n">retTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span><span class="n">CQ</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">CQ</span><span class="p">,</span>
+                                        <span class="n">Q0</span><span class="o">=</span><span class="n">dihdrlType</span><span class="o">.</span><span class="n">Q0</span><span class="p">,</span>
+                                        <span class="n">atomI</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">IQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomJ</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">JQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
+                                        <span class="n">atomK</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">KQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                         <span class="n">atomL</span><span class="o">=</span><span class="n">dihdrl</span><span class="o">.</span><span class="n">LQH</span> <span class="o">+</span> <span class="n">atnmShift</span><span class="p">,</span>
                                         <span class="n">includesH</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -459,8 +459,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;BOND&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BOND&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        
-        
+
+
         <span class="c1"># find the bondstretchtype number or create new bondstretchtype</span>
         <span class="c1"># TODO: add quartic force (CB)</span>
         <span class="n">bond_type_number</span> <span class="o">=</span> <span class="mi">0</span>
@@ -498,7 +498,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;BONDANGLE&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDANGLE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[],</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        
+
         <span class="c1"># find the BONDANGLEBENDTYPE number or create new BONDANGLEBENDTYPE</span>
         <span class="c1"># TODO: add harmonic in the angle cosine force (CT)</span>
         <span class="n">angle_type_number</span> <span class="o">=</span> <span class="mi">0</span>
@@ -513,7 +513,7 @@
             <span class="n">newBONDANGLEBENDTYPE</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">bondstretchtype_type</span><span class="p">(</span><span class="n">CB</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">CHB</span><span class="o">=</span><span class="n">kh</span><span class="p">,</span> <span class="n">B0</span><span class="o">=</span><span class="n">b0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BONDANGLEBENDTYPE</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newBONDANGLEBENDTYPE</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BONDANGLEBENDTYPE</span><span class="o">.</span><span class="n">NBTY</span> <span class="o">+=</span> <span class="mi">1</span>
-        
+
         <span class="c1">#create new angle TODO: maybe check if already exists. But I will asume smart users</span>
         <span class="n">newAngle</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">bondangle_type</span><span class="p">(</span><span class="n">IT</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">JT</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">KT</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">ICT</span><span class="o">=</span><span class="n">angle_type_number</span><span class="p">)</span>
         <span class="c1">#check if we are adding a bond to BONDANGLE or BONDANGLEH</span>
@@ -534,7 +534,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;DIHEDRAL&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;DIHEDRAL&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[],</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        
+
         <span class="c1"># find the TORSDIHEDRALTYPE number or create new TORSDIHEDRALTYPE</span>
         <span class="n">torsion_type_number</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">iterator</span> <span class="o">=</span> <span class="mi">1</span>
@@ -548,7 +548,7 @@
             <span class="n">newTORSDIHEDRALTYPE</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">torsdihedraltype_type</span><span class="p">(</span><span class="n">CP</span><span class="o">=</span><span class="n">CP</span><span class="p">,</span> <span class="n">PD</span><span class="o">=</span><span class="n">PD</span><span class="p">,</span> <span class="n">NP</span><span class="o">=</span><span class="n">NP</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">TORSDIHEDRALTYPE</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newTORSDIHEDRALTYPE</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">TORSDIHEDRALTYPE</span><span class="o">.</span><span class="n">NPTY</span> <span class="o">+=</span> <span class="mi">1</span>
-        
+
         <span class="c1">#check if we are adding a bond to DIHEDRAL or DIHEDRALH</span>
         <span class="k">if</span> <span class="n">includesH</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">DIHEDRALH</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">dihedralh_type</span><span class="p">(</span><span class="n">IPH</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">JPH</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">KPH</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">LPH</span><span class="o">=</span><span class="n">atomL</span><span class="p">,</span> <span class="n">ICPH</span><span class="o">=</span><span class="n">torsion_type_number</span><span class="p">))</span>
@@ -557,7 +557,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">DIHEDRAL</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">top_dihedral_type</span><span class="p">(</span><span class="n">IP</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">JP</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">KP</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">LP</span><span class="o">=</span><span class="n">atomL</span><span class="p">,</span> <span class="n">ICP</span><span class="o">=</span><span class="n">torsion_type_number</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">DIHEDRAL</span><span class="o">.</span><span class="n">NPHI</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-    
+
 <div class="viewcode-block" id="Top.add_new_impdihedral_type"><a class="viewcode-back" href="../../../../_source/pygromos.files.topology.html#pygromos.files.topology.top.Top.add_new_impdihedral_type">[docs]</a>    <span class="k">def</span> <span class="nf">add_new_impdihedral_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">CQ</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">Q0</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1">#check if all classes are ready, if not create</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;IMPDIHEDRALTYPE&quot;</span><span class="p">):</span>
@@ -577,7 +577,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;IMPDIHEDRAL&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;IMPDIHEDRAL&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[],</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        
+
         <span class="c1"># find the IMPDIHEDRALTYPE number or create new IMPDIHEDRALTYPE</span>
         <span class="n">impdihedral_type_number</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">iterator</span> <span class="o">=</span> <span class="mi">1</span>
@@ -589,7 +589,7 @@
             <span class="n">impdihedral_type_number</span> <span class="o">=</span> <span class="n">iterator</span> <span class="c1">#found the torsion</span>
         <span class="k">if</span> <span class="n">iterator</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">IMPDIHEDRALTYPE</span><span class="o">.</span><span class="n">content</span><span class="p">):</span><span class="c1">#torsion type was not found -&gt; add new bondtype</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_new_impdihedral_type</span><span class="p">(</span><span class="n">CQ</span><span class="o">=</span><span class="n">CQ</span><span class="p">,</span> <span class="n">Q0</span><span class="o">=</span><span class="n">Q0</span><span class="p">)</span>
-        
+
         <span class="c1">#check if we are adding a bond to IMPDIHEDRALH or IMPDIHEDRALH</span>
         <span class="k">if</span> <span class="n">includesH</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">IMPDIHEDRALH</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">impdihedralh_type</span><span class="p">(</span><span class="n">IQH</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">JQH</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">KQH</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">LQH</span><span class="o">=</span><span class="n">atomL</span><span class="p">,</span> <span class="n">ICQH</span><span class="o">=</span><span class="n">impdihedral_type_number</span><span class="p">))</span>
@@ -634,7 +634,7 @@
         <span class="n">add</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">ljparameters_type</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="n">nratt</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">JAC</span><span class="o">=</span><span class="n">nratt</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">C6</span><span class="o">=</span><span class="n">C6</span><span class="p">,</span> <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span> <span class="n">CS12</span><span class="o">=</span><span class="n">CS12</span><span class="p">,</span> <span class="n">CS6</span><span class="o">=</span><span class="n">CS6</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LJPARAMETERS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LJPARAMETERS</span><span class="o">.</span><span class="n">NRATT2</span> <span class="o">+=</span> <span class="n">nratt</span> <span class="o">+</span> <span class="mi">1</span>
-        
+
         <span class="k">if</span> <span class="n">AddATOMTYPENAME</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;ATOMTYPENAME&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;ATOMTYPENAME&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[],</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
@@ -666,7 +666,7 @@
 <div class="viewcode-block" id="Top.add_new_atom"><a class="viewcode-back" href="../../../../_source/pygromos.files.topology.html#pygromos.files.topology.top.Top.add_new_atom">[docs]</a>    <span class="k">def</span> <span class="nf">add_new_atom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ATNM</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">MRES</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">PANM</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">IAC</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">MASS</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">CG</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">CGC</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">INE</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">INE14</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">C6</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">C12</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">CS6</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">CS12</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">IACname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">IACname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">IACname</span> <span class="o">=</span> <span class="n">PANM</span>
-        
+
         <span class="c1"># Find IAC and (if needed) add a new LJ Parameter</span>
         <span class="k">if</span> <span class="n">C6</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">C12</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>           <span class="c1">#need to find PANM and IAC</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;LJPARAMETERS&quot;</span><span class="p">):</span>
@@ -700,7 +700,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">CONSTRAINT</span><span class="o">.</span><span class="n">NCON</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;BONDSTRETCHTYPE&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDSTRETCHTYPE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        
+
         <span class="c1"># find the bondstretchtype number or create new bondstretchtype</span>
         <span class="n">bond_type_number</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">iterator</span> <span class="o">=</span> <span class="mi">1</span>
@@ -767,14 +767,14 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SOLUTEATOM</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
                 <span class="n">mass</span> <span class="o">+=</span> <span class="n">i</span><span class="o">.</span><span class="n">MASS</span>
         <span class="k">return</span> <span class="n">mass</span></div></div>
-        
 
-        
+
+
 
 </pre></div>
 
            </div>
-           
+
           </div>
           <footer>
 
@@ -786,14 +786,14 @@
 
     </p>
   </div>
-    
-    
-    
+
+
+
     Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
 </footer>
         </div>
@@ -802,7 +802,7 @@
     </section>
 
   </div>
-  
+
 
   <script type="text/javascript">
       jQuery(function () {
@@ -810,10 +810,10 @@
       });
   </script>
 
-  
-  
-    
-   
+
+
+
+
 
 </body>
 </html>
