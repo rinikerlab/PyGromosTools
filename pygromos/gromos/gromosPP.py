@@ -34,6 +34,7 @@ class _gromosPPbase:
 
     _bin: str = ""
     _isValid: bool = False
+    __dont_check_bin: bool = False
 
     def __init__(self, gromosPP_bin_dir: str = None):
         """
@@ -80,7 +81,7 @@ class _gromosPPbase:
             and bash.command_exists(f"{in_bind_dir}/pdb2g96")
         ):  # move to GromosXX class
             return in_bind_dir + "/"
-        elif in_bind_dir is None and bash.command_exists("pdb2g96"):
+        elif self._dont_check_bin or (in_bind_dir is None and bash.command_exists("pdb2g96")):
             return None
         else:
             raise IOError(
