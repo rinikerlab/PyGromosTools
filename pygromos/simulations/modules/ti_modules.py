@@ -27,6 +27,7 @@ def TI_sampling(
     n_equilibrations: int = 1,
     randomize: bool = False,
     dual_cnf: List[str] = None,
+    verbose: bool = True,
 ):
     """
     This function will automatically submit N independent (different lambda)
@@ -108,6 +109,7 @@ def TI_sampling(
             in_imd_path=None,
             simulation_runs=n_productions,
             equilibration_runs=n_equilibrations,
+            verbose=verbose,
         )
 
         out_gromos_system.save(out_gromos_system.work_folder + "/sd_out_system.obj")
@@ -126,6 +128,7 @@ def _TI_lam_step(
     equilibration_runs: int = 0,
     previous_simulation_run: int = None,
     analysis_script: callable = simulation_analysis.do,
+    verbose: bool = True,
 ) -> (Gromos_System, int):
     template_control_dict = OrderedDict(
         {
@@ -155,4 +158,5 @@ def _TI_lam_step(
         equilibration_runs=equilibration_runs,
         analysis_control_dict=template_control_dict,
         analysis_script=analysis_script,
+        verbose=verbose,
     )

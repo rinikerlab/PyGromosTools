@@ -26,6 +26,7 @@ def emin(
     _template_imd_path: str = template_emin,
     initialize_first_run=False,
     analysis_script: callable = simulation_analysis.do,
+    verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
     template_emin_control_dict = simulation_analysis.template_control_dict
     template_emin_control_dict["concat"]["cat_trc"] = False
@@ -53,6 +54,7 @@ def emin(
         analysis_control_dict=template_emin_control_dict,
         analysis_script=analysis_script,
         _template_imd_path=_template_imd_path,
+        verbose=verbose,
     )
 
 
@@ -69,6 +71,7 @@ def md(
     previous_simulation_run: int = None,
     _template_imd_path: str = template_md,
     analysis_script: callable = simulation_analysis.do,
+    verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
     return simulation(
         in_gromos_simulation_system=in_gromos_system,
@@ -82,6 +85,7 @@ def md(
         equilibration_runs=equilibration_runs,
         analysis_script=analysis_script,
         _template_imd_path=_template_imd_path,
+        verbose=verbose,
     )
 
 
@@ -98,6 +102,7 @@ def sd(
     previous_simulation_run: int = None,
     _template_imd_path: str = template_sd,
     analysis_script: callable = simulation_analysis.do,
+    verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
     return simulation(
         in_gromos_simulation_system=in_gromos_system,
@@ -111,6 +116,7 @@ def sd(
         equilibration_runs=equilibration_runs,
         analysis_script=analysis_script,
         _template_imd_path=_template_imd_path,
+        verbose=verbose,
     )
 
 
@@ -126,6 +132,7 @@ def thermalisation(
     previous_simulation_run: int = None,
     _template_imd_path: str = template_sd,
     analysis_script: callable = simulation_analysis.do,
+    verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
 
     for runID, temperature in enumerate(temperatures):
@@ -151,6 +158,7 @@ def thermalisation(
                 equilibration_runs=equilibration_runs,
                 analysis_script=analysis_script,
                 _template_imd_path=_template_imd_path,
+                verbose=verbose,
             )
 
         else:
@@ -165,4 +173,5 @@ def thermalisation(
                 equilibration_runs=equilibration_runs,
                 analysis_script=analysis_script,
                 _template_imd_path=_template_imd_path,
+                verbose=verbose,
             )
