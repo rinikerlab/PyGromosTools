@@ -202,10 +202,11 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
                                       out_trg=out_trg, out_trs=out_trs, out_trf=out_trf, out_trv=out_trv,
                                       verbose=True)
                 
-                print("Waiting to find all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
-                out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
-                print (out_cnf_paths)
-                for ocp in out_cnf_paths: bash.wait_for_fileSystem(ocp)
+                if not multi_node:
+                    print("Waiting to find all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
+                    out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
+                    print (out_cnf_paths)
+                    for ocp in out_cnf_paths: bash.wait_for_fileSystem(ocp)
 
             else:
                 omd_file_path = gromosXX.md_run(in_topo_path=in_top_path, in_coord_path=in_cnf_path, in_imd_path=tmp_imd_path,
@@ -243,6 +244,18 @@ def work(out_dir : str, in_cnf_path : str, in_imd_path : str, in_top_path : str,
         # Note: If job is multi-node, it is simpler to zip things in out_dir after copying back
         if multi_node and zip_trajectories: 
             zip_files.do(in_simulation_dir=out_dir, n_processes=n_cpu_zip)
+        
+        # Check for the output files:
+        if multi_node:
+            try: 
+                print("Ensuring we have all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
+                out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
+                print (out_cnf_paths)
+                for ocp in out_cnf_paths: bash.wait_for_fileSystem(ocp)
+            except Exception as err:
+                print("Failed! process returned: \n Err: \n" + "\n".join(err.args)) 
+                md_failed = True 
+
 
     except Exception as err:
         print("\nFailed during simulations: ", file=sys.stderr)
