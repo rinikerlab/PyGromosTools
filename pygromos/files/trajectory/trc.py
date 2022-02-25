@@ -17,13 +17,92 @@ TODO: add support for rdkit conformers
 import os
 import pandas as pd
 import numpy as np
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Dict
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.analysis import coordinate_analysis as ca
+from pygromos.files.blocks._general_blocks import TITLE
+
+import nglview as nj
+import mdtraj
 
 TrcType = TypeVar("Trc")
 CnfType = TypeVar("Cnf")
+
+
+class Trc_new(mdtraj.Trajectory):
+    # Attributes
+    TITLE: TITLE
+
+    def __init__(
+        self,
+        xyz=None,
+        topology=None,
+        time=None,
+        unitcell_lengths=None,
+        unitcell_angles=None,
+        traj_path=None,
+        top_cnf_path=None,
+    ):
+
+        if xyz is str:
+            self._block_map = self._generate_blockMap(in_trc_path=xyz)
+
+        if traj_path is not None:  # is str and traj_path.endswith('.trc.gz') and not top_cnf_path is None):
+            trc = Trc(traj_path)
+
+            num_frames = len(trc.database.index)
+            num_atoms = len(trc.database.columns) - 6
+
+            xyz = np.concatenate(np.concatenate(trc.database.values[:num_frames, 2 : num_atoms + 2])).reshape(
+                (num_frames, num_atoms, 3)
+            )
+            cnf = Cnf(top_cnf_path)
+            cnf.write_pdb("/localhome/kpaul/pygromosday/test.pdb")
+            single = mdtraj.load_pdb("/localhome/kpaul/pygromosday/test.pdb")
+            super().__init__(xyz=xyz, topology=single.topology)
+        else:
+            super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+
+    rmsd = lambda self, x: mdtraj.rmsd(self, self, x)
+
+    def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
+        block_map = {}
+        with open(in_trc_path, "r") as file_handle:
+            inBlock = False
+            inTitleBlock = False
+            blockKey = None
+            nLines = 0
+            titleStr = []
+
+            while True:
+                line = file_handle.readline()
+                if "END" == line.strip():
+                    block_map.update({blockKey: nLines})
+                    if blockKey == TITLE.__name__:
+                        inTitleBlock = False
+                        self.TITLE = TITLE(content="\n".join(titleStr))
+                    inBlock = False
+                elif not inBlock:
+                    blockKey = line.strip()
+                    if blockKey in block_map:
+                        break
+                    elif blockKey == TITLE.__name__:
+                        inTitleBlock = True
+                    inBlock = True
+                    nLines = 1
+                elif inTitleBlock:
+                    titleStr.append(line)
+                nLines += 1
+        if not hasattr(self, TITLE.__name__):
+            self.TITLE = TITLE(content="Empty TITLE")
+        return block_map
+
+    @property
+    def view(self, re_create: bool = False) -> nj.NGLWidget:
+        if self._view == None or re_create:
+            self._view = nj.show_mdtraj(self)
+        return self._view
 
 
 class Trc(traj._General_Trajectory):

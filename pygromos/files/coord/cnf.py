@@ -18,7 +18,6 @@ from pygromos.files.blocks import coord_blocks as blocks
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
-from pygromos.files.trajectory.trc import Trc
 from pygromos.files.blocks.coord_blocks import GENBOX
 from pygromos.analysis import coordinate_analysis as ca
 
@@ -1196,43 +1195,6 @@ class Cnf(_general_gromos_file):
 
         """
         return self._write_to_file(out_path=out_path, content_str=self.get_pdb())
-
-    def cnf2trc(self) -> Trc:
-        """This function converts a cnf to a trajectory with a single frame
-
-        Returns
-        -------
-        Trc
-            Trc with informations from Cnf(self)
-        """
-
-        # create empty Trc
-        trc = Trc(input_value=None)
-
-        # set normal blocks
-        trc.TITLE = self.TITLE
-
-        # create dict for pd DataFrame
-        dict = {}
-
-        if hasattr(self, "TIMESTEP"):
-            dict["step"] = self.TIMESTEP.step
-            dict["time"] = self.TIMESTEP.t
-        else:
-            dict["step"] = 0
-            dict["time"] = 0
-
-        if hasattr(self, "POSITION"):
-            for pos in self.POSITION:
-                dict["POS_" + str(pos.atomID)] = np.array([pos.xp, pos.yp, pos.zp]).astype(np.float)
-        else:
-            raise ValueError("Cnf has no POSITION data")
-
-        # TODO: Maybe add othe blocks to translate?
-
-        # build dataframe and return
-        trc.database = pd.DataFrame([dict])
-        return trc
 
     """
         visualize
