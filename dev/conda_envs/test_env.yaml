@@ -1,6 +1,5 @@
 name: test
 channels:
-  - rdkit
   - conda-forge
   - defaults
 dependencies:
@@ -24,9 +23,8 @@ dependencies:
   - scipy
   - rdkit
   - mpmath
+  - mdtraj
  ##Visualization
   - matplotlib
   - py3dmol
-
-
-
+  - nglview
