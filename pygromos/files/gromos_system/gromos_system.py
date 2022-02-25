@@ -688,7 +688,7 @@ class Gromos_System:
 
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
-        if isinstance(input_value, [str, None]):
+        if isinstance(input_value, str) or input_value is None:
             self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
             self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
@@ -703,7 +703,7 @@ class Gromos_System:
 
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
-        if isinstance(input_value, [str, None]):
+        if isinstance(input_value, str) or input_value is None:
             self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):

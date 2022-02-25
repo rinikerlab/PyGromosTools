@@ -61,14 +61,18 @@ class _Gromos:
         else:
             return self._bin
 
-    def _check_gromos_binDir(self, in_bind_dir: str):
+    @bin.setter
+    def bin(self, in_bin_dir: str):
+        self._bin = _check_gromos_binDir(in_bin_dir)
+
+    def _check_gromos_binDir(self, in_bin_dir: str):
         if (
             isinstance(in_bin_dir, str)
-            and bash.directory_exists(in_bind_dir)
-            and bash.command_exists(f"{in_bind_dir}/pdb2g96")
+            and bash.directory_exists(in_bin_dir)
+            and bash.command_exists(f"{in_bin_dir}/pdb2g96")
         ):  # move to GromosXX class
-            return in_bind_dir + "/"
-        elif self.__dont_check_bin or (in_bind_dir is None and bash.command_exists("pdb2g96")):
+            return in_bin_dir + "/"
+        elif self.__dont_check_bin or (in_bin_dir is None and bash.command_exists("pdb2g96")):
             return None
         else:
             raise IOError(
@@ -79,9 +83,9 @@ class _Gromos:
                 + " and either pass the path to the binary directory or set the PATH variable"
             )
 
-    @bin.setter
-    def bin(self, in_bin_dir: str):
-        self._bin = _check_gromos_binDir(in_bin_dir)
+    """
+        GromosXX Programms
+    """
 
     @gromosTypeConverter
     def md_run(
