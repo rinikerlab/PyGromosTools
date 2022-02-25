@@ -1049,7 +1049,7 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-    def get_pdb(self, rdkit_ready: bool = True, connectivity_top=None) -> str:
+    def get_pdb(self, rdkit_ready: bool = False, connectivity_top=None) -> str:
         """
             translate cnf to pdb.
 
