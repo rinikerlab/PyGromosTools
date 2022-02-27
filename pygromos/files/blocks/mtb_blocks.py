@@ -108,7 +108,15 @@ class mtb_lj_exceptions_field(_generic_field):
 class MTBUILDBLSOLUTE(_generic_gromos_block):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
+
     atoms: List[mtb_atoms_field]
+    bonds: List[mtb_bonds_field]
+    angles: List[mtb_angles_field]
+    improper_dihedrals: List[mtb_dihedral_field]
+    dihedrals: List[mtb_dihedral_field]
+    lj_exceptions: List[mtb_lj_exceptions_field]
+
+    skip_lines: int = 2
 
     def __init__(self, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, content=None):
         super().__init__(name=self.__class__.__name__, used=True, content=content)
@@ -119,6 +127,10 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
         # reset all storage
         self.atoms = []
         self.bonds = []
+        self.angles = []
+        self.improper_dihedrals = []
+        self.dihedrals = []
+        self.lj_exceptions = []
 
         # first line
         first_line = content[0].split()
@@ -128,21 +140,38 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
         self.type = first_line[6]
         self.fullname = first_line[8]
 
-        self.RNME = content[3].strip()
+        itr = 1
+        while itr < len(content):
+            if content[itr].startswith("#"):
+                itr += 1
+                continue
+            else:
+                break
 
-        self.NMAT = int(content[6].split()[0])
-        self.NLIN = int(content[6].split()[1])
+        self.RNME = content[itr].strip()
+
+        itr += 1
+        while itr < len(content):
+            if content[itr].startswith("#"):
+                itr += 1
+                continue
+            else:
+                break
+
+        self.NMAT = int(content[itr].split()[0])
+        self.NLIN = int(content[itr].split()[1])
+        itr += 1
 
         # TODO: implement NLIN
-        itr = 6 + 4
-        nmat_found = 0
 
+        nmat_found = 0
         # try to find all atoms in the ATOM subblock and hope the while does not go to far...
         while nmat_found < self.NMAT and itr < (len(content) - 10):
             if content[itr].startswith("#"):
                 itr += 1
                 continue
             else:
+                print(itr, content[itr])
                 dump1 = content[itr].strip().split()
                 atom, anm, iacm, mass, cgm, icgm, mae = dump1[0:7]
                 if 1 <= int(mae):
@@ -152,14 +181,17 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                         itr += 1
                         try:
                             if any(i in content[itr] for i in ["\t\t\t\t\t", "                   "]):
-                                msae_values.extend([int(i) for i in content[itr].pop(0).strip().split()])
+                                msae_values.extend([int(i) for i in content[itr].strip().split()])
                         except:
                             raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
                             break
                 else:
                     msae_values = []
-                self.atoms.append(mtb_atoms_field(atom, anm, iacm, mass, cgm, icgm, mae, msae_values))
-            itr += 1
+                    self.atoms.append(mtb_atoms_field(atom, anm, iacm, mass, cgm, icgm, mae, msae_values))
+                itr += 1
+                nmat_found += 1
+        if self.NMAT == 0:
+            itr += self.skip_lines
         # all atoms from ATOM subblock should be found and parsed at this point
 
         # TODO: parse trailing atoms subblock
@@ -187,6 +219,8 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                 self.bonds.append(mtb_bonds_field(ib, jb, mcb))
                 bonds_found += 1
                 itr += 1
+        if self.NB == 0:
+            itr += self.skip_lines
 
         # read angles
         while itr < len(content):
@@ -211,6 +245,8 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                 self.angles.append(mtb_angles_field(ib, jb, kb, mcb))
                 angles_found += 1
                 itr += 1
+        if self.NBA == 0:
+            itr += self.skip_lines
 
         # read improper dihedrals
         while itr < len(content):
@@ -235,6 +271,8 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                 self.improper_dihedrals.append(mtb_dihedral_field(ib, jb, kb, lb, mcb))
                 improper_dihedrals_found += 1
                 itr += 1
+        if self.NIDA == 0:
+            itr += self.skip_lines
 
         # read dihedrals
         while itr < len(content):
@@ -259,6 +297,8 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                 self.dihedrals.append(mtb_dihedral_field(ib, jb, kb, lb, mcb))
                 dihedrals_found += 1
                 itr += 1
+        if self.NDA == 0:
+            itr += self.skip_lines
 
         # read LJ exceptions
         while itr < len(content):
