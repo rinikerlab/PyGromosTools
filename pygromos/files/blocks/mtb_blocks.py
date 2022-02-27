@@ -10,7 +10,7 @@ from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterab
 
 class mtb_atoms_field(_generic_field):
     def __init__(
-        self, ATOM: int, ANM: str, IACM: int, MASS: float, CGMI: float, CGM: int, MAE: int, MSAE: list[float]
+        self, ATOM: int, ANM: str, IACM: int, MASS: float, CGMI: float, CGM: int, MAE: int, MSAE: List[float]
     ) -> None:
         self.ATOM = int(ATOM)
         self.ANM = ANM
