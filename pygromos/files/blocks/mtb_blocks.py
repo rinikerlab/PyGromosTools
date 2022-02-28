@@ -31,11 +31,13 @@ class mtb_atoms_field(_generic_field):
         return_str += self.fieldseperator + str(self.CGM)
         return_str += self.fieldseperator + str(self.MAE)
         lcounter = 0
+        temp_MSAE = len(self.MSAE)
         for iter in self.MSAE:
             return_str += "\t" + str(iter).strip()
             lcounter += 1
-            if (lcounter % 6) == 0 and len(self.MSAE) > 6:
+            if (lcounter % 6) == 0 and temp_MSAE > 6:
                 return_str += "\n\t\t\t\t\t\t\t\t\t\t"
+                temp_MSAE -= 6
         return_str += self.lineseperator
         return return_str
 
@@ -207,7 +209,20 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                 continue
             else:
                 dump1 = content[itr].strip().split()
-                atom, anm, iacm, mass, cgm, icgm, mae = dump1[0:7]
+                if len(dump1) >= 7:
+                    atom, anm, iacm, mass, cgm, icgm, mae = dump1[0:7]
+                else:
+                    raise Exception(
+                        "Error in ATOM block: \n"
+                        + content[itr - 1]
+                        + "\n"
+                        + content[itr]
+                        + "\n"
+                        + content[itr + 1]
+                        + "\n"
+                        + content[itr + 2]
+                        + "\n"
+                    )
                 if 1 <= int(mae):
                     msae_values = [int(i) for i in dump1[7:]]
                     # keep reading in lines until we have all the data needed.
