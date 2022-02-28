@@ -10,7 +10,7 @@ from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterab
 
 class mtb_atoms_field(_generic_field):
     def __init__(
-        self, ATOM: int, ANM: str, IACM: int, MASS: float, CGMI: float, CGM: int, MAE: int, MSAE: List[float]
+        self, ATOM: int, ANM: str, IACM: int, MASS: float, CGMI: float, CGM: int, MAE: int, MSAE: List[int]
     ) -> None:
         self.ATOM = int(ATOM)
         self.ANM = ANM
@@ -19,7 +19,7 @@ class mtb_atoms_field(_generic_field):
         self.CGMI = float(CGMI)
         self.CGM = int(CGM)
         self.MAE = int(MAE)
-        self.MSAE = [float(x) for x in MSAE]
+        self.MSAE = [int(x) for x in MSAE]
 
     def to_string(self) -> str:
         return_str = ""
@@ -30,11 +30,12 @@ class mtb_atoms_field(_generic_field):
         return_str += self.fieldseperator + str(self.CGMI)
         return_str += self.fieldseperator + str(self.CGM)
         return_str += self.fieldseperator + str(self.MAE)
+        lcounter = 0
         for iter in self.MSAE:
             return_str += "\t" + str(iter).strip()
             lcounter += 1
             if (lcounter % 6) == 0 and len(self.MSAE) > 6:
-                str_line += "\n\t\t\t\t\t\t\t\t\t\t"
+                return_str += "\n\t\t\t\t\t\t\t\t\t\t"
         return_str += self.lineseperator
         return return_str
 
@@ -171,7 +172,6 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                 itr += 1
                 continue
             else:
-                print(itr, content[itr])
                 dump1 = content[itr].strip().split()
                 atom, anm, iacm, mass, cgm, icgm, mae = dump1[0:7]
                 if 1 <= int(mae):
@@ -187,7 +187,7 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
                             break
                 else:
                     msae_values = []
-                    self.atoms.append(mtb_atoms_field(atom, anm, iacm, mass, cgm, icgm, mae, msae_values))
+                self.atoms.append(mtb_atoms_field(atom, anm, iacm, mass, cgm, icgm, mae, msae_values))
                 itr += 1
                 nmat_found += 1
         if self.NMAT == 0:
@@ -393,5 +393,6 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
         for lj_exception in self.lj_exceptions:
             result += lj_exception.to_string()
 
+        result += "#@FREELINE" + self.line_seperator
         result += "END" + self.line_seperator
         return result
