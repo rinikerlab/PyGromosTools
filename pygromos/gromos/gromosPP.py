@@ -76,14 +76,19 @@ class _gromosPPbase:
         else:
             return self._bin
 
-
-    @gromosTypeConverter 
-    def amber2gromos(self, ambertop:str, solvent:str, ljscaling: float = 2.0,
-            chargegroups: str=None, atomic_chargegroups: bool = False,
-            out_path: str = "topology.top",
-            _binary_name:str= "amber2gromos", verbose:bool=False)->None:
+    @gromosTypeConverter
+    def amber2gromos(
+        self,
+        ambertop: str,
+        solvent: str,
+        ljscaling: float = 2.0,
+        chargegroups: str = None,
+        atomic_chargegroups: bool = False,
+        out_path: str = "topology.top",
+        _binary_name: str = "amber2gromos",
+        verbose: bool = False,
+    ) -> None:
         """
-        
         Parameters
         ----------
         ambertop : str
@@ -105,18 +110,19 @@ class _gromosPPbase:
         """
 
         additional_options = [""]
-        if(not ljscaling is None):
+        if not ljscaling is None:
             additional_options += [" @ljscaling ", str(ljscaling)]
-        if(not atomic_chargegroups is None):
-            additional_options += [" @atomic_chargegroups ", str(int(atomic_chargegroups)) ]
-        if(not chargegroups is None):
-            additional_options += [" @chargegroups ", chargegroups ]
+        if not atomic_chargegroups is None:
+            additional_options += [" @atomic_chargegroups ", str(int(atomic_chargegroups))]
+        if not chargegroups is None:
+            additional_options += [" @chargegroups ", chargegroups]
 
         additional_options = " ".join(map(str, additional_options))
 
-        command = ([self._bin + _binary_name, " @ambertop ", ambertop, "@solvent", solvent, additional_options, " \n"])
+        command = [self._bin + _binary_name, " @ambertop ", ambertop, "@solvent", solvent, additional_options, " \n"]
 
-        if(verbose): print(command)
+        if verbose:
+            print(command)
         bash.execute(command, catch_STD=out_path, verbose=verbose)
 
     @gromosTypeConverter

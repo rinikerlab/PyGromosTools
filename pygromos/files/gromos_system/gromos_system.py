@@ -918,9 +918,16 @@ class Gromos_System:
                 self.top = self.serenityff.top
 
         elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
-            if (self.in_mol2_file == None):
+            if self.in_mol2_file == None:
                 raise TypeError("To use amberff_gaff, please provide a mol2 file")
-            amber = amber2gromos(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield, gromosPP = self.gromosPP, work_folder = self.work_folder)
+
+            amber = amber2gromos(
+                in_mol2_file=self.in_mol2_file,
+                mol=self.mol,
+                forcefield=self.Forcefield,
+                gromosPP=self.gromosPP,
+                work_folder=self.work_folder,
+            )
             self.top = Top(amber.get_gromos_topology())
             self.cnf = Cnf(amber.get_gromos_coordinate_file())
 
