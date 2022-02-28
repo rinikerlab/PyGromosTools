@@ -15,10 +15,12 @@ class Mtb(_general_gromos_file._general_gromos_file):
     _gromos_file_ending: str = "mtb"
     MTBUILDBLSOLUTE_list: List[blocks.MTBUILDBLSOLUTE]
     MTBUILDBLSOLVENT_list: List[blocks.MTBUILDBLSOLVENT]
+    MTBUILDBLEND_list: List[blocks.MTBUILDBLEND]
 
     def __init__(self, in_value: (str or dict or None), _future_file: bool = False):
         self.MTBUILDBLSOLUTE_list = []
         self.MTBUILDBLSOLVENT_list = []
+        self.MTBUILDBLEND_list = []
         super().__init__(in_value, _future_file)
 
     def __str__(self):
@@ -42,6 +44,9 @@ class Mtb(_general_gromos_file._general_gromos_file):
             elif block_title == "MTBUILDBLSOLVENT":
                 mtb_block = blocks.MTBUILDBLSOLVENT(content=block_data)
                 self.MTBUILDBLSOLVENT_list.append(mtb_block)
+            elif block_title == "MTBUILDBLEND":
+                mtb_block = blocks.MTBUILDBLEND(content=block_data)
+                self.MTBUILDBLEND_list.append(mtb_block)
             else:
                 self.add_block(blocktitle=block_title, content=block_data)
                 block_dict.update({block_title: self.__getattribute__(block_title)})

@@ -5,7 +5,7 @@ from sympy import Q
 from pygromos.files.topology.mtb import Mtb
 from pygromos.data.ff.Gromos2016H66 import mtb, mtb_orga
 
-# from pygromos.data.ff.Gromos54A7 import mtb as mtb_g54a7
+from pygromos.data.ff.Gromos54A7 import mtb as mtb_g54a7
 from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 from pygromos.tests.test_files import out_test_root_dir
@@ -17,7 +17,7 @@ out_path = root_out + "/out_mtb.mtb"
 class test_mtb(general_file_tests):
     __test__ = True
     class_type = Mtb
-    in_file_path = mtb_orga
+    in_file_path = mtb
     root_out = root_out
 
     def test_parsing_test_file(self):
@@ -28,6 +28,16 @@ class test_mtb(general_file_tests):
         mtb_file = self.class_type(self.in_file_path)
         mtb_file.write(out_path)
         return 0
+
+
+class test_mtb_g54a7(test_mtb):
+    __test__ = True
+    in_file_path = mtb_g54a7
+
+
+class test_mtb_orga(test_mtb):
+    __test__ = True
+    in_file_path = mtb_orga
 
     def test_all_mtb_solutes_read(self):
         mtb_file = self.class_type(self.in_file_path)
