@@ -1,10 +1,4 @@
-import re
-from enum import Enum
-from typing import Union, Iterable, List
-import inspect
-import math
-
-from sympy import trailing
+from typing import List
 
 from pygromos.files.blocks.topology_blocks import FORCEFIELD, MAKETOPVERSION, TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
@@ -297,7 +291,6 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
                             except:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
-                                break
                     else:
                         msae_values = []
                     self.preceding_exclusions.append(mtb_preceding_exclusions_field(atom, mae, msae_values))
@@ -403,7 +396,6 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
                             except:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
-                                break
                     else:
                         msae_values = []
                     self.atoms.append(mtb_atoms_field(atom, anm, iacm, mass, cgm, icgm, mae, msae_values))
@@ -901,7 +893,6 @@ class MTBUILDBLEND(mtb_blocks):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
                             except:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
-                                break
                     else:
                         msae_values = []
                     self.atoms.append(mtb_atoms_field(atom, anm, iacm, mass, cgm, icgm, mae, msae_values))

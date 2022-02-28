@@ -5,8 +5,7 @@ Description:
 Author: Marc Lehner
 """
 
-from typing import Dict, List
-import warnings
+from typing import List
 from pygromos.files._basics import _general_gromos_file
 from pygromos.files.blocks import mtb_blocks as blocks
 
