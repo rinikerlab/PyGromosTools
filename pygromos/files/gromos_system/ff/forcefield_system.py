@@ -10,6 +10,8 @@ Author: Marc Lehner
 # imports
 import glob
 import importlib
+import shutil
+import os
 import collections
 
 from pygromos.files.topology.ifp import ifp
@@ -58,6 +60,9 @@ class forcefield_system:
             self.C12_input = {}
             self.partial_charges = collections.defaultdict(float)
 
+        elif self.name == "amberff_gaff":
+            self.import_amber_ff()
+
     def import_off(self):
         if not has_openff:
             raise ImportError(
@@ -81,3 +86,29 @@ class forcefield_system:
                 except Exception as err:
                     pass
         print("Found off: " + str(self.path))
+
+    def import_amber_ff(self):
+        if self.path != None:
+                self.amber_basedir = self.path
+
+        elif (shutil.which('tleap') != None):
+
+            has_amber = True # ambertools in path
+            self.amber_basedir = os.path.abspath(os.path.dirname(shutil.which('tleap'))+ "/../") 
+
+        else:
+            has_amber = False
+            raise ImportError("Could not import GAFF FF as ambertools was missing! "
+                                "Please install the package for this feature!")
+
+        self.amber_bindir = self.amber_basedir + "/bin"
+        self.leaprc_files = [self.amber_basedir + "/dat/leap/cmd/leaprc.gaff", self.amber_basedir + "/dat/leap/cmd/leaprc.water.tip3p"]
+        self.frcmod_files = [self.amber_basedir + "/dat/leap/parm/frcmod.chcl3"]
+
+        for leaprc in self.leaprc_files:
+            if not os.path.isfile(leaprc):
+                raise ImportError("could not find ff file " + leaprc)
+
+        for frcmod in self.frcmod_files:
+            if not os.path.isfile(frcmod):
+                raise ImportError("could not find ff file " + frcmod)

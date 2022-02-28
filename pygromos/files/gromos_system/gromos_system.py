@@ -49,6 +49,8 @@ if importlib.util.find_spec("rdkit") != None:
 else:
     has_rdkit = False
 
+from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
+
 if importlib.util.find_spec("openff") != None:
     from openff.toolkit.topology import Molecule
     from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
@@ -98,6 +100,7 @@ class Gromos_System:
         work_folder: str,
         system_name: str,
         rdkitMol: Chem.rdchem.Mol = None,
+        in_mol2_file: str = None,
         readIn=True,
         Forcefield: forcefield_system = forcefield_system(),
         auto_convert: bool = False,
@@ -151,6 +154,8 @@ class Gromos_System:
             path to the binary dir of GromosPP, by default None -> uses the set binaries in the PATH variable
         rdkitMol : Chem.rdchem.Mol, optional
             input rdkit Molecule, by default None
+        in_mol2_file : str, optional
+            path to input mol2 file, by default None
         readIn : bool, optional
             readIn all provided files?, by default True
         Forcefield : forcefield_system, optional
@@ -174,6 +179,7 @@ class Gromos_System:
         self.smiles = in_smiles
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
+        self.in_mol2_file = in_mol2_file
         self.checkpoint_path = None
         self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
@@ -193,7 +199,7 @@ class Gromos_System:
         self._future_promise = False
         self._future_promised_files = []
 
-        if (in_smiles == None and rdkitMol == None) or readIn == False:
+        if (in_smiles == None and rdkitMol == None and in_mol2_file == None) or readIn == False:
             if verbose:
                 warnings.warn("No data provided to gromos_system\nmanual work needed")
 
@@ -233,13 +239,17 @@ class Gromos_System:
             AllChem.UFFOptimizeMolecule(self.mol)
             self.hasData = True
 
+        if in_mol2_file:
+            self.mol = Chem.MolFromMol2File(in_mol2_file)
+            self.hasData = True
+
         # import  molecule from RDKit
         if rdkitMol:
             self.mol = rdkitMol
             self.smiles = Chem.MolToSmiles(self.mol)
             self.hasData = True
 
-        # automate all conversions for rdkit mols if possible
+        # automate all conversions for rdkit mols or mol2 if possible
         if auto_convert:
             if self.hasData:
                 self.auto_convert()
@@ -907,6 +917,13 @@ class Gromos_System:
                 self.serenityff.top.make_ordered()
                 self.top = self.serenityff.top
 
+        elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
+            if (self.in_mol2_file == None):
+                raise TypeError("To use amberff_gaff, please provide a mol2 file")
+            amber = amber2gromos(in_mol2_file = self.in_mol2_file, mol = self.mol, forcefield = self.Forcefield, gromosPP = self.gromosPP, work_folder = self.work_folder)
+            self.top = Top(amber.get_gromos_topology())
+            self.cnf = Cnf(amber.get_gromos_coordinate_file())
+
         else:
             raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
 
@@ -1025,7 +1042,7 @@ class Gromos_System:
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
         ff_name = self.Forcefield.name
-        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off":
+        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
             # adjust harmonic forces
             if hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None:
                 if self.verbose:
