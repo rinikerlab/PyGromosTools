@@ -40,6 +40,25 @@ class mtb_atoms_field(_generic_field):
         return return_str
 
 
+class mtb_atoms_solvent_field(_generic_field):
+    def __init__(self, ATOM: int, ANM: str, IACM: int, MASS: float, CG: float) -> None:
+        self.ATOM = int(ATOM)
+        self.ANM = ANM
+        self.IACM = int(IACM)
+        self.MASS = float(MASS)
+        self.CG = float(CG)
+
+    def to_string(self) -> str:
+        return_str = ""
+        return_str += self.fieldseperator + str(self.ATOM)
+        return_str += self.fieldseperator + self.ANM
+        return_str += self.fieldseperator + str(self.IACM)
+        return_str += self.fieldseperator + str(self.MASS)
+        return_str += self.fieldseperator + str(self.CG)
+        return_str += self.lineseperator
+        return return_str
+
+
 class mtb_bonds_field(_generic_field):
     def __init__(self, IB: int, JB: int, MCB: int) -> None:
         self.IB = int(IB)
@@ -102,6 +121,21 @@ class mtb_lj_exceptions_field(_generic_field):
         return_str += self.fieldseperator + str(self.iac)
         return_str += self.fieldseperator + str(self.jac)
         return_str += self.fieldseperator + str(self.mcb)
+        return_str += self.lineseperator
+        return return_str
+
+
+class mtb_constraints_field(_generic_field):
+    def __init__(self, IB: int, JB: int, LENGTH: float) -> None:
+        self.IB = int(IB)
+        self.JB = int(JB)
+        self.LENGTH = float(LENGTH)
+
+    def to_string(self) -> str:
+        return_str = ""
+        return_str += self.fieldseperator + str(self.IB)
+        return_str += self.fieldseperator + str(self.JB)
+        return_str += self.fieldseperator + str(self.LENGTH)
         return_str += self.lineseperator
         return return_str
 
@@ -392,6 +426,134 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
         result += "# IAC  JAC  MCB" + self.line_seperator
         for lj_exception in self.lj_exceptions:
             result += lj_exception.to_string()
+
+        result += "#@FREELINE" + self.line_seperator
+        result += "END" + self.line_seperator
+        return result
+
+
+class LINKEXCLUSIONS(_generic_gromos_block):
+    FORCEFIELD: FORCEFIELD
+    MAKETOPVERSION: MAKETOPVERSION
+    NRNE: int
+
+    def __init__(self, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, content=None):
+        self.NRNE = 0
+        super().__init__(name=self.__class__.__name__, used=True, content=content)
+        self.FORCEFIELD = FORCEFIELD
+        self.MAKETOPVERSION = MAKETOPVERSION
+
+    def read_content_from_str(self, content: str):
+        while content.startswith("#"):
+            content = content[1:]
+        self.NRNE = int(content[0].strip())
+
+    def block_to_string(self) -> str:
+        result = "LINKEXCLUSIONS" + self.line_seperator
+        result += "# nearest neighbour exclusions when linking" + self.line_seperator
+        result += "#NRNE" + self.line_seperator
+        result += str(self.NRNE) + self.line_seperator
+        result += "#@FREELINE" + self.line_seperator
+        result += "END" + self.line_seperator
+        return result
+
+
+class MTBUILDBLSOLVENT(_generic_gromos_block):
+    FORCEFIELD: FORCEFIELD
+    MAKETOPVERSION: MAKETOPVERSION
+
+    atoms: List[mtb_atoms_field]
+    constraints: List[mtb_constraints_field]
+
+    def __init__(self, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, content=None):
+        super().__init__(name=self.__class__.__name__, used=True, content=content)
+        self.FORCEFIELD = FORCEFIELD
+        self.MAKETOPVERSION = MAKETOPVERSION
+        print("MTBUILDBLSOLVENT")
+
+    def read_content_from_str(self, content: str):
+
+        self.atoms = []
+        self.constraints = []
+
+        print("Reading MTBUILDBLSOLVENT")
+        # first line
+        first_line = content[0].split()
+        print(first_line)
+        self.filename = first_line[1]
+        self.residuecode = first_line[3]
+        self.function = first_line[4]
+        self.type = first_line[6]
+        self.fullname = first_line[8]
+
+        while content[0].startswith("#"):
+            content = content[1:]
+        self.RNMES = content[0].strip()
+        content = content[1:]
+
+        while content[0].startswith("#"):
+            content = content[1:]
+        self.number_of_atoms = int(content[0].strip())
+        content = content[1:]
+
+        found_atoms = 0
+        while found_atoms < self.number_of_atoms:
+            if content[0].startswith("#"):
+                content = content[1:]
+            else:
+                atom, anm, iac, mass, cg = content[0].split()
+                self.atoms.append(mtb_atoms_solvent_field(atom, anm, iac, mass, cg))
+                found_atoms += 1
+                content = content[1:]
+
+        while content[0].startswith("#"):
+            content = content[1:]
+        self.number_of_constraints = int(content[0].strip())
+        content = content[1:]
+
+        found_constraints = 0
+        while found_constraints < self.number_of_constraints:
+            if content[0].startswith("#"):
+                content = content[1:]
+            else:
+                ib, jb, mcb = content[0].split()
+                self.constraints.append(mtb_constraints_field(ib, jb, mcb))
+                found_constraints += 1
+                content = content[1:]
+
+    def block_to_string(self) -> str:
+        result = "MTBUILDBLSOLVENT" + self.line_seperator
+        result += (
+            "#@BLOCKTYPE "
+            + self.filename
+            + " BLK "
+            + self.residuecode
+            + " "
+            + self.function
+            + " TYPE "
+            + self.type
+            + " NAME "
+            + self.fullname
+            + self.line_seperator
+        )
+        result += "# solvent name" + self.line_seperator
+        result += "#RNMES" + self.line_seperator
+        result += str(self.RNMES) + self.line_seperator
+
+        result += "# number of atoms" + self.line_seperator
+        result += str(self.number_of_atoms) + self.line_seperator
+
+        result += "# atoms" + self.line_seperator
+        result += "#ATOM ANM  IACM MASS        CG" + self.line_seperator
+        for atom in self.atoms:
+            result += atom.to_string()
+
+        result += "# number of constraints" + self.line_seperator
+        result += "# constraints" + self.line_seperator
+        result += str(self.number_of_constraints) + self.line_seperator
+        result += "#  IB   JB  LENGTH" + self.line_seperator
+        for constraint in self.constraints:
+            result += constraint.to_string()
 
         result += "#@FREELINE" + self.line_seperator
         result += "END" + self.line_seperator
