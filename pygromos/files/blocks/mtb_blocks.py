@@ -10,14 +10,28 @@ from pygromos.files.blocks.topology_blocks import FORCEFIELD, MAKETOPVERSION, TI
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
 
 
-class mtb_atoms_field(_generic_field):
+class mtb_blocks(_generic_gromos_block):
+    def __init__(self, name: str = None, used: bool = None, content: str = None):
+        super().__init__(name, used, content)
+        self.field_seperator = "  "
+        self.line_seperator = " \n"
+        self.field_continue_next_line = "\n\t\t\t\t\t\t\t\t\t\t"
+
+
+class mtb_fields(_generic_field):
+    fieldseperator = "  "
+    lineseperator = " \n"
+    field_continue_next_line = "\n\t\t\t\t\t\t\t\t\t\t"
+
+
+class mtb_atoms_field(mtb_fields):
     def __init__(
-        self, ATOM: int, ANM: str, IACM: int, MASS: float, CGMI: float, CGM: int, MAE: int, MSAE: List[int]
+        self, ATOM: int, ANM: str, IACM: int, MASS: int, CGMI: float, CGM: int, MAE: int, MSAE: List[int]
     ) -> None:
         self.ATOM = int(ATOM)
         self.ANM = ANM
         self.IACM = int(IACM)
-        self.MASS = float(MASS)
+        self.MASS = int(MASS)
         self.CGMI = float(CGMI)
         self.CGM = int(CGM)
         self.MAE = int(MAE)
@@ -29,22 +43,23 @@ class mtb_atoms_field(_generic_field):
         return_str += self.fieldseperator + self.ANM
         return_str += self.fieldseperator + str(self.IACM)
         return_str += self.fieldseperator + str(self.MASS)
-        return_str += self.fieldseperator + str(self.CGMI)
+        # return_str += self.fieldseperator + str(self.CGMI)
+        return_str += self.fieldseperator + "{:.5f}".format(self.CGMI)
         return_str += self.fieldseperator + str(self.CGM)
         return_str += self.fieldseperator + str(self.MAE)
         lcounter = 0
         temp_MSAE = len(self.MSAE)
         for iter in self.MSAE:
-            return_str += "\t" + str(iter).strip()
+            return_str += self.fieldseperator + str(iter).strip()
             lcounter += 1
             if (lcounter % 6) == 0 and temp_MSAE > 6:
-                return_str += "\n\t\t\t\t\t\t\t\t\t\t"
+                return_str += self.field_continue_next_line
                 temp_MSAE -= 6
         return_str += self.lineseperator
         return return_str
 
 
-class mtb_preceding_exclusions_field(_generic_field):
+class mtb_preceding_exclusions_field(mtb_fields):
     def __init__(self, ATOM: int, MAE: int, MSAE: List[int]) -> None:
         self.ATOM = int(ATOM)
         self.MAE = int(MAE)
@@ -57,21 +72,21 @@ class mtb_preceding_exclusions_field(_generic_field):
         lcounter = 0
         temp_MSAE = len(self.MSAE)
         for iter in self.MSAE:
-            return_str += "\t" + str(iter).strip()
+            return_str += self.fieldseperator + str(iter).strip()
             lcounter += 1
             if (lcounter % 6) == 0 and temp_MSAE > 6:
-                return_str += "\n\t\t\t\t\t\t\t\t\t\t"
+                return_str += self.field_continue_next_line
                 temp_MSAE -= 6
         return_str += self.lineseperator
         return return_str
 
 
-class mtb_trailing_atoms_field(_generic_field):
-    def __init__(self, ATOM: int, ANM: str, IACM: int, MASS: float, CGMI: float, CGM: int) -> None:
+class mtb_trailing_atoms_field(mtb_fields):
+    def __init__(self, ATOM: int, ANM: str, IACM: int, MASS: int, CGMI: float, CGM: int) -> None:
         self.ATOM = int(ATOM)
         self.ANM = ANM
         self.IACM = int(IACM)
-        self.MASS = float(MASS)
+        self.MASS = int(MASS)
         self.CGMI = float(CGMI)
         self.CGM = int(CGM)
 
@@ -81,18 +96,19 @@ class mtb_trailing_atoms_field(_generic_field):
         return_str += self.fieldseperator + self.ANM
         return_str += self.fieldseperator + str(self.IACM)
         return_str += self.fieldseperator + str(self.MASS)
-        return_str += self.fieldseperator + str(self.CGMI)
+        # return_str += self.fieldseperator + str(self.CGMI)
+        return_str += self.fieldseperator + "{:.5f}".format(self.CGMI)
         return_str += self.fieldseperator + str(self.CGM)
         return_str += self.lineseperator
         return return_str
 
 
-class mtb_atoms_solvent_field(_generic_field):
-    def __init__(self, ATOM: int, ANM: str, IACM: int, MASS: float, CG: float) -> None:
+class mtb_atoms_solvent_field(mtb_fields):
+    def __init__(self, ATOM: int, ANM: str, IACM: int, MASS: int, CG: float) -> None:
         self.ATOM = int(ATOM)
         self.ANM = ANM
         self.IACM = int(IACM)
-        self.MASS = float(MASS)
+        self.MASS = int(MASS)
         self.CG = float(CG)
 
     def to_string(self) -> str:
@@ -101,12 +117,13 @@ class mtb_atoms_solvent_field(_generic_field):
         return_str += self.fieldseperator + self.ANM
         return_str += self.fieldseperator + str(self.IACM)
         return_str += self.fieldseperator + str(self.MASS)
-        return_str += self.fieldseperator + str(self.CG)
+        return_str += self.fieldseperator + "{:.5f}".format(self.CG)
+        # return_str += self.fieldseperator + str(self.CG)
         return_str += self.lineseperator
         return return_str
 
 
-class mtb_bonds_field(_generic_field):
+class mtb_bonds_field(mtb_fields):
     def __init__(self, IB: int, JB: int, MCB: int) -> None:
         self.IB = int(IB)
         self.JB = int(JB)
@@ -121,7 +138,7 @@ class mtb_bonds_field(_generic_field):
         return return_str
 
 
-class mtb_angles_field(_generic_field):
+class mtb_angles_field(mtb_fields):
     def __init__(self, IB: int, JB: int, KB: int, MCB: int) -> None:
         self.IB = int(IB)
         self.JB = int(JB)
@@ -138,7 +155,7 @@ class mtb_angles_field(_generic_field):
         return return_str
 
 
-class mtb_dihedral_field(_generic_field):
+class mtb_dihedral_field(mtb_fields):
     def __init__(self, IB: int, JB: int, KB: int, LB: int, MCB: int) -> None:
         self.IB = int(IB)
         self.JB = int(JB)
@@ -157,7 +174,7 @@ class mtb_dihedral_field(_generic_field):
         return return_str
 
 
-class mtb_lj_exceptions_field(_generic_field):
+class mtb_lj_exceptions_field(mtb_fields):
     def __init__(self, iac: int, jac: int, mcb: int):
         self.iac = int(iac)
         self.jac = int(jac)
@@ -172,7 +189,7 @@ class mtb_lj_exceptions_field(_generic_field):
         return return_str
 
 
-class mtb_constraints_field(_generic_field):
+class mtb_constraints_field(mtb_fields):
     def __init__(self, IB: int, JB: int, LENGTH: float) -> None:
         self.IB = int(IB)
         self.JB = int(JB)
@@ -187,7 +204,7 @@ class mtb_constraints_field(_generic_field):
         return return_str
 
 
-class MTBUILDBLSOLUTE(_generic_gromos_block):
+class MTBUILDBLSOLUTE(mtb_blocks):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
@@ -600,7 +617,7 @@ class MTBUILDBLSOLUTE(_generic_gromos_block):
         return result
 
 
-class LINKEXCLUSIONS(_generic_gromos_block):
+class LINKEXCLUSIONS(mtb_blocks):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
     NRNE: int
@@ -626,7 +643,7 @@ class LINKEXCLUSIONS(_generic_gromos_block):
         return result
 
 
-class MTBUILDBLSOLVENT(_generic_gromos_block):
+class MTBUILDBLSOLVENT(mtb_blocks):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
@@ -725,7 +742,7 @@ class MTBUILDBLSOLVENT(_generic_gromos_block):
         return result
 
 
-class MTBUILDBLEND(_generic_gromos_block):
+class MTBUILDBLEND(mtb_blocks):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
