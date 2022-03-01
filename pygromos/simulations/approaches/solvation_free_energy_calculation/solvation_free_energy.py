@@ -116,6 +116,7 @@ class Solvation_free_energy_calculation:
         nomp=1,
         provided_topo: str = None,
         amberscaling=False,
+        ran_box_dens_multiplier=1,
     ) -> None:
 
         self.verbose = verbose
@@ -179,6 +180,7 @@ class Solvation_free_energy_calculation:
         # parameters for liquid simulation
         self.num_molecules = num_molecules
         self.density = density
+        self.ran_box_dens_multiplier = ran_box_dens_multiplier
         self.temperature = 298.15
         self.num_atoms = num_atoms
 
@@ -245,7 +247,7 @@ class Solvation_free_energy_calculation:
             in_cnf_path=self.groSys_liq.cnf.path,
             out_cnf_path=out_cnf_path,
             nmolecule=self.num_molecules,
-            dens=self.density,
+            dens=self.ran_box_dens_multiplier * self.density,
         )
 
         self.groSys_liq.cnf = Cnf(in_value=box_cnf_path)
@@ -917,10 +919,13 @@ class Solvation_free_energy_calculation:
         return solv_energy, error
 
     def create_new_submission_system(self):
-        if self._subsystem == "lsf":
-            self.submissonSystem = subSys_lsf(nmpi=self._nmpi, nomp=self._nomp, verbose=self.verbose)
+        if isinstance(self._subsystem, subSys_lsf) or isinstance(self._subsystem, subSys_local):
+            self.submissonSystem = self._subsystem
         else:
-            self.submissonSystem = subSys_local(nmpi=self._nmpi, nomp=self._nomp, verbose=self.verbose)
+            if self._subsystem == "lsf":
+                self.submissonSystem = subSys_lsf(nmpi=self._nmpi, nomp=self._nomp, verbose=self.verbose)
+            else:
+                self.submissonSystem = subSys_local(nmpi=self._nmpi, nomp=self._nomp, verbose=self.verbose)
 
     @property
     def nmpi(self):
