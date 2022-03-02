@@ -10,6 +10,8 @@ Author: Marc Lehner
 # imports
 import glob
 import importlib
+import shutil
+import os
 import collections
 
 from pygromos.files.topology.ifp import ifp
@@ -20,19 +22,19 @@ from pygromos.data import ff
 from pygromos.data.ff import Gromos2016H66
 from pygromos.data.ff import Gromos54A7
 
-if (importlib.util.find_spec("openff") != None):
+if importlib.util.find_spec("openff") != None:
     from openff.toolkit.typing.engines import smirnoff
+
     has_openff = True
 else:
     has_openff = False
 
 
-
-class forcefield_system():
-    def __init__(self, name:str="2016H66", path:str=None, auto_import:bool = True):
+class forcefield_system:
+    def __init__(self, name: str = "2016H66", path: str = None, auto_import: bool = True):
         self.name = name
         self.path = path
-        self.mol_name=None
+        self.mol_name = None
         if auto_import:
             self.auto_import_ff()
 
@@ -55,20 +57,25 @@ class forcefield_system():
             self.import_off()
             self.top = Top(in_value=topology_templates.topology_template_dir + "/blank_template+spc.top")
             self.develop = False
-            self.C12_input={}
+            self.C12_input = {}
             self.partial_charges = collections.defaultdict(float)
+
+        elif self.name == "amberff_gaff":
+            self.import_amber_ff()
 
     def import_off(self):
         if not has_openff:
-            raise ImportError("Could not import smirnoff FF as openFF toolkit was missing! "
-                                "Please install the package for this feature!")
+            raise ImportError(
+                "Could not import smirnoff FF as openFF toolkit was missing! "
+                "Please install the package for this feature!"
+            )
         if self.path != None:
             try:
                 self.off = smirnoff.ForceField(self.path)
             except:
-                raise ImportError("Could not import a OpenForceField from path: " +str(self.path))
+                raise ImportError("Could not import a OpenForceField from path: " + str(self.path))
         else:
-            filelist = glob.glob(ff.data_ff_SMIRNOFF + '/*.offxml')
+            filelist = glob.glob(ff.data_ff_SMIRNOFF + "/*.offxml")
             filelist.sort()
             filelist.reverse()
             for f in filelist:
@@ -78,4 +85,33 @@ class forcefield_system():
                     break
                 except Exception as err:
                     pass
-        print("Found off: "+str(self.path))
+        print("Found off: " + str(self.path))
+
+    def import_amber_ff(self):
+        if self.path != None:
+            self.amber_basedir = self.path
+
+        elif shutil.which("tleap") != None:
+            has_amber = True  # ambertools in path
+            self.amber_basedir = os.path.abspath(os.path.dirname(shutil.which("tleap")) + "/../")
+
+        else:
+            has_amber = False
+            raise ImportError(
+                "Could not import GAFF FF as ambertools was missing! " "Please install the package for this feature!"
+            )
+
+        self.amber_bindir = self.amber_basedir + "/bin"
+        self.leaprc_files = [
+            self.amber_basedir + "/dat/leap/cmd/leaprc.gaff",
+            self.amber_basedir + "/dat/leap/cmd/leaprc.water.tip3p",
+        ]
+        self.frcmod_files = [self.amber_basedir + "/dat/leap/parm/frcmod.chcl3"]
+
+        for leaprc in self.leaprc_files:
+            if not os.path.isfile(leaprc):
+                raise ImportError("could not find ff file " + leaprc)
+
+        for frcmod in self.frcmod_files:
+            if not os.path.isfile(frcmod):
+                raise ImportError("could not find ff file " + frcmod)

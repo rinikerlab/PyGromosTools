@@ -3,6 +3,7 @@ import pandas as pd
 
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
+
 class _SubmissionSystem:
     verbose: bool
     submission: bool
@@ -11,13 +12,24 @@ class _SubmissionSystem:
     _nmpi: int
     _nomp: int
     _max_storage: float
-    job_queue_list: pd.DataFrame #contains all jobs in the queue (from this users)
+    job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
     _zip_trajectories: bool
 
-    def __init__(self, submission: bool = False,
-                 nmpi: int = 1, nomp: int = 1, max_storage: float = 1000, job_duration: str = "24:00",
-                 verbose: bool = False, enviroment=None, block_double_submission:bool=True, chain_prefix:str="done", 
-                 begin_mail:bool=False, end_mail:bool=False, zip_trajectories: bool = True):
+    def __init__(
+        self,
+        submission: bool = False,
+        nmpi: int = 1,
+        nomp: int = 1,
+        max_storage: float = 1000,
+        job_duration: str = "24:00",
+        verbose: bool = False,
+        enviroment=None,
+        block_double_submission: bool = True,
+        chain_prefix: str = "done",
+        begin_mail: bool = False,
+        end_mail: bool = False,
+        zip_trajectories: bool = True,
+    ):
         """
             Construct a submission system with required parameters.
 
@@ -40,7 +52,7 @@ class _SubmissionSystem:
         block_double_submission: bool, optional
             if a job with the same name is already in the queue, it will not be submitted again. (default: True)
         chain_prefix: str, optional
-            the mode with witch jobs are chained together (default: "done") 
+            the mode with witch jobs are chained together (default: "done")
             (options: "done", "exit", "ended", "started", "post_done", "post_err")
         begin_mail: bool, optional
             determines if a mail is sent when job starts
@@ -63,10 +75,10 @@ class _SubmissionSystem:
         self.end_mail = end_mail
         self._zip_trajectories = zip_trajectories
 
-    def submit_to_queue(self, sub_job:Submission_job) -> int:
+    def submit_to_queue(self, sub_job: Submission_job) -> int:
         return -1
 
-    def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> int:
+    def submit_jobAarray_to_queue(self, sub_job: Submission_job) -> int:
         return -1
 
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
@@ -85,19 +97,33 @@ class _SubmissionSystem:
 
         """
         name = self.__class__.__name__
-        if (var_name is None):
+        if var_name is None:
             var_name = var_prefixes + name
 
         gen_cmd = "#Generate " + name + "\n"
         gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
-        gen_cmd += var_name + " = " + name + "_obj(submission=" + str(self.submission) + ", verbose=" + str(
-            self.verbose) + ", nmpi="+str(self.nmpi)+", nomp="+str(self.nomp)+ ", job_duration=\""+str(self.job_duration)+"\")\n\n"
+        gen_cmd += (
+            var_name
+            + " = "
+            + name
+            + "_obj(submission="
+            + str(self.submission)
+            + ", verbose="
+            + str(self.verbose)
+            + ", nmpi="
+            + str(self.nmpi)
+            + ", nomp="
+            + str(self.nomp)
+            + ', job_duration="'
+            + str(self.job_duration)
+            + '")\n\n'
+        )
         return gen_cmd
 
     def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
         return []
 
-    def search_queue_for_jobname(self, job_name: str, regex:bool=False, **kwargs)->pd.DataFrame:
+    def search_queue_for_jobname(self, job_name: str, regex: bool = False, **kwargs) -> pd.DataFrame:
         """get_jobs_from_queue
 
             this function searches the job queue for a certain job id.
@@ -113,10 +139,10 @@ class _SubmissionSystem:
         NotImplementedError
             Needs to be implemented in subclasses
         """
-        
+
         raise NotImplementedError("Do is not implemented for: " + self.__class__.__name__)
 
-    def search_queue_for_jobid(self, job_id: int, **kwargs)->pd.DataFrame:
+    def search_queue_for_jobid(self, job_id: int, **kwargs) -> pd.DataFrame:
         """search_queue_for_jobid
 
             this jobs searches the job queue for a certain job id.
@@ -133,7 +159,7 @@ class _SubmissionSystem:
 
         raise NotImplementedError("search_queue_for_jobID is not implemented for: " + self.__class__.__name__)
 
-    def is_job_in_queue(self, job_name: str=None, job_id:int=None, _onlyRUNPEND:bool=True) -> bool:
+    def is_job_in_queue(self, job_name: str = None, job_id: int = None, _onlyRUNPEND: bool = True) -> bool:
         """
         checks wether a function is still in the lsf queue
 
@@ -151,24 +177,24 @@ class _SubmissionSystem:
         bool
             is the job in the lsf queue?
         """
-        if(not job_name is None):
-            if(_onlyRUNPEND):
+        if not job_name is None:
+            if _onlyRUNPEND:
                 queued_job_ids = self.search_queue_for_jobname(job_name=job_name)
                 queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
                 return len(queued_job_ids) > 0
             else:
                 return len(self.search_queue_for_jobname(job_name=job_name)) > 0
-        elif(not job_id is None):
-            if(_onlyRUNPEND):
+        elif not job_id is None:
+            if _onlyRUNPEND:
                 queued_job_ids = self.search_queue_for_jobid(job_id=job_id)
                 queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
                 return len(queued_job_ids) > 0
             else:
-                return len(self.search_queue_for_jobid(job_id=job_id)) >0
+                return len(self.search_queue_for_jobid(job_id=job_id)) > 0
         else:
             raise ValueError("Please provide either the job_name or the job_id!")
 
-    def kill_jobs(self, job_name:str=None, regex:bool=False, job_ids: Union[List[int], int]=None):
+    def kill_jobs(self, job_name: str = None, regex: bool = False, job_ids: Union[List[int], int] = None):
         """
             this function can be used to terminate or remove pending jobs from the queue.
         Parameters
@@ -182,7 +208,6 @@ class _SubmissionSystem:
 
         """
         raise NotImplementedError("kill_jobs is not implemented for: " + self.__class__.__name__)
-
 
     @property
     def nmpi(self) -> int:

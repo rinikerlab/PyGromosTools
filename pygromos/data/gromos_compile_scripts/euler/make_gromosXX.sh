@@ -12,6 +12,5 @@ module load openblas/0.2.8_seq
 cd ${GXXPATH}
 mkdir LINUX
 cd LINUX
-make -j8 
+make -j8
 make install
-

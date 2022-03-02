@@ -2,25 +2,25 @@ TITLE
 File          : 2016H66_orga.mtb
 Force field   : 2016H66 (condensed-phase simulations)
 Reference     : B.A.C. Horta, P.T. Merz, P.F.J. Fuchs, J. Dolenc, S. Riniker & P.H. Hunenberger
-                A GROMOS-compatible force field for small organic molecules in the condensed 
+                A GROMOS-compatible force field for small organic molecules in the condensed
                 phase: The 2016H66 parameter set; J. Chem. Theory. Comput. 2016
 File content  : molecular topology building blocks (small organic molecules)
 Format        : GROMOS11
 Initial file  : BACH/Rio+PHH/Zuerich, May 2016
 Time stamp    : PHH, Sun May 29 09:54:41 CEST 2016
-Remark        : The force field 2016H66 was calibrated and validated for 57 organic liquids 
-                + 5 nucleic acid bases (see mtb file "_orga", which also contains the solvent cyclohexane); 
-                biomolecular files are also provided as described in the Appendix of Suppl Mat A of 
+Remark        : The force field 2016H66 was calibrated and validated for 57 organic liquids
+                + 5 nucleic acid bases (see mtb file "_orga", which also contains the solvent cyclohexane);
+                biomolecular files are also provided as described in the Appendix of Suppl Mat A of
                 the above reference (see also the headers of the individual mtb files); however
                 ************************************************************************************
                 ******    keep in mind that this biomolecular component has only undergone    ******
                 ******          preliminary tests and not yet a thorough validation!          ******
                 ************************************************************************************
-Remark        : make_top must recognize negative dihedral-angle type codes in patches, 
-                which indicate that, if present, an existing dihedral angle with the given type 
+Remark        : make_top must recognize negative dihedral-angle type codes in patches,
+                which indicate that, if present, an existing dihedral angle with the given type
                 code must be removed (used in HO2C, HO3C, HO4C, HO6C and C1OH patches for
-                carbohydrates to delete existing T2 or T6/T7 dihedrals assuming a OC instead of 
-                a OH); for this reason 
+                carbohydrates to delete existing T2 or T6/T7 dihedrals assuming a OC instead of
+                a OH); for this reason
                 ************************************************************************************
                 ****** topologies must be built using a make_top version of June 2012 or later *****
                 ************************************************************************************
@@ -43,8 +43,8 @@ END
 # ----- Auxiliary mtb file: small organic molecules
 #       This file contains 63 blocks
 #
-# These are molecules relevant for the parametrization and calibration of 
-# 2016H66 in Horta et al. 2016 (the 2016H66 article), namely: one solvent 
+# These are molecules relevant for the parametrization and calibration of
+# 2016H66 in Horta et al. 2016 (the 2016H66 article), namely: one solvent
 # (CHE, used for solvation free-energy calculations), 57 organic liquids
 # and 5 methylated nucleic-acid bases.
 #

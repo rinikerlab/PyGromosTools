@@ -8,15 +8,29 @@ from pygromos.utils.utils import time_wait_s_for_filesystem
 
 class DUMMY(_SubmissionSystem):
     """DUMMY
-        This SubmissionSystem is for testing submission systems. It basically prints everything out.
+    This SubmissionSystem is for testing submission systems. It basically prints everything out.
     """
 
-    def __init__(self, verbose: bool = False, nomp: int = 1, nmpi: int = 1, job_duration: str = "24:00",
-                 submission: bool = True, enviroment=None):
-        time_wait_s_for_filesystem=0
-        super().__init__(verbose=verbose, nmpi=nmpi, nomp=nomp, job_duration=job_duration, submission=submission, enviroment=enviroment)
+    def __init__(
+        self,
+        verbose: bool = False,
+        nomp: int = 1,
+        nmpi: int = 1,
+        job_duration: str = "24:00",
+        submission: bool = True,
+        enviroment=None,
+    ):
+        time_wait_s_for_filesystem = 0
+        super().__init__(
+            verbose=verbose,
+            nmpi=nmpi,
+            nomp=nomp,
+            job_duration=job_duration,
+            submission=submission,
+            enviroment=enviroment,
+        )
 
-    def submit_to_queue(self, sub_job:Submission_job) -> Union[int, None]:
+    def submit_to_queue(self, sub_job: Submission_job) -> Union[int, None]:
         """submit_to_queue
             This function submits a str command to the submission system.
 
@@ -31,14 +45,14 @@ class DUMMY(_SubmissionSystem):
             if a job was submitted the jobID is returned else None.
 
         """
-        if (self.submission):
+        if self.submission:
             print("\n", sub_job.command, "\n")
             return 0
         else:
-            print('did not submit')
+            print("did not submit")
             return None
 
-    def submit_jobAarray_to_queue(self, sub_job:Submission_job) -> Union[int, None]:
+    def submit_jobAarray_to_queue(self, sub_job: Submission_job) -> Union[int, None]:
         """submit_jobAarray_to_queue
             this function is submitting
         Parameters
@@ -52,14 +66,14 @@ class DUMMY(_SubmissionSystem):
             if a job was submitted the jobID is returned else None.
 
         """
-        if (self.submission):
+        if self.submission:
             print()
             for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                 print("Job " + str(jobID) + ":", sub_job.command, "\n")
             print()
             return 0
         else:
-            print('did not submit')
+            print("did not submit")
             return None
 
     def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
@@ -77,7 +91,8 @@ class DUMMY(_SubmissionSystem):
         List[int]
             output contains all ids of fitting jobs to the querry
         """
-        if (self.verbose): print("Retrieving jobs from list with: ", job_text)
+        if self.verbose:
+            print("Retrieving jobs from list with: ", job_text)
         warnings.warn("Queue search was called, but no queue present!")
         return []
 
@@ -96,6 +111,7 @@ class DUMMY(_SubmissionSystem):
         List[str]
             the output of the queue containing the jobname
         """
-        if (self.verbose): print("Searching job Name: ", job_name)
+        if self.verbose:
+            print("Searching job Name: ", job_name)
         warnings.warn("Queue search was called, but no queue present!")
         return []

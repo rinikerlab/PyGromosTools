@@ -1,6 +1,6 @@
 TITLE
 Reduced topology based on /home/bschroed/code/scripts/test/testfile/ptp/com_eds_6ligs.top
-using atoms 5:1-35 
+using atoms 5:1-35
 END
 PHYSICALCONSTANTS
 # FPEPSI: 1.0/(4.0*PI*EPS0) (EPS0 is the permittivity of vacuum)
