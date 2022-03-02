@@ -135,7 +135,7 @@ class Solvation_free_energy_calculation:
                     Forcefield=forcefield,
                     adapt_imd_automatically=False,
                 )
-            elif system_name is not "dummy":
+            elif system_name != "dummy":
                 self.groSys_liq = Gromos_System(
                     system_name="ff2_" + system_name,
                     work_folder=work_folder,
