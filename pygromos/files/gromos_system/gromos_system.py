@@ -35,7 +35,7 @@ from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.gromos import GromosXX, GromosPP, gromosXX
+from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
 import pickle, io

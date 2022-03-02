@@ -62,6 +62,7 @@ class Trc(mdtraj.Trajectory):
             self._step = step
         else:
             super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+
     def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)
 
@@ -103,9 +104,8 @@ class Trc(mdtraj.Trajectory):
 
         return xyz, step, time
 
-
     @property
-    def step(self)->np.array:
+    def step(self) -> np.array:
         return self._step
 
     rmsd = lambda self, x: mdtraj.rmsd(self, self, x)
@@ -153,10 +153,10 @@ class Trc(mdtraj.Trajectory):
 
     @property
     def view(self, re_create: bool = False) -> nj.NGLWidget:
-        if not hasattr(self, '_view') or not isinstance(self._view, nj.NGLWidget) or re_create:
+        if not hasattr(self, "_view") or not isinstance(self._view, nj.NGLWidget) or re_create:
             self._view = nj.show_mdtraj(self)
             self.view.clear_representations()
-            self.view.add_representation('licorice',selection=all)
+            self.view.add_representation("licorice", selection="all")
         return self._view
 
     def recreate_view(self) -> nj.NGLWidget:
