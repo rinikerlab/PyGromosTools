@@ -126,14 +126,33 @@ class Solvation_free_energy_calculation:
         if type(input_system) is Gromos_System:
             self.groSys_liq = input_system
         elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
-            self.groSys_liq = Gromos_System(
-                system_name="ff2_" + input_system,
-                work_folder=work_folder,
-                in_smiles=input_system,
-                auto_convert=True,
-                Forcefield=forcefield,
-                adapt_imd_automatically=False,
-            )
+            if type(input_system) is str:
+                self.groSys_liq = Gromos_System(
+                    system_name="ff2_" + input_system,
+                    work_folder=work_folder,
+                    in_smiles=input_system,
+                    auto_convert=True,
+                    Forcefield=forcefield,
+                    adapt_imd_automatically=False,
+                )
+            elif system_name is not "dummy":
+                self.groSys_liq = Gromos_System(
+                    system_name="ff2_" + system_name,
+                    work_folder=work_folder,
+                    in_rdmol=input_system,
+                    auto_convert=True,
+                    Forcefield=forcefield,
+                    adapt_imd_automatically=False,
+                )
+            else:
+                self.groSys_liq = Gromos_System(
+                    system_name="ff2_" + Chem.MolToSmiles(input_system),
+                    work_folder=work_folder,
+                    in_rdmol=input_system,
+                    auto_convert=True,
+                    Forcefield=forcefield,
+                    adapt_imd_automatically=False,
+                )
 
             if provided_topo:
                 self.groSys_liq.top = Top(provided_topo)
