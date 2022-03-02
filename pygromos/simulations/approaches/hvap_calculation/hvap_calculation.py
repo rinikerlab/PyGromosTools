@@ -70,6 +70,10 @@ class Hvap_calculation:
                 in_imd_path=hvap_input_files.imd_hvap_gas_sd,
                 verbose=verbose,
             )
+        if gromosXX is not None:
+            self.groSys_gas.gromosXX = gromosXX
+        if gromosPP is not None:
+            self.groSys_gas.gromosPP = gromosPP
 
         self.work_folder = work_folder
         self.system_name = system_name

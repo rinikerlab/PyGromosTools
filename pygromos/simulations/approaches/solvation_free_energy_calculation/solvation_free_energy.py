@@ -170,6 +170,11 @@ class Solvation_free_energy_calculation:
                 self.groSys_liq._top = top
                 self.groSys_liq.rebase_files()
 
+        if gromosXX is not None:
+            self.groSys_liq.gromosXX = gromosXX
+        if gromosPP is not None:
+            self.groSys_liq.gromosPP = gromosPP
+
         self.work_folder = work_folder
         self.system_name = system_name
 
