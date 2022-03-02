@@ -125,7 +125,7 @@ SOLUTEATOM
 											21	24	26
 										4	16	19	22	27
 	6	1	C7	64	12.011	0.54	1	6	7	8	9	16	18	20
-										
+
 										5	10	14	17	21	26
 	7	1	O1	62	15.9994	-0.557	1	1	8
 										3	9	16	20
@@ -136,7 +136,7 @@ SOLUTEATOM
 											19	20
 										3	13	17	21
 	10	1	C3	64	12.011	-0.106	1	6	11	12	13	14	16	18
-										
+
 										3	15	19	20
 	11	1	H3	20	1.008	0.128	1	1	12
 										3	13	14	18
@@ -3313,7 +3313,7 @@ PRESSUREGROUPS
 27
 END
 LJEXCEPTIONS
-# This block defines special LJ-interactions based on atom numbers 
+# This block defines special LJ-interactions based on atom numbers
 # This overrules the normal LJ-parameters (including 1-4 interactions)
 # 	 NEX: number of exceptions
  	 0

@@ -10,7 +10,6 @@ from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import coord_blocks as blocks
 
 
-
 class Position_Restraints(Cnf):
     """
     This class is a representation of the gromos .cnf coordinate files. It
@@ -18,8 +17,9 @@ class Position_Restraints(Cnf):
 
     is a child of general_gromos_file
     """
-    _future_file:bool
-    path:str
+
+    _future_file: bool
+    path: str
 
     # general
     _gromos_file_ending: str = "pos"
@@ -31,16 +31,23 @@ class Position_Restraints(Cnf):
     LATTICESHIFTS: blocks.LATTICESHIFTS = None
 
     # private
-    _block_order: List[str] = ["TITLE", "POSRESSPEC", ]
+    _block_order: List[str] = [
+        "TITLE",
+        "POSRESSPEC",
+    ]
     _required_blocks: List[str] = ["TITLE", "POSRESSPEC"]
-    _main_block:str = "POSRESSPEC"
+    _main_block: str = "POSRESSPEC"
 
-    def __init__(self, in_value: (str or dict or None or __class__ or Cnf),
-                 clean_resiNumbers_by_Name=False,
-                 verbose: bool = False, _future_file: bool = False):
-        if(isinstance(in_value, Cnf)):
+    def __init__(
+        self,
+        in_value: (str or dict or None or __class__ or Cnf),
+        clean_resiNumbers_by_Name=False,
+        verbose: bool = False,
+        _future_file: bool = False,
+    ):
+        if isinstance(in_value, Cnf):
             for block in self._block_order:
-                if(hasattr(in_value, block)):
+                if hasattr(in_value, block):
                     setattr(self, block, getattr(in_value, block))
             self.POSRESSPEC = blocks.POSRESSPEC(in_value.POSITION.block_to_string().split("\n")[1:-2])
             self.path = None

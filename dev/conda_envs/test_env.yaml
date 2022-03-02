@@ -1,4 +1,4 @@
-name: test
+name: pygromosTest
 channels:
   - conda-forge
   - defaults
@@ -6,25 +6,27 @@ dependencies:
   # Base depends
   - python
   - pip
-  # Testing
+  ## Testing
   - pytest
   - pytest-cov
   - codecov
-  #meta
+  ## Meta
   - typing
-  - tqdm
-  - ipywidgets
-  #science
-  - openff-toolkit = 0.10.0
+  - pre-commit
+  # Science
+  - mpmath
   - pandas
   - pytables
   - numpy
   - sympy
   - scipy
+  ## Chemie
+  - openff-toolkit = 0.10.0
+  - mdtraj
   - rdkit
   - mpmath
   - mdtraj
  ##Visualization
   - matplotlib
-  - py3dmol
+  - py3dmol #to be removed!
   - nglview

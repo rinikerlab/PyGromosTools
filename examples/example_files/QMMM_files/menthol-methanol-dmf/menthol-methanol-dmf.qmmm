@@ -1,9 +1,9 @@
 TITLE
 Custom file header
-	 >>> Generated with PyGromosTools (riniker group) <<< 
+	 >>> Generated with PyGromosTools (riniker group) <<<
 END
 QMUNIT
-# QLGL           QEGE           QCGC           QIGI           
+# QLGL           QEGE           QCGC           QIGI
 0.052918 	 2625.5 	 1.0 	 0.1
 END
 QMZONE

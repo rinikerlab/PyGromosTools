@@ -4,7 +4,7 @@ TITLE
 	 >>> line_seperator: '\n'	 field_seperator: '\t'	 comments_char: '#'
 END
 POSITION
-# 	 
+#
     1 C6H12 C          1    0.031454077   -0.138633698   -0.031186310
     1 C6H12 C          2    0.146024827   -0.035758228   -0.022023962
     1 C6H12 C          3    0.098046543    0.106921880    0.011654682

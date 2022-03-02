@@ -1,10 +1,9 @@
-
 from pygromos.files.blocks._general_blocks import TITLE, TIMESTEP, TRAJ
 
 # forward declarations
-TITLE:TITLE = TITLE
-TIMESTEP:TIMESTEP = TIMESTEP
-TRAJ:TRAJ = TRAJ
+TITLE: TITLE = TITLE
+TIMESTEP: TIMESTEP = TIMESTEP
+TRAJ: TRAJ = TRAJ
 
 """
 This was an Idea!
@@ -44,5 +43,5 @@ class ENEANAVARS(_generic_gromos_block):
         return result
 
     pass
-    
+
 """

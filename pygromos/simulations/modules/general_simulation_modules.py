@@ -20,12 +20,24 @@ from pygromos.utils import bash, utils
 from pygromos.utils.utils import spacer as spacer, time_wait_s_for_filesystem
 
 
-def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:str=None,
-               step_name:str="sim", in_imd_path:str = None,
-               submission_system:_SubmissionSystem=LOCAL(), simulation_runs:int=1, equilibration_runs:int = 0,
-               previous_simulation_run:int=None, force_simulation:bool=False, initialize_first_run= False, reinitialize_every_run= False,
-               analysis_script:callable = simulation_analysis.do, analysis_control_dict:dict = None,
-               verbose:bool = True, verbose_lvl:int=1, _template_imd_path:str=None) -> Gromos_System:
+def simulation(
+    in_gromos_simulation_system: Gromos_System,
+    override_project_dir: str = None,
+    step_name: str = "sim",
+    in_imd_path: str = None,
+    submission_system: _SubmissionSystem = LOCAL(),
+    simulation_runs: int = 1,
+    equilibration_runs: int = 0,
+    previous_simulation_run: int = None,
+    force_simulation: bool = False,
+    initialize_first_run=False,
+    reinitialize_every_run=False,
+    analysis_script: callable = simulation_analysis.do,
+    analysis_control_dict: dict = None,
+    verbose: bool = True,
+    verbose_lvl: int = 1,
+    _template_imd_path: str = None,
+) -> Gromos_System:
     """
         This function is a generic simulation block, that can be used to run and schedule simulations.
 
@@ -65,13 +77,13 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
     Gromos_System,
         returns a new gromos system which is containing the simulation info
     """
-    #PREPERATIONS
+    # PREPERATIONS
     try:
         try:
             gromos_system = deepcopy(in_gromos_simulation_system)
 
-            #check if override dir is given and set project to correct location
-            if(not override_project_dir is None):
+            # check if override dir is given and set project to correct location
+            if not override_project_dir is None:
                 init_work_folder = override_project_dir
                 step_dir = override_project_dir + "/" + step_name
             else:
@@ -88,16 +100,19 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             gromos_system.work_folder = out_input_dir
             gromos_system.name = step_name
 
-            if(not in_imd_path is None):
+            if not in_imd_path is None:
                 gromos_system.imd = in_imd_path
-            elif(hasattr(gromos_system.imd, "TITLE")):
+            elif hasattr(gromos_system.imd, "TITLE"):
                 pass
-            elif(not _template_imd_path is None):
-                if(verbose): warnings.warn("Template_imd_path was used: "+_template_imd_path)
+            elif not _template_imd_path is None:
+                if verbose:
+                    warnings.warn("Template_imd_path was used: " + _template_imd_path)
                 gromos_system.imd = _template_imd_path
                 gromos_system.prepare_for_simulation()
             else:
-                raise ValueError("Could not find any .imd path (gromos system has no imd, in_imd_path not given and also no _template_imd_path!)")
+                raise ValueError(
+                    "Could not find any .imd path (gromos system has no imd, in_imd_path not given and also no _template_imd_path!)"
+                )
 
             out_analysis_cnf = out_analysis_dir + "/data/" + gromos_system.name + ".cnf"
 
@@ -106,32 +121,40 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
                 print(step_name)
                 print(spacer)
 
-            #Write out, all non promised files
+            # Write out, all non promised files
             gromos_system.rebase_files()
 
-            #Write Out Ana Script
+            # Write Out Ana Script
             in_analysis_control_dict = analysis_control_dict
-            n_analysis_processors = 1 #Maybe in the future: 5 if(nmpi>5) else 1
+            n_analysis_processors = 1  # Maybe in the future: 5 if(nmpi>5) else 1
         except Exception as err:
             raise Exception("Could not prepare the gromos System\n\t" + "\n\t".join(map(str, err.args)))
         # do
-        if(analysis_script is not None):
-            analysis_control_dict = simulation_analysis.template_control_dict if (in_analysis_control_dict is None) else in_analysis_control_dict
+        if analysis_script is not None:
+            analysis_control_dict = (
+                simulation_analysis.template_control_dict
+                if (in_analysis_control_dict is None)
+                else in_analysis_control_dict
+            )
 
-            analysis_vars = OrderedDict({
-                "in_simulation_dir": out_simulation_dir,
-                "sim_prefix": gromos_system.name,
-                "out_analysis_dir": out_analysis_dir,
-                "gromosPP_bin_dir": gromos_system.gromosPP._bin,
-                "control_dict": analysis_control_dict,
-                "n_processes": n_analysis_processors,
-                "verbose": verbose,
-                "verbose_lvl": verbose_lvl
-            })
+            analysis_vars = OrderedDict(
+                {
+                    "in_simulation_dir": out_simulation_dir,
+                    "sim_prefix": gromos_system.name,
+                    "out_analysis_dir": out_analysis_dir,
+                    "gromosPP_bin_dir": gromos_system.gromosPP._bin,
+                    "control_dict": analysis_control_dict,
+                    "n_processes": n_analysis_processors,
+                    "verbose": verbose,
+                    "verbose_lvl": verbose_lvl,
+                }
+            )
             try:
-                in_analysis_script_path = utils.write_job_script(out_script_path=step_dir + "/job_analysis.py",
-                                                                 target_function=analysis_script,
-                                                                 variable_dict=analysis_vars)
+                in_analysis_script_path = utils.write_job_script(
+                    out_script_path=step_dir + "/job_analysis.py",
+                    target_function=analysis_script,
+                    variable_dict=analysis_vars,
+                )
             except Exception as err:
                 raise Exception("Could not prepare the analysis script\n\t" + "\n\t".join(map(str, err.args)))
         else:
@@ -139,49 +162,60 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
 
         ##Write Out schedulling Script
         ###Build analysis_script
-        MD_job_vars = OrderedDict({
-            "in_simSystem": gromos_system,
-            "out_dir_path": out_simulation_dir,
-            "simulation_run_num": simulation_runs,
-            "equilibration_run_num": equilibration_runs,
-            "submission_system": submission_system,
-            "analysis_script_path": in_analysis_script_path,
-            "initialize_first_run": initialize_first_run,
-            "reinitialize_every_run": reinitialize_every_run,
-            "verbose": verbose,
-            "verbose_lvl": verbose_lvl
-        })
+        MD_job_vars = OrderedDict(
+            {
+                "in_simSystem": gromos_system,
+                "out_dir_path": out_simulation_dir,
+                "simulation_run_num": simulation_runs,
+                "equilibration_run_num": equilibration_runs,
+                "submission_system": submission_system,
+                "analysis_script_path": in_analysis_script_path,
+                "initialize_first_run": initialize_first_run,
+                "reinitialize_every_run": reinitialize_every_run,
+                "verbose": verbose,
+                "verbose_lvl": verbose_lvl,
+            }
+        )
         try:
-            in_scheduler_script_path = utils.write_job_script(out_script_path=step_dir + "/schedule_MD_job.py",
-                                                              target_function=simulation_scheduler.do,
-                                                              variable_dict=MD_job_vars)
+            in_scheduler_script_path = utils.write_job_script(
+                out_script_path=step_dir + "/schedule_MD_job.py",
+                target_function=simulation_scheduler.do,
+                variable_dict=MD_job_vars,
+            )
         except Exception as err:
             raise Exception("Could not prepare the scheduling script\n\t" + "\n\t".join(map(str, err.args)))
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
-        raise Exception("Could not prepare the command block\n\t"+"\n\t".join(map(str, err.args)))
+        raise Exception("Could not prepare the command block\n\t" + "\n\t".join(map(str, err.args)))
 
     ##schedule
     try:
-        if((os.path.exists(out_analysis_cnf) and os.path.exists(out_simulation_dir+".tar")) and not force_simulation):
+        if (os.path.exists(out_analysis_cnf) and os.path.exists(out_simulation_dir + ".tar")) and not force_simulation:
             if verbose:
-                print(utils.spacer2+"FOUND RESULT: "+out_analysis_cnf+"\n GOING TO SKIPT THIS SUBMISSION!")
-            #warnings.warn("Skipping active submission, as result CNF was found: \n"+out_analysis_cnf)
+                print(utils.spacer2 + "FOUND RESULT: " + out_analysis_cnf + "\n GOING TO SKIPT THIS SUBMISSION!")
+            # warnings.warn("Skipping active submission, as result CNF was found: \n"+out_analysis_cnf)
             last_jobID = 0
         else:
-            last_jobID = simulation_scheduler.do(in_simSystem=gromos_system, out_dir_path=out_simulation_dir,
-                                                 simulation_run_num=simulation_runs, equilibration_run_num=equilibration_runs,
-                                                 submission_system=submission_system, previous_job_ID=previous_simulation_run,
-                                                 initialize_first_run= initialize_first_run, reinitialize_every_run= reinitialize_every_run,
-                                                 analysis_script_path=in_analysis_script_path, verbose=verbose, verbose_lvl=verbose_lvl)
+            last_jobID = simulation_scheduler.do(
+                in_simSystem=gromos_system,
+                out_dir_path=out_simulation_dir,
+                simulation_run_num=simulation_runs,
+                equilibration_run_num=equilibration_runs,
+                submission_system=submission_system,
+                previous_job_ID=previous_simulation_run,
+                initialize_first_run=initialize_first_run,
+                reinitialize_every_run=reinitialize_every_run,
+                analysis_script_path=in_analysis_script_path,
+                verbose=verbose,
+                verbose_lvl=verbose_lvl,
+            )
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
-        raise Exception("Could not submit the commands\n\t"+"\n\t".join(map(str, err.args)))
-
+        raise Exception("Could not submit the commands\n\t" + "\n\t".join(map(str, err.args)))
 
     time.sleep(time_wait_s_for_filesystem)
     # Return the promise final system
-    if(os.path.exists(out_analysis_cnf)):
+    if os.path.exists(out_analysis_cnf):
         gromos_system.cnf = cnf.Cnf(out_analysis_cnf)
     else:
         gromos_system.cnf = cnf.Cnf(in_value=None)
@@ -189,9 +223,9 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
         gromos_system.cnf.path = out_analysis_dir + "/data/" + gromos_system.name + ".cnf"
 
     # Return trajectories if available
-    if(hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWX > 0):
+    if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWX > 0:
         final_trc_file = out_analysis_dir + "/data/" + gromos_system.name + ".trc"
-        if os.path.exists(final_trc_file+".h5"):
+        if os.path.exists(final_trc_file + ".h5"):
             gromos_system.trc = Trc(input_value=final_trc_file + ".h5")
         elif os.path.exists(final_trc_file):
             gromos_system.trc = Trc(input_value=final_trc_file)
@@ -200,9 +234,9 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             gromos_system.trc._future_file = True
             gromos_system.trc.path = final_trc_file
 
-    if(hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWE > 0):
+    if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWE > 0:
         final_tre_file = out_analysis_dir + "/data/" + gromos_system.name + ".tre"
-        if os.path.exists(final_tre_file+".h5"):
+        if os.path.exists(final_tre_file + ".h5"):
             gromos_system.tre = Tre(input_value=final_tre_file + ".h5")
         elif os.path.exists(final_tre_file):
             gromos_system.tre = Tre(input_value=final_tre_file)
@@ -211,9 +245,9 @@ def simulation(in_gromos_simulation_system:Gromos_System, override_project_dir:s
             gromos_system.tre._future_file = True
             gromos_system.tre.path = final_tre_file
 
-    if(hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWG > 0):
+    if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWG > 0:
         final_trg_file = out_analysis_dir + "/data/" + gromos_system.name + ".trg"
-        if os.path.exists(final_trg_file+".h5"):
+        if os.path.exists(final_trg_file + ".h5"):
             gromos_system.trg = Trg(input_value=final_trg_file + ".h5")
         elif os.path.exists(final_trg_file):
             gromos_system.trg = Trg(input_value=final_trg_file)
