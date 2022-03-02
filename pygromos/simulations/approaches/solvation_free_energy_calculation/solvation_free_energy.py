@@ -139,7 +139,7 @@ class Solvation_free_energy_calculation:
                 self.groSys_liq = Gromos_System(
                     system_name="ff2_" + system_name,
                     work_folder=work_folder,
-                    in_rdmol=input_system,
+                    rdkitMol=input_system,
                     auto_convert=True,
                     Forcefield=forcefield,
                     adapt_imd_automatically=False,
@@ -148,7 +148,7 @@ class Solvation_free_energy_calculation:
                 self.groSys_liq = Gromos_System(
                     system_name="ff2_" + Chem.MolToSmiles(input_system),
                     work_folder=work_folder,
-                    in_rdmol=input_system,
+                    rdkitMol=input_system,
                     auto_convert=True,
                     Forcefield=forcefield,
                     adapt_imd_automatically=False,
