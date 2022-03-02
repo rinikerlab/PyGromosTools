@@ -42,25 +42,13 @@ class _Gromos(compiledProgram._compiled_programm):
             ["\t" + x for x in dir(self) if (not x.startswith("_") and callable(getattr(self, x)))]
         )
         self.__doc__ = self.__doc__ + functions_text
-
-        self._bin = self._check_binary_dir(in_bin_dir=gromosXX_bin_dir, test_programm="md")
+        self._bin = self._check_binary_dir_constructor(in_bin_dir=gromosXX_bin_dir)
 
     def __str__(self):
         return self.__doc__
 
     def __repr__(self):
         return self.__str__()
-
-    @property
-    def bin(self) -> Union[str, None]:
-        if not hasattr(self, "_bin") or self._bin == "":
-            return None
-        else:
-            return self._bin
-
-    @bin.setter
-    def bin(self, in_bin_dir: str):
-        self._bin = self._check_binary_dir(in_bin_dir=gromosXX_bin_dir, test_programm="md")
 
     """
         GromosXX Programms

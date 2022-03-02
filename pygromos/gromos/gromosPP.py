@@ -49,32 +49,13 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         )
         self.__doc__ = self.__doc__ + functions_text
 
-        self._bin = self._check_binary_dir(in_bin_dir=gromosPP_bin_dir, test_programm="pdb2g96")
-
-        try:
-            self.make_top(
-                out_top_path=os.devnull, in_building_block_lib_path=mtb, in_parameter_lib_path=ifp, in_sequence="CH4"
-            )
-            self._isValid = True
-        except:
-            self._isValid = False
+        self._bin = self._check_binary_dir_constructor(in_bin_dir=gromosPP_bin_dir)
 
     def __str__(self):
         return self.__doc__
 
     def __repr__(self):
         return self.__str__()
-
-    @property
-    def bin(self) -> Union[str, None]:
-        if not hasattr(self, "_bin") or self._bin == "":
-            return None
-        else:
-            return self._bin
-
-    @bin.setter
-    def bin(self, in_bin_dir: str):
-        self._bin = self._check_binary_dir(in_bin_dir=in_bin_dir, test_programm="pdb2g96")
 
     """
         GromosPP Programms
