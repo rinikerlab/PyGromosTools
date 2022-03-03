@@ -7,8 +7,8 @@ from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterab
 class mtb_blocks(_generic_gromos_block):
     def __init__(self, name: str = None, used: bool = None, content: str = None):
         super().__init__(name, used, content)
-        self.field_seperator = "  "
-        self.line_seperator = " \n"
+        self.field_separator = "  "
+        self.line_separator = " \n"
         self.field_continue_next_line = "\n\t\t\t\t\t\t\t\t\t\t"
 
 
@@ -33,21 +33,22 @@ class mtb_atoms_field(mtb_fields):
 
     def to_string(self) -> str:
         return_str = ""
-        return_str += self.fieldseperator + str(self.ATOM)
-        return_str += self.fieldseperator + self.ANM
-        return_str += self.fieldseperator + str(self.IACM)
-        return_str += self.fieldseperator + str(self.MASS)
+        return_str += str(self.ATOM).rjust(6) + " "
+        return_str += self.ANM.rjust(6) + " "
+        return_str += str(self.IACM).rjust(6) + " "
+        return_str += str(self.MASS).rjust(6) + " "
         # return_str += self.fieldseperator + str(self.CGMI)
-        return_str += self.fieldseperator + "{:.5f}".format(self.CGMI)
-        return_str += self.fieldseperator + str(self.CGM)
-        return_str += self.fieldseperator + str(self.MAE)
+        return_str += "{:.5f}".format(self.CGMI).rjust(10) + " "
+        return_str += str(self.CGM).rjust(4) + " "
+        return_str += str(self.MAE).rjust(4) + " "
         lcounter = 0
         temp_MSAE = len(self.MSAE)
         for iter in self.MSAE:
             return_str += self.fieldseperator + str(iter).strip()
             lcounter += 1
             if (lcounter % 6) == 0 and temp_MSAE > 6:
-                return_str += self.field_continue_next_line
+                return_str += self.lineseperator
+                return_str += 49 * " "
                 temp_MSAE -= 6
         return_str += self.lineseperator
         return return_str
@@ -229,13 +230,20 @@ class MTBUILDBLSOLUTE(mtb_blocks):
         self.dihedrals = []
         self.lj_exceptions = []
 
-        # first line
-        first_line = content[0].split()
-        self.filename = first_line[1]
-        self.residuecode = first_line[3]
-        self.function = first_line[4]
-        self.type = first_line[6]
-        self.fullname = first_line[8]
+        # first line, check if information on solute type is available
+        if "@BLOCKTYPE" in content[0]:
+            first_line = content[0].split()
+            self.filename = first_line[1]
+            self.residuecode = first_line[3]
+            self.function = first_line[4]
+            self.type = first_line[6]
+            self.fullname = first_line[8]
+        else:
+            self.filename = None
+            self.residuecode = None
+            self.function = None
+            self.type = None
+            self.fullname = None
 
         itr = 1
         while itr < len(content):
@@ -534,78 +542,88 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                 itr += 1
 
     def block_to_string(self) -> str:
-        result = "MTBUILDBLSOLUTE" + self.line_seperator
-        result += (
-            "#@BLOCKTYPE "
-            + self.filename
-            + " BLK "
-            + self.residuecode
-            + " "
-            + self.function
-            + " TYPE "
-            + self.type
-            + " NAME "
-            + self.fullname
-            + self.line_seperator
-        )
-        result += "# building block" + self.line_seperator
+        result = "MTBUILDBLSOLUTE" + self.line_separator
+        if not [x for x in (self.filename, self.residuecode, self.function, self.type, self.fullname) if x is None]:
+            result += (
+                "# @BLOCKTYPE "
+                + self.filename
+                + " BLK "
+                + self.residuecode
+                + " "
+                + self.function
+                + " TYPE "
+                + self.type
+                + " NAME "
+                + self.fullname
+                + self.line_separator
+            )
+            result += "# building block" + self.line_separator
 
-        result += "# RNME" + self.line_seperator
-        result += self.RNME + self.line_seperator
-        result += "# number of atoms, number of preceding exclusions" + self.line_seperator
-        result += "# NMAT NLIN" + self.line_seperator
-        result += str(self.NMAT) + self.field_seperator + str(self.NLIN) + self.line_seperator
-        result += "# preceding exclusions" + self.line_seperator
-        result += "#ATOM                               MAE MSAE" + self.line_seperator
+        atom_s = "ATOM".rjust(4)
+        anm_s = "ANM".rjust(6)
+        iacm_s = "IACM".rjust(6)
+        mass_s = "MASS".rjust(6)
+        cgm_s = "CGM".ljust(7)
+        icgm_s = "ICGM".rjust(4)
+        mae_s = "MAE".rjust(4)
+        msae_s = "MSAE"
+
+        result += "# RNME" + self.line_separator
+        result += self.RNME + self.line_separator
+        result += "# number of atoms, number of preceding exclusions" + self.line_separator
+        result += "# NMAT NLIN" + self.line_separator
+        result += str(self.NMAT) + self.field_separator + str(self.NLIN) + self.line_separator
+        result += "# preceding exclusions" + self.line_separator
+        result += "# ATOM                               MAE MSAE" + self.line_separator
         for pre in self.preceding_exclusions:
             result += pre.to_string()
-        result += "# atoms" + self.line_seperator
-        result += "#ATOM ANM  IACM MASS        CGMICGM MAE MSAE" + self.line_seperator
+        result += "# atoms" + self.line_separator
+        result += f"# {atom_s} {anm_s} {iacm_s} {mass_s}    {cgm_s} {icgm_s} {mae_s}   {msae_s}" + self.line_separator
         for atom in self.atoms:
             result += atom.to_string()
 
-        result += "# trailing atoms" + self.line_seperator
-        result += "#ATOM ANM  IACM MASS        CGMICGM" + self.line_seperator
+        result += "# trailing atoms" + self.line_separator
+        result += f"# ATOM ANM  IACM MASS        CGM ICGM" + self.line_separator
         for trailing_atom in self.trailing_atoms:
             result += trailing_atom.to_string()
 
-        result += "# bonds" + self.line_seperator
-        result += "#NB" + self.line_seperator
-        result += str(self.NB) + self.line_seperator
-        result += "#  IB   JB  MCB" + self.line_seperator
+        result += "# bonds" + self.line_separator
+        result += "# NB" + self.line_separator
+        result += str(self.NB) + self.line_separator
+        result += "#  IB   JB  MCB" + self.line_separator
         for bond in self.bonds:
             result += bond.to_string()
 
-        result += "# angles" + self.line_seperator
-        result += "#NBA" + self.line_seperator
-        result += str(self.NBA) + self.line_seperator
-        result += "#  IB   JB   KB  MCB" + self.line_seperator
+        result += "# angles" + self.line_separator
+        result += "# NBA" + self.line_separator
+        result += str(self.NBA) + self.line_separator
+        result += "#  IB   JB   KB  MCB" + self.line_separator
         for angle in self.angles:
             result += angle.to_string()
 
-        result += "# improper dihedrals" + self.line_seperator
-        result += "#NIDA" + self.line_seperator
-        result += str(self.NIDA) + self.line_seperator
-        result += "#  IB   JB   KB   LB  MCB" + self.line_seperator
+        result += "# improper dihedrals" + self.line_separator
+        result += "# NIDA" + self.line_separator
+        result += str(self.NIDA) + self.line_separator
+        result += "#  IB   JB   KB   LB  MCB" + self.line_separator
         for dihedral in self.improper_dihedrals:
             result += dihedral.to_string()
 
-        result += "# dihedrals" + self.line_seperator
-        result += "#NDA" + self.line_seperator
-        result += str(self.NDA) + self.line_seperator
-        result += "#  IB   JB   KB   LB  MCB" + self.line_seperator
+        result += "# dihedrals" + self.line_separator
+        result += "# NDA" + self.line_separator
+        result += str(self.NDA) + self.line_separator
+        result += "#  IB   JB   KB   LB  MCB" + self.line_separator
         for dihedral in self.dihedrals:
             result += dihedral.to_string()
 
-        result += "# LJ exceptions" + self.line_seperator
-        result += "#NEX" + self.line_seperator
-        result += str(self.NEX) + self.line_seperator
-        result += "# IAC  JAC  MCB" + self.line_seperator
+        result += "# LJ exceptions" + self.line_separator
+        result += "# NEX" + self.line_separator
+        result += str(self.NEX) + self.line_separator
+        result += "# IAC  JAC  MCB" + self.line_separator
         for lj_exception in self.lj_exceptions:
             result += lj_exception.to_string()
 
-        result += "#@FREELINE" + self.line_seperator
-        result += "END" + self.line_seperator
+        result += "# @FREELINE" + self.line_separator
+        result += "END" + self.line_separator
         return result
 
 
@@ -626,12 +644,12 @@ class LINKEXCLUSIONS(mtb_blocks):
         self.NRNE = int(content[0].strip())
 
     def block_to_string(self) -> str:
-        result = "LINKEXCLUSIONS" + self.line_seperator
-        result += "# nearest neighbour exclusions when linking" + self.line_seperator
-        result += "#NRNE" + self.line_seperator
-        result += str(self.NRNE) + self.line_seperator
-        result += "#@FREELINE" + self.line_seperator
-        result += "END" + self.line_seperator
+        result = "LINKEXCLUSIONS" + self.line_separator
+        result += "# nearest neighbour exclusions when linking" + self.line_separator
+        result += "# NRNE" + self.line_separator
+        result += str(self.NRNE) + self.line_separator
+        result += "# @FREELINE" + self.line_separator
+        result += "END" + self.line_separator
         return result
 
 
@@ -652,13 +670,20 @@ class MTBUILDBLSOLVENT(mtb_blocks):
         self.atoms = []
         self.constraints = []
 
-        # first line
-        first_line = content[0].split()
-        self.filename = first_line[1]
-        self.residuecode = first_line[3]
-        self.function = first_line[4]
-        self.type = first_line[6]
-        self.fullname = first_line[8]
+        # first line, check if information on solute type is available
+        if "@BLOCKTYPE" in content[0]:
+            first_line = content[0].split()
+            self.filename = first_line[1]
+            self.residuecode = first_line[3]
+            self.function = first_line[4]
+            self.type = first_line[6]
+            self.fullname = first_line[8]
+        else:
+            self.filename = None
+            self.residuecode = None
+            self.function = None
+            self.type = None
+            self.fullname = None
 
         while content[0].startswith("#"):
             content = content[1:]
@@ -696,41 +721,42 @@ class MTBUILDBLSOLVENT(mtb_blocks):
                 content = content[1:]
 
     def block_to_string(self) -> str:
-        result = "MTBUILDBLSOLVENT" + self.line_seperator
-        result += (
-            "#@BLOCKTYPE "
-            + self.filename
-            + " BLK "
-            + self.residuecode
-            + " "
-            + self.function
-            + " TYPE "
-            + self.type
-            + " NAME "
-            + self.fullname
-            + self.line_seperator
-        )
-        result += "# solvent name" + self.line_seperator
-        result += "#RNMES" + self.line_seperator
-        result += str(self.RNMES) + self.line_seperator
+        result = "MTBUILDBLSOLVENT" + self.line_separator
+        if not [x for x in (self.filename, self.residuecode, self.function, self.type, self.fullname) if x is None]:
+            result += (
+                "# @BLOCKTYPE "
+                + self.filename
+                + " BLK "
+                + self.residuecode
+                + " "
+                + self.function
+                + " TYPE "
+                + self.type
+                + " NAME "
+                + self.fullname
+                + self.line_separator
+            )
+        result += "# solvent name" + self.line_separator
+        result += "# RNMES" + self.line_separator
+        result += str(self.RNMES) + self.line_separator
 
-        result += "# number of atoms" + self.line_seperator
-        result += str(self.number_of_atoms) + self.line_seperator
+        result += "# number of atoms" + self.line_separator
+        result += str(self.number_of_atoms) + self.line_separator
 
-        result += "# atoms" + self.line_seperator
-        result += "#ATOM ANM  IACM MASS        CG" + self.line_seperator
+        result += "# atoms" + self.line_separator
+        result += "# ATOM ANM  IACM MASS        CG" + self.line_separator
         for atom in self.atoms:
             result += atom.to_string()
 
-        result += "# number of constraints" + self.line_seperator
-        result += "# constraints" + self.line_seperator
-        result += str(self.number_of_constraints) + self.line_seperator
-        result += "#  IB   JB  LENGTH" + self.line_seperator
+        result += "# number of constraints" + self.line_separator
+        result += "# constraints" + self.line_separator
+        result += str(self.number_of_constraints) + self.line_separator
+        result += "#  IB   JB  LENGTH" + self.line_separator
         for constraint in self.constraints:
             result += constraint.to_string()
 
-        result += "#@FREELINE" + self.line_seperator
-        result += "END" + self.line_seperator
+        result += "# @FREELINE" + self.line_separator
+        result += "END" + self.line_separator
         return result
 
 
@@ -763,13 +789,20 @@ class MTBUILDBLEND(mtb_blocks):
         self.dihedrals = []
         self.lj_exceptions = []
 
-        # first line
-        first_line = content[0].split()
-        self.filename = first_line[1]
-        self.residuecode = first_line[3]
-        self.function = first_line[4]
-        self.type = first_line[6]
-        self.fullname = first_line[8]
+        # first line, check if information on solute type is available
+        if "@BLOCKTYPE" in content[0]:
+            first_line = content[0].split()
+            self.filename = first_line[1]
+            self.residuecode = first_line[3]
+            self.function = first_line[4]
+            self.type = first_line[6]
+            self.fullname = first_line[8]
+        else:
+            self.filename = None
+            self.residuecode = None
+            self.function = None
+            self.type = None
+            self.fullname = None
 
         itr = 1
         while itr < len(content):
@@ -1031,73 +1064,74 @@ class MTBUILDBLEND(mtb_blocks):
                 itr += 1
 
     def block_to_string(self) -> str:
-        result = "MTBUILDBLSOLUTE" + self.line_seperator
-        result += (
-            "#@BLOCKTYPE "
-            + self.filename
-            + " BLK "
-            + self.residuecode
-            + " "
-            + self.function
-            + " TYPE "
-            + self.type
-            + " NAME "
-            + self.fullname
-            + self.line_seperator
-        )
-        result += "# building block" + self.line_seperator
+        result = "MTBUILDBLSOLUTE" + self.line_separator
+        if not [x for x in (self.filename, self.residuecode, self.function, self.type, self.fullname) if x is None]:
+            result += (
+                "# @BLOCKTYPE "
+                + self.filename
+                + " BLK "
+                + self.residuecode
+                + " "
+                + self.function
+                + " TYPE "
+                + self.type
+                + " NAME "
+                + self.fullname
+                + self.line_separator
+            )
+            result += "# building block" + self.line_separator
 
-        result += "# RNME" + self.line_seperator
-        result += self.RNME + self.line_seperator
-        result += "# number of atoms, number of preceding exclusions" + self.line_seperator
-        result += "# NMAT NREP" + self.line_seperator
-        result += str(self.NMAT) + self.field_seperator + str(self.NREP) + self.line_seperator
-        result += "#ATOM                               MAE MSAE" + self.line_seperator
-        result += "# atoms" + self.line_seperator
-        result += "#ATOM ANM  IACM MASS        CGMICGM MAE MSAE" + self.line_seperator
+        result += "# RNME" + self.line_separator
+        result += self.RNME + self.line_separator
+        result += "# number of atoms, number of preceding exclusions" + self.line_separator
+        result += "# NMAT NREP" + self.line_separator
+        result += str(self.NMAT) + self.field_separator + str(self.NREP) + self.line_separator
+        result += "# ATOM                               MAE MSAE" + self.line_separator
+        result += "# atoms" + self.line_separator
+        result += "# ATOM ANM  IACM MASS        CGMICGM MAE MSAE" + self.line_separator
         for atom in self.atoms:
             result += atom.to_string()
 
-        result += "# replacing atoms" + self.line_seperator
-        result += "#ATOM ANM  IACM MASS        CGMICGM" + self.line_seperator
+        result += "# replacing atoms" + self.line_separator
+        result += "# ATOM ANM  IACM MASS        CGMICGM" + self.line_separator
         for atom in self.replacing_atoms:
             result += atom.to_string()
 
-        result += "# bonds" + self.line_seperator
-        result += "#NB" + self.line_seperator
-        result += str(self.NB) + self.line_seperator
-        result += "#  IB   JB  MCB" + self.line_seperator
+        result += "# bonds" + self.line_separator
+        result += "# NB" + self.line_separator
+        result += str(self.NB) + self.line_separator
+        result += "#  IB   JB  MCB" + self.line_separator
         for bond in self.bonds:
             result += bond.to_string()
 
-        result += "# angles" + self.line_seperator
-        result += "#NBA" + self.line_seperator
-        result += str(self.NBA) + self.line_seperator
-        result += "#  IB   JB   KB  MCB" + self.line_seperator
+        result += "# angles" + self.line_separator
+        result += "# NBA" + self.line_separator
+        result += str(self.NBA) + self.line_separator
+        result += "#  IB   JB   KB  MCB" + self.line_separator
         for angle in self.angles:
             result += angle.to_string()
 
-        result += "# improper dihedrals" + self.line_seperator
-        result += "#NIDA" + self.line_seperator
-        result += str(self.NIDA) + self.line_seperator
-        result += "#  IB   JB   KB   LB  MCB" + self.line_seperator
+        result += "# improper dihedrals" + self.line_separator
+        result += "# NIDA" + self.line_separator
+        result += str(self.NIDA) + self.line_separator
+        result += "#  IB   JB   KB   LB  MCB" + self.line_separator
         for dihedral in self.improper_dihedrals:
             result += dihedral.to_string()
 
-        result += "# dihedrals" + self.line_seperator
-        result += "#NDA" + self.line_seperator
-        result += str(self.NDA) + self.line_seperator
-        result += "#  IB   JB   KB   LB  MCB" + self.line_seperator
+        result += "# dihedrals" + self.line_separator
+        result += "# NDA" + self.line_separator
+        result += str(self.NDA) + self.line_separator
+        result += "#  IB   JB   KB   LB  MCB" + self.line_separator
         for dihedral in self.dihedrals:
             result += dihedral.to_string()
 
-        result += "# LJ exceptions" + self.line_seperator
-        result += "#NEX" + self.line_seperator
-        result += str(self.NEX) + self.line_seperator
-        result += "# IAC  JAC  MCB" + self.line_seperator
+        result += "# LJ exceptions" + self.line_separator
+        result += "# NEX" + self.line_separator
+        result += str(self.NEX) + self.line_separator
+        result += "# IAC  JAC  MCB" + self.line_separator
         for lj_exception in self.lj_exceptions:
             result += lj_exception.to_string()
 
-        result += "#@FREELINE" + self.line_seperator
-        result += "END" + self.line_seperator
+        result += "# @FREELINE" + self.line_separator
+        result += "END" + self.line_separator
         return result
