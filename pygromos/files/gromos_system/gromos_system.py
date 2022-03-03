@@ -66,6 +66,8 @@ skip = {
     "protein_info": cnf.protein_infos,
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
+    "_gromosPP": GromosPP,
+    "_gromosXX": GromosXX,
 }
 
 
