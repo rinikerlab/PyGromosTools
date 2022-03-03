@@ -2138,7 +2138,7 @@ class _topology_table_block(_iterable_topology_block):
     def _check_import_method(self, content: str = None):
         if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif isinstance(content, Iterable) and all([isinstance(x, type(self.table_line_type)) for x in content]):
+        elif isinstance(content, Iterable) and all([isinstance(x, self.table_line_type) for x in content]):
             self.content = content
         elif isinstance(content, str):
             self.read_content_from_str(content.split(self.line_seperator))
