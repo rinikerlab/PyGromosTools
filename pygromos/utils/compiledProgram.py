@@ -15,7 +15,7 @@ class _compiled_program:
     """
 
     _bin: str
-    _dont_check_bin: bool = False
+    _dont_check_bin: bool
 
     _found_binary_dir: Dict[str, bool]  # found? binary dir
     _found_binary: Dict[str, bool]  #  found? binary
@@ -94,9 +94,8 @@ class _compiled_program:
             return test_program
 
         else:
-            print("DAMN!")
             self._found_binary[test_program] = False
-            if not self._dont_check_bin:
+            if self._dont_check_bin:
                 raise IOError(
                     "No binary could be found! Please make sure, the program was compiled and the path were passed to this obj."
                     + " provided binary path: "
@@ -137,7 +136,7 @@ class _compiled_program:
 
         else:
             self._found_binary_dir[in_bin_dir] = False
-            if not self._dont_check_bin:
+            if self._dont_check_bin:
                 raise IOError(
                     "No binary directory could be found! Please make sure the directory exists! "
                     + " and either pass the path to the binary directory or set the PATH variable. The given folder path was: "

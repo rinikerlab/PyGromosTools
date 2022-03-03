@@ -200,7 +200,6 @@ class Gromos_System:
         self._future_promise = False
         self._future_promised_files = []
 
-
         if (in_smiles == None and rdkitMol == None and in_mol2_file == None) or readIn == False:
             if verbose:
                 warnings.warn("No data provided to gromos_system\nmanual work needed")
@@ -707,7 +706,6 @@ class Gromos_System:
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
             self._gromosXX_bin_dir = input_value.bin
-
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
 
@@ -717,7 +715,7 @@ class Gromos_System:
 
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
-      if isinstance(input_value, str) or input_value is None:
+        if isinstance(input_value, str) or input_value is None:
             self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
@@ -725,7 +723,6 @@ class Gromos_System:
             self._gromosPP_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
-
 
     """
         Functions
