@@ -16,7 +16,7 @@ from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos.utils import gromosTypeConverter
 
 
-class _Gromos(compiledProgram._compiled_programm):
+class _Gromos(compiledProgram._compiled_program):
     """
     GromosXX
 
@@ -42,7 +42,8 @@ class _Gromos(compiledProgram._compiled_programm):
             ["\t" + x for x in dir(self) if (not x.startswith("_") and callable(getattr(self, x)))]
         )
         self.__doc__ = self.__doc__ + functions_text
-        self._bin = self._check_binary_dir_constructor(in_bin_dir=gromosXX_bin_dir)
+
+        super().__init__(in_bin_dir=gromosXX_bin_dir)  # initialises the binary checks
 
     def __str__(self):
         return self.__doc__
@@ -75,6 +76,7 @@ class _Gromos(compiledProgram._compiled_programm):
         out_trs: bool = False,
         out_trg: bool = False,
         verbose: bool = False,
+        _binary_name: str = "md",
     ) -> str:
         """
         This function is a wrapper for gromosXX md_mpi. You can directly execute the gromosXX md_mpi in a bash enviroment here.
@@ -150,12 +152,12 @@ class _Gromos(compiledProgram._compiled_programm):
             raise ValueError("There are no Hybrid NMPI and NOMP jobs possible with gromos!")
         elif nmpi > 1:
             command += ["mpirun -n " + str(nmpi * nomp) + " "]  # --loadbalance  " --cpus-per-proc " +  + " "
-            command += [self._bin + "md_mpi"]
+            command += [self._bin + _binary_name + "_mpi"]
         elif nomp >= 1:
             command += ["export OMP_NUM_THREADS=" + str(nomp) + "  && "]
-            command += [self._bin + "md"]
+            command += [self._bin + _binary_name]
         else:
-            command += [self._bin + "md"]
+            command += [self._bin + _binary_name]
 
         command += ["@topo", str(in_topo_path)]
         command += ["@conf", str(in_coord_path)]
@@ -246,6 +248,7 @@ class _Gromos(compiledProgram._compiled_programm):
         nomp: int = 1,
         nmpi: int = 1,
         verbose: bool = True,
+        _binary_name: str = "repex_mpi",
     ) -> str:
         """
         This function is a wrapper for gromosXX repex_mpi. You can directly execute the gromosXX repex_mpi in a bash enviroment here.
@@ -330,7 +333,7 @@ class _Gromos(compiledProgram._compiled_programm):
         else:
             command = ["mpirun", "-n ", str(nmpi)]
 
-        command.append(self._bin + "repex_mpi")
+        command.append(self._bin + _binary_name)
 
         # input params check
         if in_topo_path:

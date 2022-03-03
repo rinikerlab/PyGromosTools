@@ -19,7 +19,7 @@ from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos.utils import gromosTypeConverter
 
 
-class _gromosPPbase(compiledProgram._compiled_programm):
+class _gromosPPbase(compiledProgram._compiled_program):
 
     """
     GromosPP
@@ -50,7 +50,7 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         )
         self.__doc__ = self.__doc__ + functions_text
 
-        self._bin = self._check_binary_dir_constructor(in_bin_dir=gromosPP_bin_dir)
+        super().__init__(in_bin_dir=gromosPP_bin_dir)  # initialises the binary checks
 
     def __str__(self):
         return self.__doc__
@@ -172,7 +172,7 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         gff: str = "54a7",
         add_head: str = "NH3+",
         add_tail: str = "COO-",
-        _binary: str = "pdb2seq",
+        _binary_name: str = "pdb2seq",
     ) -> str:
         """
         This function is translating a pdb into a sequence file, that can be used to generate for example topologies.
