@@ -14,7 +14,6 @@ from numbers import Number
 
 from pygromos.utils import bash, compiledProgram
 from pygromos.data import pdb_lib
-from pygromos.data.ff.Gromos2016H66 import ifp, mtb
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos.utils import gromosTypeConverter
 

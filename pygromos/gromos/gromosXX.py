@@ -9,7 +9,6 @@ Author: Benjamin Schroeder
 import os
 import datetime
 import time
-from typing import Union
 
 from pygromos.utils import bash, compiledProgram
 from pygromos.utils.utils import time_wait_s_for_filesystem
