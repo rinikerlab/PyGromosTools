@@ -21,7 +21,7 @@ def gromosTypeConverter(func):
     """
 
     @functools.wraps(func)
-    def convert_pyGromos_types(self, *args, **kwargs):
+    def convert_pyGromos_types(*args, **kwargs):
         # no key-word parameters
         nargs = []
         for v in args:
@@ -44,6 +44,6 @@ def gromosTypeConverter(func):
                     raise IOError("please write out the " + k + " first to use the function " + str(func.__name__) + "")
                 kwargs[k] = v.path
 
-        return func(self, *nargs, **kwargs)
+        return func(*nargs, **kwargs)
 
     return convert_pyGromos_types
