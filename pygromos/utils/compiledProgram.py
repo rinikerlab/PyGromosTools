@@ -200,17 +200,15 @@ class _compiled_program:
         def control_binary(*args, **kwargs) -> any:
             func_signature = inspect.signature(func)
             if "_binary_name" in kwargs:
-                print("check bin")
+                self._check_binary(self._bin + kwargs["_binary_name"])
             elif "_binary_name" in func_signature.parameters:
-                print(self._check_binary(func_signature.parameters["_binary_name"].default))
+                self._check_binary(self._bin + func_signature.parameters["_binary_name"].default)
             else:
                 raise Exception(
                     "Could not find Binary name in function signature: " + str(func) + "\n found: " + str(kwargs)
                 )
-            print("DONE RWAP")
             return func(self, *args, **kwargs)
 
-        print("done_wrapping")
         return control_binary
 
     def __wrap_programms_with_binary_checks(self, remove=False):
@@ -227,7 +225,5 @@ class _compiled_program:
             if remove or self._found_binary[binary]:
                 v[func] = getattr(self.__class__, func)
             else:
-                print(func, getattr(self, func))
                 v[func] = self.__check_binaries_decorator(getattr(self, func))
-        print(v)
         self.__dict__.update(v)
