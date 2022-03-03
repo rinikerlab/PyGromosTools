@@ -1154,7 +1154,7 @@ class Cnf(_general_gromos_file):
         xyz_str = str(len(self.POSITION)) + "\n"
         xyz_str += "# " + str(self.TITLE.content[0])
         xyz_str += "# exported wit PyGromosTools\n"
-        xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
+        xyz_format = "  {:<3}    {:> 3.9f}    {:> 3.9f}    {:> 3.9f}\n"
 
         for position in self.POSITION:
             xyz_line = xyz_format.format(position.atomType[0], position.xp * 10, position.yp * 10, position.zp * 10)
