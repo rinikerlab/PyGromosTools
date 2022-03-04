@@ -525,7 +525,8 @@ class FORCEFIELD(_generic_gromos_block):
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        # result += self.NAME + self.line_seperator
+        if hasattr(self, "NAME") and type(self.NAME) is str:
+            result += self.NAME + self.line_seperator
         result += "END" + self.line_seperator
         return result
 

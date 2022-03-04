@@ -17,20 +17,26 @@ class Mtb(_general_gromos_file._general_gromos_file):
     MTBUILDBLEND_list: List[blocks.MTBUILDBLEND]
 
     def __init__(self, in_value: (str or dict or None), _future_file: bool = False):
-        self.MTBUILDBLSOLUTE_list = []
-        self.MTBUILDBLSOLVENT_list = []
-        self.MTBUILDBLEND_list = []
+        self.mtb_solutes = {}
+        self.mtb_solvents = {}
+        self.mtb_ends = {}
         super().__init__(in_value, _future_file)
 
     def __str__(self):
         ret_str = super().__str__()
-        for block in self.MTBUILDBLSOLUTE_list:
-            ret_str += str(block)
-        for block in self.MTBUILDBLSOLVENT_list:
-            ret_str += str(block)
+        for res_name in self.mtb_solutes:
+            ret_str += str(self.mtb_solutes[res_name])
+        for res_name in self.mtb_solvents:
+            ret_str += str(self.mtb_solvents[res_name])
+        for res_name in self.mtb_ends:
+            ret_str += str(self.mtb_ends[res_name])
         return ret_str
 
     def read_file(self):
+        # define some containers
+        MTBUILDBLSOLUTE_list = []
+        MTBUILDBLSOLVENT_list = []
+        MTBUILDBLEND_list = []
         # Read blocks to string
         data = self.read_mtb_file(self._orig_file_path)
 
@@ -39,16 +45,20 @@ class Mtb(_general_gromos_file._general_gromos_file):
         for block_title, block_data in data:
             if block_title == "MTBUILDBLSOLUTE":
                 mtb_block = blocks.MTBUILDBLSOLUTE(content=block_data)
-                self.MTBUILDBLSOLUTE_list.append(mtb_block)
+                MTBUILDBLSOLUTE_list.append(mtb_block)
             elif block_title == "MTBUILDBLSOLVENT":
                 mtb_block = blocks.MTBUILDBLSOLVENT(content=block_data)
-                self.MTBUILDBLSOLVENT_list.append(mtb_block)
+                MTBUILDBLSOLVENT_list.append(mtb_block)
             elif block_title == "MTBUILDBLEND":
                 mtb_block = blocks.MTBUILDBLEND(content=block_data)
-                self.MTBUILDBLEND_list.append(mtb_block)
+                MTBUILDBLEND_list.append(mtb_block)
             else:
                 self.add_block(blocktitle=block_title, content=block_data)
                 block_dict.update({block_title: self.__getattribute__(block_title)})
+        # convert mtb lists to dicts
+        self.mtb_solutes = {b.RNME: b for b in MTBUILDBLSOLUTE_list}
+        self.mtb_solvents = {b.RNMES: b for b in MTBUILDBLSOLVENT_list}
+        self.mtb_ends = {b.RNME: b for b in MTBUILDBLEND_list}
         return block_dict
 
     def read_mtb_file(self, path: str) -> List:
