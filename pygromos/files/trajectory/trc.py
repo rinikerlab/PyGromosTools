@@ -19,7 +19,7 @@ import mdtraj
 import pandas as pd
 import numpy as np
 import nglview as nj
-from typing import TypeVar, Union, Dict
+from typing import Dict
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.coord.cnf import Cnf
@@ -32,6 +32,8 @@ class Trc(mdtraj.Trajectory):
     # Attributes
     TITLE: TITLE
 
+    _future_file: bool
+
     def __init__(
         self,
         xyz=None,
@@ -42,7 +44,13 @@ class Trc(mdtraj.Trajectory):
         traj_path=None,
         in_cnf: [str, Cnf] = None,
     ):
-        if not (traj_path is None and in_cnf is None):
+
+        if not traj_path is None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
+            trj = mdtraj.load(traj_path)
+            self.__dict__.update(vars(trj))
+        elif not (traj_path is None and in_cnf is None):
+            self._future_file = False
+
             # Parse TRC
             if isinstance(traj_path, str):
                 xyz, time, step = self.parse_trc_efficiently(traj_path)
@@ -60,8 +68,16 @@ class Trc(mdtraj.Trajectory):
 
             super().__init__(xyz=xyz, topology=single.topology, time=time)
             self._step = step
-        else:
+        elif not (xyz is None and topology is None):
+            self._future_file = False
             super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+
+        else:
+            self._unitcell_lengths = []
+            self._unitcell_angles = []
+            self._xyz = np.array([], ndmin=2)
+            self._topology = None
+            self._future_file = True
 
     def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)

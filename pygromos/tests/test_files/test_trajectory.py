@@ -4,11 +4,14 @@ import unittest
 
 from pygromos.files.trajectory import _general_trajectory as gt
 from pygromos.files.trajectory import trc, tre, trg
+from pygromos.files.coord.cnf import Cnf
 from pygromos.files.trajectory.tre_field_libs import ene_fields
 
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.tests.test_files import out_test_root_dir
+
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="trajs_")
+
 
 class traj_standard_tests(unittest.TestCase):
     class_name: gt._General_Trajectory = gt._General_Trajectory
@@ -31,8 +34,8 @@ class traj_standard_tests(unittest.TestCase):
         print(t)
 
     def test_write(self):
-        if (hasattr(self, 't')):
-            getattr(self, 't').write(self.outpath)
+        if hasattr(self, "t"):
+            getattr(self, "t").write(self.outpath)
         else:
             pass
 
@@ -40,7 +43,7 @@ class traj_standard_tests(unittest.TestCase):
         self.t1 = self.class_name(input_value=self.in_file_path, auto_save=False)
 
     def test_add(self):
-        if("traj_standard_tests" == self.__class__.__name__):
+        if "traj_standard_tests" == self.__class__.__name__:
             return 0
         # addition
         tre_3 = self.t1 + self.t1
@@ -49,20 +52,51 @@ class traj_standard_tests(unittest.TestCase):
         print(tre_3)
 
 
-class test_trc(traj_standard_tests):
+class test_trc(unittest.TestCase):
     class_name = trc.Trc
-    in_file_path = in_test_file_path+ "/trc/in_test.trc"
-    in_file_h5_path =  in_test_file_path+ "/trc/in_test.trc.h5"
-    outpath = root_out + "/out_trc1.trc.h5"
+    help_class = Cnf(in_test_file_path + "/trc/in_test.cnf")
+    in_file_path = in_test_file_path + "/trc/in_test.trc"
+    in_file_path_h5 = in_test_file_path + "/trc/in_test_trc.h5"
+    outpath = root_out + "/out_trc1.h5"
+
+    # Constructors
+    def test_constructor_empty(self):
+        t = self.class_name()
+        print(t)
+
+    def test_constructor_trg_file_path(self):
+        t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
+        print(t)
+
+    def test_constructor_trg_h5_file_path(self):
+
+        t = self.class_name(traj_path=self.in_file_path_h5)
+        print(t)
+
+    def test_write(self):
+        t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
+        t.save(self.outpath)
+
+    # def setUp(self) -> None:
+    #    self.t1 = self.class_name(self.outpath)
+
+    # def test_add(self):
+    #    if("traj_standard_tests" == self.__class__.__name__):
+    #        return 0
+    #    # addition
+    #    tre_3 = self.t1 + self.t1
+    #    tre_3 += self.t1
+    #    print(self.t1, tre_3)
+    #    print(tre_3)
 
 
 class test_tre(traj_standard_tests):
     class_name = tre.Tre
-    in_file_path =  in_test_file_path+ "/tre/in_tre1.tre"
-    in_file2_path =  in_test_file_path+ "/tre/in_tre2.tre"
-    in_file_eds_path = in_test_file_path+ "/tre/in_eds.tre"
-    in_file_lam_path = in_test_file_path+ "/tre/in_lam.tre"
-    in_file_h5_path = in_test_file_path+ "/tre/in_tre1.tre.h5"
+    in_file_path = in_test_file_path + "/tre/in_tre1.tre"
+    in_file2_path = in_test_file_path + "/tre/in_tre2.tre"
+    in_file_eds_path = in_test_file_path + "/tre/in_eds.tre"
+    in_file_lam_path = in_test_file_path + "/tre/in_lam.tre"
+    in_file_h5_path = in_test_file_path + "/tre/in_tre1.tre.h5"
     outpath = root_out + "/out_tre1.tre.h5"
 
     def test_get_totals(self):
@@ -78,7 +112,7 @@ class test_tre(traj_standard_tests):
         print(eds_ene.shape)
 
         self.assertEqual(eds_ene.numstates[0], 9, msg="Number of num_states should be two")
-        self.assertEqual(eds_ene.shape, (10,37), msg="The traj should have 500 timesteps and 23 fields for precalclam")
+        self.assertEqual(eds_ene.shape, (10, 37), msg="The traj should have 500 timesteps and 23 fields for precalclam")
         pass
 
     def test_get_lam(self):
@@ -86,14 +120,14 @@ class test_tre(traj_standard_tests):
         lam_ene = t.get_precalclam()
         print(lam_ene, lam_ene.shape)
         self.assertEqual(lam_ene.nr_lambdas[0], 2, msg="Number of lambdas should be two")
-        self.assertEqual(lam_ene.shape, (5,25), msg="The traj should have 5 timesteps and 23 fields for precalclam")
+        self.assertEqual(lam_ene.shape, (5, 25), msg="The traj should have 5 timesteps and 23 fields for precalclam")
 
 
 class test_trg(traj_standard_tests):
     class_name = trg.Trg
-    in_file_path =  in_test_file_path+ "/trg/test.trg"
-    in_file_h5_path =  in_test_file_path+ "/trg/test.trg.h5"
-    outpath =  root_out + "/out_tre1.tre.h5"
+    in_file_path = in_test_file_path + "/trg/test.trg"
+    in_file_h5_path = in_test_file_path + "/trg/test.trg.h5"
+    outpath = root_out + "/out_tre1.tre.h5"
 
     # Test Get functions
 
