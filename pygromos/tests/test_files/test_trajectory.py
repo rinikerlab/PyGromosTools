@@ -21,17 +21,17 @@ class traj_standard_tests(unittest.TestCase):
     # Constructors
     def test_constructor_empty(self):
         t = self.class_name(input_value=None, auto_save=False)
-        print(t)
+        # print(t)
 
     def test_constructor_trg_file_path(self):
         t = self.class_name(input_value=self.in_file_path, auto_save=False)
-        print(t)
-        print(t.database.columns)
-        print(t.database.head())
+        # print(t)
+        # print(t.database.columns)
+        # print(t.database.head())
 
     def test_constructor_trg_h5_file_path(self):
         t = self.class_name(input_value=self.in_file_path, auto_save=False)
-        print(t)
+        # print(t)
 
     def test_write(self):
         if hasattr(self, "t"):
@@ -48,8 +48,8 @@ class traj_standard_tests(unittest.TestCase):
         # addition
         tre_3 = self.t1 + self.t1
         tre_3 += self.t1
-        print(self.t1, tre_3)
-        print(tre_3)
+        # print(self.t1, tre_3)
+        # print(tre_3)
 
 
 class test_trc(unittest.TestCase):
@@ -62,16 +62,19 @@ class test_trc(unittest.TestCase):
     # Constructors
     def test_constructor_empty(self):
         t = self.class_name()
-        print(t)
+        # print(t)
 
-    def test_constructor_trg_file_path(self):
+    def test_constructor_trc_file_path(self):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
-        print(t)
+        # print(t)
 
-    def test_constructor_trg_h5_file_path(self):
+    def test_constructor_trc_file_noTop_path(self):
+        t = self.class_name(traj_path=self.in_file_path)
+        # print(t)
 
+    def test_constructor_trc_h5_file_path(self):
         t = self.class_name(traj_path=self.in_file_path_h5)
-        print(t)
+        # print(t)
 
     def test_write(self):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)

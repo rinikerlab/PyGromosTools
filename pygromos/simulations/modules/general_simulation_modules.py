@@ -226,11 +226,11 @@ def simulation(
     if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWX > 0:
         final_trc_file = out_analysis_dir + "/data/" + gromos_system.name + ".trc"
         if os.path.exists(final_trc_file + ".h5"):
-            gromos_system.trc = Trc(input_value=final_trc_file + ".h5")
+            gromos_system.trc = Trc(traj_path=final_trc_file + ".h5")
         elif os.path.exists(final_trc_file):
-            gromos_system.trc = Trc(input_value=final_trc_file)
+            gromos_system.trc = Trc(traj_path=final_trc_file, in_cnf=gromos_system.cnf)
         else:
-            gromos_system.trc = Trc(input_value=None)
+            gromos_system.trc = Trc(traj_path=None, in_cnf=gromos_system.cnf)
             gromos_system.trc._future_file = True
             gromos_system.trc.path = final_trc_file
 

@@ -20,9 +20,9 @@ import pandas as pd
 import numpy as np
 import nglview as nj
 from typing import Dict
-from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.coord.cnf import Cnf
+from pygromos.utils import bash
 from pygromos.analysis import coordinate_analysis as ca
 
 from pygromos.files.blocks._general_blocks import TITLE
@@ -33,6 +33,7 @@ class Trc(mdtraj.Trajectory):
     TITLE: TITLE
 
     _future_file: bool
+    path: str  # Todo: we need to set this variable.
 
     def __init__(
         self,
@@ -48,16 +49,26 @@ class Trc(mdtraj.Trajectory):
         if not traj_path is None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
             trj = mdtraj.load(traj_path)
             self.__dict__.update(vars(trj))
-        elif not (traj_path is None and in_cnf is None):
+        elif not traj_path is None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
             self._future_file = False
 
             # Parse TRC
+            if traj_path.endswith(".gz"):
+                traj_path = bash.extract_tar(in_path=traj_path, gunzip_compression=True)
+
             if isinstance(traj_path, str):
                 xyz, time, step = self.parse_trc_efficiently(traj_path)
+
+            if traj_path.endswith(".gz"):
+                traj_path = bash.compress_gzip(in_path=traj_path)
 
             # Topology from Cnf
             if isinstance(in_cnf, str):
                 in_cnf = Cnf(in_cnf)
+            elif isinstance(in_cnf, Cnf) and hasattr(in_cnf, "POSITION"):
+                pass
+            else:
+                in_cnf = self.get_dummy_cnf(xyz)
 
             # Topo tmp file
             tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
@@ -78,6 +89,20 @@ class Trc(mdtraj.Trajectory):
             self._xyz = np.array([], ndmin=2)
             self._topology = None
             self._future_file = True
+
+    def get_dummy_cnf(self, xyz) -> Cnf:
+        from pygromos.files.blocks import coords
+
+        new_Cnf = Cnf(None)
+        new_Cnf.add_block(blocktitle="TITLE", content="THis is a dummy top depending on the first Frame.")
+        new_Cnf.add_block(
+            blocktitle="POSITION",
+            content=[
+                coords.atomP(resID=1, resName="DUM", atomType="C", atomID=i, xp=coord[0], yp=coord[1], zp=coord[2])
+                for i, coord in enumerate(xyz[0])
+            ],
+        )
+        return new_Cnf
 
     def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)
