@@ -14,12 +14,12 @@ from numbers import Number
 
 from pygromos.utils import bash, compiledProgram
 from pygromos.data import pdb_lib
-from pygromos.data.ff.Gromos2016H66 import ifp, mtb
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
-from pygromos.gromos.utils import gromosTypeConverter
+from pygromos.gromos._gromosClass import _gromosClass
 
 
-class _gromosPPbase(compiledProgram._compiled_programm):
+class _gromosPPbase(_gromosClass):
+
     """
     GromosPP
 
@@ -49,15 +49,7 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         )
         self.__doc__ = self.__doc__ + functions_text
 
-        self._bin = self._check_binary_dir(in_bin_dir=gromosPP_bin_dir, test_programm="pdb2g96")
-
-        try:
-            self.make_top(
-                out_top_path=os.devnull, in_building_block_lib_path=mtb, in_parameter_lib_path=ifp, in_sequence="CH4"
-            )
-            self._isValid = True
-        except:
-            self._isValid = False
+        super().__init__(in_bin_dir=gromosPP_bin_dir)  # initialises the binary checks
 
     def __str__(self):
         return self.__doc__
@@ -65,22 +57,58 @@ class _gromosPPbase(compiledProgram._compiled_programm):
     def __repr__(self):
         return self.__str__()
 
-    @property
-    def bin(self) -> Union[str, None]:
-        if not hasattr(self, "_bin") or self._bin == "":
-            return None
-        else:
-            return self._bin
-
-    @bin.setter
-    def bin(self, in_bin_dir: str):
-        self._bin = self._check_binary_dir(in_bin_dir=in_bin_dir, test_programm="pdb2g96")
-
     """
         GromosPP Programms
     """
 
-    @gromosTypeConverter
+    def amber2gromos(
+        self,
+        ambertop: str,
+        solvent: str,
+        ljscaling: float = 2.0,
+        chargegroups: str = None,
+        atomic_chargegroups: bool = False,
+        out_path: str = "topology.top",
+        _binary_name: str = "amber2gromos",
+        verbose: bool = False,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        ambertop : str
+            path to AMBER molecular topology file
+        solvent : str
+            path to GROMOS topology file with solvent
+        ljscaling : float, optional
+            scaling factor for LJ parameters (default: 2.0)
+        atomic_chargegroups : bool, optional
+            assign each atom to its own chargegroup (default: False)
+        chargegroups : str, optional
+            path to chargegroup file
+        _binary_name : str, otpional
+            binary name of gromosPP programm (default: amber2gromos)
+        Returns
+        -------
+        str
+            converted GROMOS topology
+        """
+
+        additional_options = [""]
+        if not ljscaling is None:
+            additional_options += [" @ljscaling ", str(ljscaling)]
+        if not atomic_chargegroups is None:
+            additional_options += [" @atomic_chargegroups ", str(int(atomic_chargegroups))]
+        if not chargegroups is None:
+            additional_options += [" @chargegroups ", chargegroups]
+
+        additional_options = " ".join(map(str, additional_options))
+
+        command = [self._bin + _binary_name, " @ambertop ", ambertop, "@solvent", solvent, additional_options, " \n"]
+
+        if verbose:
+            print(command)
+        bash.execute(command, catch_STD=out_path, verbose=verbose)
+
     def pdb2gromos(
         self,
         in_pdb_path: str,
@@ -131,7 +159,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_cnf_path
 
-    @gromosTypeConverter
     def pdb2seq(
         self,
         in_pdb_path: str,
@@ -141,7 +168,7 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         gff: str = "54a7",
         add_head: str = "NH3+",
         add_tail: str = "COO-",
-        _binary: str = "pdb2seq",
+        _binary_name: str = "pdb2seq",
     ) -> str:
         """
         This function is translating a pdb into a sequence file, that can be used to generate for example topologies.
@@ -201,7 +228,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command)
         return out_path
 
-    @gromosTypeConverter
     def make_top(
         self,
         out_top_path: str,
@@ -253,7 +279,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
-    @gromosTypeConverter
     def com_top(
         self,
         in_topo_paths: (str or List[str]),
@@ -306,7 +331,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
-    @gromosTypeConverter
     def dfmult(
         self,
         in_endstate_file_paths: List[str],
@@ -367,7 +391,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_file_path
 
-    @gromosTypeConverter
     def frameout(
         self,
         in_top_path: str,
@@ -501,7 +524,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_file_path
 
-    @gromosTypeConverter
     def ene_ana(
         self,
         in_ene_ana_library_path: str,
@@ -705,7 +727,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         else:
             return result_files
 
-    @gromosTypeConverter
     def gch(
         self,
         in_cnf_path: str,
@@ -789,7 +810,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
             _binary_name=_binary_name,
         )
 
-    @gromosTypeConverter
     def sim_box(
         self,
         in_top_path: str,
@@ -884,7 +904,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_cnf_path
 
-    @gromosTypeConverter
     def ran_box(
         self,
         in_top_path: str,
@@ -948,7 +967,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         else:
             return command
 
-    @gromosTypeConverter
     def build_box(
         self,
         in_top_path: str,
@@ -992,7 +1010,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         else:
             return command
 
-    @gromosTypeConverter
     def tser(
         self,
         in_trc_path: str,
@@ -1065,7 +1082,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command)
         return out_csv_path
 
-    @gromosTypeConverter
     def red_top(self, in_top_path: str, atom_selection: str, out_top_path: str, _binary_name: str = "red_top") -> str:
         """
             red_top is a gromos tool to reduce a gromos tool to a certain selection.
@@ -1093,7 +1109,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command)
         return out_top_path
 
-    @gromosTypeConverter
     def prep_eds(
         self,
         in_top_paths: List[str],
@@ -1155,7 +1170,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_top, out_ptp
 
-    @gromosTypeConverter
     def prep_noe(
         self,
         in_top_path: str,
@@ -1235,7 +1249,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_path
 
-    @gromosTypeConverter
     def rmsf(
         self,
         in_top_path: str,
@@ -1293,7 +1306,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
-    @gromosTypeConverter
     def rmsd(
         self,
         in_top_path: str,
@@ -1342,7 +1354,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
-    @gromosTypeConverter
     def cog(
         self,
         in_top_path: str,
@@ -1419,7 +1430,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_file_path
 
-    @gromosTypeConverter
     def noe(
         self,
         in_top_path: str,
@@ -1485,7 +1495,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_path
 
-    @gromosTypeConverter
     def jval(
         self,
         in_top_path: str,
@@ -1577,7 +1586,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
 
         return out_path
 
-    @gromosTypeConverter
     def ion(
         self,
         in_top_path: str,
@@ -1679,7 +1687,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
     def _gr962pdb(self):
         raise Exception("not implemented yet!")
 
-    @gromosTypeConverter
     def rgyr(
         self,
         out_rgyr_path: str,
@@ -1735,7 +1742,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command, catch_STD=out_rgyr_path)
         return out_rgyr_path
 
-    @gromosTypeConverter
     def sasa(
         self,
         out_sasa_path: str,
@@ -1802,7 +1808,6 @@ class _gromosPPbase(compiledProgram._compiled_programm):
         bash.execute(command, catch_STD=out_sasa_path)
         return out_sasa_path
 
-    @gromosTypeConverter
     def filter(
         self,
         out_filter_path: str,

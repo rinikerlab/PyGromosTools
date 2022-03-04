@@ -22,13 +22,11 @@ import nglview as nj
 from typing import Dict
 from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
-from pygromos.files.coord.cnf import Cnf
 from pygromos.analysis import coordinate_analysis as ca
-
 from pygromos.files.blocks._general_blocks import TITLE
 
 
-class Trc(mdtraj.Trajectory):
+class Trc_new(mdtraj.Trajectory):
     # Attributes
     TITLE: TITLE
 
@@ -133,7 +131,6 @@ class Trc(mdtraj.Trajectory):
             inTitleBlock = False
             blockKey = None
             nLines = 0
-            nCommentLines = 0
             titleStr = []
 
             while True:
@@ -159,7 +156,6 @@ class Trc(mdtraj.Trajectory):
                 elif inTitleBlock:
                     titleStr.append(line)
                 nLines += 1
-
         if not hasattr(self, TITLE.__name__):
             self.TITLE = TITLE(content="Empty TITLE")
 

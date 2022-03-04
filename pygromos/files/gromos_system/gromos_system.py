@@ -9,6 +9,7 @@ Bundle files with the system's topology, coordinates, input parameters, etc. and
 start your simulations from here.
 
 Author: Marc Lehner, Benjamin Ries, Felix Pultar
+test
 """
 
 # imports
@@ -48,6 +49,9 @@ if importlib.util.find_spec("rdkit") != None:
 else:
     has_rdkit = False
 
+
+from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
+
 if importlib.util.find_spec("openff") != None:
     from openff.toolkit.topology import Molecule
     from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
@@ -62,6 +66,12 @@ skip = {
     "protein_info": cnf.protein_infos,
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
+}
+exclude_pickle = {
+    "GromosPP": GromosPP,
+    "GromosXX": GromosXX,
+    "_gromosPP": GromosPP,
+    "_gromosXX": GromosXX,
 }
 
 
@@ -96,6 +106,13 @@ class Gromos_System:
         self,
         work_folder: str,
         system_name: str,
+        rdkitMol: Chem.rdchem.Mol = None,
+        in_mol2_file: str = None,
+        readIn=True,
+        Forcefield: forcefield_system = forcefield_system(),
+        auto_convert: bool = False,
+        adapt_imd_automatically: bool = True,
+        verbose: bool = False,
         in_smiles: str = None,
         in_top_path: str = None,
         in_cnf_path: str = None,
@@ -107,12 +124,6 @@ class Gromos_System:
         in_qmmm_path: str = None,
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
-        rdkitMol: Chem.rdchem.Mol = None,
-        readIn=True,
-        Forcefield: forcefield_system = forcefield_system(),
-        auto_convert: bool = False,
-        adapt_imd_automatically: bool = True,
-        verbose: bool = False,
     ):
         """
             The Gromos_System class is the central unit of PyGromosTools for files and states.
@@ -150,6 +161,8 @@ class Gromos_System:
             path to the binary dir of GromosPP, by default None -> uses the set binaries in the PATH variable
         rdkitMol : Chem.rdchem.Mol, optional
             input rdkit Molecule, by default None
+        in_mol2_file : str, optional
+            path to input mol2 file, by default None
         readIn : bool, optional
             readIn all provided files?, by default True
         Forcefield : forcefield_system, optional
@@ -173,6 +186,7 @@ class Gromos_System:
         self.smiles = in_smiles
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
+        self.in_mol2_file = in_mol2_file
         self.checkpoint_path = None
         self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
@@ -192,7 +206,7 @@ class Gromos_System:
         self._future_promise = False
         self._future_promised_files = []
 
-        if (in_smiles == None and rdkitMol == None) or readIn == False:
+        if (in_smiles == None and rdkitMol == None and in_mol2_file == None) or readIn == False:
             if verbose:
                 warnings.warn("No data provided to gromos_system\nmanual work needed")
 
@@ -232,13 +246,17 @@ class Gromos_System:
             AllChem.UFFOptimizeMolecule(self.mol)
             self.hasData = True
 
+        if in_mol2_file:
+            self.mol = Chem.MolFromMol2File(in_mol2_file)
+            self.hasData = True
+
         # import  molecule from RDKit
         if rdkitMol:
             self.mol = rdkitMol
             self.smiles = Chem.MolToSmiles(self.mol)
             self.hasData = True
 
-        # automate all conversions for rdkit mols if possible
+        # automate all conversions for rdkit mols or mol2 if possible
         if auto_convert:
             if self.hasData:
                 self.auto_convert()
@@ -249,7 +267,7 @@ class Gromos_System:
             self.cnf = Cnf(in_value=self.mol)
             # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
             if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and bash.command_exists(self.gromosPP.bin + "/pdb2g96"):
+                if self.gromosPP is not None and self.gromosPP._found_binary["pdb2g96"]:
                     try:
                         from pygromos.files.blocks.coord_blocks import atomP
 
@@ -388,13 +406,13 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not isinstance(attribute_dict[key], Callable) and not key in skip:
+            if not isinstance(attribute_dict[key], Callable) and not key in skip and not key in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
-            elif not attribute_dict[key] is None and key in skip:
+            elif not attribute_dict[key] is None and key in skip and not key in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
+                print("STUPID ", key)
                 new_dict.update({key: None})
-
         return new_dict
 
     def __setstate__(self, state):
@@ -422,9 +440,6 @@ class Gromos_System:
         copy_obj.verbose = self.verbose
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
-
-    def copy(self, no_traj: bool = True):
-        return copy.deepcopy(self)
 
     def copy(self):
         return copy.deepcopy(self)
@@ -894,6 +909,20 @@ class Gromos_System:
                 self.serenityff.top.make_ordered()
                 self.top = self.serenityff.top
 
+        elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
+            if self.in_mol2_file == None:
+                raise TypeError("To use amberff_gaff, please provide a mol2 file")
+
+            amber = amber2gromos(
+                in_mol2_file=self.in_mol2_file,
+                mol=self.mol,
+                forcefield=self.Forcefield,
+                gromosPP=self.gromosPP,
+                work_folder=self.work_folder,
+            )
+            self.top = Top(amber.get_gromos_topology())
+            self.cnf = Cnf(amber.get_gromos_coordinate_file())
+
         else:
             raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
 
@@ -1012,7 +1041,7 @@ class Gromos_System:
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
         ff_name = self.Forcefield.name
-        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off":
+        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
             # adjust harmonic forces
             if hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None:
                 if self.verbose:
@@ -1228,7 +1257,7 @@ class Gromos_System:
                         kwargs.update({k: grom_obj.path})
 
             # execute function
-            r = func(*args, **kwargs)
+            r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
             [bash.remove_file(p) for p in tmp_files]
@@ -1372,5 +1401,5 @@ class Gromos_System:
             # this is clunky and needs to be removed in future
             rewrap = self.__ionDecorator(v["ion"])
             v.update({"ion": rewrap})
-
+            [exclude_pickle.update({f: None}) for f in func]
             self.__dict__.update(v)

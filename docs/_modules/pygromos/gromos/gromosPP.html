@@ -4,66 +4,66 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>pygromos.gromos.gromosPP &mdash; PyGromosTools  documentation</title>
-  
 
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>pygromos.gromos.gromosPP &mdash; PyGromosTools  documentation</title>
+
+
+
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
 
-  
-  
 
-  
-  
 
-  
 
-  
+
+
+
+
+
+
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
+
+
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
+
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-    
+
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
 </head>
 
 <body class="wy-body-for-nav">
 
-   
+
   <div class="wy-grid-for-nav">
-    
+
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
-          
+
+
             <a href="../../../index.html" class="icon icon-home"> PyGromosTools
-          
 
-          
+
+
           </a>
 
-          
-            
-            
-          
 
-          
+
+
+
+
+
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,17 +72,17 @@
   </form>
 </div>
 
-          
+
         </div>
 
-        
+
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+
+
+
+
+
+
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
@@ -90,29 +90,29 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
 </ul>
 
-            
-          
+
+
         </div>
-        
+
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-      
+
       <nav class="wy-nav-top" aria-label="top navigation">
-        
+
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">PyGromosTools</a>
-        
+
       </nav>
 
 
       <div class="wy-nav-content">
-        
+
         <div class="rst-content">
-        
-          
+
+
 
 
 
@@ -133,26 +133,26 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-    
+
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
+
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
+
       <li>pygromos.gromos.gromosPP</li>
-    
-    
+
+
       <li class="wy-breadcrumbs-aside">
-        
+
       </li>
-    
+
   </ul>
 
-  
+
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+
   <h1>Source code for pygromos.gromos.gromosPP</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">FUNCTIONLIB:            wrapper for gromos++</span>
@@ -267,7 +267,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="n">out_cnf_path</span></div>
-    
+
 <div class="viewcode-block" id="_gromosPPbase.pdb2seq"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.pdb2seq">[docs]</a>    <span class="k">def</span> <span class="nf">pdb2seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_pdb_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pH</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mf">7.4</span><span class="p">,</span> <span class="n">select</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ALL&quot;</span><span class="p">,</span> <span class="n">gff</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;54a7&quot;</span><span class="p">,</span> <span class="n">add_head</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;NH3+&quot;</span><span class="p">,</span> <span class="n">add_tail</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;COO-&quot;</span><span class="p">,</span> <span class="n">_binary</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;pdb2seq&quot;</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function is translating a pdb into a sequence file, that can be used to generate for example topologies.</span>
@@ -728,7 +728,7 @@
                                   <span class="s2">&quot;@pbc &quot;</span> <span class="o">+</span> <span class="n">periodic_boundary_condition</span> <span class="o">+</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">gathering</span>
 
         <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">out_cnf_path</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">out_cnf_path</span></div>
 
 <div class="viewcode-block" id="_gromosPPbase.sim_box"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.sim_box">[docs]</a>    <span class="k">def</span> <span class="nf">sim_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_cnf_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_solvent_cnf_file_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_cnf_path</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -777,7 +777,7 @@
         <span class="k">return</span> <span class="n">out_cnf_path</span></div>
 
 <div class="viewcode-block" id="_gromosPPbase.ran_box"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.ran_box">[docs]</a>    <span class="k">def</span> <span class="nf">ran_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_cnf_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_cnf_path</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">periodic_boundary_condition</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">nmolecule</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dens</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+                <span class="n">periodic_boundary_condition</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">nmolecule</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dens</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="n">boxsize</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixfirst</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_binary_name</span><span class="o">=</span><span class="s2">&quot;ran_box&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_command_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
 
         <span class="n">command_suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -817,7 +817,7 @@
             <span class="k">return</span> <span class="n">out_cnf_path</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">command</span></div>
-    
+
 
 <div class="viewcode-block" id="_gromosPPbase.tser"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosPP._gromosPPbase.tser">[docs]</a>    <span class="k">def</span> <span class="nf">tser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_trc_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">in_top_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_csv_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
              <span class="n">periodic_boundary_condition</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">solvent</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1258,7 +1258,7 @@
 </pre></div>
 
            </div>
-           
+
           </div>
           <footer>
 
@@ -1270,14 +1270,14 @@
 
     </p>
   </div>
-    
-    
-    
+
+
+
     Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
 </footer>
         </div>
@@ -1286,7 +1286,7 @@
     </section>
 
   </div>
-  
+
 
   <script type="text/javascript">
       jQuery(function () {
@@ -1294,10 +1294,10 @@
       });
   </script>
 
-  
-  
-    
-   
+
+
+
+
 
 </body>
 </html>

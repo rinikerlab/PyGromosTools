@@ -6,69 +6,69 @@ steepest descent energy minimization of the peptide in water
 END
 BOUNDCOND
 # 	 NTB 	 NDFMIN
- 	 0 	 0 	 
+ 	 0 	 0
 END
 CONSTRAINT
 # 	 NTC
- 	 3 	 
+ 	 3
 # 	 NTCP 	 NTCP0(1)
- 	 1 	 0.000100 	 
+ 	 1 	 0.000100
 # 	 NTCS 	 NTCS0(1)
- 	 1 	 0.000100 	 
+ 	 1 	 0.000100
 END
 ENERGYMIN
 # 	 NTEM 	 NCYC 	 DELE 	 DX0 	 DXM 	 NMIN 	 FLIM
- 	 1 	 0 	 0.1 	 0.01 	 0.05 	 2000 	 0.0 	 
+ 	 1 	 0 	 0.1 	 0.01 	 0.05 	 2000 	 0.0
 END
 FORCE
 # 	 BONDS 	 ANGLES 	 IMPROPER 	 DIHEDRAL 	 ELECTROSTATIC 	 VDW
- 	 1 	 1 	 1 	 1 	 1 	 1 	 
+ 	 1 	 1 	 1 	 1 	 1 	 1
 # 	 NEGR 	 NRE
- 	 1 	 27 	 
+ 	 1 	 27
 END
 INITIALISE
 # 	 NTIVEL 	 NTISHK 	 NTINHT 	 NTINHB
- 	 0 	 0 	 0 	 0 	 
+ 	 0 	 0 	 0 	 0
 # 	 NTISHI 	 NTIRTC 	 NTICOM
- 	 1 	 0 	 0 	 
+ 	 1 	 0 	 0
 # 	 NTISTI
- 	 0 	 
+ 	 0
 # 	 IG 	 TEMPI
- 	 210185 	 300.0 	 
+ 	 210185 	 300.0
 END
 NONBONDED
 # 	 NLRELE
- 	 1 	 
+ 	 1
 # 	 APPAK 	 RCRF 	 EPSRF 	 NSLFEXCL
- 	 0.0 	 1.4 	 61 	 1 	 
+ 	 0.0 	 1.4 	 61 	 1
 # 	 NSHAPE 	 ASHAPE 	 NA2CLC 	 TOLA2 	 EPSLS
- 	 -1 	 1.4 	 2 	 1e-10 	 0 	 
+ 	 -1 	 1.4 	 2 	 1e-10 	 0
 # 	 NKX 	 NKY 	 NKZ 	 KCUT
- 	 10 	 10 	 10 	 100 	 
+ 	 10 	 10 	 10 	 100
 # 	 NGX 	 NGY 	 NGZ 	 NASORD 	 NFDORD 	 NALIAS 	 NSPORD
- 	 32 	 32 	 32 	 3 	 2 	 3 	 4 	 
+ 	 32 	 32 	 32 	 3 	 2 	 3 	 4
 # 	 NQEVAL 	 FACCUR 	 NRDGRD 	 NWRGRD
- 	 100000 	 1.6 	 0 	 0 	 
+ 	 100000 	 1.6 	 0 	 0
 # 	 NLRLJ 	 SLVDNS
- 	 0 	 33.3 	 
+ 	 0 	 33.3
 END
 PAIRLIST
 # 	 ALGORITHM 	 NSNB 	 RCUTP 	 RCUTL 	 SIZE 	 TYPE
- 	 0 	 5 	 0.800000 	 1.400000 	 0.4 	 0 	 
+ 	 0 	 5 	 0.800000 	 1.400000 	 0.4 	 0
 END
 PRINTOUT
 # 	 NTPR 	 NTPP
- 	 10 	 0 	 
+ 	 10 	 0
 END
 STEP
 # 	 NSTLIM 	 T 	 DT
- 	 3000 	 0.000000 	 0.002000 	 
+ 	 3000 	 0.000000 	 0.002000
 END
 SYSTEM
 # 	 NPM 	 NSM
- 	 1 	 0 	 
+ 	 1 	 0
 END
 WRITETRAJ
 # 	 NTWX 	 NTWSE 	 NTWV 	 NTWF 	 NTWE 	 NTWG 	 NTWB
- 	 100 	 0 	 0 	 0 	 100 	 0 	 0 	 
+ 	 100 	 0 	 0 	 0 	 100 	 0 	 0
 END

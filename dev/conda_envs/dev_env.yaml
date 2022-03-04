@@ -1,29 +1,36 @@
 name: pygromosDev
 channels:
-  - rdkit
   - conda-forge
   - defaults
 dependencies:
   # Base depends
   - python
   - pip
-  # Testing
+  ## Testing
   - pytest
   - pytest-cov
   - codecov
-  #meta
+  ## Meta
   - typing
+  - pre-commit
+  - jupyter
   - tqdm
   - ipywidgets
-  #science
-  - openff-toolkit
+  ## Documentation
+  - sphinx
+  - m2r
+  - nbsphinx
+  # Science
+  - mpmath
   - pandas
   - pytables
   - numpy
   - sympy
   - scipy
+  ## Chemie
+  - openff-toolkit = 0.10.0
+  - mdtraj
   - rdkit
-  - mpmath
- ##Visualization
+  ## Visualization
   - matplotlib
   - nglview

@@ -1,5 +1,5 @@
 TITLE
-prep_eds: EDS perturbation topology using: 
+prep_eds: EDS perturbation topology using:
 /home/bschroed/code/scripts/test/testfile/ptp/ligand_1.top
 /home/bschroed/code/scripts/test/testfile/ptp/ligand_2.top
 /home/bschroed/code/scripts/test/testfile/ptp/ligand_3.top
