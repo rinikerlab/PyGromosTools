@@ -1,5 +1,6 @@
 import inspect
 
+# from pygromos.files.blocks import _general_block
 from pygromos.files.blocks import coord_blocks as coords
 from pygromos.files.blocks import imd_blocks as imd
 from pygromos.files.blocks import topology_blocks as topo
@@ -8,7 +9,7 @@ from pygromos.files.blocks import pertubation_blocks as ptp
 from pygromos.files.blocks import qmmm_blocks as qmm
 from pygromos.files.blocks import replica_exchange_blocks as repdat
 from pygromos.files.blocks import miscBlocks as misc
-from pygromos.files.blocks import _general_block
+
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, TIMESTEP, TITLE, TRAJ
 
 # forward declarations
@@ -25,7 +26,7 @@ class all_blocks_class:
     """
 
     def __init__(self):
-        self.all_block_types = [_general_block, coords, imd, topo, mtb, ptp, qmm, repdat, misc]
+        self.all_block_types = [coords, imd, topo, mtb, ptp, qmm, repdat, misc]
 
         for block_types in self.all_block_types:
             [

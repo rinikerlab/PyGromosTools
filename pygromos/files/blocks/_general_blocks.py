@@ -1,6 +1,6 @@
+import copy
 from typing import Iterable, List
 from numbers import Number
-import copy
 
 # FIELDS
 class _generic_field:
