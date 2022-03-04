@@ -110,6 +110,7 @@ def project_concatenation(
 ) -> dict:
     # in_simSystem.work_folder = out_folder
     out_prefix = out_folder + "/" + in_prefix  # in_simSystem.name
+    out_cnf = None
     if control_dict["cp_cnf"]:
 
         out_cnf = out_prefix + ".cnf"
@@ -173,10 +174,10 @@ def project_concatenation(
                 in_folder, filePrefix=in_prefix, fileSuffixes=[".trc", ".trc.gz", ".trc.tar.gz"], verbose=verbose
             )
             if len(traj_files) > 0:
-                out_trc_file = trc.Trc(traj_files[0], auto_save=False)
+                out_trc_file = trc.Trc(traj_path=traj_files[0], in_cnf=out_cnf)
                 if len(traj_files) > 0:
                     for tmp_trc_file in traj_files[1:]:
-                        tmp_trc = trc.Trc(tmp_trc_file, auto_save=False)
+                        tmp_trc = trc.Trc(tmp_trc_file, in_cnf=out_cnf)
                         out_trc_file += tmp_trc
                 out_trc_file.write(output_path=out_traj_path)
     if control_dict["cat_tre"]:
