@@ -36,7 +36,7 @@ from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.gromos import GromosXX, GromosPP, gromosXX
+from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
 import pickle, io
@@ -66,8 +66,12 @@ skip = {
     "protein_info": cnf.protein_infos,
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
+}
+exclude_pickle = {
     "GromosPP": GromosPP,
     "GromosXX": GromosXX,
+    "_gromosPP": GromosPP,
+    "_gromosXX": GromosXX,
 }
 
 
@@ -402,13 +406,13 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not isinstance(attribute_dict[key], Callable) and not key in skip:
+            if not isinstance(attribute_dict[key], Callable) and not key in skip and not key in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
-            elif not attribute_dict[key] is None and key in skip:
+            elif not attribute_dict[key] is None and key in skip and not key in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
+                print("STUPID ", key)
                 new_dict.update({key: None})
-
         return new_dict
 
     def __setstate__(self, state):
@@ -1400,5 +1404,5 @@ class Gromos_System:
             # this is clunky and needs to be removed in future
             rewrap = self.__ionDecorator(v["ion"])
             v.update({"ion": rewrap})
-
+            [exclude_pickle.update({f: None}) for f in func]
             self.__dict__.update(v)
