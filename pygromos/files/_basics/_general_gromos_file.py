@@ -152,7 +152,7 @@ class _general_gromos_file:
         self,
         blocktitle: str = None,
         content: dict = None,
-        block: blocks._generic_gromos_block = None,
+        block: all_blocks._generic_gromos_block = None,
         verbose: bool = False,
     ):
         """add_block

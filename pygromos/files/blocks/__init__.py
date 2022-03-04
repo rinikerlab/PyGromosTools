@@ -7,24 +7,27 @@ from pygromos.files.blocks import mtb_blocks as mtb
 from pygromos.files.blocks import pertubation_blocks as ptp
 from pygromos.files.blocks import qmmm_blocks as qmm
 from pygromos.files.blocks import replica_exchange_blocks as repdat
-
+from pygromos.files.blocks import miscBlocks as misc
+from pygromos.files.blocks import _general_block
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, TIMESTEP, TITLE, TRAJ
 
 # forward declarations
 TITLE: TITLE = TITLE
 TIMESTEP: TIMESTEP = TIMESTEP
 TRAJ: TRAJ = TRAJ
-
 _generic_gromos_block: _generic_gromos_block = _generic_gromos_block
 _iterable_gromos_block: _iterable_gromos_block = _iterable_gromos_block
 
-all_block_types = [coords, imd, topo, mtb, ptp, qmm, repdat]
-all_blocks = {b.__name__: b for b in [_generic_gromos_block, _iterable_gromos_block, TIMESTEP, TITLE, TRAJ]}
-
 
 class all_blocks_class:
+    """
+    This class is a very simplistic block library containing all present gromos blocks.
+    """
+
     def __init__(self):
-        for block_types in all_block_types:
+        self.all_block_types = [_general_block, coords, imd, topo, mtb, ptp, qmm, repdat, misc]
+
+        for block_types in self.all_block_types:
             [
                 setattr(self, name, b)
                 for name, b in inspect.getmembers(block_types)
