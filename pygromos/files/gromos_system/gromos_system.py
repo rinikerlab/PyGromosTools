@@ -441,9 +441,6 @@ class Gromos_System:
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
-    def copy(self, no_traj: bool = True):
-        return copy.deepcopy(self)
-
     def copy(self):
         return copy.deepcopy(self)
 
@@ -1260,7 +1257,7 @@ class Gromos_System:
                         kwargs.update({k: grom_obj.path})
 
             # execute function
-            r = func(*args, **kwargs)
+            r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
             [bash.remove_file(p) for p in tmp_files]

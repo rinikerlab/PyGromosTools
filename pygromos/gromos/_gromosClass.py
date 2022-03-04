@@ -1,14 +1,23 @@
 import functools
-import os
-
+from typing import Union
 from pygromos.files._basics import _general_gromos_file
-
-"""
-Decorator
-"""
+from pygromos.utils.compiledProgram import _compiled_program
 
 
-def gromosTypeConverter(func):
+class _gromosClass(_compiled_program):
+    def __init__(self, in_bin_dir: str, dummy: bool = False) -> Union[str, None]:
+
+        for func in dir(self):
+            print(func, end="")
+            if callable(getattr(self, func)) and not func.startswith("__"):
+                print("\t check")
+                setattr(self, func, gromosTypeConverter(self, getattr(self, func)))
+                pass
+
+        super().__init__(in_bin_dir, dummy)
+
+
+def gromosTypeConverter(self, func) -> callable:
     """
         This decorator can be used to automatically convert
     Parameters
@@ -17,6 +26,7 @@ def gromosTypeConverter(func):
 
     Returns
     -------
+    callable
 
     """
 

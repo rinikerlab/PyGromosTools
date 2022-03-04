@@ -12,13 +12,13 @@ import pandas as pd
 from typing import List
 from numbers import Number
 
-from pygromos.utils import bash, compiledProgram
+from pygromos.utils import bash
 from pygromos.data import pdb_lib
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
-from pygromos.gromos.utils import gromosTypeConverter
+from pygromos.gromos._gromosClass import _gromosClass
 
 
-class _gromosPPbase(compiledProgram._compiled_program):
+class _gromosPPbase(_gromosClass):
 
     """
     GromosPP
@@ -61,7 +61,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         GromosPP Programms
     """
 
-    @gromosTypeConverter
     def amber2gromos(
         self,
         ambertop: str,
@@ -110,7 +109,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
             print(command)
         bash.execute(command, catch_STD=out_path, verbose=verbose)
 
-    @gromosTypeConverter
     def pdb2gromos(
         self,
         in_pdb_path: str,
@@ -161,7 +159,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_cnf_path
 
-    @gromosTypeConverter
     def pdb2seq(
         self,
         in_pdb_path: str,
@@ -231,7 +228,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command)
         return out_path
 
-    @gromosTypeConverter
     def make_top(
         self,
         out_top_path: str,
@@ -283,7 +279,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
-    @gromosTypeConverter
     def com_top(
         self,
         in_topo_paths: (str or List[str]),
@@ -336,7 +331,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
-    @gromosTypeConverter
     def dfmult(
         self,
         in_endstate_file_paths: List[str],
@@ -397,7 +391,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_file_path
 
-    @gromosTypeConverter
     def frameout(
         self,
         in_top_path: str,
@@ -531,7 +524,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_file_path
 
-    @gromosTypeConverter
     def ene_ana(
         self,
         in_ene_ana_library_path: str,
@@ -735,7 +727,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         else:
             return result_files
 
-    @gromosTypeConverter
     def gch(
         self,
         in_cnf_path: str,
@@ -819,7 +810,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
             _binary_name=_binary_name,
         )
 
-    @gromosTypeConverter
     def sim_box(
         self,
         in_top_path: str,
@@ -914,7 +904,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_cnf_path
 
-    @gromosTypeConverter
     def ran_box(
         self,
         in_top_path: str,
@@ -978,7 +967,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         else:
             return command
 
-    @gromosTypeConverter
     def build_box(
         self,
         in_top_path: str,
@@ -1022,7 +1010,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         else:
             return command
 
-    @gromosTypeConverter
     def tser(
         self,
         in_trc_path: str,
@@ -1095,7 +1082,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command)
         return out_csv_path
 
-    @gromosTypeConverter
     def red_top(self, in_top_path: str, atom_selection: str, out_top_path: str, _binary_name: str = "red_top") -> str:
         """
             red_top is a gromos tool to reduce a gromos tool to a certain selection.
@@ -1123,7 +1109,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command)
         return out_top_path
 
-    @gromosTypeConverter
     def prep_eds(
         self,
         in_top_paths: List[str],
@@ -1185,7 +1170,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_top, out_ptp
 
-    @gromosTypeConverter
     def prep_noe(
         self,
         in_top_path: str,
@@ -1265,7 +1249,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_path
 
-    @gromosTypeConverter
     def rmsf(
         self,
         in_top_path: str,
@@ -1323,7 +1306,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
-    @gromosTypeConverter
     def rmsd(
         self,
         in_top_path: str,
@@ -1372,7 +1354,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
-    @gromosTypeConverter
     def cog(
         self,
         in_top_path: str,
@@ -1449,7 +1430,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_file_path
 
-    @gromosTypeConverter
     def noe(
         self,
         in_top_path: str,
@@ -1515,7 +1495,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_path
 
-    @gromosTypeConverter
     def jval(
         self,
         in_top_path: str,
@@ -1607,7 +1586,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
 
         return out_path
 
-    @gromosTypeConverter
     def ion(
         self,
         in_top_path: str,
@@ -1709,7 +1687,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
     def _gr962pdb(self):
         raise Exception("not implemented yet!")
 
-    @gromosTypeConverter
     def rgyr(
         self,
         out_rgyr_path: str,
@@ -1765,7 +1742,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command, catch_STD=out_rgyr_path)
         return out_rgyr_path
 
-    @gromosTypeConverter
     def sasa(
         self,
         out_sasa_path: str,
@@ -1832,7 +1808,6 @@ class _gromosPPbase(compiledProgram._compiled_program):
         bash.execute(command, catch_STD=out_sasa_path)
         return out_sasa_path
 
-    @gromosTypeConverter
     def filter(
         self,
         out_filter_path: str,

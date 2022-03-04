@@ -10,12 +10,12 @@ import os
 import datetime
 import time
 
-from pygromos.utils import bash, compiledProgram
+from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
-from pygromos.gromos.utils import gromosTypeConverter
+from pygromos.gromos._gromosClass import _gromosClass
 
 
-class _Gromos(compiledProgram._compiled_program):
+class _GromosXX(_gromosClass):
     """
     GromosXX
 
@@ -54,7 +54,6 @@ class _Gromos(compiledProgram._compiled_program):
         GromosXX Programms
     """
 
-    @gromosTypeConverter
     def md_run(
         self,
         in_topo_path: str,
@@ -229,7 +228,6 @@ class _Gromos(compiledProgram._compiled_program):
 
         return log_file_path
 
-    @gromosTypeConverter
     def repex_run(
         self,
         in_topo_path: str,
@@ -404,7 +402,7 @@ class _Gromos(compiledProgram._compiled_program):
         return log_file_path
 
 
-class GromosXX(_Gromos):
+class GromosXX(_GromosXX):
     """
     GromosXX
 
