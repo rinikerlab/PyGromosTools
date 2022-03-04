@@ -846,7 +846,14 @@ class Gromos_System:
             if os.path.exists(promised_file.path):
                 if self.verbose:
                     print("READING FILE")
-                setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
+                if promised_file_key == "trc":
+                    setattr(
+                        self,
+                        "_" + promised_file_key,
+                        self._all_files[promised_file_key](traj_path=promised_file.path, in_cnf=self.cnf),
+                    )
+                else:
+                    setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
                 self._future_promised_files.remove(promised_file_key)
             else:
                 warnings.warn("Promised file was not found: " + promised_file_key)
