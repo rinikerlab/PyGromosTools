@@ -41,12 +41,12 @@ class test_mtb_orga(test_mtb):
 
     def test_all_mtb_solutes_read(self):
         mtb_file = self.class_type(self.in_file_path)
-        assert len(mtb_file.MTBUILDBLSOLUTE_list) == 63  # 63 solutes in 2016H66 orga
+        assert len(mtb_file.mtb_solutes) == 63  # 63 solutes in 2016H66 orga
         return 0
 
     def test_CHE_read(self):
         mtb_file = self.class_type(self.in_file_path)
-        mol = mtb_file.MTBUILDBLSOLUTE_list[0]
+        mol = mtb_file.mtb_solutes["CHE"]
 
         assert mol.RNME == "CHE"
 
