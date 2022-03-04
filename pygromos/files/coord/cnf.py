@@ -700,13 +700,12 @@ class Cnf(_general_gromos_file):
 
         Returns
         -------
-        int 
+        int
             Returns the last atom of the system.
         """
         return self.POSITION.content[-1].atomID
 
-
-    def center_of_geometry(self, selectedAtoms:list=None) -> list:
+    def center_of_geometry(self, selectedAtoms: list = None) -> list:
         """calculates the center of geometry for asingle molecule or the selected Atoms
 
         Returns
@@ -1048,8 +1047,7 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-
-    def get_pdb(self, rdkit_ready:bool=True, connectivity_top=None)->str:
+    def get_pdb(self, rdkit_ready: bool = True, connectivity_top=None) -> str:
         """
             translate cnf to pdb.
 
@@ -1154,9 +1152,8 @@ class Cnf(_general_gromos_file):
             in xyz format
         """
         xyz_str = str(len(self.POSITION)) + "\n"
-        xyz_str += "# " + str(self.TITLE.content[0])
-        xyz_str += "# exported wit PyGromosTools\n"
-        xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
+        xyz_str += "# " + str(self.TITLE.content[0]).strip() + "\t >> exported wit PyGromosTools <<\n"
+        xyz_format = "  {:<3}  {:> 3.9f}  {:> 3.9f}  {:> 3.9f}\n"
 
         for position in self.POSITION:
             xyz_line = xyz_format.format(position.atomType[0], position.xp * 10, position.yp * 10, position.zp * 10)

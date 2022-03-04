@@ -2,6 +2,7 @@ from pygromos.analysis.error_estimate import error_estimator
 import numpy as np
 import unittest
 
+
 class test_ee(unittest.TestCase):
     error_estimate_class = error_estimator
     test_array = np.arange(10000)

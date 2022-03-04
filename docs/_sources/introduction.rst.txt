@@ -2,7 +2,7 @@
 
 .. image:: .img/PyGromosToolsBanner.png
    :target: .img/PyGromosToolsBanner.png
-   :alt: 
+   :alt:
 
 
 Welcome to PyGromosTools
@@ -42,18 +42,18 @@ Content
 ----
 
 
-* 
+*
   GROMOS wrappers
 
 
   * GromosXX wrapper: for simulation execution
   * GromosPP wrapper: for GROMOS++ program usage
 
-* 
+*
   File handling of all GROMOS file types for automated creation/modification/analysis :
 
 
-  * 
+  *
     coordinate files CNF:
 
 
@@ -66,7 +66,7 @@ Content
        cnf = Cnf(input_value="file_name")
        print(cnf.GENBOX)
 
-  * 
+  *
     topology files:
 
 
@@ -87,7 +87,7 @@ Content
        top.add_new_SOLUTEATOM(ATNM=42)
        print(top)
 
-  * 
+  *
     simulation parameter files IMD
 
 
@@ -100,7 +100,7 @@ Content
        imd.INITIALISE.TEMPI = 137
        print(imd)
 
-  * 
+  *
     trajectories (tre, trc, trg, ...)
 
 
@@ -115,7 +115,7 @@ Content
        trc = Trc(input_value="file_path")
        print(trc.rmsd().mean())
 
-  * 
+  *
     replica exchange files:
 
     .. code-block::
@@ -124,7 +124,7 @@ Content
 
   * classes for single blocks of each of these files.
 
-* 
+*
   Automation and file management system ``gromos_system``
 
 
@@ -139,7 +139,7 @@ Content
      gsys = Gromos_System(work_folder="dir", in_smiles="C1CCCCC1", auto_convert=True, Forcefield=ff)
      print(gsys)
 
-* 
+*
   Simulation Submission and Execution :
 
 
@@ -194,7 +194,7 @@ Content
      emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                              step_name=step_name, submission_system=sub_system)
 
-* 
+*
   Other utilities:
 
 
@@ -209,10 +209,10 @@ Specifications
 
 
 * Python >=3.7:
-* 
+*
   requires: numpy, scipy, pandas, rdkit
 
-* 
+*
   optional: openforcefield for OpenForceField and Serenityff functions
 
 SETUP
@@ -228,5 +228,5 @@ Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder
 Acknowledgements
 ^^^^^^^^^^^^^^^^
 
-Project based on the 
+Project based on the
 `Computational Molecular Science Python Cookiecutter <https://github.com/molssi/cookiecutter-cms>`_ version 1.3.

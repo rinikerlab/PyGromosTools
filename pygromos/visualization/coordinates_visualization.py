@@ -7,17 +7,18 @@ from pygromos.utils.amino_acids import three_letter_aa_lib, ions
 from copy import deepcopy
 import py3Dmol
 
+
 def show_cnf(cnf: Cnf):
     cCNF = deepcopy(cnf)
 
-    view=py3Dmol.view(width=400, height=400)
+    view = py3Dmol.view(width=400, height=400)
 
-    solute = [resn[:3] for resn in cnf.residues if(resn !="SOLV")]
-    if(len([res for res in solute if(res in three_letter_aa_lib)])>15 or "SOLV" in cnf.residues):
+    solute = [resn[:3] for resn in cnf.residues if (resn != "SOLV")]
+    if len([res for res in solute if (res in three_letter_aa_lib)]) > 15 or "SOLV" in cnf.residues:
         pos = []
         for atomP in cCNF.POSITION:
             atomP.atomType = atomP.atomType[:1]
-            if(atomP.resName == "SOLV"):
+            if atomP.resName == "SOLV":
                 pos.append(atomP)
         solv_cnf = deepcopy(cnf)
         solv_cnf.POSITION = pos
@@ -28,15 +29,15 @@ def show_cnf(cnf: Cnf):
         view.addModel(xyz_str)
         view.addModel(xyzd_str)
 
-        view.setStyle({'resn': solute}, {"stick": {}})
+        view.setStyle({"resn": solute}, {"stick": {}})
 
-        if(len([res for res in solute if(res in three_letter_aa_lib)])>15):
-            protein = [res for res in solute if(res in three_letter_aa_lib)]
-            view.setStyle({'resn': protein}, {"cartoon": {}})
-            view.setStyle({'cartoon': {'arrows': True, 'tubes': True, 'style': 'oval'}})
+        if len([res for res in solute if (res in three_letter_aa_lib)]) > 15:
+            protein = [res for res in solute if (res in three_letter_aa_lib)]
+            view.setStyle({"resn": protein}, {"cartoon": {}})
+            view.setStyle({"cartoon": {"arrows": True, "tubes": True, "style": "oval"}})
 
-        view.setStyle({'resn': "SOLV"}, {"line": {}})        # Solvent
-        view.setStyle({'resn': ions},  {"sphere": {"color": "lightgreen", "radius":0.7}})        # ions
+        view.setStyle({"resn": "SOLV"}, {"line": {}})  # Solvent
+        view.setStyle({"resn": ions}, {"sphere": {"color": "lightgreen", "radius": 0.7}})  # ions
 
     else:
         xyz_str = cCNF.get_xyz()
@@ -47,8 +48,7 @@ def show_cnf(cnf: Cnf):
     return view
 
 
-
-def show_coordinate_traj(trc:Trc, cnf: Cnf):
+def show_coordinate_traj(trc: Trc, cnf: Cnf):
     """
     This function visualizes the provided TRC and maps it on the
 
@@ -65,15 +65,15 @@ def show_coordinate_traj(trc:Trc, cnf: Cnf):
     traj = trc.get_pdb(cnf)
     view = py3Dmol.view(width=400, height=400)
     view.addModelsAsFrames(traj)
-    view.setStyle({'model': -1}, {"stick": {}})
+    view.setStyle({"model": -1}, {"stick": {}})
 
-    solute = [resn[:3] for resn in cnf.residues if(resn !="SOLV")]
+    solute = [resn[:3] for resn in cnf.residues if (resn != "SOLV")]
     aminoA = [res for res in solute if (res in three_letter_aa_lib)]
-    if (len(aminoA) > 15):
-        view.setStyle({'resn': aminoA}, {"cartoon": {'arrows': True, 'tubes': True, 'style': 'oval'}})
-    view.setStyle({'resn': ions}, {"sphere": {"color": "lightgreen", "radius": 0.7}})  # ions
+    if len(aminoA) > 15:
+        view.setStyle({"resn": aminoA}, {"cartoon": {"arrows": True, "tubes": True, "style": "oval"}})
+    view.setStyle({"resn": ions}, {"sphere": {"color": "lightgreen", "radius": 0.7}})  # ions
 
-    view.animate({"loop":"forward", "reps":1})
+    view.animate({"loop": "forward", "reps": 1})
 
     view.zoomTo()
     return view

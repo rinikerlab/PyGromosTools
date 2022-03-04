@@ -6,13 +6,12 @@ from pygromos.files.blocks import topology_blocks as blocks
 
 class Distance_restraints(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", "DISTANCERESPEC"]
-    _gromos_file_ending:str = "disres"
+    _gromos_file_ending: str = "disres"
 
-    def __init__(self, in_value:(str or dict)=None):
+    def __init__(self, in_value: (str or dict) = None):
         self.blocksset = []
-        self.block_names = {"TITLE": "title_block", "DISTANCERESSPEC":"distance_res_spec_block"}
+        self.block_names = {"TITLE": "title_block", "DISTANCERESSPEC": "distance_res_spec_block"}
         super().__init__(in_value=in_value)
-
 
         """
         if(type(path) is str):
@@ -24,12 +23,13 @@ class Distance_restraints(_general_gromos_file._general_gromos_file):
         else:
             raise IOError("disres class got "+str(type(path))+" as input. Unknown input type for disres.")
         """
+
     def read_blocks(self):
-        #parse file into dicts
+        # parse file into dicts
         data = parser.read_disres(self.path)
-        #add _blocks as attribute to objects
+        # add _blocks as attribute to objects
         for key, sub_content in data.items():
-            #print(sub_content)
+            # print(sub_content)
             self.add_block(block=sub_content)
 
 

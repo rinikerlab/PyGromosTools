@@ -1,7 +1,7 @@
 TITLE
 1000 CCL4 water molecules, cubic box, a = 5.426025513nm
 5.5ns NPT (293K, 1atm), A.P. Kunz, 2010
-Ref: I.G. Tironi et al. 1996, Mol. Simulation 18:1 
+Ref: I.G. Tironi et al. 1996, Mol. Simulation 18:1
 END
 POSITION
 # first 24 chars ignored
