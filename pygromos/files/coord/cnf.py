@@ -1152,8 +1152,7 @@ class Cnf(_general_gromos_file):
             in xyz format
         """
         xyz_str = str(len(self.POSITION)) + "\n"
-        xyz_str += "# " + str(self.TITLE.content[0])
-        xyz_str += "# exported wit PyGromosTools\n"
+        xyz_str += "# " + str(self.TITLE.content[0]).strip() + "\t >> exported wit PyGromosTools <<\n"
         xyz_format = "  {:<3}  {:> 3.9f}  {:> 3.9f}  {:> 3.9f}\n"
 
         for position in self.POSITION:
