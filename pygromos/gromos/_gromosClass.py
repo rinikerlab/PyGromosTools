@@ -8,9 +8,7 @@ class _gromosClass(_compiled_program):
     def __init__(self, in_bin_dir: str, dummy: bool = False) -> Union[str, None]:
 
         for func in dir(self):
-            print(func, end="")
             if callable(getattr(self, func)) and not func.startswith("__"):
-                print("\t check")
                 setattr(self, func, gromosTypeConverter(self, getattr(self, func)))
                 pass
 

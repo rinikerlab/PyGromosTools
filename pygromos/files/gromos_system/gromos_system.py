@@ -411,7 +411,6 @@ class Gromos_System:
             elif not attribute_dict[key] is None and key in skip and not key in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
-                print("STUPID ", key)
                 new_dict.update({key: None})
         return new_dict
 
