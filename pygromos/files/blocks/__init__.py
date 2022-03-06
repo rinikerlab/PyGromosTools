@@ -35,7 +35,7 @@ class all_blocks_class:
                 if (inspect.isclass(b) and issubclass(b, _generic_gromos_block))
             ]
 
-    def get_all_blocks() -> dict:
+    def get_all_blocks(self) -> dict:
         return vars(self)
 
 
