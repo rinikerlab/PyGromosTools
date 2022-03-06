@@ -13,6 +13,7 @@ dependencies:
   ## Meta
   - typing
   - pre-commit
+  - jupytext
   # Science
   - mpmath
   - pandas
