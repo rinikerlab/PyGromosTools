@@ -12,7 +12,7 @@ from typing import List, Dict, NamedTuple, Iterable, Union
 import pandas as pd
 from collections import namedtuple
 from pygromos.files._basics import _general_gromos_file, parser
-from pygromos.files.blocks import _all_blocks as blocks
+from pygromos.files.blocks import TITLE
 
 
 class NOE(_general_gromos_file._general_gromos_file):
@@ -21,7 +21,7 @@ class NOE(_general_gromos_file._general_gromos_file):
     _required_blocks = ["TITLE", "AVERAGE_NOE", "NOE_VIOLATIONS", "RESTRAINT_LEGEND"]
     _gromos_file_ending = "noe"
     # POSSIBLE GROMOS BLOCKS
-    TITLE: blocks.TITLE
+    TITLE: TITLE
     AVERAGE_NOE: pd.DataFrame
     NOE_VIOLATIONS: pd.DataFrame
     RESTRAINT_LEGEND: pd.DataFrame
@@ -42,7 +42,6 @@ class NOE(_general_gromos_file._general_gromos_file):
         in_file = open(self._orig_file_path, "r")
         in_file_lines = in_file.readlines()
 
-        # read_blocks
         # read_blocks
         known_blocks = ["TITLE", "NOE VIOLATIONS", "AVERAGE NOE"]
         in_block = False

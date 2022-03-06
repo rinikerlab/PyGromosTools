@@ -10,7 +10,7 @@ import inspect
 import warnings
 from typing import List, Dict, Callable
 
-from pygromos.files.blocks import _all_blocks as blocks
+from pygromos.files.blocks import all_blocks
 
 
 ##file class
@@ -26,7 +26,7 @@ class _general_gromos_file:
 
     _gromos_file_ending: str
     # private
-    _blocks: Dict[str, blocks._generic_gromos_block]
+    _blocks: Dict[str, all_blocks._generic_gromos_block]
     _block_order: List[str] = []
     _future_file: bool
 
@@ -152,7 +152,7 @@ class _general_gromos_file:
         self,
         blocktitle: str = None,
         content: dict = None,
-        block: blocks._generic_gromos_block = None,
+        block: all_blocks._generic_gromos_block = None,
         verbose: bool = False,
     ):
         """add_block
@@ -164,7 +164,7 @@ class _general_gromos_file:
             title of a block
         content :   str, optional
             block content
-        block : blocks._generic_gromos_block, optional
+        block : all_blocks._generic_gromos_block, optional
             block class
         verbose :   bool, optional
             shall messages be printed?
@@ -184,7 +184,7 @@ class _general_gromos_file:
             # if blocktitle in self._block_names:
             if isinstance(content, dict):
                 if blocktitle == "TITLE":  # TODO fIX IN PARSER
-                    self.__setattr__(blocktitle, blocks.__getattribute__(blocktitle)(content))
+                    self.__setattr__(blocktitle, all_blocks.__getattribute__(blocktitle)(content))
                 else:
                     try:
                         content = {k.split("(")[0]: v for k, v in content.items()}
@@ -201,7 +201,7 @@ class _general_gromos_file:
                         elif issubclass(self.__class__, Top):
                             self.kwCreateBlock(blocktitle, content, topology_blocks)
                         else:
-                            self.kwCreateBlock(blocktitle, content, blocks)
+                            self.kwCreateBlock(blocktitle, content, all_blocks.all_blocks)
 
                         if verbose:
                             print("++++++++++++++++++++++++++++++")
@@ -214,17 +214,13 @@ class _general_gromos_file:
                             + "' block!\n"
                         )
                         msg += "Content is " + str(tuple(content.keys())) + "\n"
-                        msg += (
-                            "Block knows "
-                            + str((blocks.__getattribute__(blocktitle).__init__.__code__.co_varnames)[1:])
-                            + "\n"
-                        )
+                        msg += "Block knows " + str((all_blocks(blocktitle).__init__.__code__.co_varnames)[1:]) + "\n"
                         raise IOError(msg)
                 if verbose:
                     print("Block " + blocktitle + " added to gromos File object.")
 
             elif isinstance(content, list):
-                block_class = blocks.__getattribute__(blocktitle)
+                block_class = all_blocks.__getattribute__(blocktitle)
                 block = block_class(content)
 
                 self.__setattr__(blocktitle, block)
