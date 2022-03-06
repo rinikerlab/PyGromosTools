@@ -215,7 +215,11 @@ class _general_gromos_file:
                             + str(e)
                         )
                         msg += "Content is " + str(tuple(content.keys())) + "\n"
-                        msg += "Block knows " + str((all_blocks(blocktitle).__init__.__code__.co_varnames)[1:]) + "\n"
+                        msg += (
+                            "Block knows "
+                            + str((all_blocks.get_all_blocks()[blocktitle].__init__.__code__.co_varnames)[1:])
+                            + "\n"
+                        )
                         raise IOError(msg)
                 if verbose:
                     print("Block " + blocktitle + " added to gromos File object.")

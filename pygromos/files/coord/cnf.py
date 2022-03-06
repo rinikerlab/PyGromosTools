@@ -176,7 +176,7 @@ class Cnf(_general_gromos_file):
         # print(ligand_resn_prefix)
         ligand_residue = lambda res: (
             (res != "SOLV" and (res not in aa.three_letter_aa_lib and res != "prot")) and res not in not_ligand_residues
-        ) or (not isinstance(ligand_resn_prefix, None) and res in ligand_resn_prefix)
+        ) or (ligand_resn_prefix is not None and res in ligand_resn_prefix)
         # print(ligand_residue)
 
         # get ligand parameters

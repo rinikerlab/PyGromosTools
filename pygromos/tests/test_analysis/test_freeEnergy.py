@@ -30,42 +30,6 @@ class test_ZwanzigEquation(unittest.TestCase):
         np.testing.assert_almost_equal(desired=dF_ana, actual=dF_zwanzig, decimal=2)
 
 
-class test_BAR(test_ZwanzigEquation):
-    feCalculation = bennetAcceptanceRatio
-
-    def test_free_Energy1(self):
-        feCalc = self.feCalculation(kT=True)
-
-        # simulate Bar conditions
-        samples = 10000
-
-        # ensemble 1
-        V1_min = 1
-        V1_noise_1 = 0.1
-
-        V2_off = 2
-        V2_noise_1 = 0.1
-
-        # ensemble 1
-        V1_off = 2
-        V1_noise_2 = 0.1
-        V2_min = 1
-        V2_noise_2 = 0.1
-
-        # Distributions
-        V1_1 = np.random.normal(V1_min, V1_noise_1, samples)
-        V2_1 = np.random.normal(V2_off, V2_noise_1, samples)
-
-        V1_2 = np.random.normal(V1_off, V1_noise_2, samples)
-        V2_2 = np.random.normal(V2_min, V2_noise_2, samples)
-
-        dF_bar = feCalc.calculate(Vi_i=V1_1, Vj_i=V2_1, Vi_j=V1_2, Vj_j=V2_2)
-
-        print(dF_bar)
-        dF_ana = 1.000000000000
-        np.testing.assert_almost_equal(desired=dF_ana, actual=dF_bar, decimal=2)
-
-
 # TODO: @benjamin is this redundant?
 # class test_BAR(test_ZwanzigEquation):
 #     feCalculation = bennetAcceptanceRatio
@@ -78,15 +42,16 @@ class test_BAR(test_ZwanzigEquation):
 
 #         # ensemble 1
 #         V1_min = 1
-#         V1_noise_1 = 0.01
+#         V1_noise_1 = 0.1
+
 #         V2_off = 2
-#         V2_noise_1 = 0.01
+#         V2_noise_1 = 0.1
 
 #         # ensemble 1
 #         V1_off = 2
-#         V1_noise_2 = 0.01
+#         V1_noise_2 = 0.1
 #         V2_min = 1
-#         V2_noise_2 = 0.01
+#         V2_noise_2 = 0.1
 
 #         # Distributions
 #         V1_1 = np.random.normal(V1_min, V1_noise_1, samples)
@@ -95,11 +60,46 @@ class test_BAR(test_ZwanzigEquation):
 #         V1_2 = np.random.normal(V1_off, V1_noise_2, samples)
 #         V2_2 = np.random.normal(V2_min, V2_noise_2, samples)
 
-#         dF_bar = feCalc.calculate(Vi_i=V1_1, Vj_i=V2_1, Vi_j=V1_2, Vj_j=V2_2, verbose=True)
+#         dF_bar = feCalc.calculate(Vi_i=V1_1, Vj_i=V2_1, Vi_j=V1_2, Vj_j=V2_2)
 
 #         print(dF_bar)
-#         dF_ana = 0.000000000000
+#         dF_ana = 1.000000000000
 #         np.testing.assert_almost_equal(desired=dF_ana, actual=dF_bar, decimal=2)
+
+
+class test_BAR(test_ZwanzigEquation):
+    feCalculation = bennetAcceptanceRatio
+
+    def test_free_Energy1(self):
+        feCalc = self.feCalculation(kT=True)
+
+        # simulate Bar conditions
+        samples = 10000
+
+        # ensemble 1
+        V1_min = 1
+        V1_noise_1 = 0.01
+        V2_off = 2
+        V2_noise_1 = 0.01
+
+        # ensemble 1
+        V1_off = 2
+        V1_noise_2 = 0.01
+        V2_min = 1
+        V2_noise_2 = 0.01
+
+        # Distributions
+        V1_1 = np.random.normal(V1_min, V1_noise_1, samples)
+        V2_1 = np.random.normal(V2_off, V2_noise_1, samples)
+
+        V1_2 = np.random.normal(V1_off, V1_noise_2, samples)
+        V2_2 = np.random.normal(V2_min, V2_noise_2, samples)
+
+        dF_bar = feCalc.calculate(Vi_i=V1_1, Vj_i=V2_1, Vi_j=V1_2, Vj_j=V2_2, verbose=True)
+
+        print(dF_bar)
+        dF_ana = 0.000000000000
+        np.testing.assert_almost_equal(desired=dF_ana, actual=dF_bar, decimal=2)
 
 
 class test_threeStateZwanzigReweighting(test_ZwanzigEquation):

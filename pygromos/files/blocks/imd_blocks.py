@@ -134,18 +134,18 @@ class _generic_imd_block(_generic_gromos_block):
                 if self.__annotations__[key] is bool:
                     return bool(int(field))  # solves the type problem for simple types
                 return self.__annotations__[key](field)  # solves the type problem for simple types
-            except ValueError:
+            except Exception:
                 return field
         elif isinstance(field, list):
             if all([isinstance(x, str) for x in field]):
                 try:
                     return [float(x) for x in field]
-                except ValueError:
+                except Exception:
                     return field
             elif all([isinstance(x, list) for x in field]) and all([[isinstance(x, list) for x in y] for y in field]):
                 try:
                     return [[float(x) for x in y] for y in field]
-                except ValueError:
+                except Exception:
                     return field
 
 
@@ -1155,7 +1155,7 @@ class FORCE(_generic_imd_block):
             self.VDW = bool(int(VDW))
             try:
                 self.NEGR = int(NEGR)
-            except ValueError:
+            except Exception:
                 if isinstance(NEGR, list):
                     self.NEGR = int(NEGR[0])
                     NRE = NEGR[1:] + NRE

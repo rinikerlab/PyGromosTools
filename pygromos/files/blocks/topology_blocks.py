@@ -2323,7 +2323,7 @@ class SOLUTEATOM(_iterable_topology_block):
         # set NRP and check for sanity
         try:
             self.NRP = int(contentLines.pop(0))
-        except ValueError:
+        except Exception:
             self.NRP = 0
         if self.NRP < 0:
             raise IOError("NPR in SOLUTEATOM Block is " + str(self.NRP))
