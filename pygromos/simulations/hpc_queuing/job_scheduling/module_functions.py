@@ -1,6 +1,6 @@
 import os
 from inspect import signature, _empty
-from typing import Dict, List
+from typing import List
 from pygromos.files import imd
 from pygromos.files.coord import cnf as cnf_cls
 from pygromos.utils import amino_acids as aa
@@ -26,7 +26,7 @@ def adapt_imd_template(
         lambda res: res != solvent_keyword
         and res not in aa.three_letter_aa_lib
         and res != "prot"
-        and (not res in exclude_residues)
+        and (res not in exclude_residues)
     )
     protein_residues = {res: val for res, val in orig_residues.items() if (res in aa.three_letter_aa_lib)}
     n_atoms_prot = sum(
@@ -47,7 +47,7 @@ def adapt_imd_template(
         print("protein_position:", prot_position)
         residues.update({"prot": {prot_position: n_atoms_prot}})
 
-    if not solvent_keyword in residues:
+    if solvent_keyword not in residues:
         residues.update({solvent_keyword: 0})
 
     imd_file = imd.Imd(in_template_imd_path)
@@ -57,7 +57,7 @@ def adapt_imd_template(
     imd_file.STEP.NSTLIM = simulation_steps
 
     # hack for TIP3P explicit solvent
-    if len(exclude_residues) > 0 and not "prot" in residues:
+    if len(exclude_residues) > 0 and "prot" not in residues:
         solvent_bath = (
             lig_atoms + sum([sum(list(residues[x].values())) for x in exclude_residues]) + residues[solvent_keyword]
         )

@@ -13,6 +13,7 @@ import importlib
 import shutil
 import os
 import collections
+from tabnanny import verbose
 
 from pygromos.files.topology.ifp import ifp
 from pygromos.files.topology.top import Top
@@ -22,7 +23,7 @@ from pygromos.data import ff
 from pygromos.data.ff import Gromos2016H66
 from pygromos.data.ff import Gromos54A7
 
-if importlib.util.find_spec("openff") != None:
+if importlib.util.find_spec("openff") is not None:
     from openff.toolkit.typing.engines import smirnoff
 
     has_openff = True
@@ -69,10 +70,10 @@ class forcefield_system:
                 "Could not import smirnoff FF as openFF toolkit was missing! "
                 "Please install the package for this feature!"
             )
-        if self.path != None:
+        if self.path is not None:
             try:
                 self.off = smirnoff.ForceField(self.path)
-            except:
+            except ImportError:
                 raise ImportError("Could not import a OpenForceField from path: " + str(self.path))
         else:
             filelist = glob.glob(ff.data_ff_SMIRNOFF + "/*.offxml")
@@ -83,15 +84,15 @@ class forcefield_system:
                     self.off = smirnoff.ForceField(f)
                     self.path = f
                     break
-                except Exception as err:
+                except ImportError:
                     pass
         print("Found off: " + str(self.path))
 
     def import_amber_ff(self):
-        if self.path != None:
+        if self.path is not None:
             self.amber_basedir = self.path
 
-        elif shutil.which("tleap") != None:
+        elif shutil.which("tleap") is not None:
             has_amber = True  # ambertools in path
             self.amber_basedir = os.path.abspath(os.path.dirname(shutil.which("tleap")) + "/../")
 
@@ -100,6 +101,9 @@ class forcefield_system:
             raise ImportError(
                 "Could not import GAFF FF as ambertools was missing! " "Please install the package for this feature!"
             )
+
+        if verbose:
+            print("Found amber: " + str(has_amber))
 
         self.amber_bindir = self.amber_basedir + "/bin"
         self.leaprc_files = [

@@ -5,8 +5,7 @@ from typing import List, Tuple, Dict
 
 import numpy as np
 
-from pygromos.files.blocks._general_blocks import TITLE
-from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
+from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
 
 """
    FIELDS
@@ -139,7 +138,7 @@ class atom_lam_pertubation_state_dihedral(_generic_field):
 """
     BLOCKS
 """
-### NONBONDED
+# NONBONDED
 
 
 class MPERTATOM(_generic_gromos_block):
@@ -191,9 +190,9 @@ class MPERTATOM(_generic_gromos_block):
 
     def read_content_from_str(self, content: List[str]):
         field = 0
-        comment = ""
+        comment = ""  # noqa: F841
         NJLA = None
-        NTPB = None
+        NTPB = None  # noqa: F841
         STATEIDENTIFIERS = []
         STATEATOMS = []
 
@@ -201,7 +200,8 @@ class MPERTATOM(_generic_gromos_block):
         for line in content:
             # print(line)
             if "#" in line:
-                comment = line
+                pass
+                # comment = line
             else:
                 if field > 3:
                     if first:
@@ -216,7 +216,7 @@ class MPERTATOM(_generic_gromos_block):
 
                     state_line = {key: value for key, value in zip(self.STATEATOMHEADER, line.split())}
                     final_state_line = {
-                        key: state_line[key] for key in state_line if (not "IAC" in key and not "CHARGE" in key)
+                        key: state_line[key] for key in state_line if ("IAC" not in key and "CHARGE" not in key)
                     }
 
                     states = {
@@ -280,7 +280,7 @@ class MPERTATOM(_generic_gromos_block):
 
         # find all new states
         unique_stateIDs = np.unique(np.concatenate([list(natom.STATES.keys()) for natom in state_atoms]))
-        ## Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
+        # TODO: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
         unique_states = list(map(str, ["state" + str(x) if isinstance(x, Number) else x for x in unique_stateIDs]))
 
         # insert new state IDs
@@ -307,14 +307,14 @@ class MPERTATOM(_generic_gromos_block):
 
                 # add missing dummies
                 # print(unique_stateIDs)
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
                 # remove present atom
                 del atomIDs[atomIDs.index(atom.NR)]
 
             else:
                 # add missing dummies
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
         # 2. add new atoms
         new_atoms = [atom for atom in state_atoms if (atom.NR in atomIDs)]
@@ -340,7 +340,7 @@ class MPERTATOM(_generic_gromos_block):
         -------
 
         """
-        if not stateIDs is None:
+        if stateIDs is not None:
             if isinstance(stateIDs, int):
                 stateIDs = [stateIDs]
 
@@ -355,7 +355,7 @@ class MPERTATOM(_generic_gromos_block):
 
             self.NPTB -= len(set(stateIDs))
 
-        elif not stateNames is None:
+        elif stateNames is not None:
             if isinstance(stateNames, str):
                 stateNames = [stateNames]
 
@@ -375,7 +375,7 @@ class MPERTATOM(_generic_gromos_block):
                 ]
             self.NPTB -= len(set(stateNames))
 
-        elif not stateNames is None and not stateIDs is None:
+        elif stateNames is None and stateIDs is None:
             raise Exception("Please give either stateNames or stateIDs")
 
     def delete_atom(self, atomNR: (int, List[int])):
@@ -391,7 +391,7 @@ class MPERTATOM(_generic_gromos_block):
         if isinstance(atomNR, int):
             atomNR = [atomNR]
 
-        ind_offset = 0
+        # ind_offset = 0
         new_STATEATOMS = []
         for ind, atom in enumerate(self.STATEATOMS):
             if atom.NR in atomNR:
@@ -474,7 +474,7 @@ class PERTATOMPARAM(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NJLA is None and not len(STATEATOMS) == NJLA:
+        if NJLA is not None and len(STATEATOMS) != NJLA:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NJLA)
@@ -494,7 +494,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         stdid = False
         for line in content:
             if "#" in line:
-                comment = line
+                # comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -520,7 +520,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                     final_state_line = {
                         key: state_line[key]
                         for key in state_line
-                        if (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)
+                        if ("IAC" not in key and "CHARGE" not in key and "MASS" not in key)
                     }
                     states = {
                         x: pertubation_lam_state_nonbonded(
@@ -578,7 +578,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         """
 
         # some preperations:
-        pre_dummy_state = lambda atomMass: pertubation_lam_state_nonbonded(
+        pre_dummy_state = lambda atomMass: pertubation_lam_state_nonbonded(  # noqa: E731
             IAC=self.dummy_IAC, MASS=atomMass, CHARGE=self.dummy_CHARGE
         )
         insert_id = self.STATEATOMHEADER.index("ALPHLJ")
@@ -586,7 +586,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         # find all new states
         keys = np.array([list(natom.STATES.keys()) for natom in state_atoms], ndmin=1)
         unique_stateIDs = np.unique(np.concatenate(keys))
-        ## Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
+        # TODO: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
         unique_states = list(map(str, ["state" + str(x) if isinstance(x, Number) else x for x in unique_stateIDs]))
 
         # insert new state IDs
@@ -621,14 +621,14 @@ class PERTATOMPARAM(_generic_gromos_block):
                 possible_masses = [val.MASS for key, val in new_atom.STATES.items() if (val.MASS > 0)]
                 # add missing dummies
                 # print(unique_stateIDs)
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
                 # remove present atom
                 del atomIDs[atomIDs.index(atom.NR)]
 
             else:
                 # add missing dummies
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
         # 2. add new atoms
         new_atoms = [atom for atom in state_atoms if (atom.NR in atomIDs)]
@@ -658,7 +658,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         -------
 
         """
-        if not stateIDs is None:
+        if stateIDs is not None:
             if isinstance(stateIDs, int):
                 stateIDs = [stateIDs]
 
@@ -673,7 +673,7 @@ class PERTATOMPARAM(_generic_gromos_block):
 
             self.NPTB -= len(set(stateIDs))
 
-        elif not stateNames is None:
+        elif stateNames is not None:
             if isinstance(stateNames, str):
                 stateNames = [stateNames]
 
@@ -693,7 +693,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                 ]
             self.NPTB -= len(set(stateNames))
 
-        elif not stateNames is None and not stateIDs is None:
+        elif stateNames is None and stateIDs is None:
             raise Exception("Please give either stateNames or stateIDs")
 
     def delete_atom(self, atomNR: (int, List[int])):
@@ -709,7 +709,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         if isinstance(atomNR, int):
             atomNR = [atomNR]
 
-        ind_offset = 0
+        # ind_offset = 0
         new_STATEATOMS = []
         for ind, atom in enumerate(self.STATEATOMS):
             if atom.NR in atomNR:
@@ -755,7 +755,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         return result
 
 
-### BONDED
+# BONDED
 
 
 class PERTBONDSTRETCH(_generic_gromos_block):
@@ -788,7 +788,7 @@ class PERTBONDSTRETCH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPB is None and not len(STATEATOMS) == NPB:
+        if NPB is not None and len(STATEATOMS) != NPB:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NPB)
@@ -823,10 +823,8 @@ class PERTBONDSTRETCH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -842,7 +840,7 @@ class PERTBONDSTRETCH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -913,7 +911,7 @@ class PERTBONDSTRETCHH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPB is None and not len(STATEATOMS) == NPB:
+        if NPB is not None and len(STATEATOMS) != NPB:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NPB)
@@ -948,10 +946,8 @@ class PERTBONDSTRETCHH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -967,7 +963,7 @@ class PERTBONDSTRETCHH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -1008,7 +1004,7 @@ class PERTBONDSTRETCHH(_generic_gromos_block):
         return result
 
 
-### ANGLE
+# ANGLE
 
 
 class PERTBONDANGLE(_generic_gromos_block):
@@ -1041,7 +1037,7 @@ class PERTBONDANGLE(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPA is None and not len(STATEATOMS) == NPA:
+        if NPA is not None and len(STATEATOMS) != NPA:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NPA)
@@ -1076,10 +1072,8 @@ class PERTBONDANGLE(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -1095,7 +1089,7 @@ class PERTBONDANGLE(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -1166,7 +1160,7 @@ class PERTBONDANGLEH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPA is None and not len(STATEATOMS) == NPA:
+        if NPA is not None and not len(STATEATOMS) == NPA:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NPA)
@@ -1201,10 +1195,8 @@ class PERTBONDANGLEH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -1220,7 +1212,7 @@ class PERTBONDANGLEH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -1261,7 +1253,7 @@ class PERTBONDANGLEH(_generic_gromos_block):
         return result
 
 
-### DIHEDRAL
+# DIHEDRAL
 
 
 class PERTPROPERDIH(_generic_gromos_block):
@@ -1294,7 +1286,7 @@ class PERTPROPERDIH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPD is None and not len(STATEATOMS) == NPD:
+        if NPD is not None and len(STATEATOMS) != NPD:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NPD)
@@ -1329,10 +1321,8 @@ class PERTPROPERDIH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -1348,7 +1338,7 @@ class PERTPROPERDIH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -1419,7 +1409,7 @@ class PERTPROPERDIHH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPD is None and not len(STATEATOMS) == NPD:
+        if NPD is not None and len(STATEATOMS) != NPD:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NPD)
@@ -1454,10 +1444,8 @@ class PERTPROPERDIHH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -1473,7 +1461,7 @@ class PERTPROPERDIHH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -1543,7 +1531,7 @@ class PERTPROPERDIHH(_generic_gromos_block):
                 super().__init__(used=True, name=__class__.__name__, content=content)
 
             # You can check yourself :)
-            if not NPD is None and not len(STATEATOMS) == NPD:
+            if NPD is not None and len(STATEATOMS) != NPD:
                 raise ValueError(
                     "NJLA must be equal to the length of STATEATOMS! NJLA="
                     + str(NPD)
@@ -1578,10 +1566,8 @@ class PERTPROPERDIHH(_generic_gromos_block):
             STATEATOMS = []
             first = True
             stdid = False
-            i = 1
             for line in content:
                 if "#" in line:
-                    comment = line
                     if "state_identifiers" in line:
                         stdid = True
                     elif stdid:
@@ -1597,7 +1583,7 @@ class PERTPROPERDIHH(_generic_gromos_block):
                         state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                         state_line.update({"NR": len(STATEATOMS) + 1})
 
-                        final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                        final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                         states = {1: state_line["type1"], 2: state_line["type2"]}
 
                         final_state_line.update({"STATES": states})
@@ -1638,7 +1624,7 @@ class PERTPROPERDIHH(_generic_gromos_block):
             return result
 
 
-### IMPROPER
+# IMPROPER
 
 
 class PERTIMROPERDIH(_generic_gromos_block):
@@ -1671,7 +1657,7 @@ class PERTIMROPERDIH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPD is None and not len(STATEATOMS) == NPD:
+        if NPD is not None and len(STATEATOMS) != NPD:
             raise ValueError(
                 "NPD must be equal to the length of STATEATOMS! NPD="
                 + str(NPD)
@@ -1706,10 +1692,8 @@ class PERTIMROPERDIH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -1725,7 +1709,7 @@ class PERTIMROPERDIH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})
@@ -1796,7 +1780,7 @@ class PERTIMROPERDIHH(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NPD is None and not len(STATEATOMS) == NPD:
+        if NPD is not None and len(STATEATOMS) != NPD:
             raise ValueError(
                 "NPD must be equal to the length of STATEATOMS! NPD="
                 + str(NPD)
@@ -1831,10 +1815,8 @@ class PERTIMROPERDIHH(_generic_gromos_block):
         STATEATOMS = []
         first = True
         stdid = False
-        i = 1
         for line in content:
             if "#" in line:
-                comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -1850,7 +1832,7 @@ class PERTIMROPERDIHH(_generic_gromos_block):
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
                     state_line.update({"NR": len(STATEATOMS) + 1})
 
-                    final_state_line = {key: state_line[key] for key in state_line if (not "type" in key)}
+                    final_state_line = {key: state_line[key] for key in state_line if ("type" not in key)}
                     states = {1: state_line["type1"], 2: state_line["type2"]}
 
                     final_state_line.update({"STATES": states})

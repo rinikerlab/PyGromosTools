@@ -1,19 +1,18 @@
-import unittest
 import numpy as np
 import tempfile
-import os
 from itertools import combinations
+
 from pygromos.files.blocks.pertubation_blocks import pertubation_eds_state, atom_eds_pertubation_state
 from pygromos.files.topology.ptp import Pertubation_topology as ptp
 from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 
 from pygromos.tests.in_testfiles import in_test_file_path
+from pygromos.tests.test_files import out_test_root_dir
 
 in_path = in_test_file_path + "/ptp/eds.ptp"
 in_path2 = in_test_file_path + "/ptp/lam_pert.ptp"
 
-from pygromos.tests.test_files import out_test_root_dir
 
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="ptp_")
 outpath = root_out + "/out_ptp.ptp"
@@ -89,16 +88,16 @@ class test_ptp(general_file_tests):
 
     def test_eds_gen_all_states_ptp(self):
         # INPUT:
-        ## the states to use:
+        # the states to use:
         o_state = pertubation_eds_state(IAC=16, CHARGE=-1.0)
         h_state = pertubation_eds_state(IAC=33, CHARGE=-2.0)
 
-        ## Map for molecule ID with Atom IDS
-        ### First atom assumed to be O and last two Hs
+        # Map for molecule ID with Atom IDS
+        # First atom assumed to be O and last two Hs
         molecules_atoms = {1: [1, 2, 3], 2: [4, 5, 6], 3: [7, 8, 9], 4: [10, 11, 12]}
 
         # BUILD UP STATES
-        ## Generate active state mapping:
+        # Generate active state mapping:
         max_active_mols_same_time = len(molecules_atoms)
         molecule_states = {}
         state_ID = 1
@@ -125,7 +124,7 @@ class test_ptp(general_file_tests):
                     ]
                     new_atoms_state_dict.update({molecule: atoms})
 
-        ##finally make a list for our ptp file (#ThanksGromos)
+        # finally make a list for our ptp file (#ThanksGromos)
         new_atoms_state = np.concatenate(list(new_atoms_state_dict.values()))
 
         # BUILD PTP

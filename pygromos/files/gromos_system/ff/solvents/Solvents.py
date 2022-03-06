@@ -15,7 +15,7 @@ class Solvent:
 
     def __init__(self, name: str = None, coord_file: str = None):
 
-        if name != None:
+        if name is not None:
             self.name = name
             self.coord_file_path = coord_file
         else:
@@ -23,7 +23,7 @@ class Solvent:
 
     def _return_all_paths(self) -> list:
         coll = []
-        if self.coord_file_path != None:
+        if self.coord_file_path is not None:
             coll.append(self.coord_file_path)
         return coll
 
@@ -31,7 +31,7 @@ class Solvent:
 class H2O(Solvent):
     def __init__(self, coord_file_path: str = None):
 
-        if coord_file_path != None:
+        if coord_file_path is not None:
             super().__init__(name="H2O")
             self.coord_file_path = coord_file_path
             self.atomNum = 3
@@ -42,7 +42,7 @@ class H2O(Solvent):
 class CHCL3(Solvent):
     def __init__(self, coord_file_path: str = None):
 
-        if coord_file_path != None:
+        if coord_file_path is not None:
             super().__init__(name="CHCL3")
             self.coord_file_path = coord_file_path
             self.atomNum = 5
@@ -53,7 +53,7 @@ class CHCL3(Solvent):
 class DMSO(Solvent):
     def __init__(self, coord_file_path: str = None):
 
-        if coord_file_path != None:
+        if coord_file_path is not None:
             super().__init__(name="DMSO")
             self.coord_file_path = coord_file_path
             self.atomNum = 4

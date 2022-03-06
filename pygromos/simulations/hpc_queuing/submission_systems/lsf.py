@@ -7,7 +7,8 @@ from pygromos.simulations.hpc_queuing.submission_systems._submission_system impo
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
 from pygromos.utils import bash
-from pygromos.utils.utils import time_wait_s_for_filesystem
+
+# from pygromos.utils.utils import time_wait_s_for_filesystem
 
 
 class LSF(_SubmissionSystem):
@@ -110,7 +111,8 @@ class LSF(_SubmissionSystem):
 
         nCPU = self.nmpi * self.nomp
         submission_string += " -n " + str(nCPU) + " "
-        add_string = ""
+        # TODO: add GPU support
+        # add_string = ""
         # add_string= "-R \"select[model==XeonGold_5118 || model==XeonGold_6150 || model==XeonE3_1585Lv5 || model==XeonE3_1284Lv4 || model==XeonE7_8867v3 || model == XeonGold_6140 || model==XeonGold_6150 ]\""
         if isinstance(self.max_storage, int):
             submission_string += " -R rusage[mem=" + str(self.max_storage) + "] "
@@ -143,7 +145,7 @@ class LSF(_SubmissionSystem):
 
             bash.execute("chmod +x " + command_file_path, env=self._enviroment)
 
-        ##finalize string
+        # finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
 
         if self.verbose:
@@ -161,8 +163,8 @@ class LSF(_SubmissionSystem):
                     print("process returned id: " + str(job_id))
                 if str(job_id) == "" and job_id.isalnum():
                     raise ValueError("Did not get at job ID!")
-            except:
-                raise ChildProcessError("could not submit this command: \n" + str(submission_string))
+            except Exception as e:
+                raise ChildProcessError("could not submit this command: \n" + str(submission_string) + "\n\n" + str(e))
         else:
             job_id = -1
 
@@ -247,7 +249,7 @@ class LSF(_SubmissionSystem):
         else:
             command = ' "' + sub_job.command + '"'
 
-        ##finalize string
+        # finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
 
         if self.verbose:
@@ -265,8 +267,10 @@ class LSF(_SubmissionSystem):
                     print("process returned id: " + str(job_id))
                 if job_id == "" and job_id.isalnum():
                     raise ValueError("Did not get at job ID!")
-            except:
-                raise ChildProcessError("could not submit this command: \n" + " ".join(submission_string))
+            except Exception as e:
+                raise ChildProcessError(
+                    "could not submit this command: \n" + " ".join(submission_string) + "\n\n" + str(e)
+                )
         else:
             job_id = -1
         sub_job.jobID = job_id
@@ -330,14 +334,14 @@ class LSF(_SubmissionSystem):
                     if self.bjobs_only_same_host:
                         out_process = bash.execute("bjobs -w", catch_STD=True)
                     else:
-                        out_process = bash.execute("bjobs -w | grep '$HOSTNAME\|JOBID'", catch_STD=True)
+                        out_process = bash.execute("bjobs -w | grep '$HOSTNAME|JOBID'", catch_STD=True)
                     job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
 
                     # get all finished jobs
                     if self.bjobs_only_same_host:
                         out_process = bash.execute("bjobs -wd", catch_STD=True)
                     else:
-                        out_process = bash.execute("bjobs -wd | grep '$HOSTNAME\|JOBID'", catch_STD=True)
+                        out_process = bash.execute("bjobs -wd | grep '$HOSTNAME|JOBID'", catch_STD=True)
                     job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
                     self._job_queue_time_stamp = datetime.now()
                 except Exception as err:
@@ -425,9 +429,9 @@ class LSF(_SubmissionSystem):
 
         """
 
-        if not job_name is None:
+        if job_name is not None:
             job_ids = list(self.search_queue_for_jobname(job_name, regex=regex).index)
-        elif not job_ids is None:
+        elif job_ids is not None:
             if isinstance(job_ids, int):
                 job_ids = [job_ids]
         else:

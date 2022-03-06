@@ -16,9 +16,9 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../.."))
+import pygromos  # noqa: F401
 
-import pygromos
+sys.path.insert(0, os.path.abspath("../.."))
 
 
 # -- Project information -----------------------------------------------------

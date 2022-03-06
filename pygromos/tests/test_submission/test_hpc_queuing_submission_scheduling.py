@@ -1,4 +1,5 @@
-import unittest, tempfile
+import unittest
+import tempfile
 
 from pygromos.simulations.hpc_queuing.job_scheduling.schedulers import simulation_scheduler
 

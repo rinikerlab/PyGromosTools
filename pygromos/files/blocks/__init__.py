@@ -10,14 +10,18 @@ from pygromos.files.blocks import qmmm_blocks as qmm
 from pygromos.files.blocks import replica_exchange_blocks as repdat
 from pygromos.files.blocks import miscBlocks as misc
 
-from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, TIMESTEP, TITLE, TRAJ
+from pygromos.files.blocks._general_blocks import _generic_gromos_block as _ggb
+from pygromos.files.blocks._general_blocks import _iterable_gromos_block as _igb
+from pygromos.files.blocks._general_blocks import TIMESTEP as default_TIMESTEP
+from pygromos.files.blocks._general_blocks import TITLE as default_TITLE
+from pygromos.files.blocks._general_blocks import TRAJ as default_TRAJ
 
 # forward declarations
-TITLE: TITLE = TITLE
-TIMESTEP: TIMESTEP = TIMESTEP
-TRAJ: TRAJ = TRAJ
-_generic_gromos_block: _generic_gromos_block = _generic_gromos_block
-_iterable_gromos_block: _iterable_gromos_block = _iterable_gromos_block
+TITLE: default_TITLE = default_TITLE
+TIMESTEP: default_TIMESTEP = default_TIMESTEP
+TRAJ: default_TRAJ = default_TRAJ
+_generic_gromos_block: _ggb = _ggb
+_iterable_gromos_block: _igb = _igb
 
 
 class all_blocks_class:

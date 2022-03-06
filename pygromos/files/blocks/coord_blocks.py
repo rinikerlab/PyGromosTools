@@ -1,16 +1,18 @@
 import re
 from enum import Enum
-from typing import List, Iterable
+from typing import List
 from numbers import Number
 
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field, _iterable_gromos_block
-from pygromos.files.blocks._general_blocks import TITLE, TIMESTEP, TRAJ
+from pygromos.files.blocks._general_blocks import TITLE as default_TITLE
+from pygromos.files.blocks._general_blocks import TIMESTEP as default_TIMESTEP
+from pygromos.files.blocks._general_blocks import TRAJ as default_TRAJ
 from pygromos.files import blocks
 
 # forward declarations
-TITLE: TITLE = TITLE
-TIMESTEP: TIMESTEP = TIMESTEP
-TRAJ: TRAJ = TRAJ
+TITLE: default_TITLE = default_TITLE
+TIMESTEP: default_TIMESTEP = default_TIMESTEP
+TRAJ: default_TRAJ = default_TRAJ
 
 
 ##########################################################################
@@ -133,7 +135,7 @@ class POSITION(_iterable_gromos_block):
             raise Exception("Generic Block did not understand the type of content \n content: \n" + str(content))
 
     def read_content_from_str(self, content: List[str]):
-        lines = list(map(lambda x: x.split(), content))
+        lines = list(map(lambda x: x.split(), content))  # noqa: F841
         self.content = [
             blocks.coords.atomP(
                 resID=int(x[0]),
@@ -406,7 +408,7 @@ class GENBOX(_generic_gromos_block):
 
         """
 
-        if not content is None:
+        if content is not None:
             super().__init__(used=True, name="GENBOX", content=content)
         else:
             super().__init__(used=True, name="GENBOX")

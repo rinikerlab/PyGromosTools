@@ -4,7 +4,7 @@ The aim of the module is to bring romos to the Python3 World!
 """
 
 # Add imports here
-from .pygromos import *
+from .pygromos import *  # noqa: F401,F403
 
 # Handle versioneer
 from ._version import get_versions

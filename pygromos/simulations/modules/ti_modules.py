@@ -89,12 +89,12 @@ def TI_sampling(
             lam_system.cnf = Cnf(dual_cnf[1])
 
         # IMD
-        ## Pertubation
-        ###Pertubation of system.
+        # Pertubation
+        # Pertubation of system.
         pert_block = PERTURBATION(NTG=1, NRDGL=0, RLAM=lam, DLAMT=0, ALPHC=0.5, ALPHLJ=0.5, NLAM=2, NSCALE=0)
         lam_system.imd.add_block(block=pert_block)
 
-        ###Calculate additional lambda points
+        # Calculate additional lambda points
         if not hasattr(lam_system, "PRECALCLAM"):
             # Note: This assumes uniformely distributed lambda values
             precalc_lam_block = PRECALCLAM(NRLAM=len(lambda_values), MINLAM=0, MAXLAM=1)

@@ -1,4 +1,5 @@
-import pickle, copy
+import pickle
+import copy
 import unittest
 
 from pygromos.files.topology.ptp import Pertubation_topology

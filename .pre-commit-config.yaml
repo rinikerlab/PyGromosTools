@@ -18,22 +18,27 @@ repos:
         args: ["--line-length=120"]
 
 
-  # - repo: https://gitlab.com/pycqa/flake8
-  #   rev: 3.8.4
-  #   hooks:
-  #     - id: flake8
-  #       name: Checks pep8 style
-  #       args: [
-  #         "--max-line-length=120",
-  #         # Ignore imports in init files
-  #         "--per-file-ignores=*/__init__.py:F401,setup.py:E121",
-  #         # ignore long comments (E501), as long lines are formatted by black
-  #         # ignore Whitespace before ':' (E203)
-  #         # ignore Line break occurred before a binary operator (W503)
-  #         "--ignore=E501,E203,W503",
-  #         # needed to not remove * imports (for example in _all_blocks.py)
-  #         "--ignore=F405",
-  #       ]
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
+    hooks:
+      - id: flake8
+        name: Checks pep8 style
+        args: [
+          "--max-line-length=120",
+          # Ignore imports in init files
+          "--per-file-ignores=
+            */__init__.py:F401,setup.py:E121
+            versioneer.py:W605
+            */sphinx*/conf.py:E402
+            pygromos/analysis/free_energy_calculation.py:W605
+            ",
+          # ignore long comments (E501), as long lines are formatted by black
+          # ignore Whitespace before ':' (E203)
+          # ignore lambdas (E731)
+          # ignore Line break occurred before a binary operator (W503)
+          # needed to not remove * imports (for example in _all_blocks.py)
+          "--ignore=E501,E203, E731,W503,F405",
+        ]
 
   # - repo: local
   #   hooks:

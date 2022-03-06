@@ -22,6 +22,7 @@ from pandas.core.base import DataError
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.analysis import coordinate_analysis as ca
 from pygromos.files.blocks._general_blocks import TITLE
+from pygromos.files.coord.cnf import Cnf
 
 import nglview as nj
 import mdtraj
@@ -100,7 +101,7 @@ class Trc_new(mdtraj.Trajectory):
 
     @property
     def view(self, re_create: bool = False) -> nj.NGLWidget:
-        if self._view == None or re_create:
+        if self._view is None or re_create:
             self._view = nj.show_mdtraj(self)
         return self._view
 
@@ -422,8 +423,8 @@ class Trc(traj._General_Trajectory):
         col_list = [x for x in self.database.columns if ("POS" in x)]
         # cog calculation: select POS -> apply pbc -> average all positions
         pbc_pos = self.database[col_list].applymap(lambda x: ca.periodic_distance(x, grid))
-        # cog = pbc_pos.sum(axis=1) / len(col_list)
-        # print("COG:", cog)
+        cog = pbc_pos.sum(axis=1) / len(col_list)
+        print("COG:", cog)
 
         # shift all positions
         posList = [x for x in self.database[col_list]]

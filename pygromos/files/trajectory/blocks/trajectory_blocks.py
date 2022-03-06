@@ -44,15 +44,15 @@ class _general_pandas_tre_block(_general_pandas_trajectory_block):
                 )  # stupid block naming.... but they couldn't have known
             elif "ABdih" == subblocktitle:
                 subblocktitle = "precalclam"
-                tmp_sub2.extend(subblock)
-                tmp_sub_block = getattr(ene_sub_block, subblocktitle)(tmp_sub2)
+                tmp_sub2.extend(subblock)  # noqa: F821    # TODO: @benjamin is this correct?
+                tmp_sub_block = getattr(ene_sub_block, subblocktitle)(tmp_sub2)  # noqa: F821
             elif "numstates" == subblocktitle:
                 subblocktitle = "eds"
                 tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)
             elif "precalclam" == subblocktitle or "eds" == subblocktitle:
                 continue
             elif "nr_lambdas" == subblocktitle:
-                tmp_sub2 = subblock
+                tmp_sub2 = subblock  # noqa: F821 F841
                 continue
             else:
                 tmp_sub_block = getattr(ene_sub_block, subblocktitle)(subblock)

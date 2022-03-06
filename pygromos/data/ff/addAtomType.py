@@ -80,7 +80,7 @@ def readBlock(block):
 
     for i in range(len(block)):
         if block[i][0] == "#number":
-            nAtoms = block[i + 1][0]
+            nAtoms = block[i + 1][0]  # noqa: F841
 
         elif block[i][0] == "#CS6":
             atm = getAtomType(block, i - 1)

@@ -233,7 +233,8 @@ def form_columns(header: dict, lines: list) -> list:
 
     # format lines
     new_lines = []
-    ##dev function for floats
+
+    # dev function for floats
     def isfloat(value):
         try:
             float(value)

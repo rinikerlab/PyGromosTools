@@ -8,7 +8,8 @@ Author: Marc Lehner
 """
 
 # general imports
-import collections, importlib
+import collections
+import importlib
 from simtk import unit
 
 # import math
@@ -21,7 +22,7 @@ from pygromos.files.topology.top import Top
 from pygromos.files.gromos_system.ff.serenityff.serenityff_data import serenityff_C12, serenityff_C6
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-if importlib.util.find_spec("openff") == None:
+if importlib.util.find_spec("openff") is None:
     raise ImportError("SerenityFF is not enabled without openFF toolkit package! Please install openFF toolkit.")
 else:
     from openff.toolkit.topology import Molecule
@@ -45,7 +46,7 @@ class serenityff:
 
         if isinstance(forcefield, forcefield_system):
             self.top = forcefield.top
-            if top != None:
+            if top is not None:
                 self.top = top
             self.offmol.name = forcefield.mol_name
             self.develop = forcefield.develop
@@ -53,7 +54,7 @@ class serenityff:
             self.off2g = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
         else:
             self.top = top
-            if mol_name != None:
+            if mol_name is not None:
                 self.offmol.name = mol_name
             self.off2g = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
             self.develop = develop
@@ -73,7 +74,7 @@ class serenityff:
                     else:
                         self.C12_pattern[element].append(content)
                 infile.close()
-            except:
+            except IOError:
                 raise Exception("WIP")
 
     def _pattern_matching_for_one_element(self, element: str = "H") -> dict():

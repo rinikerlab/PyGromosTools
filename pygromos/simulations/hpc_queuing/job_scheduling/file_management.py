@@ -1,7 +1,11 @@
 """
     This module is doing all the post simulation file juggeling needed for gromos. CURRENTLY OLD DON"T USE
 """
-import glob, os, tempfile, warnings
+import glob
+import os
+from subprocess import SubprocessError
+import tempfile
+import warnings
 import multiprocessing as mult
 
 from typing import List, Dict, Union, Tuple, Iterable
@@ -412,7 +416,7 @@ def find_and_unarchive_tar_files(trc_files: List[str], verbose: bool = False):
                 out_path = bash.compress_gzip(
                     in_path=tared_file, out_path=tared_file.replace(".tar", "").replace(".gz", ""), extract=True
                 )
-            except:
+            except SubprocessError:
                 # print("Failed gzip, trying tar")
                 out_path = bash.extract_tar(
                     in_path=tared_file,
@@ -488,7 +492,7 @@ def gather_simulation_replica_file_paths(
         fileSuffixes = [fileSuffixes]
 
     # browse folders
-    ##init statewise dic
+    # init statewise dic
     files = {}
     for replica in range(1, replicas + 1):
         files.update({replica: []})
@@ -565,7 +569,7 @@ def gather_simulation_file_paths(
     try:
         keys = [[int(y) for y in x.split("_") if (y.isdecimal())][-1] for x in files]
         sorted_files = list(map(lambda y: y[1], sorted(zip(keys, files), key=lambda x: x[0])))
-    except:
+    except SubprocessError:
         warnings.warn("Files are not all enumerated! no file sorting.")
         sorted_files = files
 
