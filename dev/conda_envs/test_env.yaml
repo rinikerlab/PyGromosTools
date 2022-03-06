@@ -13,6 +13,9 @@ dependencies:
   ## Meta
   - typing
   - pre-commit
+  - jupyter
+  - tqdm
+  - ipywidgets
   - jupytext
   # Science
   - mpmath
