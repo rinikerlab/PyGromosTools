@@ -6,6 +6,9 @@ from typing import List, Tuple, Dict
 import numpy as np
 
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
+from pygromos.files.blocks._general_blocks import TITLE as default_TITLE
+
+TITLE: default_TITLE = default_TITLE
 
 """
    FIELDS
