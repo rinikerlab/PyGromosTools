@@ -53,13 +53,13 @@ repos:
           "--ignore=E501,E203, E731,W503,F405",
         ]
 
-  # - repo: local
-  #   hooks:
-      # - id: jupyisort
-      #   name: Sorts ipynb imports
-      #   entry: jupytext --pipe-fmt ".py" --pipe "isort - --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=99" --sync
-      #   files: \.ipynb$
-      #   language: python
+  - repo: local
+    hooks:
+      - id: jupyisort
+        name: Sorts ipynb imports
+        entry: jupytext --pipe-fmt ".py" --pipe "isort - --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=99" --sync
+        files: \.ipynb$
+        language: python
 
       # - id: jupyblack
       #   name: Fixes ipynb format
