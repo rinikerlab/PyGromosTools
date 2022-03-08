@@ -7,7 +7,6 @@ ci:
     autoupdate_branch: ''
     autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
     autoupdate_schedule: weekly
-    skip: [flake8]
     submodules: false
 
 
@@ -60,6 +59,7 @@ repos:
         entry: jupytext --pipe-fmt ".py" --pipe "isort - --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=99" --sync
         files: \.ipynb$
         language: python
+        default_stages: [commit]
 
       # - id: jupyblack
       #   name: Fixes ipynb format
