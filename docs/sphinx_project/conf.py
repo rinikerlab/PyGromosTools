@@ -14,11 +14,7 @@
 
 # Incase the project was not installed
 import os
-import sys
-
-sys.path.insert(0, os.path.abspath("../.."))
-
-import pygromos
+import pygromos  # noqa: F401
 
 
 # -- Project information -----------------------------------------------------

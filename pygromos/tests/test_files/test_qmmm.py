@@ -5,12 +5,11 @@ from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 
 from pygromos.tests.in_testfiles import in_test_file_path
+from pygromos.tests.test_files import out_test_root_dir
 
 root_in = in_test_file_path + "/qmmm"
 in_path_imd = root_in + "/md.imd"
 in_path_qmmm = root_in + "/menthol-methanol-dmf.qmmm"
-
-from pygromos.tests.test_files import out_test_root_dir
 
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="qmmm_")
 out_path_imd = root_out + "/out_qmmm.imd"
@@ -24,7 +23,7 @@ class test_qmmm_imd(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        imd_file = self.class_type(self.in_file_path)
+        imd_file = self.class_type(self.in_file_path)  # noqa: F841
         return 0
 
     def test_to_string(self):
@@ -46,7 +45,7 @@ class test_qmmm(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        qmmm_file = self.class_type(self.in_file_path)
+        qmmm_file = self.class_type(self.in_file_path)  # noqa: F841
         return 0
 
     def test_to_string(self):

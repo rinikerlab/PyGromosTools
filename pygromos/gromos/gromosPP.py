@@ -35,7 +35,7 @@ class _gromosPPbase:
     _bin: str = ""
     _isValid: bool = False
 
-    def __init__(self, gromosPP_bin_dir: str = None):
+    def __init__(self, gromosPP_bin_dir: str = None, verbose: bool = False):
         """
         Constructing a gromosPP object.
 
@@ -60,8 +60,10 @@ class _gromosPPbase:
                 out_top_path=os.devnull, in_building_block_lib_path=mtb, in_parameter_lib_path=ifp, in_sequence="CH4"
             )
             self._isValid = True
-        except:
+        except Exception as e:
             self._isValid = False
+            if verbose:
+                print(e)
 
     def __str__(self):
         return self.__doc__
@@ -110,11 +112,11 @@ class _gromosPPbase:
         """
 
         additional_options = [""]
-        if not ljscaling is None:
+        if ljscaling is not None:
             additional_options += [" @ljscaling ", str(ljscaling)]
-        if not atomic_chargegroups is None:
+        if atomic_chargegroups is not None:
             additional_options += [" @atomic_chargegroups ", str(int(atomic_chargegroups))]
-        if not chargegroups is None:
+        if chargegroups is not None:
             additional_options += [" @chargegroups ", chargegroups]
 
         additional_options = " ".join(map(str, additional_options))
@@ -158,13 +160,13 @@ class _gromosPPbase:
         --------
              For more information checkout the Gromos Manual
         """
-        if out_cnf_path == None:
+        if out_cnf_path is None:
             out_cnf_path = str(os.path.splitext(os.path.basename(in_pdb_path))[0]) + ".cnf"
         if not out_cnf_path.endswith(".cnf"):
             out_cnf_path += ".cnf"
 
         command = self._bin + _binary_name + " @pdb " + in_pdb_path + " @topo " + in_top_path + " @out " + out_cnf_path
-        if in_lib_path != None:
+        if in_lib_path is not None:
             command += " @lib " + in_lib_path
         command += "\n"
 
@@ -363,7 +365,6 @@ class _gromosPPbase:
     ) -> str:
         """
             This funciton wraps dfmult of the gromos suite, it is used to calculate the free energy of a EDS simulation.
-                .. math:: \frac{\langle e^{V_{i}-V_{R} \rangle_{R}}{\langle e^{V_{i}-V_{R} \rangle_{R}}
 
         Parameters
         ----------
@@ -479,17 +480,17 @@ class _gromosPPbase:
         """
 
         options = ""
-        if out_file_format != None:
+        if out_file_format is not None:
             options += "@outformat " + str(out_file_format) + " "
 
         periodic_boundary_condition = "@pbc " + periodic_boundary_condition + " "
-        if gather != None:
+        if gather is not None:
             periodic_boundary_condition += " " + str(gather) + " "
-        if include != None:
+        if include is not None:
             options += "@include " + str(include) + " "
-        if single_file != None:
+        if single_file is not None:
             options += "@single "
-        if atomsfit != None and reference_structure_path != None:
+        if atomsfit is not None and reference_structure_path is not None:
             options += "@ref " + str(reference_structure_path) + " @atomsfit " + atomsfit + " "
         if not isinstance(time, type(None)):
             options += "@time " + str(time) + " "
@@ -498,10 +499,10 @@ class _gromosPPbase:
         if notimeblock:
             options += "@time " + str(0)
 
-        if frames != None:
+        if frames is not None:
             raise NotImplementedError("Chosen Options for frameout not implemented yet!")
 
-        if out_file_path != None:
+        if out_file_path is not None:
             orig = os.getcwd() + "/FRAME_00001." + out_file_format
 
         else:
@@ -645,7 +646,7 @@ class _gromosPPbase:
         else:
             in_file_form = "@en_files"
 
-        ##ene_ana command and log deletion if ene_ana was successfull.:
+        # ene_ana command and log deletion if ene_ana was successfull.:
         command = (
             self._bin
             + _binary_name
@@ -900,15 +901,15 @@ class _gromosPPbase:
                 + str(os.path.splitext(os.path.basename(in_cnf_path))[0])
                 + "_solvent.cnf"
             )
-        if rotate != None:
+        if rotate is not None:
             command_suffix += " @rotate "
-        if gathering_method != None:
+        if gathering_method is not None:
             command_suffix += " @gather " + str(gathering_method)
         if boxsize:
             command_suffix += " @boxsize "
-        if threshold != None:
+        if threshold is not None:
             command_suffix += " @thresh " + str(threshold)
-        if minwall != None:
+        if minwall is not None:
             command_suffix += " @minwall " + str(minwall)
 
         command = (
@@ -926,7 +927,9 @@ class _gromosPPbase:
             + command_suffix
         )
         p = bash.execute(command, verbose=verbose, catch_STD=out_cnf_path)
-
+        if verbose:
+            print(p.stdout)
+            print(p.stderr)
         return out_cnf_path
 
     @gromosTypeConverter
@@ -956,15 +959,15 @@ class _gromosPPbase:
                 + str(os.path.splitext(os.path.basename(in_cnf_path))[0])
                 + "_ran-box.cnf"
             )
-        if threshold != None:
+        if threshold is not None:
             command_suffix += " @thresh " + str(threshold)
         if layer:
             command_suffix += " @layer "
-        if boxsize != None:
+        if boxsize is not None:
             command_suffix += " @boxsize " + str(boxsize)
         if fixfirst:
             command_suffix += " @fixfirst "
-        if seed != None:
+        if seed is not None:
             command_suffix += " @seed " + str(seed)
 
         command = (
@@ -988,7 +991,7 @@ class _gromosPPbase:
         )
         if not return_command_only:
             print(command)
-            std_out = bash.execute(command, verbose=verbose)
+            bash.execute(command, verbose=verbose)
             return out_cnf_path
         else:
             return command
@@ -1032,7 +1035,7 @@ class _gromosPPbase:
         )
         if not return_command_only:
             print(command)
-            std_out = bash.execute(command, verbose=verbose)
+            bash.execute(command, verbose=verbose)
             return out_cnf_path
         else:
             return command
@@ -1439,17 +1442,17 @@ class _gromosPPbase:
             in_trcs = " ".join(in_trcs)
 
         additional_options = [""]
-        if not atom_selection is None:
+        if atom_selection is not None:
             additional_options += [" @atomspec ", "'" + atom_selection + "'"]
-        if not outformat is None:
+        if outformat is not None:
             additional_options += [" @outformat ", outformat]
-        if not cog_com is None:
+        if cog_com is not None:
             additional_options += [" @cog_com ", cog_com]
-        if not add_repl is None:
+        if add_repl is not None:
             additional_options += [" @add_repl ", add_repl]
-        if not solv is None:
+        if solv is not None:
             additional_options += [" @solv ", solv]
-        if not nthframe is None:
+        if nthframe is not None:
             additional_options += [" @nthframe ", nthframe]
 
         additional_options = " ".join(map(str, additional_options))
@@ -1526,7 +1529,7 @@ class _gromosPPbase:
 
         if verbose:
             print(command)
-        p = bash.execute(command, catch_STD=out_path, verbose=verbose)
+        bash.execute(command, catch_STD=out_path, verbose=verbose)
 
         return out_path
 
@@ -1685,19 +1688,19 @@ class _gromosPPbase:
             returns the resulting cnf-file path
         """
         optional_args = []
-        if not positive is None:
+        if positive is not None:
             opt = "@positive " + " ".join(map(str, positive))
             optional_args.append(opt)
 
-        if not negative is None:
+        if negative is not None:
             opt = "@negative " + " ".join(map(str, negative))
             optional_args.append(opt)
 
-        if not random_seed is None:
+        if random_seed is not None:
             opt = "@random " + " ".join(map(str, random_seed))
             optional_args.append(opt)
 
-        if not exclude is None:
+        if exclude is not None:
             opt = "@exclude " + " ".join(map(str, exclude))
             optional_args.append(opt)
 
@@ -1933,5 +1936,5 @@ class GromosPP(_gromosPPbase):
         This is the path to the folder containing the binaries of gromosPP If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosPP_bin_dir: str = None):
-        super().__init__(gromosPP_bin_dir=gromosPP_bin_dir)
+    def __init__(self, gromosPP_bin_dir: str = None, verbose: bool = False):
+        super().__init__(gromosPP_bin_dir=gromosPP_bin_dir, verbose=verbose)

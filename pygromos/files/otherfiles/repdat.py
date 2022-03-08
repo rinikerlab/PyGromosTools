@@ -113,7 +113,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
             # Exchange Replica
             replica = int(transition_dict[int(row.ID)])  # get the replica unique id
-            ##record Exchange
+            # record Exchange
             if row.s == 1:  # only hit when exchange and not partner already exchangeds
                 # new_pos
                 transition_result_dict[replica]["trial"].append(int(row.run))
@@ -183,7 +183,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         # result vars
         # for easier keeping track of state indices
         state_index = {key: key for key in range(num_states)}
-        if min_state_potential_treshold != None:  # add an undef state if multiple residues are below threshold.
+        if min_state_potential_treshold is not None:  # add an undef state if multiple residues are below threshold.
             state_index.update({"undefined": num_states})
             num_states += 1
 
@@ -224,7 +224,9 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             # This replicaID has already seen an extreme pos
             if replica_extreme_position_memory[replicaID] in extreme_positions:
                 # who is the active state?
-                if min_state_potential_treshold != None:  # NEW shall no other state be in an undersampling situation?
+                if (
+                    min_state_potential_treshold is not None
+                ):  # NEW shall no other state be in an undersampling situation?
                     undersampling_state_energies = [
                         float(val) for val in list(pot_energies.values()) if (float(val) < min_state_potential_treshold)
                     ]
@@ -297,7 +299,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
         # define needed stuff for calc:
         replica_traces = self.get_replica_traces()
-        num_states = len(self.system.state_eir)
+        num_states = len(self.system.state_eir)  # noqa: F841
         num_replica = len(self.system.s)
 
         extreme_positions = (1, num_replica)  # gives the extreme values of the replica dist

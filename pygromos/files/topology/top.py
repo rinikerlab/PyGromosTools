@@ -10,7 +10,6 @@ Author: Marc Lehner, Benjamin Ries
 # imports
 from copy import deepcopy
 from typing import TypeVar, Union
-import warnings
 import math
 
 from pygromos.utils import bash as bash
@@ -50,7 +49,7 @@ class Top(_general_gromos_file._general_gromos_file):
     def __init__(self, in_value: (str or dict or None or TopType), _future_file: bool = False):
         if type(in_value) is str:
             super().__init__(in_value=in_value, _future_file=_future_file)
-        elif in_value == None:
+        elif in_value is None:
             self.path = ""
             self.block_names = {}
             super().__init__(in_value=None)
@@ -262,7 +261,7 @@ class Top(_general_gromos_file._general_gromos_file):
         atnmShift = 0  # init for number of atoms. Will be determined in SOLUTEATOM
         mresShift = 0  # init for number of molecules. Will be determined in SOLUTEMOLECULES
 
-        ##start with additonal copies of all Blocks
+        # start with additonal copies of all Blocks
 
         # multiply RESNAME
         if hasattr(top, "RESNAME") and len(top.RESNAME.content) > 0:
@@ -771,7 +770,7 @@ class Top(_general_gromos_file._general_gromos_file):
         self.LJPARAMETERS.append(add)
         self.LJPARAMETERS.NRATT2 += nratt + 1
 
-        if AddATOMTYPENAME != None:
+        if AddATOMTYPENAME is not None:
             if not hasattr(self, "ATOMTYPENAME"):
                 self.add_block(blocktitle="ATOMTYPENAME", content=[], verbose=verbose)
                 self.LJPARAMETERS.NRATT = 0
@@ -819,7 +818,7 @@ class Top(_general_gromos_file._general_gromos_file):
             IACname = PANM
 
         # Find IAC and (if needed) add a new LJ Parameter
-        if C6 != None or C12 != None:  # need to find PANM and IAC
+        if C6 is not None or C12 is not None:  # need to find PANM and IAC
             if hasattr(self, "LJPARAMETERS"):
                 IAC = self.find_LJparameterNumber(C6=C6, C12=C12)
                 if IAC == 0:  # IAC not found -> add new LJ parameter

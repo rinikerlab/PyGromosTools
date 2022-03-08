@@ -20,7 +20,9 @@ TODO: MTL: implement, check, test
 """
 
 # imports
-import collections, os, re
+import collections
+import os
+import re
 import pandas
 import numpy
 import pathlib
@@ -38,7 +40,7 @@ class _General_Trajectory:
     _gromos_file_ending: str
 
     def __init__(self, input_value: (str or None), auto_save=True, stride: int = 1, skip: int = 0):
-        if input_value == None:
+        if input_value is None:
             self.TITLE = "Empty Trajectory"
             self.database = pandas.DataFrame({"": []})
 
@@ -170,7 +172,7 @@ class _General_Trajectory:
     def _read_from_file(self, input_path: str, auto_save: bool = True, stride: int = 1, skip: int = 0):
         if input_path.endswith(".h5"):
             self._read_db_from_hf5(input_path=input_path)
-        elif re.search("\.tr.$", input_path):  #
+        elif re.search("\.tr.$", input_path):  # noqa: W605
             self._read_trajectory(input_path=input_path, auto_save=auto_save, stride=stride, skip=skip)
         else:
             raise IOError("Did not understand the file ending of given file path: ", input_path)

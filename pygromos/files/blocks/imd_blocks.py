@@ -2,11 +2,11 @@ import warnings
 from numbers import Number
 from typing import List, Dict
 
-from pygromos.files.blocks._general_blocks import TITLE
+from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
 
 # forward declarations
-TITLE: TITLE = TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 class _generic_imd_block(_generic_gromos_block):
@@ -57,7 +57,7 @@ class _generic_imd_block(_generic_gromos_block):
                             result += (self.line_seperator + self.field_seperator).join(
                                 map(self.field_seperator.join, attribute)
                             ) + self.field_seperator
-                    except:
+                    except ValueError:
                         raise ValueError(
                             "Could not convert attribute "
                             + str(element)
@@ -134,18 +134,18 @@ class _generic_imd_block(_generic_gromos_block):
                 if self.__annotations__[key] is bool:
                     return bool(int(field))  # solves the type problem for simple types
                 return self.__annotations__[key](field)  # solves the type problem for simple types
-            except:
+            except Exception:
                 return field
         elif isinstance(field, list):
             if all([isinstance(x, str) for x in field]):
                 try:
                     return [float(x) for x in field]
-                except:
+                except Exception:
                     return field
             elif all([isinstance(x, list) for x in field]) and all([[isinstance(x, list) for x in y] for y in field]):
                 try:
                     return [[float(x) for x in y] for y in field]
-                except:
+                except Exception:
                     return field
 
 
@@ -947,14 +947,14 @@ class MULTIBATH(_generic_imd_block):
         None
         """
 
-        if T == None:
+        if T is None:
             if any([self.TEMP0[0] != T_test for T_test in self.TEMP0]):
                 raise ValueError("Temperatures are not the same, this is not implemented in adapt multibath!")
             T = self.TEMP0[0]
         else:
             self.TEMP0 = [float(T) for x in range(len(self.TEMP0))]
 
-        if TAU == None:
+        if TAU is None:
             if any([self.TAU[0] != T_test for T_test in self.TAU]):
                 raise ValueError("Temperatures are not the same, this is not implemented in adapt multibath!")
 
@@ -962,12 +962,12 @@ class MULTIBATH(_generic_imd_block):
         else:
             self.TAU = [float(TAU) for x in range(len(self.TAU))]
 
-        if algorithm == None:
+        if algorithm is None:
             pass
         else:
             self.ALGORITHM = int(algorithm)
 
-        if num != None:
+        if num is not None:
             self.NUM = int(num)
 
         # TODO implementation not correct with com_bath and irbath! Works for super simple cases though
@@ -1155,7 +1155,7 @@ class FORCE(_generic_imd_block):
             self.VDW = bool(int(VDW))
             try:
                 self.NEGR = int(NEGR)
-            except:
+            except Exception:
                 if isinstance(NEGR, list):
                     self.NEGR = int(NEGR[0])
                     NRE = NEGR[1:] + NRE
@@ -1234,7 +1234,7 @@ class FORCE(_generic_imd_block):
         dict_m = {}
         solvent_names = ["WAT", "SOLV"]
         for x in sorted(residues):
-            if type(residues[x]) == dict and not x in dict_m and not x in solvent_names:
+            if type(residues[x]) == dict and x not in dict_m and x not in solvent_names:
                 dict_m.update(residues[x])
             elif x in dict_m and not x == "SOLV" and not x == "SOL":
                 raise Exception("Found mutliple residues for the same residue id!")

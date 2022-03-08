@@ -5,6 +5,7 @@ Welcome to PyGromosTools
 
 [//]: # (Badges)
 [![CI](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml)
+[![pre-commit](https://github.com/rinikerlab/PyGromosTools/actions/workflows/pre-commit.yml/badge.svg?branch=release3)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/pre-commit.yml)
 [![codecov](https://codecov.io/gh/rinikerlab/PyGromosTools/branch/main/graph/badge.svg?token=R36KJCEKEC)](https://codecov.io/gh/rinikerlab/PyGromosTools)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python)
 [![DOI](https://zenodo.org/badge/323972251.svg)](https://zenodo.org/badge/latestdoi/323972251)

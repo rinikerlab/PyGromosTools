@@ -9,7 +9,7 @@ class _general_pandas_energy_trajectory_subblock:
                 continue
             try:
                 self.content.append(i.split())
-            except:
+            except ValueError:
                 self.content.append(i)
         self.blockName = "default_block"
         self.list = []
@@ -54,7 +54,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
         if num_subsubblocks == 0:
             try:
                 num_subsubblocks = int(self.content[0][0])
-            except:
+            except ValueError:
                 print("no good value found for the number of subsubblocks")
             if num_subsubblocks <= 0:
                 raise KeyError("invalid iterator with value: " + str(num_subsubblocks))

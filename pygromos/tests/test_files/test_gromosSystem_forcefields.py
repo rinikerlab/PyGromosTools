@@ -1,4 +1,6 @@
-import unittest, tempfile, importlib
+import unittest
+import tempfile
+import importlib
 
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
@@ -7,7 +9,7 @@ from pygromos.tests.test_files import out_test_root_dir
 
 tmp_test_dir = tempfile.mkdtemp(dir=out_test_root_dir, prefix="gromSystem_ff_")
 
-if importlib.util.find_spec("openforcefield") != None:
+if importlib.util.find_spec("openforcefield") is not None:
     has_openff = True
 else:
     has_openff = False

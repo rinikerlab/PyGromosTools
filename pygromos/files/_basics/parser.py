@@ -4,7 +4,9 @@ Description:
 
 Author: Benjamin Schroeder
 """
-import re, warnings, pandas as pd
+import re
+import warnings
+import pandas as pd
 from itertools import chain, takewhile
 
 from typing import List, Dict
@@ -13,7 +15,6 @@ from pygromos.files import blocks
 from pygromos.files.blocks import topology_blocks as tb
 from pygromos.files.blocks import pertubation_blocks as pb
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
-import re
 
 
 # translation dicts
@@ -28,6 +29,7 @@ imd_field_translation_dict = {
     },
     "PAIRLIST": {"ALGORITHM": ["algorithm"]},
 }
+
 
 # private functions
 def _gather_bracket_key(keys: List[str]) -> List[str]:
@@ -53,7 +55,7 @@ def _gather_bracket_key(keys: List[str]) -> List[str]:
 
     try:
         for x in keys:  # gather brackets from comments into one subkey Eir(, ... ,..xs)]
-            if "(" in x and (not ")" in x) and not collecting:  # if a bracket is not closed in a key
+            if "(" in x and (")" not in x) and not collecting:  # if a bracket is not closed in a key
                 if x.startswith("("):  # if ( was seperated from root term
                     tmp_key = gathered_keys.pop()
                 collecting = True
@@ -224,7 +226,7 @@ def read_general_gromos_file(path: str) -> Dict:
     return data
 
 
-## TOP
+# TOP
 def read_disres(in_path: str) -> Dict:
     """read_disres
         This function can read distance restraints
@@ -298,7 +300,7 @@ def read_ptp(in_path: str) -> Dict:
     return data
 
 
-##COORDS
+# COORDS
 def read_cnf(in_file_path: str, verbose: bool = False) -> Dict[str, str]:
     """read_cnf
         This function is reading in cnf files from gromos and translates them to a dict if possible.
@@ -338,7 +340,7 @@ def read_cnf(in_file_path: str, verbose: bool = False) -> Dict[str, str]:
     subblock = []
     # Translate string
     for line in file.readlines():
-        if not first_key and not "\#" in line and len(line.split()) == 1:
+        if not first_key and "\#" not in line and len(line.split()) == 1:  # noqa: W605
             first_key = True
             block = line.strip().split()[0]
         elif "END" == line.strip():
@@ -360,12 +362,12 @@ def read_cnf(in_file_path: str, verbose: bool = False) -> Dict[str, str]:
                     "coord file has inconsistent gromos Block structure!\n This line is out of block: \n" + line
                 )
         else:
-            if not "#" in line:
+            if "#" not in line:
                 subblock.append(line)
     return data
 
 
-##REEDS
+# REEDS
 def read_repdat(path: str, Vj_header=False) -> (Dict, List[blocks.repdat.replica_stat]):
     """
     Careful old description!
@@ -428,7 +430,7 @@ def read_repdat(path: str, Vj_header=False) -> (Dict, List[blocks.repdat.replica
                 value = fields[1]
                 system_options.update({key: value})
 
-    if new_repdat:  ### TODO: NEW PARSER for actual gromos version!
+    if new_repdat:  # TODO: NEW PARSER for actual gromos version!
         file.close()
 
         eir = {}
@@ -443,7 +445,7 @@ def read_repdat(path: str, Vj_header=False) -> (Dict, List[blocks.repdat.replica
                         system_options_dict.update({"T": float(fields[1])})
                     elif fields[0] == "s":
                         system_options_dict.update({"s": list(map(float, fields[1:]))})
-                    elif "eir" in fields[0] or re.search("E[0-9]*R\(s\)", fields[0]):
+                    elif "eir" in fields[0] or re.search("E[0-9]*R\(s\)", fields[0]):  # noqa: W605
                         if "eir" in fields[0]:
                             eir.update({eir_ind: list(map(float, fields[7:]))})
                         else:
@@ -521,7 +523,7 @@ def read_repdat(path: str, Vj_header=False) -> (Dict, List[blocks.repdat.replica
         return system_options, df
 
 
-##IMD
+# IMD
 def read_imd(in_file_path: str) -> Dict:
     """imd parser
 
@@ -549,7 +551,7 @@ def read_imd(in_file_path: str) -> Dict:
                     if sub_key in sub_trans_dict[x]:
                         tmp_sub_key = x
                         break
-                if tmp_sub_key != None:
+                if tmp_sub_key is not None:
                     # print("replace: "+sub_key+" with "+tmp_sub_key)
                     translated_sub_content.update({tmp_sub_key: sub_content[sub_key]})
                 else:
@@ -713,7 +715,7 @@ def read_imd(in_file_path: str) -> Dict:
                         print(values)
 
                         sub_content.update({" ".join(subkeys): values})
-        except:
+        except IndexError:
             print("Errors while reading imd-file.")
         # TypeError:
         # if subkeys is None:
@@ -752,7 +754,7 @@ def read_imd(in_file_path: str) -> Dict:
     return data
 
 
-##SIMPLIFIED Pasers- CRUDE - not necessarily correct
+# SIMPLIFIED Pasers- CRUDE - not necessarily correct
 def read_simple_trx(in_file_path: str, every_step: int = 1, verbose: bool = True) -> Dict:
     """
         Needs output for checknig.
@@ -782,7 +784,7 @@ def read_simple_trx(in_file_path: str, every_step: int = 1, verbose: bool = True
     skip = False
     with open(in_file_path, "r") as infile:
         current_step = 0
-        skip_frame = False
+        skip_frame = False  # noqa: F841 # TODO: implement skip frames
 
         step_filter = lambda step_number: step_number == 0 or step_number % every_step == 0
         for line in infile:
@@ -1079,14 +1081,14 @@ def read_ene_ana_lib(in_path: str):
                         current_block = line.replace("block", "").strip()
                         block_dict.update({current_block: {}})
                     elif line.strip().startswith("subblock"):
-                        if not "subblock" in block_dict[current_block]:
+                        if "subblock" not in block_dict[current_block]:
                             block_dict[current_block].update(
                                 {"subblock": [line.replace("subblock", "").strip().split()]}
                             )
                         else:
                             block_dict[current_block]["subblock"].append(line.replace("subblock", "").strip().split())
                     elif line.strip().startswith("size"):
-                        if not "size" in block_dict[current_block]:
+                        if "size" not in block_dict[current_block]:
                             block_dict[current_block].update({"size": [line.replace("size", "").strip()]})
                         else:
                             block_dict[current_block]["size"].append(line.replace("size", "").strip())

@@ -1,12 +1,6 @@
-import copy
-import os
-from collections import namedtuple
 from typing import Dict, List
 
 from pygromos.files.coord.cnf import Cnf
-from pygromos.files._basics import parser
-from pygromos.files._basics._general_gromos_file import _general_gromos_file
-
 from pygromos.files.blocks import coord_blocks as blocks
 
 

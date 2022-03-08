@@ -3,7 +3,6 @@ from typing import Union, List
 
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
-from pygromos.utils.utils import time_wait_s_for_filesystem
 
 
 class DUMMY(_SubmissionSystem):
@@ -20,7 +19,6 @@ class DUMMY(_SubmissionSystem):
         submission: bool = True,
         enviroment=None,
     ):
-        time_wait_s_for_filesystem = 0
         super().__init__(
             verbose=verbose,
             nmpi=nmpi,
