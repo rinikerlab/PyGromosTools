@@ -595,8 +595,7 @@ class Top(_general_gromos_file._general_gromos_file):
         verbose=False,
         convertToQuartic=False,
     ):
-        """
-            add a angle between atom I, J and K to the ANGLE block
+        """add a angle between atom I, J and K to the ANGLE block
 
         Parameters
         ----------
@@ -617,8 +616,8 @@ class Top(_general_gromos_file._general_gromos_file):
         convertToQuartic : bool, optional
             auto convert, by default False
         """
-
         # check if all classes are ready, if not create
+
         if not hasattr(self, "BONDANGLEBENDTYPE"):
             self.add_block(blocktitle="BONDANGLEBENDTYPE", content=[], verbose=verbose)
         if includesH:
@@ -692,8 +691,7 @@ class Top(_general_gromos_file._general_gromos_file):
         includesH: bool = False,
         verbose=False,
     ):
-        """
-            add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block
+        """add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block
 
         Parameters
         ----------
@@ -714,7 +712,6 @@ class Top(_general_gromos_file._general_gromos_file):
         includesH : bool, optional
             DIHEDRAL or DIHEDRALH, by default False
         """
-
         # check if all classes are ready, if not create
         if not hasattr(self, "TORSDIHEDRALTYPE"):
             self.add_block(blocktitle="TORSDIHEDRALTYPE", content=[], verbose=verbose)
