@@ -50,7 +50,6 @@ class _gromosPPbase(_gromosClass):
         self.__doc__ = self.__doc__ + functions_text
         super().__init__(in_bin_dir=gromosPP_bin_dir)  # initialises the binary checks
 
-
     def __str__(self):
         return self.__doc__
 
@@ -210,7 +209,7 @@ class _gromosPPbase(_gromosClass):
             )
         command = (
             self._bin
-            + _binary
+            + _binary_name
             + " @develop @pdb "
             + in_pdb_path
             + " @pH "
