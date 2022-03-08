@@ -28,7 +28,7 @@ class Position_Restraints(Cnf):
     # Standard Gromos blocks
     TITLE: blocks.TITLE  # required
     POSRESSPEC: blocks.POSRESSPEC  # required
-    LATTICESHIFTS: blocks.LATTICESHIFTS = None
+    LATTICESHIFTS: blocks.LATTICESHIFTS
 
     # private
     _block_order: List[str] = [

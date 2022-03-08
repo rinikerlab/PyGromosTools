@@ -25,12 +25,12 @@ class QMMM(_general_gromos_file._general_gromos_file):
     # One of those blocks should be available
     # Consult the Gromos documentation for more details
     # Also consult the corresponding QMMM block in imd files
-    MNDOELEMENTS: blocks.MNDOELEMENTS = None
-    TURBOMOLEELEMENTS: blocks.TURBOMOLEELEMENTS = None
-    DFTBELEMENTS: blocks.DFTBELEMENTS = None
-    MOPACELEMENTS: blocks.MOPACELEMENTS = None
-    ORCAELEMENTS: blocks.ORCAELEMENTS = None
-    XTBELEMENTS: blocks.XTBELEMENTS = None
+    MNDOELEMENTS: blocks.MNDOELEMENTS
+    TURBOMOLEELEMENTS: blocks.TURBOMOLEELEMENTS
+    DFTBELEMENTS: blocks.DFTBELEMENTS
+    MOPACELEMENTS: blocks.MOPACELEMENTS
+    ORCAELEMENTS: blocks.ORCAELEMENTS
+    XTBELEMENTS: blocks.XTBELEMENTS
 
     def __init__(self, in_value: str, _future_file: bool = False):
         super().__init__(in_value=in_value, _future_file=_future_file)
