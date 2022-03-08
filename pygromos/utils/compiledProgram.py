@@ -18,7 +18,7 @@ class _compiled_program:
     _dont_check_bin: bool
 
     _found_binary_dir: Dict[str, bool]  # found? binary dir
-    _found_binary: Dict[str, bool]  #  found? binary
+    _found_binary: Dict[str, bool]  # found? binary
     _found_binary_paths: Dict[str, str]  # the found binary paths.
 
     def __init__(self, in_bin_dir: str, dummy: bool = False) -> Union[str, None]:
@@ -83,7 +83,7 @@ class _compiled_program:
         if test_program in self._found_binary and self._found_binary[test_program]:
             return True
 
-        elif not self.bin is None and bash.command_exists(self._bin + test_program):
+        elif self.bin is not None and bash.command_exists(self._bin + test_program):
             self._found_binary[test_program] = True
             self._found_binary_paths[test_program] = self._bin + test_program
             return self._bin + test_program

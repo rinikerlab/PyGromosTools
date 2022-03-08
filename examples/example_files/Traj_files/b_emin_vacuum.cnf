@@ -6,7 +6,7 @@ gch found 22 hydrogen atoms in /home/bschroed/Documents/projects/PyGromosTools_r
 	>>> Generated with PyGromosTools (riniker group) <<<
 END
 POSITION
-# 	 
+#
     1 VAL   H1         1    1.241783665    1.501556791    1.518273147
     1 VAL   H2         2    1.221597569    1.373896735    1.618130891
     1 VAL   N          3    1.196200000    1.413300000    1.529800000

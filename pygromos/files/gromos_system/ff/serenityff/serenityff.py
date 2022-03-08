@@ -79,6 +79,7 @@ class serenityff:
 
     def _pattern_matching_for_one_element(self, element: str = "H") -> dict():
         # TODO: add C12 support
+
         return_dict = collections.defaultdict(list)
         for pattern in reversed(self.C6_pattern[element]):
             # create pattern and init some variables
@@ -92,6 +93,7 @@ class serenityff:
                     idx = atom.GetIdx()
 
             # get all matches
+
             matches = self.mol.GetSubstructMatches(mol_pattern, uniquify=False)
             if len(matches) >= 1:
                 for match in matches:

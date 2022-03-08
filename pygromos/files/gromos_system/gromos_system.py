@@ -409,9 +409,10 @@ class Gromos_System:
         for key in attribute_dict.keys():
             if not isinstance(attribute_dict[key], Callable) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
-            elif not attribute_dict[key] is None and key in skip and key not in exclude_pickle:
+            elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
+                print("STUPID ", key)
                 new_dict.update({key: None})
         return new_dict
 

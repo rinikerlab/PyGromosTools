@@ -1,3 +1,4 @@
+import os
 import functools
 from typing import Union
 from pygromos.files._basics import _general_gromos_file
