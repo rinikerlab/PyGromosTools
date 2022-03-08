@@ -1,14 +1,14 @@
 from typing import List
 
-from pygromos.files.blocks.topology_blocks import TITLE as default_TITLE
-from pygromos.files.blocks.topology_blocks import FORCEFIELD as default_FORCEFIELD
-from pygromos.files.blocks.topology_blocks import MAKETOPVERSION as default_MAKETOPVERSION
+from pygromos.files.blocks.topology_blocks import TITLE as generic_TITLE
+from pygromos.files.blocks.topology_blocks import FORCEFIELD as generic_FORCEFIELD
+from pygromos.files.blocks.topology_blocks import MAKETOPVERSION as generic_MAKETOPVERSION
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
 
 
-TITLE: default_TITLE = default_TITLE
-FORCEFIELD: default_FORCEFIELD = default_FORCEFIELD
-MAKETOPVERSION: default_MAKETOPVERSION = default_MAKETOPVERSION
+TITLE: generic_TITLE = generic_TITLE
+FORCEFIELD: generic_FORCEFIELD = generic_FORCEFIELD
+MAKETOPVERSION: generic_MAKETOPVERSION = generic_MAKETOPVERSION
 
 
 class mtb_blocks(_generic_gromos_block):

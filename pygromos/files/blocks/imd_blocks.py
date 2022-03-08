@@ -2,11 +2,11 @@ import warnings
 from numbers import Number
 from typing import List, Dict
 
-from pygromos.files.blocks._general_blocks import TITLE as default_TITLE
+from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
 
 # forward declarations
-TITLE: default_TITLE = default_TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 class _generic_imd_block(_generic_gromos_block):

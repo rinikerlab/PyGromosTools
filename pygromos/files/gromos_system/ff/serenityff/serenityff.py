@@ -154,7 +154,7 @@ class serenityff:
                         INE14 = list()
                     epsilon = float(force.epsilon.value_in_unit(unit.kilojoule_per_mole))
                     rmin = 2 * force.rmin_half.value_in_unit(unit.nanometer)
-                    C6 = (float(c6dict[key[0]][1])) ** 2
+                    C6 = float(c6dict[key[0]][1])  # ** 2
                     CS6 = 0.5 * C6
                     C12 = epsilon * (rmin**12)
                     if self.develop:

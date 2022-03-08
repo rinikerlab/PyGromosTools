@@ -6,7 +6,6 @@ Author: Benjamin Schroeder
 """
 
 import os
-from tabnanny import verbose
 from typing import Union
 
 import pandas as pd
@@ -36,7 +35,7 @@ class _gromosPPbase:
     _bin: str = ""
     _isValid: bool = False
 
-    def __init__(self, gromosPP_bin_dir: str = None):
+    def __init__(self, gromosPP_bin_dir: str = None, verbose: bool = False):
         """
         Constructing a gromosPP object.
 
@@ -1937,5 +1936,5 @@ class GromosPP(_gromosPPbase):
         This is the path to the folder containing the binaries of gromosPP If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosPP_bin_dir: str = None):
-        super().__init__(gromosPP_bin_dir=gromosPP_bin_dir)
+    def __init__(self, gromosPP_bin_dir: str = None, verbose: bool = False):
+        super().__init__(gromosPP_bin_dir=gromosPP_bin_dir, verbose=verbose)

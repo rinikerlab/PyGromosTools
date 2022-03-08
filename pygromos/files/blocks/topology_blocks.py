@@ -6,7 +6,7 @@ import inspect
 import numpy as np
 from numbers import Number
 
-from pygromos.files.blocks._general_blocks import TITLE as default_TITLE
+from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
 
 
@@ -505,7 +505,7 @@ class special_atom_lj_pair_type(_generic_field):
 BLOCKS
 """
 # forward declarations
-TITLE: default_TITLE = default_TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 # general Topo Blocks

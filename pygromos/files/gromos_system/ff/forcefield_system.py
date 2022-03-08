@@ -13,7 +13,6 @@ import importlib
 import shutil
 import os
 import collections
-from tabnanny import verbose
 
 from pygromos.files.topology.ifp import ifp
 from pygromos.files.topology.top import Top
@@ -88,7 +87,7 @@ class forcefield_system:
                     pass
         print("Found off: " + str(self.path))
 
-    def import_amber_ff(self):
+    def import_amber_ff(self, verbose=False):
         if self.path is not None:
             self.amber_basedir = self.path
 

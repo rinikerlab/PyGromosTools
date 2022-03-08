@@ -148,7 +148,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
     def edit_REEDS(
         self,
-        REEDS: (bool or int) = None,
+        REEDS: int = None,
         NUMSTATES: int = None,
         SVALS: (Number, List[Number]) = None,
         EIR: (Number or Iterable[Number]) = None,
@@ -156,10 +156,7 @@ class Imd(_general_gromos_file._general_gromos_file):
         NREQUIL: int = None,
         CONT: (bool, int) = None,
         EDS_STAT_OUT: (bool, int) = None,
-        RETS: List[float] = None,
-        RET: int = None,
-        NATOM: int = None,
-    ):  # TODO: old params - to be REMOVED!
+    ):
 
         # specific relations are rescued here
         reeds_block = self.REPLICA_EDS

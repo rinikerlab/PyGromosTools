@@ -1,12 +1,12 @@
 from typing import Iterable, Union
-from pygromos.files.blocks._general_blocks import _generic_field, TITLE as default_TITLE
+from pygromos.files.blocks._general_blocks import _generic_field, TITLE as generic_TITLE
 from pygromos.files.blocks.topology_blocks import _topology_table_block, _topology_block
 
 # Note that while many classes in this file inherit from _topology_block or _topology_table_block
 # there is no obvious connection other than the tabular structure of .qmmm and .top files
 
 # forward declarations
-TITLE: default_TITLE = default_TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 class qmzone_field(_generic_field):

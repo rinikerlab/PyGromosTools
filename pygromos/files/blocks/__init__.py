@@ -12,14 +12,14 @@ from pygromos.files.blocks import miscBlocks as misc
 
 from pygromos.files.blocks._general_blocks import _generic_gromos_block as _ggb
 from pygromos.files.blocks._general_blocks import _iterable_gromos_block as _igb
-from pygromos.files.blocks._general_blocks import TIMESTEP as default_TIMESTEP
-from pygromos.files.blocks._general_blocks import TITLE as default_TITLE
-from pygromos.files.blocks._general_blocks import TRAJ as default_TRAJ
+from pygromos.files.blocks._general_blocks import TIMESTEP as generic_TIMESTEP
+from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
+from pygromos.files.blocks._general_blocks import TRAJ as generic_TRAJ
 
 # forward declarations
-TITLE: default_TITLE = default_TITLE
-TIMESTEP: default_TIMESTEP = default_TIMESTEP
-TRAJ: default_TRAJ = default_TRAJ
+TITLE: generic_TITLE = generic_TITLE
+TIMESTEP: generic_TIMESTEP = generic_TIMESTEP
+TRAJ: generic_TRAJ = generic_TRAJ
 _generic_gromos_block: _ggb = _ggb
 _iterable_gromos_block: _igb = _igb
 
