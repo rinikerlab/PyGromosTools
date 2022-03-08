@@ -1,7 +1,14 @@
 from typing import List
 
-from pygromos.files.blocks.topology_blocks import FORCEFIELD, MAKETOPVERSION, TITLE
-from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
+from pygromos.files.blocks.topology_blocks import TITLE as generic_TITLE
+from pygromos.files.blocks.topology_blocks import FORCEFIELD as generic_FORCEFIELD
+from pygromos.files.blocks.topology_blocks import MAKETOPVERSION as generic_MAKETOPVERSION
+from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
+
+
+TITLE: generic_TITLE = generic_TITLE
+FORCEFIELD: generic_FORCEFIELD = generic_FORCEFIELD
+MAKETOPVERSION: generic_MAKETOPVERSION = generic_MAKETOPVERSION
 
 
 class mtb_blocks(_generic_gromos_block):
@@ -297,8 +304,8 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                             try:
                                 if any(i in content[itr] for i in ["\t\t\t\t\t", "                   "]):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
-                            except:
-                                raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
+                            except IOError:
+                                raise IOError("Problem reading MSAE for anm=" + str(atom) + " mae=" + str(mae))
                     else:
                         msae_values = []
                     self.preceding_exclusions.append(mtb_preceding_exclusions_field(atom, mae, msae_values))
@@ -335,7 +342,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                             try:
                                 if any(i in content[itr] for i in ["\t\t\t\t\t", "                   "]):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
-                            except:
+                            except IOError:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
                     else:
                         msae_values = []
@@ -402,7 +409,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                             try:
                                 if any(i in content[itr] for i in ["\t\t\t\t\t", "                   "]):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
-                            except:
+                            except IOError:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
                     else:
                         msae_values = []
@@ -423,7 +430,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                     self.NB = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of bonds")
         bonds_found = 0
         while itr < len(content) and bonds_found < self.NB:
@@ -449,7 +456,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                     self.NBA = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of angles")
         angles_found = 0
         while itr < len(content) and angles_found < self.NBA:
@@ -475,7 +482,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                     self.NIDA = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of improper dihedrals")
         improper_dihedrals_found = 0
         while itr < len(content) and improper_dihedrals_found < self.NIDA:
@@ -501,7 +508,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                     self.NDA = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of dihedrals")
         dihedrals_found = 0
         while itr < len(content) and dihedrals_found < self.NDA:
@@ -527,7 +534,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
                     self.NEX = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of LJ exceptions")
         lj_exceptions_found = 0
         while itr < len(content) and lj_exceptions_found < self.NEX:
@@ -583,7 +590,7 @@ class MTBUILDBLSOLUTE(mtb_blocks):
             result += atom.to_string()
 
         result += "# trailing atoms" + self.line_separator
-        result += f"# ATOM ANM  IACM MASS        CGM ICGM" + self.line_separator
+        result += "# ATOM ANM  IACM MASS        CGM ICGM" + self.line_separator
         for trailing_atom in self.trailing_atoms:
             result += trailing_atom.to_string()
 
@@ -857,7 +864,7 @@ class MTBUILDBLEND(mtb_blocks):
                             try:
                                 if any(i in content[itr] for i in ["\t\t\t\t\t", "                   "]):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
-                            except:
+                            except IOError:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
                     else:
                         msae_values = []
@@ -924,7 +931,7 @@ class MTBUILDBLEND(mtb_blocks):
                             try:
                                 if any(i in content[itr] for i in ["\t\t\t\t\t", "                   "]):
                                     msae_values.extend([int(i) for i in content[itr].strip().split()])
-                            except:
+                            except IOError:
                                 raise IOError("Problem reading MSAE for anm=" + str(anm) + " mae=" + str(mae))
                     else:
                         msae_values = []
@@ -945,7 +952,7 @@ class MTBUILDBLEND(mtb_blocks):
                     self.NB = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of bonds")
         bonds_found = 0
         while itr < len(content) and bonds_found < self.NB:
@@ -971,7 +978,7 @@ class MTBUILDBLEND(mtb_blocks):
                     self.NBA = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of angles")
         angles_found = 0
         while itr < len(content) and angles_found < self.NBA:
@@ -997,7 +1004,7 @@ class MTBUILDBLEND(mtb_blocks):
                     self.NIDA = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of improper dihedrals")
         improper_dihedrals_found = 0
         while itr < len(content) and improper_dihedrals_found < self.NIDA:
@@ -1023,7 +1030,7 @@ class MTBUILDBLEND(mtb_blocks):
                     self.NDA = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of dihedrals")
         dihedrals_found = 0
         while itr < len(content) and dihedrals_found < self.NDA:
@@ -1049,7 +1056,7 @@ class MTBUILDBLEND(mtb_blocks):
                     self.NEX = int(content[itr].strip())
                     itr += 1
                     break
-                except:
+                except IOError:
                     raise IOError("Problem reading number of LJ exceptions")
         lj_exceptions_found = 0
         while itr < len(content) and lj_exceptions_found < self.NEX:

@@ -37,7 +37,7 @@ class residue_library(_general_gromos_file._general_gromos_file):
         if type(in_value) is str:
             self.path = in_value
             self.read_resnlib(in_value)
-        elif in_value == None:
+        elif in_value is None:
             if self.verbose:
                 print("Warning!: generated empty REsidue Lib obj!")
             self.TITLE = all_blocks.TITLE(content="New empyt resn_lib-file\n\tgenerated with PyGromosTools.\n")

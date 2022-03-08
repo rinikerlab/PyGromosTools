@@ -177,14 +177,14 @@ class _SubmissionSystem:
         bool
             is the job in the lsf queue?
         """
-        if not job_name is None:
+        if job_name is not None:
             if _onlyRUNPEND:
                 queued_job_ids = self.search_queue_for_jobname(job_name=job_name)
                 queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()
                 return len(queued_job_ids) > 0
             else:
                 return len(self.search_queue_for_jobname(job_name=job_name)) > 0
-        elif not job_id is None:
+        elif job_id is not None:
             if _onlyRUNPEND:
                 queued_job_ids = self.search_queue_for_jobid(job_id=job_id)
                 queued_job_ids = queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna()

@@ -1,14 +1,13 @@
-import unittest, os, tempfile
+import tempfile
 from pygromos.files import coord as cnf
 from pygromos.tests.test_files.general_file_functions import general_file_tests
-from pygromos.utils import bash
 
 from pygromos.tests.in_testfiles import in_test_file_path
+from pygromos.tests.test_files import out_test_root_dir
 
 in_file_path = in_test_file_path + "/cnf/in_cnf1.cnf"
 in_file_renum_path = in_test_file_path + "/cnf/in_renumber_ligs.cnf"
 
-from pygromos.tests.test_files import out_test_root_dir
 
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="cnf_")
 out_path = root_out + "/out_cnf1.cnf"
@@ -49,4 +48,4 @@ class test_cnf(general_file_tests):
 
     def test_visualize(self):
         cnf_file = cnf.Cnf(in_file_path)
-        view = cnf_file.view
+        view = cnf_file.view  # noqa: F841

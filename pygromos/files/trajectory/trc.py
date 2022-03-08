@@ -20,12 +20,9 @@ import pandas as pd
 import numpy as np
 import nglview as nj
 from typing import Dict
-import pygromos.files.trajectory._general_trajectory as traj
-from pygromos.files.coord.cnf import Cnf
 from pygromos.utils import bash
-from pygromos.analysis import coordinate_analysis as ca
-
 from pygromos.files.blocks._general_blocks import TITLE
+from pygromos.files.coord.cnf import Cnf
 
 
 class Trc(mdtraj.Trajectory):
@@ -46,10 +43,10 @@ class Trc(mdtraj.Trajectory):
         in_cnf: [str, Cnf] = None,
     ):
 
-        if not traj_path is None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
+        if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
             trj = mdtraj.load(traj_path)
             self.__dict__.update(vars(trj))
-        elif not traj_path is None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
+        elif traj_path is not None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
             self._future_file = False
 
             # Parse TRC
@@ -113,11 +110,11 @@ class Trc(mdtraj.Trajectory):
         title = self._block_map["TITLE"]
         end = start + self._block_map["POSITIONRED"] - 1
         timestep_block_length = sum(
-            [self._block_map[key] for key in self._block_map if (not key in ["TITLE", "commentLines"])]
+            [self._block_map[key] for key in self._block_map if (key not in ["TITLE", "commentLines"])]
         )
         chunk = self._block_map["POSITIONRED"] - self._block_map["commentLines"] - 2 + 1
 
-        ##block mapping logic
+        # block mapping logic
         rows = (
             lambda x: not (
                 (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
@@ -205,4 +202,4 @@ class Trc(mdtraj.Trajectory):
         return self._view
 
     def write_trc(self):
-        raise NotImplemented("Not Implemented")
+        raise NotImplementedError("Not Implemented")

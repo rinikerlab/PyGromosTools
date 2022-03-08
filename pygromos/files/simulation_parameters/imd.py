@@ -6,14 +6,13 @@ Author: Kay Schaller & Benjamin Schroeder
 """
 import numpy as np
 from numbers import Number
-import copy, json
-from typing import List, Dict, NamedTuple, Iterable
-from collections import namedtuple
+import copy
+import json
+from typing import List, Iterable
 from copy import deepcopy
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import imd_blocks as blocks
-from pygromos.utils import amino_acids as aa
 
 
 def nice_s_vals(svals: Iterable, base10=False) -> list:
@@ -149,7 +148,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
     def edit_REEDS(
         self,
-        REEDS: (bool or int) = None,
+        REEDS: int = None,
         NUMSTATES: int = None,
         SVALS: (Number, List[Number]) = None,
         EIR: (Number or Iterable[Number]) = None,
@@ -157,10 +156,7 @@ class Imd(_general_gromos_file._general_gromos_file):
         NREQUIL: int = None,
         CONT: (bool, int) = None,
         EDS_STAT_OUT: (bool, int) = None,
-        RETS: List[float] = None,
-        RET: int = None,
-        NATOM: int = None,
-    ):  # TODO: old params - to be REMOVED!
+    ):
 
         # specific relations are rescued here
         reeds_block = self.REPLICA_EDS

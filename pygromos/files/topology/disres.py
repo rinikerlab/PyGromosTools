@@ -1,7 +1,4 @@
-import warnings
-
 from pygromos.files._basics import _general_gromos_file, parser
-from pygromos.files.blocks import topology_blocks as blocks
 
 
 class Distance_restraints(_general_gromos_file._general_gromos_file):

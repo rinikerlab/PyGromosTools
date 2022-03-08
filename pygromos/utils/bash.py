@@ -8,7 +8,11 @@ Description
 :author: Benjamin Schroeder
 """
 
-import io, os, glob, time, warnings
+import io
+import os
+import glob
+import time
+import warnings
 import shutil
 
 import subprocess as sub
@@ -256,7 +260,7 @@ def compress_tar(
         process return log.
     """
 
-    if out_path == None:
+    if out_path is not None:
         out_path = in_path
     if not out_path.endswith(".tar.gz") and gunzip_compression:
         out_path += ".tar.gz"
@@ -273,7 +277,7 @@ def compress_tar(
     # command
     orig_path = os.getcwd()
     os.chdir(os.path.dirname(in_path))
-    ret = execute(command, verbose=verbose)
+    execute(command, verbose=verbose)
     os.chdir(orig_path)
 
     wait_for_fileSystem(out_path, verbose=verbose)
@@ -329,7 +333,7 @@ def compress_gzip(
     command = "gzip " + option + " " + in_path + " "
 
     # command
-    ret = execute(command, verbose=verbose)
+    execute(command, verbose=verbose)
     if in_path + ".gz" != out_path and not extract:
         wait_for_fileSystem(in_path + ".gz", verbose=verbose)
         out_path = move_file(in_path + ".gz", out_file_path=out_path)
@@ -421,7 +425,7 @@ def move_file(in_file_path: str, out_file_path: str, additional_options: str = "
     command = "mv " + additional_options + " " + in_file_path + " " + out_file_path + "\n"
 
     try:
-        ret = execute(command=command, verbose=verbose)
+        execute(command=command, verbose=verbose)
     except Exception as err:
         raise ValueError("BASH could not move file! " + "\n".join(map(str, err.args)))
 
@@ -646,7 +650,7 @@ def save_make_folder(in_directory_path: str, additional_options: str = "") -> st
     """
 
     offset = 1
-    dir_versions = list(filter(lambda x: not ".tar" in x or not ".gz" in x, sorted(glob.glob(in_directory_path + "*"))))
+    dir_versions = list(filter(lambda x: ".tar" not in x or ".gz" not in x, sorted(glob.glob(in_directory_path + "*"))))
     print("dirversions:", dir_versions)
     if len(dir_versions) > 0:
         last_dir = dir_versions[len(dir_versions) - 1]
@@ -807,7 +811,7 @@ def execute_subprocess(
     # print(p, vars(p))
     try:
         p.wait(120)  # Wait for process to finish
-    except:
+    except sub.TimeoutExpired:
         warnings.warn("TIME OUT WITH: " + str(command))
         print("Continue Waiting: ")
         p.wait()  # Wait for process to finish
@@ -869,7 +873,7 @@ def execute_old(
         # testing this!:
         try:
             p.wait(timeout=15)
-        except:
+        except sub.TimeoutExpired:
             warnings.warn("Wait threw error!:( for cmd: " + str(command) + " If it is a long command... ok :)")
 
             if wait_fail:

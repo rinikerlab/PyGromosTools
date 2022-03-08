@@ -3,6 +3,8 @@ from typing import Iterable, List
 from numbers import Number
 
 # FIELDS
+
+
 class _generic_field:
     comment: str = ""
 
@@ -23,7 +25,7 @@ class _generic_field:
 
 
 # BLOCKS
-##genericblock:
+# genericblock:
 class _generic_gromos_block:
     comment: str
     content: Iterable  # some content
@@ -62,7 +64,7 @@ class _generic_gromos_block:
             return False
 
     def _check_import_method(self, content: str = None):
-        if not content is None:
+        if content is not None:
             if isinstance(content, list) and all([isinstance(x, str) for x in content]):
                 self.read_content_from_str(content)
             elif type(content) == self.__class__:
@@ -142,7 +144,7 @@ class _iterable_gromos_block(_generic_gromos_block):
         return result
 
 
-##GENERAL
+# GENERAL
 class TIMESTEP(_generic_gromos_block):
     step: int
     t: float

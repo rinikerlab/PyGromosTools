@@ -14,6 +14,7 @@ dependencies:
   - jupyter
   - tqdm
   - ipywidgets
+  - jupytext
   # Science
   - mpmath
   - pandas

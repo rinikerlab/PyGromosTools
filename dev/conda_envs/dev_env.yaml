@@ -16,6 +16,7 @@ dependencies:
   - jupyter
   - tqdm
   - ipywidgets
+  - jupytext
   ## Documentation
   - sphinx
   - m2r

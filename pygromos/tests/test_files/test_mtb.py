@@ -1,7 +1,5 @@
 import tempfile
 
-from sympy import Q
-
 from pygromos.files.topology.mtb import Mtb
 from pygromos.data.ff.Gromos2016H66 import mtb, mtb_orga
 
@@ -21,7 +19,7 @@ class test_mtb(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        mtb_file = self.class_type(self.in_file_path)
+        mtb_file = self.class_type(self.in_file_path)  # noqa: F841
         return 0
 
     def test_write(self):

@@ -77,7 +77,7 @@ class Hvap_calculation:
         # create folders and structure
         try:
             os.mkdir(path=work_folder)
-        except:
+        except FileExistsError:
             if verbose:
                 warnings.warn("Folder does already exist")
             else:
@@ -135,13 +135,15 @@ class Hvap_calculation:
                 tempTop.write(out_path=self.work_folder + "temp.top")
                 time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
                 self.groSys_liq.top = tempTop
-            except:
+            except Exception as e:
                 self.groSys_liq.top = com_top(
                     top1=self.groSys_gas.top,
                     top2=self.groSys_gas.top,
                     topo_multiplier=[self.num_molecules, 0],
                     verbose=False,
                 )
+                if self.verbose:
+                    print(e)
         else:
             self.groSys_liq.top = com_top(
                 top1=self.groSys_gas.top,

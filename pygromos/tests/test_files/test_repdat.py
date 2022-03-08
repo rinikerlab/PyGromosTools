@@ -1,15 +1,14 @@
 import tempfile
 import unittest
 from pygromos.files.otherfiles import repdat
-from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 from pygromos.tests.in_testfiles import in_test_file_path
+from pygromos.tests.test_files import out_test_root_dir
 
 in_dir = in_test_file_path + "/repdat"
 in_path = in_dir + "/in_REEDS_repdat2_short.dat"
 in_path2 = in_dir + "/2_ligs_4E96_4J3I_sopt1_2_repdat.dat"
 
-from pygromos.tests.test_files import out_test_root_dir
 
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="repdat_")
 out_path = root_out + "/out_REEDS_repdat2_short.dat"
@@ -25,11 +24,11 @@ class test_repdat(unittest.TestCase):  # general_file_tests): #Todo: make copy a
     root_out = root_out
 
     def test_parsing_test_file(self):
-        repdat_file = self.class_type(self.in_file_path)
+        repdat_file = self.class_type(self.in_file_path)  # noqa: F841
         return 0
 
     def test_parsing_new_file(self):
-        repdat_file = self.class_type(in_path2)
+        repdat_file = self.class_type(in_path2)  # noqa: F841
 
     def test_write_out(self):
         repdat_file = self.class_type(self.in_file_path)
@@ -62,8 +61,8 @@ class test_repdat(unittest.TestCase):  # general_file_tests): #Todo: make copy a
 
     def test_get_transitions(self):
         repdat_file = self.class_type(self.in_file_path)
-        transitions = repdat_file.get_replica_traces()
+        transitions = repdat_file.get_replica_traces()  # noqa: F841
 
     def test_test_transitions(self):
         repdat_file = self.class_type(self.in_file_path)
-        transitions = repdat_file.get_replica_traces()
+        transitions = repdat_file.get_replica_traces()  # noqa: F841

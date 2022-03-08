@@ -34,7 +34,7 @@ def do_skip_job(
         if isinstance(queued_job_ids, (pd.DataFrame, pd.Series)):
             queued_job_ids = list(queued_job_ids.where(queued_job_ids.STAT.isin(["RUN", "PEND"])).dropna().JOBID)
 
-        ## check if already submitted
+        # check if already submitted
         if len(queued_job_ids) > 1:  # check if job is already submitted:
             if verbose:
                 print(
@@ -73,7 +73,7 @@ def do_skip_job(
         if verbose:
             print("\t\t NOT SUBMITTED!(inScript) as these Files were found: \n\t" + tmp_out_cnfs_regex)
         setattr(simSystem, "coord_seeds", tmp_out_cnf)  # set next coord Files
-        prefix_command = ""
+        prefix_command = ""  # noqa: F841
         if (verbose) and verbose_lvl >= 2:
             print(simSystem.cnf.path)
         if (verbose) and verbose_lvl >= 2:
@@ -142,9 +142,9 @@ def chain_submission(
         print("start_run_index " + str(start_run_index))
     if (verbose) and verbose_lvl >= 2:
         print("job reptitions " + str(chain_job_repetitions))
-    orig_prefix_command = prefix_command
+    orig_prefix_command = prefix_command  # noqa: F841
 
-    if not job_submission_system is LOCAL:
+    if job_submission_system is not LOCAL:
         simSystem._future_promise = True
 
     ana_id = None
@@ -188,16 +188,16 @@ def chain_submission(
             md_args += "-in_top_path " + simSystem.top.path + "\n"
             md_args += "-runID " + str(runID) + "\n"
 
-            ## OPTIONAL ARGS
-            if not simSystem.disres is None:
+            # OPTIONAL ARGS
+            if simSystem.disres is not None:
                 md_args += "-in_disres_path " + simSystem.disres.path + "\n"
-            if not simSystem.ptp is None:
+            if simSystem.ptp is not None:
                 md_args += "-in_perttopo_path " + simSystem.ptp.path + "\n"
-            if not simSystem.refpos is None:
+            if simSystem.refpos is not None:
                 md_args += "-in_refpos_path " + simSystem.refpos.path + "\n"
-            if not simSystem.qmmm is None:
+            if simSystem.qmmm is not None:
                 md_args += "-in_qmmm_path " + simSystem.qmmm.path + " "
-            if not simSystem.posres is None:
+            if simSystem.posres is not None:
                 md_args += "-in_posres_path " + simSystem.posres.path + "\n"
 
             md_args += "-nmpi " + str(job_submission_system.nmpi) + "\n"
@@ -229,7 +229,7 @@ def chain_submission(
                     md_args += "-out_trg " + str(True) + "\n"
 
             if (verbose) and verbose_lvl >= 2:
-                print("COMMAND: ", md_script_command)
+                print("COMMAND: ", md_script_command)  # noqa: F821
 
             md_args += "-zip_trajectories " + str(job_submission_system.zip_trajectories) + "\n"
 

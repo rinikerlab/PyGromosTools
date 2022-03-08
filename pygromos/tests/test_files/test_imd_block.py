@@ -4,14 +4,14 @@ from pygromos.files.blocks import imd_blocks
 
 class test_imd_block(unittest.TestCase):
     def test_some_blocks(self):
-        test = imd_blocks.REPLICA_EDS(NRES=2, NUMSTATES=5, RES=6, EIR=8, NRETRIAL=9, NREQUIL=10, CONT=11)
+        test = imd_blocks.REPLICA_EDS(NRES=2, NUMSTATES=5, RES=6, EIR=8, NRETRIAL=9, NREQUIL=10, CONT=11)  # noqa: F841
 
-        test2 = imd_blocks.MULTIBATH(
+        test2 = imd_blocks.MULTIBATH(  # noqa: F841
             ALGORITHM=1, NBATHS=1, TEMP0=[3], TAU=[4], DOFSET=5, LAST=[6], COMBATH=[6], IRBATH=[7]
         )
 
-        test3 = imd_blocks.PRESSURESCALE(
+        test3 = imd_blocks.PRESSURESCALE(  # noqa: F841
             COUPLE=1, SCALE=2, COMP=1, TAUP=1, VIRIAL=3, SEMIANISOTROPIC=[4], PRES0=[[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         )
 
-        test4 = imd_blocks.RANDOMNUMBERS(NTRNG=0, NTGSL=0)
+        test4 = imd_blocks.RANDOMNUMBERS(NTRNG=0, NTGSL=0)  # noqa: F841

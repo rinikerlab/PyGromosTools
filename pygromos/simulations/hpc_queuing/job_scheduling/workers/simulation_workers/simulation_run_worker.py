@@ -4,9 +4,6 @@ import sys
 import time
 import math
 
-package_path = os.path.abspath(__file__ + "/../../../../../..")
-sys.path.append(package_path)
-
 from pygromos.gromos import gromosXX as mdGromosXX
 from pygromos.files.simulation_parameters import imd
 from pygromos.files.coord import cnf
@@ -15,6 +12,9 @@ from pygromos.utils import bash as bash
 from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_for_filesystem
 
 import pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.clean_up_simulation_files as zip_files
+
+package_path = os.path.abspath(__file__ + "/../../../../../..")
+sys.path.append(package_path)
 
 
 def work(
@@ -118,11 +118,11 @@ def work(
     imd_file = imd.Imd(in_imd_path)
     cnf_file = cnf.Cnf(in_cnf_path)
 
-    ##check init_block - if specified!
-    ###What kind of simulation
+    # check init_block - if specified!
+    # What kind of simulation
     is_stochastic_dynamics_sim = False
     is_vacuum = False
-    is_energymin_sim = False
+    is_energymin_sim = False  # noqa: F841
 
     if imd_file.BOUNDCOND.NTB == 0:
         is_vacuum = True
@@ -133,7 +133,7 @@ def work(
 
     if hasattr(imd_file, "ENERGYMIN"):
         if imd_file.ENERGYMIN.NTEM > 0:
-            is_energymin_sim = True
+            is_energymin_sim = True  # noqa: F841
 
     # Adapt Initializations:
     if reinitialize_every_run or (initialize_first_run and runID == 1):
@@ -167,7 +167,7 @@ def work(
         if is_stochastic_dynamics_sim or is_vacuum:
             imd_file.INITIALISE.NTISHI = 1
 
-    ##Write out:
+    # Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)
 
     # RUN

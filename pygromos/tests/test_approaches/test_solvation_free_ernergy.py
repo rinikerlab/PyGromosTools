@@ -2,7 +2,6 @@ from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation
     Solvation_free_energy_calculation,
 )
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
-import numpy as np
 import unittest
 
 

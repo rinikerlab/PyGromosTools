@@ -37,6 +37,8 @@ class _general_pandas_tre_block(_general_pandas_trajectory_block):
             else:
                 subblock_content[subblock_name].append(line.strip())
 
+        tmp_sub2 = None
+        tmp_sub_block = None
         for subblocktitle, subblock in subblock_content.items():
             if "lambda" == subblocktitle:  # Exceptions for TRG
                 tmp_sub_block = getattr(ene_sub_block, "lam")(

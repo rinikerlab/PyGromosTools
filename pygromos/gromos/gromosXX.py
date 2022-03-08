@@ -10,7 +10,7 @@ import os
 import datetime
 import time
 
-from pygromos.utils import bash, compiledProgram
+from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.gromos._gromosClass import _gromosClass
 
@@ -161,20 +161,20 @@ class _GromosXX(_gromosClass):
         command += ["@conf", str(in_coord_path)]
         command += ["@input", str(in_imd_path)]
 
-        if not in_pert_topo_path is None:
+        if in_pert_topo_path is not None:
             command += ["@pttopo", str(in_pert_topo_path)]
 
-        if not in_disres_path is None:
+        if in_disres_path is not None:
             command += ["@distrest", str(in_disres_path)]
 
-        if not in_posresspec_path is None:
+        if in_posresspec_path is not None:
             print("POSRES", in_posresspec_path)
             command += ["@posresspec", str(in_posresspec_path)]
 
-        if not in_refpos_path is None:
+        if in_refpos_path is not None:
             command += ["@refpos", str(in_refpos_path)]
 
-        if not in_qmmm_path is None:
+        if in_qmmm_path is not None:
             command += ["@qmmm", str(in_qmmm_path)]
 
         if isinstance(out_prefix, str):
@@ -223,7 +223,7 @@ class _GromosXX(_gromosClass):
         log_file.write("END\n")
         log_file.close()
 
-        if md_run_return != 0:
+        if failed:
             raise ChildProcessError("GromosXX MD Run Failed!\n\nLOG:" + "\n".join(open(log_file_path, "r").readlines()))
 
         return log_file_path
