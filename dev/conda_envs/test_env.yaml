@@ -24,7 +24,9 @@ dependencies:
   - openff-toolkit = 0.10.0
   - mdtraj
   - rdkit
-  ## Visualization
+  - mpmath
+  - mdtraj
+ ##Visualization
   - matplotlib
-  - py3dmol #to be removed! soon after merge of new visualize
+  - py3dmol #to be removed!
   - nglview

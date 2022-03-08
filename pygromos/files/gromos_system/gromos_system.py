@@ -50,6 +50,7 @@ if importlib.util.find_spec("rdkit") is not None:
 else:
     has_rdkit = False
 
+
 from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
 
 if importlib.util.find_spec("openff") is not None:
@@ -66,6 +67,12 @@ skip = {
     "protein_info": cnf.protein_infos,
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
+}
+exclude_pickle = {
+    "GromosPP": GromosPP,
+    "GromosXX": GromosXX,
+    "_gromosPP": GromosPP,
+    "_gromosXX": GromosXX,
 }
 
 
@@ -261,7 +268,7 @@ class Gromos_System:
             self.cnf = Cnf(in_value=self.mol)
             # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
             if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and bash.command_exists(self.gromosPP.bin + "/pdb2g96"):
+                if self.gromosPP is not None and self.gromosPP._found_binary["pdb2g96"]:
                     try:
                         from pygromos.files.blocks.coord_blocks import atomP
 
@@ -400,13 +407,13 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not isinstance(attribute_dict[key], Callable) and key not in skip:
+            if not isinstance(attribute_dict[key], Callable) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
-            elif not attribute_dict[key] is None and key in skip:
+            elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
+                print("STUPID ", key)
                 new_dict.update({key: None})
-
         return new_dict
 
     def __setstate__(self, state):
@@ -435,7 +442,7 @@ class Gromos_System:
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
 
-    def copy(self, no_traj: bool = True):
+    def copy(self):
         return copy.deepcopy(self)
 
     """
@@ -679,7 +686,8 @@ class Gromos_System:
 
     @gromosXX_bin_dir.setter
     def gromosXX_bin_dir(self, path: str):
-        self.gromosXX = path
+        self.gromosXX.bin = path
+        self._gromosXX_bin_dir = path
 
     @property
     def gromosPP_bin_dir(self) -> str:
@@ -687,7 +695,8 @@ class Gromos_System:
 
     @gromosPP_bin_dir.setter
     def gromosPP_bin_dir(self, path: str):
-        self.gromosPP = path
+        self.gromosPP.bin = path
+        self._gromosPP_bin_dir = path
 
     @property
     def gromosXX(self) -> GromosXX:
@@ -695,19 +704,12 @@ class Gromos_System:
 
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
-        if isinstance(input_value, str):
-            # check if path to GromosXX binary is a valid directory and if md binary is present
-            if bash.directory_exists(input_value) and bash.command_exists(f"{input_value}/md"):
-                self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
-                self._gromosXX_bin_dir = input_value
-            else:
-                raise FileNotFoundError(f"{str(input_value)} is not a valid directory.")
+        if isinstance(input_value, str) or input_value is None:
+            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
+            self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
             self._gromosXX_bin_dir = input_value.bin
-        elif input_value is None:
-            self._gromosXX = None
-            self._gromosXX_bin_dir = None
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
 
@@ -717,21 +719,14 @@ class Gromos_System:
 
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
-        if isinstance(input_value, str):
-            # check if path to GromosPP binaries is a valid directory and if at least one is present
-            if bash.directory_exists(input_value) and bash.command_exists(f"{input_value}/make_top"):
-                self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
-                self._gromosPP_bin_dir = input_value
-            else:
-                raise FileNotFoundError(f"{str(input_value)} is not a valid directory.")
+        if isinstance(input_value, str) or input_value is None:
+            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
+            self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
             self._gromosPP = input_value
             self._gromosPP_bin_dir = input_value.bin
-        elif input_value is None:
-            self._gromosPP = None
-            self._gromosPP_bin_dir = None
         else:
-            raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
+            raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
 
     """
         Functions
@@ -1263,7 +1258,7 @@ class Gromos_System:
                         kwargs.update({k: grom_obj.path})
 
             # execute function
-            r = func(*args, **kwargs)
+            r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
             [bash.remove_file(p) for p in tmp_files]
@@ -1407,5 +1402,5 @@ class Gromos_System:
             # this is clunky and needs to be removed in future
             rewrap = self.__ionDecorator(v["ion"])
             v.update({"ion": rewrap})
-
+            [exclude_pickle.update({f: None}) for f in func]
             self.__dict__.update(v)
