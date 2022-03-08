@@ -61,11 +61,12 @@ repos:
         language: python
         stages: [push]
 
-      # - id: jupyblack
-      #   name: Fixes ipynb format
-      #   entry: jupytext --pipe-fmt ".py" --pipe "black - --line-length=120" --sync
-      #   files: \.ipynb$
-      #   language: python
+      - id: jupyblack
+        name: Fixes ipynb format
+        entry: jupytext --pipe-fmt ".py" --pipe "black - --line-length=120" --sync
+        files: \.ipynb$
+        language: python
+        stages: [push]
 
       # - id: nbconvert
       #   name: Removes ipynb content
