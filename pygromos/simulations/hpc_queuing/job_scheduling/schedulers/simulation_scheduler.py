@@ -4,7 +4,9 @@ This script schedules Simulations ons euler into the queue.
 
 """
 
-import os, sys, traceback
+import os
+import sys
+import traceback
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions import chain_submission
@@ -77,24 +79,24 @@ def do(
                 print("\t -> Generating given workdir: " + work_dir)
             bash.make_folder(work_dir, "-p")
             os.chdir(work_dir)
-            prepared_imd = work_dir + "/" + os.path.basename(in_simSystem.imd.path)
+            prepared_imd = work_dir + "/" + os.path.basename(in_simSystem.imd.path)  # noqa: F841
         else:
             if verbose and verbose_lvl > 2:
                 print("\t -> Using on node workdir")
-            prepared_imd = out_dir_path + "/" + os.path.basename(in_simSystem.imd.path)
+            prepared_imd = out_dir_path + "/" + os.path.basename(in_simSystem.imd.path)  # noqa: F841
 
         # sim vars logs
         out_prefix = in_simSystem.name
         slave_script = workerScript.__file__
 
         # CHECK PATH DEPENDENCIES - all Files present?
-        ##needed variables
+        # needed variables
         check_path_dependencies_paths = [
             slave_script,
             out_dir_path,
         ]  # Coord file is used by repex in_imd_path prepared_im
-        ##variable paths
-        if not work_dir is None:
+        # variable paths
+        if work_dir is not None:
             check_path_dependencies_paths.append(work_dir)
 
         if not in_simSystem.top._future_file:
@@ -103,15 +105,15 @@ def do(
             check_path_dependencies_paths.append(in_simSystem.cnf.path)
         if not in_simSystem.imd._future_file:
             check_path_dependencies_paths.append(in_simSystem.imd.path)
-        if not in_simSystem.ptp is None:
+        if in_simSystem.ptp is not None:
             check_path_dependencies_paths.append(in_simSystem.ptp.path)
-        if not in_simSystem.disres is None:
+        if in_simSystem.disres is not None:
             check_path_dependencies_paths.append(in_simSystem.disres.path)
-        if not in_simSystem.posres is None:
+        if in_simSystem.posres is not None:
             check_path_dependencies_paths.append(in_simSystem.posres.path)
-        if not in_simSystem.refpos is None:
+        if in_simSystem.refpos is not None:
             check_path_dependencies_paths.append(in_simSystem.refpos.path)
-        if not in_simSystem.qmmm is None:
+        if in_simSystem.qmmm is not None:
             check_path_dependencies_paths.append(in_simSystem.qmmm.path)
 
             # prepared_imd = bash.copy_file(in_simSystem.imd.path, prepared_imd) #Todo: Remove? @bschroed
@@ -140,7 +142,7 @@ def do(
             print("simulation runs: ", simulation_run_num)
 
         # Submission
-        ## EQ
+        # EQ
         eq_job_id = None
         if equilibration_run_num > 0:  # EQUILIBRATION
             tmp_outprefix = "eq_" + out_prefix
@@ -162,7 +164,7 @@ def do(
                 verbose=job_verb,
             )
 
-        ## MD
+        # MD
         tmp_outprefix = out_prefix
         tmp_jobname = in_simSystem.name
         previous_job_ID = previous_job_ID if (eq_job_id is None) else eq_job_id
@@ -184,7 +186,7 @@ def do(
         )
 
         ana_previous_job_ID = previous_job_ID
-        if not analysis_script_path is None:
+        if analysis_script_path is not None:
             tmp_jobname = in_simSystem.name + "_ana"
 
             ana_log = os.path.dirname(analysis_script_path) + "/ana_out.log"

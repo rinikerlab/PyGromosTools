@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
-import os, sys
-
-package_path = os.path.abspath(__file__ + "/../../../../../..")
-# print(package_path)
-sys.path.append(package_path)
-
+import os
+import sys
 import warnings
 import shutil
 import math
@@ -14,6 +10,10 @@ from pygromos.gromos import gromosPP
 from pygromos.files.coord import cnf
 from pygromos.files.trajectory import trc, tre, trg
 from pygromos.utils import bash
+
+package_path = os.path.abspath(__file__ + "/../../../../../..")
+# print(package_path)
+sys.path.append(package_path)
 
 template_control_dict = OrderedDict(
     {
@@ -59,9 +59,10 @@ def do(
     -------
 
     """
-    data = {}
-
-    gromos = gromosPP.GromosPP(gromosPP_bin_dir)
+    # data = {}
+    if gromosPP_bin_dir is not None:
+        gromos = gromosPP.GromosPP(gromosPP_bin_dir)
+        bash.command_exists(gromos.make_top())
 
     if not os.path.exists(out_analysis_dir) and not os.path.isdir(out_analysis_dir):
         bash.make_folder(out_analysis_dir)
@@ -91,6 +92,8 @@ def do(
         if os.path.exists(in_simulation_dir):
             if sub_dict["tar"]:
                 out_tar_dir = bash.compress_tar(in_path=in_simulation_dir)
+                if verbose:
+                    print("Tarred simulation folder: " + str(out_tar_dir))
                 bash.remove_file(in_simulation_dir, additional_options="-r")
 
             if sub_dict["remove"]:
@@ -125,6 +128,8 @@ def project_concatenation(
             sim_dir_cnfs = gather_simulation_step_file_paths(
                 in_folder, filePrefix=in_prefix, fileSuffixes=".cnf", verbose=verbose  # in_simSystem.name,
             )
+            if verbose:
+                print("\t\tFound " + str(len(sim_dir_cnfs)) + " cnfs")
 
             import glob
 
@@ -143,10 +148,10 @@ def project_concatenation(
     if control_dict["cp_omd"]:
 
         out_omd = out_prefix + ".omd"
-        if os.path.exists(out_prefix + ".omd"):
+        if os.path.exists(out_omd):
             warnings.warn(
                 "Skipping concatenation of tres, as there already exists one!\n "
-                "If you want to generate a new trc. Please delete the old one!\n\t Path:" + out_prefix + ".omd"
+                "If you want to generate a new trc. Please delete the old one!\n\t Path:" + out_omd
             )
         else:
             if verbose:
@@ -288,7 +293,7 @@ def gather_simulation_step_file_paths(
         fileSuffixes = [fileSuffixes]
 
     # browse folders
-    ##init statewise dic
+    # init statewise dic
     files = []
     if verbose:
         print("SEARCH PATTERN: " + filePrefix + " + * +" + str(fileSuffixes))

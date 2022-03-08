@@ -156,7 +156,7 @@ class Solvation_free_energy_calculation:
         # create folders and structure
         try:
             os.mkdir(path=work_folder)
-        except:
+        except FileExistsError:
             if verbose:
                 warnings.warn("Folder does already exist")
             else:
@@ -231,7 +231,7 @@ class Solvation_free_energy_calculation:
         coord_dir = self.work_folder + "/coord/"
         try:
             os.mkdir(path=coord_dir)
-        except:
+        except FileExistsError:
             if self.verbose:
                 warnings.warn("Folder does already exist")
             else:
@@ -485,7 +485,7 @@ class Solvation_free_energy_calculation:
         # create folders and structure
         try:
             os.mkdir(path=ti_dir)
-        except:
+        except FileExistsError:
             if self.verbose:
                 warnings.warn("Folder does already exist")
             else:
@@ -859,8 +859,8 @@ class Solvation_free_energy_calculation:
         # Set Lambda Points
         lambda_points = n_points
 
-        for l in range(lambda_points):
-            rlam = l / (lambda_points - 1)
+        for lambda_point in range(lambda_points):
+            rlam = lambda_point / (lambda_points - 1)
             rlam = np.round(rlam, 3)
 
             # Get system Name

@@ -39,9 +39,10 @@ from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
-import pickle, io
+import pickle
+import io
 
-if importlib.util.find_spec("rdkit") != None:
+if importlib.util.find_spec("rdkit") is not None:
     from rdkit import Chem
     from rdkit.Chem import AllChem
 
@@ -52,7 +53,7 @@ else:
 
 from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
 
-if importlib.util.find_spec("openff") != None:
+if importlib.util.find_spec("openff") is not None:
     from openff.toolkit.topology import Molecule
     from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
     from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
@@ -202,11 +203,11 @@ class Gromos_System:
         # add functions of gromosPP to system
         self.__bind_gromosPPFuncs()
 
-        ## For HPC-Queueing
+        # For HPC-Queueing
         self._future_promise = False
         self._future_promised_files = []
 
-        if (in_smiles == None and rdkitMol == None and in_mol2_file == None) or readIn == False:
+        if (in_smiles is None and rdkitMol is None and in_mol2_file is None) or not readIn:
             if verbose:
                 warnings.warn("No data provided to gromos_system\nmanual work needed")
 
@@ -223,7 +224,7 @@ class Gromos_System:
         }
         self.parse_attribute_files(file_mapping, readIn=readIn, verbose=verbose)
 
-        ##System Information:
+        # System Information:
         if not self._cnf._future_file:
             (
                 self.residue_list,
@@ -287,7 +288,7 @@ class Gromos_System:
                         self.cnf.write_pdb(self.work_folder + "/tmp.pdb")
                         self.pdb2gromos(self.work_folder + "/tmp.pdb")
                         self.add_hydrogens()
-                    except:
+                    except IOError:
                         raise Warning("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
 
         # decide if the imd should be adapted (force groups etc.)
@@ -323,10 +324,10 @@ class Gromos_System:
             msg += "SYSTEM: \n"
             if (
                 hasattr(self, "protein_info")
-                and not self.protein_info is None
+                and self.protein_info is not None
                 and self.protein_info.number_of_residues > 0
             ):
-                if hasattr(self, "protein_info") and not self.protein_info is None:
+                if hasattr(self, "protein_info") and self.protein_info is not None:
                     # +" resIDs: "+str(self.protein_info.residues[0])+"-"+str(self.protein_info.residues[-1])
                     msg += (
                         "\tPROTEIN:\t"
@@ -337,7 +338,7 @@ class Gromos_System:
                         + str(self.protein_info.number_of_atoms)
                         + "\n"
                     )
-                if hasattr(self, "solute_info") and not self.solute_info is None:
+                if hasattr(self, "solute_info") and self.solute_info is not None:
                     msg += (
                         "\tLIGANDS:\t"
                         + str(self.solute_info.names)
@@ -347,7 +348,7 @@ class Gromos_System:
                         + str(self.solute_info.number_of_atoms)
                         + "\n"
                     )
-                if hasattr(self, "non_ligand_info") and not self.non_ligand_info is None:
+                if hasattr(self, "non_ligand_info") and self.non_ligand_info is not None:
                     # +"  resID: "+str(self.non_ligand_info.positions)
                     msg += (
                         "\tNon-LIGANDS:\t"
@@ -358,7 +359,7 @@ class Gromos_System:
                         + str(self.non_ligand_info.number_of_atoms)
                         + "\n"
                     )
-                if hasattr(self, "solvent_info") and not self.solvent_info is None:
+                if hasattr(self, "solvent_info") and self.solvent_info is not None:
                     # " resIDs: "+str(self.solvent_info.positions[0])+"-"+str(self.solvent_info.positions[-1])+
                     msg += (
                         "\tSOLVENT:\t"
@@ -370,7 +371,7 @@ class Gromos_System:
                         + "\n"
                     )
             else:
-                if hasattr(self, "solute_info") and not self.solute_info is None:
+                if hasattr(self, "solute_info") and self.solute_info is not None:
                     msg += (
                         "\tSolute:\t"
                         + str(self.solute_info.names)
@@ -380,7 +381,7 @@ class Gromos_System:
                         + str(self.solute_info.number_of_atoms)
                         + "\n"
                     )
-                if hasattr(self, "solvent_info") and not self.solvent_info is None:
+                if hasattr(self, "solvent_info") and self.solvent_info is not None:
                     # " resIDs: "+str(self.solvent_info.positions[0])+"-"+str(self.solvent_info.positions[-1])+
                     msg += (
                         "\tSOLVENT:\t"
@@ -783,21 +784,21 @@ class Gromos_System:
         # File/Folder Attribute managment
         check_file_paths = []
 
-        ##Check if system folder is present
+        # Check if system folder is present
         if not os.path.exists(self._work_folder):
             bash.make_folder(self._work_folder)
         check_file_paths.append(self._work_folder)
 
-        ## Check if file- paths are valid
+        # Check if file- paths are valid
         all_files = {key: val for key, val in self.required_files.items()}
         all_files.update(self.optional_files)
-        [check_file_paths.append(x) for k, x in file_mapping.items() if (not x is None)]
+        [check_file_paths.append(x) for k, x in file_mapping.items() if (x is not None)]
         if len(check_file_paths) > 0:
             bash.check_path_dependencies(check_file_paths, verbose=verbose)
 
         # SET Attribute-FILES
         for attribute_name, file_path in file_mapping.items():
-            if readIn and not file_path is None:
+            if readIn and file_path is not None:
                 if verbose:
                     print("Parsing File: ", attribute_name)
                 obj = all_files[attribute_name](file_path)
@@ -806,7 +807,7 @@ class Gromos_System:
                     print("Generate Empty: ", attribute_name)
                 obj = all_files[attribute_name](None, _future_file=True)
                 obj.path = file_path
-                if not file_path is None:
+                if file_path is not None:
                     self._future_promise = True
                     self._future_promised_files.append(attribute_name)
             else:
@@ -910,7 +911,7 @@ class Gromos_System:
                 self.top = self.serenityff.top
 
         elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
-            if self.in_mol2_file == None:
+            if self.in_mol2_file is None:
                 raise TypeError("To use amberff_gaff, please provide a mol2 file")
 
             amber = amber2gromos(
@@ -954,21 +955,21 @@ class Gromos_System:
                 self.protein_info = prot
                 self.non_ligand_info = nonLig
                 self.solvent_info = solvent
-        ##System
+        # System
         self.imd.SYSTEM.NPM = 1
         self.imd.SYSTEM.NSM = len(self.residue_list["SOLV"]) if ("SOLV" in self.residue_list) else 0
 
         # boundary condition:
         from pygromos.files.blocks.coord_blocks import Pbc
 
-        ##vacuum if no box or GENBOX-pbc == Vacuum
+        # vacuum if no box or GENBOX-pbc == Vacuum
         if not self.cnf._future_file and (not hasattr(self.cnf, "GENBOX") or self.cnf.GENBOX.pbc == Pbc.vacuum):
             self.imd.BOUNDCOND.NTB = Pbc.vacuum.value
         elif not self.cnf._future_file and (not hasattr(self.cnf, "GENBOX") or self.cnf.GENBOX.pbc == Pbc.rectangular):
             self.imd.BOUNDCOND.NTB = Pbc.rectangular.value
             self.imd.BOUNDCOND.NDFMIN = 3
 
-        ##Energy and Force Group
+        # Energy and Force Group
         energy_groups = {}
 
         if self._single_energy_group:
@@ -1006,7 +1007,7 @@ class Gromos_System:
         # adapt energy groups in IMD with sorted list of energy groups created above
         self.imd.FORCE.adapt_energy_groups(energy_groups=sorted_energy_groups)
 
-        ##Multibath:
+        # Multibath:
         if hasattr(self.imd, "MULTIBATH") and not getattr(self.imd, "MULTIBATH") is None:
             last_atoms_baths = {}
             if self._single_multibath:
@@ -1067,13 +1068,13 @@ class Gromos_System:
         for file_name in self.required_files:
             try:
                 getattr(self, file_name).read_file()
-            except:
+            except FileExistsError:
                 warnings.warn("did not find the required " + file_name + " found")
 
         for file_name in self.optional_files:
             try:
                 getattr(self, file_name).read_file()
-            except:
+            except FileExistsError:
                 if verbose:
                     warnings.warn("did not find the optional " + file_name + " found")
 
@@ -1390,7 +1391,7 @@ class Gromos_System:
         return generate_ion_top
 
     def __bind_gromosPPFuncs(self):
-        if not self._gromosPP is None:
+        if self._gromosPP is not None:
             func = [k for k in dir(self._gromosPP) if (not k.startswith("_") and k != "bin")]
             v = {
                 f: self.__SystemConstructionUpdater(

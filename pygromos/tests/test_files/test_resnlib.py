@@ -1,4 +1,3 @@
-import unittest
 import tempfile
 from pygromos.data import pdb_lib
 from pygromos.files.otherfiles import residue_library

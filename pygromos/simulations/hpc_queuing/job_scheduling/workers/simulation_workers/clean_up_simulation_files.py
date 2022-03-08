@@ -8,14 +8,15 @@ It should be hanged in after each simulation step.
 
 import argparse
 import glob
-import os, sys
+import os
+import sys
+
+from pygromos.utils.utils import time_wait_s_for_filesystem
+from pygromos.simulations.hpc_queuing.job_scheduling import file_management as fM
 
 package_path = os.path.abspath(__file__ + "/../../../../../..")
 # print(package_path)
 sys.path.append(package_path)
-
-from pygromos.utils.utils import time_wait_s_for_filesystem
-from pygromos.simulations.hpc_queuing.job_scheduling import file_management as fM
 
 
 def do(in_simulation_dir: str, n_processes: int = 1, verbose: bool = True) -> None:

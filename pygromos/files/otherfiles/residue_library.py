@@ -7,7 +7,7 @@ Author: Benjamin Ries
 
 # imports
 from typing import Union
-from pygromos.files.blocks import _all_blocks as blocks
+from pygromos.files.blocks import all_blocks
 from pygromos.files._basics import parser
 
 from pygromos.files._basics import _general_gromos_file
@@ -17,8 +17,8 @@ from pygromos.data import pdb_lib
 
 class residue_library(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", "RESIDUENAMELIB", "ATOMNAMELIB"]
-    RESIDUENAMELIB: blocks.RESIDUENAMELIB
-    ATOMNAMELIB: blocks.ATOMNAMELIB
+    RESIDUENAMELIB: all_blocks.RESIDUENAMELIB
+    ATOMNAMELIB: all_blocks.ATOMNAMELIB
     verbose: bool = False
 
     _gromos_file_ending = "res"
@@ -37,12 +37,12 @@ class residue_library(_general_gromos_file._general_gromos_file):
         if type(in_value) is str:
             self.path = in_value
             self.read_resnlib(in_value)
-        elif in_value == None:
+        elif in_value is None:
             if self.verbose:
                 print("Warning!: generated empty REsidue Lib obj!")
-            self.TITLE = blocks.TITLE(content="New empyt resn_lib-file\n\tgenerated with PyGromosTools.\n")
-            self.RESIDUENAMELIB = blocks.RESIDUENAMELIB({})
-            self.ATOMNAMELIB = blocks.ATOMNAMELIB({})
+            self.TITLE = all_blocks.TITLE(content="New empyt resn_lib-file\n\tgenerated with PyGromosTools.\n")
+            self.RESIDUENAMELIB = all_blocks.RESIDUENAMELIB({})
+            self.ATOMNAMELIB = all_blocks.ATOMNAMELIB({})
         else:
             raise IOError(
                 "pertubation_topology class got " + str(type(in_value)) + " as input. Unknown input type for disres."

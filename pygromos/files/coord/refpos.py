@@ -21,7 +21,7 @@ class Reference_Position(Cnf):
     # Standard Gromos blocks
     TITLE: blocks.TITLE  # required
     REFPOSITION: blocks.REFPOSITION  # required
-    LATTICESHIFTS: blocks.LATTICESHIFTS = None
+    LATTICESHIFTS: blocks.LATTICESHIFTS
     GENBOX: blocks.GENBOX
     # private
     _block_order: List[str] = ["TITLE", "REFPOSITION", "LATTICESHIFTS", "GENBOX"]

@@ -13,7 +13,7 @@ from pygromos.files.topology.top import Top
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 
-if importlib.util.find_spec("openff") == None:
+if importlib.util.find_spec("openff") is None:
     raise ImportError(
         "openforcefield2gromos is not enabled without openFF toolkit package! Please install openFF toolkit."
     )
@@ -56,7 +56,7 @@ class openforcefield2gromos:
         self.atomic_number_dict[35] = "Br"
         self.atomic_number_dict[53] = "I"
 
-        if gromosTop != None:
+        if gromosTop is not None:
             self.gromosTop = gromosTop
         else:
             self.gromosTop = Top(in_value=topology_templates.blank_topo_template)
@@ -66,7 +66,7 @@ class openforcefield2gromos:
         self.openFFTop = Topology.from_molecules(openFFmolecule)
 
         # import the openforcfield forcefield-file
-        if forcefield != None:
+        if forcefield is not None:
             self.forcefield = forcefield
         else:
             self.forcefield = forcefield_system(name="off")
@@ -92,7 +92,7 @@ class openforcefield2gromos:
             for key in molecule["Bonds"]:
                 force = molecule["Bonds"][key]
                 # hQ = topology.atom(force[0]).atomic_number == 1 or topology.atom(force[1]).atomic_number == 1
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])
+                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 k = force.k.value_in_unit(u.kilojoule / (u.mole * u.nanometer**2))
@@ -109,7 +109,7 @@ class openforcefield2gromos:
         for molecule in self.molecule_force_list:
             for key in molecule["Angles"]:
                 force = molecule["Angles"][key]
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])
+                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 atomK = key[2] + 1
@@ -130,7 +130,7 @@ class openforcefield2gromos:
         for molecule in self.molecule_force_list:
             for key in molecule["ProperTorsions"]:
                 force = molecule["ProperTorsions"][key]
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])
+                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 atomK = key[2] + 1
@@ -160,7 +160,7 @@ class openforcefield2gromos:
         for molecule in self.molecule_force_list:
             for key in molecule["ImproperTorsions"]:
                 force = molecule["ImproperTorsions"][key]
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])
+                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 atomK = key[2] + 1

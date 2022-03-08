@@ -1,13 +1,10 @@
 import copy
 import os
 
-import __main__
-
 from collections import namedtuple, defaultdict
 from typing import Dict, List, Tuple, Union
 from typing import TypeVar
 import numpy as np
-import pandas as pd
 from scipy.spatial.transform import Rotation
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -172,18 +169,18 @@ class Cnf(_general_gromos_file):
 
         residues = self.get_residues()
         # Build Up new list
-        ##Criterium, when a ligand is considered
+        # Criterium, when a ligand is considered
         if isinstance(ligand_resn_prefix, str):
             ligand_resn_prefix = [ligand_resn_prefix]
 
         # print(ligand_resn_prefix)
         ligand_residue = lambda res: (
-            (res != "SOLV" and (res not in aa.three_letter_aa_lib and res != "prot")) and not res in not_ligand_residues
-        ) or (type(ligand_resn_prefix) != type(None) and res in ligand_resn_prefix)
+            (res != "SOLV" and (res not in aa.three_letter_aa_lib and res != "prot")) and res not in not_ligand_residues
+        ) or (ligand_resn_prefix is not None and res in ligand_resn_prefix)
         # print(ligand_residue)
 
-        ##get ligand parameters
-        ###Avoid multi ligands with same resi name!
+        # get ligand parameters
+        # Avoid multi ligands with same resi name!
         ligand_names = [res for res in residues if ligand_residue(res)]
         if any([len(residues[name]) > 1 for name in ligand_names]):
             multi_res_ligands = [name for name in ligand_names if (len(residues[name]) > 1)]
@@ -200,7 +197,7 @@ class Cnf(_general_gromos_file):
                 name: {min(residues[name].keys()): sum(list(residues[name].values()))} for name in ligand_names
             }  # ligands as resi
 
-        ###Update
+        # Update
         ligand_names = [res for res in clean_residues if ligand_residue(res)]
         number_of_ligands_atoms = sum([sum(list(clean_residues[res].values())) for res in ligand_names])
         number_of_ligands = len(ligand_names)
@@ -212,7 +209,7 @@ class Cnf(_general_gromos_file):
             number_of_atoms=number_of_ligands_atoms,
         )
 
-        ## get protein parameters if present
+        # get protein parameters if present
         protein_residues = {res: val for res, val in residues.items() if (res in aa.three_letter_aa_lib)}
         if len(protein_residues) > 0:
             protein_name = "protein"
@@ -244,7 +241,7 @@ class Cnf(_general_gromos_file):
                 end_position=-1,
             )
 
-        ##get non_Ligand_residues, e.g.: Cofactors
+        # get non_Ligand_residues, e.g.: Cofactors
         excluded_resi_names = [res for res in residues if (res in not_ligand_residues)]
         if len(excluded_resi_names) > 0:
             number_of_non_ligands_atoms = sum([sum(list(residues[res].values())) for res in excluded_resi_names])
@@ -261,7 +258,7 @@ class Cnf(_general_gromos_file):
             )
         else:
             non_ligands = non_ligand_infos(names=[], number=0, positions=0, number_of_atoms=0)
-        ##get Solvent
+        # get Solvent
         if solvent_name in residues:
             clean_residues.update({solvent_name: residues[solvent_name]})  # solvent
             positions = list(residues[solvent_name].keys())
@@ -307,7 +304,7 @@ class Cnf(_general_gromos_file):
 
         check_blocks = ["POSITION", "VELOCITY"]
 
-        atom_nums = []
+        atom_nums = []  # noqa: F841 # list of all atom numbers # TODO: check if this is needed
         if (not resID or not resName) and verbose:
             print("WARNING giving only resID or resName can be ambigous!")
         if resID or resName:
@@ -559,7 +556,7 @@ class Cnf(_general_gromos_file):
             # find Residues and Count them.
             for i, x in enumerate(subblock):
 
-                ##TREAT SOLVENT
+                # # TREAT SOLVENT
                 # if (x.resName == "SOLV" or x.resName == "SOL"):
                 #    if not (x.resName in counts):
                 #        counts.update({x.resName: 1})
@@ -569,7 +566,7 @@ class Cnf(_general_gromos_file):
                 # TREAT Unknown Molecules
                 if x.resName in counts and x.resID in counts[x.resName]:
                     counts[x.resName][x.resID] += 1
-                elif x.resName in counts and not x.resID in counts[x.resName]:
+                elif x.resName in counts and x.resID not in counts[x.resName]:
                     counts[x.resName].update({x.resID: 1})
                 else:
                     counts.update({x.resName: {x.resID: 1}})
@@ -626,7 +623,7 @@ class Cnf(_general_gromos_file):
 
         if "POSITION" in dir(self):
             # one
-            if (atomI != None and atomJ != None) and atoms == None:
+            if (atomI is not None and atomJ is not None) and atoms is None:
                 ai = self.get_atomP(atomI)[0]
                 aj = self.get_atomP(atomJ)[0]
 
@@ -634,7 +631,7 @@ class Cnf(_general_gromos_file):
                 return distance
 
             # one atom coord set to all atoms of cnf
-            elif atomI != None and atomJ == None and atoms == None and type(atomI) is tuple:
+            elif atomI is not None and atomJ is None and atoms is None and type(atomI) is tuple:
                 if len(atomI) != 3:
                     raise ValueError("atomI-Coordinate tuple have more or less than 3 dims in get_atoms_distance")
                 distances = {}
@@ -645,7 +642,7 @@ class Cnf(_general_gromos_file):
                 return distances
 
             # one coord set + list of atoms
-            elif atomI != None and atomJ == None and atoms != None and type(atomI) is tuple:
+            elif atomI is not None and atomJ is None and atoms is not None and type(atomI) is tuple:
                 if len(atomI) != 3:
                     raise ValueError("atomI-Coordinate tuple have more or less than 3 dims in get_atoms_distance")
                 distances = {}
@@ -655,7 +652,7 @@ class Cnf(_general_gromos_file):
                     distances.update({aj.atomID: distance})
                 return distances
 
-            elif atomI != None and atomJ == None and atoms != None and type(atomI) is int:
+            elif atomI is not None and atomJ is None and atoms is not None and type(atomI) is int:
                 ai = self.get_atomP(atomI)[0]
                 distances = {}
                 for x in atoms:
@@ -664,7 +661,7 @@ class Cnf(_general_gromos_file):
                     distances.update({x: distance})
                 return distances
 
-            elif atomI == None and atomJ == None and atoms != None and atoms is list:
+            elif atomI is None and atomJ is None and atoms is not None and atoms is list:
                 distances_all = []
                 for x in atoms:
                     ai = self.get_atomP(x)[0]
@@ -676,7 +673,7 @@ class Cnf(_general_gromos_file):
                     distances_all.append(distances)
                 return distances_all
 
-            elif atomI != None and atomJ != None and atoms != None and atoms is dict:
+            elif atomI is not None and atomJ is not None and atoms is not None and atoms is dict:
                 distances_all = {}
                 for x in atoms:
                     ai = self.get_atomP(x)
@@ -937,7 +934,7 @@ class Cnf(_general_gromos_file):
                         res_ids = cnf.residues[res]
                         if type(res_ids) == dict:
                             for resi in res_ids:
-                                if not resi in residues:
+                                if resi not in residues:
                                     if res in delete_res:
                                         delete_res[res].append(res_ids)
                                     else:
@@ -1125,7 +1122,7 @@ class Cnf(_general_gromos_file):
             pdb_str += "\n".join(frame_positions) + "\n"
 
         # future:
-        ##add bond block with top optionally
+        # add bond block with top optionally
         if connectivity_top is not None and hasattr(connectivity_top, "BOND") and connectivity_top.BOND is not None:
             connection_block = defaultdict(list)
             for bond in connectivity_top.BOND:
@@ -1152,9 +1149,8 @@ class Cnf(_general_gromos_file):
             in xyz format
         """
         xyz_str = str(len(self.POSITION)) + "\n"
-        xyz_str += "# " + str(self.TITLE.content[0])
-        xyz_str += "# exported wit PyGromosTools\n"
-        xyz_format = "{:<3}\t{:> 3.9f}   {:> 3.9f}   {:> 3.9f}\n"
+        xyz_str += "# " + str(self.TITLE.content[0]).strip() + "\t >> exported wit PyGromosTools <<\n"
+        xyz_format = "  {:<3}  {:> 3.9f}  {:> 3.9f}  {:> 3.9f}\n"
 
         for position in self.POSITION:
             xyz_line = xyz_format.format(position.atomType[0], position.xp * 10, position.yp * 10, position.zp * 10)

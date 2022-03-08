@@ -1,5 +1,5 @@
-from tabnanny import verbose
-import unittest, numpy as np
+import unittest
+import numpy as np
 
 import pygromos.simulations.modules.general_simulation_modules
 import pygromos.simulations.modules.ti_modules

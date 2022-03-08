@@ -2,9 +2,7 @@ from typing import Union, List, Dict
 from pygromos.files.blocks import _general_blocks
 from collections import defaultdict
 
-from collections import defaultdict
-
-##ResidueLibBlocks
+# ResidueLibBlocks
 
 
 class RESIDUENAMELIB(_general_blocks._generic_gromos_block):

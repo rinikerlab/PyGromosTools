@@ -6,13 +6,9 @@ Author: Benjamin Schroeder
 """
 
 import numpy as np
-from numbers import Number
-from typing import List, Dict, NamedTuple, Iterable, Union
-
 import pandas as pd
-from collections import namedtuple
-from pygromos.files._basics import _general_gromos_file, parser
-from pygromos.files.blocks import _all_blocks as blocks
+from pygromos.files._basics import _general_gromos_file
+from pygromos.files.blocks import TITLE
 
 
 class NOE(_general_gromos_file._general_gromos_file):
@@ -21,7 +17,7 @@ class NOE(_general_gromos_file._general_gromos_file):
     _required_blocks = ["TITLE", "AVERAGE_NOE", "NOE_VIOLATIONS", "RESTRAINT_LEGEND"]
     _gromos_file_ending = "noe"
     # POSSIBLE GROMOS BLOCKS
-    TITLE: blocks.TITLE
+    TITLE: TITLE
     AVERAGE_NOE: pd.DataFrame
     NOE_VIOLATIONS: pd.DataFrame
     RESTRAINT_LEGEND: pd.DataFrame
@@ -43,7 +39,6 @@ class NOE(_general_gromos_file._general_gromos_file):
         in_file_lines = in_file.readlines()
 
         # read_blocks
-        # read_blocks
         known_blocks = ["TITLE", "NOE VIOLATIONS", "AVERAGE NOE"]
         in_block = False
         tmp_list = []
@@ -64,12 +59,12 @@ class NOE(_general_gromos_file._general_gromos_file):
                 tmp_list.append(line)
 
         # Blockify
-        ## TITLE
+        # TITLE
         title = noe_states[0]["TITLE"]
 
-        ##NOE - VIOLATIONS
-        ###read header info
-        ###NOE Restraint
+        # NOE - VIOLATIONS
+        # read header info
+        # NOE Restraint
         header = [s.replace("#", "") for s in noe_states[0]["NOE VIOLATIONS"] if (s.startswith("#"))]
 
         t_legend = []
@@ -94,15 +89,15 @@ class NOE(_general_gromos_file._general_gromos_file):
                 raise Exception("WHAT SHALL I DO WITH THAT? " + str(legend_entry))
         restraint_legend = pd.DataFrame(t_legend, columns=["Nr.", "resI", "atomI", "resJ", "atomJ"])
 
-        ##data Header
+        # data Header
         column_header_nviols = [x for x in header[-1].strip().split("  ") if (x != "")]
 
         header = [s.replace("#", "") for s in noe_states[0]["AVERAGE NOE"] if (s.startswith("#"))]
         column_header_avgnoe = [x for x in header[-1].strip().split("  ") if (x != "")]
 
         # DATA
-        ## Remove header Info & pandafy data
-        state_viols = {}
+        # Remove header Info & pandafy data
+        state_viols = {}  # noqa: F841 # TODO: implement or remove
         NOE_violations = None
         average_NOE = None
 

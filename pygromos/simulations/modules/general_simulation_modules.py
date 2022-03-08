@@ -5,7 +5,6 @@ import time
 import warnings
 from collections import OrderedDict
 from copy import deepcopy
-from typing import Tuple
 
 from pygromos.files.coord import cnf
 from pygromos.files.gromos_system import Gromos_System
@@ -83,7 +82,7 @@ def simulation(
             gromos_system = deepcopy(in_gromos_simulation_system)
 
             # check if override dir is given and set project to correct location
-            if not override_project_dir is None:
+            if override_project_dir is not None:
                 init_work_folder = override_project_dir
                 step_dir = override_project_dir + "/" + step_name
             else:
@@ -96,15 +95,15 @@ def simulation(
             out_analysis_dir = step_dir + "/analysis"
             bash.make_folder(out_input_dir)
 
-            ##Prepare gromos system:
+            # Prepare gromos system:
             gromos_system.work_folder = out_input_dir
             gromos_system.name = step_name
 
-            if not in_imd_path is None:
+            if in_imd_path is not None:
                 gromos_system.imd = in_imd_path
             elif hasattr(gromos_system.imd, "TITLE"):
                 pass
-            elif not _template_imd_path is None:
+            elif _template_imd_path is not None:
                 if verbose:
                     warnings.warn("Template_imd_path was used: " + _template_imd_path)
                 gromos_system.imd = _template_imd_path
@@ -160,8 +159,8 @@ def simulation(
         else:
             in_analysis_script_path = None
 
-        ##Write Out schedulling Script
-        ###Build analysis_script
+        # Write Out schedulling Script
+        # Build analysis_script
         MD_job_vars = OrderedDict(
             {
                 "in_simSystem": gromos_system,
@@ -177,7 +176,7 @@ def simulation(
             }
         )
         try:
-            in_scheduler_script_path = utils.write_job_script(
+            in_scheduler_script_path = utils.write_job_script(  # noqa: F841
                 out_script_path=step_dir + "/schedule_MD_job.py",
                 target_function=simulation_scheduler.do,
                 variable_dict=MD_job_vars,
@@ -188,7 +187,7 @@ def simulation(
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not prepare the command block\n\t" + "\n\t".join(map(str, err.args)))
 
-    ##schedule
+    # schedule
     try:
         if (os.path.exists(out_analysis_cnf) and os.path.exists(out_simulation_dir + ".tar")) and not force_simulation:
             if verbose:

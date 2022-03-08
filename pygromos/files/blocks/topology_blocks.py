@@ -1,13 +1,12 @@
 import re
 from enum import Enum
-from typing import Union, Iterable, List, Dict, Tuple
+from typing import Type, Union, Iterable, List, Dict, Tuple
 from collections import namedtuple
 import inspect
-import math
 import numpy as np
 from numbers import Number
 
-from pygromos.files.blocks._general_blocks import TITLE
+from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
 
 
@@ -127,7 +126,7 @@ class atom_pair_distanceRes(_generic_field):
             else:
                 raise ValueError("DisresType in atom_pair_distanceRes unknown\n" + str(rah))
             self.comment = comment
-        except:
+        except IOError:
             raise IOError("COULD NOT convert a parameter for distancerestraint field into correct form!")
 
     def to_string(self):
@@ -506,7 +505,7 @@ class special_atom_lj_pair_type(_generic_field):
 BLOCKS
 """
 # forward declarations
-TITLE: TITLE = TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 # general Topo Blocks
@@ -525,7 +524,8 @@ class FORCEFIELD(_generic_gromos_block):
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        # result += self.NAME + self.line_seperator
+        if hasattr(self, "NAME") and type(self.NAME) is str:
+            result += self.NAME + self.line_seperator
         result += "END" + self.line_seperator
         return result
 
@@ -611,12 +611,12 @@ class DISTANCERESSPEC(_generic_gromos_block):
 
     def read_content_from_str(self, content: List[str]):
         # readout KDISH or KDISC
-        keys = content[0].replace("#", "").strip().split()
+        # keys = content[0].replace("#", "").strip().split()
         KDISH, KDISC = content[1].split()
 
         # read list header:
         line_header = content[2].replace("#", "").split()
-        ##unify keys:
+        # unify keys:
         key_dict = {"i": 1, "j": 1, "k": 1, "l": 1, "type": 1}
         renamed_header = []
         for x in line_header:
@@ -825,7 +825,7 @@ class BONDSTRETCHTYPECODE(_iterable_topology_block):
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub("\(.*?\)", "", table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8: noqa
                 split_line = [x for x in clean.replace("#", "").replace("-", "").strip().split("  ") if (len(x) > 0)]
                 split_line = [x.split(",") if ("," in x) else x for x in split_line]
                 if len(split_line) == 3:
@@ -936,7 +936,7 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub("\(.*?\)", "", table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8: noqa
                 split_line = [x for x in clean.replace("#", "").replace("-", "").strip().split("  ") if (len(x) > 0)]
                 split_line = [x.split(",") if ("," in x) else x for x in split_line]
 
@@ -1048,7 +1048,7 @@ class TORSDIHEDRALTYPECODE(_iterable_topology_block):
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub("\(.*?\)", "", table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8: noqa
                 split_line = [x for x in clean.replace("#", "").strip().split(" ") if (len(x) > 0)]
                 # print("splits", split_line)
 
@@ -1181,7 +1181,7 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub("\(.*?\)", "", table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8 ignore
                 split_line = [x for x in clean.replace("#", "").replace("-", "").strip().split(" ") if (len(x) > 0)]
                 split_line = [x.split(",") if ("," in x) else x for x in split_line]
 
@@ -1527,11 +1527,13 @@ class soluteatom_type(_generic_field):
             + str(self.INE)
         )
         lcounter = 0
+        temp_INE = len(self.INEvalues)
         for iter in self.INEvalues:
             str_line += "\t" + str(iter).strip()
             lcounter += 1
-            if (lcounter % 6) == 0 and len(self.INEvalues) > 6:
+            if (lcounter % 6) == 0 and temp_INE > 6:
                 str_line += "\n\t\t\t\t\t\t\t\t\t\t"
+                temp_INE -= 6
         str_line += "\n\t\t\t\t\t\t\t\t\t\t" + str(self.INE14)
         for iter in self.INE14values:
             str_line += "\t" + str(iter)
@@ -2008,14 +2010,14 @@ class ljexception_type(_generic_field):
 
 
 class solventatom_type(_generic_field):
-    def __init__(self, I: int, ANMS: str, IACS: int, MASS: float, CGS: float):
+    def __init__(self, I: int, ANMS: str, IACS: int, MASS: float, CGS: float):  # noqa: E741
         """
                GROMOS solventatom line
 
         Parameters
         ----------
         """
-        self.I = I
+        self.I = I  # noqa: E741
         self.ANMS = ANMS
         self.IACS = IACS
         self.MASS = MASS
@@ -2210,7 +2212,7 @@ class PHYSICALCONSTANTS(_topology_block):
     def _check_import_method(self, content: str = None):
         # elif (type(content) == __class__):
         #    self.content = content
-        if content == [[""]] or content == [""] or content == None:
+        if content == [[""]] or content == [""] or content is None:
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         elif isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
@@ -2293,7 +2295,7 @@ class SOLUTEATOM(_iterable_topology_block):
 
     def __init__(
         self,
-        content: (str or dict or None or type(SOLUTEATOM)),
+        content: (str or dict or None or Type[_iterable_topology_block]),
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2321,7 +2323,7 @@ class SOLUTEATOM(_iterable_topology_block):
         # set NRP and check for sanity
         try:
             self.NRP = int(contentLines.pop(0))
-        except:
+        except Exception:
             self.NRP = 0
         if self.NRP < 0:
             raise IOError("NPR in SOLUTEATOM Block is " + str(self.NRP))
@@ -2355,7 +2357,7 @@ class SOLUTEATOM(_iterable_topology_block):
                                         + " MRES="
                                         + str(MRES)
                                     )
-                            except:
+                            except IOError:
                                 raise IOError("Problem reading INE for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
                                 break
                     else:
@@ -2389,7 +2391,7 @@ class SOLUTEATOM(_iterable_topology_block):
                                         + " MRES="
                                         + str(MRES)
                                     )
-                            except:
+                            except IOError:
                                 raise IOError("Problem reading INE14 for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
                                 break
                     else:
@@ -2773,15 +2775,15 @@ class IMPDIHEDRAL(_topology_table_block):
         result += "END\n"
         return result
 
-    def block_to_string(self) -> str:
-        result = self.name + "\n"
-        result += "#" + self.field_seperator + "#  NQHI: number of improper dihedrals" + self.line_seperator
-        result += self.field_seperator + str(self.NQHI) + self.line_seperator
-        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
-        for x in self.content:
-            result += x.to_string()
-        result += "END\n"
-        return result
+    # def block_to_string(self) -> str:
+    #     result = self.name + "\n"
+    #     result += "#" + self.field_seperator + "#  NQHI: number of improper dihedrals" + self.line_seperator
+    #     result += self.field_seperator + str(self.NQHI) + self.line_seperator
+    #     result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
+    #     for x in self.content:
+    #         result += x.to_string()
+    #     result += "END\n"
+    #     return result
 
 
 class TORSDIHEDRALTYPE(_topology_table_block):
@@ -3271,7 +3273,7 @@ class PERTATOMPARAM(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if not NJLA is None and not len(STATEATOMS) == NJLA:
+        if NJLA is not None and not len(STATEATOMS) == NJLA:
             raise ValueError(
                 "NJLA must be equal to the length of STATEATOMS! NJLA="
                 + str(NJLA)
@@ -3291,7 +3293,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         stdid = False
         for line in content:
             if "#" in line:
-                comment = line
+                # comment = line
                 if "state_identifiers" in line:
                     stdid = True
                 elif stdid:
@@ -3317,7 +3319,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                     final_state_line = {
                         key: state_line[key]
                         for key in state_line
-                        if (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)
+                        if ("IAC" not in key and "CHARGE" not in key and "MASS" not in key)
                     }
                     states = {
                         x: pertubation_lam_state(
@@ -3372,7 +3374,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         """
 
         # some preperations:
-        pre_dummy_state = lambda atomMass: pertubation_lam_state(
+        pre_dummy_state = lambda atomMass: pertubation_lam_state(  # noqa: E731
             IAC=self.dummy_IAC, MASS=atomMass, CHARGE=self.dummy_CHARGE
         )
         insert_id = self.STATEATOMHEADER.index("ALPHLJ")
@@ -3380,7 +3382,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         # find all new states
         keys = np.array([list(natom.STATES.keys()) for natom in state_atoms], ndmin=1)
         unique_stateIDs = np.unique(np.concatenate(keys))
-        ## Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
+        # Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
         unique_states = list(map(str, ["state" + str(x) if isinstance(x, Number) else x for x in unique_stateIDs]))
 
         # insert new state IDs
@@ -3415,14 +3417,14 @@ class PERTATOMPARAM(_generic_gromos_block):
                 possible_masses = [val.MASS for key, val in new_atom.STATES.items() if (val.MASS > 0)]
                 # add missing dummies
                 # print(unique_stateIDs)
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
                 # remove present atom
                 del atomIDs[atomIDs.index(atom.NR)]
 
             else:
                 # add missing dummies
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
         # 2. add new atoms
         new_atoms = [atom for atom in state_atoms if (atom.NR in atomIDs)]
@@ -3449,7 +3451,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         Returns
         -------
         """
-        if not stateIDs is None:
+        if stateIDs is not None:
             if isinstance(stateIDs, int):
                 stateIDs = [stateIDs]
 
@@ -3464,7 +3466,7 @@ class PERTATOMPARAM(_generic_gromos_block):
 
             self.NPTB -= len(set(stateIDs))
 
-        elif not stateNames is None:
+        elif stateNames is not None:
             if isinstance(stateNames, str):
                 stateNames = [stateNames]
 
@@ -3484,7 +3486,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                 ]
             self.NPTB -= len(set(stateNames))
 
-        elif not stateNames is None and not stateIDs is None:
+        elif stateNames is None and stateIDs is None:
             raise Exception("Please give either stateNames or stateIDs")
 
     def delete_atom(self, atomNR: (int, List[int])):
@@ -3498,7 +3500,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         if isinstance(atomNR, int):
             atomNR = [atomNR]
 
-        ind_offset = 0
+        # ind_offset = 0
         new_STATEATOMS = []
         for ind, atom in enumerate(self.STATEATOMS):
             if atom.NR in atomNR:

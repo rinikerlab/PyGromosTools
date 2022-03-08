@@ -1,4 +1,3 @@
-from tabnanny import verbose
 import unittest
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
@@ -14,7 +13,7 @@ class test_queuing_system(unittest.TestCase):
     submission = True
 
     def test_construct(self):
-        subSys = self.file_class(verbose=self.verbose, submission=self.submission)
+        subSys = self.file_class(verbose=self.verbose, submission=self.submission)  # noqa: F841
 
     def test_submit(self):
         sub_job = Submission_job(jobName="test_job", command='echo " WUHAHAHA"')

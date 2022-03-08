@@ -221,7 +221,7 @@ class Tre(traj._General_Trajectory):
             if nFFContributions != len(self._contributions_nonbonded_names):
                 raise ValueError(
                     "The dimensionality of the NonbondedContributions is not corresponding to the expected dimensionality.\n expected: "
-                    + str(len(_contributions_nonbonded_names))
+                    + str(len(self._contributions_nonbonded_names))
                     + " \t found: "
                     + str(nFFContributions)
                 )

@@ -10,10 +10,10 @@ import inspect
 import warnings
 from typing import List, Dict, Callable
 
-from pygromos.files.blocks import _all_blocks as blocks
+from pygromos.files.blocks import all_blocks
 
 
-##file class
+# file class
 class _general_gromos_file:
     """_general_gromos_file
     This class is the generic gromos class, that takes care of all common gromos file featuers.
@@ -26,7 +26,7 @@ class _general_gromos_file:
 
     _gromos_file_ending: str
     # private
-    _blocks: Dict[str, blocks._generic_gromos_block]
+    _blocks: Dict[str, all_blocks._generic_gromos_block]
     _block_order: List[str] = []
     _future_file: bool
 
@@ -57,7 +57,7 @@ class _general_gromos_file:
         del self._blocks
 
     def __str__(self):
-        ##first write out certain _blocks
+        # first write out certain _blocks
         out_text = ""
         for block in self._block_order:
             if block in self.get_block_names() and not isinstance(
@@ -69,12 +69,12 @@ class _general_gromos_file:
             ):
                 out_text += getattr(self, block).block_to_string()
 
-        ##write out rest of _blocks
+        # write out rest of _blocks
         rest_blocks = [
             block
             for block in self.get_block_names()
             if (
-                not block in self._block_order
+                block not in self._block_order
                 and not isinstance(
                     getattr(
                         self,
@@ -104,7 +104,7 @@ class _general_gromos_file:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not isinstance(attribute_dict[key], Callable) and not key in skip:
+            if not isinstance(attribute_dict[key], Callable) and key not in skip:
                 new_dict.update({key: attribute_dict[key]})
 
         return new_dict
@@ -152,7 +152,7 @@ class _general_gromos_file:
         self,
         blocktitle: str = None,
         content: dict = None,
-        block: blocks._generic_gromos_block = None,
+        block: all_blocks._generic_gromos_block = None,
         verbose: bool = False,
     ):
         """add_block
@@ -164,7 +164,7 @@ class _general_gromos_file:
             title of a block
         content :   str, optional
             block content
-        block : blocks._generic_gromos_block, optional
+        block : all_blocks._generic_gromos_block, optional
             block class
         verbose :   bool, optional
             shall messages be printed?
@@ -180,18 +180,18 @@ class _general_gromos_file:
             blocktitle = block.name
             setattr(self, blocktitle, block)  # modern way
 
-        elif blocktitle != None and content != None:
+        elif blocktitle is not None and content is not None:
             # if blocktitle in self._block_names:
             if isinstance(content, dict):
                 if blocktitle == "TITLE":  # TODO fIX IN PARSER
-                    self.__setattr__(blocktitle, blocks.__getattribute__(blocktitle)(content))
+                    self.__setattr__(blocktitle, all_blocks.__getattribute__(blocktitle)(content))
                 else:
                     try:
                         content = {k.split("(")[0]: v for k, v in content.items()}
                         content = {k.split(":")[0]: v for k, v in content.items()}
                         content = {k.split(" ")[0]: v for k, v in content.items()}
                         # Required for add_block
-                        ##For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
+                        # For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
                         from pygromos.files.simulation_parameters.imd import Imd
                         from pygromos.files.topology.top import Top
                         from pygromos.files.blocks import imd_blocks, topology_blocks
@@ -201,22 +201,23 @@ class _general_gromos_file:
                         elif issubclass(self.__class__, Top):
                             self.kwCreateBlock(blocktitle, content, topology_blocks)
                         else:
-                            self.kwCreateBlock(blocktitle, content, blocks)
+                            self.kwCreateBlock(blocktitle, content, all_blocks.all_blocks)
 
                         if verbose:
                             print("++++++++++++++++++++++++++++++")
                             print("New Block: Adding " + blocktitle + " block")
                             print(content)
-                    except:
+                    except Exception as e:
                         msg = (
                             "Error while adding new value - can not resolve value names in '"
                             + blocktitle
                             + "' block!\n"
+                            + str(e)
                         )
                         msg += "Content is " + str(tuple(content.keys())) + "\n"
                         msg += (
                             "Block knows "
-                            + str((blocks.__getattribute__(blocktitle).__init__.__code__.co_varnames)[1:])
+                            + str((all_blocks.get_all_blocks()[blocktitle].__init__.__code__.co_varnames)[1:])
                             + "\n"
                         )
                         raise IOError(msg)
@@ -224,7 +225,7 @@ class _general_gromos_file:
                     print("Block " + blocktitle + " added to gromos File object.")
 
             elif isinstance(content, list):
-                block_class = blocks.__getattribute__(blocktitle)
+                block_class = all_blocks.__getattribute__(blocktitle)
                 block = block_class(content)
 
                 self.__setattr__(blocktitle, block)
@@ -257,7 +258,7 @@ class _general_gromos_file:
         sig = inspect.signature(block_type.__init__)  # block init signature
         known_params = list(sig.parameters.keys())  # the params the function knows
         known_content = {k: v for k, v in content.items() if (k in known_params)}
-        unknown_content = {k: v for k, v in content.items() if (not k in known_params)}
+        unknown_content = {k: v for k, v in content.items() if (k not in known_params)}
 
         # construct class
         self.__setattr__(blocktitle, block_type(**known_content))

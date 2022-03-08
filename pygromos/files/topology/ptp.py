@@ -1,7 +1,5 @@
-import warnings
 from copy import deepcopy
 
-import pygromos.files.blocks.pertubation_blocks
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import pertubation_blocks as blocks
 

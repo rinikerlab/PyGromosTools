@@ -6,7 +6,6 @@ from typing import List
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
-from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.utils import bash
 
 
@@ -25,7 +24,6 @@ class LOCAL(_SubmissionSystem):
         enviroment=None,
         zip_trajectories: bool = True,
     ):
-        time_wait_s_for_filesystem = 0
         super().__init__(
             verbose=verbose,
             nmpi=nmpi,
@@ -64,7 +62,7 @@ class LOCAL(_SubmissionSystem):
             command = command_file_path
             bash.execute("chmod +x " + command_file_path, env=self._enviroment)
 
-        ##finalize string
+        # finalize string
 
         if self.verbose:
             print("Submission Command: \t", " ".join(command))
@@ -81,10 +79,10 @@ class LOCAL(_SubmissionSystem):
                     os.chdir(orig_dir)
 
                 return 0
-            except:
+            except ChildProcessError:
                 try:
                     print(process)
-                except:
+                except ChildProcessError:
                     pass
                 raise ChildProcessError("command failed: \n" + str(command))
         else:
@@ -119,7 +117,7 @@ class LOCAL(_SubmissionSystem):
                     if self.verbose:
                         print("sdtout : " + str(std_out))
                 return 0
-            except:
+            except ChildProcessError:
                 raise ChildProcessError("could not submit this command: \n" + submission_string)
         else:
             print("Did note submit: ", command)

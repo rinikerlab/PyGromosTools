@@ -6,10 +6,10 @@ class test_queuing_system(unittest.TestCase):
     file_class = Submission_job
 
     def test_construct_min(self):
-        sub_job = self.file_class(command='echo " WUHAHAHA"')
+        sub_job = self.file_class(command='echo " WUHAHAHA"')  # noqa: F841
 
     def test_construct_full(self):
-        sub_job = self.file_class(
+        sub_job = self.file_class(  # noqa: F841
             command='echo " WUHAHAHA"',
             jobName="test_job",
             start_job=1,

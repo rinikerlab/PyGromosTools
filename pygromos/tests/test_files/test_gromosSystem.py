@@ -1,8 +1,8 @@
-import unittest, tempfile
+import unittest
+import tempfile
 from pygromos.utils import bash
 
 from pygromos.files.gromos_system.gromos_system import Gromos_System
-from pygromos.tests.test_files.general_file_functions import general_file_tests
 
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.data.simulation_parameters_templates import template_md
@@ -25,7 +25,7 @@ class test_gromos_system(unittest.TestCase):
         print(subSys)
 
     def test_construct_files(self):
-        subSys_files = self.class_type(
+        subSys_files = self.class_type(  # noqa: F841
             work_folder=tmp_test_dir,
             system_name="Testing1",
             in_cnf_path=self.input_cnf_path,

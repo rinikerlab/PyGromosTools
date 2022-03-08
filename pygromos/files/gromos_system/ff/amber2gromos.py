@@ -6,7 +6,6 @@ Author: Salomé Rieder
 
 # imports
 import subprocess
-from pygromos.files.topology.top import Top
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.data import topology_templates
