@@ -1,10 +1,10 @@
 """
-File:            gromos++ topo file functions
-Warnings: this CLASS IS NOT IMPLEMENTED!
-TODO:REWORK
-Description:
-    in this lib, gromos topo file mainpulating functions are gathered
-Author: Marc Lehner, Benjamin Ries
+    File:            gromos++ topo file functions
+    Warnings: this CLASS IS NOT IMPLEMENTED!
+    TODO:REWORK
+    Description:
+        in this lib, gromos topo file mainpulating functions are gathered
+    Author: Marc Lehner, Benjamin Ries
 """
 
 # imports
@@ -501,8 +501,7 @@ class Top(_general_gromos_file._general_gromos_file):
         INE14: list = [],
         verbose=False,
     ):
-        """add a soluteatom to the SOLUTEATOM block
-        """
+        """add a soluteatom to the SOLUTEATOM block"""
         if not hasattr(self, "SOLUTEATOM"):
             self.add_block(blocktitle="SOLUTEATOM", content=[], verbose=verbose)
             self.SOLUTEATOM.NRP = 0
@@ -547,7 +546,7 @@ class Top(_general_gromos_file._general_gromos_file):
         includesH : bool, optional
             wheter it should be added to BOND or BONDH, by default False
         """
-        #check if all classes are ready, if not create
+        # check if all classes are ready, if not create
         if not hasattr(self, "BONDSTRETCHTYPE"):
             self.add_block(blocktitle="BONDSTRETCHTYPE", content=list(), verbose=verbose)
         if includesH:
@@ -596,7 +595,7 @@ class Top(_general_gromos_file._general_gromos_file):
         verbose=False,
         convertToQuartic=False,
     ):
-      """add a angle between atom I, J and K to the ANGLE block
+        """add a angle between atom I, J and K to the ANGLE block
 
         Parameters
         ----------
@@ -617,7 +616,8 @@ class Top(_general_gromos_file._general_gromos_file):
         convertToQuartic : bool, optional
             auto convert, by default False
         """
-        #check if all classes are ready, if not create
+        # check if all classes are ready, if not create
+
         if not hasattr(self, "BONDANGLEBENDTYPE"):
             self.add_block(blocktitle="BONDANGLEBENDTYPE", content=[], verbose=verbose)
         if includesH:
@@ -691,7 +691,7 @@ class Top(_general_gromos_file._general_gromos_file):
         includesH: bool = False,
         verbose=False,
     ):
-         """add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block
+        """add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block
 
         Parameters
         ----------
@@ -712,7 +712,7 @@ class Top(_general_gromos_file._general_gromos_file):
         includesH : bool, optional
             DIHEDRAL or DIHEDRALH, by default False
         """
-        #check if all classes are ready, if not create
+        # check if all classes are ready, if not create
         if not hasattr(self, "TORSDIHEDRALTYPE"):
             self.add_block(blocktitle="TORSDIHEDRALTYPE", content=[], verbose=verbose)
         if includesH:
@@ -758,7 +758,7 @@ class Top(_general_gromos_file._general_gromos_file):
         Q0 : float
             Q0
         """
-        #check if all classes are ready, if not create
+        # check if all classes are ready, if not create
         if not hasattr(self, "IMPDIHEDRALTYPE"):
             self.add_block(blocktitle="IMPDIHEDRALTYPE", content=[], verbose=verbose)
         newIMPDIHEDRALTYPE = blocks.impdihedraltype_type(CQ=CQ, Q0=Q0)
@@ -795,7 +795,7 @@ class Top(_general_gromos_file._general_gromos_file):
         includesH : bool, optional
             IMPDIHEDRALH or IMPDIHEDRAL, by default False
         """
-        #check if all classes are ready, if not create
+        # check if all classes are ready, if not create
         if not hasattr(self, "IMPDIHEDRALTYPE"):
             self.add_block(blocktitle="IMPDIHEDRALTYPE", content=[], verbose=verbose)
         if includesH:
@@ -898,7 +898,6 @@ class Top(_general_gromos_file._general_gromos_file):
             if int(self.ATOMTYPENAME.content[0][0]) != self.LJPARAMETERS.content[-1].IAC:
                 raise IndexError("Missmatch between number of ATOMTYPNAMEs and LJPARAMETERS")
 
-
     def find_LJparameterNumber(self, C12: float, C6: float) -> int:
         """find the LJ parameter number"""
         if not hasattr(self, "LJPARAMETERS"):
@@ -910,7 +909,6 @@ class Top(_general_gromos_file._general_gromos_file):
                 if C12 == lj.C12 and C6 == lj.C6:
                     return lj.IAC
             return 0  # LJ parameter not found
-
 
     def get_LJparameter_from_IAC(self, IAC: int):
         """get the LJ parameter from the IAC number
