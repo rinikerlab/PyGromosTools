@@ -1,6 +1,7 @@
-![PyGromosBan](.img/PyGromosToolsBanner.png)
 
-Welcome to PyGromosTools
+![PyGromosBan](.img/PyGromosToolsLogo_smaller.png)
+
+Welcome to PyGromosTools 
 ==============================
 
 [//]: # (Badges)
