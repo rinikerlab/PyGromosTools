@@ -1234,7 +1234,7 @@ class Gromos_System:
 
         @functools.wraps(func)
         def _findGromosSystemAttributes(*args, **kwargs):
-            # print(func.__name__, args, kwargs)
+            print("attribute finder", func.__name__, args, kwargs)
 
             # collect input parameters present in system/ replace them with
             tmp_files = []

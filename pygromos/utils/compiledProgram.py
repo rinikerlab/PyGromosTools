@@ -198,6 +198,8 @@ class _compiled_program:
 
         @functools.wraps(func)
         def control_binary(*args, **kwargs) -> any:
+            print("binaryChecker", func.__name__, args, kwargs)
+
             func_signature = inspect.signature(func)
             if "_binary_name" in kwargs:
                 self._check_binary(self._bin + kwargs["_binary_name"])
