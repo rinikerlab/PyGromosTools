@@ -1233,7 +1233,7 @@ class Gromos_System:
         """
 
         @functools.wraps(func)
-        def findGromosSystemAttributes(*args, **kwargs):
+        def _findGromosSystemAttributes(*args, **kwargs):
             # print(func.__name__, args, kwargs)
 
             # collect input parameters present in system/ replace them with
@@ -1257,6 +1257,7 @@ class Gromos_System:
                         kwargs.update({k: grom_obj.path})
 
             # execute function
+            print("DEBUG:", func.__name__, args, kwargs)
             r = func(self=self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
@@ -1274,9 +1275,9 @@ class Gromos_System:
             else:
                 red_params.append(par)
         red_sig = sig.replace(parameters=red_params)
-        findGromosSystemAttributes.__signature__ = red_sig
+        _findGromosSystemAttributes.__signature__ = red_sig
 
-        return findGromosSystemAttributes
+        return _findGromosSystemAttributes
 
     def __SystemConstructionUpdater(self, func: callable) -> callable:
         """
