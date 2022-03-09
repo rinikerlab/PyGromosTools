@@ -10,12 +10,12 @@ class _gromosClass(_compiled_program):
 
         for func in dir(self):
             if callable(getattr(self, func)) and not func.startswith("__"):
-                setattr(self, func, self.gromosTypeConverter(getattr(self, func)))
+                setattr(self, func, self._gromosTypeConverter(getattr(self, func)))
                 pass
 
         super().__init__(in_bin_dir, dummy)
 
-    def gromosTypeConverter(self, func) -> callable:
+    def _gromosTypeConverter(self, func) -> callable:
         """
             This decorator can be used to automatically convert
         Parameters
