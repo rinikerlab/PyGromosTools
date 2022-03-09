@@ -130,7 +130,7 @@ class LSF(_SubmissionSystem):
         sub_job.command = sub_job.command.strip()  # remove trailing line breaks
 
         if self.nomp >= 1:
-            command = '"export OMP_NUM_THREADS=' + str(self.nomp) + ";\n " + sub_job.command + '"'
+            command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + " "
         else:
             command = "\n " + sub_job.command + ""
 
@@ -245,9 +245,9 @@ class LSF(_SubmissionSystem):
             submission_string += " -N "
 
         if self.nomp > 1:
-            command = ' " export OMP_NUM_THREADS=' + str(self.nomp) + " && " + sub_job.command + '"'
+            command = " export OMP_NUM_THREADS=" + str(self.nomp) + " && " + sub_job.command + " "
         else:
-            command = ' "' + sub_job.command + '"'
+            command = " " + sub_job.command + " "
 
         # finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
