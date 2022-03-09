@@ -1297,7 +1297,7 @@ class Gromos_System:
         """
 
         @functools.wraps(func)
-        def updateGromosSystem(*args, **kwargs):
+        def _updateGromosSystem(*args, **kwargs):
             print("updater", func.__name__, args, kwargs)
 
             # collect out_paths
@@ -1330,9 +1330,9 @@ class Gromos_System:
             else:
                 red_params.append(par)
         red_sig = sig.replace(parameters=red_params)
-        updateGromosSystem.__signature__ = red_sig
+        _updateGromosSystem.__signature__ = red_sig
 
-        return updateGromosSystem
+        return _updateGromosSystem
 
     def __ionDecorator(self, func: callable) -> callable:
         """
