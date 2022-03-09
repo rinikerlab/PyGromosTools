@@ -209,6 +209,8 @@ class _compiled_program:
                 raise Exception(
                     "Could not find Binary name in function signature: " + str(func) + "\n found: " + str(kwargs)
                 )
+
+            # args = list(filter(lambda x: not isinstance(x, self.__class__), args))
             return func(self, *args, **kwargs)
 
         return control_binary
@@ -224,7 +226,7 @@ class _compiled_program:
         """
         v = {}
         for binary, func in self._function_binary.items():
-            if remove or self._found_binary[binary]:
+            if remove:  # or self._found_binary[binary]:
                 v[func] = getattr(self.__class__, func)
             else:
                 v[func] = self.__check_binaries_decorator(getattr(self, func))

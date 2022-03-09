@@ -16,6 +16,7 @@ from pygromos.utils import bash
 from pygromos.data import pdb_lib
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos._gromosClass import _gromosClass
+from pygromos.gromos.utils import gromosTypeConverter
 
 
 class _gromosPPbase(_gromosClass):
@@ -60,6 +61,7 @@ class _gromosPPbase(_gromosClass):
         GromosPP Programms
     """
 
+    @gromosTypeConverter
     def amber2gromos(
         self,
         ambertop: str,
@@ -108,6 +110,7 @@ class _gromosPPbase(_gromosClass):
             print(command)
         bash.execute(command, catch_STD=out_path, verbose=verbose)
 
+    @gromosTypeConverter
     def pdb2gromos(
         self,
         in_pdb_path: str,
@@ -158,6 +161,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_cnf_path
 
+    @gromosTypeConverter
     def pdb2seq(
         self,
         in_pdb_path: str,
@@ -227,6 +231,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command)
         return out_path
 
+    @gromosTypeConverter
     def make_top(
         self,
         out_top_path: str,
@@ -278,6 +283,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
+    @gromosTypeConverter
     def com_top(
         self,
         in_topo_paths: (str or List[str]),
@@ -330,6 +336,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
+    @gromosTypeConverter
     def dfmult(
         self,
         in_endstate_file_paths: List[str],
@@ -389,6 +396,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_file_path
 
+    @gromosTypeConverter
     def frameout(
         self,
         in_top_path: str,
@@ -522,6 +530,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_file_path
 
+    @gromosTypeConverter
     def ene_ana(
         self,
         in_ene_ana_library_path: str,
@@ -725,6 +734,7 @@ class _gromosPPbase(_gromosClass):
         else:
             return result_files
 
+    @gromosTypeConverter
     def gch(
         self,
         in_cnf_path: str,
@@ -770,6 +780,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_cnf_path
 
+    @gromosTypeConverter
     def add_hydrogens(
         self,
         in_cnf_path: str,
