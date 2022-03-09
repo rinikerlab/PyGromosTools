@@ -288,7 +288,7 @@ class Gromos_System:
                         ]
                         self.cnf.POSITION = new_pos
                         self.cnf.write_pdb(self.work_folder + "/tmp.pdb")
-                        self.pdb2gromos(self.work_folder + "/tmp.pdb")
+                        self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
                         self.add_hydrogens()
                     except IOError:
                         raise Warning("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
