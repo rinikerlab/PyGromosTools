@@ -20,7 +20,7 @@ import functools
 import importlib
 import warnings
 from pygromos.data.ff import Gromos54A7
-from typing import Dict, Union, List, Callable
+from typing import Dict, Union, List
 
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import imd_blocks
@@ -407,12 +407,11 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not isinstance(attribute_dict[key], Callable) and key not in skip and key not in exclude_pickle:
+            if not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
             elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
-                print("STUPID ", key)
                 new_dict.update({key: None})
         return new_dict
 
