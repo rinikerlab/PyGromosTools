@@ -16,7 +16,6 @@ from pygromos.utils import bash
 from pygromos.data import pdb_lib
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos._gromosClass import _gromosClass
-from pygromos.gromos.utils import gromosTypeConverter
 
 
 class _gromosPPbase(_gromosClass):
@@ -61,7 +60,7 @@ class _gromosPPbase(_gromosClass):
         GromosPP Programms
     """
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def amber2gromos(
         self,
         ambertop: str,
@@ -110,7 +109,7 @@ class _gromosPPbase(_gromosClass):
             print(command)
         bash.execute(command, catch_STD=out_path, verbose=verbose)
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def pdb2gromos(
         self,
         in_pdb_path: str,
@@ -161,7 +160,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_cnf_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def pdb2seq(
         self,
         in_pdb_path: str,
@@ -231,7 +230,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command)
         return out_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def make_top(
         self,
         out_top_path: str,
@@ -283,7 +282,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def com_top(
         self,
         in_topo_paths: (str or List[str]),
@@ -336,7 +335,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command, catch_STD=out_top_path)
         return out_top_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def dfmult(
         self,
         in_endstate_file_paths: List[str],
@@ -396,7 +395,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_file_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def frameout(
         self,
         in_top_path: str,
@@ -530,7 +529,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_file_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def ene_ana(
         self,
         in_ene_ana_library_path: str,
@@ -734,7 +733,7 @@ class _gromosPPbase(_gromosClass):
         else:
             return result_files
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def gch(
         self,
         in_cnf_path: str,
@@ -780,7 +779,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_cnf_path
 
-    @gromosTypeConverter
+    @_gromosClass._gromosTypeConverter
     def add_hydrogens(
         self,
         in_cnf_path: str,
@@ -809,16 +808,24 @@ class _gromosPPbase(_gromosClass):
             out_cnf_path
 
         """
-        self.gch(
-            in_cnf_path=in_cnf_path,
-            in_top_path=in_top_path,
-            out_cnf_path=out_cnf_path,
-            tolerance=tolerance,
-            periodic_boundary_condition=periodic_boundary_condition,
-            gathering=gathering,
-            _binary_name=_binary_name,
+        command = (
+            self._bin
+            + _binary_name
+            + " @topo "
+            + in_top_path
+            + " @pos "
+            + in_cnf_path
+            + " @tol "
+            + str(tolerance)
+            + "  "
+            "@pbc " + periodic_boundary_condition + " " + gathering
         )
 
+        bash.execute(command, catch_STD=out_cnf_path)
+
+        return out_cnf_path
+
+    @_gromosClass._gromosTypeConverter
     def sim_box(
         self,
         in_top_path: str,
@@ -915,6 +922,7 @@ class _gromosPPbase(_gromosClass):
             print(p.stderr)
         return out_cnf_path
 
+    @_gromosClass._gromosTypeConverter
     def ran_box(
         self,
         in_top_path: str,
@@ -978,6 +986,7 @@ class _gromosPPbase(_gromosClass):
         else:
             return command
 
+    @_gromosClass._gromosTypeConverter
     def build_box(
         self,
         in_top_path: str,
@@ -1021,6 +1030,7 @@ class _gromosPPbase(_gromosClass):
         else:
             return command
 
+    @_gromosClass._gromosTypeConverter
     def tser(
         self,
         in_trc_path: str,
@@ -1093,6 +1103,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command)
         return out_csv_path
 
+    @_gromosClass._gromosTypeConverter
     def red_top(self, in_top_path: str, atom_selection: str, out_top_path: str, _binary_name: str = "red_top") -> str:
         """
             red_top is a gromos tool to reduce a gromos tool to a certain selection.
@@ -1120,6 +1131,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command)
         return out_top_path
 
+    @_gromosClass._gromosTypeConverter
     def prep_eds(
         self,
         in_top_paths: List[str],
@@ -1181,6 +1193,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_top, out_ptp
 
+    @_gromosClass._gromosTypeConverter
     def prep_noe(
         self,
         in_top_path: str,
@@ -1260,6 +1273,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_path
 
+    @_gromosClass._gromosTypeConverter
     def rmsf(
         self,
         in_top_path: str,
@@ -1317,6 +1331,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
+    @_gromosClass._gromosTypeConverter
     def rmsd(
         self,
         in_top_path: str,
@@ -1365,6 +1380,7 @@ class _gromosPPbase(_gromosClass):
         bash.execute(command, catch_STD=out_file_path)
         return out_file_path
 
+    @_gromosClass._gromosTypeConverter
     def cog(
         self,
         in_top_path: str,
@@ -1441,6 +1457,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_file_path
 
+    @_gromosClass._gromosTypeConverter
     def noe(
         self,
         in_top_path: str,
@@ -1506,6 +1523,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_path
 
+    @_gromosClass._gromosTypeConverter
     def jval(
         self,
         in_top_path: str,
@@ -1597,6 +1615,7 @@ class _gromosPPbase(_gromosClass):
 
         return out_path
 
+    @_gromosClass._gromosTypeConverter
     def ion(
         self,
         in_top_path: str,

@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import math
+import traceback
 
 from pygromos.gromos import gromosXX as mdGromosXX
 from pygromos.files.simulation_parameters import imd
@@ -208,6 +209,8 @@ def work(
         except Exception as err:
             print("Failed! process returned: \n Err: \n" + "\n".join(err.args))
             md_failed = True
+            traceback.print_exc()
+            raise err
 
         # zip the files after the simulation.
         n_cpu_zip = nmpi if nmpi >= nomp else nomp

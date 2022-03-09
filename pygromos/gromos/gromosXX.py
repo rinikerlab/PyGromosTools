@@ -54,6 +54,7 @@ class _GromosXX(_gromosClass):
         GromosXX Programms
     """
 
+    @_gromosClass._gromosTypeConverter
     def md_run(
         self,
         in_topo_path: str,
@@ -228,6 +229,7 @@ class _GromosXX(_gromosClass):
 
         return log_file_path
 
+    @_gromosClass._gromosTypeConverter
     def repex_run(
         self,
         in_topo_path: str,
