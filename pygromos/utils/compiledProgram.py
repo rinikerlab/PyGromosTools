@@ -128,6 +128,8 @@ class _compiled_program:
 
         elif isinstance(in_bin_dir, str) and in_bin_dir != "" and bash.directory_exists(in_bin_dir):
             self._found_binary_dir[in_bin_dir] = True
+            if(not in_bin_dir.endswith("/")):
+                in_bin_dir+= "/"
             return in_bin_dir
 
         elif not self._force_bin_present and (in_bin_dir is None or in_bin_dir == "" or in_bin_dir == "None"):
