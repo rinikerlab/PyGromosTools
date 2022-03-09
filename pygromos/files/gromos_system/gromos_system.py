@@ -1256,9 +1256,11 @@ class Gromos_System:
                         grom_obj.write(grom_obj.path)  # make sure filestatus is good :)
                         kwargs.update({k: grom_obj.path})
 
+            args = list(filter(lambda x: isinstance(x, self.gromosPP.__class__), args))
+
             # execute function
-            print("DEBUG:", func.__name__, args, kwargs)
-            r = func(self=self.gromosPP, *args, **kwargs)
+            print("attibuteFinder 2:", func.__name__, args, kwargs)
+            r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
             [bash.remove_file(p) for p in tmp_files]

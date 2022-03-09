@@ -30,6 +30,8 @@ class _gromosClass(_compiled_program):
 
         @functools.wraps(func)
         def convert_pyGromos_types(*args, **kwargs):
+            print("Converter1: ", func.__name__, args, kwargs)
+
             # no key-word parameters
             nargs = []
             for v in args:
@@ -53,7 +55,9 @@ class _gromosClass(_compiled_program):
                             "please write out the " + k + " first to use the function " + str(func.__name__) + ""
                         )
                     kwargs[k] = v.path
-            print("Converter: ", func.__name__, args, kwargs)
+
+            nargs = list(filter(lambda x: not isinstance(x, self.__class__), nargs))
+            print("Converter2: ", func.__name__, args, kwargs)
             return func(*nargs, **kwargs)
 
         return convert_pyGromos_types
