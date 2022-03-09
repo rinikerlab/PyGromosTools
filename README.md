@@ -1,5 +1,5 @@
 
-![PyGromosBan](.img/PyGromosToolsLogo_smaller.png)
+![PyGromosBan](.img/PyGromosToolsLogo_smallerWithBorders.png)
 
 Welcome to PyGromosTools 
 ==============================
