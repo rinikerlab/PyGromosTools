@@ -166,7 +166,7 @@ class _compiled_program:
         self._dont_check_bin = force_present
         for key, f in funcs.items():
             binary = inspect.signature(f).parameters["_binary_name"].default
-            self._check_binary(binary)
+            self._check_binary(test_program=binary)
             self._function_binary[binary] = key
         self._dont_check_bin = tmp_dont_heck_bin
 
