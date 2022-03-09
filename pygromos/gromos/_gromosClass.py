@@ -53,7 +53,7 @@ class _gromosClass(_compiled_program):
                             "please write out the " + k + " first to use the function " + str(func.__name__) + ""
                         )
                     kwargs[k] = v.path
-
+            print("Converter: ", func.__name__, args, kwargs)
             return func(*nargs, **kwargs)
 
         return convert_pyGromos_types

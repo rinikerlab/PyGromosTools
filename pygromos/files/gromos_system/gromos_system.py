@@ -267,8 +267,10 @@ class Gromos_System:
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
             # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
+
+            print(self.top)
             if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and self.gromosPP._found_binary["pdb2g96"]:
+                if self.gromosPP is not None and self.gromosPP._check_binary("pdb2g96"):
                     try:
                         from pygromos.files.blocks.coord_blocks import atomP
 
@@ -858,7 +860,6 @@ class Gromos_System:
         # create topology
         if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
             # set parameters for make_top
-            out = self.work_folder + "/make_top.top"
             mtb_temp = self.Forcefield.mtb_path
             if hasattr(self.Forcefield, "mtb_orga_path"):
                 mtb_temp += " " + self.Forcefield.mtb_orga_path
@@ -867,15 +868,14 @@ class Gromos_System:
                 name = self.rdkit2GromosName()
             else:
                 name = self.Forcefield.mol_name
+
             # make top
-            if bash.command_exists(f"{self.gromosPP_bin_dir}/make_top"):
-                self.gromosPP.make_top(
-                    out_top_path=out,
+            if self.gromosPP._found_binary["make_top"]:
+                self.make_top(
                     in_building_block_lib_path=mtb_temp,
                     in_parameter_lib_path=ifp_temp,
                     in_sequence=name,
                 )
-                self.top = Top(in_value=out)
             else:
                 warnings.warn(
                     "could not find a gromosPP version. Please provide a valid version for Gromos auto system generation"
@@ -1257,7 +1257,7 @@ class Gromos_System:
                         kwargs.update({k: grom_obj.path})
 
             # execute function
-            r = func(self.gromosPP, *args, **kwargs)
+            r = func(self=self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
             [bash.remove_file(p) for p in tmp_files]
@@ -1297,7 +1297,7 @@ class Gromos_System:
 
         @functools.wraps(func)
         def updateGromosSystem(*args, **kwargs):
-            # rint(func.__name__, args, kwargs)
+            print("updater", func.__name__, args, kwargs)
 
             # collect out_paths
             update_dict = {}
@@ -1308,7 +1308,9 @@ class Gromos_System:
                     update_dict.update({k: attr_key})
 
             # execute function
+            print("updater2", func.__name__, args, kwargs)
             r = func(*args, **kwargs)
+            print("updater3", func.__name__, args, kwargs)
 
             # update attribute states and remove tmp files.
             for k in update_dict:
