@@ -128,12 +128,13 @@ class Top(_general_gromos_file._general_gromos_file):
             ].ATNM  # Number of atoms found in main top. Shift secondary top atoms accordingly
             mresShift = retTop.SOLUTEATOM.content[-1].MRES  # Number of molecules found in main top.
         else:
-            atnmShift = 0
+            atnmShift = 1
             mresShift = 0
         if verbose:
             print("atom number shift: " + str(atnmShift))
         if verbose:
             print("molecule number shift: " + str(mresShift))
+
 
         for atom in top.SOLUTEATOM.content:
             retTop.add_new_soluteatom(
@@ -229,17 +230,24 @@ class Top(_general_gromos_file._general_gromos_file):
                 includesH=True,
             )
 
+
+        print("solMol", top.SOLUTEMOLECULES.content)
+        print("soluteATom last", retTop.SOLUTEATOM.content[-1])
+        print("atnmShift", atnmShift)
+        print("mresShift", mresShift)
+
         # add SOLUTEMOLECULES
-        for solmol in top.SOLUTEMOLECULES.content[1:]:
-            retTop.add_new_SOLUTEMOLECULES(number=str(int(solmol[0]) + atnmShift))
+        for solmol in top.SOLUTEMOLECULES.NSP:
+            print("solMolline", solmol , solmol)
+            retTop.add_new_SOLUTEMOLECULES(number=str(solmol + atnmShift))
 
         # add TEMPERATUREGROUPS
-        for solmol in top.TEMPERATUREGROUPS.content[1:]:
-            retTop.add_new_TEMPERATUREGROUPS(number=str(int(solmol[0]) + atnmShift))
+        for solmol in top.TEMPERATUREGROUPS.NSP:
+            retTop.add_new_TEMPERATUREGROUPS(number=str(solmol + atnmShift))
 
         # add PRESSUREGROUPS
-        for solmol in top.PRESSUREGROUPS.content[1:]:
-            retTop.add_new_PRESSUREGROUPS(number=str(int(solmol[0]) + atnmShift))
+        for solmol in top.PRESSUREGROUPS.NSP:
+            retTop.add_new_PRESSUREGROUPS(number=str(solmol + atnmShift))
 
         return retTop
 
