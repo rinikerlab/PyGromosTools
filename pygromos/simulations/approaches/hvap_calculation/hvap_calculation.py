@@ -172,21 +172,23 @@ class Hvap_calculation:
                 dens=self.density,
             )
         time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
-        self.groSys_liq.cnf = Cnf(in_value=self.work_folder + "/temp.cnf")
+        self.groSys_liq.cnf = self.work_folder + "/temp.cnf"
 
         # reset liq system
         self.groSys_liq.rebase_files()
 
     def run_gas(self):
-        self.groSys_gas.rebase_files()
 
         # min
         print(self.groSys_gas.work_folder)
+        self.groSys_gas.imd = self.imd_liq_eq
+        self.groSys_gas.prepare_for_simulation()
+        self.groSys_gas.rebase_files()
+
         sys_emin_gas = simulation(
             in_gromos_simulation_system=self.groSys_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="1_emin",
-            in_imd_path=self.imd_gas_min,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
@@ -194,22 +196,24 @@ class Hvap_calculation:
         print(self.groSys_gas.work_folder)
 
         # eq
+        sys_emin_gas.imd = self.imd_liq_eq
+        sys_emin_gas.prepare_for_simulation()
         sys_eq_gas = simulation(
             in_gromos_simulation_system=sys_emin_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="2_eq",
-            in_imd_path=self.imd_gas_eq,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
 
         # sd
+        sys_eq_gas.imd = self.imd_liq_eq
+        sys_eq_gas.prepare_for_simulation()
         sys_sd_gas = simulation(
             in_gromos_simulation_system=sys_eq_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="3_sd",
-            in_imd_path=self.imd_gas_sd,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
@@ -218,6 +222,10 @@ class Hvap_calculation:
         self.groSys_gas_final = sys_sd_gas
 
     def run_liq(self):
+        
+        print(self.groSys_liq)
+        self.groSys_liq.imd = self.imd_liq_min
+        self.groSys_liq.prepare_for_simulation()
         self.groSys_liq.rebase_files()
 
         # minsys_emin_liq, jobID
@@ -225,29 +233,30 @@ class Hvap_calculation:
             in_gromos_simulation_system=self.groSys_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="1_emin",
-            in_imd_path=self.imd_liq_min,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
 
         # eq
+        sys_emin_liq.imd = self.imd_liq_eq
+        sys_emin_liq.prepare_for_simulation()
         sys_eq_liq = simulation(
             in_gromos_simulation_system=sys_emin_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="2_eq",
-            in_imd_path=self.imd_liq_eq,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
 
         # md
+        sys_eq_liq.imd = self.imd_liq_md
+        sys_eq_liq.prepare_for_simulation()
         sys_md_liq = simulation(
             in_gromos_simulation_system=sys_eq_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="3_sd",
-            in_imd_path=self.imd_liq_md,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
