@@ -1,4 +1,4 @@
-class Submission_job():
+class Submission_job:
     """
     Description:
     This class stores parameters for the submission of jobs. It is used by the submission_systems:
@@ -12,19 +12,23 @@ class Submission_job():
 
     Author: Marc Lehner
     """
-    def __init__(self, command: str = None, 
-                        jobName: str = None, 
-                        outLog: str=None, 
-                        errLog: str=None, 
-                        start_job: int = None, 
-                        end_job: int = None,
-                        jobLim:int = None,
-                        queue_after_jobID: int = None, 
-                        post_execution_command: str = None, 
-                        submit_from_dir: str = None,
-                        sumbit_from_file: bool = True,
-                        jobGroup: str = None,
-                        jobID = None) -> None:
+
+    def __init__(
+        self,
+        command: str = None,
+        jobName: str = None,
+        outLog: str = None,
+        errLog: str = None,
+        start_job: int = None,
+        end_job: int = None,
+        jobLim: int = None,
+        queue_after_jobID: int = None,
+        post_execution_command: str = None,
+        submit_from_dir: str = None,
+        sumbit_from_file: bool = True,
+        jobGroup: str = None,
+        jobID=None,
+    ) -> None:
         self._command = command
         self._jobName = jobName
         self._outLog = outLog
@@ -51,7 +55,7 @@ class Submission_job():
             self._command = command
         else:
             raise ValueError("command must be a string")
-        
+
     @property
     def jobName(self) -> str:
         if self._jobName is None:
@@ -88,7 +92,7 @@ class Submission_job():
     @property
     def queue_after_jobID(self) -> int:
         return self._queue_after_jobID
-    
+
     @property
     def post_execution_command(self) -> str:
         return self._post_execution_command

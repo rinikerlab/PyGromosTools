@@ -1,13 +1,12 @@
 import re
 from enum import Enum
-from typing import Union, Iterable, List, Dict, Tuple
+from typing import Type, Union, Iterable, List, Dict, Tuple
 from collections import namedtuple
 import inspect
-import math
 import numpy as np
 from numbers import Number
 
-from pygromos.files.blocks._general_blocks import TITLE
+from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
 
 
@@ -38,10 +37,26 @@ class geometric_code(Enum):
 """
    FIELDS
 """
+
+
 class atom_pair_distanceRes(_generic_field):
-    def __init__(self, i1: int, j1: int, k1: int, l1: int, type1: (geometric_code or int),
-                 i2: int, j2: int, k2: int, l2: int, type2: (geometric_code or int),
-                 r0: float, w0: float, rah: (distant_Restraint_Type or int), comment: str = ""):
+    def __init__(
+        self,
+        i1: int,
+        j1: int,
+        k1: int,
+        l1: int,
+        type1: (geometric_code or int),
+        i2: int,
+        j2: int,
+        k2: int,
+        l2: int,
+        type2: (geometric_code or int),
+        r0: float,
+        w0: float,
+        rah: (distant_Restraint_Type or int),
+        comment: str = "",
+    ):
         """
 
         Parameters
@@ -83,9 +98,9 @@ class atom_pair_distanceRes(_generic_field):
             self.atom1k = int(k1)
             self.atom1l = int(l1)
 
-            if (type(type1) is geometric_code):
+            if type(type1) is geometric_code:
                 self.atom1ic = type1
-            elif (type(type1) is int or (type(type1) is str and str(type1).isdigit())):
+            elif type(type1) is int or (type(type1) is str and str(type1).isdigit()):
                 self.atom1ic = geometric_code(int(type1))
             else:
                 raise ValueError("geometric index.rst atom1ic in atom_pair_distanceRes unknown\n" + str(type1))
@@ -95,35 +110,49 @@ class atom_pair_distanceRes(_generic_field):
             self.atom2k = int(k2)
             self.atom2l = int(l2)
 
-            if (type(type2) is geometric_code):
+            if type(type2) is geometric_code:
                 self.atom2ic = type2
-            elif (type(type2) is int or (type(type2) is str and str(type2).isdigit())):
+            elif type(type2) is int or (type(type2) is str and str(type2).isdigit()):
                 self.atom2ic = geometric_code(int(type2))
             else:
                 raise ValueError("geometric index.rst atom2ic in atom_pair_distanceRes unknown\n" + str(type2))
 
             self.radius_0 = float(r0)
             self.weight = float(w0)
-            if (type(rah) is int or (type(rah) is str and str(rah).isdigit())):
+            if type(rah) is int or (type(rah) is str and str(rah).isdigit()):
                 self.disResType = distant_Restraint_Type(int(rah))
-            elif (type(rah) is distant_Restraint_Type):
+            elif type(rah) is distant_Restraint_Type:
                 self.disResType = rah
             else:
                 raise ValueError("DisresType in atom_pair_distanceRes unknown\n" + str(rah))
             self.comment = comment
-        except:
+        except IOError:
             raise IOError("COULD NOT convert a parameter for distancerestraint field into correct form!")
 
     def to_string(self):
-        if (len(self.comment) > 0 and not self.comment.endswith("\n")):
+        if len(self.comment) > 0 and not self.comment.endswith("\n"):
             self.comment += "\n"
-        return self.comment + "{:>5} {:>5} {:>5} {:>5} {:>5}    {:>5} {:>5} {:>5} {:>5} {:>5}  {:10.5f} {:10.5f} {:>3}\n".format(
-            self.atom1i, self.atom1j, self.atom1k, self.atom1l, self.atom1ic.value, self.atom2i, self.atom2j,
-            self.atom2k,
-            self.atom2l, self.atom2ic.value, self.radius_0, self.weight, self.disResType.value)
+        return (
+            self.comment
+            + "{:>5} {:>5} {:>5} {:>5} {:>5}    {:>5} {:>5} {:>5} {:>5} {:>5}  {:10.5f} {:10.5f} {:>3}\n".format(
+                self.atom1i,
+                self.atom1j,
+                self.atom1k,
+                self.atom1l,
+                self.atom1ic.value,
+                self.atom2i,
+                self.atom2j,
+                self.atom2k,
+                self.atom2l,
+                self.atom2ic.value,
+                self.radius_0,
+                self.weight,
+                self.disResType.value,
+            )
+        )
+
 
 class atom_mass_type(_generic_field):
-
     def __init__(self, N: int, ATMAS: float, ATMASN: str, comment: str = ""):
         self.N = N
         self.ATMAS = ATMAS
@@ -140,8 +169,16 @@ class atom_mass_type(_generic_field):
 
 
 class bond_type(_generic_field):
-    def __init__(self, ICB: int, CB: float, HB: float, B0: float, atomI: Union[str, Iterable[str]],
-                 atomJ: Union[str, Iterable[str]], specialNumber: int):
+    def __init__(
+        self,
+        ICB: int,
+        CB: float,
+        HB: float,
+        B0: float,
+        atomI: Union[str, Iterable[str]],
+        atomJ: Union[str, Iterable[str]],
+        specialNumber: int,
+    ):
         """
                GROMOS bond-stretching parameters for one possible bond
 
@@ -171,13 +208,15 @@ class bond_type(_generic_field):
         self.specialNumber = specialNumber
 
     def to_string(self):
-        str_line = self.comment + "\t{:<3} {:<1.7f}   {:<1.7f}    {:<1.7f}\n".format(self.ICB, self.CB, self.HB, self.B0)
+        str_line = self.comment + "\t{:<3} {:<1.7f}   {:<1.7f}    {:<1.7f}\n".format(
+            self.ICB, self.CB, self.HB, self.B0
+        )
 
         atomI = self.atomI
         atomJ = self.atomJ
-        if(isinstance(atomI, list)):
+        if isinstance(atomI, list):
             atomI = ",".join(atomI)
-        if(isinstance(atomJ, list)):
+        if isinstance(atomJ, list):
             atomJ = ",".join(atomJ)
 
         str_line += "#\t{:<3} - {:<3}    {:<5}\n".format(atomI, atomJ, self.specialNumber)
@@ -185,8 +224,17 @@ class bond_type(_generic_field):
 
 
 class angle_type(_generic_field):
-    def __init__(self, ICT: int, CT: float, CHT: float, T0: float, atomI: Union[str, Iterable[str]],
-                 atomJ: Union[str, Iterable[str]], atomK: Union[str, Iterable[str]], specialNumber: int):
+    def __init__(
+        self,
+        ICT: int,
+        CT: float,
+        CHT: float,
+        T0: float,
+        atomI: Union[str, Iterable[str]],
+        atomJ: Union[str, Iterable[str]],
+        atomK: Union[str, Iterable[str]],
+        specialNumber: int,
+    ):
         """
                GROMOS bond-stretching parameters for one possible bond
 
@@ -219,16 +267,18 @@ class angle_type(_generic_field):
         self.specialNumber = specialNumber
 
     def to_string(self):
-        str_line = self.comment + "\t{:<3} {:<1.7f}   {:<1.7f}    {:<1.7f}\n".format(self.ICT, self.CT, self.CHT, self.T0)
+        str_line = self.comment + "\t{:<3} {:<1.7f}   {:<1.7f}    {:<1.7f}\n".format(
+            self.ICT, self.CT, self.CHT, self.T0
+        )
 
         atomI = self.atomI
         atomJ = self.atomJ
         atomK = self.atomK
-        if (isinstance(atomI, list)):
+        if isinstance(atomI, list):
             atomI = ",".join(atomI)
-        if (isinstance(atomJ, list)):
+        if isinstance(atomJ, list):
             atomJ = ",".join(atomJ)
-        if (isinstance(atomK, list)):
+        if isinstance(atomK, list):
             atomK = ",".join(atomK)
 
         str_line += "#\t{:<3} - {:<3} - {:<3}     {:<5}\n".format(atomI, atomJ, atomK, self.specialNumber)
@@ -236,8 +286,19 @@ class angle_type(_generic_field):
 
 
 class dihedral_type(_generic_field):
-    def __init__(self, ICP: int, CP: float, PD: float, NP: int, atomI: str, atomJ: str, atomK: str, atomL: str,
-                 special_number: float, concrete_example: str = ""):
+    def __init__(
+        self,
+        ICP: int,
+        CP: float,
+        PD: float,
+        NP: int,
+        atomI: str,
+        atomJ: str,
+        atomK: str,
+        atomL: str,
+        special_number: float,
+        concrete_example: str = "",
+    ):
         """
             GROMOS improper (harmonic) dihedral angle parameters
 
@@ -283,17 +344,19 @@ class dihedral_type(_generic_field):
         atomK = self.atomK
         atomL = self.atomL
 
-        if (isinstance(atomI, list)):
+        if isinstance(atomI, list):
             atomI = ",".join(atomI)
-        if (isinstance(atomJ, list)):
+        if isinstance(atomJ, list):
             atomJ = ",".join(atomJ)
-        if (isinstance(atomK, list)):
+        if isinstance(atomK, list):
             atomK = ",".join(atomK)
-        if (isinstance(atomL, list)):
+        if isinstance(atomL, list):
             atomL = ",".join(atomL)
 
-        str_line += "#\t{:<3} - {:<3} - {:<3} - {:<3}    {:<5}\n".format(atomI, atomJ, atomK, atomL, self.special_number)
-        str_line += "#\t{:20}\n".format(self.concrete_example.replace("#",""))
+        str_line += "#\t{:<3} - {:<3} - {:<3} - {:<3}    {:<5}\n".format(
+            atomI, atomJ, atomK, atomL, self.special_number
+        )
+        str_line += "#\t{:20}\n".format(self.concrete_example.replace("#", ""))
 
         return str_line
 
@@ -329,9 +392,18 @@ class improper_dihedral_type(_generic_field):
 
 
 class single_atom_lj_pair_type(_generic_field):
-
-    def __init__(self, IAC: int, TYPE: str, C6: float, C12_1: float, C12_2: float, C12_3: float,
-                 CS6: float, CS12: float, LJ14PAIR: Iterable[float]):
+    def __init__(
+        self,
+        IAC: int,
+        TYPE: str,
+        C6: float,
+        C12_1: float,
+        C12_2: float,
+        C12_3: float,
+        CS6: float,
+        CS12: float,
+        LJ14PAIR: Iterable[float],
+    ):
         """
 
         Parameters
@@ -365,9 +437,9 @@ class single_atom_lj_pair_type(_generic_field):
 
     def to_string(self):
         str_line = self.comment + "#\tIAC TYPE C6 C12_1 C12_2 C12_3\n"
-        str_line += "\t{:<3} {:<3} {:<1.7f}   {:<1.7f} {:<1.7f}    {:<1.7f}\n".format(self.IAC, self.TYPE,
-                                                                                    self.C6, self.C12_1,
-                                                                                    self.C12_2, self.C12_3)
+        str_line += "\t{:<3} {:<3} {:<1.7f}   {:<1.7f} {:<1.7f}    {:<1.7f}\n".format(
+            self.IAC, self.TYPE, self.C6, self.C12_1, self.C12_2, self.C12_3
+        )
         str_line += "#\t CS6 CS12\n"
         str_line += "\t{:<3f} {:<3f}\n".format(self.CS6, self.CS12)
         str_line += "#\tLJPAIRS\n"
@@ -387,10 +459,9 @@ class mixed_atom_lj_pair_type(_generic_field):
         self.C12_3 = C12_3
 
     def to_string(self):
-        str_line = self.comment + "\t{:<3} {:<3} {:<1.7f}   {:<1.7f} {:<1.7f}    {:<1.7f}\n".format(self.IACI, self.IACI,
-                                                                                                  self.C6, self.C12_1,
-                                                                                                  self.C12_2,
-                                                                                                  self.C12_3)
+        str_line = self.comment + "\t{:<3} {:<3} {:<1.7f}   {:<1.7f} {:<1.7f}    {:<1.7f}\n".format(
+            self.IACI, self.IACI, self.C6, self.C12_1, self.C12_2, self.C12_3
+        )
         return str_line
 
 
@@ -420,7 +491,9 @@ class special_atom_lj_pair_type(_generic_field):
         self.c
 
     def to_string(self):
-        str_line = self.comment + "\t{:<3}\n".format(self.c, )
+        str_line = self.comment + "\t{:<3}\n".format(
+            self.c,
+        )
         return str_line
 
 
@@ -432,15 +505,16 @@ class special_atom_lj_pair_type(_generic_field):
 BLOCKS
 """
 # forward declarations
-TITLE: TITLE = TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 # general Topo Blocks
 
+
 class FORCEFIELD(_generic_gromos_block):
     NAME: str
 
-    def __init__(self, NAME: str=None, content=None):
+    def __init__(self, NAME: str = None, content=None):
         if content is None:
             super().__init__(name=self.__class__.__name__, used=True)
             self.NAME = NAME[0].strip()
@@ -450,15 +524,17 @@ class FORCEFIELD(_generic_gromos_block):
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        #result += self.NAME + self.line_seperator
+        if hasattr(self, "NAME") and type(self.NAME) is str:
+            result += self.NAME + self.line_seperator
         result += "END" + self.line_seperator
         return result
+
 
 class MAKETOPVERSION(_generic_gromos_block):
     VERSION: str
 
-    def __init__(self, VERSION: str=None, content=None):
-        if(content is None):
+    def __init__(self, VERSION: str = None, content=None):
+        if content is None:
             super().__init__(name=self.__class__.__name__, used=True)
             self.VERSION = VERSION[0].strip()
         else:
@@ -470,6 +546,7 @@ class MAKETOPVERSION(_generic_gromos_block):
         result += self.VERSION + self.line_seperator
         result += "END" + self.line_seperator
         return result
+
 
 class _topology_block(_generic_gromos_block):
     FORCEFIELD: FORCEFIELD
@@ -485,15 +562,14 @@ class _iterable_topology_block(_iterable_gromos_block):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
-    def __init__(self, FORCEFIELD:FORCEFIELD=None, MAKETOPVERSION:MAKETOPVERSION=None, content = None):
-        super().__init__(self.__class__.__name__, used=True, content = content)
+    def __init__(self, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, content=None):
+        super().__init__(self.__class__.__name__, used=True, content=content)
         self.FORCEFIELD = FORCEFIELD
         self.MAKETOPVERSION = MAKETOPVERSION
 
-
     def __deepcopy__(self, memo):
-        #return block as string, split by line and cut block title and END
-        newContent= self.block_to_string().split(self.line_seperator)[1:-2]
+        # return block as string, split by line and cut block title and END
+        newContent = self.block_to_string().split(self.line_seperator)[1:-2]
         block = type(self)(content=newContent)
         return block
 
@@ -504,9 +580,17 @@ TOPOLOGY BLOCKS
 """
 Restraints Blocks
 """
+
+
 class DISTANCERESSPEC(_generic_gromos_block):
-    def __init__(self, KDISH: int=None, KDISC: int=None, RESTRAINTHEADER: list=None, RESTRAINTS: list=None,
-                 content:List[str]=None):
+    def __init__(
+        self,
+        KDISH: int = None,
+        KDISC: int = None,
+        RESTRAINTHEADER: list = None,
+        RESTRAINTS: list = None,
+        content: List[str] = None,
+    ):
         """
 
         Parameters
@@ -517,25 +601,26 @@ class DISTANCERESSPEC(_generic_gromos_block):
         RESTRAINTS :
         """
 
-        if(content is None):
-            content = ["# KDISH, KDISC\n", str(KDISH)+"\t"+str(KDISC),
-                       "\t".join(RESTRAINTHEADER),
-                       ]+list(map(str, RESTRAINTS))
+        if content is None:
+            content = [
+                "# KDISH, KDISC\n",
+                str(KDISH) + "\t" + str(KDISC),
+                "\t".join(RESTRAINTHEADER),
+            ] + list(map(str, RESTRAINTS))
         super().__init__(used=True, name="DISTANCERESSPEC", content=content)
 
-
-    def read_content_from_str(self, content:List[str]):
+    def read_content_from_str(self, content: List[str]):
         # readout KDISH or KDISC
-        keys = content[0].replace("#", "").strip().split()
+        # keys = content[0].replace("#", "").strip().split()
         KDISH, KDISC = content[1].split()
 
         # read list header:
         line_header = content[2].replace("#", "").split()
-        ##unify keys:
+        # unify keys:
         key_dict = {"i": 1, "j": 1, "k": 1, "l": 1, "type": 1}
         renamed_header = []
         for x in line_header:
-            if (x in key_dict):
+            if x in key_dict:
                 renamed_header.append(x + str(key_dict[x]))
                 key_dict[x] += 1
             else:
@@ -545,11 +630,11 @@ class DISTANCERESSPEC(_generic_gromos_block):
         # read restraints
         RESTRAINTS = []
         for line in content[3:]:
-            if (not line.startswith("#") and len(line.split()) == len(RESTRAINTHEADER)):
+            if not line.startswith("#") and len(line.split()) == len(RESTRAINTHEADER):
                 values = line.split()
-                RESTRAINTS_dict= {key: values[RESTRAINTHEADER.index(key)] for key in RESTRAINTHEADER}
+                RESTRAINTS_dict = {key: values[RESTRAINTHEADER.index(key)] for key in RESTRAINTHEADER}
                 RESTRAINTS.append(atom_pair_distanceRes(**RESTRAINTS_dict))
-            elif (line.startswith("#")):
+            elif line.startswith("#"):
                 continue
             else:
                 print("WARNING! could not Read in :" + line)
@@ -560,14 +645,13 @@ class DISTANCERESSPEC(_generic_gromos_block):
         self.RESTRAINTHEADER = RESTRAINTHEADER
         self.RESTRAINTS = RESTRAINTS
 
-
-
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
         result += "# KDISH" + self.field_seperator + "KDISC" + self.line_seperator
         result += self.field_seperator + str(self.KDISH) + self.field_seperator + str(self.KDISC) + self.line_seperator
         result += "#{:>4} {:>5} {:>5} {:>5} {:>5}    {:>5} {:>5} {:>5} {:>5} {:>5}  {:>10} {:>10} {:>3}\n".format(
-            *self.RESTRAINTHEADER)
+            *self.RESTRAINTHEADER
+        )
         for x in self.RESTRAINTS:
             result += x.to_string()
         result += "END\n"
@@ -587,33 +671,39 @@ class MASSATOMTYPECODE(_iterable_topology_block):
     NRMATY: int
     NMATY: int
     table_header: Iterable[str] = ["N", "ATMAS", "ATMASN"]
-    def __init__(self, content: Union[Iterable[atom_mass_type], Iterable[str]],
-                 FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRMATY: int = None, NMATY: int = None):
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+
+    def __init__(
+        self,
+        content: Union[Iterable[atom_mass_type], Iterable[str]],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRMATY: int = None,
+        NMATY: int = None,
+    ):
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
         self._content = []
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRMATY is None):
+        if NRMATY is None:
             self.NRMATY = len(self.content)
-        elif (isinstance(NRMATY, int)):
-            if (NRMATY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRMATY, int):
+            if NRMATY == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRMATY = NRMATY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NRMATY is not equal to the ammount of MASSATOMTYPES.")
         else:
             raise IOError("I don't understand the type of NRMATY: " + str(type(NRMATY)))
 
-        if (NMATY is None):
+        if NMATY is None:
             self.NMATY = max([x.N for x in self.content])
-        elif (isinstance(NMATY, int)):
-            if (NMATY == max([x.N for x in self.content])):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NMATY, int):
+            if NMATY == max([x.N for x in self.content]):  # CHECK FOR POSSIBLE ERROR
                 self.NMATY = NMATY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NMATY is not the maximal Mass atom type code.")
@@ -622,18 +712,18 @@ class MASSATOMTYPECODE(_iterable_topology_block):
 
     def read_content_from_str(self, content: (str, list)):
 
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
 
-        if ("NRMATY" in lines[0] and "NMATY" in lines[0]):
+        if "NRMATY" in lines[0] and "NMATY" in lines[0]:
             NRMATY, NMATY = list(map(int, lines[1].strip().split()))
 
         table_start = 0
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
         if table_start == len(lines):
@@ -643,14 +733,14 @@ class MASSATOMTYPECODE(_iterable_topology_block):
             mass_atom_type_code, mass, mass_atom_name = field.strip().split()
             self.content.append(atom_mass_type(int(mass_atom_type_code), float(mass), str(mass_atom_name)))
 
-        #print(self.content)
+        # print(self.content)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRMATY"+self.field_seperator+"NMATY"+self.line_seperator
+        result += "#" + self.field_seperator + "NRMATY" + self.field_seperator + "NMATY" + self.line_seperator
         result += self.field_seperator + str(self.NRMATY) + self.field_seperator + str(self.NMATY) + self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -663,10 +753,14 @@ class BONDSTRETCHTYPECODE(_iterable_topology_block):
     NBTY: int
     table_header: Iterable[str] = ["ICB(H)[N]", "CB[N]", "HB[N]", "B0[N]"]
 
-    def __init__(self, content: Union[Iterable[bond_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRBTY: int = None, NBTY: int = None):
+    def __init__(
+        self,
+        content: Union[Iterable[bond_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRBTY: int = None,
+        NBTY: int = None,
+    ):
         """
                        GROMOS bond-stretching parameters
 
@@ -680,29 +774,29 @@ class BONDSTRETCHTYPECODE(_iterable_topology_block):
         NBTY : int, optional
             Number of maximal bond index.rst
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRBTY is None):
+        if NRBTY is None:
             self.NRBTY = len(self.content)
-        elif (isinstance(NRBTY, int)):
-            if (NRBTY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRBTY, int):
+            if NRBTY == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRBTY = NRBTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NRMATY is not equal to the ammount of MASSATOMTYPES.")
         else:
             raise IOError("I don't understand the type of NRMATY: " + str(type(NRBTY)))
 
-        if (NBTY is None):
+        if NBTY is None:
             self.NBTY = max([x.ICB for x in self.content])
-        elif (isinstance(NBTY, int)):
-            if (NBTY == max([x.ICB for x in self.content])):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NBTY, int):
+            if NBTY == max([x.ICB for x in self.content]):  # CHECK FOR POSSIBLE ERROR
                 self.NBTY = NBTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NMATY is not the maximal Mass atom type code.")
@@ -710,7 +804,7 @@ class BONDSTRETCHTYPECODE(_iterable_topology_block):
             raise IOError("I don't understand the type of NMATY: " + str(type(NBTY)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
@@ -718,7 +812,7 @@ class BONDSTRETCHTYPECODE(_iterable_topology_block):
         table_start = 0
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
         if table_start == len(lines):
@@ -726,32 +820,39 @@ class BONDSTRETCHTYPECODE(_iterable_topology_block):
 
         table_lines = lines[table_start:]
         for field in table_lines:
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0):
+            if not field.strip().startswith("#") and not len(field.strip()) == 0:
                 ICB, CB, HB, B0 = field.strip().split()
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub('\(.*?\)', '', table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8: noqa
                 split_line = [x for x in clean.replace("#", "").replace("-", "").strip().split("  ") if (len(x) > 0)]
                 split_line = [x.split(",") if ("," in x) else x for x in split_line]
-                if (len(split_line) == 3):
+                if len(split_line) == 3:
                     atomI, atomJ, specialNumber = split_line
-                elif (len(split_line) == 2):
+                elif len(split_line) == 2:
                     atomI, atomJ = split_line
                     specialNumber = 0
 
                 # generate line
-                params = bond_type(ICB=int(ICB), CB=float(CB), HB=float(HB), B0=float(B0),
-                                   atomI=atomI, atomJ=atomJ, specialNumber=float(specialNumber))
+                params = bond_type(
+                    ICB=int(ICB),
+                    CB=float(CB),
+                    HB=float(HB),
+                    B0=float(B0),
+                    atomI=atomI,
+                    atomJ=atomJ,
+                    specialNumber=float(specialNumber),
+                )
 
                 self.content.append(params)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRBTY"+self.field_seperator+"NBTY"+self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += self.field_seperator+str(self.NRBTY)+self.field_seperator+str(self.NBTY)+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "#" + self.field_seperator + "NRBTY" + self.field_seperator + "NBTY" + self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += self.field_seperator + str(self.NRBTY) + self.field_seperator + str(self.NBTY) + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -763,11 +864,14 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
     NTTY: int
     table_header: Iterable[str] = ["ICT(H)[N]", "CT[N]", "CHT[N]", "(T0[N])"]
 
-
-    def __init__(self, content: Union[Iterable[angle_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRTTY: int = None, NTTY: int = None):
+    def __init__(
+        self,
+        content: Union[Iterable[angle_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRTTY: int = None,
+        NTTY: int = None,
+    ):
         """
                        GROMOS bond-stretching parameters
 
@@ -781,29 +885,29 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
         NBTY : int, optional
             Number of maximal bond index.rst
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRTTY is None):
+        if NRTTY is None:
             self.NRTTY = len(self.content)
-        elif (isinstance(NRTTY, int)):
-            if (NRTTY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRTTY, int):
+            if NRTTY == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRBTY = NRTTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NRMATY is not equal to the ammount of MASSATOMTYPES.")
         else:
             raise IOError("I don't understand the type of NRMATY: " + str(type(NRTTY)))
 
-        if (NTTY is None):
+        if NTTY is None:
             self.NTTY = max([x.ICT for x in self.content])
-        elif (isinstance(NTTY, int)):
-            if (NTTY == max([x.ICT for x in self.content])):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NTTY, int):
+            if NTTY == max([x.ICT for x in self.content]):  # CHECK FOR POSSIBLE ERROR
                 self.NTTY = NTTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NMATY is not the maximal Mass atom type code.")
@@ -811,7 +915,7 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
             raise IOError("I don't understand the type of NMATY: " + str(type(NTTY)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
@@ -819,7 +923,7 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
         table_start = 0
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
         if table_start == len(lines):
@@ -827,31 +931,39 @@ class BONDANGLEBENDTYPECODE(_iterable_topology_block):
 
         table_lines = lines[table_start:]
         for field in table_lines:
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0):
+            if not field.strip().startswith("#") and not len(field.strip()) == 0:
                 ICT, CT, CHT, T0 = field.strip().split()
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub('\(.*?\)', '', table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8: noqa
                 split_line = [x for x in clean.replace("#", "").replace("-", "").strip().split("  ") if (len(x) > 0)]
                 split_line = [x.split(",") if ("," in x) else x for x in split_line]
 
-                if (len(split_line) == 4):
+                if len(split_line) == 4:
                     atomI, atomJ, atomK, specialNumber = split_line
-                elif (len(split_line) == 3):
+                elif len(split_line) == 3:
                     atomI, atomJ, atomK = split_line
                     specialNumber = 0
 
-                params = angle_type(ICT=int(ICT), CT=float(CT), CHT=float(CHT), T0=float(T0), atomI=atomI, atomJ=atomJ, atomK=atomK,
-                                    specialNumber=int(specialNumber))
+                params = angle_type(
+                    ICT=int(ICT),
+                    CT=float(CT),
+                    CHT=float(CHT),
+                    T0=float(T0),
+                    atomI=atomI,
+                    atomJ=atomJ,
+                    atomK=atomK,
+                    specialNumber=int(specialNumber),
+                )
                 self.content.append(params)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRTTY"+self.field_seperator+"NTTY"+self.line_seperator
-        result += self.field_seperator+str(self.NRTTY)+self.field_seperator+str(self.NTTY)+self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "#" + self.field_seperator + "NRTTY" + self.field_seperator + "NTTY" + self.line_seperator
+        result += self.field_seperator + str(self.NRTTY) + self.field_seperator + str(self.NTTY) + self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -864,10 +976,14 @@ class TORSDIHEDRALTYPECODE(_iterable_topology_block):
 
     table_header: Iterable[str] = ["ICP(H)[N]", "CP[N]", "PD", "NP"]
 
-    def __init__(self, content: Union[Iterable[dihedral_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRPTY: int = None, NPTY: int = None):
+    def __init__(
+        self,
+        content: Union[Iterable[dihedral_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRPTY: int = None,
+        NPTY: int = None,
+    ):
         """
                        GROMOS (trigonometric) dihedral torsional angle parameters
 
@@ -881,29 +997,29 @@ class TORSDIHEDRALTYPECODE(_iterable_topology_block):
         NPTY : int, optional
             Number of maximal dihedral-angle index.rst
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRPTY is None):
+        if NRPTY is None:
             self.NRPTY = len(self.content)
-        elif (isinstance(NRPTY, int)):
-            if (NRPTY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRPTY, int):
+            if NRPTY == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRPTY = NRPTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NRMATY is not equal to the ammount of MASSATOMTYPES.")
         else:
             raise IOError("I don't understand the type of NRPTY: " + str(type(NRPTY)))
 
-        if (NPTY is None):
+        if NPTY is None:
             self.NPTY = max([x.ICP for x in self.content])
-        elif (isinstance(NPTY, int)):
-            if (NPTY == max([x.ICP for x in self.content])):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NPTY, int):
+            if NPTY == max([x.ICP for x in self.content]):  # CHECK FOR POSSIBLE ERROR
                 self.NPTY = NPTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NPTY is not the maximal Mass atom type code.")
@@ -911,7 +1027,7 @@ class TORSDIHEDRALTYPECODE(_iterable_topology_block):
             raise IOError("I don't understand the type of NMATY: " + str(type(NPTY)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
@@ -919,55 +1035,67 @@ class TORSDIHEDRALTYPECODE(_iterable_topology_block):
         table_start = 0
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
         if table_start == len(lines):
-            raise ValueError("Could not find the TABLE start in "+self.name)
+            raise ValueError("Could not find the TABLE start in " + self.name)
 
         table_lines = lines[table_start:]
         for field in table_lines:
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0):
+            if not field.strip().startswith("#") and not len(field.strip()) == 0:
                 ICP, CP, PD, NP = field.strip().split()
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub('\(.*?\)', '', table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8: noqa
                 split_line = [x for x in clean.replace("#", "").strip().split(" ") if (len(x) > 0)]
-                #print("splits", split_line)
+                # print("splits", split_line)
 
                 special_number = float(split_line[-1]) if (split_line[-1].isdigit()) else 0
                 atom_dihedral_string = ["X" if (len(x) == 0) else x for x in split_line[0].split("-")]
-                atom_dihedral_string = [["X" if (len(y) == 0) else y for y in x.split(",")] if ("," in x) else x for x
-                                        in atom_dihedral_string]
-                atom_dihedral_string = [x for x in split_line[0].split("-") if (len(x) > 0 and not x == "-") ]
+                atom_dihedral_string = [
+                    ["X" if (len(y) == 0) else y for y in x.split(",")] if ("," in x) else x
+                    for x in atom_dihedral_string
+                ]
+                atom_dihedral_string = [x for x in split_line[0].split("-") if (len(x) > 0 and not x == "-")]
 
-                #print("Atoms-String: ", atom_dihedral_string)
+                # print("Atoms-String: ", atom_dihedral_string)
 
-                if (len(atom_dihedral_string) == 4):
+                if len(atom_dihedral_string) == 4:
                     atomI, atomJ, atomK, atomL = atom_dihedral_string
-                elif(len(atom_dihedral_string) == 2):
+                elif len(atom_dihedral_string) == 2:
                     atomI, atomJ, atomK, atomL = ["X"] + atom_dihedral_string + ["X"]
-                elif(len(atom_dihedral_string) == 1):
+                elif len(atom_dihedral_string) == 1:
                     atomI, atomJ, atomK, atomL = ["X"] + atom_dihedral_string + ["X"] + ["X"]
                 else:
-                    #print(atom_dihedral_string)
+                    # print(atom_dihedral_string)
                     atomI, atomJ, atomK, atomL = atom_dihedral_string + ["X"]
 
-                concrete_example = table_lines[comment_index + 1] if (
-                    table_lines[comment_index + 1].startswith("#")) else ""
-                #print(concrete_example)
-                params = dihedral_type(ICP=int(ICP), CP=float(CP), PD=float(PD), NP=float(NP),
-                                       atomI=atomI, atomJ=atomJ, atomK=atomK, atomL=atomL,
-                                       special_number=int(special_number), concrete_example=concrete_example)
+                concrete_example = (
+                    table_lines[comment_index + 1] if (table_lines[comment_index + 1].startswith("#")) else ""
+                )
+                # print(concrete_example)
+                params = dihedral_type(
+                    ICP=int(ICP),
+                    CP=float(CP),
+                    PD=float(PD),
+                    NP=float(NP),
+                    atomI=atomI,
+                    atomJ=atomJ,
+                    atomK=atomK,
+                    atomL=atomL,
+                    special_number=int(special_number),
+                    concrete_example=concrete_example,
+                )
                 self.content.append(params)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRPTY"+self.field_seperator+"NPTY"+self.line_seperator
-        result += self.field_seperator+str(self.NRPTY)+self.field_seperator+str(self.NPTY)+self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "#" + self.field_seperator + "NRPTY" + self.field_seperator + "NPTY" + self.line_seperator
+        result += self.field_seperator + str(self.NRPTY) + self.field_seperator + str(self.NPTY) + self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -979,10 +1107,14 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
     NQTY: int
     table_header: Iterable[str] = ["ICQ", "CQ", "Q0"]
 
-    def __init__(self, content: Union[Iterable[improper_dihedral_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRQTY: int = None, NQTY: int = None):
+    def __init__(
+        self,
+        content: Union[Iterable[improper_dihedral_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRQTY: int = None,
+        NQTY: int = None,
+    ):
         """
                        GROMOS improper dihedral type parameters
 
@@ -996,31 +1128,31 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
         NQTY : int, optional
             Number of maximal improperDihedrals index.rst
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        #print(self.content)
+        # print(self.content)
 
-        if (NRQTY is None):
+        if NRQTY is None:
             self.NRQTY = len(self.content)
-        elif (isinstance(NRQTY, int)):
-            if (NRQTY == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRQTY, int):
+            if NRQTY == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRQTY = NRQTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NRQTY is not equal to the ammount of MASSATOMTYPES.")
         else:
             raise IOError("I don't understand the type of NRQTY: " + str(type(NRQTY)))
 
-        if (NQTY is None):
+        if NQTY is None:
             self.NQTY = max([x.ICQ for x in self.content])
-        elif (isinstance(NQTY, int)):
-            if (NQTY == max([x.ICQ for x in self.content])):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NQTY, int):
+            if NQTY == max([x.ICQ for x in self.content]):  # CHECK FOR POSSIBLE ERROR
                 self.NQTY = NQTY
             else:
                 raise ValueError("IN MASSATOMTYPECODE NQTY is not the maximal Mass atom type code.")
@@ -1028,7 +1160,7 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
             raise IOError("I don't understand the type of NQTY: " + str(type(NQTY)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
@@ -1036,7 +1168,7 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
         table_start = 0
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
         if table_start == len(lines):
@@ -1044,31 +1176,32 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
 
         table_lines = lines[table_start:]
         for field in table_lines:
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0):
+            if not field.strip().startswith("#") and not len(field.strip()) == 0:
                 ICQ, CQ, Q0 = field.strip().split()
 
                 # nasty next line formatting of gromos
                 comment_index = table_lines.index(field) + 1
-                clean = re.sub('\(.*?\)', '', table_lines[comment_index])
+                clean = re.sub("\(.*?\)", "", table_lines[comment_index])  # noqa # flake8 ignore
                 split_line = [x for x in clean.replace("#", "").replace("-", "").strip().split(" ") if (len(x) > 0)]
                 split_line = [x.split(",") if ("," in x) else x for x in split_line]
 
-                if (len(split_line) == 3):
+                if len(split_line) == 3:
                     groupType, special_number = " ".join(split_line[:2]), split_line[2]
-                elif (len(split_line) == 2):
+                elif len(split_line) == 2:
                     groupType = split_line
                     special_number = 0
 
-                params = improper_dihedral_type(ICQ=int(ICQ), CQ=float(CQ), Q0=float(Q0), group_type=groupType,
-                                                special_number=int(special_number))
+                params = improper_dihedral_type(
+                    ICQ=int(ICQ), CQ=float(CQ), Q0=float(Q0), group_type=groupType, special_number=int(special_number)
+                )
                 self.content.append(params)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRQTY"+self.field_seperator+"NQTY"+self.line_seperator
-        result += self.field_seperator+str(self.NRQTY)+self.field_seperator+str(self.NQTY)+self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "#" + self.field_seperator + "NRQTY" + self.field_seperator + "NQTY" + self.line_seperator
+        result += self.field_seperator + str(self.NRQTY) + self.field_seperator + str(self.NQTY) + self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -1078,9 +1211,14 @@ class IMPDIHEDRALTYPECODE(_iterable_topology_block):
 class SINGLEATOMLJPAIR(_iterable_topology_block):
     NRATT: int
     table_header = ["IAC", "TYPE", "C6", "C12(1)", "C12(2)", "C12(3)"]
-    def __init__(self, content, NRATT: int = None,
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None, ):
+
+    def __init__(
+        self,
+        content,
+        NRATT: int = None,
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         """
 
         Parameters
@@ -1090,19 +1228,19 @@ class SINGLEATOMLJPAIR(_iterable_topology_block):
         FORCEFIELD
         MAKETOPVERSION
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRATT is None):
+        if NRATT is None:
             self.NRATT = len(self.content)
-        elif (isinstance(NRATT, int)):
-            if (NRATT == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRATT, int):
+            if NRATT == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRATT = NRATT
             else:
                 raise ValueError("IN number of terms NRATT is not equal to the ammount of terms.")
@@ -1110,7 +1248,7 @@ class SINGLEATOMLJPAIR(_iterable_topology_block):
             raise IOError("I don't understand the type of NRATT: " + str(type(NRATT)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
@@ -1118,7 +1256,7 @@ class SINGLEATOMLJPAIR(_iterable_topology_block):
         table_start = 0
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
         if table_start == len(lines):
@@ -1128,39 +1266,53 @@ class SINGLEATOMLJPAIR(_iterable_topology_block):
         subblock_end = -1
         end_string = "#--"
         for subblock_start, field in enumerate(table_lines):
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0 and subblock_start >= subblock_end):
-                #print("START: ", field)
+            if not field.strip().startswith("#") and not len(field.strip()) == 0 and subblock_start >= subblock_end:
+                # print("START: ", field)
                 IAC, TYPE, C6, C12_1, C12_2, C12_3 = field.strip().split()
-                IAC, TYPE, C6, C12_1, C12_2, C12_3 = [int(IAC), str(TYPE), float(C6), float(C12_1), float(C12_2),
-                                                      float(C12_3)]
+                IAC, TYPE, C6, C12_1, C12_2, C12_3 = [
+                    int(IAC),
+                    str(TYPE),
+                    float(C6),
+                    float(C12_1),
+                    float(C12_2),
+                    float(C12_3),
+                ]
                 LJ14PAIR = []
 
                 subblock_lines = 0
                 secondCS = False
-                for subblock_line in table_lines[subblock_start + 1:]:
+                for subblock_line in table_lines[subblock_start + 1 :]:
                     subblock_lines += 1
                     # print(subblock_line)
-                    if (end_string in subblock_line):
+                    if end_string in subblock_line:
                         subblock_end = subblock_start + subblock_lines
                         break
-                    elif (not subblock_line.startswith("#") and not secondCS):
+                    elif not subblock_line.startswith("#") and not secondCS:
                         CS6, CS12 = list(map(float, subblock_line.strip().split()))
                         secondCS = True
-                    elif (not subblock_line.startswith("#") and subblock_lines > 2):
+                    elif not subblock_line.startswith("#") and subblock_lines > 2:
                         LJ14PAIR.append(list(map(int, subblock_line.split())))
 
-                params = single_atom_lj_pair_type(IAC=IAC, TYPE=TYPE,
-                                                  C6=C6, C12_1=C12_1, C12_2=C12_2, C12_3=C12_3,
-                                                  CS6=CS6, CS12=CS12, LJ14PAIR=LJ14PAIR)
+                params = single_atom_lj_pair_type(
+                    IAC=IAC,
+                    TYPE=TYPE,
+                    C6=C6,
+                    C12_1=C12_1,
+                    C12_2=C12_2,
+                    C12_3=C12_3,
+                    CS6=CS6,
+                    CS12=CS12,
+                    LJ14PAIR=LJ14PAIR,
+                )
                 # print(params)
                 self.content.append(params)
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRATT"
-        result += self.field_seperator+str(self.NRATT)+self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "#" + self.field_seperator + "NRATT"
+        result += self.field_seperator + str(self.NRATT) + self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -1174,9 +1326,13 @@ class MIXEDATOMLJPAIR(_iterable_topology_block):
         GROMOS 43A1 normal van der Waals parameters for mixed atom type pairs (I,J)
     """
 
-    def __init__(self, content, NRMTT: int = None,
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None, ):
+    def __init__(
+        self,
+        content,
+        NRMTT: int = None,
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         """
 
         Parameters
@@ -1186,19 +1342,19 @@ class MIXEDATOMLJPAIR(_iterable_topology_block):
         FORCEFIELD
         MAKETOPVERSION
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRMTT is None):
+        if NRMTT is None:
             self.NRMTT = len(self.content)
-        elif (isinstance(NRMTT, int)):
-            if (NRMTT == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRMTT, int):
+            if NRMTT == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRMTT = NRMTT
             else:
                 raise ValueError("IN number of terms NRMTT is not equal to the ammount of terms.")
@@ -1206,7 +1362,7 @@ class MIXEDATOMLJPAIR(_iterable_topology_block):
             raise IOError("I don't understand the type of NRMTT: " + str(type(NRMTT)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
@@ -1214,26 +1370,33 @@ class MIXEDATOMLJPAIR(_iterable_topology_block):
 
         for line in lines:
             table_start += 1
-            if (all([field in line for field in self.table_header])):
+            if all([field in line for field in self.table_header]):
                 break
 
-        if table_start == len(lines): #as there is no table header in the file
+        if table_start == len(lines):  # as there is no table header in the file
             table_start = 0
 
         table_lines = lines[table_start:]
         for field in table_lines:
-            if (not field.startswith("#")):
+            if not field.startswith("#"):
                 IACI, IACJ, C6, C12_1, C12_2, C12_3 = field.strip().split()
-                self.content.append(mixed_atom_lj_pair_type(IACI=int(IACI), IACJ=int(IACJ),
-                                                            C6=float(C6), C12_1=float(C12_1), C12_2=float(C12_2), C12_3=float(C12_3)))
-
+                self.content.append(
+                    mixed_atom_lj_pair_type(
+                        IACI=int(IACI),
+                        IACJ=int(IACJ),
+                        C6=float(C6),
+                        C12_1=float(C12_1),
+                        C12_2=float(C12_2),
+                        C12_3=float(C12_3),
+                    )
+                )
 
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#"+self.field_seperator+"NRMTT"+self.line_seperator
-        result += self.field_seperator+str(self.NRMTT)+self.line_seperator
-        result += "# TABLE CONTENT: "+self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result += "#" + self.field_seperator + "NRMTT" + self.line_seperator
+        result += self.field_seperator + str(self.NRMTT) + self.line_seperator
+        result += "# TABLE CONTENT: " + self.line_seperator
+        result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         result += "END\n"
@@ -1244,9 +1407,13 @@ class SPECATOMLJPAIR(_iterable_topology_block):
     NRST: int
     table_header: Iterable[str] = ["???"]
 
-    def __init__(self, content, NRST: int = None,
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None, ):
+    def __init__(
+        self,
+        content,
+        NRST: int = None,
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         """
 
         Parameters
@@ -1256,19 +1423,19 @@ class SPECATOMLJPAIR(_iterable_topology_block):
         FORCEFIELD
         MAKETOPVERSION
         """
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, atom_mass_type) for x in content]):
             self.content = content
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
-        if (NRST is None):
+        if NRST is None:
             self.NRST = len(self.content)
-        elif (isinstance(NRST, int)):
-            if (NRST == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+        elif isinstance(NRST, int):
+            if NRST == len(self.content):  # CHECK FOR POSSIBLE ERROR
                 self.NRST = NRST
             else:
                 raise ValueError("IN number of terms NRST is not equal to the ammount of terms.")
@@ -1276,16 +1443,31 @@ class SPECATOMLJPAIR(_iterable_topology_block):
             raise IOError("I don't understand the type of NRST: " + str(type(NRST)))
 
     def read_content_from_str(self, content: str):
-        #TODO: implement
-        #warnings.warn("SPECIAL LJ BLOCK IS NOT IMPLEMENTED!")
+        # TODO: implement
+        # warnings.warn("SPECIAL LJ BLOCK IS NOT IMPLEMENTED!")
         return []
+
 
 ###################################################################
 # Top() class blocks
 ###################################################################
 
+
 class soluteatom_type(_generic_field):
-    def __init__(self, ATNM: int, MRES: int, PANM: str, IAC: int, MASS: float, CG: float, CGC: int, INE: int, INEvalues, INE14: int, INE14values):
+    def __init__(
+        self,
+        ATNM: int,
+        MRES: int,
+        PANM: str,
+        IAC: int,
+        MASS: float,
+        CG: float,
+        CGC: int,
+        INE: int,
+        INEvalues,
+        INE14: int,
+        INE14values,
+    ):
         """soluteatom_type
 
         Parameters
@@ -1326,13 +1508,32 @@ class soluteatom_type(_generic_field):
         self.INE14values = INE14values
 
     def to_string(self):
-        str_line = "\t" + str(self.ATNM) + "\t" + str(self.MRES) + "\t" + str(self.PANM) + "\t" + str(self.IAC) + "\t" + str(self.MASS) + "\t" + str(self.CG) + "\t" + str(self.CGC) + "\t" + str(self.INE)
+        str_line = (
+            "\t"
+            + str(self.ATNM)
+            + "\t"
+            + str(self.MRES)
+            + "\t"
+            + str(self.PANM)
+            + "\t"
+            + str(self.IAC)
+            + "\t"
+            + str(self.MASS)
+            + "\t"
+            + str(self.CG)
+            + "\t"
+            + str(self.CGC)
+            + "\t"
+            + str(self.INE)
+        )
         lcounter = 0
+        temp_INE = len(self.INEvalues)
         for iter in self.INEvalues:
             str_line += "\t" + str(iter).strip()
             lcounter += 1
-            if (lcounter % 6) == 0 and len(self.INEvalues)>6:
+            if (lcounter % 6) == 0 and temp_INE > 6:
                 str_line += "\n\t\t\t\t\t\t\t\t\t\t"
+                temp_INE -= 6
         str_line += "\n\t\t\t\t\t\t\t\t\t\t" + str(self.INE14)
         for iter in self.INE14values:
             str_line += "\t" + str(iter)
@@ -1341,7 +1542,7 @@ class soluteatom_type(_generic_field):
 
 
 class bondstretchtype_type(_generic_field):
-    def __init__(self, CB: float, CHB:float, B0: float):
+    def __init__(self, CB: float, CHB: float, B0: float):
         """
                GROMOS bondstretchtype for a single pair
 
@@ -1359,11 +1560,14 @@ class bondstretchtype_type(_generic_field):
         self.B0 = B0
 
     def to_string(self):
-        str_line = "\t" +  "{:.5e}".format(self.CB) + "\t" + "{:.5e}".format(self.CHB) + "\t" + "{:.5e}".format(self.B0) +"\n"
+        str_line = (
+            "\t" + "{:.5e}".format(self.CB) + "\t" + "{:.5e}".format(self.CHB) + "\t" + "{:.5e}".format(self.B0) + "\n"
+        )
         return str_line
 
+
 class bondanglebendtype_type(_generic_field):
-    def __init__(self, CT: float, CHT:float, T0: float):
+    def __init__(self, CT: float, CHT: float, T0: float):
         """
                GROMOS bondanglebendtype for a single angle
 
@@ -1381,7 +1585,9 @@ class bondanglebendtype_type(_generic_field):
         self.T0 = T0
 
     def to_string(self):
-        str_line = "\t" +  "{:.5e}".format(self.CT) + "\t" + "{:.5e}".format(self.CHT) + "\t" + "{:.5e}".format(self.T0) +"\n"
+        str_line = (
+            "\t" + "{:.5e}".format(self.CT) + "\t" + "{:.5e}".format(self.CHT) + "\t" + "{:.5e}".format(self.T0) + "\n"
+        )
         return str_line
 
 
@@ -1404,7 +1610,7 @@ class top_bond_type(_generic_field):
         self.ICB = ICB
 
     def to_string(self):
-        str_line = "\t" + str(self.IB) + "\t" + str(self.JB) + "\t" + str(self.ICB) +"\n"
+        str_line = "\t" + str(self.IB) + "\t" + str(self.JB) + "\t" + str(self.ICB) + "\n"
         return str_line
 
 
@@ -1430,8 +1636,9 @@ class bondangle_type(_generic_field):
         self.ICT = ICT
 
     def to_string(self):
-        str_line = "\t" + str(self.IT) + "\t" + str(self.JT) + "\t" + str(self.KT) + "\t" + str(self.ICT) +"\n"
+        str_line = "\t" + str(self.IT) + "\t" + str(self.JT) + "\t" + str(self.KT) + "\t" + str(self.ICT) + "\n"
         return str_line
+
 
 class impdihedraltype_type(_generic_field):
     def __init__(self, CQ: float, Q0: float):
@@ -1452,8 +1659,9 @@ class impdihedraltype_type(_generic_field):
         str_line = "\t" + "{:.5e}".format(self.CQ) + "\t" + "{:.5e}".format(self.Q0) + "\n"
         return str_line
 
+
 class impdihedralh_type(_generic_field):
-    def __init__(self, IQH:int, JQH:int, KQH:int, LQH:int, ICQH:int ):
+    def __init__(self, IQH: int, JQH: int, KQH: int, LQH: int, ICQH: int):
         """
                GROMOS impdihedralH for a single pair
 
@@ -1464,9 +1672,9 @@ class impdihedralh_type(_generic_field):
         KQH:int
         LQH:int
             IQH,JQH,KQH,LQH: atom sequence numbers of atoms forming an improper dihedral
-        ICQH:int 
+        ICQH:int
             improper dihedral type code
-        
+
         """
         self.IQH = IQH
         self.JQH = JQH
@@ -1475,11 +1683,24 @@ class impdihedralh_type(_generic_field):
         self.ICQH = ICQH
 
     def to_string(self):
-        str_line = "\t" + str(self.IQH) + "\t" + str(self.JQH) + "\t" + str(self.KQH) + "\t" + str(self.LQH) + "\t" + str(self.ICQH) + "\n"
+        str_line = (
+            "\t"
+            + str(self.IQH)
+            + "\t"
+            + str(self.JQH)
+            + "\t"
+            + str(self.KQH)
+            + "\t"
+            + str(self.LQH)
+            + "\t"
+            + str(self.ICQH)
+            + "\n"
+        )
         return str_line
 
+
 class impdihedral_type(_generic_field):
-    def __init__(self, IQ:int, JQ:int, KQ:int, LQ:int, ICQ:int ):
+    def __init__(self, IQ: int, JQ: int, KQ: int, LQ: int, ICQ: int):
         """
                GROMOS impdihedral for a single pair
 
@@ -1490,9 +1711,9 @@ class impdihedral_type(_generic_field):
         KQ:int
         LQ:int
             IQ,JQ,KQ,LQ: atom sequence numbers of atoms forming an improper dihedral
-        ICQ:int 
+        ICQ:int
             improper dihedral type code
-        
+
         """
         self.IQ = IQ
         self.JQ = JQ
@@ -1501,11 +1722,24 @@ class impdihedral_type(_generic_field):
         self.ICQ = ICQ
 
     def to_string(self):
-        str_line = "\t" + str(self.IQ) + "\t" + str(self.JQ) + "\t" + str(self.KQ) + "\t" + str(self.LQ) + "\t" + str(self.ICQ) + "\n"
+        str_line = (
+            "\t"
+            + str(self.IQ)
+            + "\t"
+            + str(self.JQ)
+            + "\t"
+            + str(self.KQ)
+            + "\t"
+            + str(self.LQ)
+            + "\t"
+            + str(self.ICQ)
+            + "\n"
+        )
         return str_line
 
+
 class torsdihedraltype_type(_generic_field):
-    def __init__(self, CP:float, PD:float, NP:int):
+    def __init__(self, CP: float, PD: float, NP: int):
         """
                GROMOS dihedraltype for a single pair
 
@@ -1515,8 +1749,8 @@ class torsdihedraltype_type(_generic_field):
             force constant
         PD:float
             phase-shift angle
-        NP:int   
-            multiplicity     
+        NP:int
+            multiplicity
         """
         self.CP = CP
         self.PD = PD
@@ -1526,13 +1760,14 @@ class torsdihedraltype_type(_generic_field):
         str_line = "\t" + "{:.5e}".format(self.CP) + "\t" + "{:.5e}".format(self.PD) + "\t" + str(self.NP) + "\n"
         return str_line
 
+
 class dihedralh_type(_generic_field):
-    def __init__(self, IPH:int, JPH:int, KPH:int, LPH:int, ICPH:int):
+    def __init__(self, IPH: int, JPH: int, KPH: int, LPH: int, ICPH: int):
         """
                GROMOS dihedral for a single pair
 
         Parameters
-        ----------  
+        ----------
         """
         self.IPH = IPH
         self.JPH = JPH
@@ -1541,16 +1776,29 @@ class dihedralh_type(_generic_field):
         self.ICPH = ICPH
 
     def to_string(self):
-        str_line = "\t" + str(self.IPH) + "\t" + str(self.JPH) + "\t" + str(self.KPH) + "\t" + str(self.LPH) + "\t" + str(self.ICPH) + "\n"
+        str_line = (
+            "\t"
+            + str(self.IPH)
+            + "\t"
+            + str(self.JPH)
+            + "\t"
+            + str(self.KPH)
+            + "\t"
+            + str(self.LPH)
+            + "\t"
+            + str(self.ICPH)
+            + "\n"
+        )
         return str_line
 
+
 class top_dihedral_type(_generic_field):
-    def __init__(self, IP:int, JP:int, KP:int, LP:int, ICP:int):
+    def __init__(self, IP: int, JP: int, KP: int, LP: int, ICP: int):
         """
                GROMOS dihedral for a single pair
 
         Parameters
-        ----------  
+        ----------
         """
         self.IP = IP
         self.JP = JP
@@ -1559,11 +1807,24 @@ class top_dihedral_type(_generic_field):
         self.ICP = ICP
 
     def to_string(self):
-        str_line = "\t" + str(self.IP) + "\t" + str(self.JP) + "\t" + str(self.KP) + "\t" + str(self.LP) + "\t" + str(self.ICP) + "\n"
+        str_line = (
+            "\t"
+            + str(self.IP)
+            + "\t"
+            + str(self.JP)
+            + "\t"
+            + str(self.KP)
+            + "\t"
+            + str(self.LP)
+            + "\t"
+            + str(self.ICP)
+            + "\n"
+        )
         return str_line
 
+
 class crossgihedralh_type(_generic_field):
-    def __init__(self, APH:int, BPH:int, CPH:int, DPH:int, EPH:int, FPH:int, GPH:int, HPH:int, ICCH:int):
+    def __init__(self, APH: int, BPH: int, CPH: int, DPH: int, EPH: int, FPH: int, GPH: int, HPH: int, ICCH: int):
         """
         GROMOS Cross Dihedral type for H
 
@@ -1600,11 +1861,32 @@ class crossgihedralh_type(_generic_field):
         self.ICCH = ICCH
 
     def to_string(self):
-        str_line = "\t" + str(self.APH) + "\t" + str(self.BPH) + "\t" + str(self.CPH) + "\t" + str(self.DPH) + "\t" + str(self.EPH) + "\t" + str(self.FPH) + "\t" + str(self.GPH) + "\t" + str(self.HPH) + "\t" + str(self.ICCH) + "\n"
+        str_line = (
+            "\t"
+            + str(self.APH)
+            + "\t"
+            + str(self.BPH)
+            + "\t"
+            + str(self.CPH)
+            + "\t"
+            + str(self.DPH)
+            + "\t"
+            + str(self.EPH)
+            + "\t"
+            + str(self.FPH)
+            + "\t"
+            + str(self.GPH)
+            + "\t"
+            + str(self.HPH)
+            + "\t"
+            + str(self.ICCH)
+            + "\n"
+        )
         return str_line
 
+
 class crossgihedral_type(_generic_field):
-    def __init__(self, AP:int, BP:int, CP:int, DP:int, EP:int, FP:int, GP:int, HP:int, ICC:int):
+    def __init__(self, AP: int, BP: int, CP: int, DP: int, EP: int, FP: int, GP: int, HP: int, ICC: int):
         """
         GROMOS Cross Dihedral type for NON H Atoms
 
@@ -1641,16 +1923,37 @@ class crossgihedral_type(_generic_field):
         self.ICC = ICC
 
     def to_string(self):
-        str_line = "\t" + str(self.AP) + "\t" + str(self.BP) + "\t" + str(self.CP) + "\t" + str(self.DP) + "\t" + str(self.EP) + "\t" + str(self.FP) + "\t" + str(self.GP) + "\t" + str(self.HP) + "\t" + str(self.ICC) + "\n"
+        str_line = (
+            "\t"
+            + str(self.AP)
+            + "\t"
+            + str(self.BP)
+            + "\t"
+            + str(self.CP)
+            + "\t"
+            + str(self.DP)
+            + "\t"
+            + str(self.EP)
+            + "\t"
+            + str(self.FP)
+            + "\t"
+            + str(self.GP)
+            + "\t"
+            + str(self.HP)
+            + "\t"
+            + str(self.ICC)
+            + "\n"
+        )
         return str_line
 
+
 class ljparameters_type(_generic_field):
-    def __init__(self, IAC:int, JAC:int, C12:float, C6:float, CS12:float, CS6:float):
+    def __init__(self, IAC: int, JAC: int, C12: float, C6: float, CS12: float, CS6: float):
         """
                GROMOS LJ parameter pair
 
         Parameters
-        ----------  
+        ----------
         """
         self.IAC = IAC
         self.JAC = JAC
@@ -1660,16 +1963,31 @@ class ljparameters_type(_generic_field):
         self.CS6 = CS6
 
     def to_string(self):
-        str_line = "\t" + str(self.IAC) + "\t" + str(self.JAC) + "\t" + "{:.6e}".format(self.C12) + "\t" + "{:.6e}".format(self.C6) + "\t" + "{:.6e}".format(self.CS12) + "\t" + "{:.6e}".format(self.CS6) + "\n"
+        str_line = (
+            "\t"
+            + str(self.IAC)
+            + "\t"
+            + str(self.JAC)
+            + "\t"
+            + "{:.6e}".format(self.C12)
+            + "\t"
+            + "{:.6e}".format(self.C6)
+            + "\t"
+            + "{:.6e}".format(self.CS12)
+            + "\t"
+            + "{:.6e}".format(self.CS6)
+            + "\n"
+        )
         return str_line
 
+
 class ljexception_type(_generic_field):
-    def __init__(self, AT1:int, AT2:int, C12:float, C6:float):
+    def __init__(self, AT1: int, AT2: int, C12: float, C6: float):
         """
                GROMOS LJ exception pair
 
         Parameters
-        ----------  
+        ----------
         """
         self.AT1 = AT1
         self.AT2 = AT2
@@ -1677,34 +1995,58 @@ class ljexception_type(_generic_field):
         self.C6 = C6
 
     def to_string(self):
-        str_line = "\t" + str(self.AT1) + "\t" + str(self.AT2) + "\t" + "{:.6e}".format(self.C12) + "\t" + "{:.6e}".format(self.C6) + "\n"
+        str_line = (
+            "\t"
+            + str(self.AT1)
+            + "\t"
+            + str(self.AT2)
+            + "\t"
+            + "{:.6e}".format(self.C12)
+            + "\t"
+            + "{:.6e}".format(self.C6)
+            + "\n"
+        )
         return str_line
 
+
 class solventatom_type(_generic_field):
-    def __init__(self, I:int, ANMS:str, IACS:int, MASS:float, CGS:float):
+    def __init__(self, I: int, ANMS: str, IACS: int, MASS: float, CGS: float):  # noqa: E741
         """
                GROMOS solventatom line
 
         Parameters
-        ----------  
+        ----------
         """
-        self.I = I
+        self.I = I  # noqa: E741
         self.ANMS = ANMS
         self.IACS = IACS
         self.MASS = MASS
         self.CGS = CGS
 
     def to_string(self):
-        str_line = "\t" + str(self.I) + "\t" + str(self.ANMS) + "\t" + str(self.IACS) + "\t" + "{:.5e}".format(self.MASS) + "\t" + "{:.5e}".format(self.CGS) +"\n"
+        str_line = (
+            "\t"
+            + str(self.I)
+            + "\t"
+            + str(self.ANMS)
+            + "\t"
+            + str(self.IACS)
+            + "\t"
+            + "{:.5e}".format(self.MASS)
+            + "\t"
+            + "{:.5e}".format(self.CGS)
+            + "\n"
+        )
         return str_line
 
+
 class solventconstr_type(_generic_field):
-    def __init__(self, ICONS:int, JCONS:int, CONS:float):
+    def __init__(self, ICONS: int, JCONS: int, CONS: float):
         """
                GROMOS SOLVENTCONSTR entry
 
         Parameters
-        ----------  
+        ----------
         """
         self.ICONS = ICONS
         self.JCONS = JCONS
@@ -1714,8 +2056,9 @@ class solventconstr_type(_generic_field):
         str_line = "\t" + str(self.ICONS) + "\t" + str(self.JCONS) + "\t" + str(self.CONS) + "\n"
         return str_line
 
+
 class constraint_type(_generic_field):
-    def __init__(self, IC:int, JC:int, ICC:float):
+    def __init__(self, IC: int, JC: int, ICC: float):
         """[summary]
 
         Parameters
@@ -1730,20 +2073,31 @@ class constraint_type(_generic_field):
         self.IC = IC
         self.JC = JC
         self.ICC = ICC
-    
+
     def to_string(self):
-        str_line = self.fieldseperator + str(self.IC) + self.fieldseperator + str(self.JC) + self.fieldseperator + str(self.ICC) + self.lineseperator
+        str_line = (
+            self.fieldseperator
+            + str(self.IC)
+            + self.fieldseperator
+            + str(self.JC)
+            + self.fieldseperator
+            + str(self.ICC)
+            + self.lineseperator
+        )
         return str_line
 
 
 class _topology_table_block(_iterable_topology_block):
-    table_header:Iterable[str]
+    table_header: Iterable[str]
     table_line_type = _generic_field
 
-    def __init__(self, content:(str or dict or None),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 **kwargs):
+    def __init__(
+        self,
+        content: (str or dict or None),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        **kwargs
+    ):
         """
         Parent class for all table like GROMOS topolgy blocks.
         Offers a standard implementation of read and write functions
@@ -1761,51 +2115,51 @@ class _topology_table_block(_iterable_topology_block):
         MAKETOPVERSION : MAKETOPVERSION, optional
             [description], by default None
         """
-        #set attributes
+        # set attributes
         for attribute in vars(__class__):
-            if(attribute.isupper()): #is_allcapital()):
+            if attribute.isupper():  # is_allcapital()):
                 setattr(self, attribute, kwargs[attribute])
 
-        #init _iterable_topology_block
+        # init _iterable_topology_block
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
-        
-        if len(kwargs.keys()) == 1 :
+
+        if len(kwargs.keys()) == 1:
             for key, value in kwargs.items():
-                if (value is None):
+                if value is None:
                     setattr(self, key, len(self.content))
-                elif (isinstance(value, int)):
-                    if (value == len(self.content)):  # CHECK FOR POSSIBLE ERROR
+                elif isinstance(value, int):
+                    if value == len(self.content):  # CHECK FOR POSSIBLE ERROR
                         setattr(self, key, value)
                     else:
                         raise ValueError("In " + self.name + " is " + str(key) + " not equal to the ammount.")
                 else:
                     raise IOError("I don't understand the type of " + str(key) + ": " + str(type(key)))
-    
-    def _check_import_method(self, content:str=None):
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+
+    def _check_import_method(self, content: str = None):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, Iterable) and all([isinstance(x, type(self.table_line_type)) for x in content])):
+        elif isinstance(content, Iterable) and all([isinstance(x, type(self.table_line_type)) for x in content]):
             self.content = content
-        elif (isinstance(content, str)):
+        elif isinstance(content, str):
             self.read_content_from_str(content.split(self.line_seperator))
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
-        
+
     def read_content_from_str(self, content: str):
-        if(not hasattr(self, "table_header")):
-                raise Exception("Could not find table_header of " + self.name)
-        elif(not hasattr(self, "table_line_type")):
-                raise Exception("Could not find table_line_type of " + self.name)
+        if not hasattr(self, "table_header"):
+            raise Exception("Could not find table_header of " + self.name)
+        elif not hasattr(self, "table_line_type"):
+            raise Exception("Could not find table_line_type of " + self.name)
         else:
-            if (isinstance(content, str)):
+            if isinstance(content, str):
                 lines = content.split("\n")
             else:
                 lines = content
-            #Table Reading:
+            # Table Reading:
             table_start = 0
             for line in lines:
                 table_start += 1
-                if (all([field in line for field in self.table_header])):
+                if all([field in line for field in self.table_header]):
                     break
 
             if table_start > len(lines):
@@ -1813,80 +2167,84 @@ class _topology_table_block(_iterable_topology_block):
             else:
                 self._read_table(lines[table_start:])
 
-    def _read_table(self, table:str):
+    def _read_table(self, table: str):
         # get information of the needed structure of the sub class
         signature = inspect.signature(self.table_line_type.__init__)
-        parameter_name = [name for name in  signature.parameters if(name != "self")]
-        parameter_type = {name:signature.parameters[name].annotation for name in parameter_name}
+        parameter_name = [name for name in signature.parameters if (name != "self")]
+        parameter_type = {name: signature.parameters[name].annotation for name in parameter_name}
         # loop over the table (=content) to create the sub classes (=table_line_type)
         for table_line in table:
-                if(not (table_line.startswith("#") or len(table_line)==0)):
-                    # pre parse all non-empty non-comment lines into a list of strings
-                    fields = table_line.strip().split()
-                    if(len(fields) != len(parameter_name)):
-                        raise Exception("Fields are not matching the ammount of needed arguments!\n "
-                                        "#fileds: " + str(len(fields)) + "\t#args: " + str(len(parameter_name))+"\n\n "
-                                        "require: "+str(parameter_name)+"\t got: "+str(fields))
-                    #generate arguments dict for line parsing (= table_line_type class construction)
-                    kwargs={key: parameter_type[key](field) for key, field in zip(parameter_name, fields)}
-                    self.content.append(self.table_line_type(**kwargs))
+            if not (table_line.startswith("#") or len(table_line) == 0):
+                # pre parse all non-empty non-comment lines into a list of strings
+                fields = table_line.strip().split()
+                if len(fields) != len(parameter_name):
+                    raise Exception(
+                        "Fields are not matching the ammount of needed arguments!\n "
+                        "#fileds: " + str(len(fields)) + "\t#args: " + str(len(parameter_name)) + "\n\n "
+                        "require: " + str(parameter_name) + "\t got: " + str(fields)
+                    )
+                # generate arguments dict for line parsing (= table_line_type class construction)
+                kwargs = {key: parameter_type[key](field) for key, field in zip(parameter_name, fields)}
+                self.content.append(self.table_line_type(**kwargs))
         pass
 
     def block_to_string(self) -> str:
-        result = "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
+        result = "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
         for x in self.content:
             result += x.to_string()
         return result
 
 
 class PHYSICALCONSTANTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
-        #Default definition of physical constants
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
+        # Default definition of physical constants
         self.FPEPSI = 138.9354
         self.HBAR = 0.0635078
         self.SPDL = 299792.458
         self.BOLTZ = 0.00831441
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
-        
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-    def _check_import_method(self, content:str = None):
-        #elif (type(content) == __class__):
+    def _check_import_method(self, content: str = None):
+        # elif (type(content) == __class__):
         #    self.content = content
-        if content == [[""]] or content == [""] or content == None:
+        if content == [[""]] or content == [""] or content is None:
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
-        elif (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+        elif isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (isinstance(content, str)):
+        elif isinstance(content, str):
             self.read_content_from_str(content.split(self.line_seperator))
-        elif (isinstance(content, tuple) and len(content)==4):
+        elif isinstance(content, tuple) and len(content) == 4:
             self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ = content
             self.content = [self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ]
         else:
             raise IOError("I don't understand the type of content: " + str(type(content)))
 
     def read_content_from_str(self, content: str):
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
 
         stash = []
         for field in lines:
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0):
+            if not field.strip().startswith("#") and not len(field.strip()) == 0:
                 stash.append(float(field.strip()))
-        if(len(stash) >= 4):
+        if len(stash) >= 4:
             self.FPEPSI = stash[0]
             self.HBAR = stash[1]
             self.SPDL = stash[2]
             self.BOLTZ = stash[3]
             self.content = (self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ)
-        elif(len(stash) == 0):
+        elif len(stash) == 0:
             self.content = (self.FPEPSI, self.HBAR, self.SPDL, self.BOLTZ)
         else:
             raise IOError("Not enough arguments provided in PHYSICALCONSTANTS")
-        
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "# FPEPSI: 1.0/(4.0*PI*EPS0) (EPS0 is the permittivity of vacuum)" + self.line_seperator
@@ -1900,109 +2258,160 @@ class PHYSICALCONSTANTS(_topology_block):
         result += "END\n"
         return result
 
+
 class TOPVERSION(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
+
 
 class ATOMTYPENAME(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
+
 class RESNAME(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
+
 
 class SOLUTEATOM(_iterable_topology_block):
     NRP: int
     table_header: Iterable[str] = ["IB", "JB", "ICB"]
-    def __init__(self, content:(str or dict or None or type(SOLUTEATOM)),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
-        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content = content)
-        
-    def _check_import_method(self, content = None):
-        if (isinstance(content, list) and all([isinstance(x, str) for x in content])):
+
+    def __init__(
+        self,
+        content: (str or dict or None or Type[_iterable_topology_block]),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
+        super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
+
+    def _check_import_method(self, content=None):
+        if isinstance(content, list) and all([isinstance(x, str) for x in content]):
             self.read_content_from_str(content)
-        elif (type(content) == __class__):
+        elif type(content) == __class__:
             self.content = content
-        elif (content is __class__):
+        elif content is __class__:
             self.content = content
 
     def read_content_from_str(self, content: str):
         contentLines = []
-        if (isinstance(content, str)):
+        if isinstance(content, str):
             lines = content.split("\n")
         else:
             lines = content
-        
+
         for field in lines:
-            if (not field.strip().startswith("#") and not len(field.strip()) == 0):
+            if not field.strip().startswith("#") and not len(field.strip()) == 0:
                 contentLines.append(field)
 
         # set NRP and check for sanity
         try:
             self.NRP = int(contentLines.pop(0))
-        except:
+        except Exception:
             self.NRP = 0
-        if(self.NRP < 0):
-            raise IOError ("NPR in SOLUTEATOM Block is " + str(self.NRP))
-        elif(self.NRP == 0):
+        if self.NRP < 0:
+            raise IOError("NPR in SOLUTEATOM Block is " + str(self.NRP))
+        elif self.NRP == 0:
             content = None
-        else:        
-            for _ in range(self.NRP): # main import loop 
+        else:
+            for _ in range(self.NRP):  # main import loop
                 dump1 = contentLines.pop(0).strip().split()
-                if(len(dump1) < 8):
+                if len(dump1) < 8:
                     raise IOError("Not enough arguments provided in SOLUTEATOM Block")
                 else:
                     ATNM, MRES, PANM, IAC, MASS, CG, CGC, INE = dump1[0:8]
-                    if(1 <= int(INE)):
+                    if 1 <= int(INE):
                         INEvalues = [int(i) for i in dump1[8:]]
                         # keep reading in lines until we have all the data needed.
-                        while (int(INE) > len(INEvalues)):
+                        while int(INE) > len(INEvalues):
                             try:
-                                if (len(contentLines) == 0):
-                                    raise IOError("Not enough lines provided for multi line INE in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
-                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
+                                if len(contentLines) == 0:
+                                    raise IOError(
+                                        "Not enough lines provided for multi line INE in SOLUTEATOM Block\nATNM="
+                                        + str(ATNM)
+                                        + " MRES="
+                                        + str(MRES)
+                                    )
+                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t", "                   "]):
                                     INEvalues.extend([int(i) for i in contentLines.pop(0).strip().split()])
                                 else:
-                                    raise IOError("no intendation detected for mult line INE in SOLUTEATOM Block or too large number for INE\nATNM="+str(ATNM)+" MRES="+str(MRES))
-                            except:
-                                raise IOError("Problem reading INE for ATNM="+str(ATNM)+" MRES="+str(MRES))
+                                    raise IOError(
+                                        "no intendation detected for mult line INE in SOLUTEATOM Block or too large number for INE\nATNM="
+                                        + str(ATNM)
+                                        + " MRES="
+                                        + str(MRES)
+                                    )
+                            except IOError:
+                                raise IOError("Problem reading INE for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
                                 break
                     else:
                         INEvalues = []
 
                 dump2 = contentLines.pop(0).strip().split()
-                if(len(dump2) < 1):
-                    raise IOError("Not enough arguments provided in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
+                if len(dump2) < 1:
+                    raise IOError(
+                        "Not enough arguments provided in SOLUTEATOM Block\nATNM=" + str(ATNM) + " MRES=" + str(MRES)
+                    )
                 else:
                     INE14 = dump2[0]
-                    if(1 <= int(INE14)):
+                    if 1 <= int(INE14):
                         INE14values = [int(i) for i in dump2[1:]]
                         # keep reading in lines until we have all the data needed.
-                        while (int(INE14) > len(INE14values)):
+                        while int(INE14) > len(INE14values):
                             try:
-                                if (len(contentLines) == 0):
-                                    raise IOError("Not enough lines provided for multi line INE14 in SOLUTEATOM Block\nATNM="+str(ATNM)+" MRES="+str(MRES))
-                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t","                   "]):
+                                if len(contentLines) == 0:
+                                    raise IOError(
+                                        "Not enough lines provided for multi line INE14 in SOLUTEATOM Block\nATNM="
+                                        + str(ATNM)
+                                        + " MRES="
+                                        + str(MRES)
+                                    )
+                                elif any(i in contentLines[0] for i in ["\t\t\t\t\t", "                   "]):
                                     INE14values.extend([int(i) for i in contentLines.pop(0).strip().split()])
                                 else:
-                                    raise IOError("no intendation detected for mult line INE14 in SOLUTEATOM Block or too large number for INE14\nATNM="+str(ATNM)+" MRES="+str(MRES))
-                            except:
-                                raise IOError("Problem reading INE14 for ATNM="+str(ATNM)+" MRES="+str(MRES))
+                                    raise IOError(
+                                        "no intendation detected for mult line INE14 in SOLUTEATOM Block or too large number for INE14\nATNM="
+                                        + str(ATNM)
+                                        + " MRES="
+                                        + str(MRES)
+                                    )
+                            except IOError:
+                                raise IOError("Problem reading INE14 for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
                                 break
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
-                params = soluteatom_type(int(ATNM), int(MRES), PANM, int(IAC), float(MASS), float(CG), int(CGC), int(INE), INEvalues, int(INE14), INE14values)
+                params = soluteatom_type(
+                    int(ATNM),
+                    int(MRES),
+                    PANM,
+                    int(IAC),
+                    float(MASS),
+                    float(CG),
+                    int(CGC),
+                    int(INE),
+                    INEvalues,
+                    int(INE14),
+                    INE14values,
+                )
                 self.content.append(params)
-        
+
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
         result += "#   NRP: number of solute atoms" + self.line_seperator
@@ -2013,15 +2422,19 @@ class SOLUTEATOM(_iterable_topology_block):
         result += "END\n"
         return result
 
+
 class BONDSTRETCHTYPE(_topology_table_block):
     NBTY: int
     table_header: Iterable[str] = ["CB", "CHB", "B0"]
     table_line_type = bondstretchtype_type
-    
-    def __init__(self, content: Union[Iterable[bondstretchtype_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NBTY = None):
+
+    def __init__(
+        self,
+        content: Union[Iterable[bondstretchtype_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NBTY=None,
+    ):
         """
                        GROMOS BONDSTRETCHTYPE block
 
@@ -2033,10 +2446,12 @@ class BONDSTRETCHTYPE(_topology_table_block):
         NBTY : int, optional
             Number of bondstretchtypes
         """
-        kwargs = {"NBTY" : NBTY}
+        kwargs = {"NBTY": NBTY}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NBTY: number of covalent bond types" + self.line_seperator
@@ -2046,16 +2461,18 @@ class BONDSTRETCHTYPE(_topology_table_block):
         return result
 
 
-
 class BOND(_topology_table_block):
-    NBON:int = 1
+    NBON: int = 1
     table_header: Iterable[str] = ["IB", "JB", "ICB"]
     table_line_type = top_bond_type
 
-    def __init__(self, content: Union[Iterable[top_bond_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NBON = None):
+    def __init__(
+        self,
+        content: Union[Iterable[top_bond_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NBON=None,
+    ):
         """
                        GROMOS BOND block
 
@@ -2067,27 +2484,35 @@ class BOND(_topology_table_block):
         NBON : int, optional
             Number of bonds
         """
-        kwargs = {"NBON" : NBON}
+        kwargs = {"NBON": NBON}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NBON: number of bonds NOT involving H atoms in solute" + self.line_seperator
+        result += (
+            "#" + self.field_seperator + "NBON: number of bonds NOT involving H atoms in solute" + self.line_seperator
+        )
         result += self.field_seperator + str(self.NBON) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
         return result
 
+
 class BONDH(_topology_table_block):
     NBONH: int = 1
     table_header: Iterable[str] = ["IBH", "JBH", "ICBH"]
-    table_line_type = top_bond_type #reused data type for simplicity
+    table_line_type = top_bond_type  # reused data type for simplicity
 
-    def __init__(self, content: Union[Iterable[top_bond_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NBONH = None):
+    def __init__(
+        self,
+        content: Union[Iterable[top_bond_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NBONH=None,
+    ):
         """
                        GROMOS BONDH block
 
@@ -2099,27 +2524,35 @@ class BONDH(_topology_table_block):
         NBONH : int, optional
             Number of bonds with H
         """
-        kwargs = {"NBONH" : NBONH}
+        kwargs = {"NBONH": NBONH}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NBONH: number of bonds involving H atoms in solute" + self.line_seperator
+        result += (
+            "#" + self.field_seperator + "NBONH: number of bonds involving H atoms in solute" + self.line_seperator
+        )
         result += self.field_seperator + str(self.NBONH) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
         return result
+
 
 class BONDANGLEBENDTYPE(_topology_table_block):
     NBTY: int
     table_header: Iterable[str] = ["CT", "CHT", "T0"]
     table_line_type = bondanglebendtype_type
 
-    def __init__(self, content: Union[Iterable[bondanglebendtype_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NBTY = None):
+    def __init__(
+        self,
+        content: Union[Iterable[bondanglebendtype_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NBTY=None,
+    ):
         """
                        GROMOS BONDSTRETCHTYPE block
 
@@ -2131,10 +2564,12 @@ class BONDANGLEBENDTYPE(_topology_table_block):
         NBTY : int, optional
             Number of bondstretchtypes
         """
-        kwargs = {"NBTY" : NBTY}
+        kwargs = {"NBTY": NBTY}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NBTY: number of angle types" + self.line_seperator
@@ -2143,15 +2578,19 @@ class BONDANGLEBENDTYPE(_topology_table_block):
         result += "END\n"
         return result
 
+
 class BONDANGLE(_topology_table_block):
     NTHE: int
     table_header: Iterable[str] = ["IT", "JT", "KT", "ICT"]
     table_line_type = bondangle_type
 
-    def __init__(self, content: Union[Iterable[bondangle_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NTHE = None):
+    def __init__(
+        self,
+        content: Union[Iterable[bondangle_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NTHE=None,
+    ):
         """
                        GROMOS BONDSTRETCHTYPE block
 
@@ -2163,10 +2602,12 @@ class BONDANGLE(_topology_table_block):
         NTHE : int, optional
             Number of bondangles
         """
-        kwargs = {"NTHE" : NTHE}
+        kwargs = {"NTHE": NTHE}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NTHE: number of angles" + self.line_seperator
@@ -2175,15 +2616,19 @@ class BONDANGLE(_topology_table_block):
         result += "END\n"
         return result
 
+
 class BONDANGLEH(_topology_table_block):
     NTHEH: int
     table_header: Iterable[str] = ["ITH", "JTH", "KTH", "ICTH"]
     table_line_type = bondangle_type
 
-    def __init__(self, content: Union[Iterable[bondangle_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NTHEH = None):
+    def __init__(
+        self,
+        content: Union[Iterable[bondangle_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NTHEH=None,
+    ):
         """
                        GROMOS BONDANGLEH block
 
@@ -2195,10 +2640,12 @@ class BONDANGLEH(_topology_table_block):
         NTHEH : int, optional
             Number of bondangles
         """
-        kwargs = {"NTHEH" : NTHEH}
+        kwargs = {"NTHEH": NTHEH}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NTHEH: number of bondangles involving a H" + self.line_seperator
@@ -2210,13 +2657,16 @@ class BONDANGLEH(_topology_table_block):
 
 class IMPDIHEDRALTYPE(_topology_table_block):
     NQTY: int
-    table_header: Iterable[str] = ["CQ","Q0"]
+    table_header: Iterable[str] = ["CQ", "Q0"]
     table_line_type = impdihedraltype_type
 
-    def __init__(self, content: Union[Iterable[impdihedraltype_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NQTY = None):
+    def __init__(
+        self,
+        content: Union[Iterable[impdihedraltype_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NQTY=None,
+    ):
         """
                        GROMOS IMPDIHEDRALTYPE block
 
@@ -2228,7 +2678,7 @@ class IMPDIHEDRALTYPE(_topology_table_block):
         NQTY : int, optional
             Number of impdihedraltype
         """
-        kwargs = {"NQTY" : NQTY}
+        kwargs = {"NQTY": NQTY}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
 
     def read_content_from_str(self, content: str):
@@ -2242,15 +2692,19 @@ class IMPDIHEDRALTYPE(_topology_table_block):
         result += "END\n"
         return result
 
+
 class IMPDIHEDRALH(_topology_table_block):
     NQHIH: int
-    table_header: Iterable[str] = ["IQH","JQH","KQH","LQH","ICQH"]
+    table_header: Iterable[str] = ["IQH", "JQH", "KQH", "LQH", "ICQH"]
     table_line_type = impdihedralh_type
 
-    def __init__(self, content: Union[Iterable[impdihedralh_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NQHIH = None):
+    def __init__(
+        self,
+        content: Union[Iterable[impdihedralh_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NQHIH=None,
+    ):
         """
                        GROMOS IMPDIHEDRALH block
 
@@ -2262,13 +2716,17 @@ class IMPDIHEDRALH(_topology_table_block):
         NQHIH : int, optional
             Number of impdihedralH
         """
-        kwargs = {"NQHIH" : NQHIH}
+        kwargs = {"NQHIH": NQHIH}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NQHIH: number of improper dihedrals involving H atoms" + self.line_seperator
+        result += (
+            "#" + self.field_seperator + "NQHIH: number of improper dihedrals involving H atoms" + self.line_seperator
+        )
         result += self.field_seperator + str(self.NQHIH) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
@@ -2277,13 +2735,16 @@ class IMPDIHEDRALH(_topology_table_block):
 
 class IMPDIHEDRAL(_topology_table_block):
     NQHI: int
-    table_header: Iterable[str] = ["IQ","JQ","KQ","LQ","ICQ"]
+    table_header: Iterable[str] = ["IQ", "JQ", "KQ", "LQ", "ICQ"]
     table_line_type = impdihedral_type
 
-    def __init__(self, content: Union[Iterable[impdihedral_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NQHI = None):
+    def __init__(
+        self,
+        content: Union[Iterable[impdihedral_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NQHI=None,
+    ):
         """
                        GROMOS IMPDIHEDRAL block
 
@@ -2295,37 +2756,48 @@ class IMPDIHEDRAL(_topology_table_block):
         NQHI : int, optional
             Number of impdihedral
         """
-        kwargs = {"NQHI" : NQHI}
+        kwargs = {"NQHI": NQHI}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NQHI: number of improper dihedrals NOT involving H atoms" + self.line_seperator
+        result += (
+            "#"
+            + self.field_seperator
+            + "NQHI: number of improper dihedrals NOT involving H atoms"
+            + self.line_seperator
+        )
         result += self.field_seperator + str(self.NQHI) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
         return result
 
-    def block_to_string(self) -> str:
-        result = self.name + "\n"
-        result += "#" + self.field_seperator + "#  NQHI: number of improper dihedrals" + self.line_seperator
-        result += self.field_seperator + str(self.NQHI) + self.line_seperator
-        result += "#"+self.field_seperator+self.field_seperator.join(self.table_header)+self.line_seperator
-        for x in self.content:
-            result += x.to_string()
-        result += "END\n"
-        return result
+    # def block_to_string(self) -> str:
+    #     result = self.name + "\n"
+    #     result += "#" + self.field_seperator + "#  NQHI: number of improper dihedrals" + self.line_seperator
+    #     result += self.field_seperator + str(self.NQHI) + self.line_seperator
+    #     result += "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
+    #     for x in self.content:
+    #         result += x.to_string()
+    #     result += "END\n"
+    #     return result
+
 
 class TORSDIHEDRALTYPE(_topology_table_block):
     NPTY: int
     table_header: Iterable[str] = ["CP", "PD", "NP"]
     table_line_type = torsdihedraltype_type
 
-    def __init__(self, content: Union[Iterable[torsdihedraltype_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NPTY = None):
+    def __init__(
+        self,
+        content: Union[Iterable[torsdihedraltype_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NPTY=None,
+    ):
         """
                        GROMOS IMPDIHEDRAL block
 
@@ -2337,10 +2809,12 @@ class TORSDIHEDRALTYPE(_topology_table_block):
         NQTY : int, optional
             Number of torsion dihedrals
         """
-        kwargs = {"NPTY" : NPTY}
+        kwargs = {"NPTY": NPTY}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NPTY: number of torsion dihedrals" + self.line_seperator
@@ -2349,15 +2823,19 @@ class TORSDIHEDRALTYPE(_topology_table_block):
         result += "END\n"
         return result
 
+
 class DIHEDRALH(_topology_table_block):
     NPHIH: int
-    table_header: Iterable[str] = ["IPH","JPH","KPH","LPH","ICPH"]
+    table_header: Iterable[str] = ["IPH", "JPH", "KPH", "LPH", "ICPH"]
     table_line_type = dihedralh_type
 
-    def __init__(self, content: Union[Iterable[dihedralh_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NPHIH = None):
+    def __init__(
+        self,
+        content: Union[Iterable[dihedralh_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NPHIH=None,
+    ):
         """
                        GROMOS DIHEDRAL block
 
@@ -2369,13 +2847,17 @@ class DIHEDRALH(_topology_table_block):
         NPHIH : int, optional
             Number of dihedralH
         """
-        kwargs = {"NPHIH" : NPHIH}
+        kwargs = {"NPHIH": NPHIH}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NPHIH: number of torsion dihedrals involving H atoms" + self.line_seperator
+        result += (
+            "#" + self.field_seperator + "NPHIH: number of torsion dihedrals involving H atoms" + self.line_seperator
+        )
         result += self.field_seperator + str(self.NPHIH) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
@@ -2384,13 +2866,16 @@ class DIHEDRALH(_topology_table_block):
 
 class DIHEDRAL(_topology_table_block):
     NPHI: int
-    table_header: Iterable[str] = ["IP","JP","KP","LP","ICP"]
+    table_header: Iterable[str] = ["IP", "JP", "KP", "LP", "ICP"]
     table_line_type = top_dihedral_type
 
-    def __init__(self, content: Union[Iterable[top_dihedral_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NPHI = None):
+    def __init__(
+        self,
+        content: Union[Iterable[top_dihedral_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NPHI=None,
+    ):
         """
                        GROMOS DIHEDRAL block
 
@@ -2402,10 +2887,12 @@ class DIHEDRAL(_topology_table_block):
         NPHI : int, optional
             Number of tors dihedral
         """
-        kwargs = {"NPHI" : NPHI}
+        kwargs = {"NPHI": NPHI}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NPHI: number of dihedrals NOT involving H atoms" + self.line_seperator
@@ -2420,10 +2907,13 @@ class CROSSDIHEDRALH(_topology_table_block):
     table_header: Iterable[str] = ["APH", "BPH", "CPH", "DPH", "EPH", "FPH", "GPH", "HPH", "ICCH"]
     table_line_type = crossgihedralh_type
 
-    def __init__(self, content: Union[Iterable[crossgihedralh_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NPHIH = None):
+    def __init__(
+        self,
+        content: Union[Iterable[crossgihedralh_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NPHIH=None,
+    ):
         """[summary]
 
         Parameters
@@ -2437,10 +2927,12 @@ class CROSSDIHEDRALH(_topology_table_block):
         NPHIH : [type], optional
             number of cross dihedrals involving H atoms in solute, by default None
         """
-        kwargs = {"NPHIH" : NPHIH}
+        kwargs = {"NPHIH": NPHIH}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NPHIH: number of dihedrals involving H atoms" + self.line_seperator
@@ -2455,10 +2947,13 @@ class CROSSDIHEDRAL(_topology_table_block):
     table_header: Iterable[str] = ["AP", "BP", "CP", "DP", "EP", "FP", "GP", "HP", "ICC"]
     table_line_type = crossgihedralh_type
 
-    def __init__(self, content: Union[Iterable[crossgihedral_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NPHI = None):
+    def __init__(
+        self,
+        content: Union[Iterable[crossgihedral_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NPHI=None,
+    ):
         """[summary]
 
         Parameters
@@ -2472,13 +2967,17 @@ class CROSSDIHEDRAL(_topology_table_block):
         NPHI : [type], optional
             number of cross dihedrals NOT involving H atoms in solute, by default None
         """
-        kwargs = {"NPHI" : NPHI}
+        kwargs = {"NPHI": NPHI}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NPHI: number of cross dihedrals NOT involving H atoms" + self.line_seperator
+        result += (
+            "#" + self.field_seperator + "NPHI: number of cross dihedrals NOT involving H atoms" + self.line_seperator
+        )
         result += self.field_seperator + str(self.NPHI) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
@@ -2490,10 +2989,13 @@ class LJPARAMETERS(_topology_table_block):
     table_header: Iterable[str] = ["IAC", "JAC", "C12", "C6", "CS12", "CS6"]
     table_line_type = ljparameters_type
 
-    def __init__(self, content: Union[Iterable[ljparameters_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRATT2 = None):
+    def __init__(
+        self,
+        content: Union[Iterable[ljparameters_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRATT2=None,
+    ):
         """
                        GROMOS LJPARAMETERS block
 
@@ -2505,13 +3007,20 @@ class LJPARAMETERS(_topology_table_block):
         NRATT2 : int, optional
             Number of LJPARAMETERS
         """
-        kwargs = {"NRATT2" : NRATT2}
+        kwargs = {"NRATT2": NRATT2}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
-        result += "#" + self.field_seperator + "NRATT2: number of LJ interaction types = NRATT*(NRATT+1)/2" + self.line_seperator
+        result += (
+            "#"
+            + self.field_seperator
+            + "NRATT2: number of LJ interaction types = NRATT*(NRATT+1)/2"
+            + self.line_seperator
+        )
         result += self.field_seperator + str(self.NRATT2) + self.line_seperator
         result += super().block_to_string()
         result += "END\n"
@@ -2519,33 +3028,47 @@ class LJPARAMETERS(_topology_table_block):
 
 
 class SOLUTEMOLECULES(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
+
 
 class TEMPERATUREGROUPS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
+
 class PRESSUREGROUPS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__),
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None):
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+    ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
 
 class LJEXCEPTIONS(_topology_table_block):
     NEX: int
-    table_header: Iterable[str] = ["AT1","AT2", "C12", "C6"]
+    table_header: Iterable[str] = ["AT1", "AT2", "C12", "C6"]
     table_line_type = ljexception_type
 
-    def __init__(self, content: Union[Iterable[ljexception_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NEX = None):
+    def __init__(
+        self,
+        content: Union[Iterable[ljexception_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NEX=None,
+    ):
         """
                        GROMOS LJEXCEPTIONS block
 
@@ -2557,10 +3080,12 @@ class LJEXCEPTIONS(_topology_table_block):
         NEX : int, optional
             Number of LJEXCEPTIONS
         """
-        kwargs = {"NEX" : NEX}
+        kwargs = {"NEX": NEX}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "# This block defines special LJ-interactions based on atom numbers \n# This overrules the normal LJ-parameters (including 1-4 interactions)\n"
@@ -2576,10 +3101,13 @@ class SOLVENTATOM(_topology_table_block):
     table_header: Iterable[str] = ["I", "ANMS", "IACS", "MASS", "CGS"]
     table_line_type = solventatom_type
 
-    def __init__(self, content: Union[Iterable[solventatom_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NRAM = None):
+    def __init__(
+        self,
+        content: Union[Iterable[solventatom_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NRAM=None,
+    ):
         """
                        GROMOS solventatom block
 
@@ -2591,10 +3119,12 @@ class SOLVENTATOM(_topology_table_block):
         NRAM : int, optional
             Number of solventatom
         """
-        kwargs = {"NRAM" : NRAM}
+        kwargs = {"NRAM": NRAM}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NRAM: number of atoms per solvent molecule" + self.line_seperator
@@ -2609,10 +3139,13 @@ class SOLVENTCONSTR(_topology_table_block):
     table_header: Iterable[str] = ["ICONS", "JCONS", "CONS"]
     table_line_type = solventconstr_type
 
-    def __init__(self, content: Union[Iterable[solventconstr_type], str],
-                 FORCEFIELD: FORCEFIELD = None,
-                 MAKETOPVERSION: MAKETOPVERSION = None,
-                 NCONS = None):
+    def __init__(
+        self,
+        content: Union[Iterable[solventconstr_type], str],
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NCONS=None,
+    ):
         """
                        GROMOS SOLVENTCONSTR block
 
@@ -2624,10 +3157,12 @@ class SOLVENTCONSTR(_topology_table_block):
         NCONS : int, optional
             Number of SOLVENTCONSTR
         """
-        kwargs = {"NCONS" : NCONS}
+        kwargs = {"NCONS": NCONS}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
+
     def read_content_from_str(self, content: str):
         super().read_content_from_str(content)
+
     def block_to_string(self) -> str:
         result = self.name + "\n"
         result += "#" + self.field_seperator + "NCONS: number of constraints" + self.line_seperator
@@ -2636,13 +3171,20 @@ class SOLVENTCONSTR(_topology_table_block):
         result += "END\n"
         return result
 
+
 class CONSTRAINT(_topology_table_block):
-    NCON:int
+    NCON: int
     table_header: Iterable[str] = ["IC", "JC", "ICC"]
     table_line_type = constraint_type
 
-    def __init__(self, content: str or dict or None, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, NCON = None):
-        kwargs = {"NCON" : NCON}
+    def __init__(
+        self,
+        content: str or dict or None,
+        FORCEFIELD: FORCEFIELD = None,
+        MAKETOPVERSION: MAKETOPVERSION = None,
+        NCON=None,
+    ):
+        kwargs = {"NCON": NCON}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
 
     def read_content_from_str(self, content: str):
@@ -2656,12 +3198,22 @@ class CONSTRAINT(_topology_table_block):
         result += "END\n"
         return result
 
+
 pertubation_lam_state = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
+
 
 class atom_lam_pertubation_state(_generic_field):
     state_format_pattern = " {:>5} {:>5} {:>10.5f}"
 
-    def __init__(self, NR:int, RES:int, NAME:str, STATES:Dict[int, pertubation_lam_state], ALPHLJ:float=1.0, ALPHCRF:float=1.0):
+    def __init__(
+        self,
+        NR: int,
+        RES: int,
+        NAME: str,
+        STATES: Dict[int, pertubation_lam_state],
+        ALPHLJ: float = 1.0,
+        ALPHCRF: float = 1.0,
+    ):
         self.NR = int(NR)
         self.RES = int(RES)
         self.NAME = NAME
@@ -2670,30 +3222,46 @@ class atom_lam_pertubation_state(_generic_field):
         self.ALPHCRF = float(ALPHCRF)
 
     def to_string(self):
-        state_str = "".join([self.state_format_pattern.format(int(self.STATES[x].IAC),float(self.STATES[x].MASS), float(self.STATES[x].CHARGE)) for x in sorted(self.STATES)])
-        format_str = "{:>5} {:>5} {:>5}"+state_str+" {:10.5f} {:10.5f}\n"
-        return format_str.format(self.NR, self.RES,  self.NAME, self.ALPHLJ, self.ALPHCRF)
+        state_str = "".join(
+            [
+                self.state_format_pattern.format(
+                    int(self.STATES[x].IAC), float(self.STATES[x].MASS), float(self.STATES[x].CHARGE)
+                )
+                for x in sorted(self.STATES)
+            ]
+        )
+        format_str = "{:>5} {:>5} {:>5}" + state_str + " {:10.5f} {:10.5f}\n"
+        return format_str.format(self.NR, self.RES, self.NAME, self.ALPHLJ, self.ALPHCRF)
+
 
 class PERTATOMPARAM(_generic_gromos_block):
-    def __init__(self, STATEATOMS:List[atom_lam_pertubation_state]=None,
-                 STATEATOMHEADER: Tuple[str]= None,
-                 NJLA: int=None, STATEIDENTIFIERS=None,
-                 dummy_IAC = 22, dummy_CHARGE=0.0, content:List[str]=None):
-
+    def __init__(
+        self,
+        STATEATOMS: List[atom_lam_pertubation_state] = None,
+        STATEATOMHEADER: Tuple[str] = None,
+        NJLA: int = None,
+        STATEIDENTIFIERS=None,
+        dummy_IAC=22,
+        dummy_CHARGE=0.0,
+        content: List[str] = None,
+    ):
 
         self.NPTB = 2
         self.dummy_IAC = dummy_IAC
         self.dummy_CHARGE = dummy_CHARGE
 
-        if(content is None):
-            if(STATEATOMHEADER is None):
-                self.STATEATOMHEADER = ["NR", "RES",   "NAME",]
+        if content is None:
+            if STATEATOMHEADER is None:
+                self.STATEATOMHEADER = [
+                    "NR",
+                    "RES",
+                    "NAME",
+                ]
                 self.STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
             else:
                 self.STATEATOMHEADER = STATEATOMHEADER
 
-
-            if(STATEATOMS is None):
+            if STATEATOMS is None:
                 self.STATEATOMS = []
             else:
                 self.STATEATOMS = []
@@ -2705,10 +3273,17 @@ class PERTATOMPARAM(_generic_gromos_block):
             super().__init__(used=True, name=__class__.__name__, content=content)
 
         # You can check yourself :)
-        if(not NJLA is None and not len(STATEATOMS)==NJLA):
-            raise ValueError("NJLA must be equal to the length of STATEATOMS! NJLA="+str(NJLA)+"\t stateatoms"+str(len(STATEATOMS))+"\n\n"+str(self))
+        if NJLA is not None and not len(STATEATOMS) == NJLA:
+            raise ValueError(
+                "NJLA must be equal to the length of STATEATOMS! NJLA="
+                + str(NJLA)
+                + "\t stateatoms"
+                + str(len(STATEATOMS))
+                + "\n\n"
+                + str(self)
+            )
 
-    def read_content_from_str(self, content:List[str]):
+    def read_content_from_str(self, content: List[str]):
         field = 0
         NJLA = None
         STATEIDENTIFIERS = None
@@ -2717,33 +3292,48 @@ class PERTATOMPARAM(_generic_gromos_block):
         first = True
         stdid = False
         for line in content:
-            if ("#" in line):
-                comment = line
-                if("state_identifiers" in line):
-                    stdid=True
-                elif(stdid):
+            if "#" in line:
+                # comment = line
+                if "state_identifiers" in line:
+                    stdid = True
+                elif stdid:
                     STATEIDENTIFIERS = line.replace("#", "").split()
-                    stdid=False
+                    stdid = False
                 continue
             else:
-                if (field > 0):
-                    if(first):
-                        STATEATOMHEADER = ["NR",  "RES", "NAME",]
-                        [STATEATOMHEADER.extend(["IAC" + str(x), "MASS" + str(x), "CHARGE" + str(x)]) for x in range(1, 3)]
+                if field > 0:
+                    if first:
+                        STATEATOMHEADER = [
+                            "NR",
+                            "RES",
+                            "NAME",
+                        ]
+                        [
+                            STATEATOMHEADER.extend(["IAC" + str(x), "MASS" + str(x), "CHARGE" + str(x)])
+                            for x in range(1, 3)
+                        ]
                         STATEATOMHEADER += ["ALPHLJ", "ALPHCRF"]
                         first = False
 
                     state_line = {key: value for key, value in zip(STATEATOMHEADER, line.split())}
-                    final_state_line = {key: state_line[key] for key in state_line if
-                                        (not "IAC" in key and not "CHARGE" in key and not "MASS" in key)}
-                    states = {x: pertubation_lam_state(IAC=int(round(float(state_line["IAC" + str(x)]))),
-                                                          MASS=float(state_line["MASS" + str(x)]),
-                                                          CHARGE=float(state_line["CHARGE" + str(x)])) for x in range(1, 3)}
+                    final_state_line = {
+                        key: state_line[key]
+                        for key in state_line
+                        if ("IAC" not in key and "CHARGE" not in key and "MASS" not in key)
+                    }
+                    states = {
+                        x: pertubation_lam_state(
+                            IAC=int(round(float(state_line["IAC" + str(x)]))),
+                            MASS=float(state_line["MASS" + str(x)]),
+                            CHARGE=float(state_line["CHARGE" + str(x)]),
+                        )
+                        for x in range(1, 3)
+                    }
 
-                    final_state_line.update({"STATES":states})
+                    final_state_line.update({"STATES": states})
                     STATEATOMS.append(atom_lam_pertubation_state(**final_state_line))
 
-                elif (field == 0):
+                elif field == 0:
                     NJLA = int(line.strip())
                 field += 1
 
@@ -2753,20 +3343,26 @@ class PERTATOMPARAM(_generic_gromos_block):
         self.STATEATOMS = STATEATOMS
 
     @property
-    def nStates(self)->int:
+    def nStates(self) -> int:
         return self.NPTB
 
     @property
-    def nTotalStateAtoms(self)->int:
+    def nTotalStateAtoms(self) -> int:
         return self.NJLA
 
     @property
-    def states(self)->dict:
-        return {self.STATEIDENTIFIERS[state-1]: {atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)} for state in range(1, self.NPTB+1)}
+    def states(self) -> dict:
+        return {
+            self.STATEIDENTIFIERS[state - 1]: {
+                atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)
+            }
+            for state in range(1, self.NPTB + 1)
+        }
 
     """
     ADD FUNCTIONS
     """
+
     def add_state_atoms(self, state_atoms: List[atom_lam_pertubation_state]):
         """
         This function can add states and atoms, but also overwrite state values of existing atoms.
@@ -2777,74 +3373,75 @@ class PERTATOMPARAM(_generic_gromos_block):
         state_atoms: List[atom_eds_pertubation_state]
         """
 
-        #some preperations:
-        pre_dummy_state = lambda atomMass: pertubation_lam_state(IAC=self.dummy_IAC, MASS=atomMass,CHARGE=self.dummy_CHARGE)
+        # some preperations:
+        pre_dummy_state = lambda atomMass: pertubation_lam_state(  # noqa: E731
+            IAC=self.dummy_IAC, MASS=atomMass, CHARGE=self.dummy_CHARGE
+        )
         insert_id = self.STATEATOMHEADER.index("ALPHLJ")
 
-        #find all new states
+        # find all new states
         keys = np.array([list(natom.STATES.keys()) for natom in state_atoms], ndmin=1)
         unique_stateIDs = np.unique(np.concatenate(keys))
-        ## Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
-        unique_states = list(map(str, [ "state"+str(x) if isinstance(x, Number) else x for x in unique_stateIDs]))
+        # Todo: not urgent; state number adaptation ( present states 1,2,3,4 new state 8 - id should be 5 not 8)
+        unique_states = list(map(str, ["state" + str(x) if isinstance(x, Number) else x for x in unique_stateIDs]))
 
-        #insert new state IDs
+        # insert new state IDs
         off = 0
         for unique_state in unique_stateIDs:
-            self.STATEATOMHEADER.insert(insert_id+off, "IAC"+str(unique_state))
-            self.STATEATOMHEADER.insert(insert_id+off+1, "mass"+str(unique_state))
-            self.STATEATOMHEADER.insert(insert_id+off+2, "CHARGE"+str(unique_state))
-            off+=3
+            self.STATEATOMHEADER.insert(insert_id + off, "IAC" + str(unique_state))
+            self.STATEATOMHEADER.insert(insert_id + off + 1, "mass" + str(unique_state))
+            self.STATEATOMHEADER.insert(insert_id + off + 2, "CHARGE" + str(unique_state))
+            off += 3
 
-        #add new state names
-        if(hasattr(self, "STATEIDENTIFIERS")):
+        # add new state names
+        if hasattr(self, "STATEIDENTIFIERS"):
             self.STATEIDENTIFIERS.extend(unique_states)
             self.NPTB += len(unique_states)
         else:
             self.STATEIDENTIFIERS = unique_states
             self.NPTB = len(unique_states)
-        #increase the number of new states
+        # increase the number of new states
 
-
-        #1. Update already present atoms:
+        # 1. Update already present atoms:
         atomIDs = [atom.NR for atom in state_atoms]
         for atom in self.STATEATOMS:
             atom.STATES.update({key: val for key, val in atom.STATES.items()})
-            possible_masses = [val.MASS for key, val in atom.STATES.items() if(val.MASS >0)]
+            possible_masses = [val.MASS for key, val in atom.STATES.items() if (val.MASS > 0)]
             dummy_state = pre_dummy_state(atomMass=possible_masses[0])
 
-            if(atom.NR in atomIDs):
+            if atom.NR in atomIDs:
                 new_atom = state_atoms[atomIDs.index(atom.NR)]
 
                 atom.NAME = new_atom.NAME
                 atom.STATES.update({key: val for key, val in new_atom.STATES.items()})
-                possible_masses = [val.MASS for key, val in new_atom.STATES.items() if(val.MASS >0)]
-                #add missing dummies
-                #print(unique_stateIDs)
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                possible_masses = [val.MASS for key, val in new_atom.STATES.items() if (val.MASS > 0)]
+                # add missing dummies
+                # print(unique_stateIDs)
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
-                #remove present atom
+                # remove present atom
                 del atomIDs[atomIDs.index(atom.NR)]
 
             else:
-                #add missing dummies
-                atom.STATES.update({key: dummy_state for key in unique_stateIDs if not key in atom.STATES})
+                # add missing dummies
+                atom.STATES.update({key: dummy_state for key in unique_stateIDs if key not in atom.STATES})
 
-
-        #2. add new atoms
+        # 2. add new atoms
         new_atoms = [atom for atom in state_atoms if (atom.NR in atomIDs)]
         for atom in new_atoms:
             atom.STATES.update({key: val for key, val in atom.STATES.items()})
-            possible_masses = [val.MASS for key, val in atom.STATES.items() if(val.MASS >0)]
+            possible_masses = [val.MASS for key, val in atom.STATES.items() if (val.MASS > 0)]
             dummy_state = pre_dummy_state(atomMass=possible_masses[0])
 
-            atom.STATES.update({key:dummy_state for key in range(1, self.NPTB+1) if (key not in atom.STATES)})
+            atom.STATES.update({key: dummy_state for key in range(1, self.NPTB + 1) if (key not in atom.STATES)})
             self.STATEATOMS.append(atom)
-            self.NJLA +=1
+            self.NJLA += 1
 
     """
     DELETING FUNCTIONS
     """
-    def delete_state(self, stateIDs:(int, List[int])=None, stateNames:(str, List[str])=None):
+
+    def delete_state(self, stateIDs: (int, List[int]) = None, stateNames: (str, List[str]) = None):
         """
         This function deletes an state column.
         Parameters
@@ -2854,40 +3451,45 @@ class PERTATOMPARAM(_generic_gromos_block):
         Returns
         -------
         """
-        if(not stateIDs is None):
-            if(isinstance(stateIDs, int)):
+        if stateIDs is not None:
+            if isinstance(stateIDs, int):
                 stateIDs = [stateIDs]
 
             for state in stateIDs:
                 for atom in self.STATEATOMS:
-                    if(state in atom.STATES):
+                    if state in atom.STATES:
                         del atom.STATES[state]
                 del self.STATEIDENTIFIERS[state - 1]
-                self.STATEATOMHEADER = [x for x in self.STATEATOMHEADER if
-                                        (not x == "IAC" + str(state) and not "CHARGE" + str(state) == x)]
+                self.STATEATOMHEADER = [
+                    x for x in self.STATEATOMHEADER if (not x == "IAC" + str(state) and not "CHARGE" + str(state) == x)
+                ]
 
-            self.NPTB-=len(set(stateIDs))
+            self.NPTB -= len(set(stateIDs))
 
-        elif(not stateNames is None):
-            if(isinstance(stateNames, str)):
+        elif stateNames is not None:
+            if isinstance(stateNames, str):
                 stateNames = [stateNames]
 
             for stateN in stateNames:
-                #print(stateN)
-                stateID = self.STATEIDENTIFIERS.index(stateN)+1
+                # print(stateN)
+                stateID = self.STATEIDENTIFIERS.index(stateN) + 1
 
                 for atom in self.STATEATOMS:
-                        if(stateID in atom.STATES):
-                            del atom.STATES[stateID]
+                    if stateID in atom.STATES:
+                        del atom.STATES[stateID]
 
-                del self.STATEIDENTIFIERS[stateID-1]
-                self.STATEATOMHEADER = [x for x in self.STATEATOMHEADER if( not x == "IAC"+str(stateID) and not "CHARGE"+str(stateID) == x)]
+                del self.STATEIDENTIFIERS[stateID - 1]
+                self.STATEATOMHEADER = [
+                    x
+                    for x in self.STATEATOMHEADER
+                    if (not x == "IAC" + str(stateID) and not "CHARGE" + str(stateID) == x)
+                ]
             self.NPTB -= len(set(stateNames))
 
-        elif(not stateNames is None and not stateIDs is None):
+        elif stateNames is None and stateIDs is None:
             raise Exception("Please give either stateNames or stateIDs")
 
-    def delete_atom(self, atomNR:(int, List[int])):
+    def delete_atom(self, atomNR: (int, List[int])):
         """
         This function removes atom lines from the ptp file.
         Parameters
@@ -2895,13 +3497,13 @@ class PERTATOMPARAM(_generic_gromos_block):
         atomNR: int
             atom to be removed.
         """
-        if(isinstance(atomNR, int)):
+        if isinstance(atomNR, int):
             atomNR = [atomNR]
 
-        ind_offset = 0
+        # ind_offset = 0
         new_STATEATOMS = []
         for ind, atom in enumerate(self.STATEATOMS):
-            if (atom.NR in atomNR):
+            if atom.NR in atomNR:
                 continue
             else:
                 new_STATEATOMS.append(atom)
@@ -2909,24 +3511,40 @@ class PERTATOMPARAM(_generic_gromos_block):
         self.STATEATOMS = new_STATEATOMS
         self.NJLA -= len(atomNR)
 
-
     """
     STR FUNCTIONS
     """
+
     def _state_STATEATOMHEADER_str(self):
-        state_format_pattern = "{:>5} {:>5} {:>5}"+"".join([" {:>5}{:>5}{:>10}"for x in range(self.NPTB)])+"    {:10} {:10}"
+        state_format_pattern = (
+            "{:>5} {:>5} {:>5}" + "".join([" {:>5}{:>5}{:>10}" for x in range(self.NPTB)]) + "    {:10} {:10}"
+        )
         return state_format_pattern.format(*self.STATEATOMHEADER)
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        result += "# NJLA " + self.field_seperator + "NPTB = " + self.field_seperator + str(self.NPTB) + self.field_seperator+ self.line_seperator
-        result += self.field_seperator + str(self.NJLA)+self.line_seperator
+        result += (
+            "# NJLA "
+            + self.field_seperator
+            + "NPTB = "
+            + self.field_seperator
+            + str(self.NPTB)
+            + self.field_seperator
+            + self.line_seperator
+        )
+        result += self.field_seperator + str(self.NJLA) + self.line_seperator
         result += "# state_identifiers" + self.line_seperator
-        result += "# "+self.field_seperator + self.field_seperator.join(map(str, self.STATEIDENTIFIERS)) + self.line_seperator
+        result += (
+            "# "
+            + self.field_seperator
+            + self.field_seperator.join(map(str, self.STATEIDENTIFIERS))
+            + self.line_seperator
+        )
         result += "# " + self._state_STATEATOMHEADER_str() + self.line_seperator
         result += "".join(map(str, sorted(self.STATEATOMS, key=lambda x: x.NR)))
-        result += "END"+self.line_seperator
+        result += "END" + self.line_seperator
         return result
+
 
 class SCALEDINTERACTIONS(_generic_gromos_block):
     def __init__(self, values=None, content=None):
@@ -2934,7 +3552,7 @@ class SCALEDINTERACTIONS(_generic_gromos_block):
         Not exactly sure what these parameters do
         """
 
-        if (content is None):
+        if content is None:
             super().__init__(used=True, name=__class__.__name__)
             self.values = values
         else:

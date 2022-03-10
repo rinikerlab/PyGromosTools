@@ -8,7 +8,11 @@ Description
 :author: Benjamin Schroeder
 """
 
-import io, os, glob, time, warnings
+import io
+import os
+import glob
+import time
+import warnings
 import shutil
 
 import subprocess as sub
@@ -18,7 +22,10 @@ from pygromos.utils.utils import time_wait_s_for_filesystem
 #################################
 #   General functions:
 
-def wait_for_fileSystem(check_paths: (str, List[str]), regex_mode:bool=False, max_waiting_iterations: int = 1000, verbose: bool = False) -> bool:
+
+def wait_for_fileSystem(
+    check_paths: (str, List[str]), regex_mode: bool = False, max_waiting_iterations: int = 1000, verbose: bool = False
+) -> bool:
     """
     This function can be used to circumvent lsf lag times.
 
@@ -33,27 +40,32 @@ def wait_for_fileSystem(check_paths: (str, List[str]), regex_mode:bool=False, ma
     True
         on success
     """
-    if(isinstance(check_paths, str)):
+    if isinstance(check_paths, str):
         check_paths = [check_paths]
 
     for check_path in check_paths:
         it = 0
         waiting = True
-        while (waiting and it < max_waiting_iterations):
-            if(regex_mode):
+        while waiting and it < max_waiting_iterations:
+            if regex_mode:
                 waiting = len(glob.glob(check_path)) <= 0
             else:
                 waiting = not os.path.exists(check_path)
             time.sleep(time_wait_s_for_filesystem)
             it += 1
-        if (waiting):
+        if waiting:
             raise IOError("Could not find file: " + check_path)
-        elif (verbose):
+        elif verbose:
             print("File Check FOUND: \t", check_path)
 
     return True
 
-def check_path_dependencies(check_required_paths: Union[Dict[any, str], List[str]], check_warn_paths: (str, List[str])=[],  verbose: bool = True) -> str:
+
+def check_path_dependencies(
+    check_required_paths: Union[Dict[any, str], List[str]],
+    check_warn_paths: (str, List[str]) = [],
+    verbose: bool = True,
+) -> str:
     """check_path_dependencies
 
         checks a list of dependencies if each path is present or not. throws an
@@ -81,44 +93,56 @@ def check_path_dependencies(check_required_paths: Union[Dict[any, str], List[str
 
     found_error = False
     missing = []
-    if (verbose and type(check_required_paths) is list):
+    if verbose and type(check_required_paths) is list:
         print("\n\n==================\n\tCHECK dependencies\n")
         print("\n".join(list(map(lambda s: "Check " + str(s), check_required_paths))))
-    elif (verbose and type(check_required_paths) is dict):
+    elif verbose and type(check_required_paths) is dict:
         print("\nCHECK dependencies")
-        print("\n".join(list(map(lambda s: "Check " + str(s), [check_required_paths[x] for x in check_required_paths]))))
+        print(
+            "\n".join(list(map(lambda s: "Check " + str(s), [check_required_paths[x] for x in check_required_paths])))
+        )
 
-    #ERROR
-    if (type(check_required_paths) is dict):
+    # ERROR
+    if type(check_required_paths) is dict:
         for x in check_required_paths:
-            if("*" in x or "?" in x):
-                if(verbose): print("Skipping regex")
+            if "*" in x or "?" in x:
+                if verbose:
+                    print("Skipping regex")
                 continue
-            if verbose: print(x)
-            if (not isinstance(check_warn_paths[x], str) or (isinstance(check_required_paths[x], str) and not os.path.exists(check_required_paths[x]))):
+            if verbose:
+                print(x)
+            if not isinstance(check_warn_paths[x], str) or (
+                isinstance(check_required_paths[x], str) and not os.path.exists(check_required_paths[x])
+            ):
                 found_error = True
                 missing.append(x)
-    elif (type(check_required_paths) is list):
+    elif type(check_required_paths) is list:
         for x in check_required_paths:
-            if("*" in x or "?" in x):
-                if(verbose): print("Skipping regex")
+            if "*" in x or "?" in x:
+                if verbose:
+                    print("Skipping regex")
                 continue
-            if verbose: print(x)
-            if (not isinstance(x, str) or (isinstance(x, str) and not os.path.exists(x))):
+            if verbose:
+                print(x)
+            if not isinstance(x, str) or (isinstance(x, str) and not os.path.exists(x)):
                 found_error = True
                 missing.append(x)
 
-    #WARN
-    if (type(check_warn_paths) is dict):
+    # WARN
+    if type(check_warn_paths) is dict:
         for x in check_warn_paths:
-            if verbose: print(x)
-            if (not isinstance(check_required_paths[x], str) or (isinstance(check_required_paths[x], str) and not os.path.exists(check_required_paths[x]))):
-                warnings.warn("\tDid not find: "+str(x)+" with path: "+check_required_paths[x])
-    elif (type(check_warn_paths) is list):
+            if verbose:
+                print(x)
+            if not isinstance(check_required_paths[x], str) or (
+                isinstance(check_required_paths[x], str) and not os.path.exists(check_required_paths[x])
+            ):
+                warnings.warn("\tDid not find: " + str(x) + " with path: " + check_required_paths[x])
+    elif type(check_warn_paths) is list:
         for x in check_warn_paths:
-            if verbose: print(x)
-            if (not isinstance(x, str) or (isinstance(x, str) and not os.path.exists(x))):
-                warnings.warn("\tDid not find: "+str(x))
+            if verbose:
+                print(x)
+            if not isinstance(x, str) or (isinstance(x, str) and not os.path.exists(x)):
+                warnings.warn("\tDid not find: " + str(x))
 
     if found_error:
         print("\n==================\nAUTSCH\n==================\n")
@@ -133,7 +157,13 @@ def check_path_dependencies(check_required_paths: Union[Dict[any, str], List[str
 #   bash wrapper:
 
 
-def extract_tar(in_path: str, out_path: str=None, gunzip_compression: bool = False, remove_tar_afterwards: bool = False, verbose: bool = False) -> str:
+def extract_tar(
+    in_path: str,
+    out_path: str = None,
+    gunzip_compression: bool = False,
+    remove_tar_afterwards: bool = False,
+    verbose: bool = False,
+) -> str:
     """extract_tar
 
         this wrapper helps you to unpack a tar file via the OS
@@ -162,31 +192,34 @@ def extract_tar(in_path: str, out_path: str=None, gunzip_compression: bool = Fal
     """
 
     option = "-"
-    if (gunzip_compression):
+    if gunzip_compression:
         option += "xzf"
     else:
         option += "xf"
 
     command = "tar " + option + " " + in_path
 
-
-    if(isinstance(out_path, str) and in_path.replace(".tar", "").replace(".gz", "") != out_path):
-        command += " && mv  "+in_path.replace(".tar", "").replace(".gz", "")+" "+out_path
+    if isinstance(out_path, str) and in_path.replace(".tar", "").replace(".gz", "") != out_path:
+        command += " && mv  " + in_path.replace(".tar", "").replace(".gz", "") + " " + out_path
     else:
         out_path = in_path.replace(".tar", "").replace(".gz", "")
 
-    if(out_path == in_path):
-        raise Exception("Outpath is not allowed to be equal with in_path!\n In_path: "+in_path+"\n Out_path:"+out_path+"\n")
+    if out_path == in_path:
+        raise Exception(
+            "Outpath is not allowed to be equal with in_path!\n In_path: " + in_path + "\n Out_path:" + out_path + "\n"
+        )
 
-    if(verbose): print("cmd: ", command)
+    if verbose:
+        print("cmd: ", command)
     orig_path = os.getcwd()
     os.chdir(os.path.dirname(in_path))
     ret = execute(command, verbose=verbose)
     os.chdir(orig_path)
 
-    if (verbose): print("\n".join(ret.readlines()))
-    if (remove_tar_afterwards):
-        if(os.path.exists(out_path)):
+    if verbose:
+        print("\n".join(ret.readlines()))
+    if remove_tar_afterwards:
+        if os.path.exists(out_path):
             remove_file(in_path)
 
     wait_for_fileSystem(out_path)
@@ -194,8 +227,14 @@ def extract_tar(in_path: str, out_path: str=None, gunzip_compression: bool = Fal
     return out_path
 
 
-def compress_tar(in_path: str, out_path: str = None, gunzip_compression: bool = False, remove_in_file_afterwards: bool = False,
-                 remove_in_dir_afterwards: bool = False, verbose: bool = False) -> str:
+def compress_tar(
+    in_path: str,
+    out_path: str = None,
+    gunzip_compression: bool = False,
+    remove_in_file_afterwards: bool = False,
+    remove_in_dir_afterwards: bool = False,
+    verbose: bool = False,
+) -> str:
     """compress_tar
 
         compress a file or directory with tar via the OS
@@ -221,38 +260,39 @@ def compress_tar(in_path: str, out_path: str = None, gunzip_compression: bool = 
         process return log.
     """
 
-
-    if (out_path == None):
+    if out_path is not None:
         out_path = in_path
-    if (not out_path.endswith(".tar.gz") and gunzip_compression):
+    if not out_path.endswith(".tar.gz") and gunzip_compression:
         out_path += ".tar.gz"
-    elif (not out_path.endswith(".tar") and not gunzip_compression):
+    elif not out_path.endswith(".tar") and not gunzip_compression:
         out_path += ".tar"
 
     option = "-c"
-    if (gunzip_compression):
+    if gunzip_compression:
         option += "z"
     option += "f"
 
-    command = "tar " + option + " " + out_path + " " + os.path.basename(in_path)+" "
+    command = "tar " + option + " " + out_path + " " + os.path.basename(in_path) + " "
 
-    #command
+    # command
     orig_path = os.getcwd()
     os.chdir(os.path.dirname(in_path))
-    ret = execute(command, verbose=verbose)
+    execute(command, verbose=verbose)
     os.chdir(orig_path)
 
     wait_for_fileSystem(out_path, verbose=verbose)
 
-    if(remove_in_dir_afterwards):
+    if remove_in_dir_afterwards:
         remove_file(in_path, recursive=True)
-    elif (remove_in_file_afterwards):
+    elif remove_in_file_afterwards:
         remove_file(in_path)
 
     return out_path
 
 
-def compress_gzip(in_path: str, out_path: str = None, extract:bool=False, force:bool=True, verbose: bool = False) -> str:
+def compress_gzip(
+    in_path: str, out_path: str = None, extract: bool = False, force: bool = True, verbose: bool = False
+) -> str:
     """compress_gzip
 
         compress a file or directory with tar via the OS
@@ -278,37 +318,37 @@ def compress_gzip(in_path: str, out_path: str = None, extract:bool=False, force:
         process return log.
     """
 
-
-    if (isinstance(out_path, type(None)) and not extract):
-        out_path = in_path+".gz"
-    elif(isinstance(out_path, type(None)) and extract):
+    if isinstance(out_path, type(None)) and not extract:
+        out_path = in_path + ".gz"
+    elif isinstance(out_path, type(None)) and extract:
         out_path = in_path.replace(".gz", "").replace(".tar", "")
 
     option = ""
 
-    if(extract):
-        option+= " -d "
-    if(force):
-        option+= " -f "
+    if extract:
+        option += " -d "
+    if force:
+        option += " -f "
 
-    command = "gzip " + option + " " + in_path+" "
+    command = "gzip " + option + " " + in_path + " "
 
-    #command
-    ret = execute(command, verbose=verbose)
-    if(in_path+".gz" != out_path and not extract):
+    # command
+    execute(command, verbose=verbose)
+    if in_path + ".gz" != out_path and not extract:
         wait_for_fileSystem(in_path + ".gz", verbose=verbose)
         out_path = move_file(in_path + ".gz", out_file_path=out_path)
         wait_for_fileSystem(out_path, verbose=verbose)
-    elif(in_path != out_path+".gz" and extract):
+    elif in_path != out_path + ".gz" and extract:
         wait_for_fileSystem(in_path.replace(".gz", ""), verbose=verbose)
         out_path = move_file(in_path, out_file_path=out_path)
         wait_for_fileSystem(out_path, verbose=verbose)
 
-
     return out_path
 
 
-def copy_file(in_file_path: str, out_file_path: str, copy_a_directory: bool = False, additional_option: str = "") -> str:
+def copy_file(
+    in_file_path: str, out_file_path: str, copy_a_directory: bool = False, additional_option: str = ""
+) -> str:
     """copy_file
 
         copy files via the OS
@@ -333,20 +373,27 @@ def copy_file(in_file_path: str, out_file_path: str, copy_a_directory: bool = Fa
 
     """
 
-    if (copy_a_directory):
+    if copy_a_directory:
         additional_option += " -r "
 
     copy_files = "cp " + str(additional_option) + " " + str(in_file_path) + " " + str(out_file_path) + "\n"
 
-    if (os.system(copy_files)):
-        raise OSError("could not copy:\n " + str(in_file_path) + "\n \t to \n" + str(out_file_path) + "\n \t options: " + str(additional_option))
+    if os.system(copy_files):
+        raise OSError(
+            "could not copy:\n "
+            + str(in_file_path)
+            + "\n \t to \n"
+            + str(out_file_path)
+            + "\n \t options: "
+            + str(additional_option)
+        )
 
     wait_for_fileSystem(out_file_path)
 
     return out_file_path
 
 
-def move_file(in_file_path: str, out_file_path: str, additional_options: str = "", verbose:bool=False) -> str:
+def move_file(in_file_path: str, out_file_path: str, additional_options: str = "", verbose: bool = False) -> str:
     """move_file
 
         copy files via the OS
@@ -371,18 +418,19 @@ def move_file(in_file_path: str, out_file_path: str, additional_options: str = "
     """
     regex = False
 
-    if("*" in in_file_path or "?" in in_file_path):
+    if "*" in in_file_path or "?" in in_file_path:
         regex = True
-    elif(os.path.isfile(in_file_path) and os.path.isdir(out_file_path)):
-        out_file_path = os.path.dirname(out_file_path)+"/"+os.path.basename(in_file_path)
+    elif os.path.isfile(in_file_path) and os.path.isdir(out_file_path):
+        out_file_path = os.path.dirname(out_file_path) + "/" + os.path.basename(in_file_path)
     command = "mv " + additional_options + " " + in_file_path + " " + out_file_path + "\n"
 
     try:
-        ret = execute(command=command,verbose=verbose)
+        execute(command=command, verbose=verbose)
     except Exception as err:
-        raise ValueError("BASH could not move file! "+"\n".join(map(str,err.args)))
+        raise ValueError("BASH could not move file! " + "\n".join(map(str, err.args)))
 
-    if(not regex): wait_for_fileSystem(out_file_path)
+    if not regex:
+        wait_for_fileSystem(out_file_path)
     return out_file_path
 
 
@@ -410,21 +458,25 @@ def concatenate_text_files(in_file_paths: List[str], out_file_path: str, verbose
     None
 
     """
-    if(isinstance(in_file_paths, str)):
-            in_file_paths = [in_file_paths]
+    if isinstance(in_file_paths, str):
+        in_file_paths = [in_file_paths]
 
-    if(isinstance(in_file_paths, str)):
+    if isinstance(in_file_paths, str):
         in_file_paths = [in_file_paths]
 
     command = "cat " + " ".join(in_file_paths) + " > " + out_file_path + " \n"
 
-    if verbose: print("CONCAT: " + command)
-    if (os.path.exists(os.path.dirname(out_file_path))):
-        if(all([os.path.exists(in_path) for in_path in in_file_paths])):
-            if (os.system(command)):
+    if verbose:
+        print("CONCAT: " + command)
+    if os.path.exists(os.path.dirname(out_file_path)):
+        if all([os.path.exists(in_path) for in_path in in_file_paths]):
+            if os.system(command):
                 raise OSError("could not concate files:\n " + str(" ".join(in_file_paths)) + "\n to\n" + out_file_path)
         else:
-            raise IOError("could not find all in_paths!:\n " + "\n".join([ in_path for in_path in in_file_paths if(not os.path.exists(in_path))]))
+            raise IOError(
+                "could not find all in_paths!:\n "
+                + "\n".join([in_path for in_path in in_file_paths if (not os.path.exists(in_path))])
+            )
     else:
         raise IOError("could not find folder for:\n " + os.path.dirname(out_file_path))
 
@@ -432,7 +484,9 @@ def concatenate_text_files(in_file_paths: List[str], out_file_path: str, verbose
     return out_file_path
 
 
-def replace_text_in_text_file(in_file_path: str, find_pattern: str, replace_pattern: str, out_file_path: str = None) -> str:
+def replace_text_in_text_file(
+    in_file_path: str, find_pattern: str, replace_pattern: str, out_file_path: str = None
+) -> str:
     """replace_text_in_text_file
 
         this file replaces a regex pattern in a text file
@@ -463,7 +517,7 @@ def replace_text_in_text_file(in_file_path: str, find_pattern: str, replace_patt
         command = "sed s/" + find_pattern + "/" + replace_pattern + "/g " + in_file_path + " \n"
         out_file_path = in_file_path
 
-    if (os.system(command)):
+    if os.system(command):
         raise OSError("could not replace text in file:\n " + str(" ".join(in_file_path)) + "\n to\n" + out_file_path)
 
     wait_for_fileSystem(out_file_path)
@@ -496,18 +550,18 @@ def make_folder(in_directory_path: str, additional_option: str = "", verbose: bo
         directory_path
     """
     mk_folder = "mkdir " + additional_option + " " + str(in_directory_path) + "\n"
-    if (not os.path.isdir(in_directory_path)):
-        if (os.system(mk_folder)):
+    if not os.path.isdir(in_directory_path):
+        if os.system(mk_folder):
             raise OSError("could not make folder:\n " + str(in_directory_path))
 
-    elif (verbose):
+    elif verbose:
         warnings.warn("WARNING:\n\t Did not build already existing folder: " + in_directory_path, category=UserWarning)
 
     wait_for_fileSystem(in_directory_path)
     return in_directory_path
 
 
-def remove_file(in_file_path: str, recursive:bool=False, additional_options: str = "") -> None:
+def remove_file(in_file_path: str, recursive: bool = False, additional_options: str = "") -> None:
     """remove_file
 
         delete a file via the OS.
@@ -530,12 +584,14 @@ def remove_file(in_file_path: str, recursive:bool=False, additional_options: str
     None
 
     """
-    if(recursive):
-        additional_options+= " -r "
+    if recursive:
+        additional_options += " -r "
     rm_command = "rm " + str(in_file_path) + " " + str(additional_options)
-    if (os.path.exists(in_file_path)):
-        if (os.system(rm_command)):
-            raise OSError("could not delete file/folder: " + str(in_file_path) + "\n options: " + str(additional_options))
+    if os.path.exists(in_file_path):
+        if os.system(rm_command):
+            raise OSError(
+                "could not delete file/folder: " + str(in_file_path) + "\n options: " + str(additional_options)
+            )
 
 
 def remove_folder(in_directory_path: str, additional_options: str = "", verbose: bool = False) -> None:
@@ -564,11 +620,11 @@ def remove_folder(in_directory_path: str, additional_options: str = "", verbose:
     """
 
     remove_folder = "rmdir " + additional_options + " " + str(in_directory_path) + "\n"
-    if (os.path.isdir(in_directory_path)):
-        if (os.system(remove_folder)):
+    if os.path.isdir(in_directory_path):
+        if os.system(remove_folder):
             raise OSError("could not remove folder:\n " + str(in_directory_path))
 
-    elif (verbose):
+    elif verbose:
         warnings.warn("Warning! Did not remove non existing folder: " + in_directory_path, category=UserWarning)
 
 
@@ -594,20 +650,20 @@ def save_make_folder(in_directory_path: str, additional_options: str = "") -> st
     """
 
     offset = 1
-    dir_versions = list(filter(lambda x: not ".tar" in x or not ".gz" in x, sorted(glob.glob(in_directory_path + "*"))))
+    dir_versions = list(filter(lambda x: ".tar" not in x or ".gz" not in x, sorted(glob.glob(in_directory_path + "*"))))
     print("dirversions:", dir_versions)
-    if (len(dir_versions) > 0):
+    if len(dir_versions) > 0:
         last_dir = dir_versions[len(dir_versions) - 1]
         print("last:", last_dir)
 
         suffix = str(last_dir.replace(in_directory_path + "_", ""))
         print(suffix)
-        if (suffix != "" and suffix.isalnum()):
+        if suffix != "" and suffix.isalnum():
             offset = int(suffix) + 1
         in_directory_path += "_" + str(offset)
 
     mk_folder = "mkdir " + additional_options + " " + str(in_directory_path) + "\n"
-    if (os.system(mk_folder)):
+    if os.system(mk_folder):
         raise Exception("could not make folder:\n " + str(in_directory_path))
 
     return in_directory_path
@@ -640,10 +696,16 @@ def link_folder(in_directory_path: str, out_link_path: str, additional_options: 
     """
 
     link_folders = "ln -s " + additional_options + " " + in_directory_path + " " + out_link_path + "\n"
-    if (not os.path.exists(out_link_path)):
-        if (os.system(link_folders)):
+    if not os.path.exists(out_link_path):
+        if os.system(link_folders):
             raise OSError(
-                "could not link:\n " + str(in_directory_path) + "\n \t to \n" + str(out_link_path) + "\n \t options: " + str(additional_options))
+                "could not link:\n "
+                + str(in_directory_path)
+                + "\n \t to \n"
+                + str(out_link_path)
+                + "\n \t options: "
+                + str(additional_options)
+            )
     else:
         raise IOError("A link with the give path already exists!: \n path:\t" + out_link_path)
     return out_link_path
@@ -676,29 +738,39 @@ def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
     """
 
     class dummyProcess:
-
         def __init__(self, stdout, stderr, ret):
             self.stdout = stdout
             self.stderr = stderr
             self.poll = lambda x: int(ret)
 
-    if (type(command) == list):
+    if type(command) == list:
         command = " ".join(command)
 
-    if (verbose): print(command + "\n")
+    if verbose:
+        print(command + "\n")
 
     try:
         ret = os.popen(command)
         print(ret)
     except Exception as err:
-        raise OSError("could not execute bash command:\n  error: " + "\n\t".join(err.args) + "\n\t" + str(command) + "\n\tCommand returned: \t" + str(
-            ret.read()))
+        raise OSError(
+            "could not execute bash command:\n  error: "
+            + "\n\t".join(err.args)
+            + "\n\t"
+            + str(command)
+            + "\n\tCommand returned: \t"
+            + str(ret.read())
+        )
 
-    if (verbose): print("\t" + "\n\t".join(ret.readlines()) + "\n")
+    if verbose:
+        print("\t" + "\n\t".join(ret.readlines()) + "\n")
 
     return dummyProcess(stdout=ret, stderr=[], ret=0)
 
-def execute_subprocess(command: (str or List[str]), catch_STD:Union[bool,str]=False, env:dict=None, verbose: bool = False)->sub.CompletedProcess:
+
+def execute_subprocess(
+    command: (str or List[str]), catch_STD: Union[bool, str] = False, env: dict = None, verbose: bool = False
+) -> sub.CompletedProcess:
     """execute_subprocess
         This command starts a subprocess, that is executing the str command in bash.
 
@@ -720,42 +792,51 @@ def execute_subprocess(command: (str or List[str]), catch_STD:Union[bool,str]=Fa
         return the executed process obj. (from subprocess)
     """
 
-    if(isinstance(command, list)):
+    if isinstance(command, list):
         command = " ".join(command)
-    if(verbose): print("\texecute command: \n\t"+command)
+    if verbose:
+        print("\texecute command: \n\t" + command)
 
-    kwargs={}
-    if(isinstance(catch_STD, bool)):
+    kwargs = {}
+    if isinstance(catch_STD, bool):
         kwargs.update({"stdout": sub.PIPE})
-    elif(isinstance(catch_STD, str)):
+    elif isinstance(catch_STD, str):
         kwargs.update({"stdout": open(catch_STD, "w")})
-    
+
     if env is None:
-        env=os.environ.copy()
+        env = os.environ.copy()
 
-    p = sub.Popen(args = command, shell=True, stderr=sub.PIPE, env=env, **kwargs)
+    p = sub.Popen(args=command, shell=True, stderr=sub.PIPE, env=env, **kwargs)
 
-    #print(p, vars(p))
-    try: 
-        p.wait(120) # Wait for process to finish
-    except:
-        warnings.warn("TIME OUT WITH: "+str(command))
+    # print(p, vars(p))
+    try:
+        p.wait(120)  # Wait for process to finish
+    except sub.TimeoutExpired:
+        warnings.warn("TIME OUT WITH: " + str(command))
         print("Continue Waiting: ")
-        p.wait() # Wait for process to finish
-    p.terminate() # Make sure its terminated
+        p.wait()  # Wait for process to finish
+    p.terminate()  # Make sure its terminated
     r = p.poll()
-    if(r):   # Did an Error occure?
-        msg = "SubProcess Failed due to returncode: "+str(r)+"\n COMMAND: \n\t"+str(command)
+    if r:  # Did an Error occure?
+        msg = "SubProcess Failed due to returncode: " + str(r) + "\n COMMAND: \n\t" + str(command)
         msg += "\nSTDOUT:\n\t"
-        msg +=  "NONE" if(p.stdout is None) else "\n\t".join(map(str, p.stdout.readlines()))
+        msg += "NONE" if (p.stdout is None) else "\n\t".join(map(str, p.stdout.readlines()))
         msg += "\nSTDERR:\n\t"
-        msg += "NONE" if(p.stdout is None) else "\n\t".join(map(str, p.stderr.readlines()))
+        msg += "NONE" if (p.stdout is None) else "\n\t".join(map(str, p.stderr.readlines()))
         raise ChildProcessError(msg)
-    if(verbose): print("RETURN: ", r)
+    if verbose:
+        print("RETURN: ", r)
 
     return p
 
-def execute_old(command: (str or List[str]), verbose: bool = False, ignore_return_code:bool=False, wait_fail=False, out_cnf_path:str=None) -> io.FileIO:
+
+def execute_old(
+    command: (str or List[str]),
+    verbose: bool = False,
+    ignore_return_code: bool = False,
+    wait_fail=False,
+    out_cnf_path: str = None,
+) -> io.FileIO:
     """execute
         this command executes a command on the os-layer. (e.g.: on linux a bash command)
 
@@ -776,28 +857,28 @@ def execute_old(command: (str or List[str]), verbose: bool = False, ignore_retur
 
     """
 
-    if(isinstance(command, str)):
+    if isinstance(command, str):
         command = command.split()
 
-    #TODO: maybe pass path directly?
+    # TODO: maybe pass path directly?
     # This block overwrites the pipe of the sub process
     std_out = sub.PIPE
     std_err = sub.PIPE
 
-    if (verbose): print("COMMAND: "+" ".join(command) + "\n")
+    if verbose:
+        print("COMMAND: " + " ".join(command) + "\n")
 
     try:
-        p = sub.Popen(command, stdout=std_out,  stderr=std_err)
+        p = sub.Popen(command, stdout=std_out, stderr=std_err)
         # testing this!:
         try:
             p.wait(timeout=15)
-        except:
-            warnings.warn("Wait threw error!:( for cmd: "+str(command)+" If it is a long command... ok :)")
+        except sub.TimeoutExpired:
+            warnings.warn("Wait threw error!:( for cmd: " + str(command) + " If it is a long command... ok :)")
 
-            if(wait_fail):
+            if wait_fail:
                 p.kill()
-                raise TimeoutError("Wait failed for proces: cmd:"+str(command))
-
+                raise TimeoutError("Wait failed for proces: cmd:" + str(command))
 
         try:
             while p.poll() is None:
@@ -808,29 +889,48 @@ def execute_old(command: (str or List[str]), verbose: bool = False, ignore_retur
         if verbose:
             print("start writing")
         ret_stdout = io.StringIO("".join(map(lambda x: x.decode("utf-8"), p.stdout.readlines())))
-        ret_stderr ="\n".join(map(lambda x: x.decode("utf-8"), p.stderr.readlines()))
+        ret_stderr = "\n".join(map(lambda x: x.decode("utf-8"), p.stderr.readlines()))
     except TimeoutError as err:
         raise err
     except Exception as err:
-        raise ChildProcessError("Process failed executing Bash command:\n Command:\n\t"+ str(command) + "\n error: " + "\n\t".join(map(str, err.args)) + "\n")
+        raise ChildProcessError(
+            "Process failed executing Bash command:\n Command:\n\t"
+            + str(command)
+            + "\n error: "
+            + "\n\t".join(map(str, err.args))
+            + "\n"
+        )
 
-    #bash command failed?
-    if(p.returncode > 0 and not ignore_return_code):
-        raise OSError("Bash command return code was Non-Zero!\nRETURN CODE: "+str(p.returncode)+"\nERR:\n"+ret_stderr+"\nstdOut:\n\t"+str("\n\t".join(ret_stdout.readlines()))+"\nCommand: "+str(command))
+    # bash command failed?
+    if p.returncode > 0 and not ignore_return_code:
+        raise OSError(
+            "Bash command return code was Non-Zero!\nRETURN CODE: "
+            + str(p.returncode)
+            + "\nERR:\n"
+            + ret_stderr
+            + "\nstdOut:\n\t"
+            + str("\n\t".join(ret_stdout.readlines()))
+            + "\nCommand: "
+            + str(command)
+        )
 
-    if (verbose): print("STDOUT:\n \t" + "\n\t".join(ret_stdout.readlines()) + "\n\n")
-    if (verbose): print("STDERR:\n \t" + ret_stderr + "\n\n")
-    if (verbose): print("RETURN CODE: \t" + str(p.returncode) + "\n")
+    if verbose:
+        print("STDOUT:\n \t" + "\n\t".join(ret_stdout.readlines()) + "\n\n")
+    if verbose:
+        print("STDERR:\n \t" + ret_stderr + "\n\n")
+    if verbose:
+        print("RETURN CODE: \t" + str(p.returncode) + "\n")
 
     p.terminate()
     del p
     return ret_stdout
 
-def execute(command: (str or List[str]), verbose: bool = False, catch_STD:Union[bool,str]=False, env:dict=None):
+
+def execute(command: (str or List[str]), verbose: bool = False, catch_STD: Union[bool, str] = False, env: dict = None):
     return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
 
 
-def which(command:str)->str:
+def which(command: str) -> str:
     """Finds the full path of a command.
 
     Args:
@@ -842,7 +942,8 @@ def which(command:str)->str:
 
     return shutil.which(command)
 
-def command_exists(command:str)->bool:
+
+def command_exists(command: str) -> bool:
     """Does the command exists in the current system / path?
 
     Args:
@@ -854,11 +955,12 @@ def command_exists(command:str)->bool:
 
     path = which(command)
 
-    if (path is None):
+    if path is None:
         return False
     return True
 
-def path_exists(path:str)->bool:
+
+def path_exists(path: str) -> bool:
     """Does the provided path exists? Gives no information on whether
     it is a directory or a file.
 
@@ -870,7 +972,8 @@ def path_exists(path:str)->bool:
     """
     return os.path.exists(path)
 
-def is_directory(path:str)->bool:
+
+def is_directory(path: str) -> bool:
     """Is the provided path a directory.
 
     Args:
@@ -881,7 +984,8 @@ def is_directory(path:str)->bool:
     """
     return os.path.isdir(path)
 
-def is_file(path:str)->bool:
+
+def is_file(path: str) -> bool:
     """Is the provided path a file.
 
     Args:
@@ -892,8 +996,9 @@ def is_file(path:str)->bool:
     """
     return os.path.isfile(path)
 
-def directory_exists(path:str)->bool:
-    """Tests whether the provided path is valid and 
+
+def directory_exists(path: str) -> bool:
+    """Tests whether the provided path is valid and
     also is a directory. Returns false if either condition
     is not fullfilled.
 
@@ -903,12 +1008,13 @@ def directory_exists(path:str)->bool:
     Returns:
         bool: Is a directory with a valid path or not.
     """
-    if (is_directory(path) and path_exists(path)):
+    if is_directory(path) and path_exists(path):
         return True
     return False
 
-def file_exists(path:str)->bool:
-    """Tests whether the provided path is valid and 
+
+def file_exists(path: str) -> bool:
+    """Tests whether the provided path is valid and
     also is a file. Returns false if either condition
     is not fullfilled.
 
@@ -918,7 +1024,7 @@ def file_exists(path:str)->bool:
     Returns:
         bool: Is a file with a valid path or not
     """
-    
-    if (is_file(path) and path_exists(path)):
+
+    if is_file(path) and path_exists(path):
         return True
     return False

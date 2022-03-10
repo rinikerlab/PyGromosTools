@@ -1,12 +1,12 @@
 from typing import Iterable, Union
-from pygromos.files.blocks._general_blocks import TITLE, _generic_field
+from pygromos.files.blocks._general_blocks import _generic_field, TITLE as generic_TITLE
 from pygromos.files.blocks.topology_blocks import _topology_table_block, _topology_block
 
 # Note that while many classes in this file inherit from _topology_block or _topology_table_block
 # there is no obvious connection other than the tabular structure of .qmmm and .top files
 
 # forward declarations
-TITLE: TITLE = TITLE
+TITLE: generic_TITLE = generic_TITLE
 
 
 class qmzone_field(_generic_field):
@@ -34,12 +34,18 @@ class qmzone_field(_generic_field):
         # the first 24 characters or so are ignored by Gromos
         # use spaces instead of tabs and format the resulting
         # table nicely using ljust and rjust
-        str_line = str(self.QMEN).ljust(27) + str(self.QMEI).rjust(6) + str(self.QMEZ).rjust(6) + str(self.QMEB).rjust(6) + "\n"
+        str_line = (
+            str(self.QMEN).ljust(27)
+            + str(self.QMEI).rjust(6)
+            + str(self.QMEZ).rjust(6)
+            + str(self.QMEB).rjust(6)
+            + "\n"
+        )
         return str_line
 
 
 class QMZONE(_topology_table_block):
-    NBON:int = 1
+    NBON: int = 1
     table_header: Iterable[str] = ["QMEN", "QMEI", "QMEZ", "QMEB"]
     table_line_type = qmzone_field
 
@@ -47,7 +53,7 @@ class QMZONE(_topology_table_block):
         super().__init__(content=content, FORCEFIELD=None, MAKETOPVERSION=None)
 
     def block_to_string(self) -> str:
-        result = self.name + "\n" # QMZONE
+        result = self.name + "\n"  # QMZONE
         result += f"{self.comment_char} {self.table_header[0]}".ljust(27)
         for element in self.table_header[1:]:
             result += element.rjust(6)
@@ -56,6 +62,7 @@ class QMZONE(_topology_table_block):
             result += element.to_string()
         result += "END\n"
         return result
+
 
 class QMUNIT(_topology_block):
 
@@ -67,15 +74,23 @@ class QMUNIT(_topology_block):
         Parameters
         ----------
         QLGL : float
-             QM length to Gromos length (e.g. Bohr to nm) 
+             QM length to Gromos length (e.g. Bohr to nm)
         QEGE : float
              QM energy to Gromos energy (e.g. Hartree to kJ / mol)
         QCGC : float
-             Gromos charge to QM charge 
+             Gromos charge to QM charge
         QIGI : float
             QM input units to Gromos input units (e.g. Angstrom to nm)
         """
-    def __init__(self, content:(str or dict or None or __class__), QLGL:float=0.052918, QEGE:float=2625.50, QCGC:float=1.0, QIGI:float=0.1):
+
+    def __init__(
+        self,
+        content: (str or dict or None or __class__),
+        QLGL: float = 0.052918,
+        QEGE: float = 2625.50,
+        QCGC: float = 1.0,
+        QIGI: float = 0.1,
+    ):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
         if content is None:
             self.QLGL = float(QLGL)
@@ -93,38 +108,54 @@ class QMUNIT(_topology_block):
         except IOError as e:
             print("Error while reading QMUNIT block: " + str(e))
 
-    def block_to_string(self) -> str:   
-        result = self.name + "\n" # QMUNIT
+    def block_to_string(self) -> str:
+        result = self.name + "\n"  # QMUNIT
         result += f"{self.comment_char} {self.table_header[0]}".ljust(17)
         for element in self.table_header[1:]:
             result += element.ljust(15)
         result += "\n"
-        result += str(self.QLGL) + self.field_seperator + str(self.QEGE) + self.field_seperator + str(self.QCGC) + self.field_seperator + str(self.QIGI) + self.line_seperator
+        result += (
+            str(self.QLGL)
+            + self.field_seperator
+            + str(self.QEGE)
+            + self.field_seperator
+            + str(self.QCGC)
+            + self.field_seperator
+            + str(self.QIGI)
+            + self.line_seperator
+        )
         result += "END\n"
         return result
 
+
 # There should be only of these blocks in the .qmmm file
 
+
 class MNDOELEMENTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content: (str or dict or None or __class__)):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
+
 
 class TURBOMOLEELEMENTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content: (str or dict or None or __class__)):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
+
 
 class DFTBELEMENTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content: (str or dict or None or __class__)):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
+
 
 class MOPACELEMENTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content: (str or dict or None or __class__)):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
+
 
 class ORCAELEMENTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content: (str or dict or None or __class__)):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
 
+
 class XTBELEMENTS(_topology_block):
-    def __init__(self, content:(str or dict or None or __class__)):
+    def __init__(self, content: (str or dict or None or __class__)):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)

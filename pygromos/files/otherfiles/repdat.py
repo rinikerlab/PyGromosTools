@@ -19,9 +19,10 @@ class Repdat:
 
 class Repdat(_general_gromos_file._general_gromos_file):  #
     """Replica exchange statistic file
-        This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.
+    This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.
 
     """
+
     _gromos_file_ending: str = "repstat"
     SYSTEM: blocks.repex_system
     DATA: pd.DataFrame
@@ -36,7 +37,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
     replica_round_trips: Dict[int, int] = None
 
     def __init__(self, input_path: str):
-        """ Repdat_Constructor
+        """Repdat_Constructor
 
         Parameters
         ----------
@@ -73,7 +74,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         # clean up indices that are -1
         clean_replica_round_trips = {}
         for key, item in replica_round_trips.items():
-            if (item != -1):
+            if item != -1:
                 clean_replica_round_trips.update({key: item})
             else:
                 clean_replica_round_trips.update({key: 0})
@@ -91,27 +92,29 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         None
         """
 
-
         replicas = len(self.system.s)
 
         # follow transitions of one state
-        transition_dict = {x: x for x in range(1, replicas + 1)}  # keeps track of unique id and current replica position.
+        transition_dict = {
+            x: x for x in range(1, replicas + 1)
+        }  # keeps track of unique id and current replica position.
         tmp_dict = {x: x for x in range(1, replicas + 1)}
-        transition_result_dict = {x: {"trial": [], "position": [], "state_pot": []} for x in
-                                  range(1, replicas + 1)}  # init transition dicts following one replica with inital start
+        transition_result_dict = {
+            x: {"trial": [], "position": [], "state_pot": []} for x in range(1, replicas + 1)
+        }  # init transition dicts following one replica with inital start
 
         # go through repda and count
         tmp_run = 1
         for index, row in self.DATA.iterrows():
-            if (tmp_run != row.run):  # new trial
+            if tmp_run != row.run:  # new trial
                 transition_dict = tmp_dict
                 tmp_dict = {x: x for x in range(1, replicas + 1)}
                 tmp_run = row.run
 
             # Exchange Replica
             replica = int(transition_dict[int(row.ID)])  # get the replica unique id
-            ##record Exchange
-            if (row.s == 1):  # only hit when exchange and not partner already exchangeds
+            # record Exchange
+            if row.s == 1:  # only hit when exchange and not partner already exchangeds
                 # new_pos
                 transition_result_dict[replica]["trial"].append(int(row.run))
                 transition_result_dict[replica]["position"].append(int(row.partner))
@@ -134,7 +137,9 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         [df.insert(0, "replicaID", replicaID) for replicaID, df in traces.items()]
         self.transition_traces = pd.concat(traces)
 
-    def _calculate_ndowns_nups_for_each_state(self, time_stride: int = -1, min_state_potential_treshold: float = None, verbose: bool = False):
+    def _calculate_ndowns_nups_for_each_state(
+        self, time_stride: int = -1, min_state_potential_treshold: float = None, verbose: bool = False
+    ):
         """_calculate_ndowns_nups_for_each_state
 
                         calculates the visit counts for each replicaID position (Temperature or s_value).
@@ -164,31 +169,41 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         num_states = len(self.system.state_eir)
         num_replica = len(self.system.s)
 
-        if (time_stride < 1):
+        if time_stride < 1:
             time_stride = 1  # arbitrary window size value, that seems reasonable!  len(replica_traces[list(replica_traces.keys())[0]]["trial"]) * 0.01
 
         extreme_positions = (1, num_replica)  # gives the extreme values of the replicaID dist
-        replica_extreme_position_memory = {replica: -1 for replica in range(1, num_replica + 1)}  # which replicaID visited which extreme?
-        replica_extreme_position_memory.update({1: extreme_positions[0], num_replica: extreme_positions[1]})  # init pos1 and last one
+        replica_extreme_position_memory = {
+            replica: -1 for replica in range(1, num_replica + 1)
+        }  # which replicaID visited which extreme?
+        replica_extreme_position_memory.update(
+            {1: extreme_positions[0], num_replica: extreme_positions[1]}
+        )  # init pos1 and last one
 
         # result vars
         # for easier keeping track of state indices
         state_index = {key: key for key in range(num_states)}
-        if (min_state_potential_treshold != None):  # add an undef state if multiple residues are below threshold.
+        if min_state_potential_treshold is not None:  # add an undef state if multiple residues are below threshold.
             state_index.update({"undefined": num_states})
             num_states += 1
 
-        count_state_perpos = {positionID: {"tot_nup": [0 for state in state_index],
-                                           "tot_ndown": [0 for state in state_index],
-                                           "dt": time_stride,
-                                           "pot_tresh": min_state_potential_treshold,
-                                           "states_index": state_index,
-                                           "dt_nup": [[0 for state in state_index]],
-                                           "dt_ndown": [[0 for state in state_index]]}
-                              for positionID in range(1, num_replica + 1)}
+        count_state_perpos = {
+            positionID: {
+                "tot_nup": [0 for state in state_index],
+                "tot_ndown": [0 for state in state_index],
+                "dt": time_stride,
+                "pot_tresh": min_state_potential_treshold,
+                "states_index": state_index,
+                "dt_nup": [[0 for state in state_index]],
+                "dt_ndown": [[0 for state in state_index]],
+            }
+            for positionID in range(1, num_replica + 1)
+        }
 
-        if verbose: print("general: ", extreme_positions)
-        if verbose: print("time_window_size: ", time_stride)
+        if verbose:
+            print("general: ", extreme_positions)
+        if verbose:
+            print("time_window_size: ", time_stride)
         # if verbose: print("INITIAL")
         # if verbose: print("Initial count_per_repPos\n", count_state_per_position)
         # if verbose: print("Initial current_extremePos_replica\n", replica_extreme_position_memory)
@@ -202,28 +217,36 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             count_state_perpos[position]["dt_ndown"].append([0 for state in state_index])
             count_state_perpos[position]["dt_nup"].append([0 for state in state_index])
 
-            if (position in extreme_positions and replica_extreme_position_memory[replicaID] != position):
+            if position in extreme_positions and replica_extreme_position_memory[replicaID] != position:
                 replica_extreme_position_memory.update({replicaID: position})
                 replica_round_trips[replicaID] += 1
 
             # This replicaID has already seen an extreme pos
-            if (replica_extreme_position_memory[replicaID] in extreme_positions):
+            if replica_extreme_position_memory[replicaID] in extreme_positions:
                 # who is the active state?
-                if (min_state_potential_treshold != None):  # NEW shall no other state be in an undersampling situation?
-                    undersampling_state_energies = [float(val) for val in list(pot_energies.values()) if (float(val) < min_state_potential_treshold)]
-                    if (1 == len(undersampling_state_energies)):  # clean active states - only one state at a time underSampling
+                if (
+                    min_state_potential_treshold is not None
+                ):  # NEW shall no other state be in an undersampling situation?
+                    undersampling_state_energies = [
+                        float(val) for val in list(pot_energies.values()) if (float(val) < min_state_potential_treshold)
+                    ]
+                    if 1 == len(
+                        undersampling_state_energies
+                    ):  # clean active states - only one state at a time underSampling
                         active_state = undersampling_state_energies.index(min(undersampling_state_energies))
                     else:  # no clear state presen skip
                         active_state = state_index["undefined"]
                 else:
-                    undersampling_state_energies = [float(val) for val in list(pot_energies.values())]  # if(float(val) < 200)]
+                    undersampling_state_energies = [
+                        float(val) for val in list(pot_energies.values())
+                    ]  # if(float(val) < 200)]
                     active_state = undersampling_state_energies.index(min(undersampling_state_energies))
 
                 # determine if replicaID comes from top or bottom and add +1 to stat
-                if (replica_extreme_position_memory[replicaID] == extreme_positions[0]):  # coming from top
+                if replica_extreme_position_memory[replicaID] == extreme_positions[0]:  # coming from top
                     count_state_perpos[position]["tot_ndown"][active_state] += 1
                     count_state_perpos[position]["dt_ndown"][-1][active_state] += 1
-                elif (replica_extreme_position_memory[replicaID] == extreme_positions[1]):  # coming_from bottom
+                elif replica_extreme_position_memory[replicaID] == extreme_positions[1]:  # coming_from bottom
                     count_state_perpos[position]["tot_nup"][active_state] += 1
                     count_state_perpos[position]["dt_nup"][-1][active_state] += 1
                 else:  # NEW has never seen any thing
@@ -231,12 +254,22 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             else:
                 continue
 
-        if verbose: print("\nFINAL")
-        if verbose: print("Final extreme_positions", replica_extreme_position_memory)
-        if verbose: print("Final position counts totup/totdown: ",
-                          [(count_state_perpos[pos]["tot_nup"], count_state_perpos[pos]["tot_ndown"]) for pos in count_state_perpos])
-        if verbose: print("Final positoin counts keys", count_state_perpos[1].keys())
-        if verbose: print("counted rountrips per replicaID!: ", replica_round_trips)
+        if verbose:
+            print("\nFINAL")
+        if verbose:
+            print("Final extreme_positions", replica_extreme_position_memory)
+        if verbose:
+            print(
+                "Final position counts totup/totdown: ",
+                [
+                    (count_state_perpos[pos]["tot_nup"], count_state_perpos[pos]["tot_ndown"])
+                    for pos in count_state_perpos
+                ],
+            )
+        if verbose:
+            print("Final positoin counts keys", count_state_perpos[1].keys())
+        if verbose:
+            print("counted rountrips per replicaID!: ", replica_round_trips)
 
         # store trajs in pd.dataframes.
         tmp_counts = self._clean_replica_round_trips(replica_round_trips)
@@ -266,12 +299,16 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
         # define needed stuff for calc:
         replica_traces = self.get_replica_traces()
-        num_states = len(self.system.state_eir)
+        num_states = len(self.system.state_eir)  # noqa: F841
         num_replica = len(self.system.s)
 
         extreme_positions = (1, num_replica)  # gives the extreme values of the replica dist
-        replica_extreme_position_memory = {replica: -1 for replica in range(1, num_replica + 1)}  # which replica visited which extreme?
-        replica_extreme_position_memory.update({1: extreme_positions[0], num_replica: extreme_positions[1]})  # init pos1 and last one
+        replica_extreme_position_memory = {
+            replica: -1 for replica in range(1, num_replica + 1)
+        }  # which replica visited which extreme?
+        replica_extreme_position_memory.update(
+            {1: extreme_positions[0], num_replica: extreme_positions[1]}
+        )  # init pos1 and last one
 
         # as side product easily the round trips can be calculated!
         replica_round_trips = {replica: -1 for replica in range(1, num_replica + 1)}
@@ -279,11 +316,14 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         replica_round_trips[num_replica] = 0
 
         # only go over_extreme postitions.
-        extreme_position_trace = replica_traces.loc[replica_traces.position.isin(extreme_positions)].sort_values("trial")
+        extreme_position_trace = replica_traces.loc[replica_traces.position.isin(extreme_positions)].sort_values(
+            "trial"
+        )
         for index, (replicaID, trial, position, pot_energies) in extreme_position_trace.sort_values(
-                "trial").iterrows():  # go through each replica trace
+            "trial"
+        ).iterrows():  # go through each replica trace
             # print(trial, position, pot_energies)
-            if (position in extreme_positions and replica_extreme_position_memory[replicaID] != position):
+            if position in extreme_positions and replica_extreme_position_memory[replicaID] != position:
                 replica_extreme_position_memory.update({replicaID: position})
                 replica_round_trips[replicaID] += 1
             else:
@@ -308,7 +348,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         # if(self.system != repdat.system):
         #    raise ValueError("The two repdats seem not to come from the same simulation, as the system settings are different!")
 
-        if (not isinstance(repdat, List)):
+        if not isinstance(repdat, List):
             repdat = [repdat]
 
         self.DATA = pd.concat([self.DATA, *map(lambda x: x.DATA, repdat)], ignore_index=True)
@@ -316,14 +356,14 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
     def clean_file_runs(self, starting_trial: float = 1):
         """clean_file
-                    Updates the run numbers to be continous sequential. (for example needed for concatenation)
-            Parameters
-            ----------
-            starting_trial: int, optional
+                Updates the run numbers to be continous sequential. (for example needed for concatenation)
+        Parameters
+        ----------
+        starting_trial: int, optional
 
         """
 
-        self.DATA.run = pd.Series(map(lambda i:  starting_trial+(int(i) // len(self.system.s)), self.DATA.index))
+        self.DATA.run = pd.Series(map(lambda i: starting_trial + (int(i) // len(self.system.s)), self.DATA.index))
 
     def get_replica_traces(self, recalculate: bool = False) -> pd.DataFrame:
         """get_replica_traces
@@ -339,12 +379,13 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             dictionary containing all individual replica_traces
         """
 
-        if (not isinstance(self.transition_traces, pd.DataFrame) or recalculate):
+        if not isinstance(self.transition_traces, pd.DataFrame) or recalculate:
             self._caculate_transition_traces()
         return self.transition_traces
 
-    def get_replicaPosition_dependend_nup_ndown_for_each_state(self, time_window_size: int = -1, potential_treshold: float = None,
-                                                               recalculate: bool = False) -> Dict[int, Dict[str, Union[List or float]]]:
+    def get_replicaPosition_dependend_nup_ndown_for_each_state(
+        self, time_window_size: int = -1, potential_treshold: float = None, recalculate: bool = False
+    ) -> Dict[int, Dict[str, Union[List or float]]]:
         """get_replicaPosition_dependend_nup_ndown_for_each_state
             This function is returning the replica position visit counts by each simulation state, per state.
 
@@ -362,16 +403,25 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             returns a dict for all replica positions and their state visit counts.
         """
 
-        if (not isinstance(self.count_state_per_position, pd.DataFrame) or recalculate):
-            self._calculate_ndowns_nups_for_each_state(time_stride=time_window_size, min_state_potential_treshold=potential_treshold)
+        if not isinstance(self.count_state_per_position, pd.DataFrame) or recalculate:
+            self._calculate_ndowns_nups_for_each_state(
+                time_stride=time_window_size, min_state_potential_treshold=potential_treshold
+            )
         else:
-            if (not all([self.count_state_per_position[1]["dt"] == time_window_size,
-                         self.count_state_per_position[1]["pot_tresh"] == potential_treshold])):
-                self._calculate_ndowns_nups_for_each_state(time_stride=time_window_size, min_state_potential_treshold=potential_treshold)
+            if not all(
+                [
+                    self.count_state_per_position[1]["dt"] == time_window_size,
+                    self.count_state_per_position[1]["pot_tresh"] == potential_treshold,
+                ]
+            ):
+                self._calculate_ndowns_nups_for_each_state(
+                    time_stride=time_window_size, min_state_potential_treshold=potential_treshold
+                )
         return self.count_state_per_position
 
-    def get_replicaPosition_dependend_nup_ndown(self, time_window_size: int = -1, potential_treshold: float = None, recalculate: bool = False) -> \
-    Dict[int, Dict[str, Union[List, pd.DataFrame, dict, float]]]:
+    def get_replicaPosition_dependend_nup_ndown(
+        self, time_window_size: int = -1, potential_treshold: float = None, recalculate: bool = False
+    ) -> Dict[int, Dict[str, Union[List, pd.DataFrame, dict, float]]]:
         """get_replicaPosition_dependend_nup_ndown
                     This function is returning the replica position visit counts by all simulation state.
 
@@ -390,17 +440,20 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             returns a dict for all replica positions and the visit counts.
         """
 
-        if (not isinstance(self.replicas_pos_visit_counts, Dict)):
+        if not isinstance(self.replicas_pos_visit_counts, Dict):
             replicas_pos_visit_counts = {}
-            for replica, statistics in self.get_replicaPosition_dependend_nup_ndown_for_each_state(time_window_size=time_window_size,
-                                                                                                   potential_treshold=potential_treshold,
-                                                                                                   recalculate=recalculate).items():
-                replica_pos_visit_counts = {replica: {"tot_nup": sum(statistics["tot_nup"]),
-                                                      "tot_ndown": sum(statistics["tot_ndown"]),
-                                                      "dt": statistics["dt"],
-                                                      "dt_nup": list(map(lambda x: sum(x), statistics["dt_nup"])),
-                                                      "dt_ndown": list(map(lambda x: sum(x), statistics["dt_ndown"]))}
-                                            }
+            for replica, statistics in self.get_replicaPosition_dependend_nup_ndown_for_each_state(
+                time_window_size=time_window_size, potential_treshold=potential_treshold, recalculate=recalculate
+            ).items():
+                replica_pos_visit_counts = {
+                    replica: {
+                        "tot_nup": sum(statistics["tot_nup"]),
+                        "tot_ndown": sum(statistics["tot_ndown"]),
+                        "dt": statistics["dt"],
+                        "dt_nup": list(map(lambda x: sum(x), statistics["dt_nup"])),
+                        "dt_ndown": list(map(lambda x: sum(x), statistics["dt_ndown"])),
+                    }
+                }
 
                 replicas_pos_visit_counts.update(replica_pos_visit_counts)
         return replicas_pos_visit_counts
@@ -421,7 +474,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
             returns a dict for all replica and their rountrip counts.
         """
 
-        if (not isinstance(self.replica_round_trips, pd.DataFrame) or recalculate):
+        if not isinstance(self.replica_round_trips, pd.DataFrame) or recalculate:
             self._calculate_replica_roundtrips()
         return self.replica_round_trips
 
@@ -443,11 +496,11 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         file.write("#======================\n")
         file.write("#" + self.system.name + "\n")
         file.write("#======================\n")
-        file.writelines(map(lambda x: "#"+x+"\n", str(self.system).split("\n")))
+        file.writelines(map(lambda x: "#" + x + "\n", str(self.system).split("\n")))
         file.write("\n")
         print("DATA COLS: ", self.DATA.columns)
-        out_df = self.DATA.join(pd.DataFrame(self.DATA.pop('state_potentials').tolist()))
-        file.write("\t".join(out_df.columns)+ "\n")
+        out_df = self.DATA.join(pd.DataFrame(self.DATA.pop("state_potentials").tolist()))
+        file.write("\t".join(out_df.columns) + "\n")
         out_df.to_csv(file, sep="\t", header=False, index=False)
         file.close()
 

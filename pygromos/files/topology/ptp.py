@@ -1,7 +1,5 @@
-import warnings
 from copy import deepcopy
 
-import pygromos.files.blocks.pertubation_blocks
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import pertubation_blocks as blocks
 
@@ -9,7 +7,9 @@ from pygromos.files.blocks import pertubation_blocks as blocks
 class Pertubation_topology(_general_gromos_file._general_gromos_file):
 
     _block_order = ["TITLE"]
-    required_blocks = ["TITLE", ]
+    required_blocks = [
+        "TITLE",
+    ]
     TITLE: blocks.TITLE
     MPERATOM: blocks.MPERTATOM
     PERTATOMPARAM: blocks.PERTATOMPARAM
@@ -19,23 +19,21 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
     PERTBONDANGLEH: blocks.PERTBONDANGLEH
     PERTPROPERDIH: blocks.PERTPROPERDIH
 
-    _gromos_file_ending:str = "ptp"
+    _gromos_file_ending: str = "ptp"
 
-    def __init__(self, in_value:(str or dict)=None):
+    def __init__(self, in_value: (str or dict) = None):
         super().__init__(in_value=in_value)
 
-        #TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks
+        # TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks
         for block in sorted(self.get_block_names()):
             setattr(self, block, deepcopy(getattr(self, block)))
 
-
     def read_blocks(self):
-        #parse file into dicts
+        # parse file into dicts
         data = parser.read_ptp(self.path)
 
         for key in data:
             self.add_block(block=data[key])
-
 
 
 class Ptp(Pertubation_topology):

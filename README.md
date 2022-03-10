@@ -1,9 +1,14 @@
-![](.img/PyGromosToolsBanner.png)
+
+![]()
+![PyGromosBanDark](.img/PyGromosToolsLogo_smallerDarkModeWithBorders.png#gh-dark-mode-only)
+![PyGromosBanLight](.img/PyGromosToolsLogo_smallerWithBorders.png#gh-light-mode-only)
 
 Welcome to PyGromosTools
 ==============================
+
 [//]: # (Badges)
 [![CI](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml/badge.svg)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/CI.yaml)
+[![pre-commit](https://github.com/rinikerlab/PyGromosTools/actions/workflows/pre-commit.yml/badge.svg?branch=release3)](https://github.com/rinikerlab/PyGromosTools/actions/workflows/pre-commit.yml)
 [![codecov](https://codecov.io/gh/rinikerlab/PyGromosTools/branch/main/graph/badge.svg?token=R36KJCEKEC)](https://codecov.io/gh/rinikerlab/PyGromosTools)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python)
 [![DOI](https://zenodo.org/badge/323972251.svg)](https://zenodo.org/badge/latestdoi/323972251)
@@ -11,11 +16,11 @@ Welcome to PyGromosTools
 
 General
 -------------
+
    The aim of the module is to bring GROMOS to the Python3 World!
    This repository should make it easier to work with GROMOS in Python and should enable the user to write cleaner, more reliable and adaptable code.
 
    General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.
-
 
 Content
 
@@ -95,6 +100,7 @@ Content
   * easy to automatize and combine with analysis routines
 
   Run on a local machine:
+
   ```python
   from pygromos.files.gromos_system import Gromos_System
   from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem
@@ -107,14 +113,16 @@ Content
   top_path = root_in_dir + "/6J29.top"
   sys_name = "6J29"
 
-# Build gromos System:
+# Build gromos System
+
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                               system_name=sys_name, work_folder=root_in_dir)
-             
+
 # Run Emin
+
   emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                           step_name=step_name, submission_system=subSystem())
-      
+
   ```
 
   Run on LSF-Cluster:
@@ -123,22 +131,23 @@ Content
   from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSystem
   from pygromos.simulations.modules.preset_simulation_modules import emin
 
-# define file paths
+   # define file paths
   root_dir = "./example_files/SD_Simulation"
   root_in_dir = root_dir+"/SD_input"
   cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
   top_path = root_in_dir + "/6J29.top"
   sys_name = "6J29"
 
-# Build gromos System:
+   # Build gromos System:
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                             system_name=sys_name, work_folder=root_in_dir)
-             
+
 # Run Emin
+
   sub_system = subSystem(nmpi=4) # allows parallelization
   emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                           step_name=step_name, submission_system=sub_system)
-      
+
   ```
 
 * Other utilities:
@@ -150,21 +159,24 @@ General Information
 
 ### Specifications
 
- * Python >=3.7:
- * requires: numpy, scipy, pandas, rdkit
+* Python >=3.7:
+* requires: numpy, scipy, pandas, rdkit
 
- * optional: openforcefield for OpenForceField and Serenityff functions
+* optional: openforcefield for OpenForceField and Serenityff functions
 
 ### SETUP
 
 see INSTALL.md file for more informations
+
+### Contributions
+
+For any contribution, please check out the CODE_OF_CONDUCT.md file and the style guide in styleguide.md.
 
 ### Copyright
 
 Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder
 
 ### Acknowledgements
- 
-Project based on the 
-[Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.
 
+Project based on the
+[Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.

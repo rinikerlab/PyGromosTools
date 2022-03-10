@@ -1,4 +1,5 @@
-import pickle, copy
+import pickle
+import copy
 import unittest
 
 from pygromos.files.topology.ptp import Pertubation_topology
@@ -6,10 +7,11 @@ from pygromos.files.topology.ptp import Pertubation_topology
 
 class general_file_tests(unittest.TestCase):
     __test__ = False
+
     def test_pickle(self):
         obj_file = self.class_type(self.in_file_path)
 
-        out_path =self.root_out+"/pickleTest.obj"
+        out_path = self.root_out + "/pickleTest.obj"
         pickle.dump(obj=obj_file, file=open(out_path, "wb"))
 
         obj_loaded = pickle.load(open(out_path, "rb"))
@@ -36,7 +38,7 @@ class general_file_tests(unittest.TestCase):
     def test_equalAfterCopy(self):
         obj_file = self.class_type(self.in_file_path)
         obj_copy = copy.deepcopy(obj_file)
-        #TODO fix
+        # TODO fix
         if isinstance(obj_file, Pertubation_topology):
             pass
         else:

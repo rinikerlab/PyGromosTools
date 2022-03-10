@@ -38,8 +38,19 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.utils.utils import time_wait_s_for_filesystem
 
-class Hvap_calculation():
-    def __init__(self, input_system:Gromos_System or str or Chem.rdchem.Mol, work_folder:str, system_name:str="dummy", forcefield:forcefield_system=forcefield_system(name="54A7"), gromosXX:str=None, gromosPP:str=None, useGromosPlsPls:bool=True, verbose:bool=True) -> None:
+
+class Hvap_calculation:
+    def __init__(
+        self,
+        input_system: Gromos_System or str or Chem.rdchem.Mol,
+        work_folder: str,
+        system_name: str = "dummy",
+        forcefield: forcefield_system = forcefield_system(name="54A7"),
+        gromosXX: str = None,
+        gromosPP: str = None,
+        useGromosPlsPls: bool = True,
+        verbose: bool = True,
+    ) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
 
         Parameters
@@ -51,8 +62,14 @@ class Hvap_calculation():
         if type(input_system) is Gromos_System:
             self.groSys_gas = input_system
         elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
-            self.groSys_gas = Gromos_System(work_folder=work_folder, system_name=system_name, in_smiles=input_system, Forcefield=forcefield, in_imd_path=hvap_input_files.imd_hvap_gas_sd, verbose=verbose)
-            
+            self.groSys_gas = Gromos_System(
+                work_folder=work_folder,
+                system_name=system_name,
+                in_smiles=input_system,
+                Forcefield=forcefield,
+                in_imd_path=hvap_input_files.imd_hvap_gas_sd,
+                verbose=verbose,
+            )
 
         self.work_folder = work_folder
         self.system_name = system_name
@@ -60,15 +77,15 @@ class Hvap_calculation():
         # create folders and structure
         try:
             os.mkdir(path=work_folder)
-        except:
+        except FileExistsError:
             if verbose:
                 warnings.warn("Folder does already exist")
             else:
                 pass
-        self.groSys_gas.work_folder = work_folder + "/" + system_name +"_gas"
+        self.groSys_gas.work_folder = work_folder + "/" + system_name + "_gas"
         self.groSys_gas.rebase_files()
         self.groSys_liq = deepcopy(self.groSys_gas)
-        self.groSys_liq.work_folder = work_folder + "/" + system_name +"_liq"
+        self.groSys_liq.work_folder = work_folder + "/" + system_name + "_liq"
         self.groSys_liq.rebase_files()
 
         self.submissonSystem = subSys()
@@ -76,7 +93,7 @@ class Hvap_calculation():
         self.gromosXX = self.groSys_gas.gromosXX
         self.gromosPP = self.groSys_gas.gromosPP
 
-        # define template imd files (overwritte for specific systems) 
+        # define template imd files (overwritte for specific systems)
         # made for small molecule Hvap calculation
         self.imd_gas_min = Imd(hvap_input_files.imd_hvap_emin)
         self.imd_gas_eq = Imd(hvap_input_files.imd_hvap_gas_sd)
@@ -109,95 +126,137 @@ class Hvap_calculation():
         # create liq top
         if self.useGromosPlsPls:
             try:
-                self.gromosPP.com_top(self.groSys_gas.top.path, topo_multiplier=self.num_molecules, out_top_path=self.work_folder + "/temp.top")
-                tempTop = Top(in_value=self.work_folder+"/temp.top")
-                tempTop.write(out_path=self.work_folder+"temp.top")
-                time.sleep(time_wait_s_for_filesystem) #wait for file to write and close
+                self.gromosPP.com_top(
+                    self.groSys_gas.top.path,
+                    topo_multiplier=self.num_molecules,
+                    out_top_path=self.work_folder + "/temp.top",
+                )
+                tempTop = Top(in_value=self.work_folder + "/temp.top")
+                tempTop.write(out_path=self.work_folder + "temp.top")
+                time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
                 self.groSys_liq.top = tempTop
-            except:
-                self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
+            except Exception as e:
+                self.groSys_liq.top = com_top(
+                    top1=self.groSys_gas.top,
+                    top2=self.groSys_gas.top,
+                    topo_multiplier=[self.num_molecules, 0],
+                    verbose=False,
+                )
+                if self.verbose:
+                    print(e)
         else:
-            self.groSys_liq.top = com_top(top1=self.groSys_gas.top, top2=self.groSys_gas.top, topo_multiplier=[self.num_molecules,0], verbose=False)
-        
+            self.groSys_liq.top = com_top(
+                top1=self.groSys_gas.top,
+                top2=self.groSys_gas.top,
+                topo_multiplier=[self.num_molecules, 0],
+                verbose=False,
+            )
 
-        #create liq cnf
+        # create liq cnf
         if self.useGromosPlsPls:
-            self.gromosPP.ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density, threshold=0.1, layer=True)
+            self.gromosPP.ran_box(
+                in_top_path=self.groSys_gas.top.path,
+                in_cnf_path=self.groSys_gas.cnf.path,
+                out_cnf_path=self.work_folder + "/temp.cnf",
+                nmolecule=self.num_molecules,
+                dens=self.density,
+                threshold=0.1,
+                layer=True,
+            )
         else:
-            ran_box(in_top_path=self.groSys_gas.top.path, in_cnf_path=self.groSys_gas.cnf.path, out_cnf_path=self.work_folder+"/temp.cnf", nmolecule=self.num_molecules, dens=self.density)
-        time.sleep(time_wait_s_for_filesystem) #wait for file to write and close
-        self.groSys_liq.cnf = Cnf(in_value=self.work_folder+"/temp.cnf")
+            ran_box(
+                in_top_path=self.groSys_gas.top.path,
+                in_cnf_path=self.groSys_gas.cnf.path,
+                out_cnf_path=self.work_folder + "/temp.cnf",
+                nmolecule=self.num_molecules,
+                dens=self.density,
+            )
+        time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
+        self.groSys_liq.cnf = Cnf(in_value=self.work_folder + "/temp.cnf")
 
-        #reset liq system
+        # reset liq system
         self.groSys_liq.rebase_files()
 
     def run_gas(self):
         self.groSys_gas.rebase_files()
 
-        #min
+        # min
         print(self.groSys_gas.work_folder)
-        sys_emin_gas, jobID = simulation(in_gromos_simulation_system=self.groSys_gas,
-                                         override_project_dir=self.groSys_gas.work_folder,
-                                         step_name="1_emin",
-                                         in_imd_path=self.imd_gas_min,
-                                         submission_system=self.submissonSystem,
-                                         analysis_script=simulation_analysis.do,
-                                         verbose=self.verbose)
+        sys_emin_gas, jobID = simulation(
+            in_gromos_simulation_system=self.groSys_gas,
+            override_project_dir=self.groSys_gas.work_folder,
+            step_name="1_emin",
+            in_imd_path=self.imd_gas_min,
+            submission_system=self.submissonSystem,
+            analysis_script=simulation_analysis.do,
+            verbose=self.verbose,
+        )
         print(self.groSys_gas.work_folder)
 
-        #eq
-        sys_eq_gas, jobID = simulation(in_gromos_simulation_system=sys_emin_gas,
-                                       override_project_dir=self.groSys_gas.work_folder,
-                                       step_name="2_eq",
-                                       in_imd_path=self.imd_gas_eq,
-                                       submission_system=self.submissonSystem,
-                                       analysis_script=simulation_analysis.do,
-                                       verbose=self.verbose)
+        # eq
+        sys_eq_gas, jobID = simulation(
+            in_gromos_simulation_system=sys_emin_gas,
+            override_project_dir=self.groSys_gas.work_folder,
+            step_name="2_eq",
+            in_imd_path=self.imd_gas_eq,
+            submission_system=self.submissonSystem,
+            analysis_script=simulation_analysis.do,
+            verbose=self.verbose,
+        )
 
-        #sd
-        sys_sd_gas, jobID = simulation(in_gromos_simulation_system=sys_eq_gas,
-                                       override_project_dir=self.groSys_gas.work_folder,
-                                       step_name="3_sd",
-                                       in_imd_path=self.imd_gas_sd,
-                                       submission_system=self.submissonSystem,
-                                       analysis_script=simulation_analysis.do,
-                                       verbose=self.verbose)
+        # sd
+        sys_sd_gas, jobID = simulation(
+            in_gromos_simulation_system=sys_eq_gas,
+            override_project_dir=self.groSys_gas.work_folder,
+            step_name="3_sd",
+            in_imd_path=self.imd_gas_sd,
+            submission_system=self.submissonSystem,
+            analysis_script=simulation_analysis.do,
+            verbose=self.verbose,
+        )
 
         self.groSys_gas_final = sys_sd_gas
-
 
     def run_liq(self):
         self.groSys_liq.rebase_files()
 
-        #minsys_emin_liq, jobID
-        sys_emin_liq, jobID = simulation(in_gromos_simulation_system=self.groSys_liq,
-                                         override_project_dir=self.groSys_liq.work_folder,
-                                         step_name="1_emin",
-                                         in_imd_path=self.imd_liq_min,
-                                         submission_system=self.submissonSystem,
-                                         analysis_script=simulation_analysis.do,
-                                         verbose=self.verbose)
+        # minsys_emin_liq, jobID
+        sys_emin_liq, jobID = simulation(
+            in_gromos_simulation_system=self.groSys_liq,
+            override_project_dir=self.groSys_liq.work_folder,
+            step_name="1_emin",
+            in_imd_path=self.imd_liq_min,
+            submission_system=self.submissonSystem,
+            analysis_script=simulation_analysis.do,
+            verbose=self.verbose,
+        )
 
-        #eq
-        sys_eq_liq, jobID = simulation(in_gromos_simulation_system=sys_emin_liq,
-                                       override_project_dir=self.groSys_liq.work_folder,
-                                       step_name="2_eq",
-                                       in_imd_path=self.imd_liq_eq,
-                                       submission_system=self.submissonSystem,
-                                       analysis_script=simulation_analysis.do,
-                                       verbose=self.verbose)
+        # eq
+        sys_eq_liq, jobID = simulation(
+            in_gromos_simulation_system=sys_emin_liq,
+            override_project_dir=self.groSys_liq.work_folder,
+            step_name="2_eq",
+            in_imd_path=self.imd_liq_eq,
+            submission_system=self.submissonSystem,
+            analysis_script=simulation_analysis.do,
+            verbose=self.verbose,
+        )
 
-        #md
-        sys_md_liq, jobID = simulation(in_gromos_simulation_system=sys_eq_liq,
-                                       override_project_dir=self.groSys_liq.work_folder,
-                                       step_name="3_sd",
-                                       in_imd_path=self.imd_liq_md,
-                                       submission_system=self.submissonSystem,
-                                       analysis_script=simulation_analysis.do,
-                                       verbose=self.verbose)
+        # md
+        sys_md_liq, jobID = simulation(
+            in_gromos_simulation_system=sys_eq_liq,
+            override_project_dir=self.groSys_liq.work_folder,
+            step_name="3_sd",
+            in_imd_path=self.imd_liq_md,
+            submission_system=self.submissonSystem,
+            analysis_script=simulation_analysis.do,
+            verbose=self.verbose,
+        )
 
         self.groSys_liq_final = sys_md_liq
 
     def calc_hvap(self) -> float:
-        h_vap = self.groSys_liq_final.tre.get_Hvap(gas_traj=self.groSys_gas_final.tre, nMolecules=self.num_molecules, temperature=self.temperature)
+        h_vap = self.groSys_liq_final.tre.get_Hvap(
+            gas_traj=self.groSys_gas_final.tre, nMolecules=self.num_molecules, temperature=self.temperature
+        )
         return h_vap

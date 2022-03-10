@@ -9,7 +9,7 @@ Make sure to have the following packages installed:
 
 ```bash
 #with pip installer:
-pip install <package_name> 
+pip install <package_name>
 #or if you use conda:
 conda install <package_name>
 ```

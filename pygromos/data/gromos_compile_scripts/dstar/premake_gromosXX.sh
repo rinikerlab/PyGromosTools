@@ -21,4 +21,3 @@ CXX=${CXXFLAG}
 CC=${CCFLAG}
 #OPTIONS
 ../configure --disable-shared --enable-debug --with-gsl=/opt/dstar/progs/gcc-4.8.5/gsl-2.1/ --with-fftw=/opt/dstar/progs/gcc-4.8.5/fftw-3.3.4/ --disable-openmp --enable-mpi CXX=/opt/dstar/progs/gcc-4.8.5/openmpi-1.10.2/bin/mpiCC CC=/opt/dstar/progs/gcc-4.8.5/openmpi-1.10.2/bin/mpicc --prefix=${buildPATH}
-
