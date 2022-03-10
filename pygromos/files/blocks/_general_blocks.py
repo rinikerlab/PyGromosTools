@@ -1,7 +1,6 @@
 import copy
 from typing import Iterable, List
 from numbers import Number
-from numbers import Number
 
 # FIELDS
 
@@ -89,7 +88,11 @@ class _generic_gromos_block:
 
     def block_to_string(self) -> str:
         result = self.name + self.line_seperator
-        if isinstance(self.content, list) and len(self.content) > 0 and all([isinstance(x, (str, Number)) for x in self.content]):
+        if (
+            isinstance(self.content, list)
+            and len(self.content) > 0
+            and all([isinstance(x, (str, Number)) for x in self.content])
+        ):
             result += self.field_seperator.join(map(str, self.content)) + self.line_seperator
         elif (
             isinstance(self.content, list)

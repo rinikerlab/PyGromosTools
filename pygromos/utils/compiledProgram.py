@@ -17,15 +17,17 @@ class _compiled_program:
     _bin: str
     _force_bin_present: bool
     _dont_check_binary: bool
-    
+
     _found_binary_dir: Dict[str, bool]  # found? binary dir
     _found_binary: Dict[str, bool]  # found? binary
     _found_binary_paths: Dict[str, str]  # the found binary paths.
 
-    def __init__(self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _dont_check_binary:bool = False) -> Union[str, None]:
+    def __init__(
+        self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _dont_check_binary: bool = False
+    ) -> Union[str, None]:
         """
             The  _compiled_program parent class can be used, to ensure on runtime, that certain binaries are present.
-                        
+
         Parameters
         ----------
         in_bin_dir : Union[str, None]
@@ -53,15 +55,16 @@ class _compiled_program:
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
 
-
     def __getstate__(self):
         """
         preperation for pickling:
         remove the non trivial pickling parts
         """
-        return {"_bin": self._bin,
-                "_dont_check_binary": self._dont_check_binary,
-                "_force_bin_present": self._force_bin_present}
+        return {
+            "_bin": self._bin,
+            "_dont_check_binary": self._dont_check_binary,
+            "_force_bin_present": self._force_bin_present,
+        }
 
     def __setstate__(self, state):
         self.__dict__ = state
@@ -69,11 +72,10 @@ class _compiled_program:
         self._found_binary = {}
         self._found_binary_paths = {}
         self._function_binary = {}
-        
+
         # Check initial status of binaries
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
-
 
     """
         properties
@@ -164,13 +166,15 @@ class _compiled_program:
         IOError
             If the binary dir was not found and _dont_check_bin was False (default: False)
         """
-        if (in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]) or self._dont_check_binary:  # did we already check this
+        if (
+            in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]
+        ) or self._dont_check_binary:  # did we already check this
             return "" if (in_bin_dir is None) else in_bin_dir
 
         elif isinstance(in_bin_dir, str) and in_bin_dir != "" and bash.directory_exists(in_bin_dir):
             self._found_binary_dir[in_bin_dir] = True
-            if(not in_bin_dir.endswith("/")):
-                in_bin_dir+= "/"
+            if not in_bin_dir.endswith("/"):
+                in_bin_dir += "/"
             return in_bin_dir
 
         elif not self._force_bin_present and (in_bin_dir is None or in_bin_dir == "" or in_bin_dir == "None"):
@@ -241,7 +245,7 @@ class _compiled_program:
 
         @functools.wraps(func)
         def control_binary(*args, **kwargs) -> any:
-            #print("binaryChecker", func.__name__, args, kwargs)
+            # print("binaryChecker", func.__name__, args, kwargs)
 
             func_signature = inspect.signature(func)
             if "_binary_name" in kwargs:
@@ -267,7 +271,7 @@ class _compiled_program:
         remove : bool, optional
             remove all wrappers?, by default False
         """
-        if(self._dont_check_binary):
+        if self._dont_check_binary:
             pass
         else:
             v = {}

@@ -7,7 +7,9 @@ from pygromos.files._basics import _general_gromos_file
 
 
 class _gromosClass(_compiled_program):
-    def __init__(self, in_bin_dir: Union[str, None], dummy: bool = False, _dont_check_binary:bool = False) -> Union[str, None]:
+    def __init__(
+        self, in_bin_dir: Union[str, None], dummy: bool = False, _dont_check_binary: bool = False
+    ) -> Union[str, None]:
         """
           This parent class contains wrappers for gromos functionalities.
           E.g. gromosTypeConverter converts a passed gromos obj (Cnf, Top etc.) to a string path, such it can be passed to the comand line tools.
@@ -31,7 +33,7 @@ class _gromosClass(_compiled_program):
     def _gromosTypeConverter(func: Callable) -> Callable:
         """
             This decorator can be used to automatically convert gromos files to the str path, where this obj, was written to.
-            
+
         Parameters
         ----------
         func: Callable
@@ -46,7 +48,7 @@ class _gromosClass(_compiled_program):
 
         @functools.wraps(func)
         def convert_pyGromos_types(self, *args, **kwargs):
-            #print("Converter1: ", func.__name__, args, kwargs)
+            # print("Converter1: ", func.__name__, args, kwargs)
 
             # no key-word parameters
             nargs = []
@@ -74,7 +76,7 @@ class _gromosClass(_compiled_program):
                         )
                     kwargs[k] = v.path
 
-            #print("Converter2: ", func.__name__, self, nargs, kwargs)
+            # print("Converter2: ", func.__name__, self, nargs, kwargs)
             return func(self, *nargs, **kwargs)
 
         return convert_pyGromos_types

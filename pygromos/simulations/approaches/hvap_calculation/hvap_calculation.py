@@ -24,7 +24,6 @@ import warnings
 import time
 
 from pygromos.gromos.pyGromosPP.ran_box import ran_box
-from pygromos.gromos.pyGromosPP.com_top import com_top
 from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.approaches.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
@@ -33,7 +32,6 @@ from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as s
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
-from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.utils.utils import time_wait_s_for_filesystem
@@ -136,11 +134,11 @@ class Hvap_calculation:
                 time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
                 self.groSys_liq.top = tempTop
             except Exception as e:
-                self.groSys_liq.top = self.groSys_gas.top *self.num_molecules
+                self.groSys_liq.top = self.groSys_gas.top * self.num_molecules
                 if self.verbose:
                     print(e)
         else:
-            self.groSys_liq.top = self.groSys_gas.top *self.num_molecules
+            self.groSys_liq.top = self.groSys_gas.top * self.num_molecules
 
         # create liq cnf
         if self.useGromosPlsPls:

@@ -135,7 +135,6 @@ class Top(_general_gromos_file._general_gromos_file):
         if verbose:
             print("molecule number shift: " + str(mresShift))
 
-
         for atom in top.SOLUTEATOM.content:
             retTop.add_new_soluteatom(
                 ATNM=atnmShift + atom.ATNM,
@@ -232,15 +231,15 @@ class Top(_general_gromos_file._general_gromos_file):
 
         # add SOLUTEMOLECULES
         for solmol in top.SOLUTEMOLECULES.NSP:
-            retTop.add_new_SOLUTEMOLECULES(number=str(solmol + atnmShift))
+            retTop.add_new_SOLUTEMOLECULES(number=solmol + atnmShift)
 
         # add TEMPERATUREGROUPS
         for solmol in top.TEMPERATUREGROUPS.NSP:
-            retTop.add_new_TEMPERATUREGROUPS(number=str(solmol + atnmShift))
+            retTop.add_new_TEMPERATUREGROUPS(number=solmol + atnmShift)
 
         # add PRESSUREGROUPS
         for solmol in top.PRESSUREGROUPS.NSP:
-            retTop.add_new_PRESSUREGROUPS(number=str(solmol + atnmShift))
+            retTop.add_new_PRESSUREGROUPS(number=solmol + atnmShift)
 
         return retTop
 
@@ -366,18 +365,18 @@ class Top(_general_gromos_file._general_gromos_file):
         if hasattr(top, "SOLUTEMOLECULES"):
             if unifyGroups and top.SOLUTEMOLECULES.NSM == 1:
                 retTop.SOLUTEMOLECULES.NSM = 1
-                retTop.SOLUTEMOLECULES.NSP = [sum(top.SOLUTEMOLECULES.NSP) * n_muliplication ]
+                retTop.SOLUTEMOLECULES.NSP = [sum(top.SOLUTEMOLECULES.NSP) * n_muliplication]
             else:
                 retTop.SOLUTEMOLECULES.NSM = top.SOLUTEMOLECULES.NSM * n_muliplication
                 for i in range(n_loops):
-                    groups = [j + atnmShift*(i+1)  for j in top.SOLUTEMOLECULES.NSP]
+                    groups = [j + atnmShift * (i + 1) for j in top.SOLUTEMOLECULES.NSP]
                     retTop.SOLUTEMOLECULES.NSP.extend(groups)
 
-        #So far there was no reason to destinguish between SOLUTEMOLECULES and the following blocks
+        # So far there was no reason to destinguish between SOLUTEMOLECULES and the following blocks
         if hasattr(top, "TEMPERATUREGROUPS"):
             retTop.TEMPERATUREGROUPS.NSM = retTop.SOLUTEMOLECULES.NSM
             retTop.TEMPERATUREGROUPS.NSP = retTop.SOLUTEMOLECULES.NSP
-          
+
         if hasattr(top, "PRESSUREGROUPS"):
             retTop.PRESSUREGROUPS.NSM = retTop.SOLUTEMOLECULES.NSM
             retTop.PRESSUREGROUPS.NSP = retTop.SOLUTEMOLECULES.NSP
@@ -1027,39 +1026,27 @@ class Top(_general_gromos_file._general_gromos_file):
 
     def add_new_TEMPERATUREGROUPS(self, number: str, verbose=False):
         if not hasattr(self, "TEMPERATUREGROUPS"):
-            defaultContent = ["0", "Dummy"]
+            defaultContent = ["0", 0]
             self.add_block(blocktitle="TEMPERATUREGROUPS", content=defaultContent, verbose=verbose)
-            self.TEMPERATUREGROUPS.content.append([number])
-            self.TEMPERATUREGROUPS.content.remove(["Dummy"])
-        else:
-            if len(self.TEMPERATUREGROUPS.content) < 1:
-                self.TEMPERATUREGROUPS.content.append(["0"])
-            self.TEMPERATUREGROUPS.content.append([number])
-        self.TEMPERATUREGROUPS.content[0][0] = str(int(self.TEMPERATUREGROUPS.content[0][0]) + 1)
+            self.TEMPERATUREGROUPS.NSP.remove([0])
+        self.TEMPERATUREGROUPS.NSM += 1
+        self.TEMPERATUREGROUPS.NSP.append(number)
 
     def add_new_SOLUTEMOLECULES(self, number: str, verbose=False):
         if not hasattr(self, "SOLUTEMOLECULES"):
             defaultContent = ["0", "Dummy"]
             self.add_block(blocktitle="SOLUTEMOLECULES", content=defaultContent, verbose=verbose)
-            self.SOLUTEMOLECULES.content.append([number])
             self.SOLUTEMOLECULES.content.remove(["Dummy"])
-        else:
-            if len(self.SOLUTEMOLECULES.content) < 1:
-                self.SOLUTEMOLECULES.content.append(["0"])
-            self.SOLUTEMOLECULES.content.append([number])
-        self.SOLUTEMOLECULES.content[0][0] = str(int(self.SOLUTEMOLECULES.content[0][0]) + 1)
+        self.SOLUTEMOLECULES.NSM += 1
+        self.SOLUTEMOLECULES.NSP.append(number)
 
     def add_new_PRESSUREGROUPS(self, number: str, verbose=False):
         if not hasattr(self, "PRESSUREGROUPS"):
-            defaultContent = ["0", "Dummy"]
+            defaultContent = ["0", 0]
             self.add_block(blocktitle="PRESSUREGROUPS", content=defaultContent, verbose=verbose)
-            self.PRESSUREGROUPS.content.append([number])
-            self.PRESSUREGROUPS.content.remove(["Dummy"])
-        else:
-            if len(self.PRESSUREGROUPS.content) < 1:
-                self.PRESSUREGROUPS.content.append(["0"])
-            self.PRESSUREGROUPS.content.append([number])
-        self.PRESSUREGROUPS.content[0][0] = str(int(self.PRESSUREGROUPS.content[0][0]) + 1)
+            self.PRESSUREGROUPS.NSP.remove([0])
+        self.PRESSUREGROUPS.NSM += 1
+        self.PRESSUREGROUPS.NSP.append(number)
 
     def get_mass(self) -> float:
         """

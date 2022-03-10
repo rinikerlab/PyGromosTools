@@ -68,7 +68,7 @@ skip = {
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
 }
-exclude_pickle = { }
+exclude_pickle = {}
 
 
 class Gromos_System:
@@ -93,7 +93,9 @@ class Gromos_System:
     _single_multibath: bool
     _single_energy_group: bool
 
-    _gromos_noBinary_checks: bool = False   # if this class Variable is set to True, all binary checks will be removed from the systems.
+    _gromos_noBinary_checks: bool = (
+        False  # if this class Variable is set to True, all binary checks will be removed from the systems.
+    )
     _gromosPP_bin_dir: Union[None, str]
     _gromosXX_bin_dir: Union[None, str]
     _gromosPP: GromosPP
@@ -1235,7 +1237,7 @@ class Gromos_System:
 
         @functools.wraps(func)
         def _findGromosSystemAttributes(*args, **kwargs):
-            #print("attribute finder", func.__name__, args, kwargs)
+            # print("attribute finder", func.__name__, args, kwargs)
 
             # collect input parameters present in system/ replace them with
             tmp_files = []
@@ -1260,7 +1262,7 @@ class Gromos_System:
             args = list(filter(lambda x: isinstance(x, self.gromosPP.__class__), args))
 
             # execute function
-            #print("attibuteFinder 2:", func.__name__, args, kwargs)
+            # print("attibuteFinder 2:", func.__name__, args, kwargs)
             r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
@@ -1301,7 +1303,7 @@ class Gromos_System:
 
         @functools.wraps(func)
         def _updateGromosSystem(*args, **kwargs):
-            #print("updater", func.__name__, args, kwargs)
+            # print("updater", func.__name__, args, kwargs)
 
             # collect out_paths
             update_dict = {}
@@ -1312,9 +1314,9 @@ class Gromos_System:
                     update_dict.update({k: attr_key})
 
             # execute function
-            #print("updater2", func.__name__, args, kwargs)
+            # print("updater2", func.__name__, args, kwargs)
             r = func(*args, **kwargs)
-            #print("updater3", func.__name__, args, kwargs)
+            # print("updater3", func.__name__, args, kwargs)
 
             # update attribute states and remove tmp files.
             for k in update_dict:
@@ -1378,7 +1380,7 @@ class Gromos_System:
                 out_top_path=top_cl,
             )
             self.top += Top(top_cl)
-            #bash.remove_file(top_cl)
+            # bash.remove_file(top_cl)
 
             return r
 

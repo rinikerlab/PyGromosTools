@@ -3028,9 +3028,9 @@ class LJPARAMETERS(_topology_table_block):
 
 
 class SOLUTEMOLECULES(_topology_block):
-    NSM:int
-    NSP:List[int]
-    
+    NSM: int
+    NSP: List[int]
+
     def __init__(
         self,
         content: (str or dict or None or __class__),
@@ -3038,33 +3038,36 @@ class SOLUTEMOLECULES(_topology_block):
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
-        
-        if(len(self.content) == 1 and len(self.content[0])-1 == int(self.content[0][0])):
+
+        if len(self.content) == 1 and len(self.content[0]) - 1 == int(self.content[0][0]):
             self.NSM = int(self.content[0][0])
             self.NSP = [int(x) for x in self.content[0][1:]]
-        elif(len(self.content) > 1):
+        elif len(self.content) > 1:
             self.NSM = int(self.content[0][0])
             self.NSP = []
-            [self.NSP.extend(list(map(int, t))) if(isinstance(t, list)) else self.NSP.extend([int(t)]) for t in self.content[1:]]
+            [
+                self.NSP.extend(list(map(int, t))) if (isinstance(t, list)) else self.NSP.extend([int(t)])
+                for t in self.content[1:]
+            ]
         else:
             raise ValueError("SOLUTEMOLECULES has not the correct number of fields.")
 
-        #Clean COntent
+        # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
-    
+
     def block_to_string(self) -> str:
-        #Clean COntent
+        # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
-        
+
         return super().block_to_string()
 
 
 class TEMPERATUREGROUPS(_topology_block):
-    NSM:int
-    NSP:List[int]
-    
+    NSM: int
+    NSP: List[int]
+
     def __init__(
         self,
         content: (str or dict or None or __class__),
@@ -3073,31 +3076,34 @@ class TEMPERATUREGROUPS(_topology_block):
     ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if(len(self.content) == 1 and len(self.content[0])-1 == int(self.content[0][0])):
+        if len(self.content) == 1 and len(self.content[0]) - 1 == int(self.content[0][0]):
             self.NSM = int(self.content[0][0])
             self.NSP = [int(x) for x in self.content[0][1:]]
-        elif(len(self.content) > 1):
+        elif len(self.content) > 1:
             self.NSM = int(self.content[0][0])
             self.NSP = []
-            [self.NSP.extend(list(map(int, t))) if(isinstance(t, list)) else self.NSP.extend([int(t)]) for t in self.content[1:]]
+            [
+                self.NSP.extend(list(map(int, t))) if (isinstance(t, list)) else self.NSP.extend([int(t)])
+                for t in self.content[1:]
+            ]
         else:
             raise ValueError("SOLUTEMOLECULES has not the correct number of fields.")
-        #Clean COntent
+        # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
-        
+
     def block_to_string(self) -> str:
-        #Clean COntent
+        # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
-        
+
         return super().block_to_string()
-    
-    
+
+
 class PRESSUREGROUPS(_topology_block):
-    NSM:int
-    NSP:List[int]
-    
+    NSM: int
+    NSP: List[int]
+
     def __init__(
         self,
         content: (str or dict or None or __class__),
@@ -3106,26 +3112,31 @@ class PRESSUREGROUPS(_topology_block):
     ):
         super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
-        if(len(self.content) == 1 and len(self.content[0])-1 == int(self.content[0][0])):
+        if len(self.content) == 1 and len(self.content[0]) - 1 == int(self.content[0][0]):
             self.NSM = int(self.content[0][0])
             self.NSP = [int(x) for x in self.content[0][1:]]
-        elif(len(self.content) > 1):
+        elif len(self.content) > 1:
             self.NSM = int(self.content[0][0])
             self.NSP = []
-            [self.NSP.extend(list(map(int, t))) if(isinstance(t, list)) else self.NSP.extend([int(t)]) for t in self.content[1:]]
+            [
+                self.NSP.extend(list(map(int, t))) if (isinstance(t, list)) else self.NSP.extend([int(t)])
+                for t in self.content[1:]
+            ]
         else:
             raise ValueError("SOLUTEMOLECULES has not the correct number of fields.")
-        
-        #Clean COntent
+
+        # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
-           
+
     def block_to_string(self) -> str:
-        #Clean COntent
+        # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
-        
-        return super().block_to_string() 
+
+        return super().block_to_string()
+
+
 class LJEXCEPTIONS(_topology_table_block):
     NEX: int
     table_header: Iterable[str] = ["AT1", "AT2", "C12", "C6"]
