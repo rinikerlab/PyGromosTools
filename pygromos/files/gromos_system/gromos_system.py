@@ -263,7 +263,6 @@ class Gromos_System:
             self.cnf = Cnf(in_value=self.mol)
             # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
 
-            print(self.top)
             if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
                 if self.gromosPP is not None and self.gromosPP._check_binary("pdb2g96"):
                     try:
@@ -1229,7 +1228,7 @@ class Gromos_System:
 
         @functools.wraps(func)
         def _findGromosSystemAttributes(*args, **kwargs):
-            print("attribute finder", func.__name__, args, kwargs)
+            #print("attribute finder", func.__name__, args, kwargs)
 
             # collect input parameters present in system/ replace them with
             tmp_files = []
@@ -1254,7 +1253,7 @@ class Gromos_System:
             args = list(filter(lambda x: isinstance(x, self.gromosPP.__class__), args))
 
             # execute function
-            print("attibuteFinder 2:", func.__name__, args, kwargs)
+            #print("attibuteFinder 2:", func.__name__, args, kwargs)
             r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
@@ -1295,7 +1294,7 @@ class Gromos_System:
 
         @functools.wraps(func)
         def _updateGromosSystem(*args, **kwargs):
-            print("updater", func.__name__, args, kwargs)
+            #print("updater", func.__name__, args, kwargs)
 
             # collect out_paths
             update_dict = {}
@@ -1306,9 +1305,9 @@ class Gromos_System:
                     update_dict.update({k: attr_key})
 
             # execute function
-            print("updater2", func.__name__, args, kwargs)
+            #print("updater2", func.__name__, args, kwargs)
             r = func(*args, **kwargs)
-            print("updater3", func.__name__, args, kwargs)
+            #print("updater3", func.__name__, args, kwargs)
 
             # update attribute states and remove tmp files.
             for k in update_dict:
@@ -1372,7 +1371,7 @@ class Gromos_System:
                 out_top_path=top_cl,
             )
             self.top += Top(top_cl)
-            bash.remove_file(top_cl)
+            #bash.remove_file(top_cl)
 
             return r
 

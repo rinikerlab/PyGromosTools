@@ -32,7 +32,7 @@ class _gromosClass(_compiled_program):
 
         @functools.wraps(func)
         def convert_pyGromos_types(self, *args, **kwargs):
-            print("Converter1: ", func.__name__, args, kwargs)
+            #print("Converter1: ", func.__name__, args, kwargs)
 
             # no key-word parameters
             nargs = []
@@ -60,7 +60,7 @@ class _gromosClass(_compiled_program):
                         )
                     kwargs[k] = v.path
 
-            print("Converter2: ", func.__name__, self, nargs, kwargs)
+            #print("Converter2: ", func.__name__, self, nargs, kwargs)
             return func(self, *nargs, **kwargs)
 
         return convert_pyGromos_types

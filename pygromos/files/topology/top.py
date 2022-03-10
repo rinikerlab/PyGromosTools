@@ -230,15 +230,8 @@ class Top(_general_gromos_file._general_gromos_file):
                 includesH=True,
             )
 
-
-        print("solMol", top.SOLUTEMOLECULES.content)
-        print("soluteATom last", retTop.SOLUTEATOM.content[-1])
-        print("atnmShift", atnmShift)
-        print("mresShift", mresShift)
-
         # add SOLUTEMOLECULES
         for solmol in top.SOLUTEMOLECULES.NSP:
-            print("solMolline", solmol , solmol)
             retTop.add_new_SOLUTEMOLECULES(number=str(solmol + atnmShift))
 
         # add TEMPERATUREGROUPS

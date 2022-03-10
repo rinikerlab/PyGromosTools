@@ -182,7 +182,7 @@ class Hvap_calculation:
 
         # min
         print(self.groSys_gas.work_folder)
-        sys_emin_gas, jobID = simulation(
+        sys_emin_gas = simulation(
             in_gromos_simulation_system=self.groSys_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="1_emin",
@@ -194,7 +194,7 @@ class Hvap_calculation:
         print(self.groSys_gas.work_folder)
 
         # eq
-        sys_eq_gas, jobID = simulation(
+        sys_eq_gas = simulation(
             in_gromos_simulation_system=sys_emin_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="2_eq",
@@ -205,7 +205,7 @@ class Hvap_calculation:
         )
 
         # sd
-        sys_sd_gas, jobID = simulation(
+        sys_sd_gas = simulation(
             in_gromos_simulation_system=sys_eq_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="3_sd",
@@ -221,7 +221,7 @@ class Hvap_calculation:
         self.groSys_liq.rebase_files()
 
         # minsys_emin_liq, jobID
-        sys_emin_liq, jobID = simulation(
+        sys_emin_liq = simulation(
             in_gromos_simulation_system=self.groSys_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="1_emin",
@@ -232,7 +232,7 @@ class Hvap_calculation:
         )
 
         # eq
-        sys_eq_liq, jobID = simulation(
+        sys_eq_liq = simulation(
             in_gromos_simulation_system=sys_emin_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="2_eq",
@@ -243,7 +243,7 @@ class Hvap_calculation:
         )
 
         # md
-        sys_md_liq, jobID = simulation(
+        sys_md_liq = simulation(
             in_gromos_simulation_system=sys_eq_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="3_sd",
