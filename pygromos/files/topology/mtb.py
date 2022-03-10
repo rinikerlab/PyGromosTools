@@ -5,21 +5,23 @@ Description:
 Author: Marc Lehner
 """
 
-from typing import List
+from typing import Dict, List
 from pygromos.files._basics import _general_gromos_file
 from pygromos.files.blocks import mtb_blocks as blocks
 
 
 class Mtb(_general_gromos_file._general_gromos_file):
     _gromos_file_ending: str = "mtb"
-    MTBUILDBLSOLUTE_list: List[blocks.MTBUILDBLSOLUTE]
-    MTBUILDBLSOLVENT_list: List[blocks.MTBUILDBLSOLVENT]
-    MTBUILDBLEND_list: List[blocks.MTBUILDBLEND]
+    mtb_solutes: Dict[blocks.MTBUILDBLSOLUTE]
+    mtb_solvents: Dict[blocks.MTBUILDBLSOLVENT]
+    mtb_ends: Dict[blocks.MTBUILDBLEND]
+    all_res_names: List
 
     def __init__(self, in_value: (str or dict or None), _future_file: bool = False):
         self.mtb_solutes = {}
         self.mtb_solvents = {}
         self.mtb_ends = {}
+        self.all_res_names = []
         super().__init__(in_value, _future_file)
 
     def __str__(self):
@@ -59,6 +61,7 @@ class Mtb(_general_gromos_file._general_gromos_file):
         self.mtb_solutes = {b.RNME: b for b in MTBUILDBLSOLUTE_list}
         self.mtb_solvents = {b.RNMES: b for b in MTBUILDBLSOLVENT_list}
         self.mtb_ends = {b.RNME: b for b in MTBUILDBLEND_list}
+        self.all_res_names = list(self.mtb_solutes.keys()) + list(self.mtb_solvents.keys()) + list(self.mtb_ends.keys())
         return block_dict
 
     def read_mtb_file(self, path: str) -> List:

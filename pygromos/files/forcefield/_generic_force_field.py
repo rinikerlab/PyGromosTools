@@ -18,9 +18,12 @@ from pygromos.files.topology.top import Top
 
 
 class _generic_force_field:
-    def __init__(self, name: str = "generic", path_to_files: List(str) = None, auto_import: bool = True):
+    def __init__(
+        self, name: str = "generic", path_to_files: List(str) = None, auto_import: bool = True, verbose: bool = False
+    ):
         self.name = name
         self.path_to_files = path_to_files
+        self.verbose = verbose
         if auto_import:
             self.auto_import_ff()
 

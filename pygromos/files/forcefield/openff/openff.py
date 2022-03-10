@@ -21,8 +21,10 @@ from pygromos.data import topology_templates
 
 
 class OpenFF(_generic_force_field):
-    def __init__(self, name: str = "generic", path_to_files: List(str) = None, auto_import: bool = True):
-        super().__init__(name, path_to_files, auto_import)
+    def __init__(
+        self, name: str = "openff", path_to_files: List(str) = None, auto_import: bool = True, verbose: bool = False
+    ):
+        super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
         self.atomic_number_dict = collections.defaultdict(str)
         self.gromosTop = None
 
@@ -80,11 +82,18 @@ class OpenFF(_generic_force_field):
             self.gromosTop._orig_file_path = os.getcwd()
 
         # create molecule
+        self._init_mol_for_convert(mol=mol)
+
+        # convert molecule
+        self.convert()
+        return self.gromosTop
+
+    def _init_mol_for_convert(self, mol: str = None):
         if mol is None:
             raise ValueError("No molecule given!")
         elif isinstance(mol, Molecule):
             self.openFFmolecule = mol
-        elif isinstance(mol, Chem.Mol):
+        elif isinstance(mol, Chem.rdchem.Mol):
             self.openFFmolecule = Molecule.from_rdkit(self.mol)
         elif isinstance(mol, str):
             self.openFFmolecule = Molecule.from_smiles(mol)
@@ -101,10 +110,6 @@ class OpenFF(_generic_force_field):
         # 1-3 / 1-4 exclusion lists
         self.exclusionList13 = dict()
         self.exclusionList14 = dict()
-
-        # convert molecule
-        self.convert()
-        return self.gromosTop
 
     def convert(self):
         # print OpenFF warning in Title
