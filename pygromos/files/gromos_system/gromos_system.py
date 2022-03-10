@@ -127,6 +127,10 @@ class Gromos_System:
             With this class all files can be read-in or the files can be automatically generated from smiles.
             Additionally to that can all gromos++ functions be used from the Gromos System, so system generation can be easily accomplished.
 
+            if you want to remove all binary checks, do the following:
+            >>> from pygromos.files.gromos_system.gromos_system import Gromos_System
+            >>> Gromos_System._gromos_noBinary_checks = True
+            >>> sys = Gromos_System()
 
         Parameters
         ----------
