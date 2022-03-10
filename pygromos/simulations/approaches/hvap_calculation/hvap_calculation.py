@@ -106,7 +106,7 @@ class Hvap_calculation:
         # used to multiply the single molecule system
         # made for small molecule Hvap calculation
         self.num_molecules = 512
-        self.density = 1000
+        self.density = 500
         self.temperature = 298.15
 
         self.groSys_gas_final = None
@@ -222,8 +222,7 @@ class Hvap_calculation:
         self.groSys_gas_final = sys_sd_gas
 
     def run_liq(self):
-        
-        print(self.groSys_liq)
+
         self.groSys_liq.imd = self.imd_liq_min
         self.groSys_liq.prepare_for_simulation()
         self.groSys_liq.rebase_files()
