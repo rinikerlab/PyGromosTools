@@ -34,14 +34,16 @@ class _gromosPPbase(_gromosClass):
 
     _isValid: bool = False
 
-    def __init__(self, gromosPP_bin_dir: str = None, _dont_check_binary:bool = False, verbose: bool = False):
+    def __init__(self, gromosPP_bin_dir: Union[str, None] = None, _dont_check_binary:bool = False, verbose: bool = False):
         """
         Constructing a gromosPP object.
 
         Parameters
         ----------
-            bin :   str, optional
+            bin :   Union[str, None], optional
                 This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
+            _dont_check_binary : bool, optional
+                This flag removes the checks of the binary presence for this obj. This can make sense if system access is slow!, by default False - checks will be made
         """
         # lazy me - doc text for functions:
         functions_text = "\n    Methods:\n    ---------\n" + "\n".join(

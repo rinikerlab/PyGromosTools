@@ -22,7 +22,24 @@ class _compiled_program:
     _found_binary: Dict[str, bool]  # found? binary
     _found_binary_paths: Dict[str, str]  # the found binary paths.
 
-    def __init__(self, in_bin_dir: str, _force_bin_present: bool = True, _dont_check_binary:bool = False) -> Union[str, None]:
+    def __init__(self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _dont_check_binary:bool = False) -> Union[str, None]:
+        """
+            The  _compiled_program parent class can be used, to ensure on runtime, that certain binaries are present.
+                        
+        Parameters
+        ----------
+        in_bin_dir : Union[str, None]
+            directory that should contain the binaries. If None, the assumption is made, that the path is part of the PATH variable.
+        _force_bin_present : bool, optional
+            if True, the check_binary or check_binary_folder will throw errors, if they don't find the targets, by default True
+        _dont_check_binary : bool, optional
+            This is a kill switch for all checks of this class., by default False
+
+        Returns
+        -------
+        Union[str, None]
+            _description_
+        """
         # init structures
         self._force_bin_present = _force_bin_present
         self._found_binary_dir = {}

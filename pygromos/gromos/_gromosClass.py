@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Callable
 from pygromos.utils.compiledProgram import _compiled_program
 
 import os
@@ -7,26 +7,40 @@ from pygromos.files._basics import _general_gromos_file
 
 
 class _gromosClass(_compiled_program):
-    def __init__(self, in_bin_dir: str, dummy: bool = False, _dont_check_binary:bool = False) -> Union[str, None]:
+    def __init__(self, in_bin_dir: Union[str, None], dummy: bool = False, _dont_check_binary:bool = False) -> Union[str, None]:
+        """
+          This parent class contains wrappers for gromos functionalities.
+          E.g. gromosTypeConverter converts a passed gromos obj (Cnf, Top etc.) to a string path, such it can be passed to the comand line tools.
 
-        """
-        for func in dir(self):
-            if callable(getattr(self, func)) and not func.startswith("__") and not func.startswith("_"):
-                setattr(self, func, self._gromosTypeConverter(getattr(self, func)))
-                pass
-        """
-        super().__init__(in_bin_dir, dummy, _dont_check_binary=_dont_check_binary)
-
-    def _gromosTypeConverter(func) -> callable:
-        """
-            This decorator can be used to automatically convert
         Parameters
         ----------
-        func
+        in_bin_dir : Union[str, None]
+            directory containing binaries of the gromos program.
+        dummy : bool, optional
+            For dummy executions, will not throw errors on binary check fails, by default False
+        _dont_check_binary : bool, optional
+            This flag removes the checks of the binary presence for this obj. This can make sense if system access is slow!, by default False - checks will be made
 
         Returns
         -------
-        callable
+        Union[str, None]
+            _description_
+        """
+        super().__init__(in_bin_dir, dummy, _dont_check_binary=_dont_check_binary)
+
+    def _gromosTypeConverter(func: Callable) -> Callable:
+        """
+            This decorator can be used to automatically convert gromos files to the str path, where this obj, was written to.
+            
+        Parameters
+        ----------
+        func: Callable
+            function to be decorated
+
+        Returns
+        -------
+        Callable
+            decorated function
 
         """
 
