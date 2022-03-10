@@ -3052,6 +3052,13 @@ class SOLUTEMOLECULES(_topology_block):
         #Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
+    
+    def block_to_string(self) -> str:
+        #Clean COntent
+        self.content = [[self.NSM]]
+        self.content.extend([[x] for x in self.NSP])
+        
+        return super().block_to_string()
 
 
 class TEMPERATUREGROUPS(_topology_block):
@@ -3078,6 +3085,15 @@ class TEMPERATUREGROUPS(_topology_block):
         #Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
+        
+    def block_to_string(self) -> str:
+        #Clean COntent
+        self.content = [[self.NSM]]
+        self.content.extend([[x] for x in self.NSP])
+        
+        return super().block_to_string()
+    
+    
 class PRESSUREGROUPS(_topology_block):
     NSM:int
     NSP:List[int]
@@ -3103,7 +3119,13 @@ class PRESSUREGROUPS(_topology_block):
         #Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
+           
+    def block_to_string(self) -> str:
+        #Clean COntent
+        self.content = [[self.NSM]]
+        self.content.extend([[x] for x in self.NSP])
         
+        return super().block_to_string() 
 class LJEXCEPTIONS(_topology_table_block):
     NEX: int
     table_header: Iterable[str] = ["AT1", "AT2", "C12", "C6"]

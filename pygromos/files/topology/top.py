@@ -128,7 +128,7 @@ class Top(_general_gromos_file._general_gromos_file):
             ].ATNM  # Number of atoms found in main top. Shift secondary top atoms accordingly
             mresShift = retTop.SOLUTEATOM.content[-1].MRES  # Number of molecules found in main top.
         else:
-            atnmShift = 1
+            atnmShift = 0
             mresShift = 0
         if verbose:
             print("atom number shift: " + str(atnmShift))
@@ -251,7 +251,7 @@ class Top(_general_gromos_file._general_gromos_file):
 
         # catch simple cases and create return top
         if n_muliplication == 0:
-            return TopType(in_value=None)
+            return self.__class__(in_value=None)
         retTop = deepcopy(self)
         if n_muliplication == 1:
             return retTop
@@ -364,33 +364,23 @@ class Top(_general_gromos_file._general_gromos_file):
                     retTop.DIHEDRALH.content.append(deepcopy(angle))
 
         if hasattr(top, "SOLUTEMOLECULES"):
-            if unifyGroups and int(top.SOLUTEMOLECULES.content[0][0]) == 1:
-                retTop.SOLUTEMOLECULES.content[1][0] = str(int(retTop.SOLUTEMOLECULES.content[1][0]) * n_muliplication)
+            if unifyGroups and top.SOLUTEMOLECULES.NSM == 1:
+                retTop.SOLUTEMOLECULES.NSM = 1
+                retTop.SOLUTEMOLECULES.NSP = [sum(top.SOLUTEMOLECULES.NSP) * n_muliplication ]
             else:
-                retTop.SOLUTEMOLECULES.content[0][0] = str(int(top.SOLUTEMOLECULES.content[0][0]) * n_muliplication)
+                retTop.SOLUTEMOLECULES.NSM = top.SOLUTEMOLECULES.NSM * n_muliplication
                 for i in range(n_loops):
-                    groups = [str(int(i) + atnmShift) for i in top.SOLUTEMOLECULES.content[1]]
-                    retTop.SOLUTEMOLECULES.content.append(groups)
+                    groups = [j + atnmShift*(i+1)  for j in top.SOLUTEMOLECULES.NSP]
+                    retTop.SOLUTEMOLECULES.NSP.extend(groups)
 
+        #So far there was no reason to destinguish between SOLUTEMOLECULES and the following blocks
         if hasattr(top, "TEMPERATUREGROUPS"):
-            if unifyGroups and int(top.TEMPERATUREGROUPS.content[0][0]) == 1:
-                retTop.TEMPERATUREGROUPS.content[1][0] = str(
-                    int(retTop.TEMPERATUREGROUPS.content[1][0]) * n_muliplication
-                )
-            else:
-                retTop.TEMPERATUREGROUPS.content[0][0] = str(int(top.TEMPERATUREGROUPS.content[0][0]) * n_muliplication)
-                for i in range(n_loops):
-                    groups = [str(int(i) + atnmShift) for i in top.TEMPERATUREGROUPS.content[1]]
-                    retTop.TEMPERATUREGROUPS.content.append(groups)
-
+            retTop.TEMPERATUREGROUPS.NSM = retTop.SOLUTEMOLECULES.NSM
+            retTop.TEMPERATUREGROUPS.NSP = retTop.SOLUTEMOLECULES.NSP
+          
         if hasattr(top, "PRESSUREGROUPS"):
-            if unifyGroups and int(top.PRESSUREGROUPS.content[0][0]) == 1:
-                retTop.PRESSUREGROUPS.content[1][0] = str(int(retTop.PRESSUREGROUPS.content[1][0]) * n_muliplication)
-            else:
-                retTop.PRESSUREGROUPS.content[0][0] = str(int(top.PRESSUREGROUPS.content[0][0]) * n_muliplication)
-                for i in range(n_loops):
-                    groups = [str(int(i) + atnmShift) for i in top.PRESSUREGROUPS.content[1]]
-                    retTop.PRESSUREGROUPS.content.append(groups)
+            retTop.PRESSUREGROUPS.NSM = retTop.SOLUTEMOLECULES.NSM
+            retTop.PRESSUREGROUPS.NSP = retTop.SOLUTEMOLECULES.NSP
 
         # return everything
         return retTop

@@ -105,7 +105,7 @@ class Hvap_calculation:
         # parameters for liquid simulation
         # used to multiply the single molecule system
         # made for small molecule Hvap calculation
-        self.num_molecules = 512
+        self.num_molecules = 600
         self.density = 500
         self.temperature = 298.15
 
@@ -136,21 +136,11 @@ class Hvap_calculation:
                 time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
                 self.groSys_liq.top = tempTop
             except Exception as e:
-                self.groSys_liq.top = com_top(
-                    top1=self.groSys_gas.top,
-                    top2=self.groSys_gas.top,
-                    topo_multiplier=[self.num_molecules, 0],
-                    verbose=False,
-                )
+                self.groSys_liq.top = self.groSys_gas.top *self.num_molecules
                 if self.verbose:
                     print(e)
         else:
-            self.groSys_liq.top = com_top(
-                top1=self.groSys_gas.top,
-                top2=self.groSys_gas.top,
-                topo_multiplier=[self.num_molecules, 0],
-                verbose=False,
-            )
+            self.groSys_liq.top = self.groSys_gas.top *self.num_molecules
 
         # create liq cnf
         if self.useGromosPlsPls:
@@ -180,11 +170,8 @@ class Hvap_calculation:
     def run_gas(self):
 
         # min
-        print(self.groSys_gas.work_folder)
-        self.groSys_gas.imd = self.imd_liq_eq
+        self.groSys_gas.imd = self.imd_gas_min
         self.groSys_gas.prepare_for_simulation()
-        self.groSys_gas.rebase_files()
-
         sys_emin_gas = simulation(
             in_gromos_simulation_system=self.groSys_gas,
             override_project_dir=self.groSys_gas.work_folder,
@@ -193,10 +180,9 @@ class Hvap_calculation:
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
-        print(self.groSys_gas.work_folder)
 
         # eq
-        sys_emin_gas.imd = self.imd_liq_eq
+        sys_emin_gas.imd = self.imd_gas_eq
         sys_emin_gas.prepare_for_simulation()
         sys_eq_gas = simulation(
             in_gromos_simulation_system=sys_emin_gas,
@@ -208,7 +194,7 @@ class Hvap_calculation:
         )
 
         # sd
-        sys_eq_gas.imd = self.imd_liq_eq
+        sys_eq_gas.imd = self.imd_gas_eq
         sys_eq_gas.prepare_for_simulation()
         sys_sd_gas = simulation(
             in_gromos_simulation_system=sys_eq_gas,
@@ -223,11 +209,9 @@ class Hvap_calculation:
 
     def run_liq(self):
 
+        # minsys_emin_liq, jobID
         self.groSys_liq.imd = self.imd_liq_min
         self.groSys_liq.prepare_for_simulation()
-        self.groSys_liq.rebase_files()
-
-        # minsys_emin_liq, jobID
         sys_emin_liq = simulation(
             in_gromos_simulation_system=self.groSys_liq,
             override_project_dir=self.groSys_liq.work_folder,
