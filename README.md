@@ -177,6 +177,7 @@ For any contribution, please check out the CODE_OF_CONDUCT.md file and the style
 Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder
 
 ### Acknowledgements
+Many thanks to @robinwuff for the logo design!
 
 Project based on the
 [Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.
