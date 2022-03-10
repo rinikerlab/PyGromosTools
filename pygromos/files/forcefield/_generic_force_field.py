@@ -14,6 +14,8 @@ Author: Marc Lehner
 
 from typing import List
 
+from pygromos.files.topology.top import Top
+
 
 class _generic_force_field:
     def __init__(self, name: str = "generic", path_to_files: List(str) = None, auto_import: bool = True):
@@ -25,5 +27,5 @@ class _generic_force_field:
     def auto_import_ff(self):
         raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")
 
-    def create_top(self, top_file_path: str = None, mol: str = None):
+    def create_top(self, in_top: Top = None, mol: str = None) -> Top:
         raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")
