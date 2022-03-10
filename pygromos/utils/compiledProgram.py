@@ -16,18 +16,20 @@ class _compiled_program:
 
     _bin: str
     _force_bin_present: bool
-
+    _dont_check_binary: bool
+    
     _found_binary_dir: Dict[str, bool]  # found? binary dir
     _found_binary: Dict[str, bool]  # found? binary
     _found_binary_paths: Dict[str, str]  # the found binary paths.
 
-    def __init__(self, in_bin_dir: str, _force_bin_present: bool = True) -> Union[str, None]:
+    def __init__(self, in_bin_dir: str, _force_bin_present: bool = True, _dont_check_binary:bool = False) -> Union[str, None]:
         # init structures
         self._force_bin_present = _force_bin_present
         self._found_binary_dir = {}
         self._found_binary = {}
         self._found_binary_paths = {}
         self._function_binary = {}
+        self._dont_check_binary = _dont_check_binary
 
         # Check initial status of binaries
         self._bin = self._check_binary_dir(in_bin_dir=in_bin_dir)
@@ -41,6 +43,7 @@ class _compiled_program:
         remove the non trivial pickling parts
         """
         return {"_bin": self._bin,
+                "_dont_check_binary": self._dont_check_binary,
                 "_force_bin_present": self._force_bin_present}
 
     def __setstate__(self, state):
@@ -101,7 +104,7 @@ class _compiled_program:
             If the binary dir was not found and _dont_check_bin was False (default: False)
         """
 
-        if test_program in self._found_binary and self._found_binary[test_program]:
+        if (test_program in self._found_binary and self._found_binary[test_program]) or self._dont_check_binary:
             return True
 
         elif self.bin is not None and bash.command_exists(self._bin + test_program):
@@ -144,7 +147,7 @@ class _compiled_program:
         IOError
             If the binary dir was not found and _dont_check_bin was False (default: False)
         """
-        if in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]:  # did we already check this
+        if (in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]) or self._dont_check_binary:  # did we already check this
             return "" if (in_bin_dir is None) else in_bin_dir
 
         elif isinstance(in_bin_dir, str) and in_bin_dir != "" and bash.directory_exists(in_bin_dir):
@@ -247,10 +250,13 @@ class _compiled_program:
         remove : bool, optional
             remove all wrappers?, by default False
         """
-        v = {}
-        for binary, func in self._function_binary.items():
-            if remove:  # or self._found_binary[binary]:
-                v[func] = getattr(self.__class__, func)
-            else:
-                v[func] = self._check_binaries_decorator(getattr(self, func))
-        self.__dict__.update(v)
+        if(self._dont_check_binary):
+            pass
+        else:
+            v = {}
+            for binary, func in self._function_binary.items():
+                if remove:  # or self._found_binary[binary]:
+                    v[func] = getattr(self.__class__, func)
+                else:
+                    v[func] = self._check_binaries_decorator(getattr(self, func))
+            self.__dict__.update(v)

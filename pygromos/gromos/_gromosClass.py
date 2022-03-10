@@ -7,7 +7,7 @@ from pygromos.files._basics import _general_gromos_file
 
 
 class _gromosClass(_compiled_program):
-    def __init__(self, in_bin_dir: str, dummy: bool = False) -> Union[str, None]:
+    def __init__(self, in_bin_dir: str, dummy: bool = False, _dont_check_binary:bool = False) -> Union[str, None]:
 
         """
         for func in dir(self):
@@ -15,7 +15,7 @@ class _gromosClass(_compiled_program):
                 setattr(self, func, self._gromosTypeConverter(getattr(self, func)))
                 pass
         """
-        super().__init__(in_bin_dir, dummy)
+        super().__init__(in_bin_dir, dummy, _dont_check_binary=_dont_check_binary)
 
     def _gromosTypeConverter(func) -> callable:
         """

@@ -93,6 +93,7 @@ class Gromos_System:
     _single_multibath: bool
     _single_energy_group: bool
 
+    _gromos_noBinary_checks: bool = False
     _gromosPP_bin_dir: Union[None, str]
     _gromosXX_bin_dir: Union[None, str]
     _gromosPP: GromosPP
@@ -700,10 +701,11 @@ class Gromos_System:
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
+            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _dont_check_binary=self._gromos_noBinary_checks)
             self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
+            self._gromosXX._dont_check_binary = self._gromos_noBinary_checks
             self._gromosXX_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -715,10 +717,11 @@ class Gromos_System:
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
+            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _dont_check_binary=self._gromos_noBinary_checks)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
             self._gromosPP = input_value
+            self._gromosPP._dont_check_binary = self._gromos_noBinary_checks
             self._gromosPP_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
