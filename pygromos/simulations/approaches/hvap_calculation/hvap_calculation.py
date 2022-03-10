@@ -103,8 +103,8 @@ class Hvap_calculation:
         # parameters for liquid simulation
         # used to multiply the single molecule system
         # made for small molecule Hvap calculation
-        self.num_molecules = 600
-        self.density = 500
+        self.num_molecules = 700
+        self.density = 700
         self.temperature = 298.15
 
         self.groSys_gas_final = None
