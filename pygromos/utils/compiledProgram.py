@@ -34,6 +34,27 @@ class _compiled_program:
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
 
+
+    def __getstate__(self):
+        """
+        preperation for pickling:
+        remove the non trivial pickling parts
+        """
+        return {"_bin": self._bin,
+                "_force_bin_present": self._force_bin_present}
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+        self._found_binary_dir = {}
+        self._found_binary = {}
+        self._found_binary_paths = {}
+        self._function_binary = {}
+        
+        # Check initial status of binaries
+        self._check_all_binaries()
+        self.__wrap_programms_with_binary_checks()
+
+
     """
         properties
     """

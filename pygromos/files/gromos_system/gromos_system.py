@@ -68,12 +68,7 @@ skip = {
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
 }
-exclude_pickle = {
-    "GromosPP": GromosPP,
-    "GromosXX": GromosXX,
-    "_gromosPP": GromosPP,
-    "_gromosXX": GromosXX,
-}
+exclude_pickle = { }
 
 
 class Gromos_System:
