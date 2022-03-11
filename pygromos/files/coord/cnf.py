@@ -1,5 +1,4 @@
 import copy
-import os
 
 from collections import namedtuple, defaultdict
 from typing import Dict, List, Tuple, Union
@@ -101,7 +100,6 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
-
 
     """
         manipulate/analysis of coordinates

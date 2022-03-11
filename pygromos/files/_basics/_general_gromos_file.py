@@ -30,7 +30,7 @@ class _general_gromos_file:
     _block_order: List[str] = []
     _future_file: bool
 
-    def __init__(self, in_value: Union[str, dict,  None], _future_file: bool = False):
+    def __init__(self, in_value: Union[str, dict, None], _future_file: bool = False):
         self._future_file = _future_file
         if isinstance(in_value, str):
             self.path = self._orig_file_path = in_value
@@ -43,13 +43,13 @@ class _general_gromos_file:
 
         elif isinstance(type(in_value), __class__):
             raise NotImplementedError("This variant is not implemented")
-        
+
         elif in_value is None:
             self.path = None
             self._orig_file_path = None
             self._future_file = True
             # print("Empty class")
-            
+
         else:
             raise ValueError("The given type of input could not be translated in " + str(__class__) + ".__init__")
 
