@@ -225,10 +225,10 @@ class _GromosXX(_gromosClass):
             log_file.write("\tRUN:\tSUCESSFUL\n")
         else:
             log_file.write("\tRUN:\tFAILED\n")
-            
+
             omd_file_content = open(log_file_path, "r").read_lines()
-            if(len(omd_file_content)>0):
-                print("\t"+"\n\t".join(omd_file_content))
+            if len(omd_file_content) > 0:
+                print("\t" + "\n\t".join(omd_file_content))
             else:
                 print("\t None")
             failed = True
