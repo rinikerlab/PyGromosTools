@@ -276,32 +276,6 @@ class LSF(_SubmissionSystem):
         sub_job.jobID = job_id
         return int(job_id)
 
-    def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
-        name = self.__class__.__name__
-        if var_name is None:
-            var_name = var_prefixes + name
-
-        gen_cmd = "#Generate " + name + "\n"
-        gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
-        gen_cmd += (
-            var_name
-            + " = "
-            + name
-            + "_obj(submission="
-            + str(self.submission)
-            + ", verbose="
-            + str(self.verbose)
-            + ", nmpi="
-            + str(self.nmpi)
-            + ", nomp="
-            + str(self.nomp)
-            + ", max_storage="
-            + str(self.max_storage)
-            + ', job_duration="'
-            + str(self.job_duration)
-            + '")\n\n'
-        )
-        return gen_cmd
 
     """
         Job Queue Managment

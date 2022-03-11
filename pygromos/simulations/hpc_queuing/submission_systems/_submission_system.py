@@ -1,5 +1,7 @@
-from typing import List, Union
+import inspect
 import pandas as pd
+
+from typing import List, Union
 
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
@@ -111,12 +113,12 @@ class _SubmissionSystem:
         parameters_str = ", ".join(params)
 
         gen_cmd = "#Generate " + name + "\n"
-        gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
+        gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_class" + "\n"
         gen_cmd += (
             var_name
             + " = "
             + name
-            + "_obj("
+            + "_class("
             + parameters_str
             + '")\n\n'
         )
