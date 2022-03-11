@@ -166,7 +166,7 @@ def work(
         imd_file.INITIALISE.NTICOM = 0
         imd_file.INITIALISE.NTISTI = 0
 
-        if is_stochastic_dynamics_sim or is_vacuum: #Bschroed: does this make sense?
+        if is_stochastic_dynamics_sim or is_vacuum:  # Bschroed: does this make sense?
             imd_file.INITIALISE.NTISHI = 1
 
     # Write out:

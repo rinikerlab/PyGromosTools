@@ -3033,7 +3033,7 @@ class _generic_topology_groups(_topology_block):
 
     def __init__(
         self,
-        content: Union[str, dict]=None,
+        content: Union[str, dict] = None,
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
         NSM: int = None,
@@ -3048,7 +3048,9 @@ class _generic_topology_groups(_topology_block):
             else:
                 self.NSM = len(NSP)
             self.NSP = list(map(int, NSP))
-            super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=[str(NSM)]+list(map(str, NSP)))
+            super().__init__(
+                FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=[str(NSM)] + list(map(str, NSP))
+            )
         else:
             super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 

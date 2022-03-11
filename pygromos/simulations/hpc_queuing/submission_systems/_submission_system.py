@@ -103,25 +103,18 @@ class _SubmissionSystem:
             var_name = var_prefixes + name
 
         params = []
-        for key in  inspect.signature(self.__init__).parameters:
-            if(hasattr(self, key)):
+        for key in inspect.signature(self.__init__).parameters:
+            if hasattr(self, key):
                 param = getattr(self, key)
-                if(isinstance(param, str)):
-                    params.append(key+"='"+str(getattr(self, key))+"'")
+                if isinstance(param, str):
+                    params.append(key + "='" + str(getattr(self, key)) + "'")
                 else:
-                    params.append(key+"="+str(getattr(self, key)))
+                    params.append(key + "=" + str(getattr(self, key)))
         parameters_str = ", ".join(params)
 
         gen_cmd = "#Generate " + name + "\n"
         gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_class" + "\n"
-        gen_cmd += (
-            var_name
-            + " = "
-            + name
-            + "_class("
-            + parameters_str
-            + '")\n\n'
-        )
+        gen_cmd += var_name + " = " + name + "_class(" + parameters_str + '")\n\n'
         return gen_cmd
 
     def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
