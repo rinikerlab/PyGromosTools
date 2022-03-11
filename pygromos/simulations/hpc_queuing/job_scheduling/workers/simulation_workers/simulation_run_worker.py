@@ -236,6 +236,16 @@ def work(
         print("\nFailed during simulations: ", file=sys.stderr)
         print(type(err), file=sys.stderr)
         print(err.args, file=sys.stderr)
+        print("GROMOS OUTPUT:")
+                
+        omd_outs = glob.glob(out_dir+"/"+out_prefix+"*.omd")
+        if(len(omd_outs)>1):
+            omd_file_content = open(omd_outs[0], "r").read_lines()
+            if(len(omd_file_content)>1):
+                print("\t"+"\n\t".join(omd_file_content))
+            else:
+                print("\t None")
+            
         exit(1)
     if md_failed:
         print("\nFailed during simulations: \n Checkout: \n " + str(tmp_prefix) + ".omd", file=sys.stderr)
