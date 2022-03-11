@@ -34,6 +34,7 @@ def simulation(
     reinitialize_every_run=False,
     analysis_script: callable = simulation_analysis.do,
     analysis_control_dict: dict = None,
+    _work_dir:str = None,
     _gromos_noBinary_checks: bool = False,
     verbose: bool = True,
     verbose_lvl: int = 1,
@@ -178,6 +179,10 @@ def simulation(
                 "verbose_lvl": verbose_lvl,
             }
         )
+        if(work_dir is not None):
+            MD_job_vars.update({"work_dir": _work_dir})
+            
+            
         try:
             in_scheduler_script_path = utils.write_job_script(  # noqa: F841
                 out_script_path=step_dir + "/schedule_MD_job.py",
@@ -198,19 +203,7 @@ def simulation(
             # warnings.warn("Skipping active submission, as result CNF was found: \n"+out_analysis_cnf)
             last_jobID = 0
         else:
-            last_jobID = simulation_scheduler.do(
-                in_simSystem=gromos_system,
-                out_dir_path=out_simulation_dir,
-                simulation_run_num=simulation_runs,
-                equilibration_run_num=equilibration_runs,
-                submission_system=submission_system,
-                previous_job_ID=previous_simulation_run,
-                initialize_first_run=initialize_first_run,
-                reinitialize_every_run=reinitialize_every_run,
-                analysis_script_path=in_analysis_script_path,
-                verbose=verbose,
-                verbose_lvl=verbose_lvl,
-            )
+            last_jobID = simulation_scheduler.do(**MD_job_vars)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not submit the commands\n\t" + "\n\t".join(map(str, err.args)))
