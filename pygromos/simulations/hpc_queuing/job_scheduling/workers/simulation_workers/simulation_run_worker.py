@@ -147,7 +147,7 @@ def work(
         if hasattr(imd_file, "MULTIBATH"):
             imd_file.INITIALISE.NTINHT = 0 if (imd_file.MULTIBATH.ALGORITHM <= 1) else 1
 
-        imd_file.INITIALISE.NTISHI = 0 if (in_cnf_path is None or hasattr(cnf_file, "LATTICESHIFT")) else 1
+        imd_file.INITIALISE.NTISHI = 0 if (cnf_file._future_file or hasattr(cnf_file, "LATTICESHIFT")) else 1
 
         imd_file.INITIALISE.NTIRTC = 0
         imd_file.INITIALISE.NTICOM = 0
@@ -166,7 +166,7 @@ def work(
         imd_file.INITIALISE.NTICOM = 0
         imd_file.INITIALISE.NTISTI = 0
 
-        if is_stochastic_dynamics_sim or is_vacuum:
+        if is_stochastic_dynamics_sim or is_vacuum: #Bschroed: does this make sense?
             imd_file.INITIALISE.NTISHI = 1
 
     # Write out:
