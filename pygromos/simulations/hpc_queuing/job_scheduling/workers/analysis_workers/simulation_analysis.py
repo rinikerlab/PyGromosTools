@@ -6,7 +6,6 @@ import shutil
 import math
 from typing import Dict, Union, List
 from collections import OrderedDict
-from pygromos.gromos import gromosPP
 from pygromos.files.coord import cnf
 from pygromos.files.trajectory import trc, tre, trg
 from pygromos.utils import bash
@@ -59,11 +58,6 @@ def do(
     -------
 
     """
-    # data = {}
-    if gromosPP_bin_dir is not None:
-        gromos = gromosPP.GromosPP(gromosPP_bin_dir)
-        bash.command_exists(gromos.make_top())
-
     if not os.path.exists(out_analysis_dir) and not os.path.isdir(out_analysis_dir):
         bash.make_folder(out_analysis_dir)
     if not isinstance(control_dict, dict):
@@ -227,34 +221,6 @@ def project_concatenation(
                         out_trg_file += tmp_trg
                 out_trg_file.write(output_path=out_traj_path)
 
-    """
-
-    if (control_dict["convert_trcs"]):
-        print("\tStart Trc Conversion")
-        # wait for async job creating the trcs.
-        if (submitted_trc_job):
-            p_trc.wait()
-
-        # get files:
-        final_trc_files = list(
-            sorted(glob.glob(out_folder + "/*.trc*"), key=lambda x: int(x.split("_")[-1].split(".")[0])))
-
-        if (n_processes > 1):
-            out_dcd = manager.dict()
-            distributed_jobs = [
-                (n, range(n, num_replicas, n_processes), final_trc_files, in_topology_path, gromosPP_bin_dir,
-                 out_dcd,
-                 fit_traj_to_mol, verbose) for
-                n in range(n_processes)]
-            p_conv = p.starmap_async(_thread_worker_conv_trc, distributed_jobs)
-        else:
-            out_dcd = {}
-            _thread_worker_conv_trc(job=-1, replica_range=range(num_replicas), trc_files=final_trc_files,
-                                    in_topology_path=in_topology_path,
-                                    gromos_path=gromosPP_bin_dir, out_traj=out_dcd, fit_traj_to_mol=1,
-                                    verbose=verbose,
-                                    boundary_conditions=boundary_conditions)
-    """
     if verbose:
         print("all jobs finished")
     return out_cnf  # in_simSystem

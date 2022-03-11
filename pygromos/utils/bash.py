@@ -259,8 +259,8 @@ def compress_tar(
     FileIO
         process return log.
     """
-
-    if out_path is not None:
+    print(out_path)
+    if out_path is None:
         out_path = in_path
     if not out_path.endswith(".tar.gz") and gunzip_compression:
         out_path += ".tar.gz"
