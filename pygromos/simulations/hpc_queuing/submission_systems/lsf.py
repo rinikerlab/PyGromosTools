@@ -276,7 +276,6 @@ class LSF(_SubmissionSystem):
         sub_job.jobID = job_id
         return int(job_id)
 
-
     """
         Job Queue Managment
     """
