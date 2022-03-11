@@ -3036,19 +3036,19 @@ class _generic_topology_groups(_topology_block):
         content: Union[str, dict, None, __class__],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NSM:int = None,
-        NSP: List[int] = None
+        NSM: int = None,
+        NSP: List[int] = None,
     ):
-        if(NSP is not None):
-            if(NSM is not None):
-                if(len(NSP)==NSM):
-                    self.NSM=NSM
+        if NSP is not None:
+            if NSM is not None:
+                if len(NSP) == NSM:
+                    self.NSM = NSM
                 else:
                     raise ValueError("FUn")
             else:
-                self.NSM=len(NSP)
+                self.NSM = len(NSP)
             self.NSM = list(map(int, NSM))
-            super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=[NSP, NSM]])
+            super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=[[NSP, NSM]])
         else:
             super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
@@ -3065,7 +3065,6 @@ class _generic_topology_groups(_topology_block):
             else:
                 raise ValueError("SOLUTEMOLECULES has not the correct number of fields.")
 
-
         # Clean COntent
         self.content = [[self.NSM]]
         self.content.extend([[x] for x in self.NSP])
@@ -3077,10 +3076,14 @@ class _generic_topology_groups(_topology_block):
 
         return super().block_to_string()
 
+
 class SOLUTEMOLECULES(_generic_topology_groups):
     pass
+
+
 class TEMPERATUREGROUPS(_generic_topology_groups):
     pass
+
 
 class PRESSUREGROUPS(_generic_topology_groups):
     pass
