@@ -32,7 +32,7 @@ def do(
     analysis_script_path: str = None,
     submission_system: _SubmissionSystem = LSF(),
     previous_job_ID: int = None,
-    no_double_submit: bool = False,
+    no_double_submit_check: bool = False,
     verbose: bool = True,
     verbose_lvl: int = 1,
 ):
@@ -60,6 +60,7 @@ def do(
     -------
 
     """
+    submission_system._block_double_submission=no_double_submit_check
     job_verb = True if (verbose and verbose_lvl > 2) else False
 
     # prepare
