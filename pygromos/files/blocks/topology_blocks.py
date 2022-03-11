@@ -3033,7 +3033,7 @@ class _generic_topology_groups(_topology_block):
 
     def __init__(
         self,
-        content: Union[str, dict, None, __class__],
+        content: Union[str, dict],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
         NSM: int = None,
