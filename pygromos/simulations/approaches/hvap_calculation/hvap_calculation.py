@@ -28,7 +28,7 @@ from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.approaches.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys
+from pygromos.simulations.hpc_queuing.submission_systems.local import _SubmissionSystem, LOCAL
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
@@ -46,6 +46,7 @@ class Hvap_calculation:
         forcefield: forcefield_system = forcefield_system(name="54A7"),
         gromosXX: str = None,
         gromosPP: str = None,
+        submissionSystem: _SubmissionSystem = LOCAL,
         useGromosPlsPls: bool = True,
         verbose: bool = True,
     ) -> None:
@@ -64,6 +65,7 @@ class Hvap_calculation:
                 work_folder=work_folder,
                 system_name=system_name,
                 in_smiles=input_system,
+                
                 Forcefield=forcefield,
                 in_imd_path=hvap_input_files.imd_hvap_gas_sd,
                 verbose=verbose,
@@ -71,7 +73,7 @@ class Hvap_calculation:
 
         self.work_folder = work_folder
         self.system_name = system_name
-
+        self.submission_system = submissionSystem
         # create folders and structure
         try:
             os.mkdir(path=work_folder)
@@ -86,7 +88,7 @@ class Hvap_calculation:
         self.groSys_liq.work_folder = work_folder + "/" + system_name + "_liq"
         self.groSys_liq.rebase_files()
 
-        self.submissonSystem = subSys()
+        self.submissonSystem = self.submission_system()
 
         self.gromosXX = self.groSys_gas.gromosXX
         self.gromosPP = self.groSys_gas.gromosPP
@@ -186,6 +188,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_emin_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="2_eq",
+            previous_simulation_run=sys_emin_gas._jobID,
             submission_system=self.submissonSystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,

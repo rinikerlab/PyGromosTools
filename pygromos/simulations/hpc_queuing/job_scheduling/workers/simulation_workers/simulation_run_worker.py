@@ -42,6 +42,7 @@ def work(
     gromosXX_bin_dir: str = None,
     work_dir: str = None,
     zip_trajectories: bool = True,
+    _gromos_noBinary_checks: bool = False,
     **kwargs
 ):
     """

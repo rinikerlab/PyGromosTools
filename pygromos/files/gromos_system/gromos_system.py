@@ -92,10 +92,10 @@ class Gromos_System:
 
     _single_multibath: bool
     _single_energy_group: bool
-
-    _gromos_noBinary_checks: bool = (
-        False  # if this class Variable is set to True, all binary checks will be removed from the systems.
-    )
+    
+    # if this class Variable is set to True, all binary checks will be removed from the systems.
+    _gromos_noBinary_checks: bool = False  
+    
     _gromosPP_bin_dir: Union[None, str]
     _gromosXX_bin_dir: Union[None, str]
     _gromosPP: GromosPP
