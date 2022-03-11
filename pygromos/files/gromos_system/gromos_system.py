@@ -41,7 +41,7 @@ from pygromos.utils import bash, utils
 
 import pickle
 import io
-
+import inspect
 if importlib.util.find_spec("rdkit") is not None:
     from rdkit import Chem
     from rdkit.Chem import AllChem
@@ -743,8 +743,9 @@ class Gromos_System:
     def get_script_generation_command(self, var_name: str = None, var_prefixes: str = "") -> str:
         if var_name is None:
             var_name = var_prefixes + self.__class__.__name__.lower()
-
+        
         gen_cmd = "#Generate " + self.__class__.__name__ + "\n"
+        gen_cmd = "\n"
         gen_cmd += (
             "from "
             + self.__module__
@@ -752,14 +753,17 @@ class Gromos_System:
             + self.__class__.__name__
             + " as "
             + self.__class__.__name__
-            + "_obj"
+            + "_class"
             + "\n"
         )
+        if(self._gromos_noBinary_checks):
+            self.__class__.__name__+"_class._gromos_noBinary_checks = "+str(self._gromos_noBinary_checks)+"\n"
+            
         gen_cmd += (
             var_name
             + " = "
             + __class__.__name__
-            + '_obj(work_folder="'
+            + '_class(work_folder="'
             + self.work_folder
             + '", system_name="'
             + self.name
@@ -768,6 +772,13 @@ class Gromos_System:
 
         for arg, path in self.all_file_paths.items():
             gen_cmd += str(var_name) + "." + str(arg) + ' = "' + str(path) + '"\n'
+            
+        if(self.gromosXX_bin_dir is not None):
+            gen_cmd += str(var_name) + ".gromosXX_bin_dir = '" + str(self.gromosXX_bin_dir) + "'\n"
+            
+        if(self.gromosPP_bin_dir is not None):
+            gen_cmd += str(var_name) + ".gromosPP_bin_dir = '" + str(self.gromosXX_bin_dir) + "'\n"
+            
         gen_cmd += "\n"
 
         return gen_cmd
