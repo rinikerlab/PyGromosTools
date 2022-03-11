@@ -166,8 +166,8 @@ def work(
         imd_file.INITIALISE.NTICOM = 0
         imd_file.INITIALISE.NTISTI = 0
 
-        if is_stochastic_dynamics_sim or is_vacuum: #Bschroed: does this make sense?
-            imd_file.INITIALISE.NTISHI = 1
+        if is_stochastic_dynamics_sim or is_vacuum:
+            imd_file.INITIALISE.NTISTI = 1
 
     # Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)
