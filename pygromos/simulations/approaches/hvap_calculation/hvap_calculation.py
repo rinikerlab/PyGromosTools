@@ -38,6 +38,8 @@ from pygromos.utils.utils import time_wait_s_for_filesystem
 
 
 class Hvap_calculation:
+    dens_modifier: float = 0.7
+
     def __init__(
         self,
         input_system: Gromos_System or str or Chem.rdchem.Mol,
@@ -60,12 +62,17 @@ class Hvap_calculation:
         # system variables
         if type(input_system) is Gromos_System:
             self.groSys_gas = input_system
+            if gromosXX is not None:
+                self.groSys_gas.gromosXX = gromosXX
+            if gromosPP is not None:
+                self.groSys_gas.gromosPP = gromosPP
         elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
             self.groSys_gas = Gromos_System(
                 work_folder=work_folder,
                 system_name=system_name,
                 in_smiles=input_system,
-                
+                gromosPP=gromosPP,
+                gromosXX=gromosXX,
                 Forcefield=forcefield,
                 in_imd_path=hvap_input_files.imd_hvap_gas_sd,
                 verbose=verbose,
@@ -105,7 +112,7 @@ class Hvap_calculation:
         # parameters for liquid simulation
         # used to multiply the single molecule system
         # made for small molecule Hvap calculation
-        self.num_molecules = 700
+        self.num_molecules = 512
         self.density = 700
         self.temperature = 298.15
 
@@ -149,8 +156,8 @@ class Hvap_calculation:
                 in_cnf_path=self.groSys_gas.cnf.path,
                 out_cnf_path=self.work_folder + "/temp.cnf",
                 nmolecule=self.num_molecules,
-                dens=self.density,
-                threshold=0.1,
+                dens=self.dens_modifier * self.density,
+                threshold=0.12,
                 layer=True,
             )
         else:
@@ -159,7 +166,7 @@ class Hvap_calculation:
                 in_cnf_path=self.groSys_gas.cnf.path,
                 out_cnf_path=self.work_folder + "/temp.cnf",
                 nmolecule=self.num_molecules,
-                dens=self.density,
+                dens=self.dens_modifier * self.density,
             )
         time.sleep(time_wait_s_for_filesystem)  # wait for file to write and close
         self.groSys_liq.cnf = self.work_folder + "/temp.cnf"
