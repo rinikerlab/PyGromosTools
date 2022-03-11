@@ -147,7 +147,7 @@ def work(
         if hasattr(imd_file, "MULTIBATH"):
             imd_file.INITIALISE.NTINHT = 0 if (imd_file.MULTIBATH.ALGORITHM <= 1) else 1
 
-        imd_file.INITIALISE.NTISHI = 0 if (hasattr(cnf_file, "LATTICESHIFT")) else 1
+        imd_file.INITIALISE.NTISHI = 0 if (in_cnf_path is None or hasattr(cnf_file, "LATTICESHIFT")) else 1
 
         imd_file.INITIALISE.NTIRTC = 0
         imd_file.INITIALISE.NTICOM = 0
