@@ -34,7 +34,7 @@ def simulation(
     reinitialize_every_run=False,
     analysis_script: callable = simulation_analysis.do,
     analysis_control_dict: dict = None,
-    no_double_submit_check:bool = False,
+    _no_double_submit_check:bool = False,
     _work_dir:str = None,
     verbose: bool = True,
     verbose_lvl: int = 1,
@@ -175,13 +175,12 @@ def simulation(
                 "initialize_first_run": initialize_first_run,
                 "reinitialize_every_run": reinitialize_every_run,
                 "previous_simulation_run": previous_simulation_run,
-                "no_double_submit_check" : no_double_submit_check,
+                "_no_double_submit_check" : _no_double_submit_check,
+                "_work_dir": _work_dir,
                 "verbose": verbose,
                 "verbose_lvl": verbose_lvl,
             }
         )
-        if(work_dir is not None):
-            MD_job_vars.update({"work_dir": _work_dir})
             
             
         try:
