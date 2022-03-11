@@ -21,6 +21,7 @@ from pygromos.utils.utils import spacer as spacer, time_wait_s_for_filesystem
 
 
 def simulation(
+    in_gromos_simulation_system: Gromos_System,
     override_project_dir: str = None,
     step_name: str = "sim",
     in_imd_path: str = None,
@@ -33,7 +34,7 @@ def simulation(
     reinitialize_every_run=False,
     analysis_script: callable = simulation_analysis.do,
     analysis_control_dict: dict = None,
-    _gromos_noBinary_checks: bool=False,
+    _gromos_noBinary_checks: bool = False,
     verbose: bool = True,
     verbose_lvl: int = 1,
     _template_imd_path: str = None,
@@ -215,10 +216,12 @@ def simulation(
         raise Exception("Could not submit the commands\n\t" + "\n\t".join(map(str, err.args)))
 
     time.sleep(time_wait_s_for_filesystem)
-    
+
     # Return the promise final system
-    if(in_analysis_script_path is None and os.path.exists(out_simulation_dir)):
-        cnfs = list(sorted(glob.glob(out_simulation_dir+"/*/*cnf"), key=lambda: int(x.split("_")[-1].split(".")[0])))
+    if in_analysis_script_path is None and os.path.exists(out_simulation_dir):
+        cnfs = list(
+            sorted(glob.glob(out_simulation_dir + "/*/*cnf"), key=lambda x: int(x.split("_")[-1].split(".")[0]))
+        )
         last_cnf = cnfs[-1]
         gromos_system.cnf = cnf.Cnf(last_cnf)
     elif os.path.exists(out_analysis_cnf):
