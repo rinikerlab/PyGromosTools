@@ -62,17 +62,17 @@ class Hvap_calculation:
         # system variables
         if type(input_system) is Gromos_System:
             self.groSys_gas = input_system
-            if gromosXX is not None:
-                self.groSys_gas.gromosXX = gromosXX
-            if gromosPP is not None:
-                self.groSys_gas.gromosPP = gromosPP
+            if in_gromosXX_bin_dir is not None:
+                self.groSys_gas.gromosXX = in_gromosXX_bin_dir
+            if in_gromosPP_bin_dir is not None:
+                self.groSys_gas.gromosPP = in_gromosPP_bin_dir
         elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
             self.groSys_gas = Gromos_System(
                 work_folder=work_folder,
                 system_name=system_name,
                 in_smiles=input_system,
-                in_gromosXX_bin_dir = in_gromosXX_bin_dir,
-                in_gromosPP_bin_dir = in_gromosPP_bin_dir,
+                in_gromosXX_bin_dir=in_gromosXX_bin_dir,
+                in_gromosPP_bin_dir=in_gromosPP_bin_dir,
                 Forcefield=forcefield,
                 in_imd_path=hvap_input_files.imd_hvap_gas_sd,
                 verbose=verbose,
