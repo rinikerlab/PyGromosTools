@@ -3048,7 +3048,7 @@ class _generic_topology_groups(_topology_block):
             else:
                 self.NSM = len(NSP)
             self.NSP = list(map(int, NSP))
-            super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=[[[NSM], NSP]])
+            super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=[[str(NSM)], list(map(str, NSP))])
         else:
             super().__init__(FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, content=content)
 
