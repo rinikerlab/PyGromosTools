@@ -100,22 +100,24 @@ class _SubmissionSystem:
         if var_name is None:
             var_name = var_prefixes + name
 
+        params = []
+        for key in  inspect.signature(self.__init__).parameters:
+            if(hasattr(self, key)):
+                param = getattr(self, key)
+                if(isinstance(param, str)):
+                    params.append(key+"='"+str(getattr(self, key))+"'")
+                else:
+                    params.append(key+"="+str(getattr(self, key)))
+        parameters_str = ", ".join(params)
+
         gen_cmd = "#Generate " + name + "\n"
         gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
         gen_cmd += (
             var_name
             + " = "
             + name
-            + "_obj(submission="
-            + str(self.submission)
-            + ", verbose="
-            + str(self.verbose)
-            + ", nmpi="
-            + str(self.nmpi)
-            + ", nomp="
-            + str(self.nomp)
-            + ', job_duration="'
-            + str(self.job_duration)
+            + "_obj("
+            + parameters_str
             + '")\n\n'
         )
         return gen_cmd

@@ -3033,7 +3033,7 @@ class _generic_topology_groups(_topology_block):
 
     def __init__(
         self,
-        content: Union[str, dict, None, __class__],
+        content: Union[str, dict, None, __class__]=None,
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
         NSM:int = None,
@@ -3079,6 +3079,7 @@ class _generic_topology_groups(_topology_block):
 
 class SOLUTEMOLECULES(_generic_topology_groups):
     pass
+
 class TEMPERATUREGROUPS(_generic_topology_groups):
     pass
 
