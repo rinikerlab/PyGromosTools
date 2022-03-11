@@ -47,7 +47,6 @@ class _general_gromos_file:
         elif in_value is None:
             self.path = None
             self._orig_file_path = None
-            self._future_file = True
             # print("Empty class")
 
         else:

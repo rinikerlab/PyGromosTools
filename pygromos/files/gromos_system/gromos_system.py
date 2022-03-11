@@ -838,7 +838,7 @@ class Gromos_System:
                     self,
                     file_name,
                 )
-                if file_obj._future_file and file_obj.path is not None:
+                if file_obj._future_file:
                     if self.verbose or True:
                         warnings.warn("Did not change file path as its only promised " + str(file_obj.path))
                 else:
