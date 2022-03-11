@@ -35,7 +35,6 @@ def simulation(
     analysis_script: callable = simulation_analysis.do,
     analysis_control_dict: dict = None,
     _work_dir:str = None,
-    _gromos_noBinary_checks: bool = False,
     verbose: bool = True,
     verbose_lvl: int = 1,
     _template_imd_path: str = None,
@@ -147,7 +146,6 @@ def simulation(
                     "gromosPP_bin_dir": gromos_system.gromosPP._bin,
                     "control_dict": analysis_control_dict,
                     "n_processes": n_analysis_processors,
-                    "_gromos_noBinary_checks": gromos_system._gromos_noBinary_checks,
                     "verbose": verbose,
                     "verbose_lvl": verbose_lvl,
                 }
@@ -175,6 +173,7 @@ def simulation(
                 "analysis_script_path": in_analysis_script_path,
                 "initialize_first_run": initialize_first_run,
                 "reinitialize_every_run": reinitialize_every_run,
+                "previous_simulation_run": previous_simulation_run,
                 "verbose": verbose,
                 "verbose_lvl": verbose_lvl,
             }
