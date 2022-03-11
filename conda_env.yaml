@@ -6,6 +6,11 @@ dependencies:
   # Base depends
   - python
   - pip
+  ## Compiling
+  - gcc
+  - openmpi
+  - autoconf
+  - automake
   ## Testing
   - pytest
   ## Meta
