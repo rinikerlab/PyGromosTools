@@ -60,7 +60,7 @@ class LOCAL(_SubmissionSystem):
             command_file.write(command.replace("&& ", ";\n") + ";\n")
             command_file.close()
             command = command_file_path
-            bash.execute("chmod +x " + command_file_path, env=self._enviroment)
+            bash.execute("chmod +x " + command_file_path, env=self.enviroment)
 
         # finalize string
 
@@ -68,7 +68,7 @@ class LOCAL(_SubmissionSystem):
             print("Submission Command: \t", " ".join(command))
         if self.submission:
             try:
-                process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
+                process = bash.execute(command=command, catch_STD=True, env=self.enviroment)
                 std_out_buff = map(str, process.stdout.readlines())
                 std_out = "\t" + "\n\t".join(std_out_buff)
 
@@ -111,7 +111,7 @@ class LOCAL(_SubmissionSystem):
             try:
                 for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                     std_out_buff = bash.execute(
-                        command="export JOBID=" + str(jobID) + " && " + command, env=self._enviroment
+                        command="export JOBID=" + str(jobID) + " && " + command, env=self.enviroment
                     )
                     std_out = "\n".join(std_out_buff.readlines())
                     if self.verbose:

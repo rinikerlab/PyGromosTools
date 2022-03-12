@@ -10,12 +10,12 @@ class _SubmissionSystem:
     verbose: bool
     submission: bool
 
-    _job_duration: str = "24:00"
-    _nmpi: int
-    _nomp: int
-    _max_storage: float
+    job_duration: str = "24:00"
+    nmpi: int
+    nomp: int
+    max_storage: float
     job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
-    _zip_trajectories: bool
+    zip_trajectories: bool
 
     def __init__(
         self,
@@ -66,16 +66,16 @@ class _SubmissionSystem:
         self.verbose = verbose
         self.submission = submission
 
-        self._job_duration = job_duration
-        self._nmpi = nmpi
-        self._nomp = nomp
-        self._max_storage = max_storage
-        self._enviroment = enviroment
-        self._block_double_submission = block_double_submission
+        self.job_duration = job_duration
+        self.nmpi = nmpi
+        self.nomp = nomp
+        self.max_storage = max_storage
+        self.enviroment = enviroment
+        self.block_double_submission = block_double_submission
         self.chain_prefix = chain_prefix
         self.begin_mail = begin_mail
         self.end_mail = end_mail
-        self._zip_trajectories = zip_trajectories
+        self.zip_trajectories = zip_trajectories
 
     def submit_to_queue(self, sub_job: Submission_job) -> int:
         return -1
@@ -214,40 +214,40 @@ class _SubmissionSystem:
 
     @property
     def nmpi(self) -> int:
-        return self._nmpi
+        return self.nmpi
 
     @nmpi.setter
     def nmpi(self, nmpi: int):
-        self._nmpi = int(nmpi)
+        self.nmpi = int(nmpi)
 
     @property
     def nomp(self) -> int:
-        return self._nomp
+        return self.nomp
 
     @nomp.setter
     def nomp(self, nomp: int):
-        self._nomp = int(nomp)
+        self.nomp = int(nomp)
 
     @property
     def job_duration(self) -> str:
-        return self._job_duration
+        return self.job_duration
 
     @job_duration.setter
     def job_duration(self, job_duration: str):
-        self._job_duration = str(job_duration)
+        self.job_duration = str(job_duration)
 
     @property
     def max_storage(self) -> str:
-        return self._max_storage
+        return self.max_storage
 
     @property
     def zip_trajectories(self) -> bool:
-        return self._zip_trajectories
+        return self.zip_trajectories
 
     @zip_trajectories.setter
     def zip_trajectories(self, zip_trajectories: bool):
-        self._zip_trajectories = zip_trajectories
+        self.zip_trajectories = zip_trajectories
 
     @max_storage.setter
     def max_storage(self, max_storage: float):
-        self._max_storage = float(max_storage)
+        self.max_storage = float(max_storage)

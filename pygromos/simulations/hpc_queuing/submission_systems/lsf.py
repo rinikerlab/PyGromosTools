@@ -72,7 +72,7 @@ class LSF(_SubmissionSystem):
         submission_string = ""
 
         # QUEUE checking to not double submit
-        if self._block_double_submission and self.submission:
+        if self.block_double_submission and self.submission:
             if self.verbose:
                 print("check queue")
             ids = list(self.search_queue_for_jobname(sub_job.jobName).index)
@@ -143,7 +143,7 @@ class LSF(_SubmissionSystem):
             command_file.close()
             command = command_file_path
 
-            bash.execute("chmod +x " + command_file_path, env=self._enviroment)
+            bash.execute("chmod +x " + command_file_path, env=self.enviroment)
 
         # finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
@@ -152,7 +152,7 @@ class LSF(_SubmissionSystem):
             print("Submission Command: \t", " ".join(submission_string))
         if self.submission and not self._dummy:
             try:
-                out_process = bash.execute(command=submission_string, catch_STD=True, env=self._enviroment)
+                out_process = bash.execute(command=submission_string, catch_STD=True, env=self.enviroment)
                 std_out = "\n".join(map(str, out_process.stdout.readlines()))
 
                 # next sopt_job is queued with id:
@@ -191,7 +191,7 @@ class LSF(_SubmissionSystem):
         """
 
         # QUEUE checking to not double submit
-        if self.submission and self._block_double_submission:
+        if self.submission and self.block_double_submission:
             if self.verbose:
                 print("check queue")
             ids = self.search_queue_for_jobname(sub_job.jobName)
@@ -256,7 +256,7 @@ class LSF(_SubmissionSystem):
             print("Submission Command: \t", " ".join(submission_string))
         if self.submission and not self._dummy:
             try:
-                std_out_buff = bash.execute(command=submission_string, env=self._enviroment)
+                std_out_buff = bash.execute(command=submission_string, env=self.enviroment)
                 std_out = "\n".join(std_out_buff.readlines())
 
                 # next sopt_job is queued with id:
