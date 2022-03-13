@@ -52,7 +52,7 @@ class LSF(_SubmissionSystem):
             zip_trajectories=zip_trajectories,
         )
         # Only LSF specific settings:
-        self._bjobs_only_same_host = bjobs_only_same_host
+        self.bjobs_only_same_host = bjobs_only_same_host
 
     def submit_to_queue(self, sub_job: Submission_job) -> int:
         """
@@ -304,14 +304,14 @@ class LSF(_SubmissionSystem):
             if not self._dummy:
                 try:
                     # get all running and pending jobs
-                    if self._bjobs_only_same_host:
+                    if self.bjobs_only_same_host:
                         out_process = bash.execute("bjobs -w", catch_STD=True)
                     else:
                         out_process = bash.execute("bjobs -w | grep '$HOSTNAME|JOBID'", catch_STD=True)
                     job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
 
                     # get all finished jobs
-                    if self._bjobs_only_same_host:
+                    if self.bjobs_only_same_host:
                         out_process = bash.execute("bjobs -wd", catch_STD=True)
                     else:
                         out_process = bash.execute("bjobs -wd | grep '$HOSTNAME|JOBID'", catch_STD=True)
