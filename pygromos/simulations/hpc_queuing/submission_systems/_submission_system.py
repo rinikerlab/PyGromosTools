@@ -8,18 +8,18 @@ from pygromos.simulations.hpc_queuing.submission_systems.submission_job import S
 
 class _SubmissionSystem:
     verbose: bool
-    submission: bool
-    nmpi: int
-    nomp: int
-    max_storage: float
-    job_duration: str
-    environment: dict
-    block_double_submission: bool
-    chain_prefix: str
-    begin_mail: bool
-    end_mail: bool
-    job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
-    zip_trajectories: bool
+    _submission: bool
+    _nmpi: int
+    _nomp: int
+    _max_storage: float
+    _job_duration: str
+    _environment: dict
+    _block_double_submission: bool
+    _chain_prefix: str
+    _begin_mail: bool
+    _end_mail: bool
+    _job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
+    _zip_trajectories: bool
 
     def __init__(
         self,
@@ -68,18 +68,18 @@ class _SubmissionSystem:
             determines if output trajectories are compressed or not
         """
 
-        self.submission = submission
-        self.nmpi = nmpi
-        self.nomp = nomp
-        self.max_storage = max_storage
-        self.job_duration = job_duration
+        self._submission = submission
+        self._nmpi = nmpi
+        self._nomp = nomp
+        self._max_storage = max_storage
+        self._job_duration = job_duration
         self.verbose = verbose
-        self.environment = enviroment
-        self.block_double_submission = block_double_submission
-        self.chain_prefix = chain_prefix
-        self.begin_mail = begin_mail
-        self.end_mail = end_mail
-        self.zip_trajectories = zip_trajectories
+        self._environment = enviroment
+        self._block_double_submission = block_double_submission
+        self._chain_prefix = chain_prefix
+        self._begin_mail = begin_mail
+        self._end_mail = end_mail
+        self._zip_trajectories = zip_trajectories
 
     def submit_to_queue(self, sub_job: Submission_job) -> int:
         return -1
@@ -216,42 +216,105 @@ class _SubmissionSystem:
         """
         raise NotImplementedError("kill_jobs is not implemented for: " + self.__class__.__name__)
 
+    # self._submission = submission
+    # self._nmpi = nmpi
+    # self._nomp = nomp
+    # self._max_storage = max_storage
+    # self._job_duration = job_duration
+    # self.verbose = verbose
+    # self._environment = enviroment
+    # self._block_double_submission = block_double_submission
+    # self._chain_prefix = chain_prefix
+    # self._begin_mail = begin_mail
+    # self._end_mail = end_mail
+    # self._zip_trajectories = zip_trajectories
+
+    @property
+    def submission(self):
+        return self._submission
+
+    @submission.setter
+    def submission(self, submission_value):
+        self._submission = submission_value
+
     @property
     def nmpi(self) -> int:
-        return self.nmpi
+        return self._nmpi
 
     @nmpi.setter
-    def nmpi(self, nmpi: int):
-        self.nmpi = int(nmpi)
+    def nmpi(self, nmpi_value: int):
+        self._nmpi = int(nmpi_value)
 
     @property
     def nomp(self) -> int:
-        return self.nomp
+        return self._nomp
 
     @nomp.setter
-    def nomp(self, nomp: int):
-        self.nomp = int(nomp)
-
-    @property
-    def job_duration(self) -> str:
-        return self.job_duration
-
-    @job_duration.setter
-    def job_duration(self, job_duration: str):
-        self.job_duration = str(job_duration)
+    def nomp(self, nomp_value: int):
+        self._nomp = int(nomp_value)
 
     @property
     def max_storage(self) -> str:
         return self._max_storage
 
+    @max_storage.setter
+    def max_storage(self, max_storage_value: float):
+        self._max_storage = float(max_storage_value)
+
     @property
-    def zip_trajectories(self) -> bool:
+    def _job_duration(self) -> str:
+        return self._job_duration
+
+    @_job_duration.setter
+    def _job_duration(self, job_duration_value: str):
+        self._job_duration = str(job_duration_value)
+
+    # no verbose setter since verbose is not private
+
+    @property
+    def environment(self) -> str:
+        return self._environment
+
+    @environment.setter
+    def environment(self, environment_value: str):
+        self._environment = str(environment_value)
+
+    @property
+    def block_double_submission(self) -> bool:
+        return self._block_double_submission
+
+    @block_double_submission.setter
+    def block_double_submission(self, block_double_submission_value: bool):
+        self._block_double_submission = bool(block_double_submission_value)
+
+    @property
+    def chain_prefix(self) -> str:
+        return self._chain_prefix
+
+    @chain_prefix.setter
+    def chain_prefix(self, chain_prefix_value: str):
+        self._chain_prefix = str(chain_prefix_value)
+
+    @property
+    def begin_mail(self) -> str:
+        return self._begin_mail
+
+    @begin_mail.setter
+    def begin_mail(self, begin_mail_value: str):
+        self._begin_mail = str(begin_mail_value)
+
+    @property
+    def end_mail(self) -> str:
+        return self._end_mail
+
+    @end_mail.setter
+    def end_mail(self, end_mail_value: str):
+        self._end_mail = str(end_mail_value)
+
+    @property
+    def _zip_trajectories(self) -> bool:
         return self._zip_trajectories
 
-    @zip_trajectories.setter
-    def zip_trajectories(self, zip_trajectories: bool):
-        self._zip_trajectories = zip_trajectories
-
-    @max_storage.setter
-    def max_storage(self, max_storage: float):
-        self._max_storage = float(max_storage)
+    @_zip_trajectories.setter
+    def _zip_trajectories(self, zip_trajectories_value: bool):
+        self._zip_trajectories = zip_trajectories_value

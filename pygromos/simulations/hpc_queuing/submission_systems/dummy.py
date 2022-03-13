@@ -43,7 +43,7 @@ class DUMMY(_SubmissionSystem):
             if a job was submitted the jobID is returned else None.
 
         """
-        if self.submission:
+        if self._submission:
             print("\n", sub_job.command, "\n")
             return 0
         else:
@@ -64,7 +64,7 @@ class DUMMY(_SubmissionSystem):
             if a job was submitted the jobID is returned else None.
 
         """
-        if self.submission:
+        if self._submission:
             print()
             for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                 print("Job " + str(jobID) + ":", sub_job.command, "\n")

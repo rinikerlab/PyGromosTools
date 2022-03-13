@@ -72,7 +72,7 @@ class LSF(_SubmissionSystem):
         submission_string = ""
 
         # QUEUE checking to not double submit
-        if self.block_double_submission and self.submission:
+        if self._block_double_submission and self._submission:
             if self.verbose:
                 print("check queue")
             ids = list(self.search_queue_for_jobname(sub_job.jobName).index)
@@ -95,7 +95,7 @@ class LSF(_SubmissionSystem):
 
         submission_string += "bsub "
         submission_string += " -J" + sub_job.jobName + " "
-        submission_string += " -W " + str(self.job_duration) + " "
+        submission_string += " -W " + str(self._job_duration) + " "
 
         if not isinstance(sub_job.post_execution_command, type(None)):
             submission_string += '-Ep "' + sub_job.post_execution_command + '" '
@@ -109,28 +109,28 @@ class LSF(_SubmissionSystem):
         if isinstance(sub_job.errLog, str):
             submission_string += " -e " + sub_job.errLog
 
-        nCPU = self.nmpi * self.nomp
+        nCPU = self._nmpi * self._nomp
         submission_string += " -n " + str(nCPU) + " "
         # TODO: add GPU support
         # add_string = ""
         # add_string= "-R \"select[model==XeonGold_5118 || model==XeonGold_6150 || model==XeonE3_1585Lv5 || model==XeonE3_1284Lv4 || model==XeonE7_8867v3 || model == XeonGold_6140 || model==XeonGold_6150 ]\""
-        if isinstance(self.max_storage, int):
-            submission_string += " -R rusage[mem=" + str(self.max_storage) + "] "
+        if isinstance(self._max_storage, int):
+            submission_string += " -R rusage[mem=" + str(self._max_storage) + "] "
 
         if isinstance(sub_job.queue_after_jobID, (int, str)) and (
             sub_job.queue_after_jobID != 0 or sub_job.queue_after_jobID != "0"
         ):
-            submission_string += ' -w "' + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ')" '
+            submission_string += ' -w "' + self._chain_prefix + "(" + str(sub_job.queue_after_jobID) + ')" '
 
-        if self.begin_mail:
+        if self._begin_mail:
             submission_string += " -B "
-        if self.end_mail:
+        if self._end_mail:
             submission_string += " -N "
 
         sub_job.command = sub_job.command.strip()  # remove trailing line breaks
 
-        if self.nomp >= 1:
-            command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + " "
+        if self._nomp >= 1:
+            command = "export OMP_NUM_THREADS=" + str(self._nomp) + ";\n " + sub_job.command + " "
         else:
             command = "\n " + sub_job.command + ""
 
@@ -150,7 +150,7 @@ class LSF(_SubmissionSystem):
 
         if self.verbose:
             print("Submission Command: \t", " ".join(submission_string))
-        if self.submission and not self._dummy:
+        if self._submission and not self._dummy:
             try:
                 out_process = bash.execute(command=submission_string, catch_STD=True, env=self.enviroment)
                 std_out = "\n".join(map(str, out_process.stdout.readlines()))
@@ -191,7 +191,7 @@ class LSF(_SubmissionSystem):
         """
 
         # QUEUE checking to not double submit
-        if self.submission and self.block_double_submission:
+        if self._submission and self._block_double_submission:
             if self.verbose:
                 print("check queue")
             ids = self.search_queue_for_jobname(sub_job.jobName)
@@ -216,7 +216,7 @@ class LSF(_SubmissionSystem):
 
         jobName = str(sub_job.jobName) + "[" + str(sub_job.start_job) + "-" + str(sub_job.end_job) + "]%" + str(jobLim)
 
-        submission_string += 'bsub -J " ' + jobName + ' " -W "' + str(self.job_duration) + '" '
+        submission_string += 'bsub -J " ' + jobName + ' " -W "' + str(self._job_duration) + '" '
 
         if isinstance(sub_job.jobGroup, str):
             submission_string += " -g " + sub_job.jobGroup + " "
@@ -230,22 +230,22 @@ class LSF(_SubmissionSystem):
         if isinstance(sub_job.errLog, str):
             submission_string += " -eo " + sub_job.errLog
 
-        nCPU = self.nmpi * self.nomp
+        nCPU = self._nmpi * self._nomp
         submission_string += " -n " + str(nCPU) + " "
 
-        if isinstance(self.max_storage, int):
-            submission_string += ' -R "rusage[mem=' + str(self.max_storage) + ']" '
+        if isinstance(self._max_storage, int):
+            submission_string += ' -R "rusage[mem=' + str(self._max_storage) + ']" '
 
         if isinstance(sub_job.queue_after_jobID, (int, str)):
-            submission_string += " -w " + self.chain_prefix + "(" + str(sub_job.queue_after_jobID) + ')" '
+            submission_string += " -w " + self._chain_prefix + "(" + str(sub_job.queue_after_jobID) + ')" '
 
-        if self.begin_mail:
+        if self._begin_mail:
             submission_string += " -B "
-        if self.end_mail:
+        if self._end_mail:
             submission_string += " -N "
 
-        if self.nomp > 1:
-            command = " export OMP_NUM_THREADS=" + str(self.nomp) + " && " + sub_job.command + " "
+        if self._nomp > 1:
+            command = " export OMP_NUM_THREADS=" + str(self._nomp) + " && " + sub_job.command + " "
         else:
             command = " " + sub_job.command + " "
 
@@ -254,7 +254,7 @@ class LSF(_SubmissionSystem):
 
         if self.verbose:
             print("Submission Command: \t", " ".join(submission_string))
-        if self.submission and not self._dummy:
+        if self._submission and not self._dummy:
             try:
                 std_out_buff = bash.execute(command=submission_string, env=self.enviroment)
                 std_out = "\n".join(std_out_buff.readlines())
@@ -294,11 +294,11 @@ class LSF(_SubmissionSystem):
         if hasattr(self, "_job_queue_time_stamp"):
             last_update = datetime.now() - self._job_queue_time_stamp
             check_job_list = last_update.seconds > self._refresh_job_queue_list_all_s
-        if not self.submission:  # shortcut to reduce queue calls!
-            self.job_queue_list = pd.DataFrame(
+        if not self._submission:  # shortcut to reduce queue calls!
+            self._job_queue_list = pd.DataFrame(
                 columns=["JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()]
             )
-            return self.job_queue_list
+            return self._job_queue_list
         if check_job_list:
             # try getting the lsf queue
             if not self._dummy:
@@ -345,9 +345,9 @@ class LSF(_SubmissionSystem):
                     values = [jobID, user, status, queue, from_host, exec_host, job_name, submit_time]
                     jobs_dict.update({jobID: {key: value for key, value in zip(header, values)}})
 
-                self.job_queue_list = pd.DataFrame(jobs_dict, index=None).T
+                self._job_queue_list = pd.DataFrame(jobs_dict, index=None).T
             else:
-                self.job_queue_list = pd.DataFrame(
+                self._job_queue_list = pd.DataFrame(
                     columns=[
                         "JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME".split()
                     ]
@@ -356,11 +356,11 @@ class LSF(_SubmissionSystem):
             if self.verbose:
                 print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
             pass
-        return self.job_queue_list
+        return self._job_queue_list
 
     def search_queue_for_jobid(self, job_id: int) -> pd.DataFrame:
         self.get_queued_jobs()
-        return self.job_queue_list.where(self.job_queue_list.JOBID == job_id).dropna()
+        return self._job_queue_list.where(self._job_queue_list.JOBID == job_id).dropna()
 
     def search_queue_for_jobname(self, job_name: str, regex: bool = False) -> pd.DataFrame:
         """search_queue_for_jobname
@@ -380,9 +380,9 @@ class LSF(_SubmissionSystem):
 
         self.get_queued_jobs()
         if regex:
-            return self.job_queue_list.where(self.job_queue_list.JOB_NAME.str.match(job_name)).dropna()
+            return self._job_queue_list.where(self._job_queue_list.JOB_NAME.str.match(job_name)).dropna()
         else:
-            return self.job_queue_list.where(self.job_queue_list.JOB_NAME == job_name).dropna()
+            return self._job_queue_list.where(self._job_queue_list.JOB_NAME == job_name).dropna()
 
     """
         kill jobs

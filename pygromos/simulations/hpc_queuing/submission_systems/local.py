@@ -49,8 +49,8 @@ class LOCAL(_SubmissionSystem):
 
         sub_job.command = sub_job.command.strip()  # remove trailing linebreaks
 
-        if self.nomp >= 1:
-            command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + ""
+        if self._nomp >= 1:
+            command = "export OMP_NUM_THREADS=" + str(self._nomp) + ";\n " + sub_job.command + ""
         else:
             command = sub_job.command
 
@@ -66,7 +66,7 @@ class LOCAL(_SubmissionSystem):
 
         if self.verbose:
             print("Submission Command: \t", " ".join(command))
-        if self.submission:
+        if self._submission:
             try:
                 process = bash.execute(command=command, catch_STD=True, env=self.enviroment)
                 std_out_buff = map(str, process.stdout.readlines())
@@ -100,14 +100,14 @@ class LOCAL(_SubmissionSystem):
         if isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir):
             submission_string += "cd " + sub_job.submit_from_dir + " && "
 
-        if self.nomp > 1:
-            command = submission_string + " export OMP_NUM_THREADS=" + str(self.nomp) + " && " + sub_job.command
+        if self._nomp > 1:
+            command = submission_string + " export OMP_NUM_THREADS=" + str(self._nomp) + " && " + sub_job.command
         else:
             command = submission_string + sub_job.command
 
         if self.verbose:
             print("Submission Command: \t", " ".join(submission_string))
-        if self.submission:
+        if self._submission:
             try:
                 for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                     std_out_buff = bash.execute(
