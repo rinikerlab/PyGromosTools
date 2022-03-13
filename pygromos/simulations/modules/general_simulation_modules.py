@@ -174,7 +174,7 @@ def simulation(
                 "analysis_script_path": in_analysis_script_path,
                 "initialize_first_run": initialize_first_run,
                 "reinitialize_every_run": reinitialize_every_run,
-                "previous_simulation_run": previous_simulation_run,
+                "previous_job_ID": previous_simulation_run,
                 "_no_double_submit_check": _no_double_submit_check,
                 "_work_dir": _work_dir,
                 "verbose": verbose,
