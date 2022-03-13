@@ -249,11 +249,11 @@ class _SubmissionSystem:
         self._max_storage = float(max_storage_value)
 
     @property
-    def _job_duration(self) -> str:
+    def job_duration(self) -> str:
         return self._job_duration
 
-    @_job_duration.setter
-    def _job_duration(self, job_duration_value: str):
+    @job_duration.setter
+    def job_duration(self, job_duration_value: str):
         self._job_duration = str(job_duration_value)
 
     # no verbose setter since verbose is not private
@@ -299,9 +299,9 @@ class _SubmissionSystem:
         self._end_mail = str(end_mail_value)
 
     @property
-    def _zip_trajectories(self) -> bool:
+    def zip_trajectories(self) -> bool:
         return self._zip_trajectories
 
-    @_zip_trajectories.setter
-    def _zip_trajectories(self, zip_trajectories_value: bool):
+    @zip_trajectories.setter
+    def zip_trajectories(self, zip_trajectories_value: bool):
         self._zip_trajectories = zip_trajectories_value
