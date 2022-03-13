@@ -34,8 +34,8 @@ def simulation(
     reinitialize_every_run=False,
     analysis_script: callable = simulation_analysis.do,
     analysis_control_dict: dict = None,
-    _no_double_submit_check:bool = False,
-    _work_dir:str = None,
+    _no_double_submit_check: bool = False,
+    _work_dir: str = None,
     verbose: bool = True,
     verbose_lvl: int = 1,
     _template_imd_path: str = None,
@@ -175,14 +175,13 @@ def simulation(
                 "initialize_first_run": initialize_first_run,
                 "reinitialize_every_run": reinitialize_every_run,
                 "previous_simulation_run": previous_simulation_run,
-                "_no_double_submit_check" : _no_double_submit_check,
+                "_no_double_submit_check": _no_double_submit_check,
                 "_work_dir": _work_dir,
                 "verbose": verbose,
                 "verbose_lvl": verbose_lvl,
             }
         )
-            
-            
+
         try:
             in_scheduler_script_path = utils.write_job_script(  # noqa: F841
                 out_script_path=step_dir + "/schedule_MD_job.py",

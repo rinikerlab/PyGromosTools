@@ -60,7 +60,7 @@ def do(
     -------
 
     """
-    submission_system._block_double_submission=_no_double_submit_check
+    submission_system._block_double_submission = _no_double_submit_check
     job_verb = True if (verbose and verbose_lvl > 2) else False
 
     # prepare
