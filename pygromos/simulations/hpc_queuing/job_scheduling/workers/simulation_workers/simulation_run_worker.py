@@ -44,7 +44,7 @@ def work(
     work_dir: str = None,
     zip_trajectories: bool = True,
     _gromos_noBinary_checks: bool = False,
-    **kwargs
+    **kwargs,
 ):
     """
     Executed by repex_EDS_long_production_run as workers
@@ -92,14 +92,25 @@ def work(
     """
     time.sleep(time_wait_s_for_filesystem)
     # WORKDIR SetUP
-    if (work_dir is None or work_dir == "None") and "TMPDIR" in os.environ:
-        work_dir = os.environ["TMPDIR"]
-        print("using TmpDir")
+    if work_dir is None or work_dir == "None":
+        if "TMPDIR" in os.environ:
+            work_dir = os.environ["TMPDIR"]
+        else:
+            print("Could not find TMPDIR!\n Switched to outdir for work")
+            work_dir = out_dir
+            if not os.path.isdir(work_dir):
+                bash.make_folder(work_dir)
+    elif isinstance(work_dir, str) and work_dir != "None":
+        if work_dir == "out_dir":
+            work_dir = out_dir
+            if not os.path.isdir(work_dir):
+                bash.make_folder(work_dir)
+        else:
+            if not os.path.isdir(work_dir):
+                bash.make_folder(work_dir)
     else:
-        print("Could not find TMPDIR!\n Switched to outdir for work")
-        work_dir = out_dir
-        if not os.path.isdir(work_dir):
-            bash.make_folder(work_dir)
+        raise ValueError(f"work_dir is not a valid path, work_dir: {work_dir}")
+
     print("workDIR: " + str(work_dir))
 
     # Check if the calculation is running on multiple nodes:
