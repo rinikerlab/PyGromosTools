@@ -26,7 +26,7 @@ def do_skip_job(
     # Check if job with same name is already in the queue!
     if (verbose) and verbose_lvl >= 2:
         print("Checking if jobs was already submitted or done")
-    if job_submission_system._block_double_submission:  # can we find an job with this name in the queue?
+    if job_submission_system.block_double_submission:  # can we find an job with this name in the queue?
         if (verbose) and verbose_lvl >= 2:
             print("Checking for jobs with name: " + tmp_jobname)
         queued_job_ids = job_submission_system.search_queue_for_jobname(job_name=tmp_jobname)

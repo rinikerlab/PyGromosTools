@@ -66,7 +66,7 @@ class LOCAL(_SubmissionSystem):
 
         if self.verbose:
             print("Submission Command: \t", " ".join(command))
-        if self._submission:
+        if self.submission:
             try:
                 process = bash.execute(command=command, catch_STD=True, env=self.enviroment)
                 std_out_buff = map(str, process.stdout.readlines())
@@ -107,7 +107,7 @@ class LOCAL(_SubmissionSystem):
 
         if self.verbose:
             print("Submission Command: \t", " ".join(submission_string))
-        if self._submission:
+        if self.submission:
             try:
                 for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                     std_out_buff = bash.execute(

@@ -8,18 +8,18 @@ from pygromos.simulations.hpc_queuing.submission_systems.submission_job import S
 
 class _SubmissionSystem:
     verbose: bool
-    _submission: bool
-    _nmpi: int
-    _nomp: int
-    _max_storage: float
-    _job_duration: str
-    _environment: dict
-    _block_double_submission: bool
-    _chain_prefix: str
-    _begin_mail: bool
-    _end_mail: bool
-    _job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
-    _zip_trajectories: bool
+    submission: bool
+    nmpi: int
+    nomp: int
+    max_storage: float
+    job_duration: str
+    environment: dict
+    block_double_submission: bool
+    chain_prefix: str
+    begin_mail: bool
+    end_mail: bool
+    job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
+    zip_trajectories: bool
 
     def __init__(
         self,
@@ -215,19 +215,6 @@ class _SubmissionSystem:
 
         """
         raise NotImplementedError("kill_jobs is not implemented for: " + self.__class__.__name__)
-
-    # self._submission = submission
-    # self._nmpi = nmpi
-    # self._nomp = nomp
-    # self._max_storage = max_storage
-    # self._job_duration = job_duration
-    # self.verbose = verbose
-    # self._environment = enviroment
-    # self._block_double_submission = block_double_submission
-    # self._chain_prefix = chain_prefix
-    # self._begin_mail = begin_mail
-    # self._end_mail = end_mail
-    # self._zip_trajectories = zip_trajectories
 
     @property
     def submission(self):
