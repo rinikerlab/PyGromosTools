@@ -29,7 +29,7 @@ class _SubmissionSystem:
         max_storage: float = 1000,
         job_duration: str = "24:00",
         verbose: bool = False,
-        enviroment=None,
+        environment=None,
         block_double_submission: bool = True,
         chain_prefix: str = "done",
         begin_mail: bool = False,
@@ -53,7 +53,7 @@ class _SubmissionSystem:
             the duration of the job as str("HHH:MM")  (default: "24:00")
         verbose : bool, optional
             let me write you a book!  (default: False)
-        enviroment: dict, optional
+        environment: dict, optional
             here you can pass environment variables as dict{varname: value} (default: None)
         block_double_submission: bool, optional
             if a job with the same name is already in the queue, it will not be submitted again. (default: True)
@@ -74,7 +74,7 @@ class _SubmissionSystem:
         self._max_storage = max_storage
         self._job_duration = job_duration
         self.verbose = verbose
-        self._environment = enviroment
+        self._environment = environment
         self._block_double_submission = block_double_submission
         self._chain_prefix = chain_prefix
         self._begin_mail = begin_mail

@@ -28,7 +28,7 @@ class LSF(_SubmissionSystem):
         job_duration: str = "24:00",
         max_storage: float = 1000,
         verbose: bool = False,
-        enviroment=None,
+        environment=None,
         block_double_submission: bool = True,
         bjobs_only_same_host: bool = False,
         chain_prefix: str = "done",
@@ -44,7 +44,7 @@ class LSF(_SubmissionSystem):
             job_duration=job_duration,
             max_storage=max_storage,
             submission=submission,
-            enviroment=enviroment,
+            environment=environment,
             block_double_submission=block_double_submission,
             chain_prefix=chain_prefix,
             begin_mail=begin_mail,
@@ -143,7 +143,7 @@ class LSF(_SubmissionSystem):
             command_file.close()
             command = command_file_path
 
-            bash.execute("chmod +x " + command_file_path, env=self._enviroment)
+            bash.execute("chmod +x " + command_file_path, env=self._environment)
 
         # finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split())) + [command]
@@ -152,7 +152,7 @@ class LSF(_SubmissionSystem):
             print("Submission Command: \t", " ".join(submission_string))
         if self._submission and not self._dummy:
             try:
-                out_process = bash.execute(command=submission_string, catch_STD=True, env=self._enviroment)
+                out_process = bash.execute(command=submission_string, catch_STD=True, env=self._environment)
                 std_out = "\n".join(map(str, out_process.stdout.readlines()))
 
                 # next sopt_job is queued with id:
@@ -256,7 +256,7 @@ class LSF(_SubmissionSystem):
             print("Submission Command: \t", " ".join(submission_string))
         if self._submission and not self._dummy:
             try:
-                std_out_buff = bash.execute(command=submission_string, env=self._enviroment)
+                std_out_buff = bash.execute(command=submission_string, env=self._environment)
                 std_out = "\n".join(std_out_buff.readlines())
 
                 # next sopt_job is queued with id:
