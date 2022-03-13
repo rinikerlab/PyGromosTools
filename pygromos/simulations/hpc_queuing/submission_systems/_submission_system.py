@@ -9,17 +9,21 @@ from pygromos.simulations.hpc_queuing.submission_systems.submission_job import S
 class _SubmissionSystem:
     verbose: bool
     submission: bool
-
-    job_duration: str = "24:00"
     nmpi: int
     nomp: int
     max_storage: float
+    job_duration: str
+    environment: dict
+    block_double_submission: bool
+    chain_prefix: str
+    begin_mail: bool
+    end_mail: bool
     job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
     zip_trajectories: bool
 
     def __init__(
         self,
-        submission: bool = False,
+        submission: bool = True,
         nmpi: int = 1,
         nomp: int = 1,
         max_storage: float = 1000,
@@ -63,14 +67,14 @@ class _SubmissionSystem:
         zip_trajectories: bool, optional
             determines if output trajectories are compressed or not
         """
-        self.verbose = verbose
-        self.submission = submission
 
-        self.job_duration = job_duration
+        self.submission = submission
         self.nmpi = nmpi
         self.nomp = nomp
         self.max_storage = max_storage
-        self.enviroment = enviroment
+        self.job_duration = job_duration
+        self.verbose = verbose
+        self.environment = enviroment
         self.block_double_submission = block_double_submission
         self.chain_prefix = chain_prefix
         self.begin_mail = begin_mail
@@ -238,16 +242,16 @@ class _SubmissionSystem:
 
     @property
     def max_storage(self) -> str:
-        return self.max_storage
+        return self._max_storage
 
     @property
     def zip_trajectories(self) -> bool:
-        return self.zip_trajectories
+        return self._zip_trajectories
 
     @zip_trajectories.setter
     def zip_trajectories(self, zip_trajectories: bool):
-        self.zip_trajectories = zip_trajectories
+        self._zip_trajectories = zip_trajectories
 
     @max_storage.setter
     def max_storage(self, max_storage: float):
-        self.max_storage = float(max_storage)
+        self._max_storage = float(max_storage)
