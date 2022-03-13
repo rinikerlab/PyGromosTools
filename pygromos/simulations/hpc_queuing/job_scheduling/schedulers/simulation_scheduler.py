@@ -97,7 +97,7 @@ def do(
             out_dir_path,
         ]  # Coord file is used by repex in_imd_path prepared_im
         # variable paths
-        if _work_dir is not None:
+        if _work_dir is not None or "out_dir":
             check_path_dependencies_paths.append(_work_dir)
 
         if not in_simSystem.top._future_file:
