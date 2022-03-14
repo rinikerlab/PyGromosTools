@@ -446,12 +446,12 @@ class Tre(traj._General_Trajectory):
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_totpot_energy = 0
         if type(gas_traj) == type(self):
-            gas_totpot_energy = gas_traj.get_totals_totpot().mean()
+            gas_totpot_energy = gas_traj.get_totpot().mean()
         elif type(gas_traj) == float:
             gas_totpot_energy = gas_traj
         else:
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
-        liq_totpot_energy = self.get_totals_totpot().mean()
+        liq_totpot_energy = self.get_totpot().mean()
 
         # get temperature from liq trajectory if not given
         if temperature is None:
