@@ -181,7 +181,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=self.groSys_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="1_emin",
-            submission_system=self.submissonSystem,
+            submission_system=self.submission_system,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -194,7 +194,7 @@ class Hvap_calculation:
             override_project_dir=self.groSys_gas.work_folder,
             step_name="2_eq",
             previous_simulation_run=sys_emin_gas._jobID,
-            submission_system=self.submissonSystem,
+            submission_system=self.submission_system,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -206,7 +206,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_eq_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="3_sd",
-            submission_system=self.submissonSystem,
+            submission_system=self.submission_system,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -222,7 +222,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=self.groSys_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="1_emin",
-            submission_system=self.submissonSystem,
+            submission_system=self.submission_system,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -234,7 +234,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_emin_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="2_eq",
-            submission_system=self.submissonSystem,
+            submission_system=self.submission_system,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -246,7 +246,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_eq_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="3_sd",
-            submission_system=self.submissonSystem,
+            submission_system=self.submission_system,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
