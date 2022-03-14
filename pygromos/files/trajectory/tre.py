@@ -22,7 +22,7 @@ from typing import Tuple, Dict
 
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import (
-    gromos_2020_tre_block_names_table,
+    gromos_2021_tre_block_names_table,
     gromos_tre_block_names_table,
 )
 from pygromos.analysis import energy_analysis as ea
@@ -65,7 +65,7 @@ class Tre(traj._General_Trajectory):
         auto_save=True,
         stride: int = 1,
         skip: int = 0,
-        _ene_ana_names: gromos_tre_block_names_table = gromos_2020_tre_block_names_table,
+        _ene_ana_names: gromos_tre_block_names_table = gromos_2021_tre_block_names_table,
     ):
         """
             Build a Gromos energy trajectory file (.tre)
