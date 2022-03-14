@@ -28,7 +28,7 @@ from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.approaches.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.simulations.hpc_queuing.submission_systems import get_submission_system
+from pygromos.simulations.hpc_queuing.submission_systems import get_submission_system, _submission_system
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
@@ -36,14 +36,12 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.utils.utils import time_wait_s_for_filesystem
 
-# automatically get Local or LSF submission system (depending on hostname)
-subSystem = get_submission_system()
 
 
 class Hvap_calculation:
     dens_modifier: float = 0.7
-    submissonSystem_gas: subSystem
-    submissonSystem_liq: subSystem
+    submissonSystem_gas: _submission_system
+    submissonSystem_liq: _submission_system
 
     def __init__(
         self,
@@ -51,6 +49,7 @@ class Hvap_calculation:
         work_folder: str,
         system_name: str = "dummy",
         forcefield: forcefield_system = forcefield_system(name="54A7"),
+        submission_system: _submission_system = get_submission_system()(),# automatically get Local or LSF submission system (depending on hostname)
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
         useGromosPlsPls: bool = True,
@@ -85,8 +84,8 @@ class Hvap_calculation:
         self.work_folder = work_folder
         self.system_name = system_name
 
-        self.submissonSystem_gas = subSystem(job_duration="4:00")
-        self.submissonSystem_liq = subSystem(nmpi=8, job_duration="24:00")
+        self.submissonSystem_gas = deepcopy(submission_system)
+        self.submissonSystem_liq = deepcopy(submission_system)
 
         # create folders and structure
         try:
@@ -200,7 +199,6 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_emin_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="2_eq",
-            previous_simulation_run=sys_emin_gas._jobID,
             submission_system=self.submissonSystem_gas,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
