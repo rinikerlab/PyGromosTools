@@ -305,16 +305,16 @@ class LSF(_SubmissionSystem):
                 try:
                     # get all running and pending jobs
                     if self.bjobs_only_same_host:
-                        out_process = bash.execute("bjobs -w", catch_STD=True)
-                    else:
                         out_process = bash.execute("bjobs -w | grep '$HOSTNAME|JOBID'", catch_STD=True)
+                    else:
+                        out_process = bash.execute("bjobs -w", catch_STD=True)
                     job_list_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
 
                     # get all finished jobs
                     if self.bjobs_only_same_host:
-                        out_process = bash.execute("bjobs -wd", catch_STD=True)
-                    else:
                         out_process = bash.execute("bjobs -wd | grep '$HOSTNAME|JOBID'", catch_STD=True)
+                    else:
+                        out_process = bash.execute("bjobs -wd", catch_STD=True)
                     job_list_finished_str = list(map(lambda x: x.decode("utf-8"), out_process.stdout.readlines()))
                     self._job_queue_time_stamp = datetime.now()
                 except Exception as err:
