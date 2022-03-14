@@ -107,10 +107,11 @@ class Tre(traj._General_Trajectory):
         """
         # print(self.database["totals"][0].shape, self.database["totals"][0])
         if not hasattr(self, "totals"):
+            totals_data = np.stack(self.database["totals"].to_numpy())
             self.totals = pd.DataFrame(
-                data=np.stack(self.database["totals"].to_numpy()),
+                data=totals_data,
                 index=self.database.time,
-                columns=self.tre_block_name_table.totals_subblock_names,
+                columns=self.tre_block_name_table.totals_subblock_names[: totals_data.shape[1]],
             )
         else:
             pass
