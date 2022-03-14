@@ -28,7 +28,7 @@ from pygromos.files.gromos_system.gromos_system import Gromos_System
 from pygromos.simulations.approaches.hvap_calculation import hvap_input_files
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
-from pygromos.simulations.hpc_queuing.submission_systems.local import _SubmissionSystem, LOCAL
+from pygromos.simulations.hpc_queuing.submission_systems import get_submission_system
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 
@@ -36,9 +36,14 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.utils.utils import time_wait_s_for_filesystem
 
+# automatically get Local or LSF submission system (depending on hostname)
+subSystem = get_submission_system()
+
 
 class Hvap_calculation:
     dens_modifier: float = 0.7
+    submissonSystem_gas: subSystem
+    submissonSystem_liq: subSystem
 
     def __init__(
         self,
@@ -48,7 +53,6 @@ class Hvap_calculation:
         forcefield: forcefield_system = forcefield_system(name="54A7"),
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
-        submissionSystem: _SubmissionSystem = LOCAL(),
         useGromosPlsPls: bool = True,
         verbose: bool = True,
     ) -> None:
@@ -80,7 +84,10 @@ class Hvap_calculation:
 
         self.work_folder = work_folder
         self.system_name = system_name
-        self.submission_system = submissionSystem
+
+        self.submissonSystem_gas = (subSystem(job_duration="4:00"),)
+        self.submissonSystem_liq = subSystem(nmpi=8, job_duration="24:00")
+
         # create folders and structure
         try:
             os.mkdir(path=work_folder)
@@ -181,7 +188,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=self.groSys_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="1_emin",
-            submission_system=self.submission_system,
+            submission_system=self.submissonSystem_gas,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -194,7 +201,7 @@ class Hvap_calculation:
             override_project_dir=self.groSys_gas.work_folder,
             step_name="2_eq",
             previous_simulation_run=sys_emin_gas._jobID,
-            submission_system=self.submission_system,
+            submission_system=self.submissonSystem_gas,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -206,7 +213,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_eq_gas,
             override_project_dir=self.groSys_gas.work_folder,
             step_name="3_sd",
-            submission_system=self.submission_system,
+            submission_system=self.submissonSystem_gas,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -222,7 +229,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=self.groSys_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="1_emin",
-            submission_system=self.submission_system,
+            submission_system=self.submissonSystem_liq,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -234,7 +241,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_emin_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="2_eq",
-            submission_system=self.submission_system,
+            submission_system=self.submissonSystem_liq,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -246,7 +253,7 @@ class Hvap_calculation:
             in_gromos_simulation_system=sys_eq_liq,
             override_project_dir=self.groSys_liq.work_folder,
             step_name="3_sd",
-            submission_system=self.submission_system,
+            submission_system=self.submissonSystem_liq,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
