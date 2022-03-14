@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import glob
 import time
 import math
 import traceback
@@ -42,7 +43,8 @@ def work(
     gromosXX_bin_dir: str = None,
     work_dir: str = None,
     zip_trajectories: bool = True,
-    **kwargs
+    _gromos_noBinary_checks: bool = False,
+    **kwargs,
 ):
     """
     Executed by repex_EDS_long_production_run as workers
@@ -90,14 +92,25 @@ def work(
     """
     time.sleep(time_wait_s_for_filesystem)
     # WORKDIR SetUP
-    if (work_dir is None or work_dir == "None") and "TMPDIR" in os.environ:
-        work_dir = os.environ["TMPDIR"]
-        print("using TmpDir")
+    if work_dir is None or work_dir == "None":
+        if "TMPDIR" in os.environ:
+            work_dir = os.environ["TMPDIR"]
+        else:
+            print("Could not find TMPDIR!\n Switched to outdir for work")
+            work_dir = out_dir
+            if not os.path.isdir(work_dir):
+                bash.make_folder(work_dir)
+    elif isinstance(work_dir, str) and work_dir != "None":
+        if work_dir == "out_dir":
+            work_dir = out_dir
+            if not os.path.isdir(work_dir):
+                bash.make_folder(work_dir)
+        else:
+            if not os.path.isdir(work_dir):
+                bash.make_folder(work_dir)
     else:
-        print("Could not find TMPDIR!\n Switched to outdir for work")
-        work_dir = out_dir
-        if not os.path.isdir(work_dir):
-            bash.make_folder(work_dir)
+        raise ValueError(f"work_dir is not a valid path, work_dir: {work_dir}")
+
     print("workDIR: " + str(work_dir))
 
     # Check if the calculation is running on multiple nodes:
@@ -146,7 +159,7 @@ def work(
         if hasattr(imd_file, "MULTIBATH"):
             imd_file.INITIALISE.NTINHT = 0 if (imd_file.MULTIBATH.ALGORITHM <= 1) else 1
 
-        imd_file.INITIALISE.NTISHI = 0 if (hasattr(cnf_file, "LATTICESHIFT")) else 1
+        imd_file.INITIALISE.NTISHI = 0 if (hasattr(cnf_file, "LATTICESHIFTS")) else 1
 
         imd_file.INITIALISE.NTIRTC = 0
         imd_file.INITIALISE.NTICOM = 0
@@ -166,7 +179,7 @@ def work(
         imd_file.INITIALISE.NTISTI = 0
 
         if is_stochastic_dynamics_sim or is_vacuum:
-            imd_file.INITIALISE.NTISHI = 1
+            imd_file.INITIALISE.NTISTI = 1
 
     # Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)
@@ -235,6 +248,16 @@ def work(
         print("\nFailed during simulations: ", file=sys.stderr)
         print(type(err), file=sys.stderr)
         print(err.args, file=sys.stderr)
+        print("GROMOS OUTPUT:")
+
+        omd_outs = glob.glob(out_dir + "/" + tmp_prefix + "*.omd")
+        if len(omd_outs) > 1:
+            omd_file_content = open(omd_outs[0], "r").read_lines()
+            if len(omd_file_content) > 1:
+                print("\t" + "\n\t".join(omd_file_content))
+            else:
+                print("\t None")
+
         exit(1)
     if md_failed:
         print("\nFailed during simulations: \n Checkout: \n " + str(tmp_prefix) + ".omd", file=sys.stderr)

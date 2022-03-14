@@ -37,7 +37,6 @@ def do(
     in_simulation_dir: str,
     out_analysis_dir: str,
     sim_prefix: str,  # in_system:Gromos_System,
-    gromosPP_bin_dir: str = None,
     n_processes: int = 1,
     control_dict: dict = None,
     verbose: bool = True,

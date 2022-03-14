@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 import traceback
 import time
 import warnings
@@ -33,6 +34,8 @@ def simulation(
     reinitialize_every_run=False,
     analysis_script: callable = simulation_analysis.do,
     analysis_control_dict: dict = None,
+    _no_double_submit_check: bool = False,
+    _work_dir: str = None,
     verbose: bool = True,
     verbose_lvl: int = 1,
     _template_imd_path: str = None,
@@ -80,6 +83,8 @@ def simulation(
     try:
         try:
             gromos_system = deepcopy(in_gromos_simulation_system)
+            if previous_simulation_run is not None:
+                gromos_system._last_jobID = previous_simulation_run
 
             # check if override dir is given and set project to correct location
             if override_project_dir is not None:
@@ -171,10 +176,14 @@ def simulation(
                 "analysis_script_path": in_analysis_script_path,
                 "initialize_first_run": initialize_first_run,
                 "reinitialize_every_run": reinitialize_every_run,
+                "previous_job_ID": gromos_system._last_jobID,
+                "_no_double_submit_check": _no_double_submit_check,
+                "_work_dir": _work_dir,
                 "verbose": verbose,
                 "verbose_lvl": verbose_lvl,
             }
         )
+
         try:
             in_scheduler_script_path = utils.write_job_script(  # noqa: F841
                 out_script_path=step_dir + "/schedule_MD_job.py",
@@ -195,26 +204,21 @@ def simulation(
             # warnings.warn("Skipping active submission, as result CNF was found: \n"+out_analysis_cnf)
             last_jobID = 0
         else:
-            last_jobID = simulation_scheduler.do(
-                in_simSystem=gromos_system,
-                out_dir_path=out_simulation_dir,
-                simulation_run_num=simulation_runs,
-                equilibration_run_num=equilibration_runs,
-                submission_system=submission_system,
-                previous_job_ID=previous_simulation_run,
-                initialize_first_run=initialize_first_run,
-                reinitialize_every_run=reinitialize_every_run,
-                analysis_script_path=in_analysis_script_path,
-                verbose=verbose,
-                verbose_lvl=verbose_lvl,
-            )
+            last_jobID = simulation_scheduler.do(**MD_job_vars)
     except Exception as err:
         traceback.print_exception(*sys.exc_info())
         raise Exception("Could not submit the commands\n\t" + "\n\t".join(map(str, err.args)))
 
     time.sleep(time_wait_s_for_filesystem)
+
     # Return the promise final system
-    if os.path.exists(out_analysis_cnf):
+    if in_analysis_script_path is None and os.path.exists(out_simulation_dir):
+        cnfs = list(
+            sorted(glob.glob(out_simulation_dir + "/*/*cnf"), key=lambda x: int(x.split("_")[-1].split(".")[0]))
+        )
+        last_cnf = cnfs[-1]
+        gromos_system.cnf = cnf.Cnf(last_cnf)
+    elif os.path.exists(out_analysis_cnf):
         gromos_system.cnf = cnf.Cnf(out_analysis_cnf)
     else:
         gromos_system.cnf = cnf.Cnf(in_value=None)

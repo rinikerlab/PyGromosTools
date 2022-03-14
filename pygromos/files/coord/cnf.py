@@ -67,7 +67,7 @@ class Cnf(_general_gromos_file):
 
     def __init__(
         self,
-        in_value: (str or dict or None or __class__),
+        in_value: Union[str, dict, None],
         clean_resiNumbers_by_Name=False,
         verbose: bool = False,
         _future_file: bool = False,
@@ -104,14 +104,6 @@ class Cnf(_general_gromos_file):
 
         """
         return parser.read_cnf(self._orig_file_path)
-
-    def write(self, out_path: str) -> str:
-        # write out
-        out_file = open(out_path, "w")
-        out_file.write(self.__str__())
-        out_file.close()
-        self.path = os.path.abspath(out_path)
-        return out_path
 
     """
         manipulate/analysis of coordinates

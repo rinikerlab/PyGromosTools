@@ -21,7 +21,7 @@ class LOCAL(_SubmissionSystem):
         nmpi: int = 1,
         job_duration: str = "24:00",
         verbose: bool = False,
-        enviroment=None,
+        environment=None,
         zip_trajectories: bool = True,
     ):
         super().__init__(
@@ -30,7 +30,7 @@ class LOCAL(_SubmissionSystem):
             nomp=nomp,
             job_duration=job_duration,
             submission=submission,
-            enviroment=enviroment,
+            environment=environment,
             zip_trajectories=zip_trajectories,
         )
 
@@ -49,8 +49,8 @@ class LOCAL(_SubmissionSystem):
 
         sub_job.command = sub_job.command.strip()  # remove trailing linebreaks
 
-        if self.nomp >= 1:
-            command = "export OMP_NUM_THREADS=" + str(self.nomp) + ";\n " + sub_job.command + ""
+        if self._nomp >= 1:
+            command = "export OMP_NUM_THREADS=" + str(self._nomp) + ";\n " + sub_job.command + ""
         else:
             command = sub_job.command
 
@@ -60,7 +60,7 @@ class LOCAL(_SubmissionSystem):
             command_file.write(command.replace("&& ", ";\n") + ";\n")
             command_file.close()
             command = command_file_path
-            bash.execute("chmod +x " + command_file_path, env=self._enviroment)
+            bash.execute("chmod +x " + command_file_path, env=self.environment)
 
         # finalize string
 
@@ -68,7 +68,7 @@ class LOCAL(_SubmissionSystem):
             print("Submission Command: \t", " ".join(command))
         if self.submission:
             try:
-                process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
+                process = bash.execute(command=command, catch_STD=True, env=self.environment)
                 std_out_buff = map(str, process.stdout.readlines())
                 std_out = "\t" + "\n\t".join(std_out_buff)
 
@@ -100,8 +100,8 @@ class LOCAL(_SubmissionSystem):
         if isinstance(sub_job.submit_from_dir, str) and os.path.isdir(sub_job.submit_from_dir):
             submission_string += "cd " + sub_job.submit_from_dir + " && "
 
-        if self.nomp > 1:
-            command = submission_string + " export OMP_NUM_THREADS=" + str(self.nomp) + " && " + sub_job.command
+        if self._nomp > 1:
+            command = submission_string + " export OMP_NUM_THREADS=" + str(self._nomp) + " && " + sub_job.command
         else:
             command = submission_string + sub_job.command
 
@@ -111,7 +111,7 @@ class LOCAL(_SubmissionSystem):
             try:
                 for jobID in range(sub_job.start_job, sub_job.end_job + 1):
                     std_out_buff = bash.execute(
-                        command="export JOBID=" + str(jobID) + " && " + command, env=self._enviroment
+                        command="export JOBID=" + str(jobID) + " && " + command, env=self.environment
                     )
                     std_out = "\n".join(std_out_buff.readlines())
                     if self.verbose:

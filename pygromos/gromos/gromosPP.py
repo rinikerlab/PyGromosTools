@@ -52,7 +52,6 @@ class _gromosPPbase(_gromosClass):
             ["\t\t" + x for x in dir(self) if (not x.startswith("_") and callable(getattr(self, x)))]
         )
         self.__doc__ = self.__doc__ + functions_text
-
         super().__init__(
             in_bin_dir=gromosPP_bin_dir, _dont_check_binary=_dont_check_binary
         )  # initialises the binary checks

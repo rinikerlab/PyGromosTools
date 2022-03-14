@@ -80,4 +80,3 @@ class _gromosClass(_compiled_program):
             return func(self, *nargs, **kwargs)
 
         return convert_pyGromos_types
-
