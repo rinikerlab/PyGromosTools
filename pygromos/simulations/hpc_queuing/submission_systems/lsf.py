@@ -360,7 +360,7 @@ class LSF(_SubmissionSystem):
 
     def search_queue_for_jobid(self, job_id: int) -> pd.DataFrame:
         self.get_queued_jobs()
-        return self._job_queue_list.where(self.job_queue_list.JOBID == job_id).dropna()
+        return self._job_queue_list.where(self._job_queue_list.JOBID == job_id).dropna()
 
     def search_queue_for_jobname(self, job_name: str, regex: bool = False) -> pd.DataFrame:
         """search_queue_for_jobname
