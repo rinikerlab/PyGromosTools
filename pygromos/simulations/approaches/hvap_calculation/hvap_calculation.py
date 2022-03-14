@@ -85,7 +85,7 @@ class Hvap_calculation:
         self.work_folder = work_folder
         self.system_name = system_name
 
-        self.submissonSystem_gas = (subSystem(job_duration="4:00"),)
+        self.submissonSystem_gas = subSystem(job_duration="4:00")
         self.submissonSystem_liq = subSystem(nmpi=8, job_duration="24:00")
 
         # create folders and structure
