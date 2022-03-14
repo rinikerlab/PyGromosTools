@@ -54,6 +54,8 @@ class Hvap_calculation:
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
         useGromosPlsPls: bool = True,
+        submissonSystem_gas=subSystem(job_duration="4:00"),
+        submissonSystem_liq=subSystem(nmpi=8, job_duration="24:00"),
         verbose: bool = True,
     ) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
@@ -85,8 +87,8 @@ class Hvap_calculation:
         self.work_folder = work_folder
         self.system_name = system_name
 
-        self.submissonSystem_gas = subSystem(job_duration="4:00")
-        self.submissonSystem_liq = subSystem(nmpi=8, job_duration="24:00")
+        self.submissonSystem_gas = submissonSystem_gas
+        self.submissonSystem_liq = submissonSystem_liq
 
         # create folders and structure
         try:
