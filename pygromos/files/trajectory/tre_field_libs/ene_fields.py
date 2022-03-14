@@ -46,7 +46,6 @@ class gromos_2015_tre_block_names_table(gromos_tre_block_names_table):
         "totqm",
         "totbsleus",
         "totrdc",
-        "wip1",
     ]
 
     eds_subblock_names_singleState = ["total", "nonbonded", "special"]
