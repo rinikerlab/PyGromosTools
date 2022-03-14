@@ -3090,30 +3090,6 @@ class TEMPERATUREGROUPS(_generic_topology_groups):
 class PRESSUREGROUPS(_generic_topology_groups):
     pass
 
-        if len(self.content) == 1 and len(self.content[0]) - 1 == int(self.content[0][0]):
-            self.NSM = int(self.content[0][0])
-            self.NSP = [int(x) for x in self.content[0][1:]]
-        elif len(self.content) > 1:
-            self.NSM = int(self.content[0][0])
-            self.NSP = []
-            [
-                self.NSP.extend(list(map(int, t))) if (isinstance(t, list)) else self.NSP.extend([int(t)])
-                for t in self.content[1:]
-            ]
-        else:
-            raise ValueError("SOLUTEMOLECULES has not the correct number of fields.")
-
-        # Clean COntent
-        self.content = [[self.NSM]]
-        self.content.extend([[x] for x in self.NSP])
-
-    def block_to_string(self) -> str:
-        # Clean COntent
-        self.content = [[self.NSM]]
-        self.content.extend([[x] for x in self.NSP])
-
-        return super().block_to_string()
-
 
 class LJEXCEPTIONS(_topology_table_block):
     NEX: int
