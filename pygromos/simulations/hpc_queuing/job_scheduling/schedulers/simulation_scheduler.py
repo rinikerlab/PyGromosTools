@@ -36,6 +36,7 @@ def do(
     verbose: bool = True,
     verbose_lvl: int = 1,
 ):
+    
     """
 
     Parameters
@@ -88,12 +89,12 @@ def do(
 
         # sim vars logs
         out_prefix = in_simSystem.name
-        slave_script = workerScript.__file__
+        worker_script = workerScript.__file__
 
         # CHECK PATH DEPENDENCIES - all Files present?
         # needed variables
         check_path_dependencies_paths = [
-            slave_script,
+            worker_script,
             out_dir_path,
         ]  # Coord file is used by repex in_imd_path prepared_im
         # variable paths
@@ -116,8 +117,6 @@ def do(
             check_path_dependencies_paths.append(in_simSystem.refpos.path)
         if in_simSystem.qmmm is not None:
             check_path_dependencies_paths.append(in_simSystem.qmmm.path)
-
-            # prepared_imd = bash.copy_file(in_simSystem.imd.path, prepared_imd) #Todo: Remove? @bschroed
 
         bash.check_path_dependencies(check_path_dependencies_paths, verbose=job_verb)
 
