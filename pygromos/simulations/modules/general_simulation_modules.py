@@ -83,7 +83,8 @@ def simulation(
     try:
         try:
             gromos_system = deepcopy(in_gromos_simulation_system)
-
+            if(previous_simulation_run != None): gromos_system._last_jobID = previous_simulation_run
+            
             # check if override dir is given and set project to correct location
             if override_project_dir is not None:
                 init_work_folder = override_project_dir
@@ -174,7 +175,7 @@ def simulation(
                 "analysis_script_path": in_analysis_script_path,
                 "initialize_first_run": initialize_first_run,
                 "reinitialize_every_run": reinitialize_every_run,
-                "previous_job_ID": previous_simulation_run,
+                "previous_job_ID": gromos_system._last_jobID,
                 "_no_double_submit_check": _no_double_submit_check,
                 "_work_dir": _work_dir,
                 "verbose": verbose,
