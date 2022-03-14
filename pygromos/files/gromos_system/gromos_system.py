@@ -86,7 +86,10 @@ class Gromos_System:
     protein_info: cnf.protein_infos
     non_ligand_info: cnf.non_ligand_infos
     solvent_info: cnf.solvent_infos
-    checkpoint_path: str
+    
+    #privates 
+    _checkpoint_path: str
+    _last_jobID : int # hpcScheduling ID of the last submitted job.
     _future_promise: bool  # for interest if multiple jobs shall be chained.
     _future_promised_files: list
 
@@ -190,7 +193,8 @@ class Gromos_System:
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.in_mol2_file = in_mol2_file
-        self.checkpoint_path = None
+        self._checkpoint_path = None
+        self._last_jobID = None
         self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
 
@@ -310,7 +314,7 @@ class Gromos_System:
         msg += "GROMOS SYSTEM: " + self.name + "\n"
         msg += utils.spacer
         msg += "WORKDIR: " + self._work_folder + "\n"
-        msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
+        msg += "LAST CHECKPOINT: " + str(self._checkpoint_path) + "\n"
         msg += "\n"
         msg += "GromosXX_bin: " + str(self.gromosXX_bin_dir) + "\n"
         msg += "GromosPP_bin: " + str(self.gromosPP_bin_dir) + "\n"
@@ -1195,7 +1199,7 @@ class Gromos_System:
         if not safe_skip:
             pickle.dump(obj=self, file=bufferdWriter)
             bufferdWriter.close()
-            self.checkpoint_path = path
+            self._checkpoint_path = path
         return path
 
     @classmethod
@@ -1221,7 +1225,7 @@ class Gromos_System:
                 obj.non_ligand_info,
                 obj.solvent_info,
             ) = obj._cnf.get_system_information()
-        obj.checkpoint_path = path
+        obj._checkpoint_path = path
         return obj
 
     """

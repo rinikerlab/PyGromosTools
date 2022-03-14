@@ -48,7 +48,7 @@ class Hvap_calculation:
         forcefield: forcefield_system = forcefield_system(name="54A7"),
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
-        submissionSystem: _SubmissionSystem = LOCAL,
+        submissionSystem: _SubmissionSystem = LOCAL(),
         useGromosPlsPls: bool = True,
         verbose: bool = True,
     ) -> None:
@@ -94,8 +94,6 @@ class Hvap_calculation:
         self.groSys_liq = deepcopy(self.groSys_gas)
         self.groSys_liq.work_folder = work_folder + "/" + system_name + "_liq"
         self.groSys_liq.rebase_files()
-
-        self.submissonSystem = self.submission_system()
 
         self.gromosXX = self.groSys_gas.gromosXX
         self.gromosPP = self.groSys_gas.gromosPP
