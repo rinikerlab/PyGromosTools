@@ -1,7 +1,7 @@
 name: pygromos
 channels:
   - conda-forge
-  - nvidia
+  #- nvidia
   - defaults
 dependencies:
   # Base depends
@@ -14,7 +14,7 @@ dependencies:
   - fftw
   - openmpi
   - openmp
-  - cuda
+  #- cuda #possible but very intense installing
   - cudatoolkit
   ## Testing
   - pytest
