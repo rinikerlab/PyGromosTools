@@ -86,10 +86,10 @@ class Gromos_System:
     protein_info: cnf.protein_infos
     non_ligand_info: cnf.non_ligand_infos
     solvent_info: cnf.solvent_infos
-    
-    #privates 
+
+    # privates
     _checkpoint_path: str
-    _last_jobID : int # hpcScheduling ID of the last submitted job.
+    _last_jobID: int  # hpcScheduling ID of the last submitted job.
     _future_promise: bool  # for interest if multiple jobs shall be chained.
     _future_promised_files: list
 

@@ -36,6 +36,8 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.utils.utils import time_wait_s_for_filesystem
 
+# automatically get Local or LSF submission system (depending on hostname)
+subSystem = get_submission_system()
 
 
 class Hvap_calculation:
@@ -49,12 +51,9 @@ class Hvap_calculation:
         work_folder: str,
         system_name: str = "dummy",
         forcefield: forcefield_system = forcefield_system(name="54A7"),
-        submission_system: _submission_system = get_submission_system()(),# automatically get Local or LSF submission system (depending on hostname)
         in_gromosXX_bin_dir: str = None,
         in_gromosPP_bin_dir: str = None,
         useGromosPlsPls: bool = True,
-        submissonSystem_gas=subSystem(job_duration="4:00"),
-        submissonSystem_liq=subSystem(nomp=8, job_duration="24:00"),
         verbose: bool = True,
     ) -> None:
         """For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated
@@ -86,9 +85,11 @@ class Hvap_calculation:
         self.work_folder = work_folder
         self.system_name = system_name
 
-        self.submissonSystem_gas = submissonSystem_gas
-        self.submissonSystem_liq = submissonSystem_liq
-
+        self.submissonSystem_gas = subSystem(job_duration="4:00")
+        # give the liquid simulation as much cores as possible to speedup the long liquid simulation.
+        # if you use a mpi version of gromos use nmpi=4 (or more)
+        # the attribute can be overwritten by the user at runtime after the class is initiated
+        self.submissonSystem_liq = subSystem(nomp=4, job_duration="24:00")
 
         # create folders and structure
         try:
