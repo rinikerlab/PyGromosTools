@@ -202,11 +202,11 @@ class Trc(mdtraj.Trajectory):
         self._view = nj.show_mdtraj(self)
         return self._view
 
-    def write_trc(self, out_path:streams)->str:
+    def write_trc(self, out_path: streams) -> str:
         raise NotImplementedError("Not Implemented")
 
-    def write(self, out_path:str):
-        if(out_path.endswith(".trc")):
+    def write(self, out_path: str):
+        if out_path.endswith(".trc"):
             return self.write_trc()
         else:
             self.save(out_path)

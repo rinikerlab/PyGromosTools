@@ -1,5 +1,4 @@
 import copy
-import os
 import mdtraj
 import tempfile
 import nglview as nj
