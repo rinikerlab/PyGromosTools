@@ -51,7 +51,7 @@ class _compiled_program:
         self._check_binary_paths = _check_binary_paths
 
         # Check initial status of binaries
-        self._bin = "" if (in_bin_dir is None or in_bin_dir == 'None' or in_bin_dir == '') else in_bin_dir 
+        self._bin = "" if (in_bin_dir is None or in_bin_dir == "None" or in_bin_dir == "") else in_bin_dir
         self._check_binary_dir(in_bin_dir=self._bin)
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
@@ -94,7 +94,7 @@ class _compiled_program:
 
     @bin.setter
     def bin(self, in_bin_dir: str):
-        self._bin = "" if (in_bin_dir is None or in_bin_dir == 'None' or in_bin_dir == '') else in_bin_dir 
+        self._bin = "" if (in_bin_dir is None or in_bin_dir == "None" or in_bin_dir == "") else in_bin_dir
         self._check_binary_dir(in_bin_dir=in_bin_dir)
         if not (self._bin == "" and self._bin.endswith("/")):
             self._bin += "/"
@@ -169,7 +169,9 @@ class _compiled_program:
             If the binary dir was not found and _dont_check_bin was False (default: False)
         """
 
-        if (in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]) or not self._check_binary_paths:  # did we already check this
+        if (
+            in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]
+        ) or not self._check_binary_paths:  # did we already check this
             return True
         elif isinstance(in_bin_dir, str) and in_bin_dir != "" and bash.directory_exists(in_bin_dir):
             self._found_binary_dir[in_bin_dir] = True
@@ -189,7 +191,7 @@ class _compiled_program:
                     + str(in_bin_dir)
                 )
             return False
-        
+
     def _check_all_binaries(self, _force_bin_present: bool = False) -> bool:
         """
         This function checks all present programs of this class, if the binary can be found and executed.
@@ -272,7 +274,7 @@ class _compiled_program:
             remove all wrappers?, by default False
         """
         if self._check_binary_paths:
-           pass
+            pass
 
         else:
             v = {}

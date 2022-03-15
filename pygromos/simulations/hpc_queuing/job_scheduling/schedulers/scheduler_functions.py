@@ -1,7 +1,5 @@
 import glob
 import os
-import warnings
-
 import pandas as pd
 from pygromos.files.coord.cnf import Cnf
 

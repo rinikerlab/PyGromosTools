@@ -760,8 +760,10 @@ class Gromos_System:
             + "_class"
             + "\n"
         )
-        if hasattr(self, '_gromos_binary_checks') and not self._gromos_binary_checks:
-            gen_cmd += self.__class__.__name__ + "_class._gromos_binary_checks = " + str(self._gromos_binary_checks) + "\n"
+        if hasattr(self, "_gromos_binary_checks") and not self._gromos_binary_checks:
+            gen_cmd += (
+                self.__class__.__name__ + "_class._gromos_binary_checks = " + str(self._gromos_binary_checks) + "\n"
+            )
 
         gen_cmd += (
             var_name
@@ -889,11 +891,10 @@ class Gromos_System:
 
             # make top
             self.make_top(
-                    in_building_block_lib_path=mtb_temp,
-                    in_parameter_lib_path=ifp_temp,
-                    in_sequence=name,
-                )
-
+                in_building_block_lib_path=mtb_temp,
+                in_parameter_lib_path=ifp_temp,
+                in_sequence=name,
+            )
 
         elif (
             self.Forcefield.name == "smirnoff"
