@@ -434,8 +434,8 @@ class Gromos_System:
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-        self._gromosPP = GromosPP(self._gromosPP_bin_dir)
-        self._gromosXX = GromosXX(self._gromosXX_bin_dir)
+        self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
+        self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
 
         self.__bind_gromosPPFuncs()
 
@@ -711,11 +711,11 @@ class Gromos_System:
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _check_binary=self._gromos_binary_checks)
+            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _check_binary_paths=self._gromos_binary_checks)
             self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
-            self._gromosXX._check_binary = self._gromos_binary_checks
+            self._gromosXX._check_binary_paths = self._gromos_binary_checks
             self._gromosXX_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -727,11 +727,11 @@ class Gromos_System:
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _check_binary=self._gromos_binary_checks)
+            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _check_binary_paths=self._gromos_binary_checks)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
             self._gromosPP = input_value
-            self._gromosPP._check_binary = self._gromos_binary_checks
+            self._gromosPP._check_binary_paths = self._gromos_binary_checks
             self._gromosPP_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -888,16 +888,12 @@ class Gromos_System:
                 name = self.Forcefield.mol_name
 
             # make top
-            if self.gromosPP._found_binary["make_top"]:
-                self.make_top(
+            self.make_top(
                     in_building_block_lib_path=mtb_temp,
                     in_parameter_lib_path=ifp_temp,
                     in_sequence=name,
                 )
-            else:
-                warnings.warn(
-                    "could not find a gromosPP version. Please provide a valid version for Gromos auto system generation"
-                )
+
 
         elif (
             self.Forcefield.name == "smirnoff"

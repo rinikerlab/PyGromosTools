@@ -41,6 +41,7 @@ def work(
     reinitialize_every_run: bool = False,
     initialize_first_run: bool = True,
     gromosXX_bin_dir: str = None,
+    gromosXX_check_binary_paths: bool=True,
     work_dir: str = None,
     zip_trajectories: bool = True,
     _gromos_noBinary_checks: bool = False,
@@ -185,7 +186,11 @@ def work(
     tmp_imd_path = imd_file.write(tmp_imd_path)
 
     # RUN
-    gromosXX = mdGromosXX.GromosXX(gromosXX_bin_dir=gromosXX_bin_dir)
+    print("input: ", type(gromosXX_bin_dir), gromosXX_bin_dir)
+    gromosXX = mdGromosXX.GromosXX(gromosXX_bin_dir=gromosXX_bin_dir, _check_binary_paths= gromosXX_check_binary_paths)
+    print("gromosXX._bin: ", type(gromosXX._bin), gromosXX._bin)
+    print("gromosXX.bin: ", type(gromosXX.bin), gromosXX.bin)
+
     try:
         print(spacer + "\n start MD " + str(os.path.basename(tmp_imd_path)) + "\n")
 
