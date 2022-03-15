@@ -35,7 +35,7 @@ class _gromosPPbase(_gromosClass):
     _isValid: bool = False
 
     def __init__(
-        self, gromosPP_bin_dir: Union[str, None] = None, _dont_check_binary: bool = False, verbose: bool = False
+        self, gromosPP_bin_dir: Union[str, None] = None, _check_binary: bool = False, verbose: bool = False
     ):
         """
         Constructing a gromosPP object.
@@ -53,7 +53,7 @@ class _gromosPPbase(_gromosClass):
         )
         self.__doc__ = self.__doc__ + functions_text
         super().__init__(
-            in_bin_dir=gromosPP_bin_dir, _dont_check_binary=_dont_check_binary
+            in_bin_dir=gromosPP_bin_dir, _check_binary=_check_binary
         )  # initialises the binary checks
 
     def __str__(self):
@@ -1929,5 +1929,5 @@ class GromosPP(_gromosPPbase):
         This is the path to the folder containing the binaries of gromosPP If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosPP_bin_dir: str = None, _dont_check_binary: bool = False, verbose: bool = False):
-        super().__init__(gromosPP_bin_dir=gromosPP_bin_dir, verbose=verbose, _dont_check_binary=_dont_check_binary)
+    def __init__(self, gromosPP_bin_dir: str = None, _check_binary: bool = False, verbose: bool = False):
+        super().__init__(gromosPP_bin_dir=gromosPP_bin_dir, verbose=verbose, _check_binary=_check_binary)

@@ -8,7 +8,7 @@ from pygromos.files._basics import _general_gromos_file
 
 class _gromosClass(_compiled_program):
     def __init__(
-        self, in_bin_dir: Union[str, None], dummy: bool = False, _dont_check_binary: bool = False
+        self, in_bin_dir: Union[str, None], dummy: bool = False, _check_binary: bool = False
     ) -> Union[str, None]:
         """
           This parent class contains wrappers for gromos functionalities.
@@ -28,7 +28,7 @@ class _gromosClass(_compiled_program):
         Union[str, None]
             _description_
         """
-        super().__init__(in_bin_dir, dummy, _dont_check_binary=_dont_check_binary)
+        super().__init__(in_bin_dir, dummy, _check_binary=_check_binary)
 
     def _gromosTypeConverter(func: Callable) -> Callable:
         """

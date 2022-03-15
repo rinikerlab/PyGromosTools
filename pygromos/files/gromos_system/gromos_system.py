@@ -97,7 +97,7 @@ class Gromos_System:
     _single_energy_group: bool
 
     # if this class Variable is set to True, all binary checks will be removed from the systems.
-    _gromos_noBinary_checks: bool = False
+    _gromos_binary_checks: bool = True
 
     _gromosPP_bin_dir: Union[None, str]
     _gromosXX_bin_dir: Union[None, str]
@@ -711,11 +711,11 @@ class Gromos_System:
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _dont_check_binary=self._gromos_noBinary_checks)
+            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _check_binary=self._gromos_binary_checks)
             self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
-            self._gromosXX._dont_check_binary = self._gromos_noBinary_checks
+            self._gromosXX._check_binary = self._gromos_binary_checks
             self._gromosXX_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -727,11 +727,11 @@ class Gromos_System:
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _dont_check_binary=self._gromos_noBinary_checks)
+            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _check_binary=self._gromos_binary_checks)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
             self._gromosPP = input_value
-            self._gromosPP._dont_check_binary = self._gromos_noBinary_checks
+            self._gromosPP._check_binary = self._gromos_binary_checks
             self._gromosPP_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -760,8 +760,8 @@ class Gromos_System:
             + "_class"
             + "\n"
         )
-        if self._gromos_noBinary_checks:
-            self.__class__.__name__ + "_class._gromos_noBinary_checks = " + str(self._gromos_noBinary_checks) + "\n"
+        if hasattr(self, '_gromos_binary_checks'):
+            self.__class__.__name__ + "_class._gromos_noBinary_checks = " + str(self._gromos_binary_checks) + "\n"
 
         gen_cmd += (
             var_name

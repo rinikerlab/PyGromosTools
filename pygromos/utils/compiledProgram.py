@@ -16,14 +16,14 @@ class _compiled_program:
 
     _bin: str
     _force_bin_present: bool
-    _dont_check_binary: bool
+    _check_binary: bool
 
     _found_binary_dir: Dict[str, bool]  # found? binary dir
     _found_binary: Dict[str, bool]  # found? binary
     _found_binary_paths: Dict[str, str]  # the found binary paths.
 
     def __init__(
-        self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _dont_check_binary: bool = False
+        self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _check_binary: bool = False
     ) -> Union[str, None]:
         """
             The  _compiled_program parent class can be used, to ensure on runtime, that certain binaries are present.
@@ -48,10 +48,11 @@ class _compiled_program:
         self._found_binary = {}
         self._found_binary_paths = {}
         self._function_binary = {}
-        self._dont_check_binary = _dont_check_binary
+        self._check_binary = _check_binary
 
         # Check initial status of binaries
-        self._bin = self._check_binary_dir(in_bin_dir=in_bin_dir)
+        self._bin = "" if (in_bin_dir is None) else in_bin_dir 
+        self._check_binary_dir(in_bin_dir=self._bin)
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
 
@@ -62,7 +63,7 @@ class _compiled_program:
         """
         return {
             "_bin": self._bin,
-            "_dont_check_binary": self._dont_check_binary,
+            "_dont_check_binary": self._check_binary,
             "_force_bin_present": self._force_bin_present,
         }
 
@@ -93,7 +94,8 @@ class _compiled_program:
 
     @bin.setter
     def bin(self, in_bin_dir: str):
-        self._bin = self._check_binary_dir(in_bin_dir=in_bin_dir)
+        self._bin = "" if (in_bin_dir is None) else in_bin_dir 
+        self._check_binary_dir(in_bin_dir=in_bin_dir)
         if not (self._bin == "" and self._bin.endswith("/")):
             self._bin += "/"
         self._check_all_binaries()
@@ -123,7 +125,7 @@ class _compiled_program:
             If the binary dir was not found and _dont_check_bin was False (default: False)
         """
 
-        if (test_program in self._found_binary and self._found_binary[test_program]) or self._dont_check_binary:
+        if (test_program in self._found_binary and self._found_binary[test_program]) or not self._check_binary:
             return True
 
         elif self.bin is not None and bash.command_exists(self._bin + test_program):
@@ -166,21 +168,18 @@ class _compiled_program:
         IOError
             If the binary dir was not found and _dont_check_bin was False (default: False)
         """
-        if (
-            in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]
-        ) or self._dont_check_binary:  # did we already check this
-            return "" if (in_bin_dir is None) else in_bin_dir
 
+        if (in_bin_dir in self._found_binary_dir and self._found_binary_dir[in_bin_dir]) or not self._check_binary:  # did we already check this
+            return True
         elif isinstance(in_bin_dir, str) and in_bin_dir != "" and bash.directory_exists(in_bin_dir):
             self._found_binary_dir[in_bin_dir] = True
             if not in_bin_dir.endswith("/"):
                 in_bin_dir += "/"
-            return in_bin_dir
+            return True
 
         elif not self._force_bin_present and (in_bin_dir is None or in_bin_dir == "" or in_bin_dir == "None"):
             self._found_binary_dir[in_bin_dir] = True
-            return ""
-
+            return True
         else:
             self._found_binary_dir[in_bin_dir] = False
             if self._force_bin_present:
@@ -189,7 +188,8 @@ class _compiled_program:
                     + " and either pass the path to the binary directory or set the PATH variable. The given folder path was: "
                     + str(in_bin_dir)
                 )
-
+            return False
+        
     def _check_all_binaries(self, _force_bin_present: bool = False) -> bool:
         """
         This function checks all present programs of this class, if the binary can be found and executed.
@@ -271,7 +271,7 @@ class _compiled_program:
         remove : bool, optional
             remove all wrappers?, by default False
         """
-        if self._dont_check_binary:
+        if self._check_binary:
             pass
         else:
             v = {}
