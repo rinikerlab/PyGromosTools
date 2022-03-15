@@ -760,8 +760,8 @@ class Gromos_System:
             + "_class"
             + "\n"
         )
-        if hasattr(self, '_gromos_binary_checks'):
-            self.__class__.__name__ + "_class._gromos_noBinary_checks = " + str(self._gromos_binary_checks) + "\n"
+        if hasattr(self, '_gromos_binary_checks') and not self._gromos_binary_checks:
+            gen_cmd += self.__class__.__name__ + "_class._gromos_binary_checks = " + str(self._gromos_binary_checks) + "\n"
 
         gen_cmd += (
             var_name
