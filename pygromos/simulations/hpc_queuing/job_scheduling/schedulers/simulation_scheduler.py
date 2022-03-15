@@ -36,7 +36,7 @@ def do(
     verbose: bool = True,
     verbose_lvl: int = 1,
 ):
-    
+
     """
 
     Parameters

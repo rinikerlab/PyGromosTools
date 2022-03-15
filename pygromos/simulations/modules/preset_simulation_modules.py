@@ -24,7 +24,7 @@ def emin(
     equilibration_runs: int = 0,
     previous_simulation_run: int = None,
     _template_imd_path: str = template_emin,
-    _no_double_submit_check:bool=False,
+    _no_double_submit_check: bool = False,
     initialize_first_run=False,
     analysis_script: callable = simulation_analysis.do,
     verbose: bool = True,
@@ -72,7 +72,7 @@ def md(
     reinitialize_every_run=False,
     previous_simulation_run: int = None,
     _template_imd_path: str = template_md,
-    _no_double_submit_check:bool=False,
+    _no_double_submit_check: bool = False,
     analysis_script: callable = simulation_analysis.do,
     verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
@@ -104,8 +104,8 @@ def sd(
     initialize_first_run=False,
     reinitialize_every_run=False,
     previous_simulation_run: int = None,
-    _template_imd_path: str = template_sd,   
-    _no_double_submit_check:bool=False,
+    _template_imd_path: str = template_sd,
+    _no_double_submit_check: bool = False,
     analysis_script: callable = simulation_analysis.do,
     verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
@@ -137,7 +137,7 @@ def thermalisation(
     equilibration_runs: int = 0,
     previous_simulation_run: int = None,
     _template_imd_path: str = template_sd,
-    _no_double_submit_check:bool=False,
+    _no_double_submit_check: bool = False,
     analysis_script: callable = simulation_analysis.do,
     verbose: bool = True,
 ) -> Tuple[Gromos_System, int]:
