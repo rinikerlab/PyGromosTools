@@ -14,6 +14,7 @@ TODO: add support for rdkit conformers
 """
 
 # imports
+from asyncio import streams
 import tempfile
 import mdtraj
 import pandas as pd
@@ -51,7 +52,7 @@ class Trc(mdtraj.Trajectory):
 
             # Parse TRC
             if traj_path.endswith(".gz"):
-                traj_path = bash.extract_tar(in_path=traj_path, gunzip_compression=True)
+                traj_path = bash.compress_gzip(in_path=traj_path, extract=True)
 
             if isinstance(traj_path, str):
                 xyz, time, step = self.parse_trc_efficiently(traj_path)
@@ -201,5 +202,12 @@ class Trc(mdtraj.Trajectory):
         self._view = nj.show_mdtraj(self)
         return self._view
 
-    def write_trc(self):
+    def write_trc(self, out_path:streams)->str:
         raise NotImplementedError("Not Implemented")
+
+    def write(self, out_path:str):
+        if(out_path.endswith(".trc")):
+            return self.write_trc()
+        else:
+            self.save(out_path)
+            return out_path
