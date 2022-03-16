@@ -890,11 +890,14 @@ class Gromos_System:
                 name = self.Forcefield.mol_name
 
             # make top
-            self.make_top(
-                in_building_block_lib_path=mtb_temp,
-                in_parameter_lib_path=ifp_temp,
-                in_sequence=name,
-            )
+            if("make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]):
+                self.make_top(
+                    in_building_block_lib_path=mtb_temp,
+                    in_parameter_lib_path=ifp_temp,
+                    in_sequence=name,
+                )
+            else:
+                warnings.warn("Could not use make_top! no binary was found!")
 
         elif (
             self.Forcefield.name == "smirnoff"
