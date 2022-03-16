@@ -890,7 +890,7 @@ class Gromos_System:
                 name = self.Forcefield.mol_name
 
             # make top
-            if("make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]):
+            if "make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]:
                 self.make_top(
                     in_building_block_lib_path=mtb_temp,
                     in_parameter_lib_path=ifp_temp,
