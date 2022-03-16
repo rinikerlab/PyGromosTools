@@ -51,7 +51,13 @@ class _compiled_program:
         self._check_binary_paths = _check_binary_paths
 
         # Check initial status of binaries
-        self._bin = "" if (in_bin_dir is None or in_bin_dir == "None" or in_bin_dir == "") else in_bin_dir
+        if in_bin_dir is None or in_bin_dir == "None" or in_bin_dir == "":
+            self._bin = ""
+        elif in_bin_dir.endswith("/"):
+            self._bin = in_bin_dir
+        else:
+            self._bin = in_bin_dir + "/"
+
         self._check_binary_dir(in_bin_dir=self._bin)
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
@@ -94,10 +100,14 @@ class _compiled_program:
 
     @bin.setter
     def bin(self, in_bin_dir: str):
-        self._bin = "" if (in_bin_dir is None or in_bin_dir == "None" or in_bin_dir == "") else in_bin_dir
+        if in_bin_dir is None or in_bin_dir == "None" or in_bin_dir == "":
+            self._bin = ""
+        elif in_bin_dir.endswith("/"):
+            self._bin = in_bin_dir
+        else:
+            self._bin = in_bin_dir + "/"
+
         self._check_binary_dir(in_bin_dir=in_bin_dir)
-        if not (self._bin == "" and self._bin.endswith("/")):
-            self._bin += "/"
         self._check_all_binaries()
         self.__wrap_programms_with_binary_checks()
 
