@@ -268,7 +268,7 @@ class Gromos_System:
             if self.hasData:
                 self.auto_convert()
             else:
-                raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
+                warnings.warn("auto_convert active but no data provided -> auto_convert NOT done!")
 
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
@@ -296,7 +296,7 @@ class Gromos_System:
                         self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
                         self.add_hydrogens()
                     except IOError:
-                        raise Warning("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
+                        warnings.warn("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
 
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
