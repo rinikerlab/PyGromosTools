@@ -30,7 +30,7 @@ class _GromosXX(_gromosClass):
     def __init__(
         self,
         gromosXX_bin_dir: str = None,
-        _dont_check_binary: bool = False,
+        _check_binary_paths: bool = True,
     ):
         """
         Constructing a gromosXX object.
@@ -49,7 +49,7 @@ class _GromosXX(_gromosClass):
         self.__doc__ = self.__doc__ + functions_text
 
         super().__init__(
-            in_bin_dir=gromosXX_bin_dir, _dont_check_binary=_dont_check_binary
+            in_bin_dir=gromosXX_bin_dir, _check_binary_paths=_check_binary_paths
         )  # initialises the binary checks
 
     def __str__(self):
@@ -430,5 +430,5 @@ class GromosXX(_GromosXX):
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosXX_bin_dir: str = None, _dont_check_binary: bool = False):
-        super().__init__(gromosXX_bin_dir=gromosXX_bin_dir, _dont_check_binary=_dont_check_binary)
+    def __init__(self, gromosXX_bin_dir: str = None, _check_binary_paths: bool = True):
+        super().__init__(gromosXX_bin_dir=gromosXX_bin_dir, _check_binary_paths=_check_binary_paths)

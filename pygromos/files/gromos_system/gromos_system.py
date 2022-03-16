@@ -97,7 +97,7 @@ class Gromos_System:
     _single_energy_group: bool
 
     # if this class Variable is set to True, all binary checks will be removed from the systems.
-    _gromos_noBinary_checks: bool = False
+    _gromos_binary_checks: bool = True
 
     _gromosPP_bin_dir: Union[None, str]
     _gromosXX_bin_dir: Union[None, str]
@@ -268,7 +268,7 @@ class Gromos_System:
             if self.hasData:
                 self.auto_convert()
             else:
-                raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
+                warnings.warn("auto_convert active but no data provided -> auto_convert NOT done!")
 
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
@@ -296,7 +296,7 @@ class Gromos_System:
                         self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
                         self.add_hydrogens()
                     except IOError:
-                        raise Warning("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
+                        warnings.warn("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
 
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
@@ -434,8 +434,8 @@ class Gromos_System:
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-        self._gromosPP = GromosPP(self._gromosPP_bin_dir)
-        self._gromosXX = GromosXX(self._gromosXX_bin_dir)
+        self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
+        self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
 
         self.__bind_gromosPPFuncs()
 
@@ -711,11 +711,11 @@ class Gromos_System:
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _dont_check_binary=self._gromos_noBinary_checks)
+            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _check_binary_paths=self._gromos_binary_checks)
             self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
-            self._gromosXX._dont_check_binary = self._gromos_noBinary_checks
+            self._gromosXX._check_binary_paths = self._gromos_binary_checks
             self._gromosXX_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -727,11 +727,11 @@ class Gromos_System:
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _dont_check_binary=self._gromos_noBinary_checks)
+            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _check_binary_paths=self._gromos_binary_checks)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
             self._gromosPP = input_value
-            self._gromosPP._dont_check_binary = self._gromos_noBinary_checks
+            self._gromosPP._check_binary_paths = self._gromos_binary_checks
             self._gromosPP_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -760,8 +760,10 @@ class Gromos_System:
             + "_class"
             + "\n"
         )
-        if self._gromos_noBinary_checks:
-            self.__class__.__name__ + "_class._gromos_noBinary_checks = " + str(self._gromos_noBinary_checks) + "\n"
+        if hasattr(self, "_gromos_binary_checks") and not self._gromos_binary_checks:
+            gen_cmd += (
+                self.__class__.__name__ + "_class._gromos_binary_checks = " + str(self._gromos_binary_checks) + "\n"
+            )
 
         gen_cmd += (
             var_name
@@ -895,16 +897,14 @@ class Gromos_System:
                 name = self.Forcefield.mol_name
 
             # make top
-            if self.gromosPP._found_binary["make_top"]:
+            if "make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]:
                 self.make_top(
                     in_building_block_lib_path=mtb_temp,
                     in_parameter_lib_path=ifp_temp,
                     in_sequence=name,
                 )
             else:
-                warnings.warn(
-                    "could not find a gromosPP version. Please provide a valid version for Gromos auto system generation"
-                )
+                warnings.warn("Could not use make_top! no binary was found!")
 
         elif (
             self.Forcefield.name == "smirnoff"
