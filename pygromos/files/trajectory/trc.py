@@ -14,7 +14,6 @@ TODO: add support for rdkit conformers
 """
 
 # imports
-from asyncio import streams
 import tempfile
 import mdtraj
 import pandas as pd
@@ -24,6 +23,7 @@ from typing import Dict
 from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
+from pygromos.visualization.coordinates_visualization import visualize_system
 
 
 class Trc(mdtraj.Trajectory):
@@ -199,18 +199,29 @@ class Trc(mdtraj.Trajectory):
         return self._view
 
     def recreate_view(self) -> nj.NGLWidget:
-        self._view = nj.show_mdtraj(self)
+        self._view = visualize_system(traj=self)
         return self._view
 
-    def write_trc(self, out_path: streams) -> str:
+    def write_trc(self, out_path: str) -> str:
         raise NotImplementedError("Not Implemented")
 
     def save(self, out_path: str) -> str:
+
+        compress = False
+        if out_path.endswith(".trc.gz"):
+            compress = True
+            out_path.replace(".gz", "")
+
+        # write out
         if out_path.endswith(".trc"):
-            return self.write_trc()
+            out_path = self.write_trc(out_path)
+            # compress if desired
+            if compress:
+                out_path = bash.compress_gzip(in_path=out_path)
+            return out_path
         else:
             super().save(out_path)
             return out_path
-        
-    def write(self, out_path: str)->str:
+
+    def write(self, out_path: str) -> str:
         return self.save(out_path)

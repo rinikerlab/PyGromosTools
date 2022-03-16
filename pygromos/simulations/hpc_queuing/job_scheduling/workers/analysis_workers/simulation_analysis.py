@@ -177,7 +177,7 @@ def project_concatenation(
                     for tmp_trc_file in traj_files[1:]:
                         tmp_trc = trc.Trc(tmp_trc_file, in_cnf=out_cnf)
                         out_trc_file += tmp_trc
-                out_trc_file.write(output_path=out_traj_path)
+                out_trc_file.write(out_path=out_traj_path)
     if control_dict["cat_tre"]:
         out_traj_path = out_prefix + ".tre.h5"
         if os.path.exists(out_traj_path):

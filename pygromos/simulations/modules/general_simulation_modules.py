@@ -99,6 +99,7 @@ def simulation(
             out_simulation_dir = step_dir + "/simulation"
             out_analysis_dir = step_dir + "/analysis"
             bash.make_folder(out_input_dir)
+            os.chdir(step_dir)
 
             # Prepare gromos system:
             gromos_system.work_folder = out_input_dir
@@ -264,5 +265,6 @@ def simulation(
     # compromising the file system structure
     gromos_system.work_folder_no_update(init_work_folder)
     gromos_system._last_jobID = last_jobID
+    os.chdir(init_work_folder)
 
     return gromos_system
