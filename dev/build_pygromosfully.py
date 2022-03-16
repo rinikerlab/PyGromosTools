@@ -1,22 +1,50 @@
+import os
+from collections import OrderedDict
+from datetime import datetime
 
-import os, sys
-
+durations = OrderedDict({})
+timings = OrderedDict({})
+starting_time = datetime.now()
 abs_file = os.path.abspath(__file__)
 package_path = os.path.dirname(os.path.dirname(abs_file))
-connda_env_path = os.path.dirname(abs_file)+"/conda_envs/dev_env_withGromos.yaml"
-env_name = 'pygromosWithGrom'
+connda_env_path = os.path.dirname(abs_file) + "/conda_envs/dev_env_withGromos.yaml"
+env_name = "pygromosWithGrom"
 
-#Conda commands
-conda_install_env = "conda env create -f "+connda_env_path
-conda_setDevelop = "conda develop "+package_path
-conda_activation = "conda activate "+env_name
+# Conda commands
+timings["conda_env_build_start"] = datetime.now()
+conda_install_env = "conda env create -f " + connda_env_path
+conda_setDevelop = "conda develop " + package_path
+conda_activation = "conda activate " + env_name
 
 os.system(conda_install_env)
 os.system(conda_setDevelop)
 os.system(conda_activation)
+timings["conda_env_build_end"] = datetime.now()
+conda_duration = timings["conda_env_build_end"] - timings["conda_env_build_start"]
 
-#Compile gromos
-import pygromos
-from pygromos.gromos.compile_gromos import default_install
+print("CONDA BUILD:", conda_duration)
 
-default_install()
+
+# Compile gromos
+from pygromos.gromos.compile_gromos import default_install  # noqa: E402
+
+
+default_install(_timing_dict=timings)
+
+print("\n" + ">" * 10 + " TIMINGS:")
+for key, val in timings.items():
+    print(key, val)
+
+# get duration
+print("\n\n" + ">" * 10 + " DURATION:")
+keys = list(timings.keys())
+for key in keys:
+    prefix = "_".join(key.split("_")[:-1])
+    if "start" in key:
+        end_key = list(filter(lambda x: x == prefix + "_end", keys))[0]
+    else:
+        pass
+    durations[prefix] = timings[end_key] - timings[key]
+
+for key, val in durations.items():
+    print(key, val)
