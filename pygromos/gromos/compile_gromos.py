@@ -132,7 +132,7 @@ def install_gromos(
                     _timing_dict["gromosXX_make_start"] = datetime.now()
                 _make_compile(build_dir=gromosXX_build_path, nCore=nCore)
                 if _timing_dict is not None:
-                    _timing_dict["gromosXX_clean_end"] = datetime.now()
+                    _timing_dict["gromosXX_make_end"] = datetime.now()
 
         if _do_gromosPP:
             print(spacer + "\n BUILD GROMOSPP \n" + spacer)

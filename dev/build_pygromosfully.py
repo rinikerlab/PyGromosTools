@@ -44,10 +44,10 @@ keys = list(timings.keys())
 for key in keys:
     prefix = "_".join(key.split("_")[:-1])
     if "start" in key:
-        end_key = list(filter(lambda x: x == prefix + "_end", keys))[0]
+        print(key)
+        print(keys)
+        end_key = list(filter(lambda x: x == (prefix + "_end"), keys))[0]
     else:
         pass
     durations[prefix] = timings[end_key] - timings[key]
-
-for key, val in durations.items():
-    print(key, val)
+    print(prefix, str(timings[end_key] - timings[key]))
