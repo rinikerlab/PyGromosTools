@@ -13,14 +13,16 @@ test
 """
 
 # imports
+import io
 import os
 import copy
+import pickle
 import inspect
 import functools
 import importlib
 import warnings
 from pygromos.data.ff import Gromos54A7
-from typing import Dict, Union, List, Callable
+from typing import Dict, Union, List
 
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import imd_blocks
@@ -39,8 +41,6 @@ from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
-import pickle
-import io
 
 if importlib.util.find_spec("rdkit") is not None:
     from rdkit import Chem
@@ -68,12 +68,7 @@ skip = {
     "non_ligand_info": cnf.non_ligand_infos,
     "solvent_info": cnf.solvent_infos,
 }
-exclude_pickle = {
-    "GromosPP": GromosPP,
-    "GromosXX": GromosXX,
-    "_gromosPP": GromosPP,
-    "_gromosXX": GromosXX,
-}
+exclude_pickle = {}
 
 
 class Gromos_System:
@@ -91,12 +86,18 @@ class Gromos_System:
     protein_info: cnf.protein_infos
     non_ligand_info: cnf.non_ligand_infos
     solvent_info: cnf.solvent_infos
-    checkpoint_path: str
+
+    # privates
+    _checkpoint_path: str
+    _last_jobID: int  # hpcScheduling ID of the last submitted job.
     _future_promise: bool  # for interest if multiple jobs shall be chained.
     _future_promised_files: list
 
     _single_multibath: bool
     _single_energy_group: bool
+
+    # if this class Variable is set to True, all binary checks will be removed from the systems.
+    _gromos_binary_checks: bool = True
 
     _gromosPP_bin_dir: Union[None, str]
     _gromosXX_bin_dir: Union[None, str]
@@ -131,6 +132,10 @@ class Gromos_System:
             With this class all files can be read-in or the files can be automatically generated from smiles.
             Additionally to that can all gromos++ functions be used from the Gromos System, so system generation can be easily accomplished.
 
+            if you want to remove all binary checks, do the following:
+            >>> from pygromos.files.gromos_system.gromos_system import Gromos_System
+            >>> Gromos_System._gromos_noBinary_checks = True
+            >>> sys = Gromos_System()
 
         Parameters
         ----------
@@ -188,7 +193,8 @@ class Gromos_System:
         self.Forcefield = Forcefield
         self.mol = Chem.Mol()
         self.in_mol2_file = in_mol2_file
-        self.checkpoint_path = None
+        self._checkpoint_path = None
+        self._last_jobID = None
         self.adapt_imd_automatically = adapt_imd_automatically
         self.verbose = verbose
 
@@ -262,13 +268,14 @@ class Gromos_System:
             if self.hasData:
                 self.auto_convert()
             else:
-                raise Warning("auto_convert active but no data provided -> auto_convert NOT done!")
+                warnings.warn("auto_convert active but no data provided -> auto_convert NOT done!")
 
         if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
             self.cnf = Cnf(in_value=self.mol)
             # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
+
             if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and self.gromosPP._found_binary["pdb2g96"]:
+                if self.gromosPP is not None and self.gromosPP._check_binary("pdb2g96"):
                     try:
                         from pygromos.files.blocks.coord_blocks import atomP
 
@@ -286,10 +293,10 @@ class Gromos_System:
                         ]
                         self.cnf.POSITION = new_pos
                         self.cnf.write_pdb(self.work_folder + "/tmp.pdb")
-                        self.pdb2gromos(self.work_folder + "/tmp.pdb")
+                        self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
                         self.add_hydrogens()
                     except IOError:
-                        raise Warning("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
+                        warnings.warn("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
 
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
@@ -307,7 +314,7 @@ class Gromos_System:
         msg += "GROMOS SYSTEM: " + self.name + "\n"
         msg += utils.spacer
         msg += "WORKDIR: " + self._work_folder + "\n"
-        msg += "LAST CHECKPOINT: " + str(self.checkpoint_path) + "\n"
+        msg += "LAST CHECKPOINT: " + str(self._checkpoint_path) + "\n"
         msg += "\n"
         msg += "GromosXX_bin: " + str(self.gromosXX_bin_dir) + "\n"
         msg += "GromosPP_bin: " + str(self.gromosPP_bin_dir) + "\n"
@@ -407,12 +414,11 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not isinstance(attribute_dict[key], Callable) and key not in skip and key not in exclude_pickle:
+            if not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
             elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
-                print("STUPID ", key)
                 new_dict.update({key: None})
         return new_dict
 
@@ -428,8 +434,8 @@ class Gromos_System:
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-        self._gromosPP = GromosPP(self._gromosPP_bin_dir)
-        self._gromosXX = GromosXX(self._gromosXX_bin_dir)
+        self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
+        self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
 
         self.__bind_gromosPPFuncs()
 
@@ -705,10 +711,11 @@ class Gromos_System:
     @gromosXX.setter
     def gromosXX(self, input_value: Union[str, GromosXX]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value)
+            self._gromosXX = GromosXX(gromosXX_bin_dir=input_value, _check_binary_paths=self._gromos_binary_checks)
             self._gromosXX_bin_dir = input_value
         elif isinstance(input_value, GromosXX):
             self._gromosXX = input_value
+            self._gromosXX._check_binary_paths = self._gromos_binary_checks
             self._gromosXX_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -720,10 +727,11 @@ class Gromos_System:
     @gromosPP.setter
     def gromosPP(self, input_value: Union[str, GromosPP]):
         if isinstance(input_value, str) or input_value is None:
-            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value)
+            self._gromosPP = GromosPP(gromosPP_bin_dir=input_value, _check_binary_paths=self._gromos_binary_checks)
             self._gromosPP_bin_dir = input_value
         elif isinstance(input_value, GromosPP):
             self._gromosPP = input_value
+            self._gromosPP._check_binary_paths = self._gromos_binary_checks
             self._gromosPP_bin_dir = input_value.bin
         else:
             raise ValueError(f"Could not parse input type:  {str(type(input_value))} {str(input_value)}")
@@ -741,6 +749,7 @@ class Gromos_System:
             var_name = var_prefixes + self.__class__.__name__.lower()
 
         gen_cmd = "#Generate " + self.__class__.__name__ + "\n"
+        gen_cmd = "\n"
         gen_cmd += (
             "from "
             + self.__module__
@@ -748,14 +757,19 @@ class Gromos_System:
             + self.__class__.__name__
             + " as "
             + self.__class__.__name__
-            + "_obj"
+            + "_class"
             + "\n"
         )
+        if hasattr(self, "_gromos_binary_checks") and not self._gromos_binary_checks:
+            gen_cmd += (
+                self.__class__.__name__ + "_class._gromos_binary_checks = " + str(self._gromos_binary_checks) + "\n"
+            )
+
         gen_cmd += (
             var_name
             + " = "
             + __class__.__name__
-            + '_obj(work_folder="'
+            + '_class(work_folder="'
             + self.work_folder
             + '", system_name="'
             + self.name
@@ -764,6 +778,13 @@ class Gromos_System:
 
         for arg, path in self.all_file_paths.items():
             gen_cmd += str(var_name) + "." + str(arg) + ' = "' + str(path) + '"\n'
+
+        if self.gromosXX_bin_dir is not None:
+            gen_cmd += str(var_name) + ".gromosXX_bin_dir = '" + str(self.gromosXX_bin_dir) + "'\n"
+
+        if self.gromosPP_bin_dir is not None:
+            gen_cmd += str(var_name) + ".gromosPP_bin_dir = '" + str(self.gromosXX_bin_dir) + "'\n"
+
         gen_cmd += "\n"
 
         return gen_cmd
@@ -859,7 +880,6 @@ class Gromos_System:
         # create topology
         if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
             # set parameters for make_top
-            out = self.work_folder + "/make_top.top"
             mtb_temp = self.Forcefield.mtb_path
             if hasattr(self.Forcefield, "mtb_orga_path"):
                 mtb_temp += " " + self.Forcefield.mtb_orga_path
@@ -868,19 +888,16 @@ class Gromos_System:
                 name = self.rdkit2GromosName()
             else:
                 name = self.Forcefield.mol_name
+
             # make top
-            if bash.command_exists(f"{self.gromosPP_bin_dir}/make_top"):
-                self.gromosPP.make_top(
-                    out_top_path=out,
+            if "make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]:
+                self.make_top(
                     in_building_block_lib_path=mtb_temp,
                     in_parameter_lib_path=ifp_temp,
                     in_sequence=name,
                 )
-                self.top = Top(in_value=out)
             else:
-                warnings.warn(
-                    "could not find a gromosPP version. Please provide a valid version for Gromos auto system generation"
-                )
+                warnings.warn("Could not use make_top! no binary was found!")
 
         elif (
             self.Forcefield.name == "smirnoff"
@@ -1182,7 +1199,7 @@ class Gromos_System:
         if not safe_skip:
             pickle.dump(obj=self, file=bufferdWriter)
             bufferdWriter.close()
-            self.checkpoint_path = path
+            self._checkpoint_path = path
         return path
 
     @classmethod
@@ -1208,7 +1225,7 @@ class Gromos_System:
                 obj.non_ligand_info,
                 obj.solvent_info,
             ) = obj._cnf.get_system_information()
-        obj.checkpoint_path = path
+        obj._checkpoint_path = path
         return obj
 
     """
@@ -1234,8 +1251,8 @@ class Gromos_System:
         """
 
         @functools.wraps(func)
-        def findGromosSystemAttributes(*args, **kwargs):
-            # print(func.__name__, args, kwargs)
+        def _findGromosSystemAttributes(*args, **kwargs):
+            # print("attribute finder", func.__name__, args, kwargs)
 
             # collect input parameters present in system/ replace them with
             tmp_files = []
@@ -1257,7 +1274,10 @@ class Gromos_System:
                         grom_obj.write(grom_obj.path)  # make sure filestatus is good :)
                         kwargs.update({k: grom_obj.path})
 
+            args = list(filter(lambda x: isinstance(x, self.gromosPP.__class__), args))
+
             # execute function
+            # print("attibuteFinder 2:", func.__name__, args, kwargs)
             r = func(self.gromosPP, *args, **kwargs)
 
             # remove tmp_files
@@ -1275,9 +1295,9 @@ class Gromos_System:
             else:
                 red_params.append(par)
         red_sig = sig.replace(parameters=red_params)
-        findGromosSystemAttributes.__signature__ = red_sig
+        _findGromosSystemAttributes.__signature__ = red_sig
 
-        return findGromosSystemAttributes
+        return _findGromosSystemAttributes
 
     def __SystemConstructionUpdater(self, func: callable) -> callable:
         """
@@ -1297,8 +1317,8 @@ class Gromos_System:
         """
 
         @functools.wraps(func)
-        def updateGromosSystem(*args, **kwargs):
-            # rint(func.__name__, args, kwargs)
+        def _updateGromosSystem(*args, **kwargs):
+            # print("updater", func.__name__, args, kwargs)
 
             # collect out_paths
             update_dict = {}
@@ -1309,7 +1329,9 @@ class Gromos_System:
                     update_dict.update({k: attr_key})
 
             # execute function
+            # print("updater2", func.__name__, args, kwargs)
             r = func(*args, **kwargs)
+            # print("updater3", func.__name__, args, kwargs)
 
             # update attribute states and remove tmp files.
             for k in update_dict:
@@ -1328,9 +1350,9 @@ class Gromos_System:
             else:
                 red_params.append(par)
         red_sig = sig.replace(parameters=red_params)
-        updateGromosSystem.__signature__ = red_sig
+        _updateGromosSystem.__signature__ = red_sig
 
-        return updateGromosSystem
+        return _updateGromosSystem
 
     def __ionDecorator(self, func: callable) -> callable:
         """
@@ -1373,7 +1395,7 @@ class Gromos_System:
                 out_top_path=top_cl,
             )
             self.top += Top(top_cl)
-            bash.remove_file(top_cl)
+            # bash.remove_file(top_cl)
 
             return r
 

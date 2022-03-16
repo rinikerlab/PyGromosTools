@@ -17,7 +17,7 @@ class DUMMY(_SubmissionSystem):
         nmpi: int = 1,
         job_duration: str = "24:00",
         submission: bool = True,
-        enviroment=None,
+        environment=None,
     ):
         super().__init__(
             verbose=verbose,
@@ -25,7 +25,7 @@ class DUMMY(_SubmissionSystem):
             nomp=nomp,
             job_duration=job_duration,
             submission=submission,
-            enviroment=enviroment,
+            environment=environment,
         )
 
     def submit_to_queue(self, sub_job: Submission_job) -> Union[int, None]:

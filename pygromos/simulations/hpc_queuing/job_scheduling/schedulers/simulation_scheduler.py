@@ -26,16 +26,17 @@ def do(
     out_dir_path: str,
     simulation_run_num: int,
     equilibration_run_num: int = 0,
-    work_dir: str = None,
     initialize_first_run=False,
     reinitialize_every_run=False,
     analysis_script_path: str = None,
     submission_system: _SubmissionSystem = LSF(),
     previous_job_ID: int = None,
-    no_double_submit: bool = False,
+    _no_double_submit_check: bool = False,
+    _work_dir: str = None,
     verbose: bool = True,
     verbose_lvl: int = 1,
 ):
+
     """
 
     Parameters
@@ -45,7 +46,7 @@ def do(
     simulation_run_num
     equilibration_run_num
     gromos_bin_dir
-    work_dir
+    _work_dir
     analysis_script_path
     submission_system
     previous_job_ID
@@ -60,6 +61,7 @@ def do(
     -------
 
     """
+    submission_system.block_double_submission = _no_double_submit_check
     job_verb = True if (verbose and verbose_lvl > 2) else False
 
     # prepare
@@ -74,12 +76,12 @@ def do(
         bash.make_folder(out_dir_path)  # final output_folder
 
         # workdir:
-        if not isinstance(work_dir, type(None)) and work_dir != "None":
+        if not isinstance(_work_dir, type(None)) and _work_dir != "None":
             if verbose and verbose_lvl > 2:
-                print("\t -> Generating given workdir: " + work_dir)
-            bash.make_folder(work_dir, "-p")
-            os.chdir(work_dir)
-            prepared_imd = work_dir + "/" + os.path.basename(in_simSystem.imd.path)  # noqa: F841
+                print("\t -> Generating given workdir: " + _work_dir)
+            bash.make_folder(_work_dir, "-p")
+            os.chdir(_work_dir)
+            prepared_imd = _work_dir + "/" + os.path.basename(in_simSystem.imd.path)  # noqa: F841
         else:
             if verbose and verbose_lvl > 2:
                 print("\t -> Using on node workdir")
@@ -87,17 +89,17 @@ def do(
 
         # sim vars logs
         out_prefix = in_simSystem.name
-        slave_script = workerScript.__file__
+        worker_script = workerScript.__file__
 
         # CHECK PATH DEPENDENCIES - all Files present?
         # needed variables
         check_path_dependencies_paths = [
-            slave_script,
+            worker_script,
             out_dir_path,
         ]  # Coord file is used by repex in_imd_path prepared_im
         # variable paths
-        if work_dir is not None:
-            check_path_dependencies_paths.append(work_dir)
+        if _work_dir is not None and _work_dir != "out_dir":
+            check_path_dependencies_paths.append(_work_dir)
 
         if not in_simSystem.top._future_file:
             check_path_dependencies_paths.append(in_simSystem.top.path)
@@ -115,8 +117,6 @@ def do(
             check_path_dependencies_paths.append(in_simSystem.refpos.path)
         if in_simSystem.qmmm is not None:
             check_path_dependencies_paths.append(in_simSystem.qmmm.path)
-
-            # prepared_imd = bash.copy_file(in_simSystem.imd.path, prepared_imd) #Todo: Remove? @bschroed
 
         bash.check_path_dependencies(check_path_dependencies_paths, verbose=job_verb)
 
@@ -158,7 +158,7 @@ def do(
                 start_run_index=1,
                 prefix_command="",
                 previous_job_ID=previous_job_ID,
-                work_dir=work_dir,
+                work_dir=_work_dir,
                 initialize_first_run=initialize_first_run,
                 reinitialize_every_run=reinitialize_every_run,
                 verbose=job_verb,
@@ -179,7 +179,7 @@ def do(
             job_submission_system=submission_system,
             prefix_command="",
             previous_job_ID=previous_job_ID,
-            work_dir=None,
+            work_dir=_work_dir,
             initialize_first_run=initialize_first_run,
             reinitialize_every_run=reinitialize_every_run,
             verbose=job_verb,
