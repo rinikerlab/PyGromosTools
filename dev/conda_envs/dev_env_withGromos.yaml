@@ -1,4 +1,4 @@
-name: pygromos
+name: pygromosWithGrom
 channels:
   - conda-forge
   #- nvidia
@@ -7,6 +7,15 @@ dependencies:
   # Base depends
   - python
   - pip
+  ## Compiling
+  - gcc
+  - autoconf
+  - automake
+  - fftw
+  - openmpi
+  - openmp
+  #- cuda #possible but very intense installing
+  - cudatoolkit
   ## Testing
   - pytest
   ## Meta

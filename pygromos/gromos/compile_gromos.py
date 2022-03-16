@@ -6,15 +6,15 @@ def default_install():
     root_dir = os.path.dirname(__file__)    
     nCores=1
     install_gromos(root_dir=root_dir, 
-                   make_clean = True,
-                   gromosXX_with_mpi=True,
-                   gromosPP_with_omp=True,
+                   #do_clean = True,
+                   gromosXX_with_mpi=False,
+                   gromosPP_with_omp=False,
                    recompile_from_scratch=True,
                    nCore=nCores)
     
     
 def install_gromos(root_dir:str, 
-                   gromosXX_with_mpi:bool=False, gromosXX_with_omp:bool=False, gromosXX_with_cuda:bool=False, 
+                   gromosXX_with_mpi:bool=False, gromosXX_with_omp:bool=False, gromosXX_with_cuda:str=None, 
                    gromosPP_with_omp=False, 
                    do_compile:bool=True, do_clean:bool=False, recompile:bool=False, recompile_from_scratch:bool=False, 
                    _do_gromosPP:bool=True, _do_gromosXX:bool=True,
@@ -87,7 +87,7 @@ def install_gromos(root_dir:str,
             gromosXX_build_path = gromosXX_path+"/build"
 
             if(not os.path.exists(gromosXX_build_path) or recompile_from_scratch):
-                _configure_gromosXX_autotools(build_dir=gromosXX_build_path, binary_dir=binary_dir, with_mpi=gromosXX_with_mpi, with_omp=gromosXX_with_omp, with_cuda=gromosXX_with_cuda)
+                _configure_gromosXX_autotools(build_dir=gromosXX_build_path, binary_dir=binary_dir, with_mpi=gromosXX_with_mpi, with_omp=gromosXX_with_omp, with_cuda_dir=gromosXX_with_cuda)
 
             if(not os.path.exists(gromosXX_build_path+"/bin") or recompile or recompile_from_scratch):
                 _make_compile(build_dir=gromosXX_build_path, nCore=nCore)
@@ -158,6 +158,7 @@ def _configure_gromosPP_autotools(build_dir:str, binary_dir:str=None, with_omp:b
     bash.execute(cmd, catch_STD=log_file)
     print()
 
+
 def _configure_gromosXX_autotools(build_dir:str, binary_dir:str=None, with_cuda_dir:str=None, with_omp:bool=False, with_mpi:bool=False, with_debug:bool=False):
     """
         Setting the configurations for the compiling gromosXX process. (uses autotools)
@@ -182,7 +183,7 @@ def _configure_gromosXX_autotools(build_dir:str, binary_dir:str=None, with_cuda_
     ValueError
         if wrong value was passed
     """
-    configure_options = {}
+
 
     root_dir = os.path.dirname(build_dir)
     os.chdir(root_dir)
@@ -215,9 +216,6 @@ def _configure_gromosXX_autotools(build_dir:str, binary_dir:str=None, with_cuda_
         flags.append("--enable-openmp")
     if(with_mpi):
         flags.append("--enable-mpi")
-    if(with_cuda):
-        raise NotImplementedError("sorry the with_cuda was not tested or implemented yet")
-        flags.append("--with-cuda") #not the correct flag!
     if(with_debug):
         flags.append("--enable-debug")   
         
@@ -226,6 +224,7 @@ def _configure_gromosXX_autotools(build_dir:str, binary_dir:str=None, with_cuda_
 
     bash.execute(cmd, catch_STD=log_file)
     print()
+ 
     
 def _make_compile(build_dir:str, nCore:int = 1):
     """
@@ -254,13 +253,13 @@ def _make_compile(build_dir:str, nCore:int = 1):
     # Create Binaries
     print(spacer2+"\t\t> INSTALL \n"+spacer2)
     
-    log_file = build_dir+"/make.log"
+    log_file = build_dir+"/makeInstall.log"
     print("log_file: ", log_file)
 
     cmd = "make -j"+str(nCore)+" install"
     print("command: ", cmd)
 
-    bash.execute(cmd, catch_STD=build_dir+"/makeInstall.log")
+    bash.execute(cmd, catch_STD=log_file)
     print()
 
 
@@ -276,7 +275,7 @@ if __name__ == "__main__":
     nCores=3
 
 
-    
+    '''
     install_gromos(root_dir=root_dir, 
                    _do_gromosXX = _do_gromosXX,
                    _do_gromosPP=_do_gromosPP, 
@@ -284,5 +283,5 @@ if __name__ == "__main__":
                    recompile=recompile, 
                    recompile_from_scratch=recompile_from_scratch,
                    nCore=nCores)
-    
-    #default_install()
+    '''
+    default_install()
