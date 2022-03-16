@@ -1,5 +1,7 @@
-from typing import List, Union
+import inspect
 import pandas as pd
+
+from typing import List, Union
 
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
@@ -7,23 +9,27 @@ from pygromos.simulations.hpc_queuing.submission_systems.submission_job import S
 class _SubmissionSystem:
     verbose: bool
     submission: bool
-
-    _job_duration: str = "24:00"
-    _nmpi: int
-    _nomp: int
-    _max_storage: float
+    nmpi: int
+    nomp: int
+    max_storage: float
+    job_duration: str
+    environment: dict
+    block_double_submission: bool
+    chain_prefix: str
+    begin_mail: bool
+    end_mail: bool
     job_queue_list: pd.DataFrame  # contains all jobs in the queue (from this users)
-    _zip_trajectories: bool
+    zip_trajectories: bool
 
     def __init__(
         self,
-        submission: bool = False,
+        submission: bool = True,
         nmpi: int = 1,
         nomp: int = 1,
         max_storage: float = 1000,
         job_duration: str = "24:00",
         verbose: bool = False,
-        enviroment=None,
+        environment=None,
         block_double_submission: bool = True,
         chain_prefix: str = "done",
         begin_mail: bool = False,
@@ -47,7 +53,7 @@ class _SubmissionSystem:
             the duration of the job as str("HHH:MM")  (default: "24:00")
         verbose : bool, optional
             let me write you a book!  (default: False)
-        enviroment: dict, optional
+        environment: dict, optional
             here you can pass environment variables as dict{varname: value} (default: None)
         block_double_submission: bool, optional
             if a job with the same name is already in the queue, it will not be submitted again. (default: True)
@@ -61,18 +67,18 @@ class _SubmissionSystem:
         zip_trajectories: bool, optional
             determines if output trajectories are compressed or not
         """
-        self.verbose = verbose
-        self.submission = submission
 
-        self._job_duration = job_duration
+        self._submission = submission
         self._nmpi = nmpi
         self._nomp = nomp
         self._max_storage = max_storage
-        self._enviroment = enviroment
+        self._job_duration = job_duration
+        self.verbose = verbose
+        self._environment = environment
         self._block_double_submission = block_double_submission
-        self.chain_prefix = chain_prefix
-        self.begin_mail = begin_mail
-        self.end_mail = end_mail
+        self._chain_prefix = chain_prefix
+        self._begin_mail = begin_mail
+        self._end_mail = end_mail
         self._zip_trajectories = zip_trajectories
 
     def submit_to_queue(self, sub_job: Submission_job) -> int:
@@ -100,24 +106,25 @@ class _SubmissionSystem:
         if var_name is None:
             var_name = var_prefixes + name
 
+        params = []
+        for key in inspect.signature(self.__init__).parameters:
+            if hasattr(self, key):
+                param = getattr(self, key)
+                if isinstance(param, str):
+                    params.append(key + "='" + str(getattr(self, key)) + "'")
+                else:
+                    params.append(key + "=" + str(getattr(self, key)))
+            elif hasattr(self, "_" + key):
+                param = getattr(self, key)
+                if isinstance(param, str):
+                    params.append(key + "='" + str(getattr(self, "_" + key)) + "'")
+                else:
+                    params.append(key + "=" + str(getattr(self, "_" + key)))
+        parameters_str = ", ".join(params)
+
         gen_cmd = "#Generate " + name + "\n"
-        gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_obj" + "\n"
-        gen_cmd += (
-            var_name
-            + " = "
-            + name
-            + "_obj(submission="
-            + str(self.submission)
-            + ", verbose="
-            + str(self.verbose)
-            + ", nmpi="
-            + str(self.nmpi)
-            + ", nomp="
-            + str(self.nomp)
-            + ', job_duration="'
-            + str(self.job_duration)
-            + '")\n\n'
-        )
+        gen_cmd += "from " + self.__module__ + " import " + name + " as " + name + "_class" + "\n"
+        gen_cmd += var_name + " = " + name + "_class(" + parameters_str + ")\n\n"
         return gen_cmd
 
     def get_jobs_from_queue(self, job_text: str, **kwargs) -> List[int]:
@@ -210,41 +217,91 @@ class _SubmissionSystem:
         raise NotImplementedError("kill_jobs is not implemented for: " + self.__class__.__name__)
 
     @property
+    def submission(self):
+        return self._submission
+
+    @submission.setter
+    def submission(self, submission_value):
+        self._submission = submission_value
+
+    @property
     def nmpi(self) -> int:
         return self._nmpi
 
     @nmpi.setter
-    def nmpi(self, nmpi: int):
-        self._nmpi = int(nmpi)
+    def nmpi(self, nmpi_value: int):
+        self._nmpi = int(nmpi_value)
 
     @property
     def nomp(self) -> int:
         return self._nomp
 
     @nomp.setter
-    def nomp(self, nomp: int):
-        self._nomp = int(nomp)
+    def nomp(self, nomp_value: int):
+        self._nomp = int(nomp_value)
+
+    @property
+    def max_storage(self) -> str:
+        return self._max_storage
+
+    @max_storage.setter
+    def max_storage(self, max_storage_value: float):
+        self._max_storage = float(max_storage_value)
 
     @property
     def job_duration(self) -> str:
         return self._job_duration
 
     @job_duration.setter
-    def job_duration(self, job_duration: str):
-        self._job_duration = str(job_duration)
+    def job_duration(self, job_duration_value: str):
+        self._job_duration = str(job_duration_value)
+
+    # no verbose setter since verbose is not private
 
     @property
-    def max_storage(self) -> str:
-        return self._max_storage
+    def environment(self) -> str:
+        return self._environment
+
+    @environment.setter
+    def environment(self, environment_value: str):
+        self._environment = str(environment_value)
+
+    @property
+    def block_double_submission(self) -> bool:
+        return self._block_double_submission
+
+    @block_double_submission.setter
+    def block_double_submission(self, block_double_submission_value: bool):
+        self._block_double_submission = bool(block_double_submission_value)
+
+    @property
+    def chain_prefix(self) -> str:
+        return self._chain_prefix
+
+    @chain_prefix.setter
+    def chain_prefix(self, chain_prefix_value: str):
+        self._chain_prefix = str(chain_prefix_value)
+
+    @property
+    def begin_mail(self) -> str:
+        return self._begin_mail
+
+    @begin_mail.setter
+    def begin_mail(self, begin_mail_value: str):
+        self._begin_mail = str(begin_mail_value)
+
+    @property
+    def end_mail(self) -> str:
+        return self._end_mail
+
+    @end_mail.setter
+    def end_mail(self, end_mail_value: str):
+        self._end_mail = str(end_mail_value)
 
     @property
     def zip_trajectories(self) -> bool:
         return self._zip_trajectories
 
     @zip_trajectories.setter
-    def zip_trajectories(self, zip_trajectories: bool):
-        self._zip_trajectories = zip_trajectories
-
-    @max_storage.setter
-    def max_storage(self, max_storage: float):
-        self._max_storage = float(max_storage)
+    def zip_trajectories(self, zip_trajectories_value: bool):
+        self._zip_trajectories = zip_trajectories_value

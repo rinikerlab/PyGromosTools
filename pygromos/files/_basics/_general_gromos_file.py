@@ -8,7 +8,7 @@ import os
 import copy
 import inspect
 import warnings
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Union
 
 from pygromos.files.blocks import all_blocks
 
@@ -30,7 +30,7 @@ class _general_gromos_file:
     _block_order: List[str] = []
     _future_file: bool
 
-    def __init__(self, in_value: (str or dict or None or __class__), _future_file: bool = False):
+    def __init__(self, in_value: Union[str, dict, None], _future_file: bool = False):
         self._future_file = _future_file
         if isinstance(in_value, str):
             self.path = self._orig_file_path = in_value
@@ -43,10 +43,12 @@ class _general_gromos_file:
 
         elif isinstance(type(in_value), __class__):
             raise NotImplementedError("This variant is not implemented")
+
         elif in_value is None:
             self.path = None
             self._orig_file_path = None
             # print("Empty class")
+
         else:
             raise ValueError("The given type of input could not be translated in " + str(__class__) + ".__init__")
 
@@ -302,11 +304,9 @@ class _general_gromos_file:
         str
             out_path
         """
-        os.makedirs(os.path.dirname(out_path), exist_ok=True)
-        file = open(out_path, "w")
-        file.write(str(self))
-        file.close()
-        self.path = out_path
+        self._write_to_file(out_path=out_path, content_str=str(self))
+        self.path = os.path.abspath(out_path)
+        self._future_file = False
 
         return out_path
 

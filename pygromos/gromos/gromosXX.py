@@ -27,7 +27,11 @@ class _GromosXX(_gromosClass):
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosXX_bin_dir: str = None):
+    def __init__(
+        self,
+        gromosXX_bin_dir: str = None,
+        _check_binary_paths: bool = True,
+    ):
         """
         Constructing a gromosXX object.
 
@@ -35,6 +39,8 @@ class _GromosXX(_gromosClass):
         ----------
         gromosXX_bin_dir :   str, optional
             This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
+        _dont_check_binary : bool, optional
+            This flag removes the checks of the binary presence for this obj. This can make sense if system access is slow!, by default False - checks will be made
         """
         # lazy me - doc text for functions:
         functions_text = "\n    Methods:\n    ---------\n" + "\n".join(
@@ -42,7 +48,9 @@ class _GromosXX(_gromosClass):
         )
         self.__doc__ = self.__doc__ + functions_text
 
-        super().__init__(in_bin_dir=gromosXX_bin_dir)  # initialises the binary checks
+        super().__init__(
+            in_bin_dir=gromosXX_bin_dir, _check_binary_paths=_check_binary_paths
+        )  # initialises the binary checks
 
     def __str__(self):
         return self.__doc__
@@ -54,6 +62,7 @@ class _GromosXX(_gromosClass):
         GromosXX Programms
     """
 
+    @_gromosClass._gromosTypeConverter
     def md_run(
         self,
         in_topo_path: str,
@@ -216,6 +225,12 @@ class _GromosXX(_gromosClass):
             log_file.write("\tRUN:\tSUCESSFUL\n")
         else:
             log_file.write("\tRUN:\tFAILED\n")
+
+            omd_file_content = open(log_file_path, "r").read_lines()
+            if len(omd_file_content) > 0:
+                print("\t" + "\n\t".join(omd_file_content))
+            else:
+                print("\t None")
             failed = True
 
         log_file.write("\tTIME:\n\tstart: " + str(start_time) + "\tend: " + str(end_time) + "\n")
@@ -228,6 +243,7 @@ class _GromosXX(_gromosClass):
 
         return log_file_path
 
+    @_gromosClass._gromosTypeConverter
     def repex_run(
         self,
         in_topo_path: str,
@@ -414,5 +430,5 @@ class GromosXX(_GromosXX):
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosXX_bin_dir: str = None):
-        super().__init__(gromosXX_bin_dir=gromosXX_bin_dir)
+    def __init__(self, gromosXX_bin_dir: str = None, _check_binary_paths: bool = True):
+        super().__init__(gromosXX_bin_dir=gromosXX_bin_dir, _check_binary_paths=_check_binary_paths)

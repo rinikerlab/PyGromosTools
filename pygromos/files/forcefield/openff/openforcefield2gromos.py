@@ -10,6 +10,7 @@ Author: Marc Lehner
 # imports
 import importlib
 from pygromos.files.topology.top import Top
+from pygromos.files.blocks import topology_blocks as blocks
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 
@@ -283,17 +284,20 @@ class openforcefield2gromos:
 
     def convert_other_stuff(self):
         if not hasattr(self.gromosTop, "SOLUTEMOLECULES"):
-            self.gromosTop.add_block(blocktitle="SOLUTEMOLECULES", content=["1", str(self.openFFmolecule.n_atoms)])
+            self.gromosTop.add_block(block=blocks.SOLUTEMOLECULES(NSM=1, NSP=[self.openFFmolecule.n_atoms]))
         else:
-            self.gromosTop.SOLUTEMOLECULES.content = [["1"], [str(self.openFFmolecule.n_atoms)]]
+            self.gromosTop.SOLUTEMOLECULES.NSM = 1
+            self.gromosTop.SOLUTEMOLECULES.NSP = [self.openFFmolecule.n_atoms]
         if not hasattr(self.gromosTop, "TEMPERATUREGROUPS"):
-            self.gromosTop.add_block(blocktitle="TEMPERATUREGROUPS", content=["1", str(self.openFFmolecule.n_atoms)])
+            self.gromosTop.add_block(block=blocks.TEMPERATUREGROUPS(NSM=1, NSP=[self.openFFmolecule.n_atoms]))
         else:
-            self.gromosTop.TEMPERATUREGROUPS.content = [["1"], [str(self.openFFmolecule.n_atoms)]]
+            self.gromosTop.TEMPERATUREGROUPS.NSM = 1
+            self.gromosTop.TEMPERATUREGROUPS.NSP = [self.openFFmolecule.n_atoms]
         if not hasattr(self.gromosTop, "PRESSUREGROUPS"):
-            self.gromosTop.add_block(blocktitle="PRESSUREGROUPS", content=["1", str(self.openFFmolecule.n_atoms)])
+            self.gromosTop.add_block(block=blocks.PRESSUREGROUPS(NSM=1, NSP=[self.openFFmolecule.n_atoms]))
         else:
-            self.gromosTop.PRESSUREGROUPS.content = [["1"], [str(self.openFFmolecule.n_atoms)]]
+            self.gromosTop.PRESSUREGROUPS.NSM = 1
+            self.gromosTop.PRESSUREGROUPS.NSP = [self.openFFmolecule.n_atoms]
         if not hasattr(self.gromosTop, "LJEXCEPTIONS"):
             self.gromosTop.add_block(blocktitle="LJEXCEPTIONS", content=["0", ""])
         if not hasattr(self.gromosTop, "SOLVENTATOM"):

@@ -22,7 +22,7 @@ from typing import Tuple, Dict
 
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import (
-    gromos_2020_tre_block_names_table,
+    gromos_2021_tre_block_names_table,
     gromos_tre_block_names_table,
 )
 from pygromos.analysis import energy_analysis as ea
@@ -65,7 +65,7 @@ class Tre(traj._General_Trajectory):
         auto_save=True,
         stride: int = 1,
         skip: int = 0,
-        _ene_ana_names: gromos_tre_block_names_table = gromos_2020_tre_block_names_table,
+        _ene_ana_names: gromos_tre_block_names_table = gromos_2021_tre_block_names_table,
     ):
         """
             Build a Gromos energy trajectory file (.tre)
@@ -107,10 +107,11 @@ class Tre(traj._General_Trajectory):
         """
         # print(self.database["totals"][0].shape, self.database["totals"][0])
         if not hasattr(self, "totals"):
+            totals_data = np.stack(self.database["totals"].to_numpy())
             self.totals = pd.DataFrame(
-                data=np.stack(self.database["totals"].to_numpy()),
+                data=totals_data,
                 index=self.database.time,
-                columns=self.tre_block_name_table.totals_subblock_names,
+                columns=self.tre_block_name_table.totals_subblock_names[: totals_data.shape[1]],
             )
         else:
             pass
@@ -446,12 +447,12 @@ class Tre(traj._General_Trajectory):
     def get_Hvap(self, gas_traj, nMolecules=1, temperature=None) -> float:
         gas_totpot_energy = 0
         if type(gas_traj) == type(self):
-            gas_totpot_energy = gas_traj.get_totals_totpot().mean()
+            gas_totpot_energy = gas_traj.get_totpot().mean()
         elif type(gas_traj) == float:
             gas_totpot_energy = gas_traj
         else:
             raise TypeError("Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)")
-        liq_totpot_energy = self.get_totals_totpot().mean()
+        liq_totpot_energy = self.get_totpot().mean()
 
         # get temperature from liq trajectory if not given
         if temperature is None:
