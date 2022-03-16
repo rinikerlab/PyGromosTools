@@ -23,7 +23,7 @@ class _compiled_program:
     _found_binary_paths: Dict[str, str]  # the found binary paths.
 
     def __init__(
-        self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _check_binary_paths: bool = False
+        self, in_bin_dir: Union[str, None], _force_bin_present: bool = True, _check_binary_paths: bool = True
     ) -> Union[str, None]:
         """
             The  _compiled_program parent class can be used, to ensure on runtime, that certain binaries are present.

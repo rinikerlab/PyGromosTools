@@ -30,7 +30,7 @@ class _GromosXX(_gromosClass):
     def __init__(
         self,
         gromosXX_bin_dir: str = None,
-        _check_binary_paths: bool = False,
+        _check_binary_paths: bool = True,
     ):
         """
         Constructing a gromosXX object.
@@ -430,5 +430,5 @@ class GromosXX(_GromosXX):
         This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.
     """
 
-    def __init__(self, gromosXX_bin_dir: str = None, _check_binary_paths: bool = False):
+    def __init__(self, gromosXX_bin_dir: str = None, _check_binary_paths: bool = True):
         super().__init__(gromosXX_bin_dir=gromosXX_bin_dir, _check_binary_paths=_check_binary_paths)
