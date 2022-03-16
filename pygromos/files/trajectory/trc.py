@@ -205,9 +205,12 @@ class Trc(mdtraj.Trajectory):
     def write_trc(self, out_path: streams) -> str:
         raise NotImplementedError("Not Implemented")
 
-    def write(self, out_path: str):
+    def save(self, out_path: str) -> str:
         if out_path.endswith(".trc"):
             return self.write_trc()
         else:
-            self.save(out_path)
+            super().save(out_path)
             return out_path
+        
+    def write(self, out_path: str)->str:
+        return self.save(out_path)
