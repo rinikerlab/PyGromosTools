@@ -1,7 +1,5 @@
 import glob
 import os
-import warnings
-
 import pandas as pd
 from pygromos.files.coord.cnf import Cnf
 
@@ -26,7 +24,7 @@ def do_skip_job(
     # Check if job with same name is already in the queue!
     if (verbose) and verbose_lvl >= 2:
         print("Checking if jobs was already submitted or done")
-    if job_submission_system._block_double_submission:  # can we find an job with this name in the queue?
+    if job_submission_system.block_double_submission:  # can we find an job with this name in the queue?
         if (verbose) and verbose_lvl >= 2:
             print("Checking for jobs with name: " + tmp_jobname)
         queued_job_ids = job_submission_system.search_queue_for_jobname(job_name=tmp_jobname)
@@ -204,14 +202,8 @@ def chain_submission(
             md_args += "-nomp " + str(job_submission_system.nomp) + "\n"
             md_args += "-initialize_first_run " + str(initialize_first_run) + "\n"
             md_args += "-reinitialize_every_run " + str(reinitialize_every_run) + "\n"
-            if simSystem.gromosXX is not None:
-                md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"
-            else:
-                md_args += "-gromosXX_bin_dir None \n"
-                if verbose:
-                    warnings.warn(
-                        "gromosXX_bin_dir is None \n If you want to simulate something please add a existing gromos bin\n"
-                    )
+            md_args += "-gromosXX_bin_dir " + str(simSystem.gromosXX.bin) + "\n"
+            md_args += "-gromosXX_check_binary_paths " + str(simSystem.gromosXX._check_binary_paths) + "\n"
 
             if work_dir is not None:
                 md_args += "-work_dir " + str(work_dir) + "\n"

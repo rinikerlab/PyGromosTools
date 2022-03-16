@@ -1,4 +1,4 @@
-from typing import Union, Callable
+from typing import Callable
 from pygromos.utils.compiledProgram import _compiled_program
 
 import os
@@ -7,9 +7,7 @@ from pygromos.files._basics import _general_gromos_file
 
 
 class _gromosClass(_compiled_program):
-    def __init__(
-        self, in_bin_dir: Union[str, None], dummy: bool = False, _dont_check_binary: bool = False
-    ) -> Union[str, None]:
+    def __init__(self, in_bin_dir: str, dummy: bool = False, _check_binary_paths: bool = True) -> str:
         """
           This parent class contains wrappers for gromos functionalities.
           E.g. gromosTypeConverter converts a passed gromos obj (Cnf, Top etc.) to a string path, such it can be passed to the comand line tools.
@@ -28,7 +26,7 @@ class _gromosClass(_compiled_program):
         Union[str, None]
             _description_
         """
-        super().__init__(in_bin_dir, dummy, _dont_check_binary=_dont_check_binary)
+        super().__init__(in_bin_dir, dummy, _check_binary_paths=_check_binary_paths)
 
     def _gromosTypeConverter(func: Callable) -> Callable:
         """
