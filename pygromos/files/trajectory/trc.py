@@ -20,7 +20,7 @@ import pandas as pd
 import numpy as np
 import nglview as nj
 from copy import deepcopy
-from typing import Dict
+from typing import Dict, List, Tuple
 from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
@@ -44,21 +44,26 @@ class Trc(mdtraj.Trajectory):
         traj_path=None,
         in_cnf: [str, Cnf] = None,
     ):
+        print("traj_path", traj_path)
+        print("in_cnf", in_cnf)
+        self._future_file = False
 
         if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
             trj = mdtraj.load(traj_path)
             self.__dict__.update(vars(trj))
+            
         elif traj_path is not None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
-            self._future_file = False
 
             # Parse TRC
+            compress = False
             if traj_path.endswith(".gz"):
                 traj_path = bash.compress_gzip(in_path=traj_path, extract=True)
+                compress = True
 
             if isinstance(traj_path, str):
                 xyz, time, step = self.parse_trc_efficiently(traj_path)
 
-            if traj_path.endswith(".gz"):
+            if compress:
                 traj_path = bash.compress_gzip(in_path=traj_path)
 
             # Topology from Cnf
@@ -79,7 +84,6 @@ class Trc(mdtraj.Trajectory):
             super().__init__(xyz=xyz, topology=single.topology, time=time)
             self._step = step
         elif not (xyz is None and topology is None):
-            self._future_file = False
             super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
 
         else:
@@ -96,6 +100,7 @@ class Trc(mdtraj.Trajectory):
             "xyz": deepcopy(self._xyz),
             "topology": deepcopy(self._topology),
             "path": deepcopy(self.path),
+            "_future_file": self._future_file,
         }
         for additional_key in ["unitcell_angles", 'unitcell_angles']:
             if(hasattr(self, additional_key) and getattr(self, additional_key) is not None):
@@ -162,7 +167,17 @@ class Trc(mdtraj.Trajectory):
     def step(self) -> np.array:
         return self._step
 
-    rmsd = lambda self, x: mdtraj.rmsd(self, self, x)
+    # Analysis of traj
+    def rmsd(self,  reference_frame :int=0, reference: mdtraj.Trajectory=None) -> pd.DataFrame:
+        if(reference is None):
+            reference = self
+        time_scale = pd.Series(data=self.time, name="time")
+        return pd.DataFrame({"rmsd":mdtraj.rmsd(self, reference, reference_frame)}, index=time_scale)
+        
+    def distances(self, atom_pairs:List[Tuple[int, int]], periodic:bool=True, opt:bool=True,)-> pd.DataFrame:
+        arr = mdtraj.compute_distances(self, atom_pairs=atom_pairs, periodic=periodic, opt=opt)
+        time_scale = pd.Series(data=self.time, name="time")
+        return pd.DataFrame({str(key[0])+"-"+str(key[1]):val for key, val in zip(atom_pairs, arr.T)}, index=time_scale)
 
     def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
         block_map = {}
@@ -205,6 +220,7 @@ class Trc(mdtraj.Trajectory):
 
         return block_map
 
+    # Visualizaton
     @property
     def view(self, re_create: bool = False) -> nj.NGLWidget:
         if not hasattr(self, "_view") or not isinstance(self._view, nj.NGLWidget) or re_create:
@@ -217,6 +233,7 @@ class Trc(mdtraj.Trajectory):
         self._view = visualize_system(traj=self)
         return self._view
 
+    # io
     def write_trc(self, out_path: str) -> str:
         raise NotImplementedError("Not Implemented")
 

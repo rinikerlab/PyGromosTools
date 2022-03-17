@@ -172,10 +172,11 @@ def project_concatenation(
                 in_folder, filePrefix=in_prefix, fileSuffixes=[".trc", ".trc.gz", ".trc.tar.gz"], verbose=verbose
             )
             if len(traj_files) > 0:
+                print("ANANANANA", traj_files, out_cnf)
                 out_trc_file = trc.Trc(traj_path=traj_files[0], in_cnf=out_cnf)
                 if len(traj_files) > 0:
                     for tmp_trc_file in traj_files[1:]:
-                        tmp_trc = trc.Trc(tmp_trc_file, in_cnf=out_cnf)
+                        tmp_trc = trc.Trc(traj_path=tmp_trc_file, in_cnf=out_cnf)
                         out_trc_file += tmp_trc
                 out_trc_file.write(out_path=out_traj_path)
     if control_dict["cat_tre"]:

@@ -234,7 +234,7 @@ def simulation(
         elif os.path.exists(final_trc_file):
             gromos_system.trc = Trc(traj_path=final_trc_file, in_cnf=gromos_system.cnf)
         else:
-            gromos_system.trc = Trc(traj_path=None, in_cnf=gromos_system.cnf)
+            gromos_system.trc = Trc(traj_path=None, in_cnf=None)
             gromos_system.trc._future_file = True
             gromos_system.trc.path = final_trc_file
 
