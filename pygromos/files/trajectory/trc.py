@@ -124,7 +124,7 @@ class Trc(mdtraj.Trajectory):
 
     def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)
-
+        print("FF", self._block_map)
         # build block mapping
         rep_time = 1
         start = self._block_map["TIMESTEP"]
@@ -196,7 +196,9 @@ class Trc(mdtraj.Trajectory):
             nCommentLines = 0
             titleStr = []
 
-            while True:
+            max_it = 1000000
+            i=0
+            while max_it>i:
                 line = file_handle.readline().strip()
 
                 if line.startswith("#"):
@@ -208,6 +210,7 @@ class Trc(mdtraj.Trajectory):
                         inTitleBlock = False
                         self.TITLE = TITLE(content="\n".join(titleStr))
                     inBlock = False
+                    
                 elif not inBlock:
                     blockKey = line.strip()
                     if blockKey in block_map:
@@ -216,8 +219,11 @@ class Trc(mdtraj.Trajectory):
                         inTitleBlock = True
                     inBlock = True
                     nLines = 1
+                    
                 elif inTitleBlock:
                     titleStr.append(line)
+                
+                i+=1 # this is a potential danger
                 nLines += 1
 
         if not hasattr(self, TITLE.__name__):
