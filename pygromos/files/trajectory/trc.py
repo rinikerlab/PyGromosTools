@@ -49,9 +49,9 @@ class Trc(mdtraj.Trajectory):
         self._future_file = False
 
         if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
-            trj = mdtraj.load(traj_path)
+            trj = self.load(traj_path)
             self.__dict__.update(vars(trj))
-            
+
         elif traj_path is not None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
 
             # Parse TRC
@@ -92,7 +92,7 @@ class Trc(mdtraj.Trajectory):
             self._xyz = np.array([], ndmin=2)
             self._topology = None
             self._future_file = True
-        
+
         self.path = traj_path
 
     def __copy__(self):
@@ -102,12 +102,12 @@ class Trc(mdtraj.Trajectory):
             "path": deepcopy(self.path),
             "_future_file": self._future_file,
         }
-        for additional_key in ["unitcell_angles", 'unitcell_angles']:
-            if(hasattr(self, additional_key) and getattr(self, additional_key) is not None):
-                attribs.update({additional_key:  deepcopy(getattr(self, additional_key))})
-            
+        for additional_key in ["unitcell_angles", "unitcell_angles"]:
+            if hasattr(self, additional_key) and getattr(self, additional_key) is not None:
+                attribs.update({additional_key: deepcopy(getattr(self, additional_key))})
+
         return self.__class__(**attribs)
-        
+
     def get_dummy_cnf(self, xyz) -> Cnf:
         from pygromos.files.blocks import coords
 
@@ -168,16 +168,23 @@ class Trc(mdtraj.Trajectory):
         return self._step
 
     # Analysis of traj
-    def rmsd(self,  reference_frame :int=0, reference: mdtraj.Trajectory=None) -> pd.DataFrame:
-        if(reference is None):
+    def rmsd(self, reference_frame: int = 0, reference: mdtraj.Trajectory = None) -> pd.DataFrame:
+        if reference is None:
             reference = self
         time_scale = pd.Series(data=self.time, name="time")
-        return pd.DataFrame({"rmsd":mdtraj.rmsd(self, reference, reference_frame)}, index=time_scale)
-        
-    def distances(self, atom_pairs:List[Tuple[int, int]], periodic:bool=True, opt:bool=True,)-> pd.DataFrame:
+        return pd.DataFrame({"rmsd": mdtraj.rmsd(self, reference, reference_frame)}, index=time_scale)
+
+    def distances(
+        self,
+        atom_pairs: List[Tuple[int, int]],
+        periodic: bool = True,
+        opt: bool = True,
+    ) -> pd.DataFrame:
         arr = mdtraj.compute_distances(self, atom_pairs=atom_pairs, periodic=periodic, opt=opt)
         time_scale = pd.Series(data=self.time, name="time")
-        return pd.DataFrame({str(key[0])+"-"+str(key[1]):val for key, val in zip(atom_pairs, arr.T)}, index=time_scale)
+        return pd.DataFrame(
+            {str(key[0]) + "-" + str(key[1]): val for key, val in zip(atom_pairs, arr.T)}, index=time_scale
+        )
 
     def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
         block_map = {}
