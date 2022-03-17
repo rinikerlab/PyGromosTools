@@ -316,6 +316,10 @@ class Gromos_System:
         self._all_files.update(copy.copy(self.optional_files))
         self._traj_files_path = {}
         
+        #Empty Attr
+        self.trc = None
+        self.tre = None
+        
     def __str__(self) -> str:
         msg = "\n"
         msg += "GROMOS SYSTEM: " + self.name + "\n"
@@ -421,7 +425,7 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if(isinstance(attribute_dict[key], tuple(self.traj_files.values()))):
+            if(isinstance(attribute_dict[key], tuple(self.traj_files.values())) or key in self._traj_files_path):
                 self._traj_files_path[key] = attribute_dict[key].path
                 print(self._traj_files_path)
             elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
@@ -680,6 +684,34 @@ class Gromos_System:
         else:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
+    @property
+    def trc(self)-> Trc:
+        if(self._trc is None and "trc" in self._traj_files_path):
+            self._trc = Trc(self._traj_files_path['trc'])
+        return self._trc
+        
+    @trc.setter
+    def trc(self, in_value:Union[str, Trc]):
+        if(isinstance(in_value, str)):
+            self._traj_files_path['trc'] = in_value
+            self._trc = None
+        else:
+            self._trc = in_value
+    
+    @property
+    def tre(self)-> Tre:
+        if(self._tre is None and "tre" in self._traj_files_path):
+            self._tre = Trc(self._traj_files_path['tre'])
+        return self._tre
+        
+    @tre.setter
+    def tre(self, in_value:Union[str, Tre]):
+        if(isinstance(in_value, str)):
+            self._traj_files_path['tre'] = in_value
+            self._tre = None
+        else:
+            self._tre = in_value
+    
     @property
     def qmmm(self) -> QMMM:
         return self._qmmm

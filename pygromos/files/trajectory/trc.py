@@ -88,11 +88,14 @@ class Trc(mdtraj.Trajectory):
             self._xyz = np.array([], ndmin=2)
             self._topology = None
             self._future_file = True
+        
+        self.path = traj_path
 
     def __copy__(self):
         attribs = {
             "xyz": deepcopy(self._xyz),
-            "topology": deepcopy(self._topology)
+            "topology": deepcopy(self._topology),
+            "path": deepcopy(self.path),
         }
         for additional_key in ["unitcell_angles", 'unitcell_angles']:
             if(hasattr(self, additional_key) and getattr(self, additional_key) is not None):
