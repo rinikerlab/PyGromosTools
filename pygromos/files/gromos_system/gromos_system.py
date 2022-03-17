@@ -24,20 +24,26 @@ import warnings
 from pygromos.data.ff import Gromos54A7
 from typing import Dict, Union, List
 
+from pygromos.files.coord import cnf
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import imd_blocks
+
+
+# Files
+from pygromos.files.topology.top import Top
+from pygromos.files.coord.cnf import Cnf
+from pygromos.files.simulation_parameters.imd import Imd
+from pygromos.files.qmmm.qmmm import QMMM
+from pygromos.files.topology.disres import Disres
+from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.coord.refpos import Reference_Position
 from pygromos.files.coord.posres import Position_Restraints
 
-from pygromos.files.coord import cnf
-from pygromos.files.coord.cnf import Cnf
-from pygromos.files.qmmm.qmmm import QMMM
-from pygromos.files.simulation_parameters.imd import Imd
-from pygromos.files.topology.top import Top
-from pygromos.files.topology.disres import Disres
-from pygromos.files.topology.ptp import Pertubation_topology
+# Trajs
+from pygromos.files.trajectory.trc import Trc
+from pygromos.files.trajectory.tre import Tre
+# Additional 
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
-
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
@@ -80,7 +86,8 @@ class Gromos_System:
         "refpos": Reference_Position,
         "qmmm": QMMM,
     }
-
+    traj_files = {"trc": Trc, "tre":Tre}
+    
     residue_list: Dict
     solute_info: cnf.solute_infos
     protein_info: cnf.protein_infos
@@ -185,7 +192,6 @@ class Gromos_System:
         Warning
             Rises warning if files are not present.
         """
-
         self.hasData = False
         self._name = system_name
         self._work_folder = work_folder
@@ -308,7 +314,8 @@ class Gromos_System:
         self._all_files_key.extend(list(map(lambda x: "_" + x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
-
+        self._traj_files_path = {}
+        
     def __str__(self) -> str:
         msg = "\n"
         msg += "GROMOS SYSTEM: " + self.name + "\n"
@@ -414,12 +421,17 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
+            if(isinstance(attribute_dict[key], tuple(self.traj_files.values()))):
+                self._traj_files_path[key] = attribute_dict[key].path
+                print(self._traj_files_path)
+            elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
             elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
                 new_dict.update({key: None})
+                
+            new_dict.update(self._traj_files_path)
         return new_dict
 
     def __setstate__(self, state):

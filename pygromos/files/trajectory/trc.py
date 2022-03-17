@@ -19,6 +19,7 @@ import mdtraj
 import pandas as pd
 import numpy as np
 import nglview as nj
+from copy import deepcopy
 from typing import Dict
 from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
@@ -88,6 +89,17 @@ class Trc(mdtraj.Trajectory):
             self._topology = None
             self._future_file = True
 
+    def __copy__(self):
+        attribs = {
+            "xyz": deepcopy(self._xyz),
+            "topology": deepcopy(self._topology)
+        }
+        for additional_key in ["unitcell_angles", 'unitcell_angles']:
+            if(hasattr(self, additional_key) and getattr(self, additional_key) is not None):
+                attribs.update({additional_key:  deepcopy(getattr(self, additional_key))})
+            
+        return self.__class__(**attribs)
+        
     def get_dummy_cnf(self, xyz) -> Cnf:
         from pygromos.files.blocks import coords
 
