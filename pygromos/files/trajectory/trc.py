@@ -197,8 +197,8 @@ class Trc(mdtraj.Trajectory):
             titleStr = []
 
             max_it = 1000000
-            i=0
-            while max_it>i:
+            i = 0
+            while max_it > i:
                 line = file_handle.readline().strip()
 
                 if line.startswith("#"):
@@ -210,7 +210,7 @@ class Trc(mdtraj.Trajectory):
                         inTitleBlock = False
                         self.TITLE = TITLE(content="\n".join(titleStr))
                     inBlock = False
-                    
+
                 elif not inBlock:
                     blockKey = line.strip()
                     if blockKey in block_map:
@@ -219,11 +219,11 @@ class Trc(mdtraj.Trajectory):
                         inTitleBlock = True
                     inBlock = True
                     nLines = 1
-                    
+
                 elif inTitleBlock:
                     titleStr.append(line)
-                
-                i+=1 # this is a potential danger
+
+                i += 1  # this is a potential danger
                 nLines += 1
 
         if not hasattr(self, TITLE.__name__):
