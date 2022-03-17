@@ -426,8 +426,10 @@ class Gromos_System:
         new_dict = {}
         for key in attribute_dict.keys():
             if(isinstance(attribute_dict[key], tuple(self.traj_files.values())) or key in self._traj_files_path):
-                self._traj_files_path[key] = attribute_dict[key].path
-                print(self._traj_files_path)
+                if(isinstance(attribute_dict[key], str)):
+                    self._traj_files_path[key] = attribute_dict[key]
+                else:
+                    self._traj_files_path[key] = attribute_dict[key].path
             elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
             elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
