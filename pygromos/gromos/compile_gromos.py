@@ -23,13 +23,13 @@ def default_install(nCores: int = 1, _timing_dict: dict = {}, verbose: bool = Fa
 
 def install_gromos(
     root_dir: str = None,
+    nCore: int = 3,
     gromosXX_with_mpi: bool = False,
     gromosXX_with_omp: bool = False,
     gromosXX_with_cuda: str = None,
     gromosPP_with_omp=False,
     gromosPP_with_debug: bool = False,
     gromosXX_with_debug: bool = False,
-    nCore: int = 3,
     do_compile: bool = True,
     do_clean: bool = True,
     recompile: bool = False,
@@ -47,6 +47,8 @@ def install_gromos(
     ----------
     root_dir : str
         this dir contains the gromosXX and the gromosPP git repositories
+    nCore : int, optional
+        how many cores should be used to compile?, by default 1
     gromosXX_with_cuda_dir : str, optional
         use the following cuda path and activate cuda support, by default None
     gromosXX_with_omp : bool, optional
@@ -55,6 +57,10 @@ def install_gromos(
         should gromosXX be compiled wiht mpi - Warning dont combine with omp!, by default False
     gromosPP_with_omp : bool, optional
         should gromosPP be compiled with omp, by default False
+    gromosPP_with_debug : bool, optional
+        set gromosPP debug flag, by default False
+    gromosXX_with_debug : bool, optional
+        set gromosXX debug flag, by default False
     do_compile : bool, optional
         compile the programms, by default True
     do_clean : bool, optional
@@ -67,10 +73,10 @@ def install_gromos(
         install the gromosPP program, by default True
     _do_gromosXX : bool, optional
         install the gromosXX program, by default True
-    with_debug : bool, optional
-        set gromos debug flag, by default False
-    nCore : int, optional
-        how many cores should be used to compile?, by default 1
+    _timing_dict : dict, optional
+        structure for storing timings of process, by default {}
+    verbose : bool, optional
+        compiling is fun, I can tell you more!, by default True
     """
 
     if root_dir is None:
@@ -119,7 +125,13 @@ def install_gromos(
                 )
 
             if not os.path.exists(gromosXX_build_path + "/bin") or recompile or recompile_from_scratch:
-                _make_compile(build_dir=gromosXX_build_path, nCore=nCore, verbose=verbose, _timing_dict=_timing_dict, _timing_prefix="gromosXX_")
+                _make_compile(
+                    build_dir=gromosXX_build_path,
+                    nCore=nCore,
+                    verbose=verbose,
+                    _timing_dict=_timing_dict,
+                    _timing_prefix="gromosXX_",
+                )
 
         if _do_gromosPP:
             if verbose:
@@ -137,8 +149,13 @@ def install_gromos(
                 )
 
             if not os.path.exists(gromosPP_build_path + "/bin") or recompile or recompile_from_scratch:
-                _make_compile(build_dir=gromosPP_build_path, nCore=nCore, verbose=verbose, _timing_dict=_timing_dict, _timing_prefix="gromosPP_")
-
+                _make_compile(
+                    build_dir=gromosPP_build_path,
+                    nCore=nCore,
+                    verbose=verbose,
+                    _timing_dict=_timing_dict,
+                    _timing_prefix="gromosPP_",
+                )
 
     if verbose:
         # TIMINGS Printout
@@ -147,7 +164,7 @@ def install_gromos(
             print(key, val)
 
         # get duration
-        print("\n\n" + ">" * 10 + " DURATION:")
+        print("\n\n" + ">" * 10 + " duration:")
         durations = OrderedDict({})
         keys = list(_timing_dict.keys())
         for key in keys:
@@ -163,7 +180,12 @@ def install_gromos(
 
 
 def _configure_gromosPP_autotools(
-    build_dir: str, binary_dir: str = None, with_omp: bool = False, with_debug: bool = False, verbose: bool = True, _timing_dict:dict={}
+    build_dir: str,
+    binary_dir: str = None,
+    with_omp: bool = False,
+    with_debug: bool = False,
+    verbose: bool = True,
+    _timing_dict: dict = {},
 ):
     """
         Setting the configurations for the compiling gromosPP process. (uses autotools)
@@ -179,6 +201,10 @@ def _configure_gromosPP_autotools(
         should gromosPP be compiled with omp, by default False
     with_debug : bool, optional
         set gromos debug flag, by default False
+    verbose : bool, optional
+        compiling is fun, I can tell you more!, by default True
+    _timing_dict : dict, optional
+        structure for storing timings of process, by default {}
 
     """
 
@@ -189,17 +215,15 @@ def _configure_gromosPP_autotools(
     _timing_dict["gromosPP_init_start"] = datetime.now()
     if verbose:
         print(spacer2 + "\t\t> INIT \n" + spacer2)
-        print("START Time: ", _timing_dict["gromosPP_init_start"])    
+        print("start time: ", _timing_dict["gromosPP_init_start"])
         print("workdir:", os.getcwd())
 
     bash.execute("./Config.sh")
-    
+
     _timing_dict["gromosPP_init_end"] = datetime.now()
     if verbose:
-        print(
-            "Duration: ", str(_timing_dict["gromosPP_init_end"] - _timing_dict["gromosPP_init_start"]), "\n"
-        )  
-    
+        print("duration: ", str(_timing_dict["gromosPP_init_end"] - _timing_dict["gromosPP_init_start"]), "\n")
+
     # Configure
     bash.make_folder(build_dir)
     os.chdir(build_dir)
@@ -209,7 +233,7 @@ def _configure_gromosPP_autotools(
 
     if verbose:
         print(spacer2 + "\t\t> CONFIGURE \n" + spacer2)
-        print("START Time: ", _timing_dict["gromosPP_conf_start"])
+        print("start time: ", _timing_dict["gromosPP_conf_start"])
         print("log_file: ", log_file)
 
     options = {}
@@ -222,6 +246,7 @@ def _configure_gromosPP_autotools(
     if with_debug:
         flags.append("--enable-debug")
 
+    flags.append(" --with-gsl=$(gsl-config --prefix) ")  # this is required for gromosPP
     cmd = (
         "../configure "
         + " ".join([key + "=" + val for key, val in options.items()])
@@ -235,10 +260,9 @@ def _configure_gromosPP_autotools(
 
     _timing_dict["gromosPP_conf_end"] = datetime.now()
     if verbose:
-        print(
-            "Duration: ", str(_timing_dict["gromosPP_conf_end"] - _timing_dict["gromosPP_conf_start"]), "\n"
-        )
-        
+        print("duration: ", str(_timing_dict["gromosPP_conf_end"] - _timing_dict["gromosPP_conf_start"]), "\n")
+
+
 def _configure_gromosXX_autotools(
     build_dir: str,
     binary_dir: str = None,
@@ -247,7 +271,7 @@ def _configure_gromosXX_autotools(
     with_mpi: bool = False,
     with_debug: bool = False,
     verbose: bool = True,
-    _timing_dict: dict = {}
+    _timing_dict: dict = {},
 ):
     """
         Setting the configurations for the compiling gromosXX process. (uses autotools)
@@ -266,6 +290,10 @@ def _configure_gromosXX_autotools(
         should gromosXX be compiled wiht mpi - Warning dont combine with omp!, by default False
     with_debug : bool, optional
         set gromos debug flag, by default False
+    verbose : bool, optional
+        compiling is fun, I can tell you more!, by default True
+    _timing_dict : dict, optional
+        structure for storing timings of process, by default {}
 
     Raises
     ------
@@ -280,17 +308,14 @@ def _configure_gromosXX_autotools(
     _timing_dict["gromosXX_init_start"] = datetime.now()
     if verbose:
         print(spacer2 + "\t\t> INIT \n" + spacer2)
-        print("START Time: ", _timing_dict["gromosXX_init_start"])
+        print("start time: ", _timing_dict["gromosXX_init_start"])
         print("workdir:", os.getcwd())
-            
+
     bash.execute("./Config.sh")
-    
+
     _timing_dict["gromosXX_init_end"] = datetime.now()
     if verbose:
-        print(
-            "Duration: ", str(_timing_dict["gromosXX_init_end"] - _timing_dict["gromosXX_init_start"]), "\n"
-        )  
-    
+        print("duration: ", str(_timing_dict["gromosXX_init_end"] - _timing_dict["gromosXX_init_start"]), "\n")
 
     # Configure
     bash.make_folder(build_dir)
@@ -300,7 +325,7 @@ def _configure_gromosXX_autotools(
     _timing_dict["gromosXX_conf_start"] = datetime.now()
     if verbose:
         print(spacer2 + "\t\t> CONFIGURE \n" + spacer2)
-        print("START Time: ", _timing_dict["gromosXX_conf_start"])
+        print("start time: ", _timing_dict["gromosXX_conf_start"])
         print("workdir:", os.getcwd())
         print("log_file: ", log_file)
 
@@ -330,15 +355,14 @@ def _configure_gromosXX_autotools(
         print("command: ", cmd)
 
     bash.execute(cmd, catch_STD=log_file)
-    
+
     _timing_dict["gromosXX_conf_end"] = datetime.now()
     if verbose:
-        print(
-            "Duration: ", str(_timing_dict["gromosXX_conf_end"] - _timing_dict["gromosXX_conf_start"]), "\n"
-        )
+        print("duration: ", str(_timing_dict["gromosXX_conf_end"] - _timing_dict["gromosXX_conf_start"]), "\n")
 
 
-def _make_compile(build_dir: str, nCore: int = 1, verbose: bool = True, _timing_dict: dict = {}, _timing_prefix:str=""
+def _make_compile(
+    build_dir: str, nCore: int = 1, verbose: bool = True, _timing_dict: dict = {}, _timing_prefix: str = ""
 ):
     """
         This function triggers make and make install in the build_dir.
@@ -349,45 +373,66 @@ def _make_compile(build_dir: str, nCore: int = 1, verbose: bool = True, _timing_
         directory prepared for make.
     nCore : int, optional
         how many cores for each make command?, by default 1
+    verbose : bool, optional
+        make, make things and talk loudly about it! , by default True
+    _timing_dict : dict, optional
+        structure for storing timings of process, by default {}
+    _timing_prefix : str, optional
+        prefix for timing keys, by default ""
     """
     os.chdir(build_dir)
-    _timing_dict[_timing_prefix+"make_start"] = datetime.now()
+    _timing_dict[_timing_prefix + "make_start"] = datetime.now()
     log_file = build_dir + "/make.log"
     cmd = "make -j" + str(nCore)
 
     # Compile
     if verbose:
         print(spacer2 + "\t\t> MAKE \n" + spacer2)
-        print("START Time: ", _timing_dict[_timing_prefix+"make_start"])
+        print("start time: ", _timing_dict[_timing_prefix + "make_start"])
         print("log_file: ", log_file)
         print("command: ", cmd, "\n")
 
     bash.execute(cmd, catch_STD=log_file)
-
+    _timing_dict[_timing_prefix + "make_end"] = datetime.now()
+    if verbose:
+        print(
+            "duration: ",
+            str(_timing_dict[_timing_prefix + "make_end"] - _timing_dict[_timing_prefix + "make_start"]),
+            "\n",
+        )
 
     # Create Binaries
     log_file = build_dir + "/makeInstall.log"
+    _timing_dict[_timing_prefix + "make_install_start"] = datetime.now()
+    log_file = build_dir + "/make_install.log"
+
     cmd = "make -j" + str(nCore) + " install"
 
     if verbose:
         print(spacer2 + "\t\t> INSTALL \n" + spacer2)
+        print("start time: ", _timing_dict[_timing_prefix + "make_start"])
         print("log_file: ", log_file)
         print("command: ", cmd)
 
     bash.execute(cmd, catch_STD=log_file)
 
-    _timing_dict[_timing_prefix+"make_end"] = datetime.now()
-    
+    _timing_dict[_timing_prefix + "make_install_end"] = datetime.now()
     if verbose:
         print(
-            "Duration: ", str(_timing_dict[_timing_prefix+"make_end"] - _timing_dict[_timing_prefix+"make_start"]), "\n"
+            "duration: ",
+            str(
+                _timing_dict[_timing_prefix + "make_install_end"] - _timing_dict[_timing_prefix + "make_install_start"]
+            ),
+            "\n",
         )
 
 
-
-def _make_clean(build_dir: str, nCore: int = 1, verbose: bool = True):
+def _make_clean(
+    build_dir: str, nCore: int = 1, verbose: bool = True, _timing_dict: dict = {}, _timing_prefix: str = ""
+):
     """
         This function triggers make clean and removes the build_dir.
+
 
     Parameters
     ----------
@@ -395,20 +440,43 @@ def _make_clean(build_dir: str, nCore: int = 1, verbose: bool = True):
         directory prepared for make.
     nCore : int, optional
         how many cores for each make command?, by default 1
+    verbose: bool, optional
+        cleaning, cleaning, every thing gets so shiny and I can sing!, by default True
+    _timing_dict : dict, optional
+        structure for storing timings of process, by default {}
+    _timing_prefix : str, optional
+        prefix for timing keys, by default ""
     """
 
     os.chdir(build_dir)
+    cmd = "make -j" + str(nCore) + " clean"
+    _timing_dict[_timing_prefix + "make_clean_start"] = datetime.now()
+
+    if verbose:
+        print("command: ", cmd)
+        print("start time: ", _timing_dict[_timing_prefix + "make_start"])
+
     try:
-        cmd = "make -j" + str(nCore) + " clean"
-        if verbose:
-            print("command: ", cmd)
         bash.execute(cmd)
     except Exception:
         pass
+
+    if verbose:
+        print("remove dir: ", build_dir)
+
     bash.remove_file(build_dir, recursive=True)
+
+    _timing_dict[_timing_prefix + "make_clean_end"] = datetime.now()
+    if verbose:
+        print(
+            "duration: ",
+            str(_timing_dict[_timing_prefix + "make_clean_end"] - _timing_dict[_timing_prefix + "make_clean_start"]),
+            "\n",
+        )
 
 
 if __name__ == "__main__":  # Main function
+    # try modifying path if necessary
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     sys.path.append(root_dir)
 
