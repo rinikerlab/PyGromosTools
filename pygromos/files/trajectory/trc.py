@@ -64,7 +64,7 @@ class Trc(mdtraj.Trajectory):
             unitcell_lengths = None
             
             if isinstance(traj_path, str):
-                xyz, time, step = self.parse_trc_efficiently(traj_path)
+                xyz, time, step, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path)
 
             if compress:
                 traj_path = bash.compress_gzip(in_path=traj_path)
@@ -81,6 +81,7 @@ class Trc(mdtraj.Trajectory):
             if(hasattr(in_cnf, "GENBOX") and not (unitcell_lengths is None and unitcell_angles is None)):
                 unitcell_angles = np.array(list(in_cnf.GENBOX.angles)*len(xyz)).reshape(len(xyz), len(in_cnf.GENBOX.length))
                 unitcell_lengths = np.array(list(in_cnf.GENBOX.length)*len(xyz)).reshape(len(xyz), len(in_cnf.GENBOX.length))
+
             
             # Topo tmp file
             tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
@@ -88,7 +89,7 @@ class Trc(mdtraj.Trajectory):
             single = mdtraj.load_pdb(tmpFile.name)
             tmpFile.close()
 
-            super().__init__(xyz=xyz, topology=single.topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angle)
+            super().__init__(xyz=xyz, topology=single.topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
             self._step = step
         elif not (xyz is None and topology is None):
             super().__init__(xyz=xyz, topology=topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
@@ -106,7 +107,9 @@ class Trc(mdtraj.Trajectory):
         attribs = {
             "xyz": deepcopy(self._xyz),
             "topology": deepcopy(self._topology),
-            "path": deepcopy(self.path),
+            "unitcell_lengths": deepcopy(self._unitcell_lengths),
+            "unitcell_angles": deepcopy(self._unitcell_angles),
+            "traj_path": deepcopy(self.path),
             "_future_file": self._future_file,
         }
         for additional_key in ["unitcell_angles", "unitcell_angles"]:
@@ -143,7 +146,7 @@ class Trc(mdtraj.Trajectory):
         chunk = self._block_map["POSITIONRED"] - self._block_map["commentLines"] - 2 + 1
 
         # block mapping logic
-        rows = (
+        base_rows = (
             lambda x: not (
                 (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
                 or (x - title) % timestep_block_length == rep_time
@@ -152,23 +155,52 @@ class Trc(mdtraj.Trajectory):
             else True
         )
 
+        unitcell_length = None
+        unitcell_angles = None
+        genbox_present = False
+        if 'GENBOX' in self._block_map:
+            genbox_present =True
+            chunk += 2
+            # timestep_block_length += 7
+            skip_rows1 = (
+                lambda x: (base_rows(x) and not ((x - title) % timestep_block_length == end + 3) and not (
+                            (x - title) % timestep_block_length == end + 4))
+            )
+
+            skip_rows = (lambda x: (x < title) or skip_rows1(x))
+
+            unitcell_length = []
+            unitcell_angles = []
+        else:
+            skip_rows = (lambda x: (x < title) or base_rows(x))
+
         # parsing
         data = []
         time = []
         step = []
         for b in pd.read_table(
-            traj_path, delim_whitespace=True, skiprows=rows, names=["x", "y", "z"], chunksize=chunk, comment="#"
+            traj_path, delim_whitespace=True, skiprows=skip_rows, names=["x", "y", "z"], chunksize=chunk, comment="#"
         ):
-            data.append(b.values[1:, :])
-            time.append(b.values[0, 1])
-            step.append(b.values[0, 0])
+            if genbox_present:
+                data.append(b.values[1:-2, :])
+                time.append(b.values[0, 1])
+                step.append(b.values[0, 0])
+                unitcell_length.append(b.values[-2, :])
+                unitcell_angles.append(b.values[-1, :])
+            else:
+                data.append(b.values[1:, :])
+                time.append(b.values[0, 1])
+                step.append(b.values[0, 0])
 
         # make np.Arrays
         xyz = np.array(data)
         time = np.array(time)
         step = np.array(step)
+        if genbox_present:
+            unitcell_length = np.array(unitcell_length)
+            unitcell_angles = np.array(unitcell_angles)
 
-        return xyz, step, time
+        return xyz, step, time, unitcell_length, unitcell_angles
 
     @property
     def step(self) -> np.array:
