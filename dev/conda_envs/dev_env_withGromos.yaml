@@ -11,7 +11,7 @@ dependencies:
   - pytest
   ## Compiling Gromos
   - gcc
-  - gfortran
+  - gfortran  # required by GSL
   ### Configure Tools
   - autoconf
   - automake
@@ -22,7 +22,7 @@ dependencies:
   - openmpi
   - openmp
   #- cuda #possible but very intense installing
-  - cudatoolkit
+  #- cudatoolkit  #possible but very intense installing
   ## Meta
   - typing
   - pre-commit
