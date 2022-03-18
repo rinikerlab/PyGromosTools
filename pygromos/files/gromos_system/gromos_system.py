@@ -866,8 +866,10 @@ class Gromos_System:
             self._future_promise = False
 
     def auto_convert(self):
-        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top)
-        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf)
+        self.forcefield.auto_import_ff()
+        kwargs = {"work_folder": self._work_folder, "smiles": self.smiles, "in_mol2_file": self.in_mol2_file}
+        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top, **kwargs)
+        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf, **kwargs)
 
     def rdkit2GromosName(self) -> str:
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
