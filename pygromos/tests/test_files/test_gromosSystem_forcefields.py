@@ -3,7 +3,8 @@ import tempfile
 import importlib
 
 from pygromos.files.gromos_system.gromos_system import Gromos_System
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+from pygromos.files.forcefield.gromos.gromosff import GromosFF
+from pygromos.files.forcefield.openff.openff import OpenFF
 
 from pygromos.tests.test_files import out_test_root_dir
 
@@ -20,7 +21,7 @@ class test_gromos_system_forcefields(unittest.TestCase):
     verbose = True
 
     smiles = "CO"
-    ff = forcefield_system()
+    ff = GromosFF()
     ff.mol_name = "MTL"
 
     def test_construct_empty(self):
@@ -39,19 +40,19 @@ class test_gromos_system_forcefields(unittest.TestCase):
 
 
 class test_gromos_system_54A7(test_gromos_system_forcefields):
-    ff = forcefield_system(name="54A7")
+    ff = GromosFF(name="54A7")
     ff.mol_name = "CH3OH"
 
 
 class test_gromos_system_2016H66(test_gromos_system_forcefields):
-    ff = forcefield_system(name="2016H66")
+    ff = GromosFF(name="2016H66")
     ff.mol_name = "MTL"
 
 
 if has_openff:
 
     class test_gromos_system_openforcefield(test_gromos_system_forcefields):
-        ff = forcefield_system(name="off")
+        ff = OpenFF()
 
 
 """
