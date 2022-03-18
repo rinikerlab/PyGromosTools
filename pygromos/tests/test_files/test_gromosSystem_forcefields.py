@@ -25,14 +25,14 @@ class test_gromos_system_forcefields(unittest.TestCase):
     ff.mol_name = "MTL"
 
     def test_construct_empty(self):
-        grSys = self.file_class(work_folder=tmp_test_dir, system_name="Testing1", Forcefield=self.ff)
+        grSys = self.file_class(work_folder=tmp_test_dir, system_name="Testing1", forcefield=self.ff)
         print(grSys)
 
     def test_construct_top_from_ff(self):
         grSys = self.file_class(
             work_folder=tmp_test_dir,
             system_name="Testing1",
-            Forcefield=self.ff,
+            forcefield=self.ff,
             in_smiles=self.smiles,
             auto_convert=True,
         )
