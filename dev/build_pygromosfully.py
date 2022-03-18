@@ -22,7 +22,7 @@ os.system(conda_setDevelop)
 timings["conda_env_build_end"] = datetime.now()
 conda_duration = timings["conda_env_build_end"] - timings["conda_env_build_start"]
 print("\n\n Finished Conda Env Build: \n\n")
-print("CONDA BUILD:", conda_duration)
+print("CONDA BUILD - Duration:", conda_duration)
 
 
 # Compile gromos
