@@ -700,6 +700,10 @@ class Gromos_System:
             self._trc = None
         else:
             self._trc = in_value
+            
+            if hasattr(in_value, "path"):
+                self._traj_files_path["trc"] = in_value
+
 
     @property
     def tre(self) -> Tre:
@@ -714,6 +718,8 @@ class Gromos_System:
             self._tre = None
         else:
             self._tre = in_value
+            if hasattr(in_value, "path"):
+                self._traj_files_path["tre"] = in_value
 
     @property
     def qmmm(self) -> QMMM:
