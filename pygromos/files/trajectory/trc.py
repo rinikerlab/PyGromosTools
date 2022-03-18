@@ -60,6 +60,9 @@ class Trc(mdtraj.Trajectory):
                 traj_path = bash.compress_gzip(in_path=traj_path, extract=True)
                 compress = True
 
+            unitcell_angles = None
+            unitcell_lengths = None
+            
             if isinstance(traj_path, str):
                 xyz, time, step = self.parse_trc_efficiently(traj_path)
 
@@ -73,18 +76,22 @@ class Trc(mdtraj.Trajectory):
                 pass
             else:
                 in_cnf = self.get_dummy_cnf(xyz)
-
+            
+            #get cnf boxDims
+            if(hasattr(in_cnf, "GENBOX") and not (unitcell_lengths is None and unitcell_angles is None)):
+                unitcell_angles = np.array(in_cnf.GENBOX.angles)
+                unitcell_lengths = np.array(in_cnf.GENBOX.length)
+            
             # Topo tmp file
             tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
             in_cnf.write_pdb(tmpFile.name)
             single = mdtraj.load_pdb(tmpFile.name)
-
             tmpFile.close()
 
-            super().__init__(xyz=xyz, topology=single.topology, time=time)
+            super().__init__(xyz=xyz, topology=single.topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angle)
             self._step = step
         elif not (xyz is None and topology is None):
-            super().__init__(xyz, topology, time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+            super().__init__(xyz=xyz, topology=topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
 
         else:
             self._unitcell_lengths = []
