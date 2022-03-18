@@ -1,13 +1,12 @@
 import os
+import sys
 from datetime import datetime
 from pygromos.utils import bash
 from pygromos.utils.utils import spacer, spacer2
 
 
-def default_install(_timing_dict: dict = {}):
+def default_install(nCores:int= 1, _timing_dict: dict = {}, verbose:bool=False):
     root_dir = os.path.dirname(__file__)
-    nCores = 3
-
     install_gromos(
         root_dir=root_dir,
         do_clean=True,
@@ -20,7 +19,7 @@ def default_install(_timing_dict: dict = {}):
 
 
 def install_gromos(
-    root_dir: str,
+    root_dir: str = None,
     gromosXX_with_mpi: bool = False,
     gromosXX_with_omp: bool = False,
     gromosXX_with_cuda: str = None,
@@ -32,8 +31,9 @@ def install_gromos(
     _do_gromosPP: bool = True,
     _do_gromosXX: bool = True,
     with_debug: bool = False,
-    nCore: int = 1,
+    nCore: int = 3,
     _timing_dict: dict = {},
+    verbose:bool=False
 ):
     """
 
@@ -68,6 +68,10 @@ def install_gromos(
     nCore : int, optional
         how many cores should be used to compile?, by default 1
     """
+    
+    if(root_dir is None):
+        root_dir = os.path.dirname(__file__)
+
     if do_clean:
         if _do_gromosPP:
             print(spacer + "\n CLEAN GROMOSPP \n" + spacer)
@@ -158,6 +162,28 @@ def install_gromos(
                 _make_compile(build_dir=gromosPP_build_path, nCore=nCore)
                 if _timing_dict is not None:
                     _timing_dict["gromosPP_make_end"] = datetime.now()
+
+    if(verbose):
+        # TIMINGS Printout
+        print("\n" + ">" * 10 + " TIMINGS:")
+        for key, val in _timing_dict.items():
+            print(key, val)
+
+        # get duration
+        print("\n\n" + ">" * 10 + " DURATION:")
+        durations = OrderedDict({})
+        keys = list(_timing_dict.keys())
+        for key in keys:
+            prefix = "_".join(key.split("_")[:-1])
+            if "start" in key:
+                print(key)
+                print(keys)
+                end_key = list(filter(lambda x: x == (prefix + "_end"), keys))[0]
+            else:
+                pass
+            durations[prefix] = _timing_dict[end_key] - _timing_dict[key]
+            print(prefix, str(durations[prefix]))
+
 
 
 def _configure_gromosPP_autotools(
@@ -334,24 +360,15 @@ def _make_compile(build_dir: str, nCore: int = 1):
 
 
 if __name__ == "__main__":
+    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    sys.path.append(root_dir)
 
-    root_dir = os.path.dirname(__file__)
-    _do_gromosXX = True
-    _do_gromosPP = False
+    from pygromos.utils.utils import dynamic_parser
 
-    make_clean = True
-    recompile = False
-    recompile_from_scratch = False
-    nCores = 3
 
-    """
-    install_gromos(root_dir=root_dir,
-                   _do_gromosXX = _do_gromosXX,
-                   _do_gromosPP=_do_gromosPP,
-                   do_clean = make_clean,
-                   recompile=recompile,
-                   recompile_from_scratch=recompile_from_scratch,
-                   nCore=nCores)
-    """
-
-    default_install()
+    args = dynamic_parser(install_gromos, title="Run MD-Worker")
+    
+    print(args)
+    install_gromos(**vars(args))
+    
+    #default_install(nCores=nCores, verbose=True)
