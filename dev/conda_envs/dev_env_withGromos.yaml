@@ -15,6 +15,7 @@ dependencies:
   - gfortran  # required by GSL
   ### Configure Tools
   - autoconf
+  - libtool
   - automake
   ### Gromos Libraries
   - fftw
