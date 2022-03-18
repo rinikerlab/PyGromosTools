@@ -79,8 +79,8 @@ class Trc(mdtraj.Trajectory):
             
             #get cnf boxDims
             if(hasattr(in_cnf, "GENBOX") and not (unitcell_lengths is None and unitcell_angles is None)):
-                unitcell_angles = np.array(in_cnf.GENBOX.angles)
-                unitcell_lengths = np.array(in_cnf.GENBOX.length)
+                unitcell_angles = np.array(list(in_cnf.GENBOX.angles)*len(xyz)).reshape(len(xyz), len(in_cnf.GENBOX.length))
+                unitcell_lengths = np.array(list(in_cnf.GENBOX.length)*len(xyz)).reshape(len(xyz), len(in_cnf.GENBOX.length))
             
             # Topo tmp file
             tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
