@@ -3,11 +3,12 @@
 import os
 import sys
 from datetime import datetime
+from collections import OrderedDict
 from pygromos.utils import bash
 from pygromos.utils.utils import spacer, spacer2
 
 
-def default_install(nCores:int= 1, _timing_dict: dict = {}, verbose:bool=False):
+def default_install(nCores: int = 1, _timing_dict: dict = {}, verbose: bool = False):
     root_dir = os.path.dirname(__file__)
     install_gromos(
         root_dir=root_dir,
@@ -26,7 +27,8 @@ def install_gromos(
     gromosXX_with_omp: bool = False,
     gromosXX_with_cuda: str = None,
     gromosPP_with_omp=False,
-    with_debug: bool = False,
+    gromosPP_with_debug: bool = False,
+    gromosXX_with_debug: bool = False,
     nCore: int = 3,
     do_compile: bool = True,
     do_clean: bool = True,
@@ -35,7 +37,7 @@ def install_gromos(
     _do_gromosPP: bool = True,
     _do_gromosXX: bool = True,
     _timing_dict: dict = {},
-    verbose:bool=False
+    verbose: bool = True,
 ):
     """
 
@@ -70,75 +72,106 @@ def install_gromos(
     nCore : int, optional
         how many cores should be used to compile?, by default 1
     """
-    
-    if(root_dir is None):
+
+    if root_dir is None:
         root_dir = os.path.dirname(__file__)
 
     if do_clean:
         if _do_gromosPP:
-            print(spacer + "\n CLEAN GROMOSPP \n" + spacer)
+            if verbose:
+                print(spacer + "\n CLEAN GROMOSPP \n" + spacer)
             gromosPP_path = root_dir + "/gromosPlsPls/gromos++"
             gromosPP_build_path = gromosPP_path + "/build"
 
             if os.path.exists(gromosPP_build_path):
                 _timing_dict["gromosPP_clean_start"] = datetime.now()
-                _make_clean(gromosPP_build_path)
+                _make_clean(gromosPP_build_path, verbose=verbose)
                 _timing_dict["gromosPP_clean_end"] = datetime.now()
 
         if _do_gromosXX:
-            print(spacer + "\n CLEAN GROMOSXX \n" + spacer)
+            if verbose:
+                print(spacer + "\n CLEAN GROMOSXX \n" + spacer)
             gromosXX_path = root_dir + "/gromosXX/gromosXX"
             gromosXX_build_path = gromosXX_path + "/build"
 
             if os.path.exists(gromosXX_build_path):
                 _timing_dict["gromosXX_clean_start"] = datetime.now()
-                _make_clean(gromosXX_build_path)
+                _make_clean(gromosXX_build_path, verbose=verbose)
                 _timing_dict["gromosXX_clean_end"] = datetime.now()
 
     if do_compile:
         binary_dir = root_dir + "/bin"
         if _do_gromosXX:
-            print(spacer + "\n BUILD GROMOSXX \n" + spacer)
+            if verbose:
+                print(spacer + "\n BUILD GROMOSXX \n" + spacer)
             gromosXX_path = root_dir + "/gromosXX/gromosXX"
             gromosXX_build_path = gromosXX_path + "/build"
 
             if not os.path.exists(gromosXX_build_path) or recompile_from_scratch:
                 _timing_dict["gromosXX_conf_start"] = datetime.now()
+                if verbose:
+                    print("START Time: ", _timing_dict["gromosXX_conf_start"])
                 _configure_gromosXX_autotools(
                     build_dir=gromosXX_build_path,
                     binary_dir=binary_dir,
                     with_mpi=gromosXX_with_mpi,
                     with_omp=gromosXX_with_omp,
                     with_cuda_dir=gromosXX_with_cuda,
+                    with_debug=gromosXX_with_debug,
+                    verbose=verbose,
                 )
                 _timing_dict["gromosXX_conf_end"] = datetime.now()
+                if verbose:
+                    print(
+                        "Duration: ", str(_timing_dict["gromosXX_conf_end"] - _timing_dict["gromosXX_conf_start"]), "\n"
+                    )
 
             if not os.path.exists(gromosXX_build_path + "/bin") or recompile or recompile_from_scratch:
                 _timing_dict["gromosXX_make_start"] = datetime.now()
-                _make_compile(build_dir=gromosXX_build_path, nCore=nCore)
+                if verbose:
+                    print("START Time: ", _timing_dict["gromosXX_make_start"])
+                _make_compile(build_dir=gromosXX_build_path, nCore=nCore, verbose=verbose)
                 _timing_dict["gromosXX_make_end"] = datetime.now()
+                if verbose:
+                    print(
+                        "Duration: ", str(_timing_dict["gromosXX_make_end"] - _timing_dict["gromosXX_make_start"]), "\n"
+                    )
 
         if _do_gromosPP:
-            print(spacer + "\n BUILD GROMOSPP \n" + spacer)
+            if verbose:
+                print(spacer + "\n BUILD GROMOSPP \n" + spacer)
             gromosPP_path = root_dir + "/gromosPlsPls/gromos++"
             gromosPP_build_path = gromosPP_path + "/build"
 
             if not os.path.exists(gromosPP_build_path) or recompile_from_scratch:
                 _timing_dict["gromosPP_conf_start"] = datetime.now()
+                if verbose:
+                    print("START Time: ", _timing_dict["gromosPP_conf_start"])
                 _configure_gromosPP_autotools(
                     build_dir=gromosPP_build_path,
                     binary_dir=binary_dir,
                     with_omp=gromosPP_with_omp,
-                    with_debug=with_debug,
+                    with_debug=gromosPP_with_debug,
+                    verbose=verbose,
                 )
                 _timing_dict["gromosPP_conf_end"] = datetime.now()
+                if verbose:
+                    print(
+                        "Duration: ", str(_timing_dict["gromosPP_conf_end"] - _timing_dict["gromosPP_conf_start"]), "\n"
+                    )
 
             if not os.path.exists(gromosPP_build_path + "/bin") or recompile or recompile_from_scratch:
                 _timing_dict["gromosPP_make_start"] = datetime.now()
-                _make_compile(build_dir=gromosPP_build_path, nCore=nCore)
+                if verbose:
+                    print("START Time: ", _timing_dict["gromosPP_make_start"])
+                _make_compile(build_dir=gromosPP_build_path, nCore=nCore, verbose=verbose)
                 _timing_dict["gromosPP_make_end"] = datetime.now()
+                if verbose:
+                    print(
+                        "Duration: ", str(_timing_dict["gromosPP_make_end"] - _timing_dict["gromosPP_make_start"]), "\n"
+                    )
 
-    if(verbose):
+    if verbose:
         # TIMINGS Printout
         print("\n" + ">" * 10 + " TIMINGS:")
         for key, val in _timing_dict.items():
@@ -160,9 +193,8 @@ def install_gromos(
             print(prefix, str(durations[prefix]))
 
 
-
 def _configure_gromosPP_autotools(
-    build_dir: str, binary_dir: str = None, with_omp: bool = False, with_debug: bool = False
+    build_dir: str, binary_dir: str = None, with_omp: bool = False, with_debug: bool = False, verbose: bool = True
 ):
     """
         Setting the configurations for the compiling gromosPP process. (uses autotools)
@@ -183,20 +215,25 @@ def _configure_gromosPP_autotools(
 
     root_dir = os.path.dirname(build_dir)
     os.chdir(root_dir)
-    print(os.getcwd())
+    if verbose:
+        print(os.getcwd())
 
     # Initial config
-    print(spacer2 + "\t\t> INIT \n" + spacer2)
+    if verbose:
+        print(spacer2 + "\t\t> INIT \n" + spacer2)
     bash.execute("./Config.sh")
-    print()
+    if verbose:
+        print()
 
     # Configure
     bash.make_folder(build_dir)
     os.chdir(build_dir)
 
-    print(spacer2 + "\t\t> CONFIGURE \n" + spacer2)
+    if verbose:
+        print(spacer2 + "\t\t> CONFIGURE \n" + spacer2)
     log_file = build_dir + "/configure.log"
-    print("log_file: ", log_file)
+    if verbose:
+        print("log_file: ", log_file)
 
     options = {}
     if binary_dir is not None:
@@ -214,10 +251,10 @@ def _configure_gromosPP_autotools(
         + " "
         + " ".join([flag for flag in flags])
     )
-    print("command: ", cmd)
+    if verbose:
+        print("command: ", cmd)
 
     bash.execute(cmd, catch_STD=log_file)
-    print()
 
 
 def _configure_gromosXX_autotools(
@@ -227,6 +264,7 @@ def _configure_gromosXX_autotools(
     with_omp: bool = False,
     with_mpi: bool = False,
     with_debug: bool = False,
+    verbose: bool = True,
 ):
     """
         Setting the configurations for the compiling gromosXX process. (uses autotools)
@@ -254,20 +292,25 @@ def _configure_gromosXX_autotools(
 
     root_dir = os.path.dirname(build_dir)
     os.chdir(root_dir)
-    print(os.getcwd())
+    if verbose:
+        print(os.getcwd())
 
     # Initial config
-    print(spacer2 + "\t\t> INIT \n" + spacer2)
+    if verbose:
+        print(spacer2 + "\t\t> INIT \n" + spacer2)
     bash.execute("./Config.sh")
-    print()
+    if verbose:
+        print()
 
     # Configure
     bash.make_folder(build_dir)
     os.chdir(build_dir)
 
-    print(spacer2 + "\t\t> CONFIGURE \n" + spacer2)
+    if verbose:
+        print(spacer2 + "\t\t> CONFIGURE \n" + spacer2)
     log_file = build_dir + "/configure.log"
-    print("log_file: ", log_file)
+    if verbose:
+        print("log_file: ", log_file)
 
     options = {}
     if binary_dir is not None:
@@ -291,13 +334,13 @@ def _configure_gromosXX_autotools(
         + " "
         + " ".join([flag for flag in flags])
     )
-    print("command: ", cmd)
+    if verbose:
+        print("command: ", cmd)
 
     bash.execute(cmd, catch_STD=log_file)
-    print()
 
 
-def _make_compile(build_dir: str, nCore: int = 1):
+def _make_compile(build_dir: str, nCore: int = 1, verbose: bool = True):
     """
         This function triggers make and make install in the build_dir.
 
@@ -309,50 +352,67 @@ def _make_compile(build_dir: str, nCore: int = 1):
         how many cores for each make command?, by default 1
     """
     # Compile
-    print(spacer2 + "\t\t> MAKE \n" + spacer2)
+    if verbose:
+        print(spacer2 + "\t\t> MAKE \n" + spacer2)
     os.chdir(build_dir)
 
     log_file = build_dir + "/make.log"
-    print("log_file: ", log_file)
+    if verbose:
+        print("log_file: ", log_file)
 
     cmd = "make -j" + str(nCore)
-    print("command: ", cmd)
+    if verbose:
+        print("command: ", cmd)
 
     bash.execute(cmd, catch_STD=log_file)
-    print()
+    if verbose:
+        print()
 
     # Create Binaries
-    print(spacer2 + "\t\t> INSTALL \n" + spacer2)
-
+    if verbose:
+        print(spacer2 + "\t\t> INSTALL \n" + spacer2)
     log_file = build_dir + "/makeInstall.log"
-    print("log_file: ", log_file)
+    if verbose:
+        print("log_file: ", log_file)
 
     cmd = "make -j" + str(nCore) + " install"
-    print("command: ", cmd)
+    if verbose:
+        print("command: ", cmd)
 
     bash.execute(cmd, catch_STD=log_file)
-    print()
 
-def _make_clean(build_dir: str, nCore: int = 1):
-    
+
+def _make_clean(build_dir: str, nCore: int = 1, verbose: bool = True):
+    """
+        This function triggers make clean and removes the build_dir.
+
+    Parameters
+    ----------
+    build_dir : str
+        directory prepared for make.
+    nCore : int, optional
+        how many cores for each make command?, by default 1
+    """
+
     os.chdir(build_dir)
     try:
         cmd = "make -j" + str(nCore) + " clean"
-        print("command: ", cmd)
+        if verbose:
+            print("command: ", cmd)
         bash.execute(cmd)
     except Exception:
         pass
     bash.remove_file(build_dir, recursive=True)
 
-if __name__ == "__main__":
+
+if __name__ == "__main__":  # Main function
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     sys.path.append(root_dir)
 
     from pygromos.utils.utils import dynamic_parser
 
-
     args = dynamic_parser(install_gromos, title="Run MD-Worker")
-    
+
     install_gromos(**vars(args))
-    
-    #default_install(nCores=nCores, verbose=True)
+
+    # default_install(nCores=nCores, verbose=True)
