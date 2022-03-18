@@ -1,7 +1,7 @@
 from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation_free_energy import (
     Solvation_free_energy_calculation,
 )
-from pygromos.files.forcefield.openff import OpenFF
+from pygromos.files.forcefield.openff.openff import OpenFF
 import unittest
 
 

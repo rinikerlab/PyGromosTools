@@ -4,6 +4,7 @@ import importlib
 import os
 from rdkit import Chem
 from simtk import unit as u
+from pygromos.files.coord.cnf import Cnf
 
 if importlib.util.find_spec("openff") is None:
     raise ImportError(
@@ -70,10 +71,14 @@ class OpenFF(_generic_force_field):
         self.atomic_number_dict[35] = "Br"
         self.atomic_number_dict[53] = "I"
 
+    def create_cnf(self, mol: str, in_cnf: Cnf = None, **kwargs) -> Cnf:
+        return Cnf(in_value=mol)
+
     def create_top(
         self,
         mol: str,
         in_top: Top = None,
+        **kwargs,
     ) -> Top:
         # prepare topology
         if in_top is not None:
@@ -95,7 +100,7 @@ class OpenFF(_generic_force_field):
         elif isinstance(mol, Molecule):
             self.openFFmolecule = mol
         elif isinstance(mol, Chem.rdchem.Mol):
-            self.openFFmolecule = Molecule.from_rdkit(self.mol)
+            self.openFFmolecule = Molecule.from_rdkit(mol)
         elif isinstance(mol, str):
             self.openFFmolecule = Molecule.from_smiles(mol)
         else:

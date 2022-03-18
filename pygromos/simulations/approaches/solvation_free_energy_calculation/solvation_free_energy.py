@@ -130,7 +130,7 @@ class Solvation_free_energy_calculation:
                 work_folder=work_folder,
                 in_smiles=input_system,
                 auto_convert=True,
-                Forcefield=forcefield,
+                forcefield=forcefield,
                 adapt_imd_automatically=False,
             )
 
