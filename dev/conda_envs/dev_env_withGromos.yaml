@@ -6,6 +6,7 @@ channels:
 dependencies:
   # Base depends
   - python
+  - conda-build
   - pip
   ## Testing
   - pytest
