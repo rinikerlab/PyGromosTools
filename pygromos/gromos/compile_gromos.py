@@ -4,9 +4,10 @@ from pygromos.utils import bash
 from pygromos.utils.utils import spacer, spacer2
 
 
-def default_install(_timing_dict: dict):
+def default_install(_timing_dict: dict = {}):
     root_dir = os.path.dirname(__file__)
-    nCores = 1
+    nCores = 3
+
     install_gromos(
         root_dir=root_dir,
         do_clean=True,
@@ -32,7 +33,7 @@ def install_gromos(
     _do_gromosXX: bool = True,
     with_debug: bool = False,
     nCore: int = 1,
-    _timing_dict: dict = None,
+    _timing_dict: dict = {},
 ):
     """
 
@@ -352,4 +353,5 @@ if __name__ == "__main__":
                    recompile_from_scratch=recompile_from_scratch,
                    nCore=nCores)
     """
+
     default_install()

@@ -13,13 +13,12 @@ env_name = "pygromosWithGrom"
 # Conda commands
 timings["conda_env_build_start"] = datetime.now()
 conda_install_env = "conda env create -f " + connda_env_path
-conda_setDevelop = "conda develop " + package_path
-conda_activation = "conda activate " + env_name
+conda_setDevelop = "conda develop -n " + env_name + " " + package_path
 
 print("Start Conda Env Build: \n\n")
 os.system(conda_install_env)
 os.system(conda_setDevelop)
-os.system(conda_activation)
+
 timings["conda_env_build_end"] = datetime.now()
 conda_duration = timings["conda_env_build_end"] - timings["conda_env_build_start"]
 print("\n\n Finished Conda Env Build: \n\n")
@@ -27,10 +26,15 @@ print("CONDA BUILD:", conda_duration)
 
 
 # Compile gromos
-from pygromos.gromos.compile_gromos import default_install  # noqa: E402
+print("Start Gromos Build: \n\n")
+from pygromos.gromos import compile_gromos  # noqa: E402
 
-default_install(_timing_dict=timings)
-
+timings["gromos_build_start"] = datetime.now()
+os.system("conda run -v --live-stream -n " + env_name + " python " + compile_gromos.__file__)
+timings["gromos_build_end"] = datetime.now()
+grom_duration = timings["gromos_build_end"] - timings["gromos_build_start"]
+print("\n\n Finished Gromos Build: \n\n")
+print("Gromos BUILD:", grom_duration)
 
 # TIMINGS Printout
 print("\n" + ">" * 10 + " TIMINGS:")
