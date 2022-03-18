@@ -24,14 +24,14 @@ def install_gromos(
     gromosXX_with_omp: bool = False,
     gromosXX_with_cuda: str = None,
     gromosPP_with_omp=False,
+    with_debug: bool = False,
+    nCore: int = 3,
     do_compile: bool = True,
     do_clean: bool = False,
     recompile: bool = False,
     recompile_from_scratch: bool = False,
     _do_gromosPP: bool = True,
     _do_gromosXX: bool = True,
-    with_debug: bool = False,
-    nCore: int = 3,
     _timing_dict: dict = {},
     verbose:bool=False
 ):
@@ -79,18 +79,9 @@ def install_gromos(
             gromosPP_build_path = gromosPP_path + "/build"
 
             if os.path.exists(gromosPP_build_path):
-                if _timing_dict is not None:
-                    _timing_dict["gromosPP_clean_start"] = datetime.now()
-                os.chdir(gromosPP_build_path)
-                try:
-                    cmd = "make -j" + str(nCore) + " clean"
-                    print("command: ", cmd)
-                    bash.execute(cmd)
-                except Exception:
-                    pass
-                bash.remove_file(gromosPP_build_path, recursive=True)
-                if _timing_dict is not None:
-                    _timing_dict["gromosPP_clean_end"] = datetime.now()
+                _timing_dict["gromosPP_clean_start"] = datetime.now()
+                _make_clean(gromosPP_build_path)
+                _timing_dict["gromosPP_clean_end"] = datetime.now()
 
         if _do_gromosXX:
             print(spacer + "\n CLEAN GROMOSXX \n" + spacer)
@@ -98,19 +89,9 @@ def install_gromos(
             gromosXX_build_path = gromosXX_path + "/build"
 
             if os.path.exists(gromosXX_build_path):
-                if _timing_dict is not None:
-                    _timing_dict["gromosXX_clean_start"] = datetime.now()
-
-                os.chdir(gromosXX_build_path)
-                try:
-                    cmd = "make -j" + str(nCore) + " clean"
-                    print("command: ", cmd)
-                    bash.execute(cmd)
-                except Exception:
-                    pass
-                bash.remove_file(gromosXX_build_path, recursive=True)
-                if _timing_dict is not None:
-                    _timing_dict["gromosXX_clean_end"] = datetime.now()
+                _timing_dict["gromosXX_clean_start"] = datetime.now()
+                _make_clean(gromosXX_build_path)
+                _timing_dict["gromosXX_clean_end"] = datetime.now()
 
     if do_compile:
         binary_dir = root_dir + "/bin"
@@ -120,8 +101,7 @@ def install_gromos(
             gromosXX_build_path = gromosXX_path + "/build"
 
             if not os.path.exists(gromosXX_build_path) or recompile_from_scratch:
-                if _timing_dict is not None:
-                    _timing_dict["gromosXX_conf_start"] = datetime.now()
+                _timing_dict["gromosXX_conf_start"] = datetime.now()
                 _configure_gromosXX_autotools(
                     build_dir=gromosXX_build_path,
                     binary_dir=binary_dir,
@@ -129,15 +109,12 @@ def install_gromos(
                     with_omp=gromosXX_with_omp,
                     with_cuda_dir=gromosXX_with_cuda,
                 )
-                if _timing_dict is not None:
-                    _timing_dict["gromosXX_conf_end"] = datetime.now()
+                _timing_dict["gromosXX_conf_end"] = datetime.now()
 
             if not os.path.exists(gromosXX_build_path + "/bin") or recompile or recompile_from_scratch:
-                if _timing_dict is not None:
-                    _timing_dict["gromosXX_make_start"] = datetime.now()
+                _timing_dict["gromosXX_make_start"] = datetime.now()
                 _make_compile(build_dir=gromosXX_build_path, nCore=nCore)
-                if _timing_dict is not None:
-                    _timing_dict["gromosXX_make_end"] = datetime.now()
+                _timing_dict["gromosXX_make_end"] = datetime.now()
 
         if _do_gromosPP:
             print(spacer + "\n BUILD GROMOSPP \n" + spacer)
@@ -145,23 +122,19 @@ def install_gromos(
             gromosPP_build_path = gromosPP_path + "/build"
 
             if not os.path.exists(gromosPP_build_path) or recompile_from_scratch:
-                if _timing_dict is not None:
-                    _timing_dict["gromosPP_conf_start"] = datetime.now()
+                _timing_dict["gromosPP_conf_start"] = datetime.now()
                 _configure_gromosPP_autotools(
                     build_dir=gromosPP_build_path,
                     binary_dir=binary_dir,
                     with_omp=gromosPP_with_omp,
                     with_debug=with_debug,
                 )
-                if _timing_dict is not None:
-                    _timing_dict["gromosPP_conf_end"] = datetime.now()
+                _timing_dict["gromosPP_conf_end"] = datetime.now()
 
             if not os.path.exists(gromosPP_build_path + "/bin") or recompile or recompile_from_scratch:
-                if _timing_dict is not None:
-                    _timing_dict["gromosPP_make_start"] = datetime.now()
+                _timing_dict["gromosPP_make_start"] = datetime.now()
                 _make_compile(build_dir=gromosPP_build_path, nCore=nCore)
-                if _timing_dict is not None:
-                    _timing_dict["gromosPP_make_end"] = datetime.now()
+                _timing_dict["gromosPP_make_end"] = datetime.now()
 
     if(verbose):
         # TIMINGS Printout
@@ -358,6 +331,16 @@ def _make_compile(build_dir: str, nCore: int = 1):
     bash.execute(cmd, catch_STD=log_file)
     print()
 
+def _make_clean(build_dir: str, nCore: int = 1):
+    
+    os.chdir(build_dir)
+    try:
+        cmd = "make -j" + str(nCore) + " clean"
+        print("command: ", cmd)
+        bash.execute(cmd)
+    except Exception:
+        pass
+    bash.remove_file(build_dir, recursive=True)
 
 if __name__ == "__main__":
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
