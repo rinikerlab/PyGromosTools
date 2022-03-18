@@ -24,11 +24,11 @@ email: paul.katzberger@phys.chem.ethz.ch
 
 # Imports
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
+from pygromos.files.forcefield.openff.openff import OpenFF
 from openff.toolkit.topology import Molecule
 from pygromos.files.topology.top import Top
 from pygromos.files.coord import Cnf
-from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
 from rdkit import Chem
 import os
 import numpy as np
@@ -103,7 +103,7 @@ class Solvation_free_energy_calculation:
         input_system: Gromos_System or str or Chem.rdchem.Mol,
         work_folder: str,
         system_name: str = "dummy",
-        forcefield: forcefield_system = forcefield_system(name="54A7"),
+        forcefield: _generic_force_field = OpenFF(),
         gromosXX: str = None,
         gromosPP: str = None,
         useGromosPlsPls: bool = True,
@@ -139,11 +139,11 @@ class Solvation_free_energy_calculation:
 
             # test if openforcefield is used
             # Create Topology and convert to GROMOS
-            elif forcefield.name == "openforcefield":
+            elif forcefield.name == "openff":
                 molecule = Molecule.from_smiles(input_system)
                 molecule.name = system_name[:4]
                 # Change name to system_name for residue
-                top = openforcefield2gromos(molecule).convert_return()
+                top = forcefield.create_top(molecule)
 
                 # Setter not working, manual check needed
                 assert isinstance(top, Top)

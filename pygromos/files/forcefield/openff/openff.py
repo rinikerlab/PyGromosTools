@@ -2,7 +2,6 @@ import collections
 import glob
 import importlib
 import os
-from typing import List
 from rdkit import Chem
 from simtk import unit as u
 
@@ -24,18 +23,16 @@ class OpenFF(_generic_force_field):
     def __init__(
         self, name: str = "openff", path_to_files: str = None, auto_import: bool = True, verbose: bool = False
     ):
-        super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
         self.atomic_number_dict = collections.defaultdict(str)
+        super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
         self.gromosTop = None
 
     def auto_import_ff(self):
-        if self.path is not None:
-            if isinstance(self.path, List) and len(self.path) > 0 and isinstance(self.path[0], str):
-                self.path = self.path[0]
+        if self.path_to_files is not None:
             try:
-                self.off = smirnoff.ForceField(self.path)
+                self.off = smirnoff.ForceField(self.path_to_files)
             except ImportError:
-                raise ImportError("Could not import a OpenForceField from path: " + str(self.path))
+                raise ImportError("Could not import a OpenForceField from path: " + str(self.path_to_files))
         else:
             filelist = glob.glob(data_ff_SMIRNOFF + "/*.offxml")
             filelist.sort()
@@ -43,11 +40,11 @@ class OpenFF(_generic_force_field):
             for f in filelist:
                 try:
                     self.off = smirnoff.ForceField(f)
-                    self.path = f
+                    self.path_to_files = f
                     break
                 except ImportError:
                     pass
-        print("Found off: " + str(self.path))
+        print("Found off: " + str(self.path_to_files))
 
         # set atomic_number_dict
         self.atomic_number_dict[1] = "H"

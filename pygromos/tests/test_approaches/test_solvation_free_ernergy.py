@@ -1,7 +1,7 @@
 from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation_free_energy import (
     Solvation_free_energy_calculation,
 )
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+from pygromos.files.forcefield.openff import OpenFF
 import unittest
 
 
@@ -15,7 +15,7 @@ class test_sfe(unittest.TestCase):
         work_folder=workfolder,  # Folder to do calculations in
         system_name=smiles,
         # Name of the system (does not need to be smiles but convenient)
-        forcefield=forcefield_system("openforcefield"),  # Force field to use
+        forcefield=OpenFF(),  # Force field to use
         density=789,  # density of the liquid in kg/L
         num_molecules=512,  # number of molecules used for the calculation
         num_atoms=number_of_atoms,  # number of atoms in one molecule
