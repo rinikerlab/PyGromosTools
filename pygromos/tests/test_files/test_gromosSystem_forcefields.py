@@ -22,7 +22,7 @@ class test_gromos_system_forcefields(unittest.TestCase):
 
     smiles = "CO"
     ff = GromosFF()
-    ff.mol_name = "MTL"
+    top_residue_list = ["MTL"]
 
     def test_construct_empty(self):
         grSys = self.file_class(work_folder=tmp_test_dir, system_name="Testing1", forcefield=self.ff)
@@ -35,18 +35,19 @@ class test_gromos_system_forcefields(unittest.TestCase):
             forcefield=self.ff,
             in_smiles=self.smiles,
             auto_convert=True,
+            in_residue_list=self.top_residue_list,
         )
         print(grSys)
 
 
 class test_gromos_system_54A7(test_gromos_system_forcefields):
     ff = GromosFF(name="54A7")
-    ff.mol_name = "CH3OH"
+    top_residue_list = ["CH3OH"]
 
 
 class test_gromos_system_2016H66(test_gromos_system_forcefields):
     ff = GromosFF(name="2016H66")
-    ff.mol_name = "MTL"
+    top_residue_list = ["MTL"]
 
 
 if has_openff:
