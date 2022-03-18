@@ -66,7 +66,7 @@ def dynamic_parser(func: callable, title: str):
     total_args = len(args.args)
     total_required = total_args - total_defaults
 
-    parser.description = func.__doc__
+    parser.description = func.__doc__.split("Parameters")[0]
     for argument, argument_type in args.annotations.items():
         index = args.args.index(argument)
         required = True if (index < total_required) else False
