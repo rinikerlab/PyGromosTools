@@ -24,7 +24,7 @@ class GromosFF(_generic_force_field):
             self.mtb = Mtb(mtb_54a7)
             self.mtb_orga = None
 
-    def create_top(self, in_top: Top = None, mol: str = None) -> Top:
+    def create_top(self, mol: str, in_top: Top = None) -> Top:
         if in_top is None:
             in_top = Top(in_value=topology_templates.topology_template_dir + "/blank_template+spc.top")
 

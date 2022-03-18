@@ -9,6 +9,7 @@ Author: Marc Lehner
 
 # imports
 import importlib
+import warnings
 from pygromos.files.topology.top import Top
 from pygromos.files.blocks import topology_blocks as blocks
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
@@ -32,6 +33,7 @@ from simtk import unit as u
 
 class openforcefield2gromos:
     def __init__(self, openFFmolecule: Molecule, gromosTop: Top = None, forcefield: forcefield_system = None):
+        warnings.warn("This class is deprecated. Use the new forcefield instead", DeprecationWarning)
         self.atomic_number_dict = collections.defaultdict(str)
         # get openmm atom type code / periodic table
         self.atomic_number_dict[1] = "H"

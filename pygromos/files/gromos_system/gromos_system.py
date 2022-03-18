@@ -36,7 +36,7 @@ from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.topology.top import Top
 from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
 
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
@@ -50,17 +50,6 @@ if importlib.util.find_spec("rdkit") is not None:
 else:
     has_rdkit = False
 
-
-from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
-
-if importlib.util.find_spec("openff") is not None:
-    from openff.toolkit.topology import Molecule
-    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
-    from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
-
-    has_openff = True
-else:
-    has_openff = False
 
 skip = {
     "solute_info": cnf.solute_infos,
@@ -111,7 +100,7 @@ class Gromos_System:
         rdkitMol: Chem.rdchem.Mol = None,
         in_mol2_file: str = None,
         readIn=True,
-        Forcefield: forcefield_system = forcefield_system(),
+        forcefield: _generic_force_field = _generic_force_field(),
         auto_convert: bool = False,
         adapt_imd_automatically: bool = True,
         verbose: bool = False,
@@ -190,7 +179,7 @@ class Gromos_System:
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
-        self.Forcefield = Forcefield
+        self.forcefield = forcefield
         self.mol = Chem.Mol()
         self.in_mol2_file = in_mol2_file
         self._checkpoint_path = None
@@ -877,72 +866,8 @@ class Gromos_System:
             self._future_promise = False
 
     def auto_convert(self):
-        # create topology
-        if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-            # set parameters for make_top
-            mtb_temp = self.Forcefield.mtb_path
-            if hasattr(self.Forcefield, "mtb_orga_path"):
-                mtb_temp += " " + self.Forcefield.mtb_orga_path
-            ifp_temp = self.Forcefield.path
-            if self.Forcefield.mol_name is None:
-                name = self.rdkit2GromosName()
-            else:
-                name = self.Forcefield.mol_name
-
-            # make top
-            if "make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]:
-                self.make_top(
-                    in_building_block_lib_path=mtb_temp,
-                    in_parameter_lib_path=ifp_temp,
-                    in_sequence=name,
-                )
-            else:
-                warnings.warn("Could not use make_top! no binary was found!")
-
-        elif (
-            self.Forcefield.name == "smirnoff"
-            or self.Forcefield.name == "off"
-            or self.Forcefield.name == "openforcefield"
-        ):
-            if not has_openff:
-                raise ImportError(
-                    "Could not import smirnoff FF as openFF toolkit was missing! "
-                    "Please install the package for this feature!"
-                )
-            else:
-                self.top = openforcefield2gromos(
-                    Molecule.from_rdkit(self.mol), self.top, forcefield=self.Forcefield
-                ).convert_return()
-        elif self.Forcefield.name == "serenityff" or self.Forcefield.name == "sff":
-            if not has_openff:
-                raise ImportError(
-                    "Could not import smirnoff FF as openFF toolkit was missing! "
-                    "Please install the package for this feature!"
-                )
-            else:
-                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield, top=self.top)
-                self.serenityff.create_top(
-                    C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges
-                )
-                self.serenityff.top.make_ordered()
-                self.top = self.serenityff.top
-
-        elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
-            if self.in_mol2_file is None:
-                raise TypeError("To use amberff_gaff, please provide a mol2 file")
-
-            amber = amber2gromos(
-                in_mol2_file=self.in_mol2_file,
-                mol=self.mol,
-                forcefield=self.Forcefield,
-                gromosPP=self.gromosPP,
-                work_folder=self.work_folder,
-            )
-            self.top = Top(amber.get_gromos_topology())
-            self.cnf = Cnf(amber.get_gromos_coordinate_file())
-
-        else:
-            raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
+        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top)
+        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf)
 
     def rdkit2GromosName(self) -> str:
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")

@@ -6,6 +6,7 @@ Author: Salomé Rieder
 
 # imports
 import subprocess
+import warnings
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
 
 from pygromos.data import topology_templates
@@ -47,6 +48,7 @@ class amber2gromos:
         work_folder: str, optional
             where to generate the topology + cnf (default: ".")
         """
+        warnings.warn("This class is deprecated. Use the new forcefield instead", DeprecationWarning)
 
         self.in_mol2_file = os.path.abspath(in_mol2_file)
 

@@ -15,6 +15,7 @@ Author: Marc Lehner
 from typing import List
 
 from pygromos.files.topology.top import Top
+from pygromos.files.coord.cnf import Cnf
 
 
 class _generic_force_field:
@@ -30,5 +31,8 @@ class _generic_force_field:
     def auto_import_ff(self):
         raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")
 
-    def create_top(self, in_top: Top = None, mol: str = None) -> Top:
+    def create_top(self, mol: str, in_top: Top = None) -> Top:
+        raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")
+
+    def create_cnf(self, mol: str, in_cnf: Cnf = None) -> Cnf:
         raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")

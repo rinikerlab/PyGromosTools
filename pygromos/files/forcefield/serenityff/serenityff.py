@@ -28,8 +28,8 @@ class SerenityFF(_generic_force_field):
 
     def create_top(
         self,
+        mol: str,
         in_top: Top = None,
-        mol: str = None,
         C12_input={"H": 0.0, "C": 0.0},
         partial_charges=collections.defaultdict(float),
     ):
