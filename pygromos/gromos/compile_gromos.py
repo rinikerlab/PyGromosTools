@@ -27,7 +27,7 @@ def install_gromos(
     with_debug: bool = False,
     nCore: int = 3,
     do_compile: bool = True,
-    do_clean: bool = False,
+    do_clean: bool = True,
     recompile: bool = False,
     recompile_from_scratch: bool = False,
     _do_gromosPP: bool = True,
