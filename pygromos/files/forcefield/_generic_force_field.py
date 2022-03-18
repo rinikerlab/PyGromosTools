@@ -12,15 +12,13 @@ Author: Marc Lehner
 """
 
 
-from typing import List
-
 from pygromos.files.topology.top import Top
 from pygromos.files.coord.cnf import Cnf
 
 
 class _generic_force_field:
     def __init__(
-        self, name: str = "generic", path_to_files: List(str) = None, auto_import: bool = True, verbose: bool = False
+        self, name: str = "generic", path_to_files: list(str) = None, auto_import: bool = True, verbose: bool = False
     ):
         self.name = name
         self.path_to_files = path_to_files
