@@ -46,9 +46,13 @@ class AmberFF(_generic_force_field):
             if not os.path.isfile(frcmod):
                 raise ImportError("could not find ff file " + frcmod)
 
-    def create_top(self, mol: str, in_top: Top = None) -> Top:
+    def create_top(self, mol: str, in_top: Top = None, in_mol2_file: str = None) -> Top:
+        self.mol = mol
+        self.in_mol2_file = in_mol2_file
+
         if self.amber is None:
-            self.create_mol2()
+            if in_mol2_file is None:
+                self.create_mol2()
             self.amber = amber2gromos(
                 in_mol2_file=self.in_mol2_file,
                 mol=self.mol,
@@ -56,7 +60,14 @@ class AmberFF(_generic_force_field):
                 gromosPP=self.gromosPP,
                 work_folder=self.work_folder,
             )
-        self.top = Top(self.amber.get_gromos_topology())
+        if in_top is None:
+            self.top = Top(self.amber.get_gromos_topology())
+        elif isinstance(in_top, Top):
+            self.top = in_top + Top(self.amber.get_gromos_topology())
+        elif isinstance(in_top, str):
+            self.top = Top(in_top) + Top(self.amber.get_gromos_topology())
+        else:
+            raise TypeError("in_top is of wrong type")
 
     def create_cnf(self, mol: str, in_cnf: Top = None) -> Cnf:
         if self.amber is None:
