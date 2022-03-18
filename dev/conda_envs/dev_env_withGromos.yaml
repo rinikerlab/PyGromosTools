@@ -7,17 +7,22 @@ dependencies:
   # Base depends
   - python
   - pip
-  ## Compiling
+  ## Testing
+  - pytest
+  ## Compiling Gromos
   - gcc
+  - gfortran
+  ### Configure Tools
   - autoconf
   - automake
+  ### Gromos Libraries
   - fftw
+  - gsl
+  ### Gromos Parallelization
   - openmpi
   - openmp
   #- cuda #possible but very intense installing
   - cudatoolkit
-  ## Testing
-  - pytest
   ## Meta
   - typing
   - pre-commit
