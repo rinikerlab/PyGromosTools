@@ -454,7 +454,7 @@ def _make_clean(
 
     if verbose:
         print("command: ", cmd)
-        print("start time: ", _timing_dict[_timing_prefix + "make_start"])
+        print("start time: ", _timing_dict[_timing_prefix + "make_clean_start"])
 
     try:
         bash.execute(cmd)
