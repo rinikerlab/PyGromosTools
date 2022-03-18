@@ -28,7 +28,6 @@ print("CONDA BUILD:", conda_duration)
 # Compile gromos
 print("Start Gromos Build: \n\n")
 from pygromos.gromos import compile_gromos  # noqa: E402
-
 timings["gromos_build_start"] = datetime.now()
 os.system("conda run -v --no-capture-output --live-stream -n " + env_name + " python " + compile_gromos.__file__)
 timings["gromos_build_end"] = datetime.now()

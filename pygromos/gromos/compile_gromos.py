@@ -368,7 +368,6 @@ if __name__ == "__main__":
 
     args = dynamic_parser(install_gromos, title="Run MD-Worker")
     
-    print(args)
     install_gromos(**vars(args))
     
     #default_install(nCores=nCores, verbose=True)
