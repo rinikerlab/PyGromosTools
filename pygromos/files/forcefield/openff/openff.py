@@ -22,7 +22,7 @@ from pygromos.data import topology_templates
 
 class OpenFF(_generic_force_field):
     def __init__(
-        self, name: str = "openff", path_to_files: List(str) = None, auto_import: bool = True, verbose: bool = False
+        self, name: str = "openff", path_to_files: str = None, auto_import: bool = True, verbose: bool = False
     ):
         super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
         self.atomic_number_dict = collections.defaultdict(str)

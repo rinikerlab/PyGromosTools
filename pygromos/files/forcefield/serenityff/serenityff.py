@@ -1,5 +1,4 @@
 import collections
-from typing import List
 from simtk import unit
 from rdkit import Chem
 
@@ -12,7 +11,7 @@ from pygromos.files.topology.top import Top
 
 class SerenityFF(_generic_force_field):
     def __init__(
-        self, name: str = "serenity", path_to_files: List(str) = None, auto_import: bool = True, verbose: bool = False
+        self, name: str = "serenity", path_to_files: str = None, auto_import: bool = True, verbose: bool = False
     ):
         super().__init__(name, path_to_files, auto_import, verbose)
         self.off = OpenFF(name, path_to_files, auto_import, verbose)

@@ -9,9 +9,7 @@ from pygromos.files.forcefield.amber.amber2gromos import amber2gromos
 
 
 class AmberFF(_generic_force_field):
-    def __init__(
-        self, name: str = "amber", path_to_files: List(str) = None, auto_import: bool = True, verbose: bool = False
-    ):
+    def __init__(self, name: str = "amber", path_to_files: str = None, auto_import: bool = True, verbose: bool = False):
         super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
 
     def auto_import_ff(self):
