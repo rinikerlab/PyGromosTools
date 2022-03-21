@@ -101,7 +101,7 @@ class AmberFF(_generic_force_field):
                 mol=self.mol,
                 forcefield=self,
                 gromosPP=self.gromosPP,
-                work_folder=self.work_folder,
+                work_folder=work_folder,
                 solvate=self.solvate,
                 solventbox=self.solventbox,
                 clean=self.clean,
