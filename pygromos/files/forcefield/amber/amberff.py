@@ -148,6 +148,12 @@ class amber2gromos:
         forcefield: forcefield_system
         work_folder: str, optional
             where to generate the topology + cnf (default: ".")
+        solvate: bool, optional
+            should the topology be solvated? (default: False)
+        solventbox: str, optional
+            what solvent should be used for solvation? e.g. TIP3PBOX or CHCL3BOX (default: None)
+        clean: bool, optional
+            should temporary ambertool files be removed after parameterization? (default: False)
         """
 
         self.in_mol2_file = os.path.abspath(in_mol2_file)
