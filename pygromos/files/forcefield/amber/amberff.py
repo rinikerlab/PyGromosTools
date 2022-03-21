@@ -34,16 +34,14 @@ class AmberFF(_generic_force_field):
             ):
                 self.amber_basedir = self.path_to_files[0]
         elif shutil.which("tleap") is not None:
-            has_amber = True  # ambertools in path
             self.amber_basedir = os.path.abspath(os.path.dirname(shutil.which("tleap")) + "/../")
         else:
-            has_amber = False
             raise ImportError(
                 "Could not import GAFF FF as ambertools was missing! " "Please install the package for this feature!"
             )
 
         if self.verbose:
-            print("Found amber: " + str(has_amber))
+            print("Found amber: " + str(self.amber_basedir))
 
         self.amber_bindir = self.amber_basedir + "/bin"
         self.leaprc_files = [
