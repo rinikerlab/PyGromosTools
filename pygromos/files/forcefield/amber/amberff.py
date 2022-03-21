@@ -151,7 +151,7 @@ class amber2gromos:
         solvate: bool, optional
             should the topology be solvated? (default: False)
         solventbox: str, optional
-            what solvent should be used for solvation? e.g. TIP3PBOX or CHCL3BOX (default: None)
+            what solvent should be used for solvation? e.g. TIP3PBOX or CHCL3BOX (default: TIP3PBOX)
         clean: bool, optional
             should temporary ambertool files be removed after parameterization? (default: False)
         """
