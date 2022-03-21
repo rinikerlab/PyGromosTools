@@ -12,6 +12,7 @@ from rdkit import Chem
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 from pygromos.files.topology.top import Top
 
+
 class AmberFF(_generic_force_field):
     # static variables to control solvation
     solvate = False
@@ -26,7 +27,11 @@ class AmberFF(_generic_force_field):
     def auto_import_ff(self):
         # check path
         if self.path_to_files is not None:
-            if isinstance(self.path_to_files, List) and len(self.path_to_files) > 0 and isinstance(self.path_to_files[0], str):
+            if (
+                isinstance(self.path_to_files, List)
+                and len(self.path_to_files) > 0
+                and isinstance(self.path_to_files[0], str)
+            ):
                 self.amber_basedir = self.path_to_files[0]
         elif shutil.which("tleap") is not None:
             has_amber = True  # ambertools in path
@@ -55,26 +60,27 @@ class AmberFF(_generic_force_field):
             if not os.path.isfile(frcmod):
                 raise ImportError("could not find ff file " + frcmod)
 
-    def create_top(self, mol: str, in_top: Top, in_mol2_file: str = None, work_folder: str = None, gromosPP: GromosPP = None) -> Top:
+    def create_top(
+        self, mol: str, in_top: Top, in_mol2_file: str = None, work_folder: str = None, gromosPP: GromosPP = None
+    ) -> Top:
         self.mol = mol
         self.in_mol2_file = in_mol2_file
         self.work_folder = work_folder
         self.gromosPP = gromosPP
 
-       
         if in_mol2_file is None:
             self.create_mol2()
-       
+
         self.amber = amber2gromos(
             in_mol2_file=self.in_mol2_file,
             mol=self.mol,
             forcefield=self,
             gromosPP=self.gromosPP,
             work_folder=work_folder,
-            solvate = self.solvate,
-            solventbox = self.solventbox,
-            clean = self.clean
-            )
+            solvate=self.solvate,
+            solventbox=self.solventbox,
+            clean=self.clean,
+        )
 
         if in_top.path is None:
             self.top = Top(self.amber.get_gromos_topology())
@@ -84,10 +90,12 @@ class AmberFF(_generic_force_field):
             self.top = Top(in_top) + Top(self.amber.get_gromos_topology())
         else:
             raise TypeError("in_top is of wrong type")
-            
+
         return self.top
 
-    def create_cnf(self, mol: str, in_cnf: Top = None, work_folder: str = None, in_mol2_file: str = None, gromosPP: GromosPP = None) -> Cnf:
+    def create_cnf(
+        self, mol: str, in_cnf: Top = None, work_folder: str = None, in_mol2_file: str = None, gromosPP: GromosPP = None
+    ) -> Cnf:
         if self.amber is None:
             self.create_mol2()
             self.amber = amber2gromos(
@@ -96,9 +104,9 @@ class AmberFF(_generic_force_field):
                 forcefield=self,
                 gromosPP=self.gromosPP,
                 work_folder=self.work_folder,
-            solvate = self.solvate,
-            solventbox = self.solventbox,
-            clean = self.clean
+                solvate=self.solvate,
+                solventbox=self.solventbox,
+                clean=self.clean,
             )
         if in_cnf.path is None:
             self.cnf = Cnf(self.amber.get_gromos_coordinate_file())
@@ -116,7 +124,6 @@ class AmberFF(_generic_force_field):
 
 
 class amber2gromos:
-
     def __init__(
         self,
         in_mol2_file: str,
@@ -126,7 +133,7 @@ class amber2gromos:
         work_folder: str = ".",
         solvate: bool = False,
         solventbox: str = None,
-        clean: bool = False
+        clean: bool = False,
     ):
         """
         uses the ambertools programs antechamber, parmchk, and tleap together with
@@ -298,33 +305,35 @@ class amber2gromos:
         self.gromos_coordinate_file = os.path.abspath(self.gromos_coordinate_file)
 
         if self.solvate:
-            with open(self.crd_file, 'r') as f:
+            with open(self.crd_file, "r") as f:
                 last_line = f.readlines()[-1]
             print(last_line)
-            x = float(last_line.split()[0]) * 0.1 # x-coordinate in nm
-            y = float(last_line.split()[1]) * 0.1 # y-coordinate in nm
-            z = float(last_line.split()[2]) * 0.1 # z-coordinate in nm
+            x = float(last_line.split()[0]) * 0.1  # x-coordinate in nm
+            y = float(last_line.split()[1]) * 0.1  # y-coordinate in nm
+            z = float(last_line.split()[2]) * 0.1  # z-coordinate in nm
 
-            a1 = last_line.split()[3] # box angle
-            a2 = last_line.split()[4] # box angle
-            a3 = last_line.split()[5] # box angle
+            a1 = last_line.split()[3]  # box angle
+            a2 = last_line.split()[4]  # box angle
+            a3 = last_line.split()[5]  # box angle
             shutil.copyfile(self.gromos_coordinate_file, "tmp_cnf")
             file_out = open(self.gromos_coordinate_file, "w")
             file_in = open("tmp_cnf")
 
             for line in file_in:
-                if("GENBOX" not in line):
+                if "GENBOX" not in line:
                     file_out.write(line)
                 else:
                     file_out.write("GENBOX\n")
                     file_out.write("    1\n")
-                    file_out.write("    " + str(float(x)/10) + "  " + str(float(y)/10) + "  " + str(float(z)/10) + "\n")
+                    file_out.write(
+                        "    " + str(float(x) / 10) + "  " + str(float(y) / 10) + "  " + str(float(z) / 10) + "\n"
+                    )
                     file_out.write("    " + str(a1) + "  " + str(a2) + "  " + str(a3) + "\n")
                     file_out.write("    0.000000000    0.000000000    0.000000000\n")
                     file_out.write("    0.000000000    0.000000000    0.000000000\n")
                     file_out.write("END")
                     break
-            
+
             file_in.close()
             file_out.close()
             os.remove("tmp_cnf")
