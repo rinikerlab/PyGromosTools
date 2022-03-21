@@ -851,6 +851,8 @@ class Gromos_System:
             ff_kwargs["in_mol2_file"] = self.in_mol2_file
         if self.top_residue_list is not None:
             ff_kwargs["residue_list"] = self.top_residue_list
+        if self.forcefield.name == "amberff_gaff":
+            ff_kwargs["gromosPP"] = self.gromosPP
 
         # convert
         self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top, **ff_kwargs)
