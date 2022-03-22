@@ -1,18 +1,10 @@
-"""
-File:            openforcefield2gromos
-Warnings: this class is WIP!
-TODO:REWORK
-Description:
-    This is a super class to convert from a openforcfield topology to a gromos topology
-Author: Marc Lehner
-"""
-
-# imports
+import collections
+import glob
 import importlib
-from pygromos.files.topology.top import Top
-from pygromos.files.blocks import topology_blocks as blocks
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
-
+import os
+from rdkit import Chem
+from simtk import unit as u
+from pygromos.files.coord.cnf import Cnf
 
 if importlib.util.find_spec("openff") is None:
     raise ImportError(
@@ -20,20 +12,42 @@ if importlib.util.find_spec("openff") is None:
     )
 else:
     from openff.toolkit.topology import Molecule, Topology
+    from openff.toolkit.typing.engines import smirnoff
 
-    # from openforcefield.typing.engines import smirnoff
-    # from openforcefield.typing.engines.smirnoff import forcefield
-
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
+from pygromos.files.topology.top import Top
+from pygromos.data.ff import data_ff_SMIRNOFF
 from pygromos.data import topology_templates
-import os
-import collections
-from simtk import unit as u
 
 
-class openforcefield2gromos:
-    def __init__(self, openFFmolecule: Molecule, gromosTop: Top = None, forcefield: forcefield_system = None):
+class OpenFF(_generic_force_field):
+    def __init__(
+        self, name: str = "openff", path_to_files: str = None, auto_import: bool = True, verbose: bool = False
+    ):
         self.atomic_number_dict = collections.defaultdict(str)
-        # get openmm atom type code / periodic table
+        super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
+        self.gromosTop = None
+
+    def auto_import_ff(self):
+        if self.path_to_files is not None:
+            try:
+                self.off = smirnoff.ForceField(self.path_to_files)
+            except ImportError:
+                raise ImportError("Could not import a OpenForceField from path: " + str(self.path_to_files))
+        else:
+            filelist = glob.glob(data_ff_SMIRNOFF + "/*.offxml")
+            filelist.sort()
+            filelist.reverse()
+            for f in filelist:
+                try:
+                    self.off = smirnoff.ForceField(f)
+                    self.path_to_files = f
+                    break
+                except ImportError:
+                    pass
+        print("Found off: " + str(self.path_to_files))
+
+        # set atomic_number_dict
         self.atomic_number_dict[1] = "H"
         self.atomic_number_dict[2] = "He"
         self.atomic_number_dict[3] = "Li"
@@ -57,21 +71,42 @@ class openforcefield2gromos:
         self.atomic_number_dict[35] = "Br"
         self.atomic_number_dict[53] = "I"
 
-        if gromosTop is not None:
-            self.gromosTop = gromosTop
+    def create_cnf(self, mol: str, in_cnf: Cnf = None, **kwargs) -> Cnf:
+        return Cnf(in_value=mol)
+
+    def create_top(
+        self,
+        mol: str,
+        in_top: Top = None,
+        **kwargs,
+    ) -> Top:
+        # prepare topology
+        if in_top is not None:
+            self.gromosTop = in_top
         else:
             self.gromosTop = Top(in_value=topology_templates.blank_topo_template)
             self.gromosTop._orig_file_path = os.getcwd()
 
-        self.openFFmolecule = openFFmolecule
-        self.openFFTop = Topology.from_molecules(openFFmolecule)
+        # create molecule
+        self._init_mol_for_convert(mol=mol)
 
-        # import the openforcfield forcefield-file
-        if forcefield is not None:
-            self.forcefield = forcefield
+        # convert molecule
+        self.convert()
+        return self.gromosTop
+
+    def _init_mol_for_convert(self, mol: str = None):
+        if mol is None:
+            raise ValueError("No molecule given!")
+        elif isinstance(mol, Molecule):
+            self.openFFmolecule = mol
+        elif isinstance(mol, Chem.rdchem.Mol):
+            self.openFFmolecule = Molecule.from_rdkit(mol)
+        elif isinstance(mol, str):
+            self.openFFmolecule = Molecule.from_smiles(mol)
         else:
-            self.forcefield = forcefield_system(name="off")
-        self.off = self.forcefield.off
+            raise ValueError("mol is not a supported molecule type!")
+
+        self.openFFTop = Topology.from_molecules(self.openFFmolecule)
 
         # create list of all forces
         self.molecule_force_list = []
@@ -81,6 +116,30 @@ class openforcefield2gromos:
         # 1-3 / 1-4 exclusion lists
         self.exclusionList13 = dict()
         self.exclusionList14 = dict()
+
+    def convert(self):
+        # print OpenFF warning in Title
+        titleString = ""
+        titleString += "\n\tname: " + self.openFFmolecule.name + "\t hill_formula: " + self.openFFmolecule.hill_formula
+        titleString += (
+            "\n\t"
+            + 40 * "-"
+            + "\n\t| created from OpenForceField topology |\n\t| use Amber Block for OpenFF topology! |\n\t"
+            + 40 * "-"
+            + "\n"
+        )
+        if hasattr(self.gromosTop, "TITLE"):
+            self.gromosTop.TITLE.content += [titleString]
+        else:
+            self.gromosTop.add_block(blocktitle="TITLE", content=[titleString])
+        # Do all the conversions
+        self.convertResname()
+        self.convertBonds()
+        self.convertAngles()
+        self.convertTosions()
+        self.convertImproper()
+        self.convertVdW()
+        self.convert_other_stuff()
 
     def convertResname(self):
         if len(self.openFFmolecule.name) >= 1:
@@ -284,20 +343,17 @@ class openforcefield2gromos:
 
     def convert_other_stuff(self):
         if not hasattr(self.gromosTop, "SOLUTEMOLECULES"):
-            self.gromosTop.add_block(block=blocks.SOLUTEMOLECULES(NSM=1, NSP=[self.openFFmolecule.n_atoms]))
+            self.gromosTop.add_block(blocktitle="SOLUTEMOLECULES", content=["1", str(self.openFFmolecule.n_atoms)])
         else:
-            self.gromosTop.SOLUTEMOLECULES.NSM = 1
-            self.gromosTop.SOLUTEMOLECULES.NSP = [self.openFFmolecule.n_atoms]
+            self.gromosTop.SOLUTEMOLECULES.content = [["1"], [str(self.openFFmolecule.n_atoms)]]
         if not hasattr(self.gromosTop, "TEMPERATUREGROUPS"):
-            self.gromosTop.add_block(block=blocks.TEMPERATUREGROUPS(NSM=1, NSP=[self.openFFmolecule.n_atoms]))
+            self.gromosTop.add_block(blocktitle="TEMPERATUREGROUPS", content=["1", str(self.openFFmolecule.n_atoms)])
         else:
-            self.gromosTop.TEMPERATUREGROUPS.NSM = 1
-            self.gromosTop.TEMPERATUREGROUPS.NSP = [self.openFFmolecule.n_atoms]
+            self.gromosTop.TEMPERATUREGROUPS.content = [["1"], [str(self.openFFmolecule.n_atoms)]]
         if not hasattr(self.gromosTop, "PRESSUREGROUPS"):
-            self.gromosTop.add_block(block=blocks.PRESSUREGROUPS(NSM=1, NSP=[self.openFFmolecule.n_atoms]))
+            self.gromosTop.add_block(blocktitle="PRESSUREGROUPS", content=["1", str(self.openFFmolecule.n_atoms)])
         else:
-            self.gromosTop.PRESSUREGROUPS.NSM = 1
-            self.gromosTop.PRESSUREGROUPS.NSP = [self.openFFmolecule.n_atoms]
+            self.gromosTop.PRESSUREGROUPS.content = [["1"], [str(self.openFFmolecule.n_atoms)]]
         if not hasattr(self.gromosTop, "LJEXCEPTIONS"):
             self.gromosTop.add_block(blocktitle="LJEXCEPTIONS", content=["0", ""])
         if not hasattr(self.gromosTop, "SOLVENTATOM"):
@@ -308,31 +364,3 @@ class openforcefield2gromos:
             self.gromosTop.add_block(blocktitle="TOPVERSION", content=["2.0"])
         if not hasattr(self.gromosTop, "PHYSICALCONSTANTS"):
             self.gromosTop.add_block(blocktitle="PHYSICALCONSTANTS", content=[""])
-
-    def convert(self):
-        # print OpenFF warning in Title
-        titleString = ""
-        titleString += "\n\tname: " + self.openFFmolecule.name + "\t hill_formula: " + self.openFFmolecule.hill_formula
-        titleString += (
-            "\n\t"
-            + 40 * "-"
-            + "\n\t| created from OpenForceField topology |\n\t| use Amber Block for OpenFF topology! |\n\t"
-            + 40 * "-"
-            + "\n"
-        )
-        if hasattr(self.gromosTop, "TITLE"):
-            self.gromosTop.TITLE.content += [titleString]
-        else:
-            self.gromosTop.add_block(blocktitle="TITLE", content=[titleString])
-        # Do all the conversions
-        self.convertResname()
-        self.convertBonds()
-        self.convertAngles()
-        self.convertTosions()
-        self.convertImproper()
-        self.convertVdW()
-        self.convert_other_stuff()
-
-    def convert_return(self) -> Top:
-        self.convert()
-        return self.gromosTop
