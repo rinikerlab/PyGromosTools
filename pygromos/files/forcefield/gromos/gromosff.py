@@ -71,5 +71,31 @@ class GromosFF(_generic_force_field):
 
         # create the topology by going through all fields in data
         for atom in data.atoms:
-            in_top.add_new_atom()
+            ATNM = 0
+            MRES = 0
+            PANM = ""
+            IAC = 0
+            MASS = 0
+            CG = 0
+            CGC = 0
+            INE = []
+            INE14 = []
+            C6 = 0
+            C12 = 0
+            IACname = ""
+
+            in_top.add_new_atom(
+                ATNM=ATNM,
+                MRES=MRES,
+                PANM=PANM,
+                IAC=IAC,
+                MASS=MASS,
+                CG=CG,
+                CGC=CGC,
+                INE=INE,
+                INE14=INE14,
+                C6=C6,
+                C12=C12,
+                IACname=IACname,
+            )
         return in_top
