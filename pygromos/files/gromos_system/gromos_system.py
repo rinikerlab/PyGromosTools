@@ -105,6 +105,7 @@ class Gromos_System:
         adapt_imd_automatically: bool = True,
         verbose: bool = False,
         in_smiles: str = None,
+        in_residue_list: List = None,
         in_top_path: str = None,
         in_cnf_path: str = None,
         in_imd_path: str = None,
@@ -179,6 +180,7 @@ class Gromos_System:
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
+        self.top_residue_list = in_residue_list
         self.forcefield = forcefield
         self.mol = Chem.Mol()
         self.in_mol2_file = in_mol2_file
@@ -258,34 +260,6 @@ class Gromos_System:
                 self.auto_convert()
             else:
                 warnings.warn("auto_convert active but no data provided -> auto_convert NOT done!")
-
-        if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
-            self.cnf = Cnf(in_value=self.mol)
-            # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
-
-            if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and self.gromosPP._check_binary("pdb2g96"):
-                    try:
-                        from pygromos.files.blocks.coord_blocks import atomP
-
-                        new_pos = [
-                            atomP(
-                                xp=atom.xp,
-                                yp=atom.yp,
-                                zp=atom.zp,
-                                resID=atom.resID,
-                                atomType=atom.atomType + str(i + 1),
-                                atomID=atom.atomID,
-                                resName=self.Forcefield.mol_name,
-                            )
-                            for i, atom in enumerate(self.cnf.POSITION)
-                        ]
-                        self.cnf.POSITION = new_pos
-                        self.cnf.write_pdb(self.work_folder + "/tmp.pdb")
-                        self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
-                        self.add_hydrogens()
-                    except IOError:
-                        warnings.warn("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
 
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
@@ -866,10 +840,23 @@ class Gromos_System:
             self._future_promise = False
 
     def auto_convert(self):
+        # init forcefield
         self.forcefield.auto_import_ff()
-        kwargs = {"work_folder": self._work_folder, "smiles": self.smiles, "in_mol2_file": self.in_mol2_file}
-        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top, **kwargs)
-        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf, **kwargs)
+
+        # find all kwargs
+        ff_kwargs = {"work_folder": self._work_folder}
+        if self.smiles is not None:
+            ff_kwargs["smiles"] = self.smiles
+        if self.in_mol2_file is not None:
+            ff_kwargs["in_mol2_file"] = self.in_mol2_file
+        if self.top_residue_list is not None:
+            ff_kwargs["residue_list"] = self.top_residue_list
+        if self.forcefield.name == "amberff_gaff":
+            ff_kwargs["gromosPP"] = self.gromosPP
+
+        # convert
+        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top, **ff_kwargs)
+        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf, **ff_kwargs)
 
     def rdkit2GromosName(self) -> str:
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
@@ -985,7 +972,7 @@ class Gromos_System:
 
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
-        ff_name = self.Forcefield.name
+        ff_name = self.forcefield.name
         if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
             # adjust harmonic forces
             if hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None:

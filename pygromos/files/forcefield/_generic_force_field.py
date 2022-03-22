@@ -27,7 +27,7 @@ class _generic_force_field:
             self.auto_import_ff()
 
     def auto_import_ff(self, **kwargs):
-        raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")
+        pass
 
     def create_top(self, mol: str, in_top: Top = None, **kwargs) -> Top:
         raise NotImplementedError("This is a template class! It'should be used as a super class for all forcefields!")

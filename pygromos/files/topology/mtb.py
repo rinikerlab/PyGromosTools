@@ -12,9 +12,9 @@ from pygromos.files.blocks import mtb_blocks as blocks
 
 class Mtb(_general_gromos_file._general_gromos_file):
     _gromos_file_ending: str = "mtb"
-    mtb_solutes: Dict[blocks.MTBUILDBLSOLUTE]
-    mtb_solvents: Dict[blocks.MTBUILDBLSOLVENT]
-    mtb_ends: Dict[blocks.MTBUILDBLEND]
+    mtb_solutes: Dict[str, blocks.MTBUILDBLSOLUTE]
+    mtb_solvents: Dict[str, blocks.MTBUILDBLSOLVENT]
+    mtb_ends: Dict[str, blocks.MTBUILDBLEND]
     all_res_names: List
 
     def __init__(self, in_value: (str or dict or None), _future_file: bool = False):
