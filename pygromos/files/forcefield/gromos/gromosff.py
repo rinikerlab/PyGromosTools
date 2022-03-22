@@ -1,4 +1,5 @@
 from typing import List
+import warnings
 from pygromos.data import topology_templates
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 from pygromos.files.topology.top import Top
@@ -19,12 +20,35 @@ class GromosFF(_generic_force_field):
             self.ifp = Ifp(ifp)
             self.mtb = Mtb(mtb)
             self.mtb_orga = Mtb(mtb_orga)
+            self.in_building_block_lib_path = [mtb, mtb_orga]
+            self.in_parameter_lib_path = ifp
         else:
             self.ifp = Ifp(ifp_54a7)
             self.mtb = Mtb(mtb_54a7)
             self.mtb_orga = None
+            self.in_building_block_lib_path = [mtb_54a7]
+            self.in_parameter_lib_path = ifp_54a7
 
-    def create_top(self, mol: str, in_top: Top = None) -> Top:
+    def create_top(self, mol: str, in_top: Top = None, **kwargs) -> Top:
+        if "residue_list" in kwargs:
+            if self.gromosPP._check_all_binaries():
+                residue_list = kwargs["residue_list"]
+                work_dir = kwargs["work_folder"]
+                self.gromosPP.make_top(
+                    out_top_path=work_dir + "/temp.top",
+                    in_building_block_lib_path=" ".join(self.in_building_block_lib_path),
+                    in_parameter_lib_path=self.in_parameter_lib_path,
+                    in_sequence=" ".join(residue_list),
+                )
+                self.top = Top(work_dir + "/temp.top")
+                return self.top
+            else:
+                warnings.warn("Could not create topology, gromos binaries not found")
+                return Top(None)
+        else:
+            return self.creteTopoFromSmiles(mol, in_top, **kwargs)
+
+    def creteTopoFromSmiles(self, mol: str, in_top: Top = None, **kwargs) -> Top:
         if in_top is None:
             in_top = Top(in_value=topology_templates.topology_template_dir + "/blank_template+spc.top")
 
