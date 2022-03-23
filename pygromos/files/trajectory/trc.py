@@ -62,7 +62,7 @@ class Trc(mdtraj.Trajectory):
 
             unitcell_angles = None
             unitcell_lengths = None
-            
+
             if isinstance(traj_path, str):
                 xyz, time, step, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path)
 
@@ -76,23 +76,38 @@ class Trc(mdtraj.Trajectory):
                 pass
             else:
                 in_cnf = self.get_dummy_cnf(xyz)
-            
-            #get cnf boxDims
-            if(hasattr(in_cnf, "GENBOX") and not (unitcell_lengths is None and unitcell_angles is None)):
-                unitcell_angles = np.array(list(in_cnf.GENBOX.angles)*len(xyz)).reshape(len(xyz), len(in_cnf.GENBOX.length))
-                unitcell_lengths = np.array(list(in_cnf.GENBOX.length)*len(xyz)).reshape(len(xyz), len(in_cnf.GENBOX.length))
 
-            
+            # get cnf boxDims
+            if hasattr(in_cnf, "GENBOX") and not (unitcell_lengths is None and unitcell_angles is None):
+                unitcell_angles = np.array(list(in_cnf.GENBOX.angles) * len(xyz)).reshape(
+                    len(xyz), len(in_cnf.GENBOX.length)
+                )
+                unitcell_lengths = np.array(list(in_cnf.GENBOX.length) * len(xyz)).reshape(
+                    len(xyz), len(in_cnf.GENBOX.length)
+                )
+
             # Topo tmp file
             tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
             in_cnf.write_pdb(tmpFile.name)
             single = mdtraj.load_pdb(tmpFile.name)
             tmpFile.close()
 
-            super().__init__(xyz=xyz, topology=single.topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+            super().__init__(
+                xyz=xyz,
+                topology=single.topology,
+                time=time,
+                unitcell_lengths=unitcell_lengths,
+                unitcell_angles=unitcell_angles,
+            )
             self._step = step
         elif not (xyz is None and topology is None):
-            super().__init__(xyz=xyz, topology=topology, time=time, unitcell_lengths=unitcell_lengths, unitcell_angles=unitcell_angles)
+            super().__init__(
+                xyz=xyz,
+                topology=topology,
+                time=time,
+                unitcell_lengths=unitcell_lengths,
+                unitcell_angles=unitcell_angles,
+            )
 
         else:
             self._unitcell_lengths = []
@@ -158,21 +173,22 @@ class Trc(mdtraj.Trajectory):
         unitcell_length = None
         unitcell_angles = None
         genbox_present = False
-        if 'GENBOX' in self._block_map:
-            genbox_present =True
+        if "GENBOX" in self._block_map:
+            genbox_present = True
             chunk += 2
             # timestep_block_length += 7
-            skip_rows1 = (
-                lambda x: (base_rows(x) and not ((x - title) % timestep_block_length == end + 3) and not (
-                            (x - title) % timestep_block_length == end + 4))
+            skip_rows1 = lambda x: (
+                base_rows(x)
+                and not ((x - title) % timestep_block_length == end + 3)
+                and not ((x - title) % timestep_block_length == end + 4)
             )
 
-            skip_rows = (lambda x: (x < title) or skip_rows1(x))
+            skip_rows = lambda x: (x < title) or skip_rows1(x)
 
             unitcell_length = []
             unitcell_angles = []
         else:
-            skip_rows = (lambda x: (x < title) or base_rows(x))
+            skip_rows = lambda x: (x < title) or base_rows(x)
 
         # parsing
         data = []

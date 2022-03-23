@@ -689,8 +689,10 @@ class Gromos_System:
 
     @property
     def trc(self) -> Trc:
-        if self._trc is None and "trc" in self._traj_files_path:
-            self._trc = Trc(self._traj_files_path["trc"])
+        if self._trc is None and "trc" in self._traj_files_path and not self.cnf is None and not self.cnf._future_file:
+            self._trc = Trc(traj_path=self._traj_files_path["trc"], in_cnf=self.cnf)
+        elif self._trc is None and "trc" in self._traj_files_path:
+            self._trc = Trc(traj_path=self._traj_files_path["trc"])
         return self._trc
 
     @trc.setter
@@ -700,15 +702,14 @@ class Gromos_System:
             self._trc = None
         else:
             self._trc = in_value
-            
+
             if hasattr(in_value, "path"):
                 self._traj_files_path["trc"] = in_value
-
 
     @property
     def tre(self) -> Tre:
         if self._tre is None and "tre" in self._traj_files_path:
-            self._tre = Trc(self._traj_files_path["tre"])
+            self._tre = Tre(self._traj_files_path["tre"])
         return self._tre
 
     @tre.setter
