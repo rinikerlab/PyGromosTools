@@ -1,63 +1,49 @@
-"""
-File:            serenityff system folder managment
-Warnings: this class is WIP!
-TODO:REWORK
-Description:
-    This is a super class for the collection of all files used inside a serenityff project
-Author: Marc Lehner
-"""
-
-# general imports
 import collections
-import importlib
 from simtk import unit
-
-# import math
-
-# rdkit imports
 from rdkit import Chem
 
-# pygromos imports
+from pygromos.data import topology_templates
+from pygromos.files.forcefield.openff.openff import OpenFF
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
+from pygromos.files.forcefield.serenityff.serenityff_data import serenityff_C12, serenityff_C6
 from pygromos.files.topology.top import Top
-from pygromos.files.gromos_system.ff.serenityff.serenityff_data import serenityff_C12, serenityff_C6
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
-
-if importlib.util.find_spec("openff") is None:
-    raise ImportError("SerenityFF is not enabled without openFF toolkit package! Please install openFF toolkit.")
-else:
-    from openff.toolkit.topology import Molecule
-    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
 
 
-class serenityff:
+class SerenityFF(_generic_force_field):
     def __init__(
-        self,
-        mol: Chem.rdchem.Mol,
-        forcefield: forcefield_system or str = None,
-        top: Top = None,
-        mol_name=None,
-        develop=False,
+        self, name: str = "serenity", path_to_files: str = None, auto_import: bool = True, verbose: bool = False
     ):
+        super().__init__(name, path_to_files, auto_import, verbose)
+        self.off = OpenFF(name, path_to_files, auto_import, verbose)
+
+    def auto_import_ff(self):
+        self.top = Top(in_value=topology_templates.topology_template_dir + "/blank_template+spc.top")
+        self.develop = False
+        self.C12_input = {}
+        self.partial_charges = collections.defaultdict(float)
         self.serenityFFelements = ["H", "C", "N", "O", "F", "S", "Br", "I"]
         self.C6_pattern = collections.defaultdict(list)
         self.C12_pattern = collections.defaultdict(list)
-        self.mol = mol
-        self.offmol = Molecule.from_rdkit(self.mol)
 
-        if isinstance(forcefield, forcefield_system):
-            self.top = forcefield.top
-            if top is not None:
-                self.top = top
-            self.offmol.name = forcefield.mol_name
-            self.develop = forcefield.develop
-            self.off = forcefield.off
-            self.off2g = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
-        else:
-            self.top = top
-            if mol_name is not None:
-                self.offmol.name = mol_name
-            self.off2g = openforcefield2gromos(openFFmolecule=self.offmol, gromosTop=self.top, forcefield=forcefield)
-            self.develop = develop
+    def create_top(
+        self,
+        mol: str,
+        in_top: Top = None,
+        C12_input={"H": 0.0, "C": 0.0},
+        partial_charges=collections.defaultdict(float),
+    ):
+        self.top = in_top
+        self.off.gromosTop = in_top
+        self.off._init_mol_for_convert(mol)
+        self.off.convertResname()
+        self.off.convertBonds()
+        self.off.convertAngles()
+        self.off.convertTosions()
+        self.off.convertImproper()
+        self.off.convert_other_stuff()
+        self.create_serenityff_nonBonded(C12_input=C12_input, partial_charges=partial_charges)
+        self.top = self.off.gromosTop
+        return self.top
 
     def read_pattern(self, C6orC12: str = "C6"):
         for element in self.serenityFFelements:
@@ -124,9 +110,9 @@ class serenityff:
             self.read_pattern()
         c6dict = self.get_LJ_parameters()
         if self.develop:
-            self.off2g.createVdWexclusionList()
+            self.off.createVdWexclusionList()
             moleculeItr = 1
-            for molecule in self.off2g.molecule_force_list:
+            for molecule in self.off.molecule_force_list:
                 panm_dict = collections.defaultdict(int)
                 for key in molecule["vdW"]:
                     force = molecule["vdW"][key]
@@ -136,7 +122,7 @@ class serenityff:
                     panm_dict[element_symbol] += 1
                     PANM = element_symbol + str(panm_dict[element_symbol])
                     IAC = 0  # will not be used if we use automatic
-                    MASS = self.off2g.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(unit.dalton)
+                    MASS = self.off.openFFmolecule.atoms[int(key[0])].mass.value_in_unit(unit.dalton)
                     CG = 0
                     if self.develop:
                         CG = partial_charges[int(key[0])]
@@ -144,13 +130,13 @@ class serenityff:
                         CGC = 1
                     else:
                         CGC = 0
-                    if str(key[0]) in self.off2g.exclusionList13:
-                        openFFexList13 = list(self.off2g.exclusionList13[str(key[0])])
+                    if str(key[0]) in self.off.exclusionList13:
+                        openFFexList13 = list(self.off.exclusionList13[str(key[0])])
                         INE = [int(x) + 1 for x in openFFexList13]
                     else:
                         INE = list()
-                    if str(key[0]) in self.off2g.exclusionList14:
-                        openFFexList14 = list(self.off2g.exclusionList14[str(key[0])])
+                    if str(key[0]) in self.off.exclusionList14:
+                        openFFexList14 = list(self.off.exclusionList14[str(key[0])])
                         INE14 = [int(x) + 1 for x in openFFexList14]
                     else:
                         INE14 = list()
@@ -163,7 +149,7 @@ class serenityff:
                         C12 = C12_input[(c6dict[key[0]][0])]
                     CS12 = 0.5 * C12
                     IACname = c6dict[key[0]][0]
-                    self.off2g.gromosTop.add_new_atom(
+                    self.off.gromosTop.add_new_atom(
                         ATNM=ATNM,
                         MRES=MRES,
                         PANM=PANM,
@@ -182,13 +168,3 @@ class serenityff:
                 moleculeItr += 1
         else:
             raise NotImplementedError("WIP")
-
-    def create_top(self, C12_input={"H": 0.0, "C": 0.0}, partial_charges=collections.defaultdict(float)):
-        self.off2g.convertResname()
-        self.off2g.convertBonds()
-        self.off2g.convertAngles()
-        self.off2g.convertTosions()
-        self.off2g.convertImproper()
-        self.off2g.convert_other_stuff()
-        self.create_serenityff_nonBonded(C12_input=C12_input, partial_charges=partial_charges)
-        self.top = self.off2g.gromosTop

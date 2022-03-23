@@ -42,6 +42,7 @@ from pygromos.files.coord.posres import Position_Restraints
 # Trajs
 from pygromos.files.trajectory.trc import Trc
 from pygromos.files.trajectory.tre import Tre
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
 
 # Additional
 from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
@@ -57,17 +58,6 @@ if importlib.util.find_spec("rdkit") is not None:
 else:
     has_rdkit = False
 
-
-from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
-
-if importlib.util.find_spec("openff") is not None:
-    from openff.toolkit.topology import Molecule
-    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
-    from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
-
-    has_openff = True
-else:
-    has_openff = False
 
 skip = {
     "solute_info": cnf.solute_infos,
@@ -119,11 +109,12 @@ class Gromos_System:
         rdkitMol: Chem.rdchem.Mol = None,
         in_mol2_file: str = None,
         readIn=True,
-        Forcefield: forcefield_system = forcefield_system(),
+        forcefield: _generic_force_field = _generic_force_field(),
         auto_convert: bool = False,
         adapt_imd_automatically: bool = True,
         verbose: bool = False,
         in_smiles: str = None,
+        in_residue_list: List = None,
         in_top_path: str = None,
         in_cnf_path: str = None,
         in_imd_path: str = None,
@@ -197,7 +188,8 @@ class Gromos_System:
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
-        self.Forcefield = Forcefield
+        self.top_residue_list = in_residue_list
+        self.forcefield = forcefield
         self.mol = Chem.Mol()
         self.in_mol2_file = in_mol2_file
         self._checkpoint_path = None
@@ -276,34 +268,6 @@ class Gromos_System:
                 self.auto_convert()
             else:
                 warnings.warn("auto_convert active but no data provided -> auto_convert NOT done!")
-
-        if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
-            self.cnf = Cnf(in_value=self.mol)
-            # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
-
-            if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and self.gromosPP._check_binary("pdb2g96"):
-                    try:
-                        from pygromos.files.blocks.coord_blocks import atomP
-
-                        new_pos = [
-                            atomP(
-                                xp=atom.xp,
-                                yp=atom.yp,
-                                zp=atom.zp,
-                                resID=atom.resID,
-                                atomType=atom.atomType + str(i + 1),
-                                atomID=atom.atomID,
-                                resName=self.Forcefield.mol_name,
-                            )
-                            for i, atom in enumerate(self.cnf.POSITION)
-                        ]
-                        self.cnf.POSITION = new_pos
-                        self.cnf.write_pdb(self.work_folder + "/tmp.pdb")
-                        self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
-                        self.add_hydrogens()
-                    except IOError:
-                        warnings.warn("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
 
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
@@ -938,72 +902,23 @@ class Gromos_System:
             self._future_promise = False
 
     def auto_convert(self):
-        # create topology
-        if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-            # set parameters for make_top
-            mtb_temp = self.Forcefield.mtb_path
-            if hasattr(self.Forcefield, "mtb_orga_path"):
-                mtb_temp += " " + self.Forcefield.mtb_orga_path
-            ifp_temp = self.Forcefield.path
-            if self.Forcefield.mol_name is None:
-                name = self.rdkit2GromosName()
-            else:
-                name = self.Forcefield.mol_name
+        # init forcefield
+        self.forcefield.auto_import_ff()
 
-            # make top
-            if "make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]:
-                self.make_top(
-                    in_building_block_lib_path=mtb_temp,
-                    in_parameter_lib_path=ifp_temp,
-                    in_sequence=name,
-                )
-            else:
-                warnings.warn("Could not use make_top! no binary was found!")
+        # find all kwargs
+        ff_kwargs = {"work_folder": self._work_folder}
+        if self.smiles is not None:
+            ff_kwargs["smiles"] = self.smiles
+        if self.in_mol2_file is not None:
+            ff_kwargs["in_mol2_file"] = self.in_mol2_file
+        if self.top_residue_list is not None:
+            ff_kwargs["residue_list"] = self.top_residue_list
+        if self.forcefield.name == "amberff_gaff":
+            ff_kwargs["gromosPP"] = self.gromosPP
 
-        elif (
-            self.Forcefield.name == "smirnoff"
-            or self.Forcefield.name == "off"
-            or self.Forcefield.name == "openforcefield"
-        ):
-            if not has_openff:
-                raise ImportError(
-                    "Could not import smirnoff FF as openFF toolkit was missing! "
-                    "Please install the package for this feature!"
-                )
-            else:
-                self.top = openforcefield2gromos(
-                    Molecule.from_rdkit(self.mol), self.top, forcefield=self.Forcefield
-                ).convert_return()
-        elif self.Forcefield.name == "serenityff" or self.Forcefield.name == "sff":
-            if not has_openff:
-                raise ImportError(
-                    "Could not import smirnoff FF as openFF toolkit was missing! "
-                    "Please install the package for this feature!"
-                )
-            else:
-                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield, top=self.top)
-                self.serenityff.create_top(
-                    C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges
-                )
-                self.serenityff.top.make_ordered()
-                self.top = self.serenityff.top
-
-        elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
-            if self.in_mol2_file is None:
-                raise TypeError("To use amberff_gaff, please provide a mol2 file")
-
-            amber = amber2gromos(
-                in_mol2_file=self.in_mol2_file,
-                mol=self.mol,
-                forcefield=self.Forcefield,
-                gromosPP=self.gromosPP,
-                work_folder=self.work_folder,
-            )
-            self.top = Top(amber.get_gromos_topology())
-            self.cnf = Cnf(amber.get_gromos_coordinate_file())
-
-        else:
-            raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
+        # convert
+        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top, **ff_kwargs)
+        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf, **ff_kwargs)
 
     def rdkit2GromosName(self) -> str:
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
@@ -1119,7 +1034,7 @@ class Gromos_System:
 
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
-        ff_name = self.Forcefield.name
+        ff_name = self.forcefield.name
         if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
             # adjust harmonic forces
             if hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None:
