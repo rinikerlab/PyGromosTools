@@ -1,4 +1,3 @@
-import numpy as np
 from typing import Tuple
 from pygromos.files.gromos_system import Gromos_System
 
@@ -124,4 +123,3 @@ def sd(
         _no_double_submit_check=_no_double_submit_check,
         verbose=verbose,
     )
-
