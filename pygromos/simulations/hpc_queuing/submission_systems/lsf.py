@@ -355,7 +355,6 @@ class LSF(_SubmissionSystem):
         else:
             if self.verbose:
                 print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
-            pass
         return self._job_queue_list
 
     def search_queue_for_jobid(self, job_id: int) -> pd.DataFrame:
