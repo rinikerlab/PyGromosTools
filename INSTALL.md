@@ -14,6 +14,11 @@ pip install <package_name>
 conda install <package_name>
 ```
 
+or even simpler from the provided yml enviroment file shipped with the package:
+```bash
+conda env create -f conda_env.yml
+```
+
 ## SETUP
 
 ### Installing the package
