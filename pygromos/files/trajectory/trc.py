@@ -126,21 +126,25 @@ class Trc(mdtraj.Trajectory):
             "unitcell_angles": deepcopy(self._unitcell_angles),
             "traj_path": deepcopy(self.path),
             "_future_file": self._future_file,
-            "_block_map": deepcopy(self._block_map)
         }
         for additional_key in ["unitcell_angles", "unitcell_angles"]:
             if hasattr(self, additional_key) and getattr(self, additional_key) is not None:
                 attribs.update({additional_key: deepcopy(getattr(self, additional_key))})
-
-        return self.__class__(**attribs)
+                
+        cCls = self.__class__(**attribs)
+        cCls._step = deepcopy(self._step)
+        cCls.TITLE = deepcopy(self.TITLE)
+        cCls._time = deepcopy(self._time)
+        
+        return 
 
     def __getitem__(self, key):
-
+        print(vars(self).keys())
         t = self.slice(key)
-        t._block_map = deepcopy(self._block_map)
-        t._step = deepcopy(self._step[key])
-        t.TITLE = deepcopy(self.TITLE)
-
+        if(hasattr(t, "_step")): t._step = deepcopy(self._step[key])
+        if(hasattr(t, "_time")): t._time = deepcopy(self._time[key])
+        if(hasattr(t, "TITLE")): t.TITLE = deepcopy(self.TITLE)
+        
         return t
 
     def get_dummy_cnf(self, xyz) -> Cnf:
@@ -335,8 +339,8 @@ class Trc(mdtraj.Trajectory):
         # Add comments
         length += self.xyz[0].shape[0] // 10
 
-        if "GENBOX" in self._block_map:
-            length += self._block_map['GENBOX']
+        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
+            length += 7
 
         array = np.empty((length, 4), dtype=object)
 
@@ -358,7 +362,7 @@ class Trc(mdtraj.Trajectory):
 
         last = self.xyz[frame_id].shape[0] % 10
 
-        if "GENBOX" in self._block_map:
+        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
             array_last = last + 7
         else:
             array_last = last
@@ -366,7 +370,7 @@ class Trc(mdtraj.Trajectory):
         array[-(array_last + 1):-(array_last - last) - 1, 1:] = self.xyz[frame_id][-last:, :]
         array[-(array_last - last) - 1, 0] = "END"
 
-        if "GENBOX" in self._block_map:
+        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
             array[-(array_last - last), 0] = "GENBOX"
             array[-(array_last - last) + 1, 1] = 1
             array[-(array_last - last) + 2, 1:] = self.unitcell_lengths[frame_id]
@@ -386,8 +390,8 @@ class Trc(mdtraj.Trajectory):
         # Add comments
         length += self.xyz[0].shape[0] // 10
 
-        if "GENBOX" in self._block_map:
-            length += self._block_map['GENBOX']
+        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
+            length += 7
 
         array = np.empty((length, 4), dtype=object)
 
@@ -418,7 +422,7 @@ class Trc(mdtraj.Trajectory):
 
         last = self.xyz[0].shape[0] % 10
 
-        if "GENBOX" in self._block_map:
+        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
             array_last = last + 7
         else:
             array_last = last
@@ -426,7 +430,7 @@ class Trc(mdtraj.Trajectory):
         array[-(array_last + 1):-(array_last - last) - 1, 1:] = self.xyz[0][-last:, :]
         array[-(array_last - last) - 1, 0] = "END"
 
-        if "GENBOX" in self._block_map:
+        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
             array[-(array_last - last), 0] = "GENBOX"
             array[-(array_last - last) + 1, 1] = 1
             array[-(array_last - last) + 2, 1:] = self.unitcell_lengths[0]
@@ -460,6 +464,17 @@ class Trc(mdtraj.Trajectory):
                                                   atomType=new_Cnf.POSITION.content[i].atomType, atomID=i, xp=coord[0],
                                                   yp=coord[1], zp=coord[2])
                                      for i, coord in enumerate(self.xyz[frame_id])])
+        
+        if(hasattr(new_Cnf, "GENBOX")):
+            new_Cnf.GENBOX.length = list(self.unitcell_lengths[frame_id])
+            new_Cnf.GENBOX.angles = list(self.unitcell_angles[frame_id])
+            new_Cnf.GENBOX.euler = [0,0,0]
+            new_Cnf.GENBOX.origin = [0,0,0]
+        else:
+            from pygromos.files.blocks.coord_blocks import GENBOX
+            box_block = GENBOX(pbc=1, length=list(self.unitcell_lengths[frame_id]) ,angles=list(self.unitcell_angles[frame_id]))
+            new_Cnf.add_block(block=box_block)
+
 
         return new_Cnf
 

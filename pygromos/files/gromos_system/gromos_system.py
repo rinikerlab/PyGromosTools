@@ -45,7 +45,7 @@ from pygromos.files.trajectory.tre import Tre
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 
 # Additional
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+#from pygromos.files.forcefield import forcefield_system
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
