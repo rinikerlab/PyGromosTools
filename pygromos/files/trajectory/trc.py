@@ -24,6 +24,7 @@ from typing import Dict, List, Tuple
 from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
+from pygromos.files.blocks.coord_blocks import POSITION
 from pygromos.visualization.coordinates_visualization import visualize_system
 
 
@@ -35,17 +36,16 @@ class Trc(mdtraj.Trajectory):
     path: str  # Todo: we need to set this variable.
 
     def __init__(
-        self,
-        xyz=None,
-        topology=None,
-        time=None,
-        unitcell_lengths=None,
-        unitcell_angles=None,
-        traj_path=None,
-        in_cnf: [str, Cnf] = None,
+            self,
+            xyz=None,
+            topology=None,
+            time=None,
+            unitcell_lengths=None,
+            unitcell_angles=None,
+            traj_path=None,
+            in_cnf: [str, Cnf] = None,
     ):
-        print("traj_path", traj_path)
-        print("in_cnf", in_cnf)
+
         self._future_file = False
 
         if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
@@ -64,7 +64,7 @@ class Trc(mdtraj.Trajectory):
             unitcell_lengths = None
 
             if isinstance(traj_path, str):
-                xyz, time, step, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path)
+                xyz, step, time, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path)
 
             if compress:
                 traj_path = bash.compress_gzip(in_path=traj_path)
@@ -78,7 +78,7 @@ class Trc(mdtraj.Trajectory):
                 in_cnf = self.get_dummy_cnf(xyz)
 
             # get cnf boxDims
-            if hasattr(in_cnf, "GENBOX") and not (unitcell_lengths is None and unitcell_angles is None):
+            if hasattr(in_cnf, "GENBOX") and (unitcell_lengths is None and unitcell_angles is None):
                 unitcell_angles = np.array(list(in_cnf.GENBOX.angles) * len(xyz)).reshape(
                     len(xyz), len(in_cnf.GENBOX.length)
                 )
@@ -126,12 +126,22 @@ class Trc(mdtraj.Trajectory):
             "unitcell_angles": deepcopy(self._unitcell_angles),
             "traj_path": deepcopy(self.path),
             "_future_file": self._future_file,
+            "_block_map": deepcopy(self._block_map)
         }
         for additional_key in ["unitcell_angles", "unitcell_angles"]:
             if hasattr(self, additional_key) and getattr(self, additional_key) is not None:
                 attribs.update({additional_key: deepcopy(getattr(self, additional_key))})
 
         return self.__class__(**attribs)
+
+    def __getitem__(self, key):
+
+        t = self.slice(key)
+        t._block_map = deepcopy(self._block_map)
+        t._step = deepcopy(self._step[key])
+        t.TITLE = deepcopy(self.TITLE)
+
+        return t
 
     def get_dummy_cnf(self, xyz) -> Cnf:
         from pygromos.files.blocks import coords
@@ -149,7 +159,6 @@ class Trc(mdtraj.Trajectory):
 
     def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)
-        print("FF", self._block_map)
         # build block mapping
         rep_time = 1
         start = self._block_map["TIMESTEP"]
@@ -163,8 +172,8 @@ class Trc(mdtraj.Trajectory):
         # block mapping logic
         base_rows = (
             lambda x: not (
-                (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
-                or (x - title) % timestep_block_length == rep_time
+                    (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
+                    or (x - title) % timestep_block_length == rep_time
             )
             if x > title
             else True
@@ -178,9 +187,9 @@ class Trc(mdtraj.Trajectory):
             chunk += 2
             # timestep_block_length += 7
             skip_rows1 = lambda x: (
-                base_rows(x)
-                and not ((x - title) % timestep_block_length == end + 3)
-                and not ((x - title) % timestep_block_length == end + 4)
+                    base_rows(x)
+                    and not ((x - title) % timestep_block_length == end + 3)
+                    and not ((x - title) % timestep_block_length == end + 4)
             )
 
             skip_rows = lambda x: (x < title) or skip_rows1(x)
@@ -195,7 +204,8 @@ class Trc(mdtraj.Trajectory):
         time = []
         step = []
         for b in pd.read_table(
-            traj_path, delim_whitespace=True, skiprows=skip_rows, names=["x", "y", "z"], chunksize=chunk, comment="#"
+                traj_path, delim_whitespace=True, skiprows=skip_rows, names=["x", "y", "z"], chunksize=chunk,
+                comment="#"
         ):
             if genbox_present:
                 data.append(b.values[1:-2, :])
@@ -230,10 +240,10 @@ class Trc(mdtraj.Trajectory):
         return pd.DataFrame({"rmsd": mdtraj.rmsd(self, reference, reference_frame)}, index=time_scale)
 
     def distances(
-        self,
-        atom_pairs: List[Tuple[int, int]],
-        periodic: bool = True,
-        opt: bool = True,
+            self,
+            atom_pairs: List[Tuple[int, int]],
+            periodic: bool = True,
+            opt: bool = True,
     ) -> pd.DataFrame:
         arr = mdtraj.compute_distances(self, atom_pairs=atom_pairs, periodic=periodic, opt=opt)
         time_scale = pd.Series(data=self.time, name="time")
@@ -303,7 +313,155 @@ class Trc(mdtraj.Trajectory):
 
     # io
     def write_trc(self, out_path: str) -> str:
-        raise NotImplementedError("Not Implemented")
+
+        first_entry = self.generate_first_entry()
+        array_list = [first_entry]
+
+        for i in range(len(self.time) - 1):
+            array_list.append(self.generate_entry_for_frame(i))
+
+        array = np.concatenate(array_list, axis=0)
+        array = np.array(array, dtype=str)
+        array[array == 'None'] = ''
+
+        np.savetxt(out_path, array, fmt='%s', delimiter='\t')
+
+    def generate_entry_for_frame(self, frame_id: int):
+
+        length = 3  # TIMESTEP
+        length += 2  # Positionred
+        length += self.xyz[0].shape[0]
+
+        # Add comments
+        length += self.xyz[0].shape[0] // 10
+
+        if "GENBOX" in self._block_map:
+            length += self._block_map['GENBOX']
+
+        array = np.empty((length, 4), dtype=object)
+
+        # Add TIMESTEP
+        array[0, 0] = "TIMESTEP"
+        array[1, 1] = self.step[frame_id + 1]
+        array[1, 2] = self.time[frame_id + 1]
+        array[2, 0] = "END"
+
+        # Add POSITIONRED
+        array[3, 0] = "POSITIONRED"
+        start = 4
+        for block in range(self.xyz[frame_id].shape[0] // 10):
+            array[start + block * 10: start + (block + 1) * 10, 1:] = self.xyz[frame_id][block * 10: (block + 1) * 10,
+                                                                      :]
+            array[start + (block + 1) * 10, 0] = "#"
+            array[start + (block + 1) * 10, 1] = (block + 1) * 10
+            start += 1
+
+        last = self.xyz[frame_id].shape[0] % 10
+
+        if "GENBOX" in self._block_map:
+            array_last = last + 7
+        else:
+            array_last = last
+
+        array[-(array_last + 1):-(array_last - last) - 1, 1:] = self.xyz[frame_id][-last:, :]
+        array[-(array_last - last) - 1, 0] = "END"
+
+        if "GENBOX" in self._block_map:
+            array[-(array_last - last), 0] = "GENBOX"
+            array[-(array_last - last) + 1, 1] = 1
+            array[-(array_last - last) + 2, 1:] = self.unitcell_lengths[frame_id]
+            array[-(array_last - last) + 3, 1:] = self.unitcell_angles[frame_id]
+            array[-(array_last - last) + 4, 1:] = 0
+            array[-(array_last - last) + 5, 1:] = 0
+            array[-(array_last - last) + 6, 0] = "END"
+
+        return array
+
+    def generate_first_entry(self):
+        length = 3  # TITLE will only be one line
+        length += 3  # TIMESTEP
+        length += 2
+        length += self.xyz[0].shape[0]
+
+        # Add comments
+        length += self.xyz[0].shape[0] // 10
+
+        if "GENBOX" in self._block_map:
+            length += self._block_map['GENBOX']
+
+        array = np.empty((length, 4), dtype=object)
+
+        # Add Title
+        array[0, 0] = "TITLE"
+
+        titlestring = ''
+        for t in self.TITLE.content:
+            titlestring += t
+
+        array[1, 0] = titlestring
+        array[2, 0] = "END"
+
+        # Add TIMESTEP
+        array[3, 0] = "TIMESTEP"
+        array[4, 1] = self.timestep * 0
+        array[4, 2] = self.time[0]
+        array[5, 0] = "END"
+
+        # Add POSITIONRED
+        array[6, 0] = "POSITIONRED"
+        start = 7
+        for block in range(self.xyz[0].shape[0] // 10):
+            array[start + block * 10: start + (block + 1) * 10, 1:] = self.xyz[0][block * 10: (block + 1) * 10, :]
+            array[start + (block + 1) * 10, 0] = "#"
+            array[start + (block + 1) * 10, 1] = (block + 1) * 10
+            start += 1
+
+        last = self.xyz[0].shape[0] % 10
+
+        if "GENBOX" in self._block_map:
+            array_last = last + 7
+        else:
+            array_last = last
+
+        array[-(array_last + 1):-(array_last - last) - 1, 1:] = self.xyz[0][-last:, :]
+        array[-(array_last - last) - 1, 0] = "END"
+
+        if "GENBOX" in self._block_map:
+            array[-(array_last - last), 0] = "GENBOX"
+            array[-(array_last - last) + 1, 1] = 1
+            array[-(array_last - last) + 2, 1:] = self.unitcell_lengths[0]
+            array[-(array_last - last) + 3, 1:] = self.unitcell_angles[0]
+            array[-(array_last - last) + 4, 1:] = 0
+            array[-(array_last - last) + 5, 1:] = 0
+            array[-(array_last - last) + 6, 0] = "END"
+
+        return array
+
+    def to_conf(self, frame_id: int = None, base_cnf: Cnf = None):
+        from pygromos.files.blocks import coords
+
+        if frame_id is None:
+            frame_id = 0
+
+        content_str = "THIS IS THE FRAME AT TIMESTEP: " + str(
+            self.time[frame_id]) + " OF THE TRAJECTORY WITH TITLE:\n" + self.TITLE.block_to_string()
+
+        if base_cnf is None:
+            new_Cnf = self.get_dummy_cnf(self.xyz)
+        else:
+            if type(base_cnf) is Cnf:
+                new_Cnf = base_cnf
+            else:
+                new_Cnf = Cnf(base_cnf)
+        new_Cnf.TITLE = TITLE(content_str)
+
+        new_Cnf.POSITION = POSITION([coords.atomP(resID=new_Cnf.POSITION.content[i].resID,
+                                                  resName=new_Cnf.POSITION.content[i].resName,
+                                                  atomType=new_Cnf.POSITION.content[i].atomType, atomID=i, xp=coord[0],
+                                                  yp=coord[1], zp=coord[2])
+                                     for i, coord in enumerate(self.xyz[frame_id])])
+
+        return new_Cnf
 
     def save(self, out_path: str) -> str:
 
