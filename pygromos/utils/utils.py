@@ -3,11 +3,13 @@
     This module should contain small usefull functions.
 
 """
+import os
+import math
+import numpy as np
 import argparse
 import inspect
-import math
-import os
-from typing import Dict, List
+
+from typing import Dict, List, Iterable
 
 spacer0 = "!" * 90 + "\n"
 spacer = "#" * 80 + "\n"
@@ -256,3 +258,29 @@ def write_job_script(
     os.system("chmod +x " + out_script_path)
 
     return out_script_path
+
+
+def nice_s_vals(svals: Iterable, base10=False) -> list:
+    """
+
+    Parameters
+    ----------
+    svals :
+    base10 :
+
+    Returns
+    -------
+
+    """
+
+    nicer_labels = []
+    if base10:
+        for val in svals:
+            if float(np.log10(val)).is_integer() or val == min(svals):
+                nicer_labels.append(round(val, str(val).count("0") + 3))
+            else:
+                nicer_labels.append("")
+    else:
+        for val in svals:
+            nicer_labels.append(round(float(val), str(val).count("0") + 2))
+    return nicer_labels
