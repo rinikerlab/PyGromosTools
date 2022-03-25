@@ -9,7 +9,6 @@ from numbers import Number
 import copy
 import json
 from typing import List, Iterable
-from copy import deepcopy
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import imd_blocks as blocks
@@ -71,7 +70,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         # TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks
         for block in sorted(self.get_block_names()):
-            setattr(self, block, deepcopy(getattr(self, block)))
+            setattr(self, block, copy.deepcopy(getattr(self, block)))
 
     def __str__(self):
         text = ""

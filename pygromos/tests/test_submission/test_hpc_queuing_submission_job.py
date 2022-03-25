@@ -6,10 +6,11 @@ class test_queuing_system(unittest.TestCase):
     file_class = Submission_job
 
     def test_construct_min(self):
-        sub_job = self.file_class(command='echo " WUHAHAHA"')  # noqa: F841
+        sub_job = self.file_class(command='echo " WUHAHAHA"')
+        assert isinstance(sub_job, self.file_class)
 
     def test_construct_full(self):
-        sub_job = self.file_class(  # noqa: F841
+        sub_job = self.file_class(
             command='echo " WUHAHAHA"',
             jobName="test_job",
             start_job=1,
@@ -22,6 +23,7 @@ class test_queuing_system(unittest.TestCase):
             submit_from_dir=".",
             sumbit_from_file=True,
         )
+        assert isinstance(sub_job, self.file_class)
 
     def test_acces(self):
         sub_job = self.file_class(command='echo " WUHAHAHA"', queue_after_jobID=1)

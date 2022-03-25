@@ -152,7 +152,7 @@ class OpenFF(_generic_force_field):
             for key in molecule["Bonds"]:
                 force = molecule["Bonds"][key]
                 # hQ = topology.atom(force[0]).atomic_number == 1 or topology.atom(force[1]).atomic_number == 1
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
+                # hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 k = force.k.value_in_unit(u.kilojoule / (u.mole * u.nanometer**2))
@@ -169,7 +169,7 @@ class OpenFF(_generic_force_field):
         for molecule in self.molecule_force_list:
             for key in molecule["Angles"]:
                 force = molecule["Angles"][key]
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
+                # hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 atomK = key[2] + 1
@@ -190,7 +190,7 @@ class OpenFF(_generic_force_field):
         for molecule in self.molecule_force_list:
             for key in molecule["ProperTorsions"]:
                 force = molecule["ProperTorsions"][key]
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
+                # hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 atomK = key[2] + 1
@@ -220,7 +220,7 @@ class OpenFF(_generic_force_field):
         for molecule in self.molecule_force_list:
             for key in molecule["ImproperTorsions"]:
                 force = molecule["ImproperTorsions"][key]
-                hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
+                # hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841
                 atomI = key[0] + 1
                 atomJ = key[1] + 1
                 atomK = key[2] + 1

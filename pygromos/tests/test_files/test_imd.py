@@ -20,7 +20,8 @@ class test_imd(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        imd_file = self.class_type(self.in_file_path)  # noqa: F841
+        imd_file = self.class_type(self.in_file_path)
+        assert isinstance(imd_file, self.class_type)
         return 0
 
     def test_to_string(self):
