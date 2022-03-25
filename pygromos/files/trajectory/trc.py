@@ -37,20 +37,20 @@ class Trc(mdtraj.Trajectory):
     path: str  # Todo: we need to set this variable.
 
     def __init__(
-            self,
-            xyz=None,
-            topology=None,
-            time=None,
-            unitcell_lengths=None,
-            unitcell_angles=None,
-            traj_path=None,
-            in_cnf: [str, Cnf] = None,
-            timestep_duration : float = 0.002,
-            _future_file:bool=False
+        self,
+        xyz=None,
+        topology=None,
+        time=None,
+        unitcell_lengths=None,
+        unitcell_angles=None,
+        traj_path=None,
+        in_cnf: [str, Cnf] = None,
+        timestep_duration: float = 0.002,
+        _future_file: bool = False,
     ):
 
         self._future_file = _future_file
-        if(xyz is None and topology is None and traj_path is None and in_cnf is None):
+        if xyz is None and topology is None and traj_path is None and in_cnf is None:
             self._future_file = None
 
         if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
@@ -114,8 +114,8 @@ class Trc(mdtraj.Trajectory):
                 unitcell_lengths=unitcell_lengths,
                 unitcell_angles=unitcell_angles,
             )
-                    
-            self._step = np.array(np.round(self._time/timestep_duration), dtype=int)
+
+            self._step = np.array(np.round(self._time / timestep_duration), dtype=int)
             self.TITLE = TITLE(content=" Generic Title... to be changed by YOU!")
 
         else:
@@ -139,21 +139,24 @@ class Trc(mdtraj.Trajectory):
         for additional_key in ["unitcell_angles", "unitcell_angles"]:
             if hasattr(self, additional_key) and getattr(self, additional_key) is not None:
                 attribs.update({additional_key: deepcopy(getattr(self, additional_key))})
-                
+
         cCls = self.__class__(**attribs)
         cCls._step = deepcopy(self._step)
         cCls.TITLE = deepcopy(self.TITLE)
         cCls._time = deepcopy(self._time)
-        
+
         return cCls
 
     def __getitem__(self, key):
 
         t = self.slice(key)
-        if(hasattr(t, "_step")): t._step = deepcopy(np.array(self._step[key], ndmin=1))
-        if(hasattr(t, "_time")): t._time = deepcopy(np.array(self._time[key], ndmin=1))
-        if(hasattr(t, "TITLE")): t.TITLE = deepcopy(self.TITLE)
-        
+        if hasattr(t, "_step"):
+            t._step = deepcopy(np.array(self._step[key], ndmin=1))
+        if hasattr(t, "_time"):
+            t._time = deepcopy(np.array(self._time[key], ndmin=1))
+        if hasattr(t, "TITLE"):
+            t.TITLE = deepcopy(self.TITLE)
+
         return t
 
     def get_dummy_cnf(self, xyz) -> Cnf:
@@ -185,8 +188,8 @@ class Trc(mdtraj.Trajectory):
         # block mapping logic
         base_rows = (
             lambda x: not (
-                    (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
-                    or (x - title) % timestep_block_length == rep_time
+                (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
+                or (x - title) % timestep_block_length == rep_time
             )
             if x > title
             else True
@@ -200,9 +203,9 @@ class Trc(mdtraj.Trajectory):
             chunk += 2
             # timestep_block_length += 7
             skip_rows1 = lambda x: (
-                    base_rows(x)
-                    and not ((x - title) % timestep_block_length == end + 3)
-                    and not ((x - title) % timestep_block_length == end + 4)
+                base_rows(x)
+                and not ((x - title) % timestep_block_length == end + 3)
+                and not ((x - title) % timestep_block_length == end + 4)
             )
 
             skip_rows = lambda x: (x < title) or skip_rows1(x)
@@ -217,8 +220,7 @@ class Trc(mdtraj.Trajectory):
         time = []
         step = []
         for b in pd.read_table(
-                traj_path, delim_whitespace=True, skiprows=skip_rows, names=["x", "y", "z"], chunksize=chunk,
-                comment="#"
+            traj_path, delim_whitespace=True, skiprows=skip_rows, names=["x", "y", "z"], chunksize=chunk, comment="#"
         ):
             if genbox_present:
                 data.append(b.values[1:-2, :])
@@ -253,10 +255,10 @@ class Trc(mdtraj.Trajectory):
         return pd.DataFrame({"rmsd": mdtraj.rmsd(self, reference, reference_frame)}, index=time_scale)
 
     def distances(
-            self,
-            atom_pairs: List[Tuple[int, int]],
-            periodic: bool = True,
-            opt: bool = True,
+        self,
+        atom_pairs: List[Tuple[int, int]],
+        periodic: bool = True,
+        opt: bool = True,
     ) -> pd.DataFrame:
         arr = mdtraj.compute_distances(self, atom_pairs=atom_pairs, periodic=periodic, opt=opt)
         time_scale = pd.Series(data=self.time, name="time")
@@ -324,7 +326,6 @@ class Trc(mdtraj.Trajectory):
         self._view = visualize_system(traj=self)
         return self._view
 
-
     # io
 
     _formatting = np.vectorize(np.format_float_positional)
@@ -339,9 +340,9 @@ class Trc(mdtraj.Trajectory):
 
         array = np.concatenate(array_list, axis=0)
         array = np.array(array, dtype=str)
-        array[array == 'None'] = ''
+        array[array == "None"] = ""
 
-        np.savetxt(out_path, array, fmt='%s', delimiter='\t')
+        np.savetxt(out_path, array, fmt="%s", delimiter="\t")
 
     def generate_entry_for_frame(self, frame_id: int):
         length = 3  # TIMESTEP
@@ -365,11 +366,11 @@ class Trc(mdtraj.Trajectory):
         # Add POSITIONRED
         array[3, 0] = "POSITIONRED"
         start = 4
-        formatting = np.vectorize(np.format_float_positional)
 
         for block in range(self.xyz[frame_id].shape[0] // 10):
-            array[start + block * 10: start + (block + 1) * 10, 1:] = self._formatting(self.xyz[frame_id][block * 10: (block + 1) * 10,
-                                                                      :], precision=9, unique=False, pad_left=2)
+            array[start + block * 10 : start + (block + 1) * 10, 1:] = self._formatting(
+                self.xyz[frame_id][block * 10 : (block + 1) * 10, :], precision=9, unique=False, pad_left=2
+            )
             array[start + (block + 1) * 10, 0] = "#"
             array[start + (block + 1) * 10, 1] = (block + 1) * 10
             start += 1
@@ -381,14 +382,20 @@ class Trc(mdtraj.Trajectory):
         else:
             array_last = last
 
-        array[-(array_last + 1):-(array_last - last) - 1, 1:] = self._formatting(self.xyz[frame_id][-last:, :], precision=9, unique=False, pad_left=2)
+        array[-(array_last + 1) : -(array_last - last) - 1, 1:] = self._formatting(
+            self.xyz[frame_id][-last:, :], precision=9, unique=False, pad_left=2
+        )
         array[-(array_last - last) - 1, 0] = "END"
 
         if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
             array[-(array_last - last), 0] = "GENBOX"
             array[-(array_last - last) + 1, 1] = 1
-            array[-(array_last - last) + 2, 1:] = self._formatting(self.unitcell_lengths[frame_id], precision=9, unique=False, pad_left=2)
-            array[-(array_last - last) + 3, 1:] = self._formatting(self.unitcell_angles[frame_id], precision=9, unique=False, pad_left=2)
+            array[-(array_last - last) + 2, 1:] = self._formatting(
+                self.unitcell_lengths[frame_id], precision=9, unique=False, pad_left=2
+            )
+            array[-(array_last - last) + 3, 1:] = self._formatting(
+                self.unitcell_angles[frame_id], precision=9, unique=False, pad_left=2
+            )
             array[-(array_last - last) + 4, 1:] = self._formatting(0, precision=9, unique=False, pad_left=2)
             array[-(array_last - last) + 5, 1:] = self._formatting(0, precision=9, unique=False, pad_left=2)
             array[-(array_last - last) + 6, 0] = "END"
@@ -404,13 +411,12 @@ class Trc(mdtraj.Trajectory):
         # Add Title
         array[0, 0] = "TITLE"
 
-        titlestring = ''
+        titlestring = ""
         for t in self.TITLE.content:
             titlestring += t
 
         array[1, 0] = titlestring
         array[2, 0] = "END"
-
 
         return array
 
@@ -420,8 +426,12 @@ class Trc(mdtraj.Trajectory):
         if frame_id is None:
             frame_id = 0
 
-        content_str = "THIS IS THE FRAME AT TIMESTEP: " + str(
-            self.time[frame_id]) + " OF THE TRAJECTORY WITH TITLE: \n" + "\n".join(self.TITLE.content)
+        content_str = (
+            "THIS IS THE FRAME AT TIMESTEP: "
+            + str(self.time[frame_id])
+            + " OF THE TRAJECTORY WITH TITLE: \n"
+            + "\n".join(self.TITLE.content)
+        )
 
         if base_cnf is None:
             new_Cnf = self.get_dummy_cnf(self.xyz)
@@ -431,24 +441,36 @@ class Trc(mdtraj.Trajectory):
             else:
                 new_Cnf = Cnf(base_cnf)
         new_Cnf.TITLE = TITLE(content_str)
-        
-        new_Cnf.POSITION = POSITION([coords.atomP(resID=new_Cnf.POSITION.content[i].resID,
-                                                  resName=new_Cnf.POSITION.content[i].resName,
-                                                  atomType=new_Cnf.POSITION.content[i].atomType, atomID=i, xp=coord[0],
-                                                  yp=coord[1], zp=coord[2])
-                                     for i, coord in enumerate(self.xyz[frame_id])])
-        
-        if(hasattr(new_Cnf, "GENBOX")):
+
+        new_Cnf.POSITION = POSITION(
+            [
+                coords.atomP(
+                    resID=new_Cnf.POSITION.content[i].resID,
+                    resName=new_Cnf.POSITION.content[i].resName,
+                    atomType=new_Cnf.POSITION.content[i].atomType,
+                    atomID=i,
+                    xp=coord[0],
+                    yp=coord[1],
+                    zp=coord[2],
+                )
+                for i, coord in enumerate(self.xyz[frame_id])
+            ]
+        )
+
+        if hasattr(new_Cnf, "GENBOX"):
             new_Cnf.GENBOX.length = list(self.unitcell_lengths[frame_id])
             new_Cnf.GENBOX.angles = list(self.unitcell_angles[frame_id])
-            new_Cnf.GENBOX.euler = [0.0,0.0,0.0]
-            new_Cnf.GENBOX.origin = [0.0,0.0,0.0]
+            new_Cnf.GENBOX.euler = [0.0, 0.0, 0.0]
+            new_Cnf.GENBOX.origin = [0.0, 0.0, 0.0]
         else:
             from pygromos.files.blocks.coord_blocks import GENBOX
-            box_block = GENBOX(pbc=1, length=list(self.unitcell_lengths[frame_id]) ,angles=list(self.unitcell_angles[frame_id]))
+
+            box_block = GENBOX(
+                pbc=1, length=list(self.unitcell_lengths[frame_id]), angles=list(self.unitcell_angles[frame_id])
+            )
             new_Cnf.add_block(block=box_block)
-    
-        if(hasattr(new_Cnf, "TIMESTEP")):
+
+        if hasattr(new_Cnf, "TIMESTEP"):
             new_Cnf.TIMESTEP.t = self.time[frame_id]
             new_Cnf.TIMESTEP.step = self.step[frame_id]
 
@@ -468,13 +490,19 @@ class Trc(mdtraj.Trajectory):
         return self.save(out_path)
 
     @classmethod
-    def load(cls, in_path:str, in_cnf_path:str=None, timestep_duration:float=0.002) -> any:
+    def load(cls, in_path: str, in_cnf_path: str = None, timestep_duration: float = 0.002) -> any:
 
         if in_path.endswith(".trc") or in_path.endswith(".trc.gz"):
             o = cls(traj_path=in_path, in_cnf_path=in_cnf_path)
         else:
             so = super().load(in_path)
-            o = cls(xyz=so.xyz,  topology=so.topology, time=so.time, 
-                    unitcell_lengths=so.unitcell_lengths, unitcell_angles=so.unitcell_angles, timestep_duration=timestep_duration)
+            o = cls(
+                xyz=so.xyz,
+                topology=so.topology,
+                time=so.time,
+                unitcell_lengths=so.unitcell_lengths,
+                unitcell_angles=so.unitcell_angles,
+                timestep_duration=timestep_duration,
+            )
 
         return o

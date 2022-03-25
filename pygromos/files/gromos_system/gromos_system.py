@@ -13,6 +13,7 @@ test
 """
 
 # imports
+from curses import keyname
 import io
 import os
 import copy
@@ -45,7 +46,7 @@ from pygromos.files.trajectory.tre import Tre
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 
 # Additional
-#from pygromos.files.forcefield import forcefield_system
+# from pygromos.files.forcefield import forcefield_system
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
@@ -390,10 +391,12 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
+            print(keyname)
             if key in self._traj_files_path:
-                if isinstance(attribute_dict[key], str) or attribute_dict[key] is None: #traj file is not loaded
-                   continue
-                else:   # traj file was loaded
+                print("traj!")
+                if isinstance(attribute_dict[key], str) or attribute_dict[key] is None:  # traj file is not loaded
+                    continue
+                else:  # traj file was loaded
                     self._traj_files_path[key] = attribute_dict[key].path
             elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
@@ -417,15 +420,14 @@ class Gromos_System:
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
-        #init_traj attr:
+        # init_traj attr:
         self._trc = None
         self._tre = None
-        
+
         self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
         self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
 
         self.__bind_gromosPPFuncs()
-        
 
         # are promised files now present?
         self._check_promises()
@@ -658,7 +660,7 @@ class Gromos_System:
 
     @property
     def trc(self) -> Trc:
-        if self._trc is None and "trc" in self._traj_files_path and not self.cnf is None and not self.cnf._future_file:
+        if self._trc is None and "trc" in self._traj_files_path and self.cnf is not None and not self.cnf._future_file:
             self._trc = Trc(traj_path=self._traj_files_path["trc"], in_cnf=self.cnf)
         elif self._trc is None and "trc" in self._traj_files_path:
             self._trc = Trc(traj_path=self._traj_files_path["trc"])

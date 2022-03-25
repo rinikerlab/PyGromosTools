@@ -1,10 +1,10 @@
 TITLE
 THIS IS THE FRAME AT TIMESTEP: 0.18 OF THE TRAJECTORY WITH TITLE:TITLE Generic Title... to be changed by YOU!	>>> Generated with PyGromosTools (riniker group) <<<ENDEND
 TIMESTEP
- 	20.0 	0.04 
+ 	20.0 	0.04
 END
 POSITION
-# 	 
+#
     1 VAL   H1         0    2.744436741    0.012317984    3.038766623
     1 VAL   H2         1    2.814316988   -0.122559793    3.025961637
     1 VAL   N          2    2.760130405   -0.059234411    2.970644474
@@ -2870,7 +2870,7 @@ POSITION
   930 SOLV  HW2     2862    0.273255736    0.560532391    1.130696416
 END
 LATTICESHIFTS
-# 	 
+#
          0         0         0
          0         0         0
          0         0         0
@@ -5736,7 +5736,7 @@ LATTICESHIFTS
          0         0         0
 END
 VELOCITY
-# 	 
+#
     1 VAL  H1         1   -1.005540000   -0.230702769   -1.312864587
     1 VAL  H2         2    0.232808087   -0.844721445   -0.792680394
     1 VAL  N          3    0.524686827    0.055334311   -0.374792915

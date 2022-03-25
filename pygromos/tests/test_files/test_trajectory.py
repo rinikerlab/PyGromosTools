@@ -11,6 +11,7 @@ from pygromos.tests.test_files import out_test_root_dir
 
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="trajs_")
 
+
 class traj_standard_tests(unittest.TestCase):
     class_name: gt._General_Trajectory = gt._General_Trajectory
     in_file_path = in_file_h5_path = None
@@ -68,7 +69,7 @@ class test_trc(unittest.TestCase):
 
     def test_constructor_trc_file_path(self):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)  # noqa: F841
-        #print(t)
+        # print(t)
 
     def test_constructor_trc_file_noTop_path(self):
         t = self.class_name(traj_path=self.in_file_path)  # noqa: F841
@@ -82,32 +83,30 @@ class test_trc(unittest.TestCase):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
         t.save(self.outpath)
 
-
     def test_trc_with_boxes_traj(self):
         c = Cnf(self.in_file_w_genbox_cnf_path)
         t_origin = self.class_name(traj_path=self.in_file_w_genbox_path, in_cnf=self.in_file_w_genbox_cnf_path)
 
-        #CNF was the last frame:
-        testing.assert_allclose(actual= t_origin._unitcell_lengths[-1], desired=c.GENBOX.length)
+        # CNF was the last frame:
+        testing.assert_allclose(actual=t_origin._unitcell_lengths[-1], desired=c.GENBOX.length)
 
-        #these should not be equal! as the box changes in NPT over time
+        # these should not be equal! as the box changes in NPT over time
         assert t_origin._unitcell_lengths[0][0] != c.GENBOX.length[0]
         assert t_origin._unitcell_lengths[0][1] != c.GENBOX.length[1]
         assert t_origin._unitcell_lengths[0][2] != c.GENBOX.length[2]
-        
-        
+
     def test_to_trc_file(self):
         # Read in trc
         t_origin = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
 
         # take a subset of frames
-        t = t_origin[[5,7,12]]
+        t = t_origin[[5, 7, 12]]
 
         # write trc
         t.write_trc(self.trc_outpath)
 
         # read in new trc
-        t_new = self.class_name(traj_path=self.trc_outpath,in_cnf=self.help_class)
+        t_new = self.class_name(traj_path=self.trc_outpath, in_cnf=self.help_class)
 
         # test if new trc coordinates have correct shapes
         assert t_new.xyz.shape[0] == 3
@@ -123,7 +122,7 @@ class test_trc(unittest.TestCase):
         assert conf_60 == conf_60_None
 
         # TEST with base
-        conf_60 = t.to_cnf(60,base_cnf=self.help_class)
+        conf_60 = t.to_cnf(60, base_cnf=self.help_class)
         conf_60_None = t[60].to_cnf(base_cnf=self.help_class)
         assert conf_60 == conf_60_None
 
