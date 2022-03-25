@@ -13,7 +13,6 @@ test
 """
 
 # imports
-from curses import keyname
 import io
 import os
 import copy
@@ -391,9 +390,7 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            print(keyname)
-            if key in self._traj_files_path:
-                print("traj!")
+            if key.replace("_", "") in self._traj_files_path:
                 if isinstance(attribute_dict[key], str) or attribute_dict[key] is None:  # traj file is not loaded
                     continue
                 else:  # traj file was loaded
