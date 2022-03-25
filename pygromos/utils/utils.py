@@ -5,11 +5,10 @@
 """
 import os
 import math
-import numpy as np
 import argparse
 import inspect
 
-from typing import Dict, List, Iterable
+from typing import Dict, List
 
 spacer0 = "!" * 90 + "\n"
 spacer = "#" * 80 + "\n"
@@ -262,15 +261,15 @@ def write_job_script(
 
 def nice_s_vals(svals: List[float]) -> List[float]:
     """
-        This helper function formats s-vals for RE-EDS to nice readable values. 
+        This helper function formats s-vals for RE-EDS to nice readable values.
         Is/was used in RE-EDS applications. Main functionality is rounding the different s-vals to their significance digits.
-        
+
 
     Parameters
     ----------
     svals : List[float]
         smoothing parameters of a reeds approach
-        
+
     Returns
     -------
         List[float]
