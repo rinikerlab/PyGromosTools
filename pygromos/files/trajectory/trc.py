@@ -421,7 +421,7 @@ class Trc(mdtraj.Trajectory):
             frame_id = 0
 
         content_str = "THIS IS THE FRAME AT TIMESTEP: " + str(
-            self.time[frame_id]) + " OF THE TRAJECTORY WITH TITLE:\n" + self.TITLE.block_to_string()
+            self.time[frame_id]) + " OF THE TRAJECTORY WITH TITLE: \n" + "\n".join(self.TITLE.content)
 
         if base_cnf is None:
             new_Cnf = self.get_dummy_cnf(self.xyz)
@@ -431,7 +431,7 @@ class Trc(mdtraj.Trajectory):
             else:
                 new_Cnf = Cnf(base_cnf)
         new_Cnf.TITLE = TITLE(content_str)
-
+        
         new_Cnf.POSITION = POSITION([coords.atomP(resID=new_Cnf.POSITION.content[i].resID,
                                                   resName=new_Cnf.POSITION.content[i].resName,
                                                   atomType=new_Cnf.POSITION.content[i].atomType, atomID=i, xp=coord[0],
@@ -447,7 +447,10 @@ class Trc(mdtraj.Trajectory):
             from pygromos.files.blocks.coord_blocks import GENBOX
             box_block = GENBOX(pbc=1, length=list(self.unitcell_lengths[frame_id]) ,angles=list(self.unitcell_angles[frame_id]))
             new_Cnf.add_block(block=box_block)
-
+    
+        if(hasattr(new_Cnf, "TIMESTEP")):
+            new_Cnf.TIMESTEP.t = self.time[frame_id]
+            new_Cnf.TIMESTEP.step = self.step[frame_id]
 
         return new_Cnf
 

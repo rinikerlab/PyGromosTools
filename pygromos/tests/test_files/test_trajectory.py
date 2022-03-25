@@ -1,17 +1,15 @@
 import tempfile
 import unittest
-
+from numpy import testing
 from pygromos.files.trajectory import _general_trajectory as gt
 from pygromos.files.trajectory import trc, tre, trg
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.trajectory.tre_field_libs import ene_fields
-from copy import deepcopy
 
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.tests.test_files import out_test_root_dir
 
 root_out = tempfile.mkdtemp(dir=out_test_root_dir, prefix="trajs_")
-
 
 class traj_standard_tests(unittest.TestCase):
     class_name: gt._General_Trajectory = gt._General_Trajectory
@@ -57,6 +55,9 @@ class test_trc(unittest.TestCase):
     help_class = Cnf(in_test_file_path + "/trc/in_test.cnf")
     in_file_path = in_test_file_path + "/trc/in_test.trc"
     in_file_path_h5 = in_test_file_path + "/trc/in_test_trc.h5"
+    in_file_w_genbox_path = in_test_file_path + "/trc/in_test_genbox.trc"
+    in_file_w_genbox_cnf_path = in_test_file_path + "/trc/in_test_genbox.cnf"
+
     outpath = root_out + "/out_trc1.h5"
     trc_outpath = root_out + "/out_.trc.gz"
 
@@ -81,6 +82,20 @@ class test_trc(unittest.TestCase):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
         t.save(self.outpath)
 
+
+    def test_trc_with_boxes_traj(self):
+        c = Cnf(self.in_file_w_genbox_cnf_path)
+        t_origin = self.class_name(traj_path=self.in_file_w_genbox_path, in_cnf=self.in_file_w_genbox_cnf_path)
+
+        #CNF was the last frame:
+        testing.assert_allclose(actual= t_origin._unitcell_lengths[-1], desired=c.GENBOX.length)
+
+        #these should not be equal! as the box changes in NPT over time
+        assert t_origin._unitcell_lengths[0][0] != c.GENBOX.length[0]
+        assert t_origin._unitcell_lengths[0][1] != c.GENBOX.length[1]
+        assert t_origin._unitcell_lengths[0][2] != c.GENBOX.length[2]
+        
+        
     def test_to_trc_file(self):
         # Read in trc
         t_origin = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
@@ -103,13 +118,13 @@ class test_trc(unittest.TestCase):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
 
         # TEST DUMMY
-        conf_60 = t.to_conf(60)
-        conf_60_None = t[60].to_conf()
+        conf_60 = t.to_cnf(60)
+        conf_60_None = t[60].to_cnf()
         assert conf_60 == conf_60_None
 
         # TEST with base
-        conf_60 = t.to_conf(60,base_cnf=self.help_class)
-        conf_60_None = t[60].to_conf(base_cnf=self.help_class)
+        conf_60 = t.to_cnf(60,base_cnf=self.help_class)
+        conf_60_None = t[60].to_cnf(base_cnf=self.help_class)
         assert conf_60 == conf_60_None
 
 
