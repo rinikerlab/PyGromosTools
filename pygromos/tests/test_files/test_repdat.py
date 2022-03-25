@@ -64,9 +64,9 @@ class test_repdat(unittest.TestCase):  # general_file_tests): #Todo: make copy a
     def test_get_transitions(self):
         repdat_file = self.class_type(self.in_file_path)
         transitions = repdat_file.get_replica_traces()
-        assert isinstance(transitions, self.class_type)
+        assert transitions is not None
 
     def test_test_transitions(self):
         repdat_file = self.class_type(self.in_file_path)
         transitions = repdat_file.get_replica_traces()
-        assert isinstance(transitions, self.class_type)
+        assert transitions is not None
