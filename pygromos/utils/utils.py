@@ -260,27 +260,25 @@ def write_job_script(
     return out_script_path
 
 
-def nice_s_vals(svals: Iterable, base10=False) -> list:
+def nice_s_vals(svals: List[float]) -> List[float]:
     """
+        This helper function formats s-vals for RE-EDS to nice readable values. 
+        Is/was used in RE-EDS applications. Main functionality is rounding the different s-vals to their significance digits.
+        
 
     Parameters
     ----------
-    svals :
-    base10 :
-
+    svals : List[float]
+        smoothing parameters of a reeds approach
+        
     Returns
     -------
+        List[float]
+            nicely rounded s-values, such that only significant digits for each number is around.
 
     """
 
     nicer_labels = []
-    if base10:
-        for val in svals:
-            if float(np.log10(val)).is_integer() or val == min(svals):
-                nicer_labels.append(round(val, str(val).count("0") + 3))
-            else:
-                nicer_labels.append("")
-    else:
-        for val in svals:
-            nicer_labels.append(round(float(val), str(val).count("0") + 2))
+    for val in svals:
+        nicer_labels.append(round(float(val), str(val).count("0") + 2))
     return nicer_labels
