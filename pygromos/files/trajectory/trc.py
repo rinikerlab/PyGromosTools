@@ -21,6 +21,7 @@ import numpy as np
 import nglview as nj
 from copy import deepcopy
 from typing import Dict, List, Tuple
+
 from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
@@ -44,9 +45,13 @@ class Trc(mdtraj.Trajectory):
             unitcell_angles=None,
             traj_path=None,
             in_cnf: [str, Cnf] = None,
+            timestep_duration : float = 0.002,
+            _future_file:bool=False
     ):
 
-        self._future_file = False
+        self._future_file = _future_file
+        if(xyz is None and topology is None and traj_path is None and in_cnf is None):
+            self._future_file = None
 
         if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
             trj = self.load(traj_path)
@@ -100,6 +105,7 @@ class Trc(mdtraj.Trajectory):
                 unitcell_angles=unitcell_angles,
             )
             self._step = step
+
         elif not (xyz is None and topology is None):
             super().__init__(
                 xyz=xyz,
@@ -108,6 +114,9 @@ class Trc(mdtraj.Trajectory):
                 unitcell_lengths=unitcell_lengths,
                 unitcell_angles=unitcell_angles,
             )
+                    
+            self._step = np.array(np.round(self._time/timestep_duration), dtype=int)
+            self.TITLE = TITLE(content=" Generic Title... to be changed by YOU!")
 
         else:
             self._unitcell_lengths = []
@@ -136,13 +145,13 @@ class Trc(mdtraj.Trajectory):
         cCls.TITLE = deepcopy(self.TITLE)
         cCls._time = deepcopy(self._time)
         
-        return 
+        return cCls
 
     def __getitem__(self, key):
-        print(vars(self).keys())
+
         t = self.slice(key)
-        if(hasattr(t, "_step")): t._step = deepcopy(self._step[key])
-        if(hasattr(t, "_time")): t._time = deepcopy(self._time[key])
+        if(hasattr(t, "_step")): t._step = deepcopy(np.array(self._step[key], ndmin=1))
+        if(hasattr(t, "_time")): t._time = deepcopy(np.array(self._time[key], ndmin=1))
         if(hasattr(t, "TITLE")): t.TITLE = deepcopy(self.TITLE)
         
         return t
@@ -315,13 +324,17 @@ class Trc(mdtraj.Trajectory):
         self._view = visualize_system(traj=self)
         return self._view
 
+
     # io
+
+    _formatting = np.vectorize(np.format_float_positional)
+
     def write_trc(self, out_path: str) -> str:
 
-        first_entry = self.generate_first_entry()
+        first_entry = self.generate_TITLE_entry()
         array_list = [first_entry]
 
-        for i in range(len(self.time) - 1):
+        for i in range(len(self.time)):
             array_list.append(self.generate_entry_for_frame(i))
 
         array = np.concatenate(array_list, axis=0)
@@ -331,7 +344,6 @@ class Trc(mdtraj.Trajectory):
         np.savetxt(out_path, array, fmt='%s', delimiter='\t')
 
     def generate_entry_for_frame(self, frame_id: int):
-
         length = 3  # TIMESTEP
         length += 2  # Positionred
         length += self.xyz[0].shape[0]
@@ -346,16 +358,18 @@ class Trc(mdtraj.Trajectory):
 
         # Add TIMESTEP
         array[0, 0] = "TIMESTEP"
-        array[1, 1] = self.step[frame_id + 1]
-        array[1, 2] = self.time[frame_id + 1]
+        array[1, 1] = self.step[frame_id]
+        array[1, 2] = self._formatting(self.time[frame_id], precision=9, unique=False, pad_left=2)
         array[2, 0] = "END"
 
         # Add POSITIONRED
         array[3, 0] = "POSITIONRED"
         start = 4
+        formatting = np.vectorize(np.format_float_positional)
+
         for block in range(self.xyz[frame_id].shape[0] // 10):
-            array[start + block * 10: start + (block + 1) * 10, 1:] = self.xyz[frame_id][block * 10: (block + 1) * 10,
-                                                                      :]
+            array[start + block * 10: start + (block + 1) * 10, 1:] = self._formatting(self.xyz[frame_id][block * 10: (block + 1) * 10,
+                                                                      :], precision=9, unique=False, pad_left=2)
             array[start + (block + 1) * 10, 0] = "#"
             array[start + (block + 1) * 10, 1] = (block + 1) * 10
             start += 1
@@ -367,32 +381,24 @@ class Trc(mdtraj.Trajectory):
         else:
             array_last = last
 
-        array[-(array_last + 1):-(array_last - last) - 1, 1:] = self.xyz[frame_id][-last:, :]
+        array[-(array_last + 1):-(array_last - last) - 1, 1:] = self._formatting(self.xyz[frame_id][-last:, :], precision=9, unique=False, pad_left=2)
         array[-(array_last - last) - 1, 0] = "END"
 
         if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
             array[-(array_last - last), 0] = "GENBOX"
             array[-(array_last - last) + 1, 1] = 1
-            array[-(array_last - last) + 2, 1:] = self.unitcell_lengths[frame_id]
-            array[-(array_last - last) + 3, 1:] = self.unitcell_angles[frame_id]
-            array[-(array_last - last) + 4, 1:] = 0
-            array[-(array_last - last) + 5, 1:] = 0
+            array[-(array_last - last) + 2, 1:] = self._formatting(self.unitcell_lengths[frame_id], precision=9, unique=False, pad_left=2)
+            array[-(array_last - last) + 3, 1:] = self._formatting(self.unitcell_angles[frame_id], precision=9, unique=False, pad_left=2)
+            array[-(array_last - last) + 4, 1:] = self._formatting(0, precision=9, unique=False, pad_left=2)
+            array[-(array_last - last) + 5, 1:] = self._formatting(0, precision=9, unique=False, pad_left=2)
             array[-(array_last - last) + 6, 0] = "END"
 
         return array
 
-    def generate_first_entry(self):
+    def generate_TITLE_entry(self):
         length = 3  # TITLE will only be one line
-        length += 3  # TIMESTEP
-        length += 2
-        length += self.xyz[0].shape[0]
 
         # Add comments
-        length += self.xyz[0].shape[0] // 10
-
-        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
-            length += 7
-
         array = np.empty((length, 4), dtype=object)
 
         # Add Title
@@ -405,43 +411,10 @@ class Trc(mdtraj.Trajectory):
         array[1, 0] = titlestring
         array[2, 0] = "END"
 
-        # Add TIMESTEP
-        array[3, 0] = "TIMESTEP"
-        array[4, 1] = self.timestep * 0
-        array[4, 2] = self.time[0]
-        array[5, 0] = "END"
-
-        # Add POSITIONRED
-        array[6, 0] = "POSITIONRED"
-        start = 7
-        for block in range(self.xyz[0].shape[0] // 10):
-            array[start + block * 10: start + (block + 1) * 10, 1:] = self.xyz[0][block * 10: (block + 1) * 10, :]
-            array[start + (block + 1) * 10, 0] = "#"
-            array[start + (block + 1) * 10, 1] = (block + 1) * 10
-            start += 1
-
-        last = self.xyz[0].shape[0] % 10
-
-        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
-            array_last = last + 7
-        else:
-            array_last = last
-
-        array[-(array_last + 1):-(array_last - last) - 1, 1:] = self.xyz[0][-last:, :]
-        array[-(array_last - last) - 1, 0] = "END"
-
-        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
-            array[-(array_last - last), 0] = "GENBOX"
-            array[-(array_last - last) + 1, 1] = 1
-            array[-(array_last - last) + 2, 1:] = self.unitcell_lengths[0]
-            array[-(array_last - last) + 3, 1:] = self.unitcell_angles[0]
-            array[-(array_last - last) + 4, 1:] = 0
-            array[-(array_last - last) + 5, 1:] = 0
-            array[-(array_last - last) + 6, 0] = "END"
 
         return array
 
-    def to_conf(self, frame_id: int = None, base_cnf: Cnf = None):
+    def to_cnf(self, frame_id: int = None, base_cnf: Cnf = None):
         from pygromos.files.blocks import coords
 
         if frame_id is None:
@@ -468,8 +441,8 @@ class Trc(mdtraj.Trajectory):
         if(hasattr(new_Cnf, "GENBOX")):
             new_Cnf.GENBOX.length = list(self.unitcell_lengths[frame_id])
             new_Cnf.GENBOX.angles = list(self.unitcell_angles[frame_id])
-            new_Cnf.GENBOX.euler = [0,0,0]
-            new_Cnf.GENBOX.origin = [0,0,0]
+            new_Cnf.GENBOX.euler = [0.0,0.0,0.0]
+            new_Cnf.GENBOX.origin = [0.0,0.0,0.0]
         else:
             from pygromos.files.blocks.coord_blocks import GENBOX
             box_block = GENBOX(pbc=1, length=list(self.unitcell_lengths[frame_id]) ,angles=list(self.unitcell_angles[frame_id]))
@@ -480,17 +453,9 @@ class Trc(mdtraj.Trajectory):
 
     def save(self, out_path: str) -> str:
 
-        compress = False
-        if out_path.endswith(".trc.gz"):
-            compress = True
-            out_path.replace(".gz", "")
-
         # write out
-        if out_path.endswith(".trc"):
+        if out_path.endswith(".trc") or out_path.endswith(".trc.gz"):
             out_path = self.write_trc(out_path)
-            # compress if desired
-            if compress:
-                out_path = bash.compress_gzip(in_path=out_path)
             return out_path
         else:
             super().save(out_path)
@@ -498,3 +463,15 @@ class Trc(mdtraj.Trajectory):
 
     def write(self, out_path: str) -> str:
         return self.save(out_path)
+
+    @classmethod
+    def load(cls, in_path:str, in_cnf_path:str=None, timestep_duration:float=0.002) -> any:
+
+        if in_path.endswith(".trc") or in_path.endswith(".trc.gz"):
+            o = cls(traj_path=in_path, in_cnf_path=in_cnf_path)
+        else:
+            so = super().load(in_path)
+            o = cls(xyz=so.xyz,  topology=so.topology, time=so.time, 
+                    unitcell_lengths=so.unitcell_lengths, unitcell_angles=so.unitcell_angles, timestep_duration=timestep_duration)
+
+        return o

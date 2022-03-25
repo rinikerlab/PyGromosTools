@@ -279,11 +279,11 @@ class Gromos_System:
         self._all_files_key.extend(list(map(lambda x: "_" + x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
-        self._traj_files_path = {}
 
         # Empty Attr
-        self.trc = None
-        self.tre = None
+        self._traj_files_path = {}
+        self._trc = None
+        self._tre = None
 
     def __str__(self) -> str:
         msg = "\n"
@@ -390,10 +390,10 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if isinstance(attribute_dict[key], tuple(self.traj_files.values())) or key in self._traj_files_path:
-                if isinstance(attribute_dict[key], str):
-                    self._traj_files_path[key] = attribute_dict[key]
-                else:
+            if key in self._traj_files_path:
+                if isinstance(attribute_dict[key], str) or attribute_dict[key] is None: #traj file is not loaded
+                   continue
+                else:   # traj file was loaded
                     self._traj_files_path[key] = attribute_dict[key].path
             elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
@@ -402,7 +402,7 @@ class Gromos_System:
             else:
                 new_dict.update({key: None})
 
-            new_dict.update(self._traj_files_path)
+            new_dict.update({"_traj_files_path": self._traj_files_path})
         return new_dict
 
     def __setstate__(self, state):
@@ -417,10 +417,15 @@ class Gromos_System:
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
 
+        #init_traj attr:
+        self._trc = None
+        self._tre = None
+        
         self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
         self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
 
         self.__bind_gromosPPFuncs()
+        
 
         # are promised files now present?
         self._check_promises()

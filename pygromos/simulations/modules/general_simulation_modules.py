@@ -227,6 +227,7 @@ def simulation(
         gromos_system.cnf.path = out_analysis_dir + "/data/" + gromos_system.name + ".cnf"
 
     # Return trajectories if available
+    gromos_system._traj_files_path = {}
     if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWX > 0:
         final_trc_file = out_analysis_dir + "/data/" + gromos_system.name + ".trc"
         if os.path.exists(final_trc_file + ".h5"):
