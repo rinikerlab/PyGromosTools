@@ -193,9 +193,9 @@ class MPERTATOM(_generic_gromos_block):
 
     def read_content_from_str(self, content: List[str]):
         field = 0
-        comment = ""  # noqa: F841
+        # comment = ""  # noqa: F841
         NJLA = None
-        NTPB = None  # noqa: F841
+        # NTPB = None  # noqa: F841
         STATEIDENTIFIERS = []
         STATEATOMS = []
 

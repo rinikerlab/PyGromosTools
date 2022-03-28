@@ -771,7 +771,7 @@ class Gromos_System:
             var_name = var_prefixes + self.__class__.__name__.lower()
 
         gen_cmd = "#Generate " + self.__class__.__name__ + "\n"
-        gen_cmd = "\n"
+        gen_cmd += "\n"
         gen_cmd += (
             "from "
             + self.__module__

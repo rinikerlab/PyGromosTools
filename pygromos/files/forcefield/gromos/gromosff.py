@@ -19,6 +19,8 @@ class GromosFF(_generic_force_field):
         self, name: str = "gromos", path_to_files: str = None, auto_import: bool = True, verbose: bool = False
     ):
         super().__init__(name, path_to_files, auto_import, verbose)
+        if auto_import:
+            self.auto_import_ff()
         self.gromosPP = GromosPP(None)
 
     def auto_import_ff(self):
