@@ -97,7 +97,6 @@ class NOE(_general_gromos_file._general_gromos_file):
 
         # DATA
         # Remove header Info & pandafy data
-        state_viols = {}  # noqa: F841 # TODO: implement or remove
         NOE_violations = None
         average_NOE = None
 

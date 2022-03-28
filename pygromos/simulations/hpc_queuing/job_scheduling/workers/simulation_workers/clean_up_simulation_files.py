@@ -14,7 +14,9 @@ import sys
 from pygromos.utils.utils import time_wait_s_for_filesystem
 from pygromos.simulations.hpc_queuing.job_scheduling import file_management as fM
 
-package_path = os.path.abspath(__file__ + "/../../../../../..")
+package_path = os.path.abspath(
+    __file__ + "/../../../../../.."
+)  # this is only here  to be sure, that from any context you call pygromos, the package is found.
 # print(package_path)
 sys.path.append(package_path)
 

@@ -184,7 +184,7 @@ class _general_gromos_file:
 
         elif blocktitle is not None and content is not None:
             # if blocktitle in self._block_names:
-            if blocktitle == "TITLE":  # TODO fIX IN PARSER
+            if blocktitle == "TITLE":
                 self.__setattr__(blocktitle, all_blocks.__getattribute__(blocktitle)(content))
             elif isinstance(content, dict):
                 try:

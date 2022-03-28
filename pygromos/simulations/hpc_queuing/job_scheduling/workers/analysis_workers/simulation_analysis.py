@@ -10,7 +10,9 @@ from pygromos.files.coord import cnf
 from pygromos.files.trajectory import trc, tre, trg
 from pygromos.utils import bash
 
-package_path = os.path.abspath(__file__ + "/../../../../../..")
+package_path = os.path.abspath(
+    __file__ + "/../../../../../.."
+)  # this is only here  to be sure, that from any context you call pygromos, the package is found.
 # print(package_path)
 sys.path.append(package_path)
 
@@ -42,21 +44,25 @@ def do(
     verbose: bool = True,
 ):
     """
+        This function is a analysis framework structure, that starts an analysis folder containing a data folder with all concatenated files, from which analysis can be started.
 
     Parameters
     ----------
-    in_simulation_dir
-    in_system
-    out_analysis_dir
-    gromosPP_bin_dir
-    n_processes
-    control_dict
-    verbose
-
-    Returns
-    -------
+    in_simulation_dir : str
+        input simulation directory (with succesfully finished simulations)
+    out_analysis_dir : str
+        output directory
+    sim_prefix : str
+        prefix of the simulation == name of simulation
+    n_processes : int, optional
+                WARNING: parallelization is currently not implemented!, by default 1
+    control_dict : dict, optional
+        control structure, steering the executions, by default None
+    verbose : bool, optional
+        bla bla, by default True
 
     """
+
     if not os.path.exists(out_analysis_dir) and not os.path.isdir(out_analysis_dir):
         bash.make_folder(out_analysis_dir)
     if not isinstance(control_dict, dict):
@@ -94,8 +100,6 @@ def do(
         else:
             warnings.warn("Simulation dir was not present. Skipped Compression.\nGiven Path: " + in_simulation_dir)
 
-    return 0
-
 
 def project_concatenation(
     in_folder: str,
@@ -103,7 +107,28 @@ def project_concatenation(
     in_prefix: str,  # in_simSystem: Gromos_System,
     control_dict: Dict[str, bool],
     verbose: bool = False,
-) -> dict:
+) -> str:
+    """
+    concatenation of the simulation data.
+
+    Parameters
+    ----------
+    in_folder : str
+        folder containing the simulation results
+    out_folder : str
+        folder that should contain the concatenated out files
+    in_prefix : str
+        prefix of the simulation files.
+    control_dict : Dict[str, bool]
+        control of what should be executed
+    verbose : bool, optional
+        baeeeeh baeeeeh, by default False
+
+    Returns
+    -------
+    str
+        resulting cnf path.
+    """
     # in_simSystem.work_folder = out_folder
     out_prefix = out_folder + "/" + in_prefix  # in_simSystem.name
     out_cnf = None
