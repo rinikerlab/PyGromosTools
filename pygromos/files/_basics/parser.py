@@ -755,7 +755,7 @@ def read_imd(in_file_path: str) -> Dict:
 
 
 # SIMPLIFIED Pasers- CRUDE - not necessarily correct
-def read_simple_trx(in_file_path: str, every_step: int = 1, verbose: bool = True) -> Dict:
+def read_simple_trx(in_file_path: str, every_step: int = 1, skip_steps: int = 0, verbose: bool = True) -> Dict:
     """
         Needs output for checknig.
         Simple tre_ read - reads only _blocks! does not seperate fields.
@@ -784,9 +784,13 @@ def read_simple_trx(in_file_path: str, every_step: int = 1, verbose: bool = True
     skip = False
     with open(in_file_path, "r") as infile:
         current_step = 0
-        skip_frame = False  # noqa: F841 # TODO: implement skip frames
+        if skip_steps > 0:
+            step_filter = (
+                lambda step_number: (step_number == 0 or step_number % every_step == 0) and step_number > skip_steps
+            )
+        else:
+            step_filter = lambda step_number: step_number == 0 or step_number % every_step == 0
 
-        step_filter = lambda step_number: step_number == 0 or step_number % every_step == 0
         for line in infile:
             if first_key:  # BlockHeader
                 # Keep only one Title

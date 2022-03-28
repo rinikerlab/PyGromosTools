@@ -19,7 +19,8 @@ class test_mtb(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        mtb_file = self.class_type(self.in_file_path)  # noqa: F841
+        mtb_file = self.class_type(self.in_file_path)
+        assert isinstance(mtb_file, self.class_type)
         return 0
 
     def test_write(self):

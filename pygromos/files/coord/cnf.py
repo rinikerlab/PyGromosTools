@@ -299,7 +299,6 @@ class Cnf(_general_gromos_file):
 
         check_blocks = ["POSITION", "VELOCITY"]
 
-        atom_nums = []  # noqa: F841 # list of all atom numbers # TODO: check if this is needed
         if (not resID or not resName) and verbose:
             print("WARNING giving only resID or resName can be ambigous!")
         if resID or resName:

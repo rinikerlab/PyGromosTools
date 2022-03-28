@@ -24,11 +24,13 @@ class test_repdat(unittest.TestCase):  # general_file_tests): #Todo: make copy a
     root_out = root_out
 
     def test_parsing_test_file(self):
-        repdat_file = self.class_type(self.in_file_path)  # noqa: F841
+        repdat_file = self.class_type(self.in_file_path)
+        assert isinstance(repdat_file, self.class_type)
         return 0
 
     def test_parsing_new_file(self):
-        repdat_file = self.class_type(in_path2)  # noqa: F841
+        repdat_file = self.class_type(in_path2)
+        assert isinstance(repdat_file, self.class_type)
 
     def test_write_out(self):
         repdat_file = self.class_type(self.in_file_path)
@@ -61,8 +63,10 @@ class test_repdat(unittest.TestCase):  # general_file_tests): #Todo: make copy a
 
     def test_get_transitions(self):
         repdat_file = self.class_type(self.in_file_path)
-        transitions = repdat_file.get_replica_traces()  # noqa: F841
+        transitions = repdat_file.get_replica_traces()
+        assert transitions is not None
 
     def test_test_transitions(self):
         repdat_file = self.class_type(self.in_file_path)
-        transitions = repdat_file.get_replica_traces()  # noqa: F841
+        transitions = repdat_file.get_replica_traces()
+        assert transitions is not None

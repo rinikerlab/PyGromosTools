@@ -137,7 +137,7 @@ def work(
     # What kind of simulation
     is_stochastic_dynamics_sim = False
     is_vacuum = False
-    is_energymin_sim = False  # noqa: F841
+    # is_energymin_sim = False  # noqa: F841
 
     if imd_file.BOUNDCOND.NTB == 0:
         is_vacuum = True
@@ -146,9 +146,9 @@ def work(
         if imd_file.STOCHDYN.NTSD:
             is_stochastic_dynamics_sim = True
 
-    if hasattr(imd_file, "ENERGYMIN"):
-        if imd_file.ENERGYMIN.NTEM > 0:
-            is_energymin_sim = True  # noqa: F841
+    # if hasattr(imd_file, "ENERGYMIN"):
+    #    if imd_file.ENERGYMIN.NTEM > 0:
+    #        is_energymin_sim = True  # noqa: F841
 
     # Adapt Initializations:
     if reinitialize_every_run or (initialize_first_run and runID == 1):

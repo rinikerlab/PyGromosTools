@@ -3,10 +3,11 @@
     This module should contain small usefull functions.
 
 """
+import os
+import math
 import argparse
 import inspect
-import math
-import os
+
 from typing import Dict, List
 
 spacer0 = "!" * 90 + "\n"
@@ -256,3 +257,27 @@ def write_job_script(
     os.system("chmod +x " + out_script_path)
 
     return out_script_path
+
+
+def nice_s_vals(svals: List[float]) -> List[float]:
+    """
+        This helper function formats s-vals for RE-EDS to nice readable values.
+        Is/was used in RE-EDS applications. Main functionality is rounding the different s-vals to their significance digits.
+
+
+    Parameters
+    ----------
+    svals : List[float]
+        smoothing parameters of a reeds approach
+
+    Returns
+    -------
+        List[float]
+            nicely rounded s-values, such that only significant digits for each number is around.
+
+    """
+
+    nicer_labels = []
+    for val in svals:
+        nicer_labels.append(round(float(val), str(val).count("0") + 2))
+    return nicer_labels

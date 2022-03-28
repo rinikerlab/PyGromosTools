@@ -2186,7 +2186,6 @@ class _topology_table_block(_iterable_topology_block):
                 # generate arguments dict for line parsing (= table_line_type class construction)
                 kwargs = {key: parameter_type[key](field) for key, field in zip(parameter_name, fields)}
                 self.content.append(self.table_line_type(**kwargs))
-        pass
 
     def block_to_string(self) -> str:
         result = "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
@@ -2359,7 +2358,6 @@ class SOLUTEATOM(_iterable_topology_block):
                                     )
                             except IOError:
                                 raise IOError("Problem reading INE for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
-                                break
                     else:
                         INEvalues = []
 
@@ -2393,7 +2391,6 @@ class SOLUTEATOM(_iterable_topology_block):
                                     )
                             except IOError:
                                 raise IOError("Problem reading INE14 for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
-                                break
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
@@ -3520,7 +3517,7 @@ class PERTATOMPARAM(_generic_gromos_block):
                 ]
             self.NPTB -= len(set(stateNames))
 
-        elif stateNames is None and stateIDs is None:
+        else:
             raise Exception("Please give either stateNames or stateIDs")
 
     def delete_atom(self, atomNR: (int, List[int])):

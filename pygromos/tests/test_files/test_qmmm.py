@@ -23,7 +23,8 @@ class test_qmmm_imd(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        imd_file = self.class_type(self.in_file_path)  # noqa: F841
+        imd_file = self.class_type(self.in_file_path)
+        assert isinstance(imd_file, self.class_type)
         return 0
 
     def test_to_string(self):
@@ -45,7 +46,8 @@ class test_qmmm(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        qmmm_file = self.class_type(self.in_file_path)  # noqa: F841
+        qmmm_file = self.class_type(self.in_file_path)
+        assert isinstance(qmmm_file, self.class_type)
         return 0
 
     def test_to_string(self):

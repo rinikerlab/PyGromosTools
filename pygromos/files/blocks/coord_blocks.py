@@ -135,7 +135,6 @@ class POSITION(_iterable_gromos_block):
             raise Exception("Generic Block did not understand the type of content \n content: \n" + str(content))
 
     def read_content_from_str(self, content: List[str]):
-        lines = list(map(lambda x: x.split(), content))  # noqa: F841
         self.content = [
             blocks.coords.atomP(
                 resID=int(x[0]),
