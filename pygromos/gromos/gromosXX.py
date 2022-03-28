@@ -364,11 +364,6 @@ class _GromosXX(_gromosClass):
         else:
             raise IOError("Did not get an input top file. Got: " + in_topo_path)
 
-        if in_coord_path:
-            command += ["@conf", str(in_coord_path)]
-        else:
-            raise IOError("Did not get an input coord file. Got: " + in_coord_path)
-
         if in_imd_path:
             command += ["@input", str(in_imd_path)]
 
@@ -386,6 +381,11 @@ class _GromosXX(_gromosClass):
                 in_coord_path = in_coord_path.replace("_1.cnf", ".cnf")
         else:
             raise IOError("Did not get an input imd file. Got: " + in_imd_path)
+
+        if in_coord_path:
+            command += ["@conf", str(in_coord_path)]
+        else:
+            raise IOError("Did not get an input coord file. Got: " + in_coord_path)
 
         if in_pert_topo_path:
             command += ["@pttopo", str(in_pert_topo_path)]
