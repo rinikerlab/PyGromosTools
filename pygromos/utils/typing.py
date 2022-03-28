@@ -1,6 +1,6 @@
 from numbers import Number  # noqa: F401
-from pygromos.utils.typing import TypeVar
-from pygromos.utils.typing import Dict, List, Union, Tuple, Iterable, Callable  # noqa: F401
+from typing import TypeVar
+from typing import Dict, List, Union, Tuple, Iterable, Callable  # noqa: F401
 
 # Files
 # Topology

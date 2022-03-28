@@ -13,6 +13,7 @@ from scipy import constants as const
 
 from pygromos.utils.typing import Iterable, Number
 
+
 class _FreeEnergyCalculator:
     constants: dict
     equation: sp.Function

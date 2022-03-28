@@ -1,10 +1,9 @@
-
-
 import os
 import functools
 from pygromos.files._basics import _general_gromos_file
 from pygromos.utils.typing import Callable
 from pygromos.utils.compiledProgram import _compiled_program
+
 
 class _gromosClass(_compiled_program):
     def __init__(self, in_bin_dir: str, dummy: bool = False, _check_binary_paths: bool = True) -> str:
