@@ -19,17 +19,20 @@ class traj_standard_tests(unittest.TestCase):
 
     # Constructors
     def test_constructor_empty(self):
-        t = self.class_name(input_value=None, auto_save=False)  # noqa: F841
+        t = self.class_name(input_value=None, auto_save=False)
+        assert isinstance(t, self.class_name)
         # print(t)
 
     def test_constructor_trg_file_path(self):
-        t = self.class_name(input_value=self.in_file_path, auto_save=False)  # noqa: F841
+        t = self.class_name(input_value=self.in_file_path, auto_save=False)
+        assert isinstance(t, self.class_name)
         # print(t)
         # print(t.database.columns)
         # print(t.database.head())
 
     def test_constructor_trg_h5_file_path(self):
-        t = self.class_name(input_value=self.in_file_path, auto_save=False)  # noqa: F841
+        t = self.class_name(input_value=self.in_file_path, auto_save=False)
+        assert isinstance(t, self.class_name)
         # print(t)
 
     def test_write(self):
@@ -64,19 +67,23 @@ class test_trc(unittest.TestCase):
 
     # Constructors
     def test_constructor_empty(self):
-        t = self.class_name()  # noqa: F841
+        t = self.class_name()
+        assert isinstance(t, self.class_name)
         # print(t)
 
     def test_constructor_trc_file_path(self):
-        t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)  # noqa: F841
+        t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
+        assert isinstance(t, self.class_name)
         # print(t)
 
     def test_constructor_trc_file_noTop_path(self):
-        t = self.class_name(traj_path=self.in_file_path)  # noqa: F841
+        t = self.class_name(traj_path=self.in_file_path)
+        assert isinstance(t, self.class_name)
         # print(t)
 
     def test_constructor_trc_h5_file_path(self):
-        t = self.class_name(traj_path=self.in_file_path_h5)  # noqa: F841
+        t = self.class_name(traj_path=self.in_file_path_h5)
+        assert isinstance(t, self.class_name)
         # print(t)
 
     def test_write(self):

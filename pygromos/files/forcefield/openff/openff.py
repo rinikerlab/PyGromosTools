@@ -28,6 +28,8 @@ class OpenFF(_generic_force_field):
     ):
         self.atomic_number_dict = collections.defaultdict(str)
         super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
+        if auto_import:
+            self.auto_import_ff()
         self.gromosTop = None
 
     def auto_import_ff(self):

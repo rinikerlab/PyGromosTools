@@ -25,6 +25,8 @@ class AmberFF(_generic_force_field):
 
     def __init__(self, name: str = "amber", path_to_files: str = None, auto_import: bool = True, verbose: bool = False):
         super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
+        if auto_import:
+            self.auto_import_ff()
 
     def auto_import_ff(self):
         # check path

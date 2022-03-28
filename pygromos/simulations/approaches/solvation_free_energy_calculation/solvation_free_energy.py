@@ -213,7 +213,7 @@ class Solvation_free_energy_calculation:
         emin_sys, jobID = self.minimize_liq(in_gromos_simulation_system=self.groSys_liq, prev_JobID=-1)
         eq_sys, jobID = self.eq_liq(in_gromos_simulation_system=emin_sys, prev_JobID=jobID)
         ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID)
-        self.calculate_solvation_free_energy(ti_sys, jobID)
+        self.calculate_solvation_free_energy(ti_sys, jobID)  # TODO: fix errors
 
     def create_liq(self):
         """

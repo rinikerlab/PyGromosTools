@@ -22,8 +22,6 @@ class _generic_force_field:
         self.name = name
         self.path_to_files = path_to_files
         self.verbose = verbose
-        if auto_import:
-            self.auto_import_ff()
 
     def auto_import_ff(self, **kwargs):
         pass
