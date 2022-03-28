@@ -24,20 +24,28 @@ import warnings
 from pygromos.data.ff import Gromos54A7
 from typing import Dict, Union, List
 
+from pygromos.files.coord import cnf
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.blocks import imd_blocks
+
+
+# Files
+from pygromos.files.topology.top import Top
+from pygromos.files.coord.cnf import Cnf
+from pygromos.files.simulation_parameters.imd import Imd
+from pygromos.files.qmmm.qmmm import QMMM
+from pygromos.files.topology.disres import Disres
+from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.coord.refpos import Reference_Position
 from pygromos.files.coord.posres import Position_Restraints
 
-from pygromos.files.coord import cnf
-from pygromos.files.coord.cnf import Cnf
-from pygromos.files.qmmm.qmmm import QMMM
-from pygromos.files.simulation_parameters.imd import Imd
-from pygromos.files.topology.top import Top
-from pygromos.files.topology.disres import Disres
-from pygromos.files.topology.ptp import Pertubation_topology
+# Trajs
+from pygromos.files.trajectory.trc import Trc
+from pygromos.files.trajectory.tre import Tre
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 
+# Additional
+# from pygromos.files.forcefield import forcefield_system
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
 
@@ -69,6 +77,7 @@ class Gromos_System:
         "refpos": Reference_Position,
         "qmmm": QMMM,
     }
+    traj_files = {"trc": Trc, "tre": Tre}
 
     residue_list: Dict
     solute_info: cnf.solute_infos
@@ -175,7 +184,6 @@ class Gromos_System:
         Warning
             Rises warning if files are not present.
         """
-
         self.hasData = False
         self._name = system_name
         self._work_folder = work_folder
@@ -271,6 +279,11 @@ class Gromos_System:
         self._all_files_key.extend(list(map(lambda x: "_" + x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
+
+        # Empty Attr
+        self._traj_files_path = {}
+        self._trc = None
+        self._tre = None
 
     def __str__(self) -> str:
         msg = "\n"
@@ -377,12 +390,19 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
+            if key.replace("_", "") in self._traj_files_path:
+                if isinstance(attribute_dict[key], str) or attribute_dict[key] is None:  # traj file is not loaded
+                    continue
+                else:  # traj file was loaded
+                    self._traj_files_path[key] = attribute_dict[key].path
+            elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
             elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
                 new_dict.update({key: None})
+
+            new_dict.update({"_traj_files_path": self._traj_files_path})
         return new_dict
 
     def __setstate__(self, state):
@@ -396,6 +416,10 @@ class Gromos_System:
         self._all_files_key.extend(list(map(lambda x: "_" + x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
+
+        # init_traj attr:
+        self._trc = None
+        self._tre = None
 
         self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
         self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
@@ -632,6 +656,41 @@ class Gromos_System:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
     @property
+    def trc(self) -> Trc:
+        if self._trc is None and "trc" in self._traj_files_path and self.cnf is not None and not self.cnf._future_file:
+            self._trc = Trc(traj_path=self._traj_files_path["trc"], in_cnf=self.cnf)
+        elif self._trc is None and "trc" in self._traj_files_path:
+            self._trc = Trc(traj_path=self._traj_files_path["trc"])
+        return self._trc
+
+    @trc.setter
+    def trc(self, in_value: Union[str, Trc]):
+        if isinstance(in_value, str):
+            self._traj_files_path["trc"] = in_value
+            self._trc = None
+        else:
+            self._trc = in_value
+
+            if hasattr(in_value, "path"):
+                self._traj_files_path["trc"] = in_value
+
+    @property
+    def tre(self) -> Tre:
+        if self._tre is None and "tre" in self._traj_files_path:
+            self._tre = Tre(self._traj_files_path["tre"])
+        return self._tre
+
+    @tre.setter
+    def tre(self, in_value: Union[str, Tre]):
+        if isinstance(in_value, str):
+            self._traj_files_path["tre"] = in_value
+            self._tre = None
+        else:
+            self._tre = in_value
+            if hasattr(in_value, "path"):
+                self._traj_files_path["tre"] = in_value
+
+    @property
     def qmmm(self) -> QMMM:
         return self._qmmm
 
@@ -832,7 +891,14 @@ class Gromos_System:
             if os.path.exists(promised_file.path):
                 if self.verbose:
                     print("READING FILE")
-                setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
+                if promised_file_key == "trc":
+                    setattr(
+                        self,
+                        "_" + promised_file_key,
+                        self._all_files[promised_file_key](traj_path=promised_file.path, in_cnf=self.cnf),
+                    )
+                else:
+                    setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
                 self._future_promised_files.remove(promised_file_key)
             else:
                 warnings.warn("Promised file was not found: " + promised_file_key)

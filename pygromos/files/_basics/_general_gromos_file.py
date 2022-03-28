@@ -102,7 +102,7 @@ class _general_gromos_file:
         preperation for pickling:
         remove the non trivial pickling parts
         """
-        skip = []
+        skip = ["_view"]
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
@@ -184,45 +184,44 @@ class _general_gromos_file:
 
         elif blocktitle is not None and content is not None:
             # if blocktitle in self._block_names:
-            if isinstance(content, dict):
-                if blocktitle == "TITLE":  # TODO fIX IN PARSER
-                    self.__setattr__(blocktitle, all_blocks.__getattribute__(blocktitle)(content))
-                else:
-                    try:
-                        content = {k.split("(")[0]: v for k, v in content.items()}
-                        content = {k.split(":")[0]: v for k, v in content.items()}
-                        content = {k.split(" ")[0]: v for k, v in content.items()}
-                        # Required for add_block
-                        # For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
-                        from pygromos.files.simulation_parameters.imd import Imd
-                        from pygromos.files.topology.top import Top
-                        from pygromos.files.blocks import imd_blocks, topology_blocks
+            if blocktitle == "TITLE":  # TODO fIX IN PARSER
+                self.__setattr__(blocktitle, all_blocks.__getattribute__(blocktitle)(content))
+            elif isinstance(content, dict):
+                try:
+                    content = {k.split("(")[0]: v for k, v in content.items()}
+                    content = {k.split(":")[0]: v for k, v in content.items()}
+                    content = {k.split(" ")[0]: v for k, v in content.items()}
+                    # Required for add_block
+                    # For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
+                    from pygromos.files.simulation_parameters.imd import Imd
+                    from pygromos.files.topology.top import Top
+                    from pygromos.files.blocks import imd_blocks, topology_blocks
 
-                        if issubclass(self.__class__, Imd):
-                            self.kwCreateBlock(blocktitle, content, imd_blocks)
-                        elif issubclass(self.__class__, Top):
-                            self.kwCreateBlock(blocktitle, content, topology_blocks)
-                        else:
-                            self.kwCreateBlock(blocktitle, content, all_blocks.all_blocks)
+                    if issubclass(self.__class__, Imd):
+                        self.kwCreateBlock(blocktitle, content, imd_blocks)
+                    elif issubclass(self.__class__, Top):
+                        self.kwCreateBlock(blocktitle, content, topology_blocks)
+                    else:
+                        self.kwCreateBlock(blocktitle, content, all_blocks.all_blocks)
 
-                        if verbose:
-                            print("++++++++++++++++++++++++++++++")
-                            print("New Block: Adding " + blocktitle + " block")
-                            print(content)
-                    except Exception as e:
-                        msg = (
-                            "Error while adding new value - can not resolve value names in '"
-                            + blocktitle
-                            + "' block!\n"
-                            + str(e)
-                        )
-                        msg += "Content is " + str(tuple(content.keys())) + "\n"
-                        msg += (
-                            "Block knows "
-                            + str((all_blocks.get_all_blocks()[blocktitle].__init__.__code__.co_varnames)[1:])
-                            + "\n"
-                        )
-                        raise IOError(msg)
+                    if verbose:
+                        print("++++++++++++++++++++++++++++++")
+                        print("New Block: Adding " + blocktitle + " block")
+                        print(content)
+                except Exception as e:
+                    msg = (
+                        "Error while adding new value - can not resolve value names in '"
+                        + blocktitle
+                        + "' block!\n"
+                        + str(e)
+                    )
+                    msg += "Content is " + str(tuple(content.keys())) + "\n"
+                    msg += (
+                        "Block knows "
+                        + str((all_blocks.get_all_blocks()[blocktitle].__init__.__code__.co_varnames)[1:])
+                        + "\n"
+                    )
+                    raise IOError(msg)
                 if verbose:
                     print("Block " + blocktitle + " added to gromos File object.")
 

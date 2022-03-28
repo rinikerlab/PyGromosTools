@@ -28,5 +28,4 @@ dependencies:
   - mdtraj
  ##Visualization
   - matplotlib
-  - py3dmol #to be removed!
   - nglview

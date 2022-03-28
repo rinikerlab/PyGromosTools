@@ -1,4 +1,7 @@
 import copy
+import mdtraj
+import tempfile
+import nglview as nj
 
 from collections import namedtuple, defaultdict
 from typing import Dict, List, Tuple, Union
@@ -16,6 +19,7 @@ from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
 from pygromos.files.blocks.coord_blocks import GENBOX
 from pygromos.analysis import coordinate_analysis as ca
+from pygromos.visualization.coordinates_visualization import visualize_system
 
 Reference_Position = TypeVar("refpos.Reference_Position")
 Position_Restraints = TypeVar("posres.Position_Restraints")
@@ -1034,7 +1038,7 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-    def get_pdb(self, rdkit_ready: bool = True, connectivity_top=None) -> str:
+    def get_pdb(self, rdkit_ready: bool = False, connectivity_top=None) -> str:
         """
             translate cnf to pdb.
 
@@ -1052,7 +1056,7 @@ class Cnf(_general_gromos_file):
 
         """
         dummy_occupancy = dummy_bfactor = dummy_charge = dummy_mass = 0.0
-        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
+        dummy_chain = ""
 
         if rdkit_ready:
             format_str = (
@@ -1072,7 +1076,7 @@ class Cnf(_general_gromos_file):
                         pos.zp * 10,
                         dummy_mass,
                         int(dummy_charge),
-                        pos.atomType,
+                        pos.atomType[0],
                     )
                 )
 
@@ -1083,33 +1087,32 @@ class Cnf(_general_gromos_file):
             # 2) CONSTUCT PDB BLOCKS
             # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
             pdb_format = (
-                "ATOM  {:>5d} {:<4}{:1}{:<4} {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+                "ATOM  {:>5d} {:>4} {:<3} {:1}{:>4d}   {:>8.3f}{:>8.3f}{:>8.3f}  {:>3.2f} {:>5}      {:>4}{:>2}"
             )
+
+            # pdb_format =  "ATOM  %5d %-4s %3s %1s%4d   %s%s%s  1.00 %5s      %-4s%2s  "
 
             frame_positions = []
             for ind, atom in enumerate(self.POSITION):
                 frame_positions.append(
                     pdb_format.format(
-                        atom.atomID,
+                        atom.atomID % 100000,
                         atom.atomType,
-                        dummy_alt_location,
                         atom.resName,
                         dummy_chain,
-                        int(atom.resID),
-                        dummy_insertion_code,
+                        atom.resID % 10000,
                         atom.xp * 10,
                         atom.yp * 10,
                         atom.zp * 10,
                         dummy_occupancy,
                         dummy_bfactor,
-                        dummy_segment,
-                        atom.atomType,
                         int(dummy_charge),
+                        atom.atomType[0],
                     )
                 )  # times *10 because pdb is in A
 
             pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
-            pdb_str += "\n".join(frame_positions) + "\n"
+            pdb_str += "\n".join(frame_positions)
 
         # future:
         # add bond block with top optionally
@@ -1186,7 +1189,23 @@ class Cnf(_general_gromos_file):
         visualize
     """
 
-    def visualize(self):
-        from pygromos.visualization.coordinates_visualization import show_cnf
+    @property
+    def view(self) -> nj.NGLWidget:
+        if not hasattr(self, "_view") or not (hasattr(self, "_view") and isinstance(self._view, nj.NGLWidget)):
+            return self.recreate_view()
+        else:
+            return self._view
 
-        return show_cnf(self)
+    def get_mdtraj(self):
+        tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
+        self.write_pdb(tmpFile.name)
+        single = mdtraj.load_pdb(tmpFile.name)
+        # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
+        tmpFile.close()
+        return single
+
+    def recreate_view(self) -> nj.NGLWidget:
+        # Topo tmp file
+        single = self.get_mdtraj()
+        self._view = visualize_system(traj=single)
+        return self._view
