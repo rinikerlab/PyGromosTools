@@ -178,9 +178,9 @@ def work(
         if is_stochastic_dynamics_sim or is_vacuum:
             imd_file.INITIALISE.NTISTI = 1
 
-    #adjust sim time if continuation:
-    if(runID > 1):
-        imd_file.STEP.T = imd_file.STEP.T + (imd_file.STEP.NSTLIM * imd_file.STEP.DT) * (runID-1)
+    # adjust sim time if continuation:
+    if runID > 1:
+        imd_file.STEP.T = imd_file.STEP.T + (imd_file.STEP.NSTLIM * imd_file.STEP.DT) * (runID - 1)
 
     # Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)

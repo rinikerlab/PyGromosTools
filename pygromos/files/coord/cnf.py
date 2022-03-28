@@ -1200,7 +1200,7 @@ class Cnf(_general_gromos_file):
         tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
         self.write_pdb(tmpFile.name)
         self._mdtraj = mdtraj.load_pdb(tmpFile.name)
-        if(hasattr(self, "GENBOX")):
+        if hasattr(self, "GENBOX"):
             self._mdtraj.unitcell_lengths = self.GENBOX.length
             self._mdtraj.unitcell_angles = self.GENBOX.angles
 
@@ -1222,7 +1222,7 @@ class Cnf(_general_gromos_file):
 
         self.get_mdtraj()
         self._mdtraj.image_molecules()
-        
+
         # write new pos:
         result_pos = []
         for new_pos, aP in zip(self._mdtraj.xyz[0], self.POSITION):
