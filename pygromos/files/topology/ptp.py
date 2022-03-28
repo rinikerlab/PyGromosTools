@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Union
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import pertubation_blocks as blocks
@@ -21,7 +22,7 @@ class Pertubation_topology(_general_gromos_file._general_gromos_file):
 
     _gromos_file_ending: str = "ptp"
 
-    def __init__(self, in_value: (str or dict) = None):
+    def __init__(self, in_value: Union[str, dict] = None):
         super().__init__(in_value=in_value)
 
         # TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks

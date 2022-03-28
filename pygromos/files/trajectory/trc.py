@@ -147,7 +147,7 @@ class Trc(mdtraj.Trajectory):
 
         return cCls
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: int):
 
         t = self.slice(key)
         if hasattr(t, "_step"):
@@ -159,7 +159,7 @@ class Trc(mdtraj.Trajectory):
 
         return t
 
-    def get_dummy_cnf(self, xyz) -> Cnf:
+    def get_dummy_cnf(self, xyz: np.array) -> Cnf:
         from pygromos.files.blocks import coords
 
         new_Cnf = Cnf(None)
@@ -173,7 +173,7 @@ class Trc(mdtraj.Trajectory):
         )
         return new_Cnf
 
-    def parse_trc_efficiently(self, traj_path: str) -> (np.array, np.array, np.array):
+    def parse_trc_efficiently(self, traj_path: str) -> Tuple[np.array, np.array, np.array]:
         self._block_map = self._generate_blockMap(in_trc_path=traj_path)
         # build block mapping
         rep_time = 1

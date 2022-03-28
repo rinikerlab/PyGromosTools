@@ -1,3 +1,6 @@
+from typing import Union, List
+
+
 class gromosBashSyntaxParser:
     """
     Helper class to parse general gromos bash syntax
@@ -6,7 +9,7 @@ class gromosBashSyntaxParser:
     """
 
     @staticmethod
-    def multiplyArgumentParser(args: (str or list(str)), multiplier: (int or list(int)) = 1) -> str:
+    def multiplyArgumentParser(args: Union[str, List[str]], multiplier: Union[int, List[int]] = 1) -> str:
         """
         Parser for multiplier syntax to gromos scripts
 

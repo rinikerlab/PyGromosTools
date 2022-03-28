@@ -17,7 +17,7 @@ from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
 
 
-TopType = TypeVar("Top")
+selfType = TypeVar("Top")
 
 
 # functions
@@ -46,7 +46,7 @@ def check_top():
 class Top(_general_gromos_file._general_gromos_file):
     _gromos_file_ending: str = "top"
 
-    def __init__(self, in_value: (str or dict or None or TopType), _future_file: bool = False):
+    def __init__(self, in_value: Union[str, dict, selfType], _future_file: bool = False):
         if type(in_value) is str:
             super().__init__(in_value=in_value, _future_file=_future_file)
         elif in_value is None:
@@ -59,10 +59,10 @@ class Top(_general_gromos_file._general_gromos_file):
         else:
             raise Exception("not implemented yet!")
 
-    def __add__(self, top: TopType) -> TopType:
+    def __add__(self, top: selfType) -> selfType:
         return self._add_top(top=top)
 
-    def _add_top(self, top: Union[TopType, None], solvFrom1: bool = True, verbose: bool = False) -> TopType:
+    def _add_top(self, top: Union[selfType, None], solvFrom1: bool = True, verbose: bool = False) -> selfType:
         """
         combines two topologies. Parameters are taken from the initial topology.
         But missing parameters from the second topology will be added.
@@ -246,7 +246,7 @@ class Top(_general_gromos_file._general_gromos_file):
     def __mul__(self, n_multiplication: int):
         return self.multiply_top(n_multiplication)
 
-    def multiply_top(self, n_muliplication: int, unifyGroups: bool = False, verbose=False) -> TopType:
+    def multiply_top(self, n_muliplication: int, unifyGroups: bool = False, verbose: bool = False) -> selfType:
 
         # catch simple cases and create return top
         if n_muliplication == 0:
@@ -436,7 +436,7 @@ class Top(_general_gromos_file._general_gromos_file):
         else:
             return int(self.ATOMTYPENAME.content[0][0])
 
-    def add_new_atomtype(self, name: str, verbose=False):
+    def add_new_atomtype(self, name: str, verbose: bool = False):
         """add a atomtype to ATOMTYPENAME block
 
         Parameters
@@ -457,7 +457,7 @@ class Top(_general_gromos_file._general_gromos_file):
             self.ATOMTYPENAME.content.append([name])
         self.ATOMTYPENAME.content[0][0] = str(int(self.ATOMTYPENAME.content[0][0]) + 1)
 
-    def add_new_resname(self, name: str, verbose=False):
+    def add_new_resname(self, name: str, verbose: bool = False):
         """add a resname to the RESNAME block
 
         Parameters
@@ -489,7 +489,7 @@ class Top(_general_gromos_file._general_gromos_file):
         CGC: int = 0,
         INE: list = [],
         INE14: list = [],
-        verbose=False,
+        verbose: bool = False,
     ):
         """add a soluteatom to the SOLUTEATOM block"""
         if not hasattr(self, "SOLUTEATOM"):
@@ -520,7 +520,7 @@ class Top(_general_gromos_file._general_gromos_file):
         self.SOLUTEATOM.content.append(entry)
         self.SOLUTEATOM.NRP += 1
 
-    def add_new_bond(self, k: float, b0: float, atomI: int, atomJ: int, includesH: bool = False, verbose=False):
+    def add_new_bond(self, k: float, b0: float, atomI: int, atomJ: int, includesH: bool = False, verbose: bool = False):
         """add a bond between atom I and J to the BOND block
 
         Parameters
@@ -582,8 +582,8 @@ class Top(_general_gromos_file._general_gromos_file):
         atomJ: int,
         atomK: int,
         includesH: bool = False,
-        verbose=False,
-        convertToQuartic=False,
+        verbose: bool = False,
+        convertToQuartic: bool = False,
     ):
         """add a angle between atom I, J and K to the ANGLE block
 
@@ -644,7 +644,7 @@ class Top(_general_gromos_file._general_gromos_file):
             self.BONDANGLE.content.append(newAngle)
             self.BONDANGLE.NTHE += 1
 
-    def harmonic2quarticAngleConversion(self, kh, b0):
+    def harmonic2quarticAngleConversion(self, kh: float, b0: float):
         """conversion of a harmonic bondanglebending force constant to a cubic in cosine/quartic one
 
         Parameters
@@ -679,7 +679,7 @@ class Top(_general_gromos_file._general_gromos_file):
         atomK: int,
         atomL: int,
         includesH: bool = False,
-        verbose=False,
+        verbose: bool = False,
     ):
         """add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block
 
@@ -738,7 +738,7 @@ class Top(_general_gromos_file._general_gromos_file):
             )
             self.DIHEDRAL.NPHI += 1
 
-    def add_new_impdihedral_type(self, CQ: float, Q0: float, verbose=False):
+    def add_new_impdihedral_type(self, CQ: float, Q0: float, verbose: bool = False):
         """add a new impodihedraltype
 
         Parameters
@@ -764,7 +764,7 @@ class Top(_general_gromos_file._general_gromos_file):
         atomK: int,
         atomL: int,
         includesH: bool = False,
-        verbose=False,
+        verbose: bool = False,
     ):
         """add a new impdihedral
 
@@ -820,7 +820,7 @@ class Top(_general_gromos_file._general_gromos_file):
             self.IMPDIHEDRAL.NQHI += 1
 
     # TODO: add implementation
-    def add_new_crossdihedral(self, verbose=False):
+    def add_new_crossdihedral(self, verbose: bool = False):
         raise NotImplementedError("Who needs this???? Could you plox implement it. UwU")
 
     def add_new_LJparameter(
@@ -988,7 +988,7 @@ class Top(_general_gromos_file._general_gromos_file):
             ATNM=ATNM, MRES=MRES, PANM=PANM, IAC=IAC, MASS=MASS, CG=CG, CGC=CGC, INE=INE, INE14=INE14
         )
 
-    def add_new_CONSTRAINT(self, IC: int, JC: int, ICC: float, verbose=False):
+    def add_new_CONSTRAINT(self, IC: int, JC: int, ICC: float, verbose: bool = False):
         """
         adds a CONSTRAINT entry to the topology
 
@@ -1024,7 +1024,7 @@ class Top(_general_gromos_file._general_gromos_file):
         self.CONSTRAINT.content.append(blocks.constraint_type(IC=IC, JC=JC, ICC=bond_type_number))
         self.CONSTRAINT.NCON += 1
 
-    def add_new_TEMPERATUREGROUPS(self, number: str, verbose=False):
+    def add_new_TEMPERATUREGROUPS(self, number: int, verbose: bool = False):
         if not hasattr(self, "TEMPERATUREGROUPS"):
             defaultContent = ["0", 0]
             self.add_block(blocktitle="TEMPERATUREGROUPS", content=defaultContent, verbose=verbose)
@@ -1032,7 +1032,7 @@ class Top(_general_gromos_file._general_gromos_file):
         self.TEMPERATUREGROUPS.NSM += 1
         self.TEMPERATUREGROUPS.NSP.append(number)
 
-    def add_new_SOLUTEMOLECULES(self, number: str, verbose=False):
+    def add_new_SOLUTEMOLECULES(self, number: int, verbose: bool = False):
         if not hasattr(self, "SOLUTEMOLECULES"):
             defaultContent = ["0", "Dummy"]
             self.add_block(blocktitle="SOLUTEMOLECULES", content=defaultContent, verbose=verbose)
@@ -1040,7 +1040,7 @@ class Top(_general_gromos_file._general_gromos_file):
         self.SOLUTEMOLECULES.NSM += 1
         self.SOLUTEMOLECULES.NSP.append(number)
 
-    def add_new_PRESSUREGROUPS(self, number: str, verbose=False):
+    def add_new_PRESSUREGROUPS(self, number: int, verbose: bool = False):
         if not hasattr(self, "PRESSUREGROUPS"):
             defaultContent = ["0", 0]
             self.add_block(blocktitle="PRESSUREGROUPS", content=defaultContent, verbose=verbose)
@@ -1063,7 +1063,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 mass += i.MASS
         return mass
 
-    def get_diff_to_top(self, top: TopType):
+    def get_diff_to_top(self, top: selfType):
         for block in self._block_order[1:]:
             if hasattr(self, block):
                 if hasattr(top, block):

@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.blocks import coord_blocks as blocks
 
@@ -28,9 +28,7 @@ class Reference_Position(Cnf):
     _required_blocks: List[str] = ["TITLE", "REFPOSITION"]
     _main_block: str = "REFPOSITION"
 
-    def __init__(
-        self, in_value: (str or dict or None or __class__ or Cnf), verbose: bool = False, _future_file: bool = False
-    ):
+    def __init__(self, in_value: Union[str, dict, __class__, Cnf], verbose: bool = False, _future_file: bool = False):
         if isinstance(in_value, Cnf):
             for block in self._block_order:
                 if hasattr(in_value, block):

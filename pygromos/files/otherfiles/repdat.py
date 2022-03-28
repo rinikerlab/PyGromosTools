@@ -31,7 +31,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
     transition_traces: Dict[int, Dict[str, List[float]]] = None
 
     # count_state_per_position[replicaposition][["tot_nup", "tot_ndown", "states_index", "dt", "dt_nup", "dt_ndown"]]
-    count_state_per_position: Dict[int, Dict[str, Union[List or float]]] = None
+    count_state_per_position: Dict[int, Dict[str, Union[List, float]]] = None
 
     # count_state_per_position[replica]
     replica_round_trips: Dict[int, int] = None
@@ -80,7 +80,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
                 clean_replica_round_trips.update({key: 0})
         return clean_replica_round_trips
 
-    def _caculate_transition_traces(self) -> None:
+    def _caculate_transition_traces(self):
         """_caculate_transition_traces
             calculates the transition traces for all replicas from raw data and stores them in self.transition_traces.
             In the end you recieve the trace a replica coord system moved through s dist
@@ -384,7 +384,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
     def get_replicaPosition_dependend_nup_ndown_for_each_state(
         self, time_window_size: int = -1, potential_treshold: float = None, recalculate: bool = False
-    ) -> Dict[int, Dict[str, Union[List or float]]]:
+    ) -> Dict[int, Dict[str, Union[List, float]]]:
         """get_replicaPosition_dependend_nup_ndown_for_each_state
             This function is returning the replica position visit counts by each simulation state, per state.
 

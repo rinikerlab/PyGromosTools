@@ -68,7 +68,7 @@ class Cnf(_general_gromos_file):
     def __init__(
         self,
         in_value: Union[str, dict, None],
-        clean_resiNumbers_by_Name=False,
+        clean_resiNumbers_by_Name: bool = False,
         verbose: bool = False,
         _future_file: bool = False,
     ):
@@ -135,9 +135,9 @@ class Cnf(_general_gromos_file):
     def get_system_information(
         self,
         not_ligand_residues: List[str] = [],
-        ligand_resn_prefix: (str or List[str]) = None,
+        ligand_resn_prefix: Union[str, List[str]] = None,
         solvent_name: str = "SOLV",
-    ) -> (Dict[str, Dict[int, int]], namedtuple, namedtuple, namedtuple, namedtuple):
+    ) -> Tuple[Dict[str, Dict[int, int]], namedtuple, namedtuple, namedtuple, namedtuple]:
         """get_system_information
         This function utilizes a dictionary containing all residues and atom numbers (e.g. cnf.get_residues()) and modifies them such, that the result can be used to set up a standard REEDS gromos_simulation
 
@@ -271,7 +271,7 @@ class Cnf(_general_gromos_file):
 
         return clean_residues, ligands, protein, non_ligands, solvent
 
-    def rename_residue(self, new_resName: str, resID: int = False, resName: str = False, verbose=False) -> int:
+    def rename_residue(self, new_resName: str, resID: int = False, resName: str = False, verbose: bool = False) -> int:
         """rename_residue
 
         this function is renaming residues from a cnf file with taking following _blocks into account:
@@ -322,7 +322,7 @@ class Cnf(_general_gromos_file):
             raise IOError("No residue number or resName given.")
         return 0
 
-    def clean_posiResNums(self) -> None:
+    def clean_posiResNums(self):
         """clean_posiResNums
             This function recount the Residue number with respect to residue name and residue number.
 
@@ -612,8 +612,8 @@ class Cnf(_general_gromos_file):
         return np.array([(a.xp, a.yp, a.zp) for a in self.POSITION])
 
     def get_atoms_distance(
-        self, atomI: (int or tuple) = None, atomJ: int = None, atoms: (list or dict) = None
-    ) -> float or list:
+        self, atomI: Union[int, List[int]] = None, atomJ: int = None, atoms: Union[List[int], Dict[int, int]] = None
+    ) -> Union[float, List[float]]:
 
         if "POSITION" in dir(self):
             # one
@@ -696,7 +696,7 @@ class Cnf(_general_gromos_file):
         """
         return self.POSITION.content[-1].atomID
 
-    def center_of_geometry(self, selectedAtoms: list = None) -> list:
+    def center_of_geometry(self, selectedAtoms: List[int] = None) -> list:
         """calculates the center of geometry for asingle molecule or the selected Atoms
 
         Returns
@@ -723,7 +723,9 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
-    def rotate(self, rotationCenter: np.array = None, selectedAtoms=None, alpha=0, beta=0, gamma=0):
+    def rotate(
+        self, rotationCenter: np.array = None, selectedAtoms=None, alpha: float = 0, beta: float = 0, gamma: float = 0
+    ):
         # define rotation center
         if rotationCenter is None:
             rotationCenter = np.array(self.center_of_geometry())
@@ -775,7 +777,7 @@ class Cnf(_general_gromos_file):
         length = self.GENBOX.length
         return length[0] * length[1] * length[2]
 
-    def get_density(self, mass=1, autoCalcMass=False) -> float:
+    def get_density(self, mass: float = 1, autoCalcMass: bool = False) -> float:
         """
             This function calculates the density of the cnf.
 
@@ -850,7 +852,7 @@ class Cnf(_general_gromos_file):
     """
 
     def generate_position_restraints(
-        self, out_path_prefix: str, residues: dict or list, verbose: bool = False
+        self, out_path_prefix: str, residues: Union[Dict[str, List[int]], List[int]], verbose: bool = False
     ) -> Tuple[str, str]:
         """
             This function generates position restraints for the selected residues.
@@ -876,7 +878,7 @@ class Cnf(_general_gromos_file):
         return posres, refpos
 
     def gen_possrespec(
-        self, residues: Union[dict or list], keep_residues: bool = True, verbose: bool = False
+        self, residues: Union[Dict[str, List[int]], List[int]], keep_residues: bool = True, verbose: bool = False
     ) -> Position_Restraints:
         """
                 This function writes out a gromos file, containing a atom list. that is to be position restrained!

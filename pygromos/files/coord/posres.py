@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.blocks import coord_blocks as blocks
@@ -34,8 +34,8 @@ class Position_Restraints(Cnf):
 
     def __init__(
         self,
-        in_value: (str or dict or None or __class__ or Cnf),
-        clean_resiNumbers_by_Name=False,
+        in_value: Union[str, dict, __class__, Cnf],
+        clean_resiNumbers_by_Name: bool = False,
         verbose: bool = False,
         _future_file: bool = False,
     ):

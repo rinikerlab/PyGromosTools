@@ -22,7 +22,7 @@ import functools
 import importlib
 import warnings
 from pygromos.data.ff import Gromos54A7
-from typing import Dict, Union, List
+from typing import Dict, Union, List, Callable
 
 from pygromos.files.coord import cnf
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
@@ -97,8 +97,8 @@ class Gromos_System:
     # if this class Variable is set to True, all binary checks will be removed from the systems.
     _gromos_binary_checks: bool = True
 
-    _gromosPP_bin_dir: Union[None, str]
-    _gromosXX_bin_dir: Union[None, str]
+    _gromosPP_bin_dir: str
+    _gromosXX_bin_dir: str
     _gromosPP: GromosPP
     _gromosXX: GromosXX
 
@@ -108,7 +108,7 @@ class Gromos_System:
         system_name: str,
         rdkitMol: Chem.rdchem.Mol = None,
         in_mol2_file: str = None,
-        readIn=True,
+        readIn: bool = True,
         forcefield: _generic_force_field = _generic_force_field(),
         auto_convert: bool = False,
         adapt_imd_automatically: bool = True,
@@ -1053,7 +1053,7 @@ class Gromos_System:
             else:
                 setattr(self.imd, "AMBER", imd_blocks.AMBER(AMBER=1, AMBSCAL=1.2))
 
-    def generate_posres(self, residues: list = [], keep_residues: bool = True, verbose: bool = False):
+    def generate_posres(self, residues: List = [int], keep_residues: bool = True, verbose: bool = False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
         self.refpos = self.cnf.gen_refpos()
 
@@ -1212,7 +1212,7 @@ class Gromos_System:
     super privates - don't even read!
     """
 
-    def __SystemConstructionAttributeFinder(self, func: callable) -> callable:
+    def __SystemConstructionAttributeFinder(self, func: Callable) -> Callable:
         """
             ** DECORATOR **
 
@@ -1279,7 +1279,7 @@ class Gromos_System:
 
         return _findGromosSystemAttributes
 
-    def __SystemConstructionUpdater(self, func: callable) -> callable:
+    def __SystemConstructionUpdater(self, func: Callable) -> Callable:
         """
             ** DECORATOR **
             This decorator trys to find output parameters of the function in the gromossystem and will automatically update the state of those attributes!
@@ -1334,7 +1334,7 @@ class Gromos_System:
 
         return _updateGromosSystem
 
-    def __ionDecorator(self, func: callable) -> callable:
+    def __ionDecorator(self, func: Callable) -> Callable:
         """
             ** DECORATOR **
             This Helper Decorator should be removed soon! it helps with gromosPP ion,

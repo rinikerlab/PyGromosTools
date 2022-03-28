@@ -36,7 +36,7 @@ class RESIDUENAMELIB(_general_blocks._generic_gromos_block):
                 + str(content)
             )
 
-    def read_content_from_str(self, content):
+    def read_content_from_str(self, content: List[str]):
         self.pdb_top = defaultdict(list)
         tuples = list(map(lambda x: x.strip().split(), filter(lambda x: not x.startswith("#"), content)))
         for pdb, top in tuples:
@@ -84,7 +84,7 @@ class ATOMNAMELIB(_general_blocks._generic_gromos_block):
                 + str(content)
             )
 
-    def read_content_from_str(self, content):
+    def read_content_from_str(self, content: Union[List[str], Dict[str, Dict[str, str]]]):
         self.pdb_top = defaultdict(list)
         tuples = [
             (resn, pdb, top)

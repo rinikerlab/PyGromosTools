@@ -1,4 +1,4 @@
-from typing import Iterable, Union
+from typing import Iterable, Union, TypeVar
 from pygromos.files.blocks._general_blocks import _generic_field, TITLE as generic_TITLE
 from pygromos.files.blocks.topology_blocks import _topology_table_block, _topology_block
 
@@ -7,6 +7,7 @@ from pygromos.files.blocks.topology_blocks import _topology_table_block, _topolo
 
 # forward declarations
 TITLE: generic_TITLE = generic_TITLE
+selfType = TypeVar("self")
 
 
 class qmzone_field(_generic_field):
@@ -85,7 +86,7 @@ class QMUNIT(_topology_block):
 
     def __init__(
         self,
-        content: (str or dict or None or __class__),
+        content: Union[str, dict, selfType],
         QLGL: float = 0.052918,
         QEGE: float = 2625.50,
         QCGC: float = 1.0,
@@ -132,30 +133,30 @@ class QMUNIT(_topology_block):
 
 
 class MNDOELEMENTS(_topology_block):
-    def __init__(self, content: (str or dict or None or __class__)):
+    def __init__(self, content: Union[str, dict, selfType]):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
 
 
 class TURBOMOLEELEMENTS(_topology_block):
-    def __init__(self, content: (str or dict or None or __class__)):
+    def __init__(self, content: Union[str, dict, selfType]):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
 
 
 class DFTBELEMENTS(_topology_block):
-    def __init__(self, content: (str or dict or None or __class__)):
+    def __init__(self, content: Union[str, dict, selfType]):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
 
 
 class MOPACELEMENTS(_topology_block):
-    def __init__(self, content: (str or dict or None or __class__)):
+    def __init__(self, content: Union[str, dict, selfType]):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
 
 
 class ORCAELEMENTS(_topology_block):
-    def __init__(self, content: (str or dict or None or __class__)):
+    def __init__(self, content: Union[str, dict, selfType]):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)
 
 
 class XTBELEMENTS(_topology_block):
-    def __init__(self, content: (str or dict or None or __class__)):
+    def __init__(self, content: Union[str, dict, selfType]):
         super().__init__(FORCEFIELD=None, MAKETOPVERSION=None, content=content)

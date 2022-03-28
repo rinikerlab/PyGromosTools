@@ -6,7 +6,7 @@ Author: Benjamin Ries
 """
 
 # imports
-from typing import Union
+from typing import Union, Dict
 from pygromos.files.blocks import all_blocks
 from pygromos.files._basics import parser
 
@@ -23,7 +23,7 @@ class residue_library(_general_gromos_file._general_gromos_file):
 
     _gromos_file_ending = "res"
 
-    def __init__(self, in_value: Union[str, dict] = pdb_lib):
+    def __init__(self, in_value: Union[str, Dict] = pdb_lib):
         """
             This class represents a file that is used for the gromosPP program - pdb2g96
             it contains two blocks for residue naming and atom naming

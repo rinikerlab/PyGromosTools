@@ -1,7 +1,7 @@
 import __main__
 from collections import namedtuple
 from numbers import Number
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 
 import numpy as np
 
@@ -31,7 +31,7 @@ class atom_mass_type(_generic_field):
         self.ATMASN = ATMASN
         self.comment = comment
 
-    def to_string(self):
+    def to_string(self) -> str:
         return self.comment + "{:<8} {:<3.4f} {:<5}\n".format(self.N, self.ATMAS, self.ATMASN)
 
 
@@ -47,7 +47,7 @@ class atom_eds_pertubation_state(_generic_field):
         self.ALPHLJ = float(ALPHLJ)
         self.ALPHCRF = float(ALPHCRF)
 
-    def to_string(self):
+    def to_string(self) -> str:
         state_str = "".join(
             [
                 self.state_format_pattern.format(int(self.STATES[x].IAC), float(self.STATES[x].CHARGE))
@@ -77,7 +77,7 @@ class atom_lam_pertubation_state(_generic_field):
         self.ALPHLJ = float(ALPHLJ)
         self.ALPHCRF = float(ALPHCRF)
 
-    def to_string(self):
+    def to_string(self) -> str:
         state_str = "".join(
             [
                 self.state_format_pattern.format(
@@ -99,7 +99,7 @@ class atom_lam_pertubation_state_bond(_generic_field):
         self.atomJ = atomJ
         self.STATES = STATES
 
-    def to_string(self):
+    def to_string(self) -> str:
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5}" + state_str + "\n"
         return format_str.format(self.atomI, self.atomJ)
@@ -115,7 +115,7 @@ class atom_lam_pertubation_state_angle(_generic_field):
         self.atomK = atomK
         self.STATES = STATES
 
-    def to_string(self):
+    def to_string(self) -> str:
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5} {:>5}" + state_str + "\n"
         return format_str.format(self.atomI, self.atomJ, self.atomK)
@@ -132,7 +132,7 @@ class atom_lam_pertubation_state_dihedral(_generic_field):
         self.atomL = atomL
         self.STATES = STATES
 
-    def to_string(self):
+    def to_string(self) -> str:
         state_str = "".join([self.state_format_pattern.format(int(self.STATES[x])) for x in sorted(self.STATES)])
         format_str = "{:>5} {:>5} {:>5} {:>5}" + state_str + "\n"
         return format_str.format(self.atomI, self.atomJ, self.atomK, self.atomL)
@@ -152,8 +152,8 @@ class MPERTATOM(_generic_gromos_block):
         STATEIDENTIFIERS: List[str] = [],
         STATEATOMHEADER: Tuple[str] = ["NR", "NAME", "ALPHLJ", "ALPHCRF"],
         STATEATOMS: List[atom_eds_pertubation_state] = [],
-        dummy_IAC=22,
-        dummy_CHARGE=0.0,
+        dummy_IAC: int = 22,
+        dummy_CHARGE: float = 0.0,
         content: List[str] = None,
     ):
         """
@@ -327,7 +327,7 @@ class MPERTATOM(_generic_gromos_block):
     DELETING FUNCTIONS
     """
 
-    def delete_state(self, stateIDs: (int, List[int]) = None, stateNames: (str, List[str]) = None):
+    def delete_state(self, stateIDs: Union[int, List[int]] = None, stateNames: Union[str, List[str]] = None):
         """
         This function deletes an state column.
 
@@ -378,7 +378,7 @@ class MPERTATOM(_generic_gromos_block):
         elif stateNames is None and stateIDs is None:
             raise Exception("Please give either stateNames or stateIDs")
 
-    def delete_atom(self, atomNR: (int, List[int])):
+    def delete_atom(self, atomNR: Union[int, List[int]]):
         """
         This function removes atom lines from the ptp file.
 
@@ -552,7 +552,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         return self.NJLA
 
     @property
-    def states(self) -> dict:
+    def states(self) -> Dict:
         return {
             self.STATEIDENTIFIERS[state - 1]: {
                 atom.NR: atom.STATES[state] for atom in sorted(self.STATEATOMS, key=lambda x: x.NR)
@@ -645,7 +645,7 @@ class PERTATOMPARAM(_generic_gromos_block):
     DELETING FUNCTIONS
     """
 
-    def delete_state(self, stateIDs: (int, List[int]) = None, stateNames: (str, List[str]) = None):
+    def delete_state(self, stateIDs: Union[int, List[int]] = None, stateNames: Union[str, List[str]] = None):
         """
         This function deletes an state column.
 
@@ -696,7 +696,7 @@ class PERTATOMPARAM(_generic_gromos_block):
         elif stateNames is None and stateIDs is None:
             raise Exception("Please give either stateNames or stateIDs")
 
-    def delete_atom(self, atomNR: (int, List[int])):
+    def delete_atom(self, atomNR: Union[int, List[int]]):
         """
         This function removes atom lines from the ptp file.
 

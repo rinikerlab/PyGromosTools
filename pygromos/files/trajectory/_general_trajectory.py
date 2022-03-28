@@ -26,9 +26,12 @@ import re
 import pandas
 import numpy
 import pathlib
+from typing import TypeVar
 
 from pygromos.files.trajectory.blocks import trajectory_blocks as blocks
 from pygromos.utils import bash
+
+selfType = TypeVar("Top")
 
 
 class _General_Trajectory:
@@ -39,7 +42,7 @@ class _General_Trajectory:
     _future_file: bool  # if code is executed async, this helps organizing.
     _gromos_file_ending: str
 
-    def __init__(self, input_value: (str or None), auto_save=True, stride: int = 1, skip: int = 0):
+    def __init__(self, input_value: str, auto_save: bool = True, stride: int = 1, skip: int = 0):
         if input_value is None:
             self.TITLE = "Empty Trajectory"
             self.database = pandas.DataFrame({"": []})
@@ -87,7 +90,7 @@ class _General_Trajectory:
     def __repr__(self):
         return str(self)
 
-    def __add__(self, traj):
+    def __add__(self, traj: selfType):
         return self.add_traj(traj)
 
     def __copy__(self):
@@ -104,7 +107,9 @@ class _General_Trajectory:
         traj.database = self.database.copy(deep=True)
         return traj
 
-    def add_traj(self, traj, skip_new_0=False, auto_detect_skip=True, correct_time=True):
+    def add_traj(
+        self, traj: selfType, skip_new_0: bool = False, auto_detect_skip: bool = True, correct_time: bool = True
+    ):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 
         Parameters

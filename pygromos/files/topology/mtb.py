@@ -5,7 +5,7 @@ Description:
 Author: Marc Lehner
 """
 
-from typing import Dict, List
+from typing import Dict, List, Union
 from pygromos.files._basics import _general_gromos_file
 from pygromos.files.blocks import mtb_blocks as blocks
 
@@ -17,7 +17,7 @@ class Mtb(_general_gromos_file._general_gromos_file):
     mtb_ends: Dict[str, blocks.MTBUILDBLEND]
     all_res_names: List
 
-    def __init__(self, in_value: (str or dict or None), _future_file: bool = False):
+    def __init__(self, in_value: Union[str, Dict], _future_file: bool = False):
         self.mtb_solutes = {}
         self.mtb_solvents = {}
         self.mtb_ends = {}
@@ -64,7 +64,7 @@ class Mtb(_general_gromos_file._general_gromos_file):
         self.all_res_names = list(self.mtb_solutes.keys()) + list(self.mtb_solvents.keys()) + list(self.mtb_ends.keys())
         return block_dict
 
-    def read_mtb_file(self, path: str) -> List:
+    def read_mtb_file(self, path: str) -> List[str]:
         data = []
 
         first_key = True

@@ -8,7 +8,7 @@ import numpy as np
 from numbers import Number
 import copy
 import json
-from typing import List, Iterable
+from typing import List, Iterable, Union
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import imd_blocks as blocks
@@ -124,12 +124,12 @@ class Imd(_general_gromos_file._general_gromos_file):
         self,
         REEDS: int = None,
         NUMSTATES: int = None,
-        SVALS: (Number, List[Number]) = None,
-        EIR: (Number or Iterable[Number]) = None,
+        SVALS: Union[Number, List[Number]] = None,
+        EIR: Union[Number, Iterable[Number]] = None,
         NRETRIAL: int = None,
         NREQUIL: int = None,
-        CONT: (bool, int) = None,
-        EDS_STAT_OUT: (bool, int) = None,
+        CONT: Union[bool, int] = None,
+        EDS_STAT_OUT: Union[bool, int] = None,
     ):
 
         # specific relations are rescued here
