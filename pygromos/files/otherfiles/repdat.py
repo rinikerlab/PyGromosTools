@@ -299,7 +299,6 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
         # define needed stuff for calc:
         replica_traces = self.get_replica_traces()
-        num_states = len(self.system.state_eir)  # noqa: F841
         num_replica = len(self.system.s)
 
         extreme_positions = (1, num_replica)  # gives the extreme values of the replica dist

@@ -970,7 +970,6 @@ class MULTIBATH(_generic_imd_block):
         if num is not None:
             self.NUM = int(num)
 
-        # TODO implementation not correct with com_bath and irbath! Works for super simple cases though
         # print("MBATH")
         # print(last_atoms_bath)
         # print("\n")

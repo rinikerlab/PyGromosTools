@@ -35,32 +35,51 @@ def do(
     _work_dir: str = None,
     verbose: bool = True,
     verbose_lvl: int = 1,
-):
-
+) -> int:
     """
+        This function schedules simulations starting from the gromos system.
 
     Parameters
     ----------
-    in_simSystem
-    out_dir_path
-    simulation_run_num
-    equilibration_run_num
-    gromos_bin_dir
-    _work_dir
-    analysis_script_path
-    submission_system
-    previous_job_ID
-    no_double_submit
-    verbose
-    verbose_lv:
-        1 - slightly verbose
-        2 - more info
-        3 - let me tell you a story... let's start with Adam & Eve!....
+    in_simSystem : Gromos_System
+        system that should be submitted with the provided imd file
+    out_dir_path : str
+        out directory  path for the simulation
+    simulation_run_num : int
+        number of simulations
+    equilibration_run_num : int, optional
+        number of the equilibraitons, by default 0
+    initialize_first_run : bool, optional
+        should the velocities be initialized in the first run?, by default False
+    reinitialize_every_run : bool, optional
+        DEAPPRECIATED! should always the velocities be initialized, by default False
+    analysis_script_path : str, optional
+        path to the analysis script, that should be used for this simulaiton approach, by default None
+    submission_system : _SubmissionSystem, optional
+        system, to be used to submit the jobs, by default LSF()
+    previous_job_ID : int, optional
+        previous job ID, by default None
+    _no_double_submit_check : bool, optional
+        don't check if job was already submit to queue (increases performance!), by default False
+    _work_dir : str, optional
+        directory, to write out the tmp files, by default None
+    verbose : bool, optional
+        Baeh Baeh, by default True
+    verbose_lvl : int, optional
+        amount of Baehs, by default 1
 
     Returns
     -------
+    int
+        the last job id, that was submitted.
+
+    Raises
+    ------
+    IOError
+        If error happens in preperation of simulation or in the submission
 
     """
+
     submission_system.block_double_submission = _no_double_submit_check
     job_verb = True if (verbose and verbose_lvl > 2) else False
 
@@ -81,11 +100,9 @@ def do(
                 print("\t -> Generating given workdir: " + _work_dir)
             bash.make_folder(_work_dir, "-p")
             os.chdir(_work_dir)
-            prepared_imd = _work_dir + "/" + os.path.basename(in_simSystem.imd.path)  # noqa: F841
         else:
             if verbose and verbose_lvl > 2:
                 print("\t -> Using on node workdir")
-            prepared_imd = out_dir_path + "/" + os.path.basename(in_simSystem.imd.path)  # noqa: F841
 
         # sim vars logs
         out_prefix = in_simSystem.name

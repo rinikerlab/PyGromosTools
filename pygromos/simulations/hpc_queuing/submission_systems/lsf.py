@@ -8,8 +8,6 @@ from pygromos.simulations.hpc_queuing.submission_systems.submission_job import S
 
 from pygromos.utils import bash
 
-# from pygromos.utils.utils import time_wait_s_for_filesystem
-
 
 class LSF(_SubmissionSystem):
     """LSF

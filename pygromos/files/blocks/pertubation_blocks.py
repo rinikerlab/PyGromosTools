@@ -193,9 +193,7 @@ class MPERTATOM(_generic_gromos_block):
 
     def read_content_from_str(self, content: List[str]):
         field = 0
-        comment = ""  # noqa: F841
         NJLA = None
-        NTPB = None  # noqa: F841
         STATEIDENTIFIERS = []
         STATEATOMS = []
 
@@ -204,7 +202,6 @@ class MPERTATOM(_generic_gromos_block):
             # print(line)
             if "#" in line:
                 pass
-                # comment = line
             else:
                 if field > 3:
                     if first:

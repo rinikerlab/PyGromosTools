@@ -1,8 +1,8 @@
-import glob
 import os
+import glob
 import pandas as pd
+from typing import Tuple
 from pygromos.files.coord.cnf import Cnf
-
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
@@ -19,7 +19,40 @@ def do_skip_job(
     previous_job: int,
     verbose: bool = True,
     verbose_lvl: int = 1,
-):
+) -> Tuple[bool, int]:
+    """
+        This function returns true if the job was already submitted or already finished, as well as the job id.
+
+    Parameters
+    ----------
+    tmp_out_cnf : str
+        the possible final out cnf
+    simSystem : Gromos_System
+        the simulation system
+    tmp_jobname : str
+        possible job-name
+    job_submission_system : _SubmissionSystem
+        submission system
+    previous_job : int
+        job, that was submitted before this one.
+    verbose : bool, optional
+        more bla bla, by default True
+    verbose_lvl : int, optional
+        nicely define ammount of bla bla, by default 1
+
+    Returns
+    -------
+    Tuple[bool, int]
+        the bool tells, if the job was already submitted,
+        the id is the possibly found job id of the job, if it is in the queue.
+
+    Raises
+    ------
+    IOError
+        if a tmp_out_cnf is present, we assume the simulation run was successfull. If it can not be parsed in, something else is a problem, but we should not continue our chain!
+    ValueError
+        if multiple jobs with same name were found in the queue, we assume, the search regex did not work.
+    """
 
     # Check if job with same name is already in the queue!
     if (verbose) and verbose_lvl >= 2:
@@ -71,7 +104,7 @@ def do_skip_job(
         if verbose:
             print("\t\t NOT SUBMITTED!(inScript) as these Files were found: \n\t" + tmp_out_cnfs_regex)
         setattr(simSystem, "coord_seeds", tmp_out_cnf)  # set next coord Files
-        prefix_command = ""  # noqa: F841
+
         if (verbose) and verbose_lvl >= 2:
             print(simSystem.cnf.path)
         if (verbose) and verbose_lvl >= 2:
@@ -104,43 +137,66 @@ def chain_submission(
     reinitialize_every_run: bool = False,
     verbose: bool = False,
     verbose_lvl: int = 1,
-):
+) -> Tuple[int, str, Gromos_System]:
     """
+        this function submits a chain of simulation steps to the queuing system and does the file managment.
+
 
     Parameters
     ----------
-    simSystem
-    out_dir_path
-    out_prefix
-    chain_job_repetitions
-    worker_script
-    job_submission_system
-    jobname
-    nmpi
-    job_queue_duration
-    run_analysis_script_every_x_runs
-    in_analysis_script_path
-    do_not_doubly_submit_to_queue
-    start_run_index
-    prefix_command
-    previous_job_ID
-    work_dir
-    initialize_first_run
-    reinitialize_every_run
-        initialize_first_run must be False
-    verbose
+    simSystem : Gromos_System
+        simulation system
+    out_dir_path : str
+        out directory path
+    out_prefix : str
+        out prefix for simulation files
+    chain_job_repetitions : int
+        how often, should the simulation be repeated (in continuation)
+    worker_script : str
+        worker, that should be submitted. This script will be executed at each scheduled job.
+    job_submission_system : _SubmissionSystem
+        submission system, what type of submission?
+    jobname : str
+        name of the simulation job
+    run_analysis_script_every_x_runs : int, optional
+        run analysis in between - (careful will not be overwritten, make sure final analysis is correct.), by default 0
+    in_analysis_script_path : str, optional
+        analysis script for simulation, that should be applied (will at least be applied after the full simulation chain.), by default ""
+    start_run_index : int, optional
+        start index of the job chain., by default 1
+    prefix_command : str, optional
+        any bash prefix commands, before submitting?, by default ""
+    previous_job_ID : int, optional
+        ID of the prefious job, to be chained to. , by default None
+    work_dir : str, optional
+        dir to wich the work in progress will be written. if None a tmp-srcatch dir will be used with LSF!, by default None
+    initialize_first_run : bool, optional
+        should the velocities for the first run be initialized?, by default True
+    reinitialize_every_run : bool, optional
+        should in every run, the velocities be reinitialized?, by default False
+    verbose : bool, optional
+        more bla bla, by default False
+    verbose_lvl : int, optional
+        nicely define ammount of bla bla, by default 1
 
     Returns
     -------
+    Tuple[int, str, Gromos_System]
+        Tuple[previous_job_ID, tmp_jobname, simSystem]
+        will return the last job_ID, the last tmp_jobname and the final gromosSystem.
 
+    Raises
+    ------
+    ValueError
+        if submission fails. This can habe various reasons, always check also the present files! (*omd etc.)
     """
+
     if verbose:
         print("\nChainSubmission - " + out_prefix + "\n" + "=" * 30 + "\n")
     if (verbose) and verbose_lvl >= 2:
         print("start_run_index " + str(start_run_index))
     if (verbose) and verbose_lvl >= 2:
         print("job reptitions " + str(chain_job_repetitions))
-    orig_prefix_command = prefix_command  # noqa: F841
 
     if job_submission_system is not LOCAL:
         simSystem._future_promise = True
@@ -171,7 +227,6 @@ def chain_submission(
             bash.make_folder(tmp_outdir)
 
             # build COMMANDS:
-            prefix_command += ""
             if len(prefix_command) > 1:
                 prefix_command += " && "
 
@@ -220,9 +275,6 @@ def chain_submission(
                 if simSystem.imd.WRITETRAJ.NTWG > 0:
                     md_args += "-out_trg " + str(True) + "\n"
 
-            if (verbose) and verbose_lvl >= 2:
-                print("COMMAND: ", md_script_command)  # noqa: F821
-
             md_args += "-zip_trajectories " + str(job_submission_system.zip_trajectories) + "\n"
 
             md_args += ")\n"  # closing the bash array which stores all arguments.
@@ -235,6 +287,8 @@ def chain_submission(
 
             if verbose:
                 print("PREVIOUS ID: ", previous_job_ID)
+                if verbose_lvl >= 2:
+                    print("COMMAND: ", md_script_command)
 
             # SCHEDULE THE COMMANDS
             try:

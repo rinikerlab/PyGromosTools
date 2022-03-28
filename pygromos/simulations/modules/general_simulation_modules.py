@@ -186,7 +186,7 @@ def simulation(
         )
 
         try:
-            in_scheduler_script_path = utils.write_job_script(  # noqa: F841
+            utils.write_job_script(
                 out_script_path=step_dir + "/schedule_MD_job.py",
                 target_function=simulation_scheduler.do,
                 variable_dict=MD_job_vars,
