@@ -1199,13 +1199,43 @@ class Cnf(_general_gromos_file):
     def get_mdtraj(self):
         tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
         self.write_pdb(tmpFile.name)
-        single = mdtraj.load_pdb(tmpFile.name)
+        self._mdtraj = mdtraj.load_pdb(tmpFile.name)
+        if(hasattr(self, "GENBOX")):
+            self._mdtraj.unitcell_lengths = self.GENBOX.length
+            self._mdtraj.unitcell_angles = self.GENBOX.angles
+
         # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
         tmpFile.close()
-        return single
+        return self._mdtraj
 
     def recreate_view(self) -> nj.NGLWidget:
         # Topo tmp file
-        single = self.get_mdtraj()
-        self._view = visualize_system(traj=single)
+        self._mdtraj = self.get_mdtraj()
+        self._view = visualize_system(traj=self._mdtraj)
         return self._view
+
+    def recenter_pbc(self):
+        """
+        This function is shifting the coordinates such that the solute molecule is centered, if it is placed in the corners.
+        However, this function might break down with more complicated situations. Careful the function is not fail safe ;)
+        """
+
+        self.get_mdtraj()
+        self._mdtraj.image_molecules()
+        
+        # write new pos:
+        result_pos = []
+        for new_pos, aP in zip(self._mdtraj.xyz[0], self.POSITION):
+            result_pos.append(
+                blocks.atomP(
+                    xp=new_pos[0],
+                    yp=new_pos[1],
+                    zp=new_pos[2],
+                    resID=aP.resID,
+                    resName=aP.resName,
+                    atomType=aP.atomType,
+                    atomID=aP.atomID,
+                )
+            )
+
+        self.POSITION = result_pos
