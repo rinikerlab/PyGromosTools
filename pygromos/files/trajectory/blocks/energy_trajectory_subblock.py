@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List, Dict
+from pygromos.utils.typing import  List, Dict
 
 
 class _general_pandas_energy_trajectory_subblock:

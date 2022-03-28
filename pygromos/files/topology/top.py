@@ -9,15 +9,13 @@
 
 # imports
 from copy import deepcopy
-from typing import TypeVar, Union
+from pygromos.utils.typing import Union, Top_Type
 import math
 
 from pygromos.utils import bash as bash
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
 
-
-selfType = TypeVar("Top")
 
 
 # functions
@@ -46,7 +44,7 @@ def check_top():
 class Top(_general_gromos_file._general_gromos_file):
     _gromos_file_ending: str = "top"
 
-    def __init__(self, in_value: Union[str, dict, selfType], _future_file: bool = False):
+    def __init__(self, in_value: Union[str, dict, Top_Type], _future_file: bool = False):
         if type(in_value) is str:
             super().__init__(in_value=in_value, _future_file=_future_file)
         elif in_value is None:
@@ -59,10 +57,10 @@ class Top(_general_gromos_file._general_gromos_file):
         else:
             raise Exception("not implemented yet!")
 
-    def __add__(self, top: selfType) -> selfType:
+    def __add__(self, top: Top_Type) -> Top_Type:
         return self._add_top(top=top)
 
-    def _add_top(self, top: Union[selfType, None], solvFrom1: bool = True, verbose: bool = False) -> selfType:
+    def _add_top(self, top: Union[Top_Type, None], solvFrom1: bool = True, verbose: bool = False) -> Top_Type:
         """
         combines two topologies. Parameters are taken from the initial topology.
         But missing parameters from the second topology will be added.
@@ -246,7 +244,7 @@ class Top(_general_gromos_file._general_gromos_file):
     def __mul__(self, n_multiplication: int):
         return self.multiply_top(n_multiplication)
 
-    def multiply_top(self, n_muliplication: int, unifyGroups: bool = False, verbose: bool = False) -> selfType:
+    def multiply_top(self, n_muliplication: int, unifyGroups: bool = False, verbose: bool = False) -> Top_Type:
 
         # catch simple cases and create return top
         if n_muliplication == 0:
@@ -1063,7 +1061,7 @@ class Top(_general_gromos_file._general_gromos_file):
                 mass += i.MASS
         return mass
 
-    def get_diff_to_top(self, top: selfType):
+    def get_diff_to_top(self, top: Top_Type):
         for block in self._block_order[1:]:
             if hasattr(self, block):
                 if hasattr(top, block):

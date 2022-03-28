@@ -5,7 +5,7 @@ Description:
 Author: Marc Lehner
 """
 
-from typing import Dict, List, Union
+from pygromos.utils.typing import  Dict, List, Union
 from pygromos.files._basics import _general_gromos_file
 from pygromos.files.blocks import mtb_blocks as blocks
 

@@ -20,7 +20,7 @@ import pandas as pd
 import numpy as np
 import nglview as nj
 from copy import deepcopy
-from typing import Dict, List, Tuple
+from pygromos.utils.typing import  Dict, List, Tuple
 
 from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE

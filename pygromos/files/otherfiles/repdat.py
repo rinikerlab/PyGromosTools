@@ -6,15 +6,10 @@ Author: Benjamin Schroeder
 """
 
 import pandas as pd
-from typing import Dict, List, Union
+
 from pygromos.files._basics import _general_gromos_file, parser
-
 from pygromos.files.blocks import replica_exchange_blocks as blocks
-
-
-# forward declaration like - for typing - ugly - TODO
-class Repdat:
-    pass
+from pygromos.utils.typing import Union, List, Dict, Repdat_Type
 
 
 class Repdat(_general_gromos_file._general_gromos_file):  #
@@ -329,7 +324,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
                 continue
         self.replica_round_trips = self._clean_replica_round_trips(replica_round_trips)
 
-    def append(self, repdat: (List[Repdat] or Repdat)):
+    def append(self, repdat: Union[List[Repdat_Type], Repdat_Type]):
         """append
 
             This function concatenates two repdat files into the executing obj.

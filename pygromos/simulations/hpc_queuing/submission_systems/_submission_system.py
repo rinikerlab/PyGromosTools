@@ -1,7 +1,7 @@
 import inspect
 import pandas as pd
 
-from typing import List, Union
+from pygromos.utils.typing import  List, Union
 
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 

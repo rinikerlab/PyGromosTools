@@ -1,5 +1,5 @@
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
-from typing import Dict
+from pygromos.utils.typing import Dict
 
 
 class repex_system(_generic_gromos_block):

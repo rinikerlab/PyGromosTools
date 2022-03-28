@@ -8,8 +8,8 @@ Description:
 Author: Paul Katzberger
 """
 
-from typing import List
 import numpy as np
+from pygromos.utils.typing import List
 
 
 class error_estimator:

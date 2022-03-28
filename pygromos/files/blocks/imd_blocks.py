@@ -1,9 +1,8 @@
 import warnings
-from numbers import Number
-from typing import List, Dict, Union
 
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
+from pygromos.utils.typing import List, Dict, Union, Number
 
 # forward declarations
 TITLE: generic_TITLE = generic_TITLE

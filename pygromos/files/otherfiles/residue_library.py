@@ -6,12 +6,10 @@ Author: Benjamin Ries
 """
 
 # imports
-from typing import Union, Dict
 from pygromos.files.blocks import all_blocks
 from pygromos.files._basics import parser
-
 from pygromos.files._basics import _general_gromos_file
-
+from pygromos.utils.typing import Union, Dict
 from pygromos.data import pdb_lib
 
 

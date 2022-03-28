@@ -8,7 +8,7 @@ import math
 import argparse
 import inspect
 
-from typing import Dict, List
+from pygromos.utils.typing import  Dict, List
 
 spacer0 = "!" * 90 + "\n"
 spacer = "#" * 80 + "\n"

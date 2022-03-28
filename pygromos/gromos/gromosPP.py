@@ -6,10 +6,10 @@ Author: Benjamin Schroeder
 """
 
 import os
-from typing import Union, Tuple
+from pygromos.utils.typing import  Union, Tuple
 
 import pandas as pd
-from typing import List
+from pygromos.utils.typing import  List
 from numbers import Number
 
 from pygromos.utils import bash

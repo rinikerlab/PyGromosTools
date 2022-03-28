@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from pygromos.utils.typing import  List
 import warnings
 
 from pygromos.files._basics import _general_gromos_file, parser

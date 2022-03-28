@@ -1,9 +1,9 @@
-from typing import List
 
 from pygromos.files.blocks.topology_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks.topology_blocks import FORCEFIELD as generic_FORCEFIELD
 from pygromos.files.blocks.topology_blocks import MAKETOPVERSION as generic_MAKETOPVERSION
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
+from pygromos.utils.typing import List
 
 
 TITLE: generic_TITLE = generic_TITLE

@@ -1,6 +1,6 @@
 import os
 from inspect import signature, _empty
-from typing import List
+from pygromos.utils.typing import  List
 
 
 def write_job_script(

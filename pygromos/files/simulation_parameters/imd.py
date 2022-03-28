@@ -8,7 +8,7 @@ import numpy as np
 from numbers import Number
 import copy
 import json
-from typing import List, Iterable, Union
+from pygromos.utils.typing import  List, Iterable, Union
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import imd_blocks as blocks

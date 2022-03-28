@@ -1,15 +1,12 @@
 import re
-from enum import Enum
-from typing import Type, Union, Iterable, List, Dict, Tuple, TypeVar
-from collections import namedtuple
 import inspect
 import numpy as np
-from numbers import Number
+from enum import Enum
+from collections import namedtuple
 
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
-
-selfType = TypeVar("self")
+from pygromos.utils.typing import Union, Iterable, List, Tuple, Dict, Number, _topology_table_block_Type, _iterable_topology_block_Type, PHYSICALCONSTANTS_Type, TOPVERSION_Type, ATOMTYPENAME_Type, RESNAME_Type, TOPVERSION_Type
 
 
 """
@@ -2095,7 +2092,7 @@ class _topology_table_block(_iterable_topology_block):
 
     def __init__(
         self,
-        content: Union[str, dict, selfType],
+        content: Union[str, dict, _topology_table_block_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
         **kwargs
@@ -2199,7 +2196,7 @@ class _topology_table_block(_iterable_topology_block):
 class PHYSICALCONSTANTS(_topology_block):
     def __init__(
         self,
-        content: Union[str, dict, selfType],
+        content: Union[str, dict, PHYSICALCONSTANTS_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2263,7 +2260,7 @@ class PHYSICALCONSTANTS(_topology_block):
 class TOPVERSION(_topology_block):
     def __init__(
         self,
-        content: Union[str, Dict[str, str], selfType],
+        content: Union[str, Dict[str, str], TOPVERSION_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2273,7 +2270,7 @@ class TOPVERSION(_topology_block):
 class ATOMTYPENAME(_topology_block):
     def __init__(
         self,
-        content: Union[str, Dict[str, str], selfType],
+        content: Union[str, Dict[str, str], ATOMTYPENAME_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2283,7 +2280,7 @@ class ATOMTYPENAME(_topology_block):
 class RESNAME(_topology_block):
     def __init__(
         self,
-        content: Union[str, Dict[str, str], selfType],
+        content: Union[str, Dict[str, str], RESNAME_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2296,7 +2293,7 @@ class SOLUTEATOM(_iterable_topology_block):
 
     def __init__(
         self,
-        content: Union[str, Dict[str, str], Type[_iterable_topology_block]],
+        content: Union[str, Dict[str, str], _iterable_topology_block_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):

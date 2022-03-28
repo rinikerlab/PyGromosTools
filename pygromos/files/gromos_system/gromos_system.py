@@ -21,16 +21,12 @@ import inspect
 import functools
 import importlib
 import warnings
-from pygromos.data.ff import Gromos54A7
-from typing import Dict, Union, List, Callable
-
-from pygromos.files.coord import cnf
-from pygromos.files._basics._general_gromos_file import _general_gromos_file
-from pygromos.files.blocks import imd_blocks
 
 
 # Files
+from pygromos.files._basics._general_gromos_file import _general_gromos_file
 from pygromos.files.topology.top import Top
+from pygromos.files.coord import cnf
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.simulation_parameters.imd import Imd
 from pygromos.files.qmmm.qmmm import QMMM
@@ -38,6 +34,7 @@ from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
 from pygromos.files.coord.refpos import Reference_Position
 from pygromos.files.coord.posres import Position_Restraints
+from pygromos.files.blocks import imd_blocks
 
 # Trajs
 from pygromos.files.trajectory.trc import Trc
@@ -46,9 +43,10 @@ from pygromos.files.forcefield._generic_force_field import _generic_force_field
 
 # Additional
 # from pygromos.files.forcefield import forcefield_system
+from pygromos.data.ff import Gromos54A7
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
-
+from pygromos.utils.typing import Union, List, Dict, Callable
 
 if importlib.util.find_spec("rdkit") is not None:
     from rdkit import Chem

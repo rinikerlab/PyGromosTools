@@ -1,6 +1,7 @@
-from typing import Union, List, Dict
 from pygromos.files.blocks import _general_blocks
 from collections import defaultdict
+
+from pygromos.utils.typing import Union, List, Dict
 
 # ResidueLibBlocks
 

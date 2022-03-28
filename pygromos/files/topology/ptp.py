@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Union
+from pygromos.utils.typing import  Union
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import pertubation_blocks as blocks

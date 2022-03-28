@@ -6,7 +6,7 @@ Author:
 """
 
 from pygromos.files._basics import _general_gromos_file, parser
-from typing import Union, Dict
+from pygromos.utils.typing import  Union, Dict
 
 
 class Ifp(_general_gromos_file._general_gromos_file):

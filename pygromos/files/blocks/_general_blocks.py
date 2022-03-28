@@ -1,6 +1,6 @@
 import copy
-from typing import Iterable, List, Dict
-from numbers import Number
+
+from pygromos.utils.typing import List, Dict, Iterable, Number
 
 # FIELDS
 

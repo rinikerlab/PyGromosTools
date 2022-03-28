@@ -8,9 +8,9 @@ import os
 import copy
 import inspect
 import warnings
-from typing import List, Dict, Callable, Union
 
 from pygromos.files.blocks import all_blocks
+from pygromos.utils.typing import List, Dict, Callable, Union, Number
 
 
 # file class

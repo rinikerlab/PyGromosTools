@@ -1,4 +1,4 @@
-from typing import Callable
+from pygromos.utils.typing import  Callable
 from pygromos.utils.compiledProgram import _compiled_program
 
 import os

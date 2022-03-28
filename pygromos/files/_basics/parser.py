@@ -9,12 +9,11 @@ import warnings
 import pandas as pd
 from itertools import chain, takewhile
 
-from typing import List, Dict
-
 from pygromos.files import blocks
 from pygromos.files.blocks import topology_blocks as tb
 from pygromos.files.blocks import pertubation_blocks as pb
 from pygromos.files.blocks._general_blocks import _generic_gromos_block
+from pygromos.utils.typing import List, Dict
 
 
 # translation dicts

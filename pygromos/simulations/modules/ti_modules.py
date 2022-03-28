@@ -3,7 +3,7 @@
 """
 
 from collections import OrderedDict
-from typing import List
+from pygromos.utils.typing import  List
 import numpy as np
 from copy import deepcopy
 

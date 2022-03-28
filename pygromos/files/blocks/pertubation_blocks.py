@@ -1,12 +1,10 @@
 import __main__
-from collections import namedtuple
-from numbers import Number
-from typing import List, Tuple, Dict, Union
-
 import numpy as np
+from collections import namedtuple
 
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
+from pygromos.utils.typing import Union, List, Tuple, Dict, Number
 
 TITLE: generic_TITLE = generic_TITLE
 

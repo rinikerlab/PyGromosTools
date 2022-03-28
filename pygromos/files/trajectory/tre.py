@@ -18,7 +18,7 @@ TODO: add ene_ana functions
 # imports
 import pandas as pd
 import numpy as np
-from typing import Tuple, Dict, TypeVar
+from pygromos.utils.typing import  Tuple, Dict, Tre_Type
 
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import (
@@ -26,8 +26,6 @@ from pygromos.files.trajectory.tre_field_libs.ene_fields import (
     gromos_tre_block_names_table,
 )
 from pygromos.analysis import energy_analysis as ea
-
-selfType = TypeVar("Top")
 
 
 class Tre(traj._General_Trajectory):
@@ -446,7 +444,7 @@ class Tre(traj._General_Trajectory):
             name="density",
         )
 
-    def get_Hvap(self, gas_traj: selfType, nMolecules: int = 1, temperature: float = None) -> float:
+    def get_Hvap(self, gas_traj: Tre_Type, nMolecules: int = 1, temperature: float = None) -> float:
         gas_totpot_energy = 0
         if type(gas_traj) == type(self):
             gas_totpot_energy = gas_traj.get_totpot().mean()

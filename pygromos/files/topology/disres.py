@@ -1,4 +1,4 @@
-from typing import Union, Dict
+from pygromos.utils.typing import  Union, Dict
 from pygromos.files._basics import _general_gromos_file, parser
 
 

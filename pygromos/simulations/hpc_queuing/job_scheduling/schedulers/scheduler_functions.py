@@ -1,7 +1,7 @@
 import os
 import glob
 import pandas as pd
-from typing import Tuple
+from pygromos.utils.typing import  Tuple
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem

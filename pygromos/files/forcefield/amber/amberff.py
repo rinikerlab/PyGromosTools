@@ -1,17 +1,20 @@
 import os
 import shutil
 import subprocess
-from typing import List
-from pygromos.files.coord.cnf import Cnf
-from pygromos.gromos import GromosPP
-
-from pygromos.data import topology_templates
-from pygromos import data
 from rdkit import Chem
 
+
+
+
+from pygromos.files.coord.cnf import Cnf
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 from pygromos.files.topology.top import Top
 
+from pygromos.gromos import GromosPP
+from pygromos.data import topology_templates
+from pygromos import data
+
+from pygromos.utils.typing import List
 
 class AmberFF(_generic_force_field):
     # static variables to control solvation

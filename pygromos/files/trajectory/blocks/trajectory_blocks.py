@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List, Dict
+from pygromos.utils.typing import  List, Dict
 from pygromos.files.trajectory.blocks import energy_trajectory_subblock as ene_sub_block
 
 

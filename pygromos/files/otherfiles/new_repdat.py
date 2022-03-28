@@ -6,13 +6,10 @@ Author: Benjamin Schroeder
 """
 
 import pandas as pd
-from typing import Dict, List, Union, TypeVar
 
 from pygromos.files._basics import parser
 from pygromos.files.blocks import replica_exchange_blocks as blocks
-
-selfType = TypeVar("selfType")
-
+from pygromos.utils.typing import Dict, List, Union, Repdat_Type
 
 class Repdat(pd.DataFrame):  #
     """Replica exchange statistic file
@@ -335,7 +332,7 @@ class Repdat(pd.DataFrame):  #
                 continue
         self.replica_round_trips = self._clean_replica_round_trips(replica_round_trips)
 
-    def append(self, repdat: Union[List[selfType], selfType]):
+    def append(self, repdat: Union[List[Repdat_Type], Repdat_Type]):
         """append
 
             This function concatenates two repdat files into the executing obj.

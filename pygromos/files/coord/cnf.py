@@ -4,8 +4,6 @@ import tempfile
 import nglview as nj
 
 from collections import namedtuple, defaultdict
-from typing import Dict, List, Tuple, Union
-from typing import TypeVar
 import numpy as np
 from scipy.spatial.transform import Rotation
 from rdkit import Chem
@@ -17,12 +15,12 @@ from pygromos.files.blocks import coord_blocks as blocks
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
+from pygromos.utils.typing import Union, List, Tuple, Dict, Reference_Position_Type, Position_Restraints_Type
 from pygromos.files.blocks.coord_blocks import GENBOX
 from pygromos.analysis import coordinate_analysis as ca
 from pygromos.visualization.coordinates_visualization import visualize_system
 
-Reference_Position = TypeVar("refpos.Reference_Position")
-Position_Restraints = TypeVar("posres.Position_Restraints")
+
 # Constructs describing the system
 solute_infos = namedtuple("solute_info", ["names", "number", "positions", "number_of_atoms"])
 protein_infos = namedtuple(
@@ -879,7 +877,7 @@ class Cnf(_general_gromos_file):
 
     def gen_possrespec(
         self, residues: Union[Dict[str, List[int]], List[int]], keep_residues: bool = True, verbose: bool = False
-    ) -> Position_Restraints:
+    ) -> Position_Restraints_Type:
         """
                 This function writes out a gromos file, containing a atom list. that is to be position restrained!
                 Raises not Implemented error, if a input variant of the residues
@@ -986,7 +984,7 @@ class Cnf(_general_gromos_file):
         posres_class.write(out_path)
         return out_path
 
-    def gen_refpos(self) -> Reference_Position:
+    def gen_refpos(self) -> Reference_Position_Type:
         from pygromos.files.coord import refpos
 
         return refpos.Reference_Position(self)

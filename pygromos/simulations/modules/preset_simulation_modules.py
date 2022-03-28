@@ -1,4 +1,4 @@
-from typing import Tuple
+from pygromos.utils.typing import  Tuple
 from pygromos.files.gromos_system import Gromos_System
 
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd

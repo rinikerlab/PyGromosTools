@@ -16,15 +16,15 @@ import warnings
 import shutil
 
 import subprocess as sub
-from typing import List, Dict, Union
 from pygromos.utils.utils import time_wait_s_for_filesystem
+from pygromos.utils.typing import Union, List, Dict
 
 #################################
 #   General functions:
 
 
 def wait_for_fileSystem(
-    check_paths: (str, List[str]), regex_mode: bool = False, max_waiting_iterations: int = 1000, verbose: bool = False
+    check_paths: Union[str, List[str]], regex_mode: bool = False, max_waiting_iterations: int = 1000, verbose: bool = False
 ) -> bool:
     """
     This function can be used to circumvent lsf lag times.
@@ -63,7 +63,7 @@ def wait_for_fileSystem(
 
 def check_path_dependencies(
     check_required_paths: Union[Dict[any, str], List[str]],
-    check_warn_paths: (str, List[str]) = [],
+    check_warn_paths: Union[str, List[str]] = [],
     verbose: bool = True,
 ) -> str:
     """check_path_dependencies
@@ -711,7 +711,7 @@ def link_folder(in_directory_path: str, out_link_path: str, additional_options: 
     return out_link_path
 
 
-def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
+def execute_os(command: Uniont[str, List[str]], verbose: bool = False) -> io.FileIO:
     """execute
 
         DEAPRECIATED
@@ -769,7 +769,7 @@ def execute_os(command: (str or List[str]), verbose: bool = False) -> io.FileIO:
 
 
 def execute_subprocess(
-    command: (str or List[str]), catch_STD: Union[bool, str] = False, env: dict = None, verbose: bool = False
+    command: Union[str, List[str]], catch_STD: Union[bool, str] = False, env: dict = None, verbose: bool = False
 ) -> sub.CompletedProcess:
     """execute_subprocess
         This command starts a subprocess, that is executing the str command in bash.
@@ -831,7 +831,7 @@ def execute_subprocess(
 
 
 def execute_old(
-    command: (str or List[str]),
+    command: Union[str, List[str]],
     verbose: bool = False,
     ignore_return_code: bool = False,
     wait_fail=False,
@@ -926,7 +926,7 @@ def execute_old(
     return ret_stdout
 
 
-def execute(command: (str or List[str]), verbose: bool = False, catch_STD: Union[bool, str] = False, env: dict = None):
+def execute(command: Union[str, List[str]], verbose: bool = False, catch_STD: Union[bool, str] = False, env: dict = None):
     return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
 
 
