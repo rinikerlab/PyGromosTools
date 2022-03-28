@@ -14,7 +14,7 @@ from pygromos.files.otherfiles import repdat
 from pygromos.files.trajectory import tre
 from pygromos.gromos import gromosPP
 from pygromos.utils import bash
-from pygromos.utils.typing import List, Dict, Union, Tuple
+from pygromos.utils.typing import List, Dict, Union, Tuple, Cnf_Type
 
 """
     PARALLEL WORKER - These functions are required for parallelized code Execution
@@ -197,7 +197,14 @@ def thread_worker_concat_repdat(
         del repdat_file
 
 
-def _thread_worker_cnfs(job:int, out_cnfs:List[str], in_cnfs:List[cnf], replica_range:List[int], out_folder:str, verbose: bool = False):
+def _thread_worker_cnfs(
+    job: int,
+    out_cnfs: List[str],
+    in_cnfs: List[Cnf_Type],
+    replica_range: List[int],
+    out_folder: str,
+    verbose: bool = False,
+):
     if verbose:
         print("JOB: " + str(job) + " copy to " + out_folder)
     for replicaID in replica_range:

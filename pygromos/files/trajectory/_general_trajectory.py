@@ -29,8 +29,7 @@ import pathlib
 
 from pygromos.files.trajectory.blocks import trajectory_blocks as blocks
 from pygromos.utils import bash
-from pygromos.utils.typing import  _General_Trajectory_Type
-
+from pygromos.utils.typing import _General_Trajectory_Type
 
 
 class _General_Trajectory:
@@ -107,7 +106,11 @@ class _General_Trajectory:
         return traj
 
     def add_traj(
-        self, traj: _General_Trajectory_Type, skip_new_0: bool = False, auto_detect_skip: bool = True, correct_time: bool = True
+        self,
+        traj: _General_Trajectory_Type,
+        skip_new_0: bool = False,
+        auto_detect_skip: bool = True,
+        correct_time: bool = True,
     ):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 

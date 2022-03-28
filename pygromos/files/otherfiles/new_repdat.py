@@ -11,6 +11,7 @@ from pygromos.files._basics import parser
 from pygromos.files.blocks import replica_exchange_blocks as blocks
 from pygromos.utils.typing import Dict, List, Union, Repdat_Type
 
+
 class Repdat(pd.DataFrame):  #
     """Replica exchange statistic file
     This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.

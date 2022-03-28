@@ -3,7 +3,7 @@
 """
 import inspect
 import functools
-from pygromos.utils.typing import  Union, Dict, Callable
+from pygromos.utils.typing import Union, Dict, Callable
 from pygromos.utils import bash
 
 

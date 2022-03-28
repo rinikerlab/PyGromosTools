@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import os
 import sys
-import warnings
-import shutil
 import math
-from pygromos.utils.typing import  Dict, Union, List
+import shutil
+import warnings
+
+from pygromos.utils.typing import Dict, Union, List
 from collections import OrderedDict
 from pygromos.files.coord import cnf
 from pygromos.files.trajectory import trc, tre, trg

@@ -6,16 +6,13 @@ Author: Benjamin Schroeder
 """
 
 import os
-from pygromos.utils.typing import  Union, Tuple
-
 import pandas as pd
-from pygromos.utils.typing import  List
-from numbers import Number
 
-from pygromos.utils import bash
 from pygromos.data import pdb_lib
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos._gromosClass import _gromosClass
+from pygromos.utils import bash
+from pygromos.utils.typing import Union, List, Tuple, Number
 
 
 class _gromosPPbase(_gromosClass):

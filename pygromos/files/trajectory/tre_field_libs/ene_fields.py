@@ -1,4 +1,4 @@
-from pygromos.utils.typing import  List
+from pygromos.utils.typing import List
 
 
 class gromos_tre_block_names_table:

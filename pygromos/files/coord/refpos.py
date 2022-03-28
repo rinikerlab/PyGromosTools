@@ -2,6 +2,7 @@ from pygromos.files.coord.cnf import Cnf
 from pygromos.files.blocks import coord_blocks as blocks
 from pygromos.utils.typing import Dict, List, Union, Reference_Position_Type, Cnf_Type
 
+
 class Reference_Position(Cnf):
     """
     This class is a representation of the gromos .cnf coordinate files. It
@@ -27,7 +28,12 @@ class Reference_Position(Cnf):
     _required_blocks: List[str] = ["TITLE", "REFPOSITION"]
     _main_block: str = "REFPOSITION"
 
-    def __init__(self, in_value: Union[str, dict, Reference_Position_Type, Cnf_Type], verbose: bool = False, _future_file: bool = False):
+    def __init__(
+        self,
+        in_value: Union[str, dict, Reference_Position_Type, Cnf_Type],
+        verbose: bool = False,
+        _future_file: bool = False,
+    ):
         if isinstance(in_value, Cnf):
             for block in self._block_order:
                 if hasattr(in_value, block):

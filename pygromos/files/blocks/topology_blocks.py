@@ -6,7 +6,20 @@ from collections import namedtuple
 
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
-from pygromos.utils.typing import Union, Iterable, List, Tuple, Dict, Number, _topology_table_block_Type, _iterable_topology_block_Type, PHYSICALCONSTANTS_Type, TOPVERSION_Type, ATOMTYPENAME_Type, RESNAME_Type, TOPVERSION_Type
+from pygromos.utils.typing import (
+    Union,
+    Iterable,
+    List,
+    Tuple,
+    Dict,
+    Number,
+    _topology_table_block_Type,
+    _iterable_topology_block_Type,
+    PHYSICALCONSTANTS_Type,
+    TOPVERSION_Type,
+    ATOMTYPENAME_Type,
+    RESNAME_Type,
+)
 
 
 """

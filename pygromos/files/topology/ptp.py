@@ -1,8 +1,8 @@
 from copy import deepcopy
-from pygromos.utils.typing import  Union
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import pertubation_blocks as blocks
+from pygromos.utils.typing import Union
 
 
 class Pertubation_topology(_general_gromos_file._general_gromos_file):

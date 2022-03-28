@@ -1,11 +1,11 @@
 import copy
 import mdtraj
 import tempfile
-import nglview as nj
-
-from collections import namedtuple, defaultdict
 import numpy as np
+import nglview as nj
 from scipy.spatial.transform import Rotation
+from collections import namedtuple, defaultdict
+
 from rdkit import Chem
 from rdkit.Chem import AllChem
 

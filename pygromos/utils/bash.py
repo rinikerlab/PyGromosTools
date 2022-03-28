@@ -24,7 +24,10 @@ from pygromos.utils.typing import Union, List, Dict
 
 
 def wait_for_fileSystem(
-    check_paths: Union[str, List[str]], regex_mode: bool = False, max_waiting_iterations: int = 1000, verbose: bool = False
+    check_paths: Union[str, List[str]],
+    regex_mode: bool = False,
+    max_waiting_iterations: int = 1000,
+    verbose: bool = False,
 ) -> bool:
     """
     This function can be used to circumvent lsf lag times.
@@ -711,7 +714,7 @@ def link_folder(in_directory_path: str, out_link_path: str, additional_options: 
     return out_link_path
 
 
-def execute_os(command: Uniont[str, List[str]], verbose: bool = False) -> io.FileIO:
+def execute_os(command: Union[str, List[str]], verbose: bool = False) -> io.FileIO:
     """execute
 
         DEAPRECIATED
@@ -926,7 +929,9 @@ def execute_old(
     return ret_stdout
 
 
-def execute(command: Union[str, List[str]], verbose: bool = False, catch_STD: Union[bool, str] = False, env: dict = None):
+def execute(
+    command: Union[str, List[str]], verbose: bool = False, catch_STD: Union[bool, str] = False, env: dict = None
+):
     return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
 
 

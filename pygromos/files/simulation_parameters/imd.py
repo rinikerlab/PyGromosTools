@@ -5,14 +5,13 @@ Description:
 Author: Kay Schaller & Benjamin Schroeder
 """
 import numpy as np
-from numbers import Number
 import copy
 import json
-from pygromos.utils.typing import  List, Iterable, Union
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import imd_blocks as blocks
 from pygromos.utils.utils import nice_s_vals
+from pygromos.utils.typing import List, Iterable, Union, Number
 
 
 class Imd(_general_gromos_file._general_gromos_file):

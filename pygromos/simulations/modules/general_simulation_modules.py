@@ -4,8 +4,8 @@ import glob
 import traceback
 import time
 import warnings
-from collections import OrderedDict
 from copy import deepcopy
+from collections import OrderedDict
 
 from pygromos.files.coord import cnf
 from pygromos.files.gromos_system import Gromos_System

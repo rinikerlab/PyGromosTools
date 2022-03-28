@@ -23,16 +23,22 @@ email: paul.katzberger@phys.chem.ethz.ch
 """
 
 # Imports
+import os
+import warnings
+import numpy as np
+import pandas as pd
+import scipy.integrate as integrate
+
+from rdkit import Chem
+
+
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 from pygromos.files.forcefield.openff.openff import OpenFF
 from openff.toolkit.topology import Molecule
 from pygromos.files.topology.top import Top
 from pygromos.files.coord import Cnf
-from rdkit import Chem
-import os
-import numpy as np
-import warnings
+
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys_local
 from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSys_lsf
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
@@ -54,8 +60,6 @@ from pygromos.files.blocks.imd_blocks import PRESSURESCALE, PERTURBATION, MULTIB
 from pygromos.files.blocks.imd_blocks import RANDOMNUMBERS
 from pygromos.analysis.error_estimate import error_estimator
 from pygromos.utils import bash
-import scipy.integrate as integrate
-import pandas as pd
 from pygromos.files.trajectory.trg import Trg
 
 

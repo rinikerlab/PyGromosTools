@@ -10,7 +10,7 @@ import inspect
 import warnings
 
 from pygromos.files.blocks import all_blocks
-from pygromos.utils.typing import List, Dict, Callable, Union, Number
+from pygromos.utils.typing import List, Dict, Callable, Union
 
 
 # file class

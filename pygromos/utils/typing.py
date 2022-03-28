@@ -1,8 +1,8 @@
-from numbers import Number
-from pygromos.utils.typing import  TypeVar
-from pygromos.utils.typing import  Dict, List, Union, Tuple, Iterable, Callable 
+from numbers import Number  # noqa: F401
+from pygromos.utils.typing import TypeVar
+from pygromos.utils.typing import Dict, List, Union, Tuple, Iterable, Callable  # noqa: F401
 
-#Files
+# Files
 # Topology
 Top_Type = TypeVar("Top_Type")
 
@@ -33,11 +33,3 @@ TOPVERSION_Type = TypeVar("TOPVERSION_Type")
 ATOMTYPENAME_Type = TypeVar("ATOMTYPENAME_Type")
 RESNAME_Type = TypeVar("RESNAME_Type")
 TOPVERSION_Type = TypeVar("TOPVERSION_Type")
-
-
-
-
-
-
-
-from pygromos.utils.typing import Union, List, Tuple, Dict, Number

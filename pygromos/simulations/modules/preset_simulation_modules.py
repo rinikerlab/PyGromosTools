@@ -1,4 +1,3 @@
-from pygromos.utils.typing import  Tuple
 from pygromos.files.gromos_system import Gromos_System
 
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
@@ -7,6 +6,7 @@ from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers import simulation_analysis
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
+from pygromos.utils.typing import Tuple
 
 """
     Simulations

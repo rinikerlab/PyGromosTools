@@ -18,13 +18,13 @@ TODO: add ene_ana functions
 # imports
 import pandas as pd
 import numpy as np
-from pygromos.utils.typing import  Tuple, Dict, Tre_Type
 
 import pygromos.files.trajectory._general_trajectory as traj
 from pygromos.files.trajectory.tre_field_libs.ene_fields import (
     gromos_2021_tre_block_names_table,
     gromos_tre_block_names_table,
 )
+from pygromos.utils.typing import Tuple, Dict, Tre_Type
 from pygromos.analysis import energy_analysis as ea
 
 

@@ -33,7 +33,7 @@ class Position_Restraints(Cnf):
 
     def __init__(
         self,
-        in_value: Union[str, dict,Position_Restraints_Type, Cnf_Type],
+        in_value: Union[str, dict, Position_Restraints_Type, Cnf_Type],
         clean_resiNumbers_by_Name: bool = False,
         verbose: bool = False,
         _future_file: bool = False,

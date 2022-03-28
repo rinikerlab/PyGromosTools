@@ -8,14 +8,13 @@
 """
 
 # imports
-from copy import deepcopy
-from pygromos.utils.typing import Union, Top_Type
 import math
+from copy import deepcopy
 
 from pygromos.utils import bash as bash
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import topology_blocks as blocks
-
+from pygromos.utils.typing import Union, Top_Type
 
 
 # functions

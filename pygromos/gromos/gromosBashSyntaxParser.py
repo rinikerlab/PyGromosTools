@@ -1,4 +1,4 @@
-from pygromos.utils.typing import  Union, List
+from pygromos.utils.typing import Union, List
 
 
 class gromosBashSyntaxParser:

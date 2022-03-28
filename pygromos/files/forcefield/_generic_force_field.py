@@ -11,9 +11,8 @@ Description:
 Author: Marc Lehner
 """
 
-
-from pygromos.files.topology.top import Top
 from pygromos.files.coord.cnf import Cnf
+from pygromos.files.topology.top import Top
 
 
 class _generic_force_field:

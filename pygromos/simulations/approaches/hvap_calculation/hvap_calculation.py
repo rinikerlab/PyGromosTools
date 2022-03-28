@@ -16,12 +16,12 @@ Description:
 
 Author: Marc Lehner
 """
-
-from copy import deepcopy
-from rdkit import Chem
 import os
-import warnings
 import time
+import warnings
+from copy import deepcopy
+
+from rdkit import Chem
 
 from pygromos.gromos.pyGromosPP.ran_box import ran_box
 from pygromos.files.gromos_system.gromos_system import Gromos_System

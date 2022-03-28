@@ -1,10 +1,11 @@
-import collections
+import os
 import glob
 import importlib
-import os
+import collections
+
 from rdkit import Chem
 from simtk import unit as u
-from pygromos.files.coord.cnf import Cnf
+
 
 if importlib.util.find_spec("openff") is None:
     raise ImportError(
@@ -14,6 +15,7 @@ else:
     from openff.toolkit.topology import Molecule, Topology
     from openff.toolkit.typing.engines import smirnoff
 
+from pygromos.files.coord.cnf import Cnf
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
 from pygromos.files.topology.top import Top
 from pygromos.data.ff import data_ff_SMIRNOFF

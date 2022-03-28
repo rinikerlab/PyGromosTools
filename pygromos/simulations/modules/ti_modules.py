@@ -3,7 +3,6 @@
 """
 
 from collections import OrderedDict
-from pygromos.utils.typing import  List
 import numpy as np
 from copy import deepcopy
 
@@ -15,6 +14,7 @@ from pygromos.simulations.hpc_queuing.submission_systems._submission_system impo
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL
 from pygromos.simulations.modules.general_simulation_modules import simulation
 from pygromos.utils import bash
+from pygromos.utils.typing import List
 
 
 def TI_sampling(

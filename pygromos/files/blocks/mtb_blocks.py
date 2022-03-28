@@ -1,4 +1,3 @@
-
 from pygromos.files.blocks.topology_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks.topology_blocks import FORCEFIELD as generic_FORCEFIELD
 from pygromos.files.blocks.topology_blocks import MAKETOPVERSION as generic_MAKETOPVERSION

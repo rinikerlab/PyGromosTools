@@ -1,5 +1,5 @@
-from pygromos.utils.typing import  Union, Dict
 from pygromos.files._basics import _general_gromos_file, parser
+from pygromos.utils.typing import Union, Dict
 
 
 class Distance_restraints(_general_gromos_file._general_gromos_file):
