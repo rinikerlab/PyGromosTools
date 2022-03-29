@@ -6,13 +6,13 @@ Author:
 """
 
 from pygromos.files._basics import _general_gromos_file, parser
-from typing import Union
+from pygromos.utils.typing import Union, Dict
 
 
-class ifp(_general_gromos_file._general_gromos_file):
+class Ifp(_general_gromos_file._general_gromos_file):
     _gromos_file_ending = "ifp"
 
-    def __init__(self, in_value: Union[str, dict]):
+    def __init__(self, in_value: Union[str, Dict]):
         super().__init__(in_value=in_value)
 
     def read_file(self):

@@ -5,15 +5,13 @@ Free Energy Calculations:
 
     THIS file was pirated from here: https://github.com/rinikerlab/Ensembler/blob/master/ensembler/analysis/freeEnergyCalculation.py
 """
-# Generic Typing
-from numbers import Number
-from typing import Iterable
-
 # Calculations
 import numpy as np
 import sympy as sp
 import mpmath as mp
 from scipy import constants as const
+
+from pygromos.utils.typing import Iterable, Number
 
 
 class _FreeEnergyCalculator:

@@ -22,7 +22,8 @@ class test_top(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        imd_file = self.class_type(self.in_file_path)  # noqa: F841
+        imd_file = self.class_type(self.in_file_path)
+        assert isinstance(imd_file, self.class_type)
         return 0
 
 
@@ -33,7 +34,8 @@ class test_top_simple(general_file_tests):
     root_out = root_out
 
     def test_parsing_test_file(self):
-        top_file = self.class_type(self.in_file_path)  # noqa: F841
+        top_file = self.class_type(self.in_file_path)
+        assert isinstance(top_file, self.class_type)
         return 0
 
     def test_additon(self):

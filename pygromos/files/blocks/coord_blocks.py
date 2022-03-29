@@ -1,13 +1,12 @@
 import re
 from enum import Enum
-from typing import List
-from numbers import Number
 
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field, _iterable_gromos_block
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import TIMESTEP as generic_TIMESTEP
 from pygromos.files.blocks._general_blocks import TRAJ as generic_TRAJ
 from pygromos.files import blocks
+from pygromos.utils.typing import List, Number
 
 # forward declarations
 TITLE: generic_TITLE = generic_TITLE
@@ -135,7 +134,6 @@ class POSITION(_iterable_gromos_block):
             raise Exception("Generic Block did not understand the type of content \n content: \n" + str(content))
 
     def read_content_from_str(self, content: List[str]):
-        lines = list(map(lambda x: x.split(), content))  # noqa: F841
         self.content = [
             blocks.coords.atomP(
                 resID=int(x[0]),

@@ -4,8 +4,8 @@ import glob
 import traceback
 import time
 import warnings
-from collections import OrderedDict
 from copy import deepcopy
+from collections import OrderedDict
 
 from pygromos.files.coord import cnf
 from pygromos.files.gromos_system import Gromos_System
@@ -99,6 +99,7 @@ def simulation(
             out_simulation_dir = step_dir + "/simulation"
             out_analysis_dir = step_dir + "/analysis"
             bash.make_folder(out_input_dir)
+            os.chdir(step_dir)
 
             # Prepare gromos system:
             gromos_system.work_folder = out_input_dir
@@ -185,7 +186,7 @@ def simulation(
         )
 
         try:
-            in_scheduler_script_path = utils.write_job_script(  # noqa: F841
+            utils.write_job_script(
                 out_script_path=step_dir + "/schedule_MD_job.py",
                 target_function=simulation_scheduler.do,
                 variable_dict=MD_job_vars,
@@ -226,23 +227,24 @@ def simulation(
         gromos_system.cnf.path = out_analysis_dir + "/data/" + gromos_system.name + ".cnf"
 
     # Return trajectories if available
+    gromos_system._traj_files_path = {}
     if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWX > 0:
         final_trc_file = out_analysis_dir + "/data/" + gromos_system.name + ".trc"
         if os.path.exists(final_trc_file + ".h5"):
-            gromos_system.trc = Trc(input_value=final_trc_file + ".h5")
+            gromos_system.trc = final_trc_file + ".h5"
         elif os.path.exists(final_trc_file):
-            gromos_system.trc = Trc(input_value=final_trc_file)
+            gromos_system.trc = final_trc_file
         else:
-            gromos_system.trc = Trc(input_value=None)
+            gromos_system.trc = Trc(traj_path=None, in_cnf=None)
             gromos_system.trc._future_file = True
             gromos_system.trc.path = final_trc_file
 
     if hasattr(gromos_system.imd, "WRITETRAJ") and gromos_system.imd.WRITETRAJ.NTWE > 0:
         final_tre_file = out_analysis_dir + "/data/" + gromos_system.name + ".tre"
         if os.path.exists(final_tre_file + ".h5"):
-            gromos_system.tre = Tre(input_value=final_tre_file + ".h5")
+            gromos_system.tre = final_tre_file + ".h5"
         elif os.path.exists(final_tre_file):
-            gromos_system.tre = Tre(input_value=final_tre_file)
+            gromos_system.tre = final_tre_file
         else:
             gromos_system.tre = Tre(input_value=None)
             gromos_system.tre._future_file = True
@@ -264,5 +266,6 @@ def simulation(
     # compromising the file system structure
     gromos_system.work_folder_no_update(init_work_folder)
     gromos_system._last_jobID = last_jobID
+    os.chdir(init_work_folder)
 
     return gromos_system

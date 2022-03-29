@@ -1,21 +1,21 @@
-"""
-File:        amber2gromos
-Description: This is a class to parameterize a molecule with ambertools. Generates a GROMOS top and cnf file.
-Author: Salomé Rieder
-"""
-
-# imports
-import subprocess
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
-
-from pygromos.data import topology_templates
-from pygromos import data
-from pygromos.gromos import GromosPP
 import os
+import shutil
+import subprocess
 from rdkit import Chem
 
 
-class amber2gromos:
+from pygromos.files.coord.cnf import Cnf
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
+from pygromos.files.topology.top import Top
+
+from pygromos.gromos import GromosPP
+from pygromos.data import topology_templates
+from pygromos import data
+
+from pygromos.utils.typing import List
+
+
+class AmberFF(_generic_force_field):
     # static variables to control solvation
     solvate = False
     solventbox = "TIP3PBOX"
@@ -23,13 +23,119 @@ class amber2gromos:
     # don't remove temporary directories after execution by default
     clean = False
 
+    def __init__(self, name: str = "amber", path_to_files: str = None, auto_import: bool = True, verbose: bool = False):
+        super().__init__(name, path_to_files=path_to_files, auto_import=auto_import, verbose=verbose)
+        if auto_import:
+            self.auto_import_ff()
+
+    def auto_import_ff(self):
+        # check path
+        if self.path_to_files is not None:
+            if (
+                isinstance(self.path_to_files, List)
+                and len(self.path_to_files) > 0
+                and isinstance(self.path_to_files[0], str)
+            ):
+                self.amber_basedir = self.path_to_files[0]
+        elif shutil.which("tleap") is not None:
+            self.amber_basedir = os.path.abspath(os.path.dirname(shutil.which("tleap")) + "/../")
+        else:
+            raise ImportError(
+                "Could not import GAFF FF as ambertools was missing! " "Please install the package for this feature!"
+            )
+
+        if self.verbose:
+            print("Found amber: " + str(self.amber_basedir))
+
+        self.amber_bindir = self.amber_basedir + "/bin"
+        self.leaprc_files = [
+            self.amber_basedir + "/dat/leap/cmd/leaprc.gaff",
+            self.amber_basedir + "/dat/leap/cmd/leaprc.water.tip3p",
+        ]
+        self.frcmod_files = [self.amber_basedir + "/dat/leap/parm/frcmod.chcl3"]
+
+        for leaprc in self.leaprc_files:
+            if not os.path.isfile(leaprc):
+                raise ImportError("could not find ff file " + leaprc)
+
+        for frcmod in self.frcmod_files:
+            if not os.path.isfile(frcmod):
+                raise ImportError("could not find ff file " + frcmod)
+
+    def create_top(
+        self, mol: str, in_top: Top, in_mol2_file: str = None, work_folder: str = None, gromosPP: GromosPP = None
+    ) -> Top:
+        self.mol = mol
+        self.in_mol2_file = in_mol2_file
+        self.work_folder = work_folder
+        self.gromosPP = gromosPP
+
+        if in_mol2_file is None:
+            self.create_mol2()
+
+        self.amber = amber2gromos(
+            in_mol2_file=self.in_mol2_file,
+            mol=self.mol,
+            forcefield=self,
+            gromosPP=self.gromosPP,
+            work_folder=work_folder,
+            solvate=self.solvate,
+            solventbox=self.solventbox,
+            clean=self.clean,
+        )
+
+        if in_top.path is None:
+            self.top = Top(self.amber.get_gromos_topology())
+        elif isinstance(in_top, Top):
+            self.top = in_top + Top(self.amber.get_gromos_topology())
+        elif isinstance(in_top, str):
+            self.top = Top(in_top) + Top(self.amber.get_gromos_topology())
+        else:
+            raise TypeError("in_top is of wrong type")
+
+        return self.top
+
+    def create_cnf(
+        self, mol: str, in_cnf: Top = None, work_folder: str = None, in_mol2_file: str = None, gromosPP: GromosPP = None
+    ) -> Cnf:
+        if self.amber is None:
+            self.create_mol2()
+            self.amber = amber2gromos(
+                in_mol2_file=self.in_mol2_file,
+                mol=self.mol,
+                forcefield=self,
+                gromosPP=self.gromosPP,
+                work_folder=work_folder,
+                solvate=self.solvate,
+                solventbox=self.solventbox,
+                clean=self.clean,
+            )
+        if in_cnf.path is None:
+            self.cnf = Cnf(self.amber.get_gromos_coordinate_file())
+        elif isinstance(in_cnf, Cnf):
+            self.cnf = in_cnf + Cnf(self.amber.get_gromos_coordinate_file())
+        elif isinstance(in_cnf, str):
+            self.cnf = Cnf(in_cnf) + Cnf(self.amber.get_gromos_coordinate_file())
+        else:
+            raise TypeError("in_cnf is of wrong type")
+
+        return self.cnf
+
+    def create_mol2(self, mol: str = None):
+        pass
+
+
+class amber2gromos:
     def __init__(
         self,
         in_mol2_file: str,
         mol: Chem.rdchem.Mol,
         gromosPP: GromosPP,
-        forcefield: forcefield_system,
+        forcefield: _generic_force_field,
         work_folder: str = ".",
+        solvate: bool = False,
+        solventbox: str = None,
+        clean: bool = False,
     ):
         """
         uses the ambertools programs antechamber, parmchk, and tleap together with
@@ -46,6 +152,12 @@ class amber2gromos:
         forcefield: forcefield_system
         work_folder: str, optional
             where to generate the topology + cnf (default: ".")
+        solvate: bool, optional
+            should the topology be solvated? (default: False)
+        solventbox: str, optional
+            what solvent should be used for solvation? e.g. TIP3PBOX or CHCL3BOX (default: TIP3PBOX)
+        clean: bool, optional
+            should temporary ambertool files be removed after parameterization? (default: False)
         """
 
         self.in_mol2_file = os.path.abspath(in_mol2_file)
@@ -56,6 +168,8 @@ class amber2gromos:
         self.mol = mol
         self.Forcefield = forcefield
         self.gromosPP = gromosPP
+        self.solvate = solvate
+        self.solventbox = solventbox
 
         self.mol2_name = "".join(os.path.basename(self.in_mol2_file).split(".")[:-1])
 
@@ -67,7 +181,7 @@ class amber2gromos:
         # convert AMBER files to GROMOS
         self.amber2gromos()
 
-        if self.clean:
+        if clean:
             self.cleanup
 
         os.chdir(current_dir)
@@ -195,7 +309,43 @@ class amber2gromos:
             in_lib_path=pdb2g96_lib,
             out_cnf_path=self.gromos_coordinate_file,
         )
+
         self.gromos_coordinate_file = os.path.abspath(self.gromos_coordinate_file)
+
+        if self.solvate:
+            with open(self.crd_file, "r") as f:
+                last_line = f.readlines()[-1]
+            print(last_line)
+            x = float(last_line.split()[0]) * 0.1  # x-coordinate in nm
+            y = float(last_line.split()[1]) * 0.1  # y-coordinate in nm
+            z = float(last_line.split()[2]) * 0.1  # z-coordinate in nm
+
+            a1 = last_line.split()[3]  # box angle
+            a2 = last_line.split()[4]  # box angle
+            a3 = last_line.split()[5]  # box angle
+            shutil.copyfile(self.gromos_coordinate_file, "tmp_cnf")
+            file_out = open(self.gromos_coordinate_file, "w")
+            file_in = open("tmp_cnf")
+
+            for line in file_in:
+                if "GENBOX" not in line:
+                    file_out.write(line)
+                else:
+                    file_out.write("GENBOX\n")
+                    file_out.write("    1\n")
+                    file_out.write(
+                        "    " + str(float(x) / 10) + "  " + str(float(y) / 10) + "  " + str(float(z) / 10) + "\n"
+                    )
+                    file_out.write("    " + str(a1) + "  " + str(a2) + "  " + str(a3) + "\n")
+                    file_out.write("    0.000000000    0.000000000    0.000000000\n")
+                    file_out.write("    0.000000000    0.000000000    0.000000000\n")
+                    file_out.write("END")
+                    break
+
+            file_in.close()
+            file_out.close()
+            os.remove("tmp_cnf")
+
         print("converted coordinates saved to " + self.gromos_coordinate_file)
 
     def get_gromos_topology(self) -> str:
@@ -214,7 +364,6 @@ class amber2gromos:
         str
             returns the path to the converted GROMOS coordinate file
         """
-        print(self.gromos_coordinate_file)
         return self.gromos_coordinate_file
 
     def cleanup(self):

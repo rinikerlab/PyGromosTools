@@ -1,6 +1,6 @@
 import copy
-from typing import Iterable, List
-from numbers import Number
+
+from pygromos.utils.typing import List, Dict, Iterable, Number
 
 # FIELDS
 
@@ -153,7 +153,15 @@ class TIMESTEP(_generic_gromos_block):
     step: int
     t: float
 
-    def __init__(self, t: float = None, step: int = None, content=None, subcontent=False, name="TIMESTEP", used=True):
+    def __init__(
+        self,
+        t: float = None,
+        step: int = None,
+        content: Dict = None,
+        subcontent: bool = False,
+        name: str = "TIMESTEP",
+        used: bool = True,
+    ):
 
         if t is None and step is None:
             super().__init__(used=used, name=name, content=content)
@@ -184,7 +192,14 @@ class TITLE(_generic_gromos_block):
     order = [[["content"]]]
     pyGromosWatermark: str = ">>> Generated with PyGromosTools (riniker group) <<<"
 
-    def __init__(self, content: str, field_seperator: str = "\t", line_seperator: str = "\n", name="TITLE", used=True):
+    def __init__(
+        self,
+        content: str,
+        field_seperator: str = "\t",
+        line_seperator: str = "\n",
+        name: str = "TITLE",
+        used: bool = True,
+    ):
         super().__init__(used=used, name=name, content=content)
         self.field_seperator = field_seperator
         self.line_seperator = line_seperator

@@ -6,15 +6,10 @@ Author: Benjamin Schroeder
 """
 
 import pandas as pd
-from typing import Dict, List, Union
+
 from pygromos.files._basics import _general_gromos_file, parser
-
 from pygromos.files.blocks import replica_exchange_blocks as blocks
-
-
-# forward declaration like - for typing - ugly - TODO
-class Repdat:
-    pass
+from pygromos.utils.typing import Union, List, Dict, Repdat_Type
 
 
 class Repdat(_general_gromos_file._general_gromos_file):  #
@@ -31,7 +26,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
     transition_traces: Dict[int, Dict[str, List[float]]] = None
 
     # count_state_per_position[replicaposition][["tot_nup", "tot_ndown", "states_index", "dt", "dt_nup", "dt_ndown"]]
-    count_state_per_position: Dict[int, Dict[str, Union[List or float]]] = None
+    count_state_per_position: Dict[int, Dict[str, Union[List, float]]] = None
 
     # count_state_per_position[replica]
     replica_round_trips: Dict[int, int] = None
@@ -80,7 +75,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
                 clean_replica_round_trips.update({key: 0})
         return clean_replica_round_trips
 
-    def _caculate_transition_traces(self) -> None:
+    def _caculate_transition_traces(self):
         """_caculate_transition_traces
             calculates the transition traces for all replicas from raw data and stores them in self.transition_traces.
             In the end you recieve the trace a replica coord system moved through s dist
@@ -299,7 +294,6 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
         # define needed stuff for calc:
         replica_traces = self.get_replica_traces()
-        num_states = len(self.system.state_eir)  # noqa: F841
         num_replica = len(self.system.s)
 
         extreme_positions = (1, num_replica)  # gives the extreme values of the replica dist
@@ -330,7 +324,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
                 continue
         self.replica_round_trips = self._clean_replica_round_trips(replica_round_trips)
 
-    def append(self, repdat: (List[Repdat] or Repdat)):
+    def append(self, repdat: Union[List[Repdat_Type], Repdat_Type]):
         """append
 
             This function concatenates two repdat files into the executing obj.
@@ -385,7 +379,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
 
     def get_replicaPosition_dependend_nup_ndown_for_each_state(
         self, time_window_size: int = -1, potential_treshold: float = None, recalculate: bool = False
-    ) -> Dict[int, Dict[str, Union[List or float]]]:
+    ) -> Dict[int, Dict[str, Union[List, float]]]:
         """get_replicaPosition_dependend_nup_ndown_for_each_state
             This function is returning the replica position visit counts by each simulation state, per state.
 

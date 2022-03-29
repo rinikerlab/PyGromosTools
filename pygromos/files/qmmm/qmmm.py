@@ -1,9 +1,9 @@
 from copy import deepcopy
-from typing import List
 import warnings
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import qmmm_blocks as blocks
+from pygromos.utils.typing import List
 
 
 class QMMM(_general_gromos_file._general_gromos_file):

@@ -21,26 +21,32 @@ import inspect
 import functools
 import importlib
 import warnings
-from pygromos.data.ff import Gromos54A7
-from typing import Dict, Union, List
 
+
+# Files
 from pygromos.files._basics._general_gromos_file import _general_gromos_file
-from pygromos.files.blocks import imd_blocks
-from pygromos.files.coord.refpos import Reference_Position
-from pygromos.files.coord.posres import Position_Restraints
-
+from pygromos.files.topology.top import Top
 from pygromos.files.coord import cnf
 from pygromos.files.coord.cnf import Cnf
-from pygromos.files.qmmm.qmmm import QMMM
 from pygromos.files.simulation_parameters.imd import Imd
-from pygromos.files.topology.top import Top
+from pygromos.files.qmmm.qmmm import QMMM
 from pygromos.files.topology.disres import Disres
 from pygromos.files.topology.ptp import Pertubation_topology
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+from pygromos.files.coord.refpos import Reference_Position
+from pygromos.files.coord.posres import Position_Restraints
+from pygromos.files.blocks import imd_blocks
 
+# Trajs
+from pygromos.files.trajectory.trc import Trc
+from pygromos.files.trajectory.tre import Tre
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
+
+# Additional
+# from pygromos.files.forcefield import forcefield_system
+from pygromos.data.ff import Gromos54A7
 from pygromos.gromos import GromosXX, GromosPP
 from pygromos.utils import bash, utils
-
+from pygromos.utils.typing import Union, List, Dict, Callable
 
 if importlib.util.find_spec("rdkit") is not None:
     from rdkit import Chem
@@ -50,17 +56,6 @@ if importlib.util.find_spec("rdkit") is not None:
 else:
     has_rdkit = False
 
-
-from pygromos.files.gromos_system.ff.amber2gromos import amber2gromos
-
-if importlib.util.find_spec("openff") is not None:
-    from openff.toolkit.topology import Molecule
-    from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
-    from pygromos.files.gromos_system.ff.serenityff.serenityff import serenityff
-
-    has_openff = True
-else:
-    has_openff = False
 
 skip = {
     "solute_info": cnf.solute_infos,
@@ -80,6 +75,7 @@ class Gromos_System:
         "refpos": Reference_Position,
         "qmmm": QMMM,
     }
+    traj_files = {"trc": Trc, "tre": Tre}
 
     residue_list: Dict
     solute_info: cnf.solute_infos
@@ -99,8 +95,8 @@ class Gromos_System:
     # if this class Variable is set to True, all binary checks will be removed from the systems.
     _gromos_binary_checks: bool = True
 
-    _gromosPP_bin_dir: Union[None, str]
-    _gromosXX_bin_dir: Union[None, str]
+    _gromosPP_bin_dir: str
+    _gromosXX_bin_dir: str
     _gromosPP: GromosPP
     _gromosXX: GromosXX
 
@@ -110,12 +106,13 @@ class Gromos_System:
         system_name: str,
         rdkitMol: Chem.rdchem.Mol = None,
         in_mol2_file: str = None,
-        readIn=True,
-        Forcefield: forcefield_system = forcefield_system(),
+        readIn: bool = True,
+        forcefield: _generic_force_field = _generic_force_field(),
         auto_convert: bool = False,
         adapt_imd_automatically: bool = True,
         verbose: bool = False,
         in_smiles: str = None,
+        in_residue_list: List = None,
         in_top_path: str = None,
         in_cnf_path: str = None,
         in_imd_path: str = None,
@@ -185,12 +182,12 @@ class Gromos_System:
         Warning
             Rises warning if files are not present.
         """
-
         self.hasData = False
         self._name = system_name
         self._work_folder = work_folder
         self.smiles = in_smiles
-        self.Forcefield = Forcefield
+        self.top_residue_list = in_residue_list
+        self.forcefield = forcefield
         self.mol = Chem.Mol()
         self.in_mol2_file = in_mol2_file
         self._checkpoint_path = None
@@ -270,34 +267,6 @@ class Gromos_System:
             else:
                 warnings.warn("auto_convert active but no data provided -> auto_convert NOT done!")
 
-        if in_cnf_path is None and type(self.mol) == Chem.rdchem.Mol and self.mol.GetNumAtoms() >= 1:
-            self.cnf = Cnf(in_value=self.mol)
-            # TODO: fix ugly workaround for cnf from rdkit with GROMOS FFs
-
-            if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-                if self.gromosPP is not None and self.gromosPP._check_binary("pdb2g96"):
-                    try:
-                        from pygromos.files.blocks.coord_blocks import atomP
-
-                        new_pos = [
-                            atomP(
-                                xp=atom.xp,
-                                yp=atom.yp,
-                                zp=atom.zp,
-                                resID=atom.resID,
-                                atomType=atom.atomType + str(i + 1),
-                                atomID=atom.atomID,
-                                resName=self.Forcefield.mol_name,
-                            )
-                            for i, atom in enumerate(self.cnf.POSITION)
-                        ]
-                        self.cnf.POSITION = new_pos
-                        self.cnf.write_pdb(self.work_folder + "/tmp.pdb")
-                        self.pdb2gromos(in_pdb_path=self.work_folder + "/tmp.pdb")
-                        self.add_hydrogens()
-                    except IOError:
-                        warnings.warn("Could not convert cnf from rdkit to gromos, will use rdkit cnf")
-
         # decide if the imd should be adapted (force groups etc.)
         # assert if the respective option is activated and cnf/imd files do actually exist
         if self.adapt_imd_automatically and not self._cnf._future_file and not self.imd._future_file:
@@ -308,6 +277,11 @@ class Gromos_System:
         self._all_files_key.extend(list(map(lambda x: "_" + x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
+
+        # Empty Attr
+        self._traj_files_path = {}
+        self._trc = None
+        self._tre = None
 
     def __str__(self) -> str:
         msg = "\n"
@@ -414,12 +388,19 @@ class Gromos_System:
         attribute_dict = self.__dict__
         new_dict = {}
         for key in attribute_dict.keys():
-            if not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
+            if key.replace("_", "") in self._traj_files_path:
+                if isinstance(attribute_dict[key], str) or attribute_dict[key] is None:  # traj file is not loaded
+                    continue
+                else:  # traj file was loaded
+                    self._traj_files_path[key] = attribute_dict[key].path
+            elif not callable(attribute_dict[key]) and key not in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]})
             elif attribute_dict[key] is not None and key in skip and key not in exclude_pickle:
                 new_dict.update({key: attribute_dict[key]._asdict()})
             else:
                 new_dict.update({key: None})
+
+            new_dict.update({"_traj_files_path": self._traj_files_path})
         return new_dict
 
     def __setstate__(self, state):
@@ -433,6 +414,10 @@ class Gromos_System:
         self._all_files_key.extend(list(map(lambda x: "_" + x, self.optional_files.keys())))
         self._all_files = copy.copy(self.required_files)
         self._all_files.update(copy.copy(self.optional_files))
+
+        # init_traj attr:
+        self._trc = None
+        self._tre = None
 
         self._gromosPP = GromosPP(self._gromosPP_bin_dir, _check_binary_paths=self._gromos_binary_checks)
         self._gromosXX = GromosXX(self._gromosXX_bin_dir, _check_binary_paths=self._gromos_binary_checks)
@@ -669,6 +654,41 @@ class Gromos_System:
             raise ValueError("Could not parse input type: " + str(type(input_value)) + " " + str(input_value))
 
     @property
+    def trc(self) -> Trc:
+        if self._trc is None and "trc" in self._traj_files_path and self.cnf is not None and not self.cnf._future_file:
+            self._trc = Trc(traj_path=self._traj_files_path["trc"], in_cnf=self.cnf)
+        elif self._trc is None and "trc" in self._traj_files_path:
+            self._trc = Trc(traj_path=self._traj_files_path["trc"])
+        return self._trc
+
+    @trc.setter
+    def trc(self, in_value: Union[str, Trc]):
+        if isinstance(in_value, str):
+            self._traj_files_path["trc"] = in_value
+            self._trc = None
+        else:
+            self._trc = in_value
+
+            if hasattr(in_value, "path"):
+                self._traj_files_path["trc"] = in_value
+
+    @property
+    def tre(self) -> Tre:
+        if self._tre is None and "tre" in self._traj_files_path:
+            self._tre = Tre(self._traj_files_path["tre"])
+        return self._tre
+
+    @tre.setter
+    def tre(self, in_value: Union[str, Tre]):
+        if isinstance(in_value, str):
+            self._traj_files_path["tre"] = in_value
+            self._tre = None
+        else:
+            self._tre = in_value
+            if hasattr(in_value, "path"):
+                self._traj_files_path["tre"] = in_value
+
+    @property
     def qmmm(self) -> QMMM:
         return self._qmmm
 
@@ -749,7 +769,7 @@ class Gromos_System:
             var_name = var_prefixes + self.__class__.__name__.lower()
 
         gen_cmd = "#Generate " + self.__class__.__name__ + "\n"
-        gen_cmd = "\n"
+        gen_cmd += "\n"
         gen_cmd += (
             "from "
             + self.__module__
@@ -869,7 +889,14 @@ class Gromos_System:
             if os.path.exists(promised_file.path):
                 if self.verbose:
                     print("READING FILE")
-                setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
+                if promised_file_key == "trc":
+                    setattr(
+                        self,
+                        "_" + promised_file_key,
+                        self._all_files[promised_file_key](traj_path=promised_file.path, in_cnf=self.cnf),
+                    )
+                else:
+                    setattr(self, "_" + promised_file_key, self._all_files[promised_file_key](promised_file.path))
                 self._future_promised_files.remove(promised_file_key)
             else:
                 warnings.warn("Promised file was not found: " + promised_file_key)
@@ -877,72 +904,23 @@ class Gromos_System:
             self._future_promise = False
 
     def auto_convert(self):
-        # create topology
-        if self.Forcefield.name == "2016H66" or self.Forcefield.name == "54A7":
-            # set parameters for make_top
-            mtb_temp = self.Forcefield.mtb_path
-            if hasattr(self.Forcefield, "mtb_orga_path"):
-                mtb_temp += " " + self.Forcefield.mtb_orga_path
-            ifp_temp = self.Forcefield.path
-            if self.Forcefield.mol_name is None:
-                name = self.rdkit2GromosName()
-            else:
-                name = self.Forcefield.mol_name
+        # init forcefield
+        self.forcefield.auto_import_ff()
 
-            # make top
-            if "make_top" in self.gromosPP._found_binary and self.gromosPP._found_binary["make_top"]:
-                self.make_top(
-                    in_building_block_lib_path=mtb_temp,
-                    in_parameter_lib_path=ifp_temp,
-                    in_sequence=name,
-                )
-            else:
-                warnings.warn("Could not use make_top! no binary was found!")
+        # find all kwargs
+        ff_kwargs = {"work_folder": self._work_folder}
+        if self.smiles is not None:
+            ff_kwargs["smiles"] = self.smiles
+        if self.in_mol2_file is not None:
+            ff_kwargs["in_mol2_file"] = self.in_mol2_file
+        if self.top_residue_list is not None:
+            ff_kwargs["residue_list"] = self.top_residue_list
+        if self.forcefield.name == "amberff_gaff":
+            ff_kwargs["gromosPP"] = self.gromosPP
 
-        elif (
-            self.Forcefield.name == "smirnoff"
-            or self.Forcefield.name == "off"
-            or self.Forcefield.name == "openforcefield"
-        ):
-            if not has_openff:
-                raise ImportError(
-                    "Could not import smirnoff FF as openFF toolkit was missing! "
-                    "Please install the package for this feature!"
-                )
-            else:
-                self.top = openforcefield2gromos(
-                    Molecule.from_rdkit(self.mol), self.top, forcefield=self.Forcefield
-                ).convert_return()
-        elif self.Forcefield.name == "serenityff" or self.Forcefield.name == "sff":
-            if not has_openff:
-                raise ImportError(
-                    "Could not import smirnoff FF as openFF toolkit was missing! "
-                    "Please install the package for this feature!"
-                )
-            else:
-                self.serenityff = serenityff(mol=self.mol, forcefield=self.Forcefield, top=self.top)
-                self.serenityff.create_top(
-                    C12_input=self.Forcefield.C12_input, partial_charges=self.Forcefield.partial_charges
-                )
-                self.serenityff.top.make_ordered()
-                self.top = self.serenityff.top
-
-        elif self.Forcefield.name == "amberff_gaff" or self.Forcefield.name == "amberff":
-            if self.in_mol2_file is None:
-                raise TypeError("To use amberff_gaff, please provide a mol2 file")
-
-            amber = amber2gromos(
-                in_mol2_file=self.in_mol2_file,
-                mol=self.mol,
-                forcefield=self.Forcefield,
-                gromosPP=self.gromosPP,
-                work_folder=self.work_folder,
-            )
-            self.top = Top(amber.get_gromos_topology())
-            self.cnf = Cnf(amber.get_gromos_coordinate_file())
-
-        else:
-            raise ValueError("I don't know this forcefield: " + self.Forcefield.name)
+        # convert
+        self.top = self.forcefield.create_top(mol=self.mol, in_top=self.top, **ff_kwargs)
+        self.cnf = self.forcefield.create_cnf(mol=self.mol, in_cnf=self.cnf, **ff_kwargs)
 
     def rdkit2GromosName(self) -> str:
         raise NotImplementedError("please find your own way to get the Gromos Name for your molecule.")
@@ -1058,7 +1036,7 @@ class Gromos_System:
 
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
-        ff_name = self.Forcefield.name
+        ff_name = self.forcefield.name
         if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
             # adjust harmonic forces
             if hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None:
@@ -1073,7 +1051,7 @@ class Gromos_System:
             else:
                 setattr(self.imd, "AMBER", imd_blocks.AMBER(AMBER=1, AMBSCAL=1.2))
 
-    def generate_posres(self, residues: list = [], keep_residues: bool = True, verbose: bool = False):
+    def generate_posres(self, residues: List = [int], keep_residues: bool = True, verbose: bool = False):
         self.posres = self.cnf.gen_possrespec(residues=residues, keep_residues=keep_residues, verbose=verbose)
         self.refpos = self.cnf.gen_refpos()
 
@@ -1232,7 +1210,7 @@ class Gromos_System:
     super privates - don't even read!
     """
 
-    def __SystemConstructionAttributeFinder(self, func: callable) -> callable:
+    def __SystemConstructionAttributeFinder(self, func: Callable) -> Callable:
         """
             ** DECORATOR **
 
@@ -1299,7 +1277,7 @@ class Gromos_System:
 
         return _findGromosSystemAttributes
 
-    def __SystemConstructionUpdater(self, func: callable) -> callable:
+    def __SystemConstructionUpdater(self, func: Callable) -> Callable:
         """
             ** DECORATOR **
             This decorator trys to find output parameters of the function in the gromossystem and will automatically update the state of those attributes!
@@ -1354,7 +1332,7 @@ class Gromos_System:
 
         return _updateGromosSystem
 
-    def __ionDecorator(self, func: callable) -> callable:
+    def __ionDecorator(self, func: Callable) -> Callable:
         """
             ** DECORATOR **
             This Helper Decorator should be removed soon! it helps with gromosPP ion,

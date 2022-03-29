@@ -6,16 +6,13 @@ Author: Benjamin Schroeder
 """
 
 import os
-from typing import Union
-
 import pandas as pd
-from typing import List
-from numbers import Number
 
-from pygromos.utils import bash
 from pygromos.data import pdb_lib
 from pygromos.gromos.gromosBashSyntaxParser import gromosBashSyntaxParser
 from pygromos.gromos._gromosClass import _gromosClass
+from pygromos.utils import bash
+from pygromos.utils.typing import Union, List, Tuple, Number
 
 
 class _gromosPPbase(_gromosClass):
@@ -77,7 +74,7 @@ class _gromosPPbase(_gromosClass):
         out_path: str = "topology.top",
         _binary_name: str = "amber2gromos",
         verbose: bool = False,
-    ) -> None:
+    ):
         """
         Parameters
         ----------
@@ -244,7 +241,6 @@ class _gromosPPbase(_gromosClass):
         in_parameter_lib_path: str,
         in_sequence: str,
         in_solvent: str = "H2O",
-        additional_options="\n",
         _binary_name: str = "make_top",
     ) -> str:
         """
@@ -291,8 +287,8 @@ class _gromosPPbase(_gromosClass):
     @_gromosClass._gromosTypeConverter
     def com_top(
         self,
-        in_topo_paths: (str or List[str]),
-        topo_multiplier: (int or List[int]) = 1,
+        in_topo_paths: Union[str, List[str]],
+        topo_multiplier: Union[int, List[int]] = 1,
         out_top_path: str = "combined_out.top",
         take_topology_params_of_file: int = 1,
         take_solvent_parameters_of_file: int = 1,
@@ -410,7 +406,7 @@ class _gromosPPbase(_gromosClass):
         out_file_path: str = None,
         out_file_format: str = None,
         single_file: bool = None,
-        gather: (int or str) = None,
+        gather: Union[int, str] = None,
         include: str = "SOLUTE",
         reference_structure_path: str = None,
         atomsfit: str = None,
@@ -551,7 +547,7 @@ class _gromosPPbase(_gromosClass):
         verbose: bool = False,
         _binary_name: str = "ene_ana",
         workdir: bool = False,
-    ) -> (List[str] or str):
+    ) -> Union[List[str], str]:
 
         """
             This is a wrapper for ene_ana.
@@ -748,7 +744,7 @@ class _gromosPPbase(_gromosClass):
         tolerance: float = 0.1,
         periodic_boundary_condition: str = "v",
         gathering: str = "cog",
-        _binary_name="gch",
+        _binary_name: str = "gch",
     ) -> str:
         """
                     This function adds reasonable hydrogenpositions a coordinate file.
@@ -794,7 +790,7 @@ class _gromosPPbase(_gromosClass):
         tolerance: float = 0.1,
         periodic_boundary_condition: str = "v",
         gathering: str = "cog",
-        _binary_name="gch",
+        _binary_name: str = "gch",
     ) -> str:
         """
                     This function protonates a coordinate file.
@@ -844,8 +840,8 @@ class _gromosPPbase(_gromosClass):
         threshold: float = None,
         rotate: str = None,
         boxsize: bool = False,
-        _binary_name="sim_box",
-        verbose=False,
+        _binary_name: str = "sim_box",
+        verbose: bool = False,
     ) -> str:
         """
         When simulating a molecule in solution or in a crystal containing solvent
@@ -942,9 +938,9 @@ class _gromosPPbase(_gromosClass):
         boxsize: float = None,
         fixfirst: bool = False,
         seed: float = None,
-        _binary_name="ran_box",
-        verbose=False,
-        return_command_only=False,
+        _binary_name: str = "ran_box",
+        verbose: bool = False,
+        return_command_only: bool = False,
     ) -> str:
 
         command_suffix = ""
@@ -1001,9 +997,9 @@ class _gromosPPbase(_gromosClass):
         periodic_boundary_condition: str = "r",
         nmolecule: int = 1,
         dens: float = 1.0,
-        _binary_name="build_box",
-        verbose=False,
-        return_command_only=False,
+        _binary_name: str = "build_box",
+        verbose: bool = False,
+        return_command_only: bool = False,
     ) -> str:
 
         if out_cnf_path == "":
@@ -1147,7 +1143,7 @@ class _gromosPPbase(_gromosClass):
         out_file_path: str = "dev",
         _binary_name: str = "prep_eds",
         verbose: bool = False,
-    ) -> (str, str):
+    ) -> Tuple[str, str]:
         """
             prepare eds topology.
 
@@ -1534,7 +1530,7 @@ class _gromosPPbase(_gromosClass):
         self,
         in_top_path: str,
         in_jval_path: str,
-        in_traj_path: (str, List[str]),
+        in_traj_path: Union[str, List[str]],
         out_path: str,
         pbc: str = "v",
         gathering: str = "cog",
@@ -1634,7 +1630,7 @@ class _gromosPPbase(_gromosClass):
         mindist: float = 0.8,
         random_seed: int = None,
         exclude: str = None,
-        _binary_name="ion",
+        _binary_name: str = "ion",
         verbose: bool = False,
     ) -> str:
         """

@@ -15,7 +15,9 @@ from pygromos.utils.utils import spacer3 as spacer, dynamic_parser, time_wait_s_
 
 import pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.clean_up_simulation_files as zip_files
 
-package_path = os.path.abspath(__file__ + "/../../../../../..")
+package_path = os.path.abspath(
+    __file__ + "/../../../../../.."
+)  # this is only here  to be sure, that from any context you call pygromos, the package is found.
 sys.path.append(package_path)
 
 
@@ -44,7 +46,6 @@ def work(
     gromosXX_check_binary_paths: bool = True,
     work_dir: str = None,
     zip_trajectories: bool = True,
-    _gromos_noBinary_checks: bool = False,
     **kwargs,
 ):
     """
@@ -137,7 +138,6 @@ def work(
     # What kind of simulation
     is_stochastic_dynamics_sim = False
     is_vacuum = False
-    is_energymin_sim = False  # noqa: F841
 
     if imd_file.BOUNDCOND.NTB == 0:
         is_vacuum = True
@@ -145,10 +145,6 @@ def work(
     if hasattr(imd_file, "STOCHDYN"):
         if imd_file.STOCHDYN.NTSD:
             is_stochastic_dynamics_sim = True
-
-    if hasattr(imd_file, "ENERGYMIN"):
-        if imd_file.ENERGYMIN.NTEM > 0:
-            is_energymin_sim = True  # noqa: F841
 
     # Adapt Initializations:
     if reinitialize_every_run or (initialize_first_run and runID == 1):
@@ -181,6 +177,10 @@ def work(
 
         if is_stochastic_dynamics_sim or is_vacuum:
             imd_file.INITIALISE.NTISTI = 1
+
+    # adjust sim time if continuation:
+    if runID > 1:
+        imd_file.STEP.T = imd_file.STEP.T + (imd_file.STEP.NSTLIM * imd_file.STEP.DT) * (runID - 1)
 
     # Write out:
     tmp_imd_path = imd_file.write(tmp_imd_path)

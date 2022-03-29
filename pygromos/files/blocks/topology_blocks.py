@@ -1,13 +1,25 @@
 import re
-from enum import Enum
-from typing import Type, Union, Iterable, List, Dict, Tuple
-from collections import namedtuple
 import inspect
 import numpy as np
-from numbers import Number
+from enum import Enum
+from collections import namedtuple
 
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
+from pygromos.utils.typing import (
+    Union,
+    Iterable,
+    List,
+    Tuple,
+    Dict,
+    Number,
+    _topology_table_block_Type,
+    _iterable_topology_block_Type,
+    PHYSICALCONSTANTS_Type,
+    TOPVERSION_Type,
+    ATOMTYPENAME_Type,
+    RESNAME_Type,
+)
 
 
 """
@@ -46,15 +58,15 @@ class atom_pair_distanceRes(_generic_field):
         j1: int,
         k1: int,
         l1: int,
-        type1: (geometric_code or int),
+        type1: Union[geometric_code, int],
         i2: int,
         j2: int,
         k2: int,
         l2: int,
-        type2: (geometric_code or int),
+        type2: Union[geometric_code, int],
         r0: float,
         w0: float,
-        rah: (distant_Restraint_Type or int),
+        rah: Union[distant_Restraint_Type, int],
         comment: str = "",
     ):
         """
@@ -514,7 +526,7 @@ TITLE: generic_TITLE = generic_TITLE
 class FORCEFIELD(_generic_gromos_block):
     NAME: str
 
-    def __init__(self, NAME: str = None, content=None):
+    def __init__(self, NAME: str = None, content: List[str] = None):
         if content is None:
             super().__init__(name=self.__class__.__name__, used=True)
             self.NAME = NAME[0].strip()
@@ -533,7 +545,7 @@ class FORCEFIELD(_generic_gromos_block):
 class MAKETOPVERSION(_generic_gromos_block):
     VERSION: str
 
-    def __init__(self, VERSION: str = None, content=None):
+    def __init__(self, VERSION: str = None, content: List[str] = None):
         if content is None:
             super().__init__(name=self.__class__.__name__, used=True)
             self.VERSION = VERSION[0].strip()
@@ -552,7 +564,7 @@ class _topology_block(_generic_gromos_block):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
-    def __init__(self, FORCEFIELD, MAKETOPVERSION, content=None):
+    def __init__(self, FORCEFIELD, MAKETOPVERSION, content: List[str] = None):
         super().__init__(name=self.__class__.__name__, used=True, content=content)
         self.FORCEFIELD = FORCEFIELD
         self.MAKETOPVERSION = MAKETOPVERSION
@@ -562,7 +574,7 @@ class _iterable_topology_block(_iterable_gromos_block):
     FORCEFIELD: FORCEFIELD
     MAKETOPVERSION: MAKETOPVERSION
 
-    def __init__(self, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, content=None):
+    def __init__(self, FORCEFIELD: FORCEFIELD = None, MAKETOPVERSION: MAKETOPVERSION = None, content: List[str] = None):
         super().__init__(self.__class__.__name__, used=True, content=content)
         self.FORCEFIELD = FORCEFIELD
         self.MAKETOPVERSION = MAKETOPVERSION
@@ -710,7 +722,7 @@ class MASSATOMTYPECODE(_iterable_topology_block):
         else:
             raise IOError("I don't understand the type of NMATY: " + str(type(NMATY)))
 
-    def read_content_from_str(self, content: (str, list)):
+    def read_content_from_str(self, content: Union[str, List[str]]):
 
         if isinstance(content, str):
             lines = content.split("\n")
@@ -1214,7 +1226,7 @@ class SINGLEATOMLJPAIR(_iterable_topology_block):
 
     def __init__(
         self,
-        content,
+        content: List[str],
         NRATT: int = None,
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
@@ -1328,7 +1340,7 @@ class MIXEDATOMLJPAIR(_iterable_topology_block):
 
     def __init__(
         self,
-        content,
+        content: List[str],
         NRMTT: int = None,
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
@@ -1409,7 +1421,7 @@ class SPECATOMLJPAIR(_iterable_topology_block):
 
     def __init__(
         self,
-        content,
+        content: List[str],
         NRST: int = None,
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
@@ -1464,9 +1476,9 @@ class soluteatom_type(_generic_field):
         CG: float,
         CGC: int,
         INE: int,
-        INEvalues,
+        INEvalues: List[int],
         INE14: int,
-        INE14values,
+        INE14values: List[int],
     ):
         """soluteatom_type
 
@@ -2093,7 +2105,7 @@ class _topology_table_block(_iterable_topology_block):
 
     def __init__(
         self,
-        content: (str or dict or None),
+        content: Union[str, dict, _topology_table_block_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
         **kwargs
@@ -2186,7 +2198,6 @@ class _topology_table_block(_iterable_topology_block):
                 # generate arguments dict for line parsing (= table_line_type class construction)
                 kwargs = {key: parameter_type[key](field) for key, field in zip(parameter_name, fields)}
                 self.content.append(self.table_line_type(**kwargs))
-        pass
 
     def block_to_string(self) -> str:
         result = "#" + self.field_seperator + self.field_seperator.join(self.table_header) + self.line_seperator
@@ -2198,7 +2209,7 @@ class _topology_table_block(_iterable_topology_block):
 class PHYSICALCONSTANTS(_topology_block):
     def __init__(
         self,
-        content: (str or dict or None or __class__),
+        content: Union[str, dict, PHYSICALCONSTANTS_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2262,7 +2273,7 @@ class PHYSICALCONSTANTS(_topology_block):
 class TOPVERSION(_topology_block):
     def __init__(
         self,
-        content: (str or dict or None or __class__),
+        content: Union[str, Dict[str, str], TOPVERSION_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2272,7 +2283,7 @@ class TOPVERSION(_topology_block):
 class ATOMTYPENAME(_topology_block):
     def __init__(
         self,
-        content: (str or dict or None or __class__),
+        content: Union[str, Dict[str, str], ATOMTYPENAME_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2282,7 +2293,7 @@ class ATOMTYPENAME(_topology_block):
 class RESNAME(_topology_block):
     def __init__(
         self,
-        content: (str or dict or None or __class__),
+        content: Union[str, Dict[str, str], RESNAME_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2295,7 +2306,7 @@ class SOLUTEATOM(_iterable_topology_block):
 
     def __init__(
         self,
-        content: (str or dict or None or Type[_iterable_topology_block]),
+        content: Union[str, Dict[str, str], _iterable_topology_block_Type],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
     ):
@@ -2359,7 +2370,6 @@ class SOLUTEATOM(_iterable_topology_block):
                                     )
                             except IOError:
                                 raise IOError("Problem reading INE for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
-                                break
                     else:
                         INEvalues = []
 
@@ -2393,7 +2403,6 @@ class SOLUTEATOM(_iterable_topology_block):
                                     )
                             except IOError:
                                 raise IOError("Problem reading INE14 for ATNM=" + str(ATNM) + " MRES=" + str(MRES))
-                                break
                     else:
                         INE14values = []
                 # pass everything to the subclass maker
@@ -2433,7 +2442,7 @@ class BONDSTRETCHTYPE(_topology_table_block):
         content: Union[Iterable[bondstretchtype_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NBTY=None,
+        NBTY: int = None,
     ):
         """
                        GROMOS BONDSTRETCHTYPE block
@@ -2471,7 +2480,7 @@ class BOND(_topology_table_block):
         content: Union[Iterable[top_bond_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NBON=None,
+        NBON: int = None,
     ):
         """
                        GROMOS BOND block
@@ -2511,7 +2520,7 @@ class BONDH(_topology_table_block):
         content: Union[Iterable[top_bond_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NBONH=None,
+        NBONH: int = None,
     ):
         """
                        GROMOS BONDH block
@@ -2551,7 +2560,7 @@ class BONDANGLEBENDTYPE(_topology_table_block):
         content: Union[Iterable[bondanglebendtype_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NBTY=None,
+        NBTY: int = None,
     ):
         """
                        GROMOS BONDSTRETCHTYPE block
@@ -2589,7 +2598,7 @@ class BONDANGLE(_topology_table_block):
         content: Union[Iterable[bondangle_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NTHE=None,
+        NTHE: int = None,
     ):
         """
                        GROMOS BONDSTRETCHTYPE block
@@ -2627,7 +2636,7 @@ class BONDANGLEH(_topology_table_block):
         content: Union[Iterable[bondangle_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NTHEH=None,
+        NTHEH: int = None,
     ):
         """
                        GROMOS BONDANGLEH block
@@ -2665,7 +2674,7 @@ class IMPDIHEDRALTYPE(_topology_table_block):
         content: Union[Iterable[impdihedraltype_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NQTY=None,
+        NQTY: int = None,
     ):
         """
                        GROMOS IMPDIHEDRALTYPE block
@@ -2703,7 +2712,7 @@ class IMPDIHEDRALH(_topology_table_block):
         content: Union[Iterable[impdihedralh_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NQHIH=None,
+        NQHIH: int = None,
     ):
         """
                        GROMOS IMPDIHEDRALH block
@@ -2743,7 +2752,7 @@ class IMPDIHEDRAL(_topology_table_block):
         content: Union[Iterable[impdihedral_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NQHI=None,
+        NQHI: int = None,
     ):
         """
                        GROMOS IMPDIHEDRAL block
@@ -2796,7 +2805,7 @@ class TORSDIHEDRALTYPE(_topology_table_block):
         content: Union[Iterable[torsdihedraltype_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NPTY=None,
+        NPTY: int = None,
     ):
         """
                        GROMOS IMPDIHEDRAL block
@@ -2834,7 +2843,7 @@ class DIHEDRALH(_topology_table_block):
         content: Union[Iterable[dihedralh_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NPHIH=None,
+        NPHIH: int = None,
     ):
         """
                        GROMOS DIHEDRAL block
@@ -2874,7 +2883,7 @@ class DIHEDRAL(_topology_table_block):
         content: Union[Iterable[top_dihedral_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NPHI=None,
+        NPHI: int = None,
     ):
         """
                        GROMOS DIHEDRAL block
@@ -2912,7 +2921,7 @@ class CROSSDIHEDRALH(_topology_table_block):
         content: Union[Iterable[crossgihedralh_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NPHIH=None,
+        NPHIH: int = None,
     ):
         """[summary]
 
@@ -2952,7 +2961,7 @@ class CROSSDIHEDRAL(_topology_table_block):
         content: Union[Iterable[crossgihedral_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NPHI=None,
+        NPHI: int = None,
     ):
         """[summary]
 
@@ -2994,7 +3003,7 @@ class LJPARAMETERS(_topology_table_block):
         content: Union[Iterable[ljparameters_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NRATT2=None,
+        NRATT2: int = None,
     ):
         """
                        GROMOS LJPARAMETERS block
@@ -3101,7 +3110,7 @@ class LJEXCEPTIONS(_topology_table_block):
         content: Union[Iterable[ljexception_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NEX=None,
+        NEX: int = None,
     ):
         """
                        GROMOS LJEXCEPTIONS block
@@ -3140,7 +3149,7 @@ class SOLVENTATOM(_topology_table_block):
         content: Union[Iterable[solventatom_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NRAM=None,
+        NRAM: int = None,
     ):
         """
                        GROMOS solventatom block
@@ -3178,7 +3187,7 @@ class SOLVENTCONSTR(_topology_table_block):
         content: Union[Iterable[solventconstr_type], str],
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NCONS=None,
+        NCONS: int = None,
     ):
         """
                        GROMOS SOLVENTCONSTR block
@@ -3216,7 +3225,7 @@ class CONSTRAINT(_topology_table_block):
         content: str or dict or None,
         FORCEFIELD: FORCEFIELD = None,
         MAKETOPVERSION: MAKETOPVERSION = None,
-        NCON=None,
+        NCON: int = None,
     ):
         kwargs = {"NCON": NCON}
         super().__init__(content=content, FORCEFIELD=FORCEFIELD, MAKETOPVERSION=MAKETOPVERSION, **kwargs)
@@ -3274,9 +3283,9 @@ class PERTATOMPARAM(_generic_gromos_block):
         STATEATOMS: List[atom_lam_pertubation_state] = None,
         STATEATOMHEADER: Tuple[str] = None,
         NJLA: int = None,
-        STATEIDENTIFIERS=None,
-        dummy_IAC=22,
-        dummy_CHARGE=0.0,
+        STATEIDENTIFIERS: List[str] = None,
+        dummy_IAC: int = 22,
+        dummy_CHARGE: int = 0.0,
         content: List[str] = None,
     ):
 
@@ -3475,7 +3484,7 @@ class PERTATOMPARAM(_generic_gromos_block):
     DELETING FUNCTIONS
     """
 
-    def delete_state(self, stateIDs: (int, List[int]) = None, stateNames: (str, List[str]) = None):
+    def delete_state(self, stateIDs: Union[int, List[int]] = None, stateNames: Union[str, List[str]] = None):
         """
         This function deletes an state column.
         Parameters
@@ -3520,10 +3529,10 @@ class PERTATOMPARAM(_generic_gromos_block):
                 ]
             self.NPTB -= len(set(stateNames))
 
-        elif stateNames is None and stateIDs is None:
+        else:
             raise Exception("Please give either stateNames or stateIDs")
 
-    def delete_atom(self, atomNR: (int, List[int])):
+    def delete_atom(self, atomNR: Union[int, List[int]]):
         """
         This function removes atom lines from the ptp file.
         Parameters

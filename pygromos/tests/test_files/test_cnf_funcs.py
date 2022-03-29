@@ -48,4 +48,5 @@ class test_cnf(general_file_tests):
 
     def test_visualize(self):
         cnf_file = cnf.Cnf(in_file_path)
-        cnf_file.visualize()
+        view = cnf_file.view
+        assert view is not None

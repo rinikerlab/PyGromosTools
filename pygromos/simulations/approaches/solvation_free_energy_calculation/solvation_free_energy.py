@@ -23,16 +23,22 @@ email: paul.katzberger@phys.chem.ethz.ch
 """
 
 # Imports
+import os
+import warnings
+import numpy as np
+import pandas as pd
+import scipy.integrate as integrate
+
+from rdkit import Chem
+
+
 from pygromos.files.gromos_system import Gromos_System
-from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system
+from pygromos.files.forcefield._generic_force_field import _generic_force_field
+from pygromos.files.forcefield.openff.openff import OpenFF
 from openff.toolkit.topology import Molecule
 from pygromos.files.topology.top import Top
 from pygromos.files.coord import Cnf
-from pygromos.files.gromos_system.ff.openforcefield2gromos import openforcefield2gromos
-from rdkit import Chem
-import os
-import numpy as np
-import warnings
+
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys_local
 from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSys_lsf
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
@@ -54,8 +60,6 @@ from pygromos.files.blocks.imd_blocks import PRESSURESCALE, PERTURBATION, MULTIB
 from pygromos.files.blocks.imd_blocks import RANDOMNUMBERS
 from pygromos.analysis.error_estimate import error_estimator
 from pygromos.utils import bash
-import scipy.integrate as integrate
-import pandas as pd
 from pygromos.files.trajectory.trg import Trg
 
 
@@ -103,7 +107,7 @@ class Solvation_free_energy_calculation:
         input_system: Gromos_System or str or Chem.rdchem.Mol,
         work_folder: str,
         system_name: str = "dummy",
-        forcefield: forcefield_system = forcefield_system(name="54A7"),
+        forcefield: _generic_force_field = OpenFF(),
         gromosXX: str = None,
         gromosPP: str = None,
         useGromosPlsPls: bool = True,
@@ -130,7 +134,7 @@ class Solvation_free_energy_calculation:
                 work_folder=work_folder,
                 in_smiles=input_system,
                 auto_convert=True,
-                Forcefield=forcefield,
+                forcefield=forcefield,
                 adapt_imd_automatically=False,
             )
 
@@ -139,11 +143,11 @@ class Solvation_free_energy_calculation:
 
             # test if openforcefield is used
             # Create Topology and convert to GROMOS
-            elif forcefield.name == "openforcefield":
+            elif forcefield.name == "openff":
                 molecule = Molecule.from_smiles(input_system)
                 molecule.name = system_name[:4]
                 # Change name to system_name for residue
-                top = openforcefield2gromos(molecule).convert_return()
+                top = forcefield.create_top(molecule)
 
                 # Setter not working, manual check needed
                 assert isinstance(top, Top)
@@ -209,7 +213,7 @@ class Solvation_free_energy_calculation:
         emin_sys, jobID = self.minimize_liq(in_gromos_simulation_system=self.groSys_liq, prev_JobID=-1)
         eq_sys, jobID = self.eq_liq(in_gromos_simulation_system=emin_sys, prev_JobID=jobID)
         ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID)
-        self.calculate_solvation_free_energy(ti_sys, jobID)
+        self.calculate_solvation_free_energy(ti_sys, jobID)  # TODO: fix errors
 
     def create_liq(self):
         """

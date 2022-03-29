@@ -25,12 +25,13 @@ class test_gromos_system(unittest.TestCase):
         print(subSys)
 
     def test_construct_files(self):
-        subSys_files = self.class_type(  # noqa: F841
+        subSys_files = self.class_type(
             work_folder=tmp_test_dir,
             system_name="Testing1",
             in_cnf_path=self.input_cnf_path,
             in_top_path=self.input_top_path,
         )
+        assert isinstance(subSys_files, self.class_type)
 
         subSys_files2 = self.class_type(
             work_folder=tmp_test_dir,

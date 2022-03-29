@@ -6,16 +6,10 @@ Author: Benjamin Schroeder
 """
 
 import pandas as pd
-from typing import Dict, List, Union
+
 from pygromos.files._basics import parser
-
 from pygromos.files.blocks import replica_exchange_blocks as blocks
-
-# forward declaration like - for typing - ugly - TODO
-
-
-class Repdat:
-    pass
+from pygromos.utils.typing import Dict, List, Union, Repdat_Type
 
 
 class Repdat(pd.DataFrame):  #
@@ -43,7 +37,7 @@ class Repdat(pd.DataFrame):  #
     transition_traces: Dict[int, Dict[str, List[float]]] = None
 
     # count_state_per_position[replicaposition][["tot_nup", "tot_ndown", "states_index", "dt", "dt_nup", "dt_ndown"]]
-    count_state_per_position: Dict[int, Dict[str, Union[List or float]]] = None
+    count_state_per_position: Dict[int, Dict[str, Union[List[int], int]]] = None
 
     # count_state_per_position[replica]
     replica_round_trips: Dict[int, int] = None
@@ -308,7 +302,7 @@ class Repdat(pd.DataFrame):  #
         """
         # define needed stuff for calc:
         replica_traces = self.get_replica_traces()
-        num_states = len(self.system.state_eir)  # noqa: F841
+        _ = len(self.system.state_eir)
         num_replica = len(self.system.s)
 
         extreme_positions = (1, num_replica)  # gives the extreme values of the replica dist
@@ -339,7 +333,7 @@ class Repdat(pd.DataFrame):  #
                 continue
         self.replica_round_trips = self._clean_replica_round_trips(replica_round_trips)
 
-    def append(self, repdat: (List[Repdat] or Repdat)):
+    def append(self, repdat: Union[List[Repdat_Type], Repdat_Type]):
         """append
 
             This function concatenates two repdat files into the executing obj.

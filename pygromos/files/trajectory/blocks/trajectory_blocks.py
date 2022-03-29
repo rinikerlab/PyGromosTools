@@ -1,20 +1,21 @@
 import numpy as np
+from pygromos.utils.typing import List, Dict
 from pygromos.files.trajectory.blocks import energy_trajectory_subblock as ene_sub_block
 
 
 class _general_pandas_trajectory_block:
-    def __init__(self, content):
+    def __init__(self, content: List):
         self.content = content
 
     def __eq__(self, __o: object) -> bool:
         return (self.content == __o.content) and (self.__class__ == __o.__class__)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return {"default_block": self.content}  # Only use for Debuging
 
 
 class _general_pandas_tre_block(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         # reset the static variables in the energy trajectory subsubblock
         ene_sub_block._general_pandas_energy_trajectory_subblock_numerated.num_energy_baths = 0
@@ -23,7 +24,7 @@ class _general_pandas_tre_block(_general_pandas_trajectory_block):
         ene_sub_block._general_pandas_energy_trajectory_subblock_numerated.num_temp_groups = 0
         ene_sub_block._general_pandas_energy_trajectory_subblock_numerated.num_lambdas = 0
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return_dict = {}
         subblock_content = {}
         subblock_name = "dummy"
@@ -65,13 +66,13 @@ class _general_pandas_tre_block(_general_pandas_trajectory_block):
 
 
 class TIMESTEP(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         entries = self.content[0].strip().split()
         self.step = int(entries[0])
         self.time = float(entries[1])
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return {"step": self.step, "time": self.time}
 
 
@@ -81,10 +82,10 @@ TRC Blocks:
 
 
 class POSITIONRED(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return_dict = {}
         iterator = 1
         for line in self.content:
@@ -96,10 +97,10 @@ class POSITIONRED(_general_pandas_trajectory_block):
 
 
 class SHAKEFAILPOSITION(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return_dict = {}
         iterator = 1
         for line in self.content:
@@ -111,10 +112,10 @@ class SHAKEFAILPOSITION(_general_pandas_trajectory_block):
 
 
 class SHAKEFAILPREVPOSITION(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return_dict = {}
         iterator = 1
         for line in self.content:
@@ -126,10 +127,10 @@ class SHAKEFAILPREVPOSITION(_general_pandas_trajectory_block):
 
 
 class REFPOSITION(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return_dict = {}
         iterator = 1
         for line in self.content:
@@ -141,10 +142,10 @@ class REFPOSITION(_general_pandas_trajectory_block):
 
 
 class GENBOX(_general_pandas_trajectory_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         if len(self.content) < 4:
             raise IOError("GENBOX block incomplete in trajectory")
         return_dict = {}
@@ -162,18 +163,18 @@ TRE Blocks:
 
 
 class ENERGY03(_general_pandas_tre_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class VOLUMEPRESSURE03(_general_pandas_tre_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
@@ -183,8 +184,8 @@ TRG Blocks:
 
 
 class FREEENERDERIVS03(_general_pandas_tre_block):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()

@@ -29,6 +29,7 @@ import pathlib
 
 from pygromos.files.trajectory.blocks import trajectory_blocks as blocks
 from pygromos.utils import bash
+from pygromos.utils.typing import _General_Trajectory_Type
 
 
 class _General_Trajectory:
@@ -39,7 +40,7 @@ class _General_Trajectory:
     _future_file: bool  # if code is executed async, this helps organizing.
     _gromos_file_ending: str
 
-    def __init__(self, input_value: (str or None), auto_save=True, stride: int = 1, skip: int = 0):
+    def __init__(self, input_value: str, auto_save: bool = True, stride: int = 1, skip: int = 0):
         if input_value is None:
             self.TITLE = "Empty Trajectory"
             self.database = pandas.DataFrame({"": []})
@@ -87,7 +88,7 @@ class _General_Trajectory:
     def __repr__(self):
         return str(self)
 
-    def __add__(self, traj):
+    def __add__(self, traj: _General_Trajectory_Type):
         return self.add_traj(traj)
 
     def __copy__(self):
@@ -104,7 +105,13 @@ class _General_Trajectory:
         traj.database = self.database.copy(deep=True)
         return traj
 
-    def add_traj(self, traj, skip_new_0=False, auto_detect_skip=True, correct_time=True):
+    def add_traj(
+        self,
+        traj: _General_Trajectory_Type,
+        skip_new_0: bool = False,
+        auto_detect_skip: bool = True,
+        correct_time: bool = False,
+    ):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 
         Parameters
@@ -120,6 +127,7 @@ class _General_Trajectory:
 
         correct_time : bool
             if True, the time of the new trajectory will be corrected to continue after the last frame of the base class
+            Not Implemented currently!
 
         Returns
         -------
@@ -138,7 +146,6 @@ class _General_Trajectory:
                 "first shape: " + str(self.database.shape) + "\tsecond shape: " + str(traj.database.shape) + "\n"
             )
         # get end data from first trajectory
-        step_offset = int(self.database.step.iloc[-1])
         time_offset = float(self.database.time.iloc[-1])
         delta_time_self = self.get_time_step()
 
@@ -160,8 +167,13 @@ class _General_Trajectory:
                     time_offset += delta_time_self
 
         if correct_time:
-            new_data.step += step_offset
-            new_data.time += time_offset
+            # is the time access all right?
+            # last_step_traj1 = int(self.database.time.iloc[-1])
+            # first_step_traj2 = int(new_data.database.time.iloc[0])
+            # consecutive_trajs = last_step_traj1+delta_time_self == first_step_traj2
+            # correct the axis:
+            #
+            raise NotImplementedError("This is not implemented currently!")
 
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
@@ -291,6 +303,6 @@ class _General_Trajectory:
         if len(self.database) == 0:
             return 0
         elif len(self.database) == 1:
-            return float(self.database.time.iloc[-1])
+            return float(self.database.time.iloc[0])
         else:
-            return float(self.database.time.iloc[-1]) - float(self.database.time.iloc[-2])
+            return float(self.database.time.iloc[1]) - float(self.database.time.iloc[0])

@@ -1,14 +1,12 @@
 import os
 from datetime import datetime
 import pandas as pd
-from typing import Union, List
+from pygromos.utils.typing import Union, List
 
 from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.submission_job import Submission_job
 
 from pygromos.utils import bash
-
-# from pygromos.utils.utils import time_wait_s_for_filesystem
 
 
 class LSF(_SubmissionSystem):
@@ -355,7 +353,6 @@ class LSF(_SubmissionSystem):
         else:
             if self.verbose:
                 print("Skipping refresh of job list, as the last update is " + str(last_update) + "s ago")
-            pass
         return self._job_queue_list
 
     def search_queue_for_jobid(self, job_id: int) -> pd.DataFrame:

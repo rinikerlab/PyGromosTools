@@ -3,8 +3,6 @@ Unit and regression dev for the pygromos package.
 """
 
 # Import package, dev suite, and other packages as needed
-import pygromos  # noqa: F401
-import pytest  # noqa: F401
 import sys
 
 

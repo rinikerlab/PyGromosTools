@@ -9,7 +9,7 @@ This mehod can also be called directly via top1.com_top(top2), top1 + top2 or to
 Author: Marc Lehner
 """
 
-from typing import List
+from pygromos.utils.typing import List
 from pygromos.files.topology.top import Top
 
 

@@ -6,9 +6,11 @@ Description:
 Author: Benjamin Schroeder
 """
 
+import glob
 import os
 import datetime
 import time
+from pygromos.files.simulation_parameters.imd import Imd
 
 from pygromos.utils import bash
 from pygromos.utils.utils import time_wait_s_for_filesystem
@@ -258,6 +260,8 @@ class _GromosXX(_gromosClass):
         out_tre: bool = True,
         out_trs: bool = False,
         out_trg: bool = False,
+        out_trf: bool = False,
+        out_trv: bool = False,
         nomp: int = 1,
         nmpi: int = 1,
         verbose: bool = True,
@@ -314,6 +318,12 @@ class _GromosXX(_gromosClass):
         out_trg :   bool, optional
                     do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)
 
+        out_trf :   bool, optional
+                    do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)
+
+        out_trv :   bool, optional
+                    do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)
+
         queueing_systems : NONE
             This var is not in use yet! - under development
 
@@ -354,15 +364,28 @@ class _GromosXX(_gromosClass):
         else:
             raise IOError("Did not get an input top file. Got: " + in_topo_path)
 
+        if in_imd_path:
+            command += ["@input", str(in_imd_path)]
+
+            # Input cnf file depends if we have the CONT keyword or not
+            # with CONT == 1, the convention is to give the name of the
+            # file without the "_1" extension
+            imd = Imd(in_imd_path)
+            if hasattr(imd, "REPLICA") and imd.REPLICA is not None and imd.REPLICA.CONT:
+                tmp_path = "/".join(os.path.abspath(in_coord_path).split("/")[:-1])
+                in_coord_path = sorted(glob.glob(tmp_path + "/*.cnf"))[0]
+                in_coord_path = in_coord_path.replace("_1.cnf", ".cnf")
+            elif hasattr(imd, "REPLICA_EDS") and imd.REPLICA_EDS is not None and imd.REPLICA_EDS.CONT:
+                tmp_path = "/".join(os.path.abspath(in_coord_path).split("/")[:-1])
+                in_coord_path = sorted(glob.glob(tmp_path + "/*.cnf"))[0]
+                in_coord_path = in_coord_path.replace("_1.cnf", ".cnf")
+        else:
+            raise IOError("Did not get an input imd file. Got: " + in_imd_path)
+
         if in_coord_path:
             command += ["@conf", str(in_coord_path)]
         else:
             raise IOError("Did not get an input coord file. Got: " + in_coord_path)
-
-        if in_imd_path:
-            command += ["@input", str(in_imd_path)]
-        else:
-            raise IOError("Did not get an input imd file. Got: " + in_imd_path)
 
         if in_pert_topo_path:
             command += ["@pttopo", str(in_pert_topo_path)]
@@ -379,17 +402,21 @@ class _GromosXX(_gromosClass):
         if out_prefix:
             command += ["@fin", str(out_prefix + ".cnf")]
 
-            if out_trc:
-                command += ["@trc", str(out_prefix + ".trc")]
-            if out_trs:
-                command += ["@trs", str(out_prefix + ".trs")]
-            if out_tre:
-                command += ["@tre", str(out_prefix + ".tre")]
-            if out_trg:
-                command += ["@trg", str(out_prefix + ".trg")]
+        if out_trc:
+            command += ["@trc", str(out_prefix + ".trc")]
+        if out_trs:
+            command += ["@trs", str(out_prefix + ".trs")]
+        if out_tre:
+            command += ["@tre", str(out_prefix + ".tre")]
+        if out_trg:
+            command += ["@trg", str(out_prefix + ".trg")]
+        if out_trf:
+            command += ["@trf", str(out_prefix + ".trf")]
+        if out_trv:
+            command += ["@trv", str(out_prefix + ".trv")]
 
-            command += ["@repout", str(out_prefix + "_repout.dat")]
-            command += ["@repdat", str(out_prefix + "_repdat.dat")]
+        command += ["@repout", str(out_prefix + "_repout.dat")]
+        command += ["@repdat", str(out_prefix + "_repdat.dat")]
 
         log_file_path = out_prefix + ".omd"
         command_text = " ".join(command) + " >> " + log_file_path + "\n"

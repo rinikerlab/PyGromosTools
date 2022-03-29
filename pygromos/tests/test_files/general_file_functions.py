@@ -38,7 +38,7 @@ class general_file_tests(unittest.TestCase):
     def test_equalAfterCopy(self):
         obj_file = self.class_type(self.in_file_path)
         obj_copy = copy.deepcopy(obj_file)
-        # TODO fix
+
         if isinstance(obj_file, Pertubation_topology):
             pass
         else:

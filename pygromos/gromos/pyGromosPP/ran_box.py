@@ -27,9 +27,9 @@ def ran_box(
     boxsize: float = None,
     fixfirst: bool = False,
     seed: float = None,
-    _binary_name="ran_box",
-    verbose=True,
-    return_command_only=False,
+    _binary_name: str = "ran_box",
+    verbose: bool = True,
+    return_command_only: bool = False,
 ) -> str:
 
     top = Top(in_value=in_top_path)

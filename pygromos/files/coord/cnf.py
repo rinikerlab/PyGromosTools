@@ -1,10 +1,11 @@
 import copy
-
-from collections import namedtuple, defaultdict
-from typing import Dict, List, Tuple, Union
-from typing import TypeVar
+import mdtraj
+import tempfile
 import numpy as np
+import nglview as nj
 from scipy.spatial.transform import Rotation
+from collections import namedtuple, defaultdict
+
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
@@ -14,11 +15,12 @@ from pygromos.files.blocks import coord_blocks as blocks
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.utils import amino_acids as aa
 from pygromos.utils.utils import _cartesian_distance
+from pygromos.utils.typing import Union, List, Tuple, Dict, Reference_Position_Type, Position_Restraints_Type
 from pygromos.files.blocks.coord_blocks import GENBOX
 from pygromos.analysis import coordinate_analysis as ca
+from pygromos.visualization.coordinates_visualization import visualize_system
 
-Reference_Position = TypeVar("refpos.Reference_Position")
-Position_Restraints = TypeVar("posres.Position_Restraints")
+
 # Constructs describing the system
 solute_infos = namedtuple("solute_info", ["names", "number", "positions", "number_of_atoms"])
 protein_infos = namedtuple(
@@ -64,7 +66,7 @@ class Cnf(_general_gromos_file):
     def __init__(
         self,
         in_value: Union[str, dict, None],
-        clean_resiNumbers_by_Name=False,
+        clean_resiNumbers_by_Name: bool = False,
         verbose: bool = False,
         _future_file: bool = False,
     ):
@@ -131,9 +133,9 @@ class Cnf(_general_gromos_file):
     def get_system_information(
         self,
         not_ligand_residues: List[str] = [],
-        ligand_resn_prefix: (str or List[str]) = None,
+        ligand_resn_prefix: Union[str, List[str]] = None,
         solvent_name: str = "SOLV",
-    ) -> (Dict[str, Dict[int, int]], namedtuple, namedtuple, namedtuple, namedtuple):
+    ) -> Tuple[Dict[str, Dict[int, int]], namedtuple, namedtuple, namedtuple, namedtuple]:
         """get_system_information
         This function utilizes a dictionary containing all residues and atom numbers (e.g. cnf.get_residues()) and modifies them such, that the result can be used to set up a standard REEDS gromos_simulation
 
@@ -267,7 +269,7 @@ class Cnf(_general_gromos_file):
 
         return clean_residues, ligands, protein, non_ligands, solvent
 
-    def rename_residue(self, new_resName: str, resID: int = False, resName: str = False, verbose=False) -> int:
+    def rename_residue(self, new_resName: str, resID: int = False, resName: str = False, verbose: bool = False) -> int:
         """rename_residue
 
         this function is renaming residues from a cnf file with taking following _blocks into account:
@@ -295,7 +297,6 @@ class Cnf(_general_gromos_file):
 
         check_blocks = ["POSITION", "VELOCITY"]
 
-        atom_nums = []  # noqa: F841 # list of all atom numbers # TODO: check if this is needed
         if (not resID or not resName) and verbose:
             print("WARNING giving only resID or resName can be ambigous!")
         if resID or resName:
@@ -319,7 +320,7 @@ class Cnf(_general_gromos_file):
             raise IOError("No residue number or resName given.")
         return 0
 
-    def clean_posiResNums(self) -> None:
+    def clean_posiResNums(self):
         """clean_posiResNums
             This function recount the Residue number with respect to residue name and residue number.
 
@@ -609,8 +610,8 @@ class Cnf(_general_gromos_file):
         return np.array([(a.xp, a.yp, a.zp) for a in self.POSITION])
 
     def get_atoms_distance(
-        self, atomI: (int or tuple) = None, atomJ: int = None, atoms: (list or dict) = None
-    ) -> float or list:
+        self, atomI: Union[int, List[int]] = None, atomJ: int = None, atoms: Union[List[int], Dict[int, int]] = None
+    ) -> Union[float, List[float]]:
 
         if "POSITION" in dir(self):
             # one
@@ -693,7 +694,7 @@ class Cnf(_general_gromos_file):
         """
         return self.POSITION.content[-1].atomID
 
-    def center_of_geometry(self, selectedAtoms: list = None) -> list:
+    def center_of_geometry(self, selectedAtoms: List[int] = None) -> list:
         """calculates the center of geometry for asingle molecule or the selected Atoms
 
         Returns
@@ -720,7 +721,9 @@ class Cnf(_general_gromos_file):
         else:
             raise ValueError("NO POSITION block in cnf-Object: " + self.path)
 
-    def rotate(self, rotationCenter: np.array = None, selectedAtoms=None, alpha=0, beta=0, gamma=0):
+    def rotate(
+        self, rotationCenter: np.array = None, selectedAtoms=None, alpha: float = 0, beta: float = 0, gamma: float = 0
+    ):
         # define rotation center
         if rotationCenter is None:
             rotationCenter = np.array(self.center_of_geometry())
@@ -772,7 +775,7 @@ class Cnf(_general_gromos_file):
         length = self.GENBOX.length
         return length[0] * length[1] * length[2]
 
-    def get_density(self, mass=1, autoCalcMass=False) -> float:
+    def get_density(self, mass: float = 1, autoCalcMass: bool = False) -> float:
         """
             This function calculates the density of the cnf.
 
@@ -847,7 +850,7 @@ class Cnf(_general_gromos_file):
     """
 
     def generate_position_restraints(
-        self, out_path_prefix: str, residues: dict or list, verbose: bool = False
+        self, out_path_prefix: str, residues: Union[Dict[str, List[int]], List[int]], verbose: bool = False
     ) -> Tuple[str, str]:
         """
             This function generates position restraints for the selected residues.
@@ -873,8 +876,8 @@ class Cnf(_general_gromos_file):
         return posres, refpos
 
     def gen_possrespec(
-        self, residues: Union[dict or list], keep_residues: bool = True, verbose: bool = False
-    ) -> Position_Restraints:
+        self, residues: Union[Dict[str, List[int]], List[int]], keep_residues: bool = True, verbose: bool = False
+    ) -> Position_Restraints_Type:
         """
                 This function writes out a gromos file, containing a atom list. that is to be position restrained!
                 Raises not Implemented error, if a input variant of the residues
@@ -981,7 +984,7 @@ class Cnf(_general_gromos_file):
         posres_class.write(out_path)
         return out_path
 
-    def gen_refpos(self) -> Reference_Position:
+    def gen_refpos(self) -> Reference_Position_Type:
         from pygromos.files.coord import refpos
 
         return refpos.Reference_Position(self)
@@ -1035,7 +1038,7 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-    def get_pdb(self, rdkit_ready: bool = True, connectivity_top=None) -> str:
+    def get_pdb(self, rdkit_ready: bool = False, connectivity_top=None) -> str:
         """
             translate cnf to pdb.
 
@@ -1053,7 +1056,7 @@ class Cnf(_general_gromos_file):
 
         """
         dummy_occupancy = dummy_bfactor = dummy_charge = dummy_mass = 0.0
-        dummy_alt_location = dummy_chain = dummy_insertion_code = dummy_segment = ""
+        dummy_chain = ""
 
         if rdkit_ready:
             format_str = (
@@ -1073,7 +1076,7 @@ class Cnf(_general_gromos_file):
                         pos.zp * 10,
                         dummy_mass,
                         int(dummy_charge),
-                        pos.atomType,
+                        pos.atomType[0],
                     )
                 )
 
@@ -1084,33 +1087,32 @@ class Cnf(_general_gromos_file):
             # 2) CONSTUCT PDB BLOCKS
             # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
             pdb_format = (
-                "ATOM  {:>5d} {:<4}{:1}{:<4} {:1}{:>3d}{:1}   {:>7.3f} {:>7.3f} {:>7.3f} {:>5}{:>6}{:<3}{:>2} {:>2d}"
+                "ATOM  {:>5d} {:>4} {:<3} {:1}{:>4d}   {:>8.3f}{:>8.3f}{:>8.3f}  {:>3.2f} {:>5}      {:>4}{:>2}"
             )
+
+            # pdb_format =  "ATOM  %5d %-4s %3s %1s%4d   %s%s%s  1.00 %5s      %-4s%2s  "
 
             frame_positions = []
             for ind, atom in enumerate(self.POSITION):
                 frame_positions.append(
                     pdb_format.format(
-                        atom.atomID,
+                        atom.atomID % 100000,
                         atom.atomType,
-                        dummy_alt_location,
                         atom.resName,
                         dummy_chain,
-                        int(atom.resID),
-                        dummy_insertion_code,
+                        atom.resID % 10000,
                         atom.xp * 10,
                         atom.yp * 10,
                         atom.zp * 10,
                         dummy_occupancy,
                         dummy_bfactor,
-                        dummy_segment,
-                        atom.atomType,
                         int(dummy_charge),
+                        atom.atomType[0],
                     )
                 )  # times *10 because pdb is in A
 
             pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
-            pdb_str += "\n".join(frame_positions) + "\n"
+            pdb_str += "\n".join(frame_positions)
 
         # future:
         # add bond block with top optionally
@@ -1187,7 +1189,53 @@ class Cnf(_general_gromos_file):
         visualize
     """
 
-    def visualize(self):
-        from pygromos.visualization.coordinates_visualization import show_cnf
+    @property
+    def view(self) -> nj.NGLWidget:
+        if not hasattr(self, "_view") or not (hasattr(self, "_view") and isinstance(self._view, nj.NGLWidget)):
+            return self.recreate_view()
+        else:
+            return self._view
 
-        return show_cnf(self)
+    def get_mdtraj(self):
+        tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
+        self.write_pdb(tmpFile.name)
+        self._mdtraj = mdtraj.load_pdb(tmpFile.name)
+        if hasattr(self, "GENBOX"):
+            self._mdtraj.unitcell_lengths = self.GENBOX.length
+            self._mdtraj.unitcell_angles = self.GENBOX.angles
+
+        # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
+        tmpFile.close()
+        return self._mdtraj
+
+    def recreate_view(self) -> nj.NGLWidget:
+        # Topo tmp file
+        self._mdtraj = self.get_mdtraj()
+        self._view = visualize_system(traj=self._mdtraj)
+        return self._view
+
+    def recenter_pbc(self):
+        """
+        This function is shifting the coordinates such that the solute molecule is centered, if it is placed in the corners.
+        However, this function might break down with more complicated situations. Careful the function is not fail safe ;)
+        """
+
+        self.get_mdtraj()
+        self._mdtraj.image_molecules()
+
+        # write new pos:
+        result_pos = []
+        for new_pos, aP in zip(self._mdtraj.xyz[0], self.POSITION):
+            result_pos.append(
+                blocks.atomP(
+                    xp=new_pos[0],
+                    yp=new_pos[1],
+                    zp=new_pos[2],
+                    resID=aP.resID,
+                    resName=aP.resName,
+                    atomType=aP.atomType,
+                    atomID=aP.atomID,
+                )
+            )
+
+        self.POSITION = result_pos

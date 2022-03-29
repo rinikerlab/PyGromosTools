@@ -1,9 +1,8 @@
-from typing import Callable
-from pygromos.utils.compiledProgram import _compiled_program
-
 import os
 import functools
 from pygromos.files._basics import _general_gromos_file
+from pygromos.utils.typing import Callable
+from pygromos.utils.compiledProgram import _compiled_program
 
 
 class _gromosClass(_compiled_program):
@@ -28,6 +27,7 @@ class _gromosClass(_compiled_program):
         """
         super().__init__(in_bin_dir, dummy, _check_binary_paths=_check_binary_paths)
 
+    @staticmethod
     def _gromosTypeConverter(func: Callable) -> Callable:
         """
             This decorator can be used to automatically convert gromos files to the str path, where this obj, was written to.

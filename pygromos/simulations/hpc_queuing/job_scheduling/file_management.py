@@ -1,21 +1,20 @@
 """
     This module is doing all the post simulation file juggeling needed for gromos. CURRENTLY OLD DON"T USE
 """
-import glob
 import os
-from subprocess import SubprocessError
+import glob
 import tempfile
 import warnings
-import multiprocessing as mult
-
-from typing import List, Dict, Union, Tuple, Iterable
 import pandas as pd
+import multiprocessing as mult
+from subprocess import SubprocessError
 
 from pygromos.files.simulation_parameters import imd
 from pygromos.files.otherfiles import repdat
 from pygromos.files.trajectory import tre
 from pygromos.gromos import gromosPP
 from pygromos.utils import bash
+from pygromos.utils.typing import List, Dict, Union, Tuple, Cnf_Type
 
 """
     PARALLEL WORKER - These functions are required for parallelized code Execution
@@ -24,7 +23,7 @@ from pygromos.utils import bash
 
 def _thread_worker_cat_trc(
     job: int,
-    replicaID_range: (Iterable, List[int]),
+    replicaID_range: List[int],
     trc_files: Dict[int, List[str]],
     out_prefix: str,
     topology_path: str,
@@ -117,7 +116,7 @@ def _thread_worker_cat_trc(
 
 def _thread_worker_cat_tre(
     job: int,
-    replicaID_range: (Iterable, List[int]),
+    replicaID_range: List[int],
     tre_files: Dict[int, List[str]],
     out_prefix: str,
     out_tres: dict,
@@ -170,7 +169,7 @@ def _thread_worker_cat_tre(
 
 
 def thread_worker_concat_repdat(
-    job: int, repdat_file_out_path: str, repdat_file_paths: (str, List[str]), verbose: bool = False
+    job: int, repdat_file_out_path: str, repdat_file_paths: Union[str, List[str]], verbose: bool = False
 ) -> str:
     if os.path.exists(repdat_file_out_path):
         warnings.warn("Skipped repdat creation as already existed!: " + repdat_file_out_path)
@@ -198,7 +197,14 @@ def thread_worker_concat_repdat(
         del repdat_file
 
 
-def _thread_worker_cnfs(job, out_cnfs, in_cnfs, replica_range, out_folder, verbose: bool = False):
+def _thread_worker_cnfs(
+    job: int,
+    out_cnfs: List[str],
+    in_cnfs: List[Cnf_Type],
+    replica_range: List[int],
+    out_folder: str,
+    verbose: bool = False,
+):
     if verbose:
         print("JOB: " + str(job) + " copy to " + out_folder)
     for replicaID in replica_range:
@@ -213,7 +219,7 @@ def _thread_worker_cnfs(job, out_cnfs, in_cnfs, replica_range, out_folder, verbo
 
 def _thread_worker_conv_trc(
     job: int,
-    replica_range: Iterable[int],
+    replica_range: List[int],
     trc_files: List[str],
     in_topology_path: str,
     gromos_path: str,

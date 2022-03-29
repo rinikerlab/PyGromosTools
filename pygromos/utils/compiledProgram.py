@@ -3,7 +3,7 @@
 """
 import inspect
 import functools
-from typing import Union, Dict, Callable
+from pygromos.utils.typing import Union, Dict, Callable
 from pygromos.utils import bash
 
 
@@ -222,7 +222,6 @@ class _compiled_program:
 
         funcs = {key: getattr(self, key) for key in dir(self) if (not key.startswith("_") and key != "bin")}
         tmp_dont_check_bin = self._force_bin_present
-        self._force_bin_present = self._force_bin_present
         for key, f in funcs.items():
             binary = inspect.signature(f).parameters["_binary_name"].default
             self._check_binary(test_program=binary)

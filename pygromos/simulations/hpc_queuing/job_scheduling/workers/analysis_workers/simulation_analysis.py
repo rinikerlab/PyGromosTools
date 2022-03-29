@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 import os
 import sys
-import warnings
-import shutil
 import math
-from typing import Dict, Union, List
+import shutil
+import warnings
+
+from pygromos.utils.typing import Dict, Union, List
 from collections import OrderedDict
 from pygromos.files.coord import cnf
 from pygromos.files.trajectory import trc, tre, trg
 from pygromos.utils import bash
 
-package_path = os.path.abspath(__file__ + "/../../../../../..")
+package_path = os.path.abspath(
+    __file__ + "/../../../../../.."
+)  # this is only here  to be sure, that from any context you call pygromos, the package is found.
 # print(package_path)
 sys.path.append(package_path)
 
@@ -42,21 +45,25 @@ def do(
     verbose: bool = True,
 ):
     """
+        This function is a analysis framework structure, that starts an analysis folder containing a data folder with all concatenated files, from which analysis can be started.
 
     Parameters
     ----------
-    in_simulation_dir
-    in_system
-    out_analysis_dir
-    gromosPP_bin_dir
-    n_processes
-    control_dict
-    verbose
-
-    Returns
-    -------
+    in_simulation_dir : str
+        input simulation directory (with succesfully finished simulations)
+    out_analysis_dir : str
+        output directory
+    sim_prefix : str
+        prefix of the simulation == name of simulation
+    n_processes : int, optional
+                WARNING: parallelization is currently not implemented!, by default 1
+    control_dict : dict, optional
+        control structure, steering the executions, by default None
+    verbose : bool, optional
+        bla bla, by default True
 
     """
+
     if not os.path.exists(out_analysis_dir) and not os.path.isdir(out_analysis_dir):
         bash.make_folder(out_analysis_dir)
     if not isinstance(control_dict, dict):
@@ -94,8 +101,6 @@ def do(
         else:
             warnings.warn("Simulation dir was not present. Skipped Compression.\nGiven Path: " + in_simulation_dir)
 
-    return 0
-
 
 def project_concatenation(
     in_folder: str,
@@ -103,9 +108,31 @@ def project_concatenation(
     in_prefix: str,  # in_simSystem: Gromos_System,
     control_dict: Dict[str, bool],
     verbose: bool = False,
-) -> dict:
+) -> str:
+    """
+    concatenation of the simulation data.
+
+    Parameters
+    ----------
+    in_folder : str
+        folder containing the simulation results
+    out_folder : str
+        folder that should contain the concatenated out files
+    in_prefix : str
+        prefix of the simulation files.
+    control_dict : Dict[str, bool]
+        control of what should be executed
+    verbose : bool, optional
+        baeeeeh baeeeeh, by default False
+
+    Returns
+    -------
+    str
+        resulting cnf path.
+    """
     # in_simSystem.work_folder = out_folder
     out_prefix = out_folder + "/" + in_prefix  # in_simSystem.name
+    out_cnf = None
     if control_dict["cp_cnf"]:
 
         out_cnf = out_prefix + ".cnf"
@@ -171,12 +198,13 @@ def project_concatenation(
                 in_folder, filePrefix=in_prefix, fileSuffixes=[".trc", ".trc.gz", ".trc.tar.gz"], verbose=verbose
             )
             if len(traj_files) > 0:
-                out_trc_file = trc.Trc(traj_files[0], auto_save=False)
+                print("ANANANANA", traj_files, out_cnf)
+                out_trc_file = trc.Trc(traj_path=traj_files[0], in_cnf=out_cnf)
                 if len(traj_files) > 0:
                     for tmp_trc_file in traj_files[1:]:
-                        tmp_trc = trc.Trc(tmp_trc_file, auto_save=False)
+                        tmp_trc = trc.Trc(traj_path=tmp_trc_file, in_cnf=out_cnf)
                         out_trc_file += tmp_trc
-                out_trc_file.write(output_path=out_traj_path)
+                out_trc_file.write(out_path=out_traj_path)
     if control_dict["cat_tre"]:
         out_traj_path = out_prefix + ".tre.h5"
         if os.path.exists(out_traj_path):

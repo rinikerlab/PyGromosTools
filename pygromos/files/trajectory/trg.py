@@ -18,6 +18,7 @@ TODO: add ene_ana functions
 # imports
 import pandas as pd
 import numpy as np
+
 import pygromos.files.trajectory._general_trajectory as traj
 
 

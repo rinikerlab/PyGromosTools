@@ -1,11 +1,12 @@
 from pygromos.files._basics import _general_gromos_file, parser
+from pygromos.utils.typing import Union, Dict
 
 
 class Distance_restraints(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", "DISTANCERESPEC"]
     _gromos_file_ending: str = "disres"
 
-    def __init__(self, in_value: (str or dict) = None):
+    def __init__(self, in_value: Union[str, Dict] = None):
         self.blocksset = []
         self.block_names = {"TITLE": "title_block", "DISTANCERESSPEC": "distance_res_spec_block"}
         super().__init__(in_value=in_value)

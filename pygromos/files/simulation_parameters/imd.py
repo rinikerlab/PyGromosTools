@@ -5,40 +5,13 @@ Description:
 Author: Kay Schaller & Benjamin Schroeder
 """
 import numpy as np
-from numbers import Number
 import copy
 import json
-from typing import List, Iterable
-from copy import deepcopy
 
 from pygromos.files._basics import _general_gromos_file, parser
 from pygromos.files.blocks import imd_blocks as blocks
-
-
-def nice_s_vals(svals: Iterable, base10=False) -> list:
-    """
-
-    Parameters
-    ----------
-    svals :
-    base10 :
-
-    Returns
-    -------
-
-    """
-
-    nicer_labels = []
-    if base10:
-        for val in svals:
-            if float(np.log10(val)).is_integer() or val == min(svals):
-                nicer_labels.append(round(val, str(val).count("0") + 3))
-            else:
-                nicer_labels.append("")
-    else:
-        for val in svals:
-            nicer_labels.append(round(float(val), str(val).count("0") + 2))
-    return nicer_labels
+from pygromos.utils.utils import nice_s_vals
+from pygromos.utils.typing import List, Iterable, Union, Number
 
 
 class Imd(_general_gromos_file._general_gromos_file):
@@ -96,7 +69,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         # TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks
         for block in sorted(self.get_block_names()):
-            setattr(self, block, deepcopy(getattr(self, block)))
+            setattr(self, block, copy.deepcopy(getattr(self, block)))
 
     def __str__(self):
         text = ""
@@ -150,12 +123,12 @@ class Imd(_general_gromos_file._general_gromos_file):
         self,
         REEDS: int = None,
         NUMSTATES: int = None,
-        SVALS: (Number, List[Number]) = None,
-        EIR: (Number or Iterable[Number]) = None,
+        SVALS: Union[Number, List[Number]] = None,
+        EIR: Union[Number, Iterable[Number]] = None,
         NRETRIAL: int = None,
         NREQUIL: int = None,
-        CONT: (bool, int) = None,
-        EDS_STAT_OUT: (bool, int) = None,
+        CONT: Union[bool, int] = None,
+        EDS_STAT_OUT: Union[bool, int] = None,
     ):
 
         # specific relations are rescued here
@@ -213,7 +186,6 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         if isinstance(EIR, (Number, Iterable)):
             EIR_matrix = []
-            print(EIR)
             # single number
             if isinstance(EIR, Number):  # depends on SVALS and NRES
                 EIR_vector = [str(EIR) for x in range(reeds_block.NUMSTATES)]

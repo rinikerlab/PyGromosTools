@@ -1,8 +1,9 @@
 import numpy as np
+from pygromos.utils.typing import List, Dict
 
 
 class _general_pandas_energy_trajectory_subblock:
-    def __init__(self, content):
+    def __init__(self, content: List):
         self.content = []
         for i in content:
             if i.startswith("#"):  # cometimes there are inconsistent comment lines...(
@@ -17,7 +18,7 @@ class _general_pandas_energy_trajectory_subblock:
             for j in i:
                 self.list.append(j)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return {self.blockName: np.array(self.list, dtype=np.float64)}
 
 
@@ -30,7 +31,7 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
     num_temp_groups = 0
     num_lambdas = 0
 
-    def __init__(self, content, subsubblock_number_code="energy"):
+    def __init__(self, content: List, subsubblock_number_code: str = "energy"):
         super().__init__(content)
         self.matrixList = []
         self.extra_line_for_num = 0
@@ -83,115 +84,115 @@ class _general_pandas_energy_trajectory_subblock_numerated(_general_pandas_energ
 
         self.matrix = np.array(self.matrixList, dtype=np.float64)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return {self.blockName: self.matrix}
 
 
 class totals(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "totals"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class baths(_general_pandas_energy_trajectory_subblock_numerated):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content, subsubblock_number_code="energy")
         self.blockName = "baths"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class bonded(_general_pandas_energy_trajectory_subblock_numerated):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content, subsubblock_number_code="force")
         self.blockName = "bonded"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class nonbonded(_general_pandas_energy_trajectory_subblock_numerated):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content, subsubblock_number_code="nbforce")
         self.blockName = "nonbonded"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class special(_general_pandas_energy_trajectory_subblock_numerated):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content, subsubblock_number_code="force")
         self.blockName = "special"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class eds(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "eds"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class precalclam(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "precalclam"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class mass(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "mass"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class temperature(_general_pandas_energy_trajectory_subblock_numerated):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content, subsubblock_number_code="temp")
         self.blockName = "temperature"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class volume(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "volume"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class pressure(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "pressure"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
 class xxx_copy_xxx(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "xxx"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
 
 
@@ -201,9 +202,9 @@ TRG specials:
 
 
 class lam(_general_pandas_energy_trajectory_subblock):
-    def __init__(self, content):
+    def __init__(self, content: List):
         super().__init__(content)
         self.blockName = "lambda"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return super().to_dict()
