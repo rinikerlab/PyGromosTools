@@ -146,7 +146,6 @@ class _General_Trajectory:
                 "first shape: " + str(self.database.shape) + "\tsecond shape: " + str(traj.database.shape) + "\n"
             )
         # get end data from first trajectory
-        step_offset = int(self.database.step.iloc[-1])
         time_offset = float(self.database.time.iloc[-1])
         delta_time_self = self.get_time_step()
 
@@ -168,6 +167,12 @@ class _General_Trajectory:
                     time_offset += delta_time_self
 
         if correct_time:
+            # is the time access all right?
+            # last_step_traj1 = int(self.database.time.iloc[-1])
+            # first_step_traj2 = int(new_data.database.time.iloc[0])
+            # consecutive_trajs = last_step_traj1+delta_time_self == first_step_traj2
+            # correct the axis:
+            #
             raise NotImplementedError("This is not implemented currently!")
 
         # create output trajectory (copy of first traj) and combine trajectories
