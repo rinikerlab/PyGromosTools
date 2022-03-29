@@ -110,7 +110,7 @@ class _General_Trajectory:
         traj: _General_Trajectory_Type,
         skip_new_0: bool = False,
         auto_detect_skip: bool = True,
-        correct_time: bool = True,
+        correct_time: bool = False,
     ):
         """Combine (Catenate) two trajectories to a longer trajectory. Important: A+B!=B+A
 
@@ -127,7 +127,8 @@ class _General_Trajectory:
 
         correct_time : bool
             if True, the time of the new trajectory will be corrected to continue after the last frame of the base class
-
+            Not Implemented currently!
+            
         Returns
         -------
         traj
@@ -167,8 +168,8 @@ class _General_Trajectory:
                     time_offset += delta_time_self
 
         if correct_time:
-            new_data.step += step_offset
-            new_data.time += time_offset
+            raise NotImplementedError("This is not implemented currently!")
+
 
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
@@ -298,6 +299,6 @@ class _General_Trajectory:
         if len(self.database) == 0:
             return 0
         elif len(self.database) == 1:
-            return float(self.database.time.iloc[-1])
+            return float(self.database.time.iloc[0])
         else:
-            return float(self.database.time.iloc[-1]) - float(self.database.time.iloc[-2])
+            return float(self.database.time.iloc[1]) - float(self.database.time.iloc[0])
