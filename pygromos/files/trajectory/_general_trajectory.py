@@ -128,7 +128,7 @@ class _General_Trajectory:
         correct_time : bool
             if True, the time of the new trajectory will be corrected to continue after the last frame of the base class
             Not Implemented currently!
-            
+
         Returns
         -------
         traj
@@ -169,7 +169,6 @@ class _General_Trajectory:
 
         if correct_time:
             raise NotImplementedError("This is not implemented currently!")
-
 
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
