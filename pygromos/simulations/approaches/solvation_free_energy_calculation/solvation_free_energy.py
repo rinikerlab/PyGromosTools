@@ -90,12 +90,8 @@ class Solvation_free_energy_calculation:
         Density of the used molecule
     num_atoms : int
         Number of atoms in the molecule
-    subsystem : str
+    subsystem : Submission_system
         Subsystem to use (either lsf for LSF or other for LOCAL)
-    nmpi : int
-        Number of MPI cores to use
-    nomp : int
-        Number of OMP cores to use
     amberscaling : bool
         whether to use amberscaling (not implemented on all GROMOS Branches)
     """
@@ -114,8 +110,6 @@ class Solvation_free_energy_calculation:
         density: float = 1000,
         num_atoms: int = 0,
         subsystem: _SubmissionSystem = subSys_local,
-        nmpi=1,
-        nomp=1,
         provided_topo: Top = None,
         amberscaling=False,
     ) -> None:
@@ -155,8 +149,6 @@ class Solvation_free_energy_calculation:
         self.groSys_liq.rebase_files()
 
         # Setup Submission system
-        self._nmpi = nmpi
-        self._nomp = nomp
         self._subsystem = subsystem
 
         # Setup GromosXX and GromosPP
@@ -203,7 +195,8 @@ class Solvation_free_energy_calculation:
         emin_sys, jobID = self.minimize_liq(in_gromos_simulation_system=self.groSys_liq, prev_JobID=-1)
         eq_sys, jobID = self.eq_liq(in_gromos_simulation_system=emin_sys, prev_JobID=jobID)
         ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID)
-        self.calculate_solvation_free_energy(ti_sys, jobID)  # TODO: fix errors
+        assert isinstance(ti_sys, Gromos_System)
+        self.calculate_solvation_free_energy()
 
     def create_liq(self):
         """
@@ -361,7 +354,7 @@ class Solvation_free_energy_calculation:
                 override_project_dir=self.groSys_liq.work_folder,
                 step_name="eq" + run_name,
                 in_imd_path=eq_imd,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 analysis_script=simulation_analysis.do,
                 verbose=self.verbose,
             )
@@ -371,7 +364,7 @@ class Solvation_free_energy_calculation:
                 override_project_dir=self.groSys_liq.work_folder,
                 step_name="eq" + run_name,
                 in_imd_path=eq_imd,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 analysis_script=simulation_analysis.do,
                 verbose=self.verbose,
                 previous_simulation_run=prevID,
@@ -509,7 +502,7 @@ class Solvation_free_energy_calculation:
                     in_gromos_system=c_ti_sys0_prep,
                     override_project_dir=ti_dir + system_name,
                     step_name=system_name,
-                    submission_system=self.submissonSystem,
+                    submission_system=self._subsystem,
                     previous_simulation_run=prev_JobID,
                 )
             else:
@@ -531,7 +524,7 @@ class Solvation_free_energy_calculation:
                     in_gromos_system=c_ti_sys0_prep,
                     override_project_dir=ti_dir + system_name,
                     step_name=system_name,
-                    submission_system=self.submissonSystem,
+                    submission_system=self._subsystem,
                     previous_simulation_run=jobIDs[previous_system_name],
                 )
 
@@ -557,7 +550,7 @@ class Solvation_free_energy_calculation:
                 in_gromos_system=c_ti_sys1_prep,
                 override_project_dir=ti_dir + system_name,
                 step_name=system_name,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 previous_simulation_run=jobIDs[previous_system_name],
             )
 
@@ -580,7 +573,7 @@ class Solvation_free_energy_calculation:
                 in_gromos_system=c_ti_sys2_prep,
                 override_project_dir=ti_dir + system_name,
                 step_name=system_name,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 previous_simulation_run=jobIDs[previous_system_name],
             )
 
@@ -911,28 +904,9 @@ class Solvation_free_energy_calculation:
         return solv_energy, error
 
     @property
-    def nmpi(self):
-        return self._nmpi
-
-    @nmpi.setter
-    def nmpi(self, nmpi=1):
-        self._nmpi = nmpi
-        self.create_new_submission_system()
-
-    @property
-    def nomp(self):
-        return self._nomp
-
-    @nomp.setter
-    def nomp(self, nomp=1):
-        self._nomp = nomp
-        self.create_new_submission_system()
-
-    @property
     def subsystem(self):
         return self._subsystem
 
     @subsystem.setter
-    def subsystem(self, subsystem="local"):
+    def subsystem(self, subsystem=subSys_local):
         self._subsystem = subsystem
-        self.create_new_submission_system()
