@@ -1,7 +1,6 @@
 name: pygromos
 channels:
   - conda-forge
-  #- nvidia
   - defaults
 dependencies:
   # Base depends
