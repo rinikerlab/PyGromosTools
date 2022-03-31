@@ -3,14 +3,15 @@ make clean;
 
 #make doku
 ##configurations
-sphinx-apidoc -o _source ../../pygromos
+sphinx-apidoc -o _source ../../pygromos;
 
-cp ../../examples/ex*ipynb ./Examples
-cp ../../examples/t*ipynb ./Tutorials
+cp ../../examples/ex*ipynb ./Examples;
+cp -r ../../examples/developer_examples ./Examples;
+cp ../../examples/t*ipynb ./Tutorials;
 
-python conf.py
+python conf.py;
 
 ##execute making docu
-make html
+make html;
 
 cp -r _build/html/* ../

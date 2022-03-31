@@ -46,3 +46,8 @@ dependencies:
   ## Visualization
   - matplotlib
   - nglview
+  ## Documentation
+  - sphinx
+  - m2r
+  - nbsphinx
+  - sphinx_rtd_theme
