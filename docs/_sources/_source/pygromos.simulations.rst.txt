@@ -7,19 +7,9 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   pygromos.simulations.hvap_calculation
+   pygromos.simulations.approaches
+   pygromos.simulations.hpc_queuing
    pygromos.simulations.modules
-
-Submodules
-----------
-
-pygromos.simulations.do\_MD\_simulations module
------------------------------------------------
-
-.. automodule:: pygromos.simulations.do_MD_simulations
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Module contents
 ---------------

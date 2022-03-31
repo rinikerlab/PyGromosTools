@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example For Calculation of Self Solvation Free Energy &mdash; PyGromosTools  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorials" href="../Tutorials/index.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="example_openff.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#define-file-paths">define file paths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#build-gromos-system">Build gromos System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#run-emin">Run Emin</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">create top + cnf for aniline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-CHCl3">create top + cnf for aniline, solvated in CHCl3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">create top + cnf for aniline, solvated in TIP3P water</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Example Notebook for the Usage of the New Submission System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example For Calculation of Self Solvation Free Energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Do-Imports">Do Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Choose-Molecule-to-run-calculation-for">Choose Molecule to run calculation for</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-gromos_system-from-a-smile-and-get-the-number-of-atoms">create the gromos_system from a smile and get the number of atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Create-The-Solvation-free-energy-calculation-system">Create The Solvation free energy calculation system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Create-Liquid">Create Liquid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Minimize-Liquid">Minimize Liquid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Change-the-number-of-cores-for-longer-runs">Change the number of cores for longer runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Equilibrate-System">Equilibrate System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Do-Ti-calculation">Do Ti calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Read-out-results">Read out results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Examples</a> &raquo;</li>
+      <li>Example For Calculation of Self Solvation Free Energy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Examples/example_solvation_free_energy.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Example-For-Calculation-of-Self-Solvation-Free-Energy">
+<h1>Example For Calculation of Self Solvation Free Energy<a class="headerlink" href="#Example-For-Calculation-of-Self-Solvation-Free-Energy" title="Permalink to this headline"></a></h1>
+<section id="Do-Imports">
+<h2>Do Imports<a class="headerlink" href="#Do-Imports" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">import</span> <span class="nn">pygromos</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield.openff.openff</span> <span class="kn">import</span> <span class="n">OpenFF</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.approaches.solvation_free_energy_calculation.solvation_free_energy</span> <span class="kn">import</span> <span class="n">Solvation_free_energy_calculation</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Warning: importing &#39;simtk.openmm&#39; is deprecated.  Import &#39;openmm&#39; instead.
+Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field Toolkit does not require the OpenEye Toolkits, and can use RDKit/AmberTools instead. However, if you have a valid license for the OpenEye Toolkits, consider installing them for faster performance and additional file format support: https://docs.eyesopen.com/toolkits/python/quickstart-python/linuxosx.html OpenEye offers free Toolkit licenses for academics: https://www.eyesopen.com/academic-licensing
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f57f1617a5cb4a64805a4b5e6e61432f"}</script></div>
+</div>
+</section>
+<section id="Choose-Molecule-to-run-calculation-for">
+<h2>Choose Molecule to run calculation for<a class="headerlink" href="#Choose-Molecule-to-run-calculation-for" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smiles</span> <span class="o">=</span> <span class="s2">&quot;c1ccccc1&quot;</span>
+<span class="n">workfolder</span> <span class="o">=</span> <span class="n">project_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pygromos</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/../examples/example_files/solvation_free_energy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="create-the-gromos_system-from-a-smile-and-get-the-number-of-atoms">
+<h2>create the gromos_system from a smile and get the number of atoms<a class="headerlink" href="#create-the-gromos_system-from-a-smile-and-get-the-number-of-atoms" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">groSys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">workfolder</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">in_smiles</span><span class="o">=</span><span class="n">smiles</span><span class="p">,</span> <span class="n">forcefield</span><span class="o">=</span><span class="n">OpenFF</span><span class="p">(),</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">number_of_atoms</span> <span class="o">=</span> <span class="n">groSys</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of atoms:&quot;</span><span class="p">,</span> <span class="n">number_of_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Found off: /home/bschroed/Documents/projects/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+Found off: /home/bschroed/Documents/projects/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of atoms: 12
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subSys</span> <span class="o">=</span> <span class="n">LOCAL</span><span class="p">()</span> <span class="c1"># use the local submission system (for cluster use LSF)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_points</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># Number of Lambda points to calculate (typically 21)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Create-The-Solvation-free-energy-calculation-system">
+<h2>Create The Solvation free energy calculation system<a class="headerlink" href="#Create-The-Solvation-free-energy-calculation-system" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span> <span class="o">=</span> <span class="n">Solvation_free_energy_calculation</span><span class="p">(</span><span class="n">input_system</span><span class="o">=</span><span class="n">groSys</span><span class="p">,</span> <span class="c1"># Gromos_System, SMILES (str) or rdkit Mol</span>
+                                       <span class="n">work_folder</span><span class="o">=</span><span class="n">workfolder</span><span class="p">,</span> <span class="c1"># Folder to do calculations in</span>
+                                       <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="c1"># Name of the system (does not need to be smiles but convenient)</span>
+                                       <span class="n">forcefield</span><span class="o">=</span><span class="n">OpenFF</span><span class="p">(),</span> <span class="c1"># Force field to use</span>
+                                       <span class="n">density</span><span class="o">=</span><span class="mi">789</span><span class="p">,</span> <span class="c1"># density of the liquid in kg/L</span>
+                                       <span class="n">num_molecules</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="c1"># number of molecules used for the calculation</span>
+                                       <span class="n">num_atoms</span><span class="o">=</span><span class="n">number_of_atoms</span><span class="p">,</span> <span class="c1"># number of atoms in one molecule</span>
+                                       <span class="n">subsystem</span><span class="o">=</span><span class="n">subSys</span><span class="p">,</span> <span class="c1"># Subsystem to use for calculation local or lsf</span>
+                                       <span class="n">amberscaling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># Whether to use amberscaling (for openforcefield recommended)</span>
+                                       <span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">)</span> <span class="c1"># Number of Lambda points to calculate (typically 21)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Found off: /home/bschroed/Documents/projects/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+File imd is empty , can not be written!
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/approaches/solvation_free_energy_calculation/solvation_free_energy.py:146: UserWarning: Folder does already exist
+  warnings.warn(&#34;Folder does already exist&#34;)
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:869: UserWarning: Did not change file path as its only promised None
+  warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
+</pre></div></div>
+</div>
+</section>
+<section id="Create-Liquid">
+<h2>Create Liquid<a class="headerlink" href="#Create-Liquid" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">create_liq</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/approaches/solvation_free_energy_calculation/solvation_free_energy.py:225: UserWarning: Folder does already exist
+  warnings.warn(&#34;Folder does already exist&#34;)
+</pre></div></div>
+</div>
+</section>
+<section id="Minimize-Liquid">
+<h2>Minimize Liquid<a class="headerlink" href="#Minimize-Liquid" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">emin_sys</span><span class="p">,</span> <span class="n">jobID</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">minimize_liq</span><span class="p">(</span><span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">sf</span><span class="o">.</span><span class="n">groSys_liq</span><span class="p">,</span><span class="n">prev_JobID</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################################################################
+
+test_emin
+################################################################################
+
+============================================================
+FOUND RESULT: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/test_emin/analysis/data/test_emin.cnf
+ GOING TO SKIPT THIS SUBMISSION!
+</pre></div></div>
+</div>
+</section>
+<section id="Change-the-number-of-cores-for-longer-runs">
+<h2>Change the number of cores for longer runs<a class="headerlink" href="#Change-the-number-of-cores-for-longer-runs" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">subsystem</span><span class="o">.</span><span class="n">nomp</span> <span class="o">=</span> <span class="mi">6</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Equilibrate-System">
+<h2>Equilibrate System<a class="headerlink" href="#Equilibrate-System" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eq_sys</span><span class="p">,</span> <span class="n">jobID</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">eq_liq</span><span class="p">(</span><span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">emin_sys</span><span class="p">,</span><span class="n">prev_JobID</span><span class="o">=</span><span class="n">jobID</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################################################################
+
+eqtest_eq_1
+################################################################################
+
+Script:  /home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
+
+################################################################################
+Simulation Setup:
+################################################################################
+
+steps_per_run:  25000
+equis:  0
+simulation runs:  1
+################################################################################
+
+ submit final analysis part
+
+/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/ana_out.log
+/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/job_analysis.py
+#####################################################################################
+                ERROR in Submission
+#####################################################################################
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Traceback (most recent call last):
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
+    process = bash.execute(command=command, catch_STD=True, env=self.environment)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute
+    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess
+    raise ChildProcessError(msg)
+ChildProcessError: SubProcess Failed due to returncode: 1
+ COMMAND:
+        ./job_eqtest_eq_1_ana.sh
+STDOUT:
+        b&#39;\tStart cnfs\n&#39;
+        b&#34;SEARCH PATTERN: eqtest_eq_1 + * +[&#39;.cnf&#39;]\n&#34;
+        b&#39;walking to in_dir:  simulation found:  0\n&#39;
+        b&#39;\n&#39;
+        b&#39;foundFiles:\n&#39;
+        b&#39;\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;\t\tFound 0 cnfs\n&#39;
+        b&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/simulation/eqtest_eq_1/*.cnf\n&#39;
+STDERR:
+        b&#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py:318: UserWarning: could not find any file with the prefix: eqtest_eq_1 * [&#39;.cnf&#39;] in folder : \n&#34;
+        b&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/simulation\n&#39;
+        b&#39;  warnings.warn(\n&#39;
+        b&#39;Traceback (most recent call last):\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/job_analysis.py&#34;, line 37, in &lt;module&gt;\n&#39;
+        b&#39;    do(in_simulation_dir=in_simulation_dir, out_analysis_dir=out_analysis_dir, sim_prefix=sim_prefix, n_processes=n_processes, control_dict=control_dict, verbose=verbose, )\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py&#34;, line 79, in do\n&#39;
+        b&#39;    project_concatenation(\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py&#34;, line 160, in project_concatenation\n&#39;
+        b&#39;    if any([math.isnan(x) for x in sim_cnf.GENBOX.euler]):\n&#39;
+        b&#34;AttributeError: &#39;Cnf&#39; object has no attribute &#39;GENBOX&#39;\n&#34;
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 223, in do
+    ana_previous_job_ID = submission_system.submit_to_queue(sub_job)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 84, in submit_to_queue
+    print(process)
+UnboundLocalError: local variable &#39;process&#39; referenced before assignment
+Traceback (most recent call last):
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
+    process = bash.execute(command=command, catch_STD=True, env=self.environment)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute
+    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess
+    raise ChildProcessError(msg)
+ChildProcessError: SubProcess Failed due to returncode: 1
+ COMMAND:
+        ./job_eqtest_eq_1_ana.sh
+STDOUT:
+        b&#39;\tStart cnfs\n&#39;
+        b&#34;SEARCH PATTERN: eqtest_eq_1 + * +[&#39;.cnf&#39;]\n&#34;
+        b&#39;walking to in_dir:  simulation found:  0\n&#39;
+        b&#39;\n&#39;
+        b&#39;foundFiles:\n&#39;
+        b&#39;\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;\t\tFound 0 cnfs\n&#39;
+        b&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/simulation/eqtest_eq_1/*.cnf\n&#39;
+STDERR:
+        b&#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py:318: UserWarning: could not find any file with the prefix: eqtest_eq_1 * [&#39;.cnf&#39;] in folder : \n&#34;
+        b&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/simulation\n&#39;
+        b&#39;  warnings.warn(\n&#39;
+        b&#39;Traceback (most recent call last):\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/job_analysis.py&#34;, line 37, in &lt;module&gt;\n&#39;
+        b&#39;    do(in_simulation_dir=in_simulation_dir, out_analysis_dir=out_analysis_dir, sim_prefix=sim_prefix, n_processes=n_processes, control_dict=control_dict, verbose=verbose, )\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py&#34;, line 79, in do\n&#39;
+        b&#39;    project_concatenation(\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py&#34;, line 160, in project_concatenation\n&#39;
+        b&#39;    if any([math.isnan(x) for x in sim_cnf.GENBOX.euler]):\n&#39;
+        b&#34;AttributeError: &#39;Cnf&#39; object has no attribute &#39;GENBOX&#39;\n&#34;
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 223, in do
+    ana_previous_job_ID = submission_system.submit_to_queue(sub_job)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 84, in submit_to_queue
+    print(process)
+UnboundLocalError: local variable &#39;process&#39; referenced before assignment
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py&#34;, line 208, in simulation
+    last_jobID = simulation_scheduler.do(**MD_job_vars)
+  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 234, in do
+    raise IOError(&#34;ERROR in SUBMISSION!&#34;) from err
+OSError: ERROR in SUBMISSION!
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py:71</span>, in <span class="ansi-cyan-fg">LOCAL.submit_to_queue</span><span class="ansi-blue-fg">(self, sub_job)</span>
+<span class="ansi-green-intense-fg ansi-bold">     70</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">---&gt; 71</span>     process <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">execute</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">command</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">command</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">catch_STD</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">env</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">environment</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     72</span>     std_out_buff <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">map</span>(<span style="color: rgb(0,135,0)">str</span>, process<span style="color: rgb(98,98,98)">.</span>stdout<span style="color: rgb(98,98,98)">.</span>readlines())
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/utils/bash.py:935</span>, in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    932</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">execute</span>(
+<span class="ansi-green-intense-fg ansi-bold">    933</span>     command: Union[<span style="color: rgb(0,135,0)">str</span>, List[<span style="color: rgb(0,135,0)">str</span>]], verbose: <span style="color: rgb(0,135,0)">bool</span> <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, catch_STD: Union[<span style="color: rgb(0,135,0)">bool</span>, <span style="color: rgb(0,135,0)">str</span>] <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, env: <span style="color: rgb(0,135,0)">dict</span> <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">execute_subprocess</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">command</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">command</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">catch_STD</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">catch_STD</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">env</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">env</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/utils/bash.py:829</span>, in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>     msg <span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">NONE</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> (p<span style="color: rgb(98,98,98)">.</span>stdout <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">.</span>join(<span style="color: rgb(0,135,0)">map</span>(<span style="color: rgb(0,135,0)">str</span>, p<span style="color: rgb(98,98,98)">.</span>stderr<span style="color: rgb(98,98,98)">.</span>readlines()))
+<span class="ansi-green-fg">--&gt; 829</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ChildProcessError</span>(msg)
+<span class="ansi-green-intense-fg ansi-bold">    830</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> verbose:
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 1
+ COMMAND:
+        ./job_eqtest_eq_1_ana.sh
+STDOUT:
+        b&#39;\tStart cnfs\n&#39;
+        b&#34;SEARCH PATTERN: eqtest_eq_1 + * +[&#39;.cnf&#39;]\n&#34;
+        b&#39;walking to in_dir:  simulation found:  0\n&#39;
+        b&#39;\n&#39;
+        b&#39;foundFiles:\n&#39;
+        b&#39;\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;\t\tFound 0 cnfs\n&#39;
+        b&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/simulation/eqtest_eq_1/*.cnf\n&#39;
+STDERR:
+        b&#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py:318: UserWarning: could not find any file with the prefix: eqtest_eq_1 * [&#39;.cnf&#39;] in folder : \n&#34;
+        b&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/simulation\n&#39;
+        b&#39;  warnings.warn(\n&#39;
+        b&#39;Traceback (most recent call last):\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/eqtest_eq_1/job_analysis.py&#34;, line 37, in &lt;module&gt;\n&#39;
+        b&#39;    do(in_simulation_dir=in_simulation_dir, out_analysis_dir=out_analysis_dir, sim_prefix=sim_prefix, n_processes=n_processes, control_dict=control_dict, verbose=verbose, )\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py&#34;, line 79, in do\n&#39;
+        b&#39;    project_concatenation(\n&#39;
+        b&#39;  File &#34;/home/bschroed/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.py&#34;, line 160, in project_concatenation\n&#39;
+        b&#39;    if any([math.isnan(x) for x in sim_cnf.GENBOX.euler]):\n&#39;
+        b&#34;AttributeError: &#39;Cnf&#39; object has no attribute &#39;GENBOX&#39;\n&#34;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">UnboundLocalError</span>                         Traceback (most recent call last)
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py:223</span>, in <span class="ansi-cyan-fg">do</span><span class="ansi-blue-fg">(in_simSystem, out_dir_path, simulation_run_num, equilibration_run_num, initialize_first_run, reinitialize_every_run, analysis_script_path, submission_system, previous_job_ID, _no_double_submit_check, _work_dir, verbose, verbose_lvl)</span>
+<span class="ansi-green-intense-fg ansi-bold">    217</span> sub_job <span style="color: rgb(98,98,98)">=</span> Submission_job(
+<span class="ansi-green-intense-fg ansi-bold">    218</span>     command<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">python3 </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> analysis_script_path,
+<span class="ansi-green-intense-fg ansi-bold">    219</span>     jobName<span style="color: rgb(98,98,98)">=</span>tmp_jobname,
+<span class="ansi-green-intense-fg ansi-bold">    220</span>     outLog<span style="color: rgb(98,98,98)">=</span>ana_log,
+<span class="ansi-green-intense-fg ansi-bold">    221</span>     queue_after_jobID<span style="color: rgb(98,98,98)">=</span>previous_job_ID,
+<span class="ansi-green-intense-fg ansi-bold">    222</span> )
+<span class="ansi-green-fg">--&gt; 223</span> ana_previous_job_ID <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">submission_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">submit_to_queue</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">sub_job</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    225</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> verbose:
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py:84</span>, in <span class="ansi-cyan-fg">LOCAL.submit_to_queue</span><span class="ansi-blue-fg">(self, sub_job)</span>
+<span class="ansi-green-intense-fg ansi-bold">     83</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">---&gt; 84</span>     <span style="color: rgb(0,135,0)">print</span>(<span class="ansi-yellow-bg">process</span>)
+<span class="ansi-green-intense-fg ansi-bold">     85</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ChildProcessError</span>:
+
+<span class="ansi-red-fg">UnboundLocalError</span>: local variable &#39;process&#39; referenced before assignment
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py:208</span>, in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    207</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">--&gt; 208</span>         last_jobID <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">simulation_scheduler</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">do</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">MD_job_vars</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    209</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> err:
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py:234</span>, in <span class="ansi-cyan-fg">do</span><span class="ansi-blue-fg">(in_simSystem, out_dir_path, simulation_run_num, equilibration_run_num, initialize_first_run, reinitialize_every_run, analysis_script_path, submission_system, previous_job_ID, _no_double_submit_check, _work_dir, verbose, verbose_lvl)</span>
+<span class="ansi-green-intense-fg ansi-bold">    233</span>     traceback<span style="color: rgb(98,98,98)">.</span>print_exception(<span style="color: rgb(98,98,98)">*</span>sys<span style="color: rgb(98,98,98)">.</span>exc_info())
+<span class="ansi-green-fg">--&gt; 234</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">IOError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">ERROR in SUBMISSION!</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">err</span>
+<span class="ansi-green-intense-fg ansi-bold">    236</span> <span style="color: rgb(95,135,135)"># in_simSystem._future_promise = False #reset future promising if necessary</span>
+
+<span class="ansi-red-fg">OSError</span>: ERROR in SUBMISSION!
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [10]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> eq_sys, jobID <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">sf</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">eq_liq</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">in_gromos_simulation_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">emin_sys</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg">prev_JobID</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">jobID</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/approaches/solvation_free_energy_calculation/solvation_free_energy.py:396</span>, in <span class="ansi-cyan-fg">Solvation_free_energy_calculation.eq_liq</span><span class="ansi-blue-fg">(self, in_gromos_simulation_system, prev_JobID)</span>
+<span class="ansi-green-intense-fg ansi-bold">    393</span> in_gromos_simulation_system<span style="color: rgb(98,98,98)">.</span>imd <span style="color: rgb(98,98,98)">=</span> Imd(template_md)
+<span class="ansi-green-intense-fg ansi-bold">    395</span> <span style="color: rgb(95,135,135)"># Equilibrate system and pass on for next step</span>
+<span class="ansi-green-fg">--&gt; 396</span> eq_sys1, JobID1 <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">equilibration_gromos_system_step</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">    397</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">in_gromos_simulation_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">in_gromos_simulation_system</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    398</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">NTIVAL</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">1</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    399</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">NTISHI</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">1</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    400</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">TEMPI</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">60</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    401</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">TEMPO</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">60</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    402</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">prevID</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">prev_JobID</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    403</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">run_name</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">system_name</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">_eq_1</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    404</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">natoms</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">num_atoms</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">num_molecules</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    405</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    406</span> eq_sys2, JobID2 <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>equilibration_gromos_system_step(
+<span class="ansi-green-intense-fg ansi-bold">    407</span>     in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span>eq_sys1,
+<span class="ansi-green-intense-fg ansi-bold">    408</span>     NTIVAL<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">0</span>,
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    414</span>     natoms<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>num_atoms <span style="color: rgb(98,98,98)">*</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>num_molecules,
+<span class="ansi-green-intense-fg ansi-bold">    415</span> )
+<span class="ansi-green-intense-fg ansi-bold">    416</span> eq_sys3, JobID3 <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>equilibration_gromos_system_step(
+<span class="ansi-green-intense-fg ansi-bold">    417</span>     in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span>eq_sys2,
+<span class="ansi-green-intense-fg ansi-bold">    418</span>     NTIVAL<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">0</span>,
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    424</span>     natoms<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>num_atoms <span style="color: rgb(98,98,98)">*</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>num_molecules,
+<span class="ansi-green-intense-fg ansi-bold">    425</span> )
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/approaches/solvation_free_energy_calculation/solvation_free_energy.py:364</span>, in <span class="ansi-cyan-fg">Solvation_free_energy_calculation.equilibration_gromos_system_step</span><span class="ansi-blue-fg">(self, in_gromos_simulation_system, NTIVAL, NTISHI, TEMPI, TEMPO, prevID, run_name, natoms)</span>
+<span class="ansi-green-intense-fg ansi-bold">    354</span>     md_sys <span style="color: rgb(98,98,98)">=</span> simulation(
+<span class="ansi-green-intense-fg ansi-bold">    355</span>         in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span>in_gromos_simulation_system,
+<span class="ansi-green-intense-fg ansi-bold">    356</span>         override_project_dir<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>groSys_liq<span style="color: rgb(98,98,98)">.</span>work_folder,
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    361</span>         verbose<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>verbose,
+<span class="ansi-green-intense-fg ansi-bold">    362</span>     )
+<span class="ansi-green-intense-fg ansi-bold">    363</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">--&gt; 364</span>     md_sys <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">simulation</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">    365</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">in_gromos_simulation_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">in_gromos_simulation_system</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    366</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">override_project_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">groSys_liq</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">work_folder</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    367</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">step_name</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">eq</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">run_name</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    368</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">in_imd_path</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">eq_imd</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    369</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">submission_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_subsystem</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    370</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">analysis_script</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">simulation_analysis</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">do</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    371</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    372</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">previous_simulation_run</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">prevID</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    373</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    375</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> md_sys, md_sys<span style="color: rgb(98,98,98)">.</span>_last_jobID
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py:211</span>, in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    209</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> err:
+<span class="ansi-green-intense-fg ansi-bold">    210</span>     traceback<span style="color: rgb(98,98,98)">.</span>print_exception(<span style="color: rgb(98,98,98)">*</span>sys<span style="color: rgb(98,98,98)">.</span>exc_info())
+<span class="ansi-green-fg">--&gt; 211</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Could not submit the commands</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">.</span>join(<span style="color: rgb(0,135,0)">map</span>(<span style="color: rgb(0,135,0)">str</span>, err<span style="color: rgb(98,98,98)">.</span>args)))
+<span class="ansi-green-intense-fg ansi-bold">    213</span> time<span style="color: rgb(98,98,98)">.</span>sleep(time_wait_s_for_filesystem)
+<span class="ansi-green-intense-fg ansi-bold">    215</span> <span style="color: rgb(95,135,135)"># Return the promise final system</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not submit the commands
+        ERROR in SUBMISSION!
+</pre></div></div>
+</div>
+</section>
+<section id="Do-Ti-calculation">
+<h2>Do Ti calculation<a class="headerlink" href="#Do-Ti-calculation" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ti_sys</span><span class="p">,</span> <span class="n">jobID</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">ti_liq</span><span class="p">(</span><span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">eq_sys</span><span class="p">,</span>
+                          <span class="n">prev_JobID</span><span class="o">=</span><span class="n">jobID</span><span class="p">,</span>
+                          <span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [11]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> ti_sys, jobID <span style="color: rgb(98,98,98)">=</span> sf<span style="color: rgb(98,98,98)">.</span>ti_liq(in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">eq_sys</span>,
+<span class="ansi-green-intense-fg ansi-bold">      2</span>                           prev_JobID<span style="color: rgb(98,98,98)">=</span>jobID,
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                           n_points<span style="color: rgb(98,98,98)">=</span>n_points)
+
+<span class="ansi-red-fg">NameError</span>: name &#39;eq_sys&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="Read-out-results">
+<h2>Read out results<a class="headerlink" href="#Read-out-results" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">calculate_solvation_free_energy</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/solvation_free_energy/test_liq/ti/test_L0.0_2/test_L0.0_2/simulation/test_L0.0_2_1/test_L0.0_2
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [12]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">sf</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">calculate_solvation_free_energy</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">n_points</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">n_points</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/simulations/approaches/solvation_free_energy_calculation/solvation_free_energy.py:882</span>, in <span class="ansi-cyan-fg">Solvation_free_energy_calculation.calculate_solvation_free_energy</span><span class="ansi-blue-fg">(self, n_points)</span>
+<span class="ansi-green-intense-fg ansi-bold">    880</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-intense-fg ansi-bold">    881</span>     <span style="color: rgb(0,135,0)">print</span>(path <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">simulation/</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> system_name <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">_1/</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> system_name)
+<span class="ansi-green-fg">--&gt; 882</span>     <span class="ansi-yellow-bg">exit</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">No Files have been found</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">    884</span> dhdls <span style="color: rgb(98,98,98)">=</span> [trg<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>totals[i][<span style="color: rgb(98,98,98)">2</span>] <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">range</span>(<span style="color: rgb(0,135,0)">len</span>(trg<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>totals))]
+<span class="ansi-green-intense-fg ansi-bold">    886</span> <span style="color: rgb(95,135,135)"># Remove simulation directory</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;exit&#39; is not defined
+</pre></div></div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"5a94c57c4b5040d98efa8f3f4dcb172a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f57f1617a5cb4a64805a4b5e6e61432f": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_5a94c57c4b5040d98efa8f3f4dcb172a"}}}, "version_major": 2, "version_minor": 0}
+</script></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example_openff.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,14 +1,6 @@
 pygromos.files.gromos\_system package
 =====================================
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   pygromos.files.gromos_system.ff
-
 Submodules
 ----------
 

@@ -9,8 +9,10 @@ Subpackages
 
    pygromos.files.blocks
    pygromos.files.coord
+   pygromos.files.forcefield
    pygromos.files.gromos_system
    pygromos.files.otherfiles
+   pygromos.files.qmmm
    pygromos.files.simulation_parameters
    pygromos.files.topology
    pygromos.files.trajectory

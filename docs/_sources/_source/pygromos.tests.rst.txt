@@ -9,6 +9,8 @@ Subpackages
 
    pygromos.tests.in_testfiles
    pygromos.tests.out_testresults
+   pygromos.tests.test_analysis
+   pygromos.tests.test_approaches
    pygromos.tests.test_files
    pygromos.tests.test_simulation_blocks
    pygromos.tests.test_submission

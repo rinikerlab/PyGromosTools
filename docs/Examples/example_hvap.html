@@ -1,71 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>&lt;no title&gt; &mdash; PyGromosTools  documentation</title>
-
-
-
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-
-
-
-
-
-
-
-
-
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-
-
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Submission Systems" href="example_submission_systems.html" />
-    <link rel="prev" title="Gromos Trajectory evaluation with Pygromos and Pandas" href="example_gromos_trajectories.html" />
+    <link rel="next" title="&lt;no title&gt;" href="example_openff.html" />
+    <link rel="prev" title="Support for QMMM functionality in GROMOS input files" href="example_gromos_qmmm.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-
-
             <a href="../index.html" class="icon icon-home"> PyGromosTools
-
-
-
           </a>
-
-
-
-
-
-
-
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,93 +40,43 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-
-        </div>
-
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#define-file-paths">define file paths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#build-gromos-system">Build gromos System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#run-emin">Run Emin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
 </ul>
 
-
-
         </div>
-
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-
-      <nav class="wy-nav-top" aria-label="top navigation">
-
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">PyGromosTools</a>
-
       </nav>
 
-
       <div class="wy-nav-content">
-
         <div class="rst-content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-
           <li><a href="index.html">Examples</a> &raquo;</li>
-
       <li>&lt;no title&gt;</li>
-
-
       <li class="wy-breadcrumbs-aside">
-
-
             <a href="../_sources/Examples/example_hvap.ipynb.txt" rel="nofollow"> View page source</a>
-
-
       </li>
-
   </ul>
-
-
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
-
+             
+  
 <style>
 /* CSS for nbsphinx extension */
 
@@ -369,7 +286,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -429,24 +346,31 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield.gromos.gromosff</span> <span class="kn">import</span> <span class="n">GromosFF</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.approaches.hvap_calculation.hvap_calculation</span> <span class="kn">import</span> <span class="n">Hvap_calculation</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_sd</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "d2996463930643b7ba687b570ab8699b"}</script></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.ff.forcefield_system</span> <span class="kn">import</span> <span class="n">forcefield_system</span>
-<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
-<span class="kn">from</span> <span class="nn">pygromos.simulations.hvap_calculation.hvap_calculation</span> <span class="kn">import</span> <span class="n">Hvap_calculation</span>
-<span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_sd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">work_dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;/example_files/Hvap_files/&quot;</span>
+<span class="n">gromosXX_path</span><span class="o">=</span><span class="kc">None</span>
+<span class="n">gromosPP_path</span><span class="o">=</span><span class="kc">None</span>
 </pre></div>
 </div>
 </div>
@@ -454,629 +378,75 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pygro_env</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;SHELL&#39;</span><span class="p">:</span> <span class="s1">&#39;/bin/bash&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBGL_ALWAYS_INDIRECT&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_EXE&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/bin/conda&#39;</span><span class="p">,</span> <span class="s1">&#39;_CE_M&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;WSL_DISTRO_NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;Ubuntu-20.04&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;MarcSurface&#39;</span><span class="p">,</span> <span class="s1">&#39;GSETTINGS_SCHEMA_DIR&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/envs/pygro/share/glib-2.0/schemas&#39;</span><span class="p">,</span> <span class="s1">&#39;LOGNAME&#39;</span><span class="p">:</span> <span class="s1">&#39;mlehner&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_PREFIX&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/envs/pygro&#39;</span><span class="p">,</span> <span class="s1">&#39;GSETTINGS_SCHEMA_DIR_CONDA_BACKUP&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;HOME&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner&#39;</span><span class="p">,</span> <span class="s1">&#39;LANG&#39;</span><span class="p">:</span> <span class="s1">&#39;C.UTF-8&#39;</span><span class="p">,</span> <span class="s1">&#39;WSL_INTEROP&#39;</span><span class="p">:</span> <span class="s1">&#39;/run/WSL/451_interop&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_PROMPT_MODIFIER&#39;</span><span class="p">:</span> <span class="s1">&#39;(pygro) &#39;</span><span class="p">,</span> <span class="s1">&#39;PERL5LIB&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/envs/pygro/lib/perl/mm_pbsa&#39;</span><span class="p">,</span> <span class="s1">&#39;LESSCLOSE&#39;</span><span class="p">:</span> <span class="s1">&#39;/usr/bin/lesspipe </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;TERM&#39;</span><span class="p">:</span> <span class="s1">&#39;xterm-256color&#39;</span><span class="p">,</span> <span class="s1">&#39;_CE_CONDA&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;LESSOPEN&#39;</span><span class="p">:</span> <span class="s1">&#39;| /usr/bin/lesspipe </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;mlehner&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_SHLVL&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;AMBERHOME&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/envs/pygro&#39;</span><span class="p">,</span> <span class="s1">&#39;DISPLAY&#39;</span><span class="p">:</span> <span class="s1">&#39;172.21.240.1:0&#39;</span><span class="p">,</span> <span class="s1">&#39;SHLVL&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_PYTHON_EXE&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/bin/python&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_DEFAULT_ENV&#39;</span><span class="p">:</span> <span class="s1">&#39;pygro&#39;</span><span class="p">,</span> <span class="s1">&#39;WSLENV&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;XDG_DATA_DIRS&#39;</span><span class="p">:</span> <span class="s1">&#39;/usr/local/share:/usr/share:/var/lib/snapd/desktop&#39;</span><span class="p">,</span> <span class="s1">&#39;PATH&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/envs/pygro/bin:/home/mlehner/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.Ubuntu20.04onWindows_2004.2021.222.0_x64__79rhkp1fndgsc:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/Wolfram Research/WolframScript:/mnt/c/Users/thier/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/thier/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/thier/AppData/Local/GitHubDesktop/bin:/snap/bin:/usr/local/gromacs/bin/GMXRC&#39;</span><span class="p">,</span> <span class="s1">&#39;HOSTTYPE&#39;</span><span class="p">:</span> <span class="s1">&#39;x86_64&#39;</span><span class="p">,</span> <span class="s1">&#39;CONDA_PREFIX_1&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/mlehner/anaconda3/envs/pygro/bin/python3&#39;</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ff</span> <span class="o">=</span> <span class="n">GromosFF</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;54A7&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">work_dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;/example_files/Hvap_files/&quot;</span>
-<span class="n">gromosXX_path</span><span class="o">=</span><span class="kc">None</span> <span class="c1">#&quot;/home/mlehner/gromosXX/gromosXX/BUILD/program/&quot;</span>
-<span class="n">gromosPP_path</span><span class="o">=</span><span class="kc">None</span><span class="c1"># &quot;/home/mlehner/gromosPlsPls/gromos++/BUILD/programs/&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">groSys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">work_dir</span><span class="o">+</span><span class="s2">&quot;init/&quot;</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Hvap_test&quot;</span><span class="p">,</span> <span class="n">in_smiles</span><span class="o">=</span><span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="n">in_residue_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;H2O&quot;</span><span class="p">],</span>
+                       <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">in_imd_path</span><span class="o">=</span><span class="n">template_sd</span><span class="p">,</span>
+                       <span class="n">in_gromosPP_bin_dir</span><span class="o">=</span><span class="n">gromosPP_path</span><span class="p">,</span> <span class="n">in_gromosXX_bin_dir</span><span class="o">=</span><span class="n">gromosXX_path</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+mkdir: cannot create directory ‘/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/init/’: No such file or directory
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [4]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> groSys <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">Gromos_System</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">work_folder</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">work_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">init/</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">system_name</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">Hvap_test</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">in_smiles</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">O</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">in_residue_list</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">H2O</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-yellow-bg">                       </span><span class="ansi-yellow-bg">auto_convert</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">forcefield</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">ff</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">in_imd_path</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">template_sd</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-yellow-bg">                       </span><span class="ansi-yellow-bg">in_gromosPP_bin_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">gromosPP_path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">in_gromosXX_bin_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">gromosXX_path</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+<span class="ansi-green-intense-fg ansi-bold">    217</span> <span style="color: rgb(95,135,135)"># import files:</span>
+<span class="ansi-green-intense-fg ansi-bold">    218</span> file_mapping <span style="color: rgb(98,98,98)">=</span> {
+<span class="ansi-green-intense-fg ansi-bold">    219</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">imd</span><span style="color: rgb(175,0,0)">&#34;</span>: in_imd_path,
+<span class="ansi-green-intense-fg ansi-bold">    220</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">top</span><span style="color: rgb(175,0,0)">&#34;</span>: in_top_path,
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">qmmm</span><span style="color: rgb(175,0,0)">&#34;</span>: in_qmmm_path,
+<span class="ansi-green-intense-fg ansi-bold">    227</span> }
+<span class="ansi-green-fg">--&gt; 228</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">parse_attribute_files</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">file_mapping</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">readIn</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">readIn</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span> <span style="color: rgb(95,135,135)"># System Information:</span>
+<span class="ansi-green-intense-fg ansi-bold">    231</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_cnf<span style="color: rgb(98,98,98)">.</span>_future_file:
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span> <span style="color: rgb(95,135,135)"># Check if system folder is present</span>
+<span class="ansi-green-intense-fg ansi-bold">    829</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>exists(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder):
+<span class="ansi-green-fg">--&gt; 830</span>     <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_work_folder</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span> check_file_paths<span style="color: rgb(98,98,98)">.</span>append(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder)
+<span class="ansi-green-intense-fg ansi-bold">    833</span> <span style="color: rgb(95,135,135)"># Check if file- paths are valid</span>
+
+File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
+<span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
+<span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
+<span class="ansi-green-intense-fg ansi-bold">    560</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> verbose:
+<span class="ansi-green-intense-fg ansi-bold">    561</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">WARNING:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)"> Did not build already existing folder: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> in_directory_path, category<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(215,95,95)">UserWarning</span>)
+
+<span class="ansi-red-fg">OSError</span>: could not make folder:
+ /home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/init/
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ff</span> <span class="o">=</span> <span class="n">forcefield_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;54A7&quot;</span><span class="p">)</span>
-<span class="n">ff</span><span class="o">.</span><span class="n">mol_name</span> <span class="o">=</span> <span class="s2">&quot;H2O&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">groSys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">work_dir</span><span class="o">+</span><span class="s2">&quot;init/&quot;</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Hvap_test&quot;</span><span class="p">,</span> <span class="n">in_smiles</span><span class="o">=</span><span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">in_imd_path</span><span class="o">=</span><span class="n">template_sd</span><span class="p">,</span> <span class="n">in_gromosPP_bin_dir</span><span class="o">=</span><span class="n">gromosPP_path</span><span class="p">,</span> <span class="n">in_gromosXX_bin_dir</span><span class="o">=</span><span class="n">gromosXX_path</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/init/
-Check /home/bschroed/Documents/code/PyGromosTools/pygromos/data/simulation_parameters_templates/vacuum_sd.imd
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/init/
-/home/bschroed/Documents/code/PyGromosTools/pygromos/data/simulation_parameters_templates/vacuum_sd.imd
-All dependencies are correct!
-
-
-Parsing File:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hvap_sys</span><span class="o">=</span><span class="n">Hvap_calculation</span><span class="p">(</span><span class="n">input_system</span><span class="o">=</span><span class="n">groSys</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="n">work_dir</span><span class="o">+</span><span class="s2">&quot;hvap&quot;</span><span class="p">,</span> <span class="n">forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/bschroed/Documents/code/PyGromosTools/pygromos/simulations/hvap_calculation/hvap_calculation.py:64: UserWarning: Folder does already exist
-  warnings.warn(&#34;Folder does already exist&#34;)
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:131: UserWarning: No data provided to gromos_system
-manual work needed
-  if verbose: warnings.warn(&#34;No data provided to gromos_system\nmanual work needed&#34;)
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">submissonSystem</span><span class="o">.</span><span class="n">_enviroment</span> <span class="o">=</span> <span class="n">pygro_env</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">create_liq</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/bschroed/Documents/code/PyGromosTools/pygromos/gromos/pyGromosPP/ran_box.py:59: UserWarning: Molecules might overlap! Check cnf manually or decrease the density
-  warnings.warn(&#34;Molecules might overlap! Check cnf manually or decrease the density&#34;)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">run_gas</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-################################################################################
-
-1_emin
-################################################################################
-
-Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
-################################################################################
-Simulation PREPERATION
-################################################################################
-
-
-
-################################################################################
-Simulation Setup:
-################################################################################
-
-steps_per_run:  100
-equis:  0
-simulation runs:  1
-[]
-#####################################################################################
-                ERROR in Submission
-#####################################################################################
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
-    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 752, in execute_subprocess
-    raise ChildProcessError(msg)
-ChildProcessError: SubProcess Failed due to returncode: 127
- COMMAND:
-        /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/simulation/1_emin_1/job_1_emin_1.sh
-STDOUT:
-
-STDERR:
-        b&#39;/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/simulation/1_emin_1/job_1_emin_1.sh: line 3: python: command not found\n&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 147, in do
-    verbose = job_verb)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 193, in chain_submission
-    sumbit_from_file=True, verbose=verbose)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 86, in submit_to_queue
-    str(command))
-ChildProcessError: command failed:
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/simulation/1_emin_1/job_1_emin_1.sh
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/analysis/data/1_emin.cnf
-  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-################################################################################
-
-2_eq
-################################################################################
-
-File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/analysis/data/1_emin.cnf
-Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
-################################################################################
-Simulation PREPERATION
-################################################################################
-
-
-
-################################################################################
-Simulation Setup:
-################################################################################
-
-steps_per_run:  100
-equis:  0
-simulation runs:  1
-[]
-#####################################################################################
-                ERROR in Submission
-#####################################################################################
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
-    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 752, in execute_subprocess
-    raise ChildProcessError(msg)
-ChildProcessError: SubProcess Failed due to returncode: 127
- COMMAND:
-        /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/simulation/2_eq_1/job_2_eq_1.sh
-STDOUT:
-
-STDERR:
-        b&#39;/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/simulation/2_eq_1/job_2_eq_1.sh: line 3: python: command not found\n&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 147, in do
-    verbose = job_verb)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 193, in chain_submission
-    sumbit_from_file=True, verbose=verbose)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 86, in submit_to_queue
-    str(command))
-ChildProcessError: command failed:
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/simulation/2_eq_1/job_2_eq_1.sh
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/analysis/data/2_eq.cnf
-  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-################################################################################
-
-3_sd
-################################################################################
-
-File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/analysis/data/2_eq.cnf
-Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
-################################################################################
-Simulation PREPERATION
-################################################################################
-
-
-
-################################################################################
-Simulation Setup:
-################################################################################
-
-steps_per_run:  100
-equis:  0
-simulation runs:  1
-[]
-#####################################################################################
-                ERROR in Submission
-#####################################################################################
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
-    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 752, in execute_subprocess
-    raise ChildProcessError(msg)
-ChildProcessError: SubProcess Failed due to returncode: 127
- COMMAND:
-        /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/simulation/3_sd_1/job_3_sd_1.sh
-STDOUT:
-
-STDERR:
-        b&#39;/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/simulation/3_sd_1/job_3_sd_1.sh: line 3: python: command not found\n&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 147, in do
-    verbose = job_verb)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 193, in chain_submission
-    sumbit_from_file=True, verbose=verbose)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 86, in submit_to_queue
-    str(command))
-ChildProcessError: command failed:
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/simulation/3_sd_1/job_3_sd_1.sh
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/analysis/data/3_sd.cnf
-  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">run_liq</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-################################################################################
-
-1_emin
-################################################################################
-
-Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
-################################################################################
-Simulation PREPERATION
-################################################################################
-
-
-
-################################################################################
-Simulation Setup:
-################################################################################
-
-steps_per_run:  100
-equis:  0
-simulation runs:  1
-[]
-#####################################################################################
-                ERROR in Submission
-#####################################################################################
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
-    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 752, in execute_subprocess
-    raise ChildProcessError(msg)
-ChildProcessError: SubProcess Failed due to returncode: 127
- COMMAND:
-        /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/simulation/1_emin_1/job_1_emin_1.sh
-STDOUT:
-
-STDERR:
-        b&#39;/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/simulation/1_emin_1/job_1_emin_1.sh: line 3: python: command not found\n&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 147, in do
-    verbose = job_verb)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 193, in chain_submission
-    sumbit_from_file=True, verbose=verbose)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 86, in submit_to_queue
-    str(command))
-ChildProcessError: command failed:
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/simulation/1_emin_1/job_1_emin_1.sh
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/analysis/data/1_emin.cnf
-  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-################################################################################
-
-2_eq
-################################################################################
-
-File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/analysis/data/1_emin.cnf
-Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
-################################################################################
-Simulation PREPERATION
-################################################################################
-
-
-
-################################################################################
-Simulation Setup:
-################################################################################
-
-steps_per_run:  100
-equis:  0
-simulation runs:  1
-[]
-#####################################################################################
-                ERROR in Submission
-#####################################################################################
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
-    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 752, in execute_subprocess
-    raise ChildProcessError(msg)
-ChildProcessError: SubProcess Failed due to returncode: 127
- COMMAND:
-        /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/simulation/2_eq_1/job_2_eq_1.sh
-STDOUT:
-
-STDERR:
-        b&#39;/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/simulation/2_eq_1/job_2_eq_1.sh: line 3: python: command not found\n&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 147, in do
-    verbose = job_verb)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 193, in chain_submission
-    sumbit_from_file=True, verbose=verbose)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 86, in submit_to_queue
-    str(command))
-ChildProcessError: command failed:
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/simulation/2_eq_1/job_2_eq_1.sh
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/analysis/data/2_eq.cnf
-  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-==================
-        CHECK dependencies
-
-Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq
-All dependencies are correct!
-
-
-Generate Empty:  imd
-Generate Empty:  top
-Generate Empty:  cnf
-################################################################################
-
-3_sd
-################################################################################
-
-File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/analysis/data/2_eq.cnf
-Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
-################################################################################
-Simulation PREPERATION
-################################################################################
-
-
-
-################################################################################
-Simulation Setup:
-################################################################################
-
-steps_per_run:  100
-equis:  0
-simulation runs:  1
-[]
-#####################################################################################
-                ERROR in Submission
-#####################################################################################
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
-    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute
-    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py&#34;, line 752, in execute_subprocess
-    raise ChildProcessError(msg)
-ChildProcessError: SubProcess Failed due to returncode: 127
- COMMAND:
-        /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh
-STDOUT:
-
-STDERR:
-        b&#39;/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh: line 3: python: command not found\n&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 147, in do
-    verbose = job_verb)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 193, in chain_submission
-    sumbit_from_file=True, verbose=verbose)
-  File &#34;/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py&#34;, line 86, in submit_to_queue
-    str(command))
-ChildProcessError: command failed:
-/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh
-/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/analysis/data/3_sd.cnf
-  if(self.verbose or True): warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">calc_hvap</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hvap_sys</span><span class="o">=</span><span class="n">Hvap_calculation</span><span class="p">(</span><span class="n">input_system</span><span class="o">=</span><span class="n">groSys</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="n">work_dir</span><span class="o">+</span><span class="s2">&quot;hvap&quot;</span><span class="p">,</span> <span class="n">forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">useGromosPlsPls</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1086,121 +456,137 @@ ChildProcessError: command failed:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/indexes/base.py</span> in <span class="ansi-cyan-fg">get_loc</span><span class="ansi-blue-fg">(self, key, method, tolerance)</span>
-<span class="ansi-green-intense-fg ansi-bold">   3079</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">-&gt; 3080</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_engine<span class="ansi-blue-fg">.</span>get_loc<span class="ansi-blue-fg">(</span>casted_key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   3081</span>             <span class="ansi-green-fg">except</span> KeyError <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [5]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> hvap_sys<span style="color: rgb(98,98,98)">=</span>Hvap_calculation(input_system<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">groSys</span>, work_folder<span style="color: rgb(98,98,98)">=</span>work_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">hvap</span><span style="color: rgb(175,0,0)">&#34;</span>, forcefield<span style="color: rgb(98,98,98)">=</span>ff, system_name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">test</span><span style="color: rgb(175,0,0)">&#34;</span>, useGromosPlsPls<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
 
-<span class="ansi-green-fg">pandas/_libs/index.pyx</span> in <span class="ansi-cyan-fg">pandas._libs.index.IndexEngine.get_loc</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-red-fg">NameError</span>: name &#39;groSys&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">create_liq</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">hvap_sys</span><span style="color: rgb(98,98,98)">.</span>create_liq()
 
-<span class="ansi-green-fg">pandas/_libs/index.pyx</span> in <span class="ansi-cyan-fg">pandas._libs.index.IndexEngine.get_loc</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">run_gas</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">hvap_sys</span><span style="color: rgb(98,98,98)">.</span>run_gas()
 
-<span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi</span> in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable.get_item</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">run_liq</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">hvap_sys</span><span style="color: rgb(98,98,98)">.</span>run_liq()
 
-<span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi</span> in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable.get_item</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hvap_sys</span><span class="o">.</span><span class="n">calc_hvap</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">hvap_sys</span><span style="color: rgb(98,98,98)">.</span>calc_hvap()
 
-<span class="ansi-red-fg">KeyError</span>: &#39;totals&#39;
-
-The above exception was the direct cause of the following exception:
-
-<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-12-78ce0d333dcf&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hvap_sys<span class="ansi-blue-fg">.</span>calc_hvap<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/simulations/hvap_calculation/hvap_calculation.py</span> in <span class="ansi-cyan-fg">calc_hvap</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    196</span>
-<span class="ansi-green-intense-fg ansi-bold">    197</span>     <span class="ansi-green-fg">def</span> calc_hvap<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> float<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 198</span><span class="ansi-red-fg">         </span>h_vap <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>groSys_liq_final<span class="ansi-blue-fg">.</span>tre<span class="ansi-blue-fg">.</span>get_Hvap<span class="ansi-blue-fg">(</span>gas<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>groSys_gas_final<span class="ansi-blue-fg">.</span>tre<span class="ansi-blue-fg">,</span> nMolecules<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>num_molecules<span class="ansi-blue-fg">,</span> temperature<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>temperature<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    199</span>         <span class="ansi-green-fg">return</span> h_vap
-
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/trajectory/tre.py</span> in <span class="ansi-cyan-fg">get_Hvap</span><span class="ansi-blue-fg">(self, gas, nMolecules, temperature)</span>
-<span class="ansi-green-intense-fg ansi-bold">    108</span>         gas_nonbonded_energy <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span>
-<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">if</span> type<span class="ansi-blue-fg">(</span>gas<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">==</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 110</span><span class="ansi-red-fg">             </span>gas_nonbonded_energy <span class="ansi-blue-fg">=</span> gas<span class="ansi-blue-fg">.</span>get_totals_nonbonded<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>mean<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    111</span>         <span class="ansi-green-fg">elif</span> type<span class="ansi-blue-fg">(</span>gas<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">==</span> float<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    112</span>             gas_nonbonded_energy <span class="ansi-blue-fg">=</span> gas
-
-<span class="ansi-green-fg">~/Documents/code/PyGromosTools/pygromos/files/trajectory/tre.py</span> in <span class="ansi-cyan-fg">get_totals_nonbonded</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     48</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>     <span class="ansi-green-fg">def</span> get_totals_nonbonded<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 50</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>totals_nonbonded <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;totals&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>apply<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     51</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>totals_nonbonded
-<span class="ansi-green-intense-fg ansi-bold">     52</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, key)</span>
-<span class="ansi-green-intense-fg ansi-bold">   3022</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>columns<span class="ansi-blue-fg">.</span>nlevels <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   3023</span>                 <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_getitem_multilevel<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">-&gt; 3024</span><span class="ansi-red-fg">             </span>indexer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>columns<span class="ansi-blue-fg">.</span>get_loc<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   3025</span>             <span class="ansi-green-fg">if</span> is_integer<span class="ansi-blue-fg">(</span>indexer<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   3026</span>                 indexer <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>indexer<span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/indexes/base.py</span> in <span class="ansi-cyan-fg">get_loc</span><span class="ansi-blue-fg">(self, key, method, tolerance)</span>
-<span class="ansi-green-intense-fg ansi-bold">   3080</span>                 <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_engine<span class="ansi-blue-fg">.</span>get_loc<span class="ansi-blue-fg">(</span>casted_key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   3081</span>             <span class="ansi-green-fg">except</span> KeyError <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">-&gt; 3082</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> KeyError<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">from</span> err
-<span class="ansi-green-intense-fg ansi-bold">   3083</span>
-<span class="ansi-green-intense-fg ansi-bold">   3084</span>         <span class="ansi-green-fg">if</span> tolerance <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">KeyError</span>: &#39;totals&#39;
+<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
-
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"a390995ec8a6485886ed1d21ac16cb02": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "d2996463930643b7ba687b570ab8699b": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_a390995ec8a6485886ed1d21ac16cb02"}}}, "version_major": 2, "version_minor": 0}
+</script>
 
            </div>
-
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="example_submission_systems.html" class="btn btn-neutral float-right" title="Submission Systems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="example_gromos_trajectories.html" class="btn btn-neutral float-left" title="Gromos Trajectory evaluation with Pygromos and Pandas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example_gromos_qmmm.html" class="btn btn-neutral float-left" title="Support for QMMM functionality in GROMOS input files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_openff.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
-
-    </p>
+    <p>&#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
   </div>
 
-
-
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-
-
-
-
+  </script> 
 
 </body>
 </html>
