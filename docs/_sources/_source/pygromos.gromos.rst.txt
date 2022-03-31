@@ -12,6 +12,14 @@ Subpackages
 Submodules
 ----------
 
+pygromos.gromos.compile\_gromos module
+--------------------------------------
+
+.. automodule:: pygromos.gromos.compile_gromos
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pygromos.gromos.gromosBashSyntaxParser module
 ---------------------------------------------
 

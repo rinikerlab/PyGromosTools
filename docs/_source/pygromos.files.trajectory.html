@@ -1,42 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>pygromos.files.trajectory package &mdash; PyGromosTools  documentation</title>
-
-
-
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-
-
-
-
-
-
-
-
-
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
 
-
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pygromos.files.trajectory.blocks package" href="pygromos.files.trajectory.blocks.html" />
@@ -44,28 +25,12 @@
 </head>
 
 <body class="wy-body-for-nav">
-
-
   <div class="wy-grid-for-nav">
-
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-
-
             <a href="../index.html" class="icon icon-home"> PyGromosTools
-
-
-
           </a>
-
-
-
-
-
-
-
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,20 +38,12 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-
-        </div>
-
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#define-file-paths">define file paths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#build-gromos-system">Build gromos System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#run-emin">Run Emin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
@@ -96,7 +53,6 @@
 <li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pygromos.hpc_queuing.html">pygromos.hpc_queuing package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
@@ -112,72 +68,28 @@
 </li>
 </ul>
 
-
-
         </div>
-
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-
-      <nav class="wy-nav-top" aria-label="top navigation">
-
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">PyGromosTools</a>
-
       </nav>
 
-
       <div class="wy-nav-content">
-
         <div class="rst-content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-
           <li><a href="modules.html">Documentation</a> &raquo;</li>
-
           <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
-
           <li><a href="pygromos.files.html">pygromos.files package</a> &raquo;</li>
-
       <li>pygromos.files.trajectory package</li>
-
-
       <li class="wy-breadcrumbs-aside">
-
-
             <a href="../_sources/_source/pygromos.files.trajectory.rst.txt" rel="nofollow"> View page source</a>
-
-
       </li>
-
   </ul>
-
-
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -207,10 +119,10 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="pygromos-files-trajectory-package">
-<h1>pygromos.files.trajectory package<a class="headerlink" href="#pygromos-files-trajectory-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<section id="pygromos-files-trajectory-package">
+<h1>pygromos.files.trajectory package<a class="headerlink" href="#pygromos-files-trajectory-package" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pygromos.files.trajectory.blocks.html">pygromos.files.trajectory.blocks package</a><ul>
@@ -228,12 +140,12 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-pygromos.files.trajectory.trc">
-<span id="pygromos-files-trajectory-trc-module"></span><h2>pygromos.files.trajectory.trc module<a class="headerlink" href="#module-pygromos.files.trajectory.trc" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-pygromos.files.trajectory.trc">
+<span id="pygromos-files-trajectory-trc-module"></span><h2>pygromos.files.trajectory.trc module<a class="headerlink" href="#module-pygromos.files.trajectory.trc" title="Permalink to this headline"></a></h2>
 <p>File:            Class for trc files in pandas
 Description:</p>
 <blockquote>
@@ -246,259 +158,117 @@ TODO: add support for periodic boundary condition
 TODO: add support for rdkit mol selector
 TODO: add support for rdkit conformers</p>
 <dl class="py class">
-<dt id="pygromos.files.trajectory.trc.Trc">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.trc.</span></code><code class="sig-name descname"><span class="pre">Trc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.trajectory._general_trajectory._General_Trajectory</span></code></p>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.trc.</span></span><span class="sig-name descname"><span class="pre">Trc</span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mdtraj.core.trajectory.Trajectory</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.TITLE">
+<span class="sig-name descname"><span class="pre">TITLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.TITLE" title="pygromos.files.blocks._general_blocks.TITLE"><span class="pre">pygromos.files.blocks._general_blocks.TITLE</span></a></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.TITLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc._rms">
-<code class="sig-name descname"><span class="pre">_rms</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_values</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc._rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc._rms" title="Permalink to this definition">¶</a></dt>
-<dd><p>helper function for RMSD. Calculates the root mean square for a array of (position/velocity) arrays</p>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.distances">
+<span class="sig-name descname"><span class="pre">distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom_pairs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.distances" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.generate_TITLE_entry">
+<span class="sig-name descname"><span class="pre">generate_TITLE_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.generate_TITLE_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.generate_TITLE_entry" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.generate_entry_for_frame">
+<span class="sig-name descname"><span class="pre">generate_entry_for_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.generate_entry_for_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.generate_entry_for_frame" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.get_dummy_cnf">
+<span class="sig-name descname"><span class="pre">get_dummy_cnf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf" title="pygromos.files.coord.cnf.Cnf"><span class="pre">pygromos.files.coord.cnf.Cnf</span></a></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_dummy_cnf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_dummy_cnf" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_cnf_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.002</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">any</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load a trajectory from disk</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>in_values</strong> (<em>np.array of np.arrays</em>)</p>
+<dd class="field-odd"><p><strong>filenames</strong> (<em>{path-like, [path-like]}</em>) – Either a path or list of paths</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>root mean square</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><p><strong>As requested by the various load functions – it depends on the extension</strong></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.cog_reframe">
-<code class="sig-name descname"><span class="pre">cog_reframe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Cnf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.cog_reframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.cog_reframe" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.parse_trc_efficiently">
+<span class="sig-name descname"><span class="pre">parse_trc_efficiently</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traj_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.parse_trc_efficiently"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.parse_trc_efficiently" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pygromos.files.trajectory.trc.Trc.database">
-<code class="sig-name descname"><span class="pre">database</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.database" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.path" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_atom_movement_length_mean">
-<code class="sig-name descname"><span class="pre">get_atom_movement_length_mean</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_atom_movement_length_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_atom_movement_length_mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>The average euclidian movement between to consecutive timesteps is calculated for atom i</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atomI</strong> (<em>int</em>)</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_atom_movement_length_series">
-<code class="sig-name descname"><span class="pre">get_atom_movement_length_series</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_atom_movement_length_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_atom_movement_length_series" title="Permalink to this definition">¶</a></dt>
-<dd><p>for every timestep the total euclidian difference to the last time step is calculate for atom i</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atomI</strong> (<em>int</em>)</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_atom_movement_length_total">
-<code class="sig-name descname"><span class="pre">get_atom_movement_length_total</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_atom_movement_length_total"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_atom_movement_length_total" title="Permalink to this definition">¶</a></dt>
-<dd><p>The total euclidian movement between to consecutive timesteps is calculated for atom i</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atomI</strong> (<em>int</em>)</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_atom_movement_series">
-<code class="sig-name descname"><span class="pre">get_atom_movement_series</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_atom_movement_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_atom_movement_series" title="Permalink to this definition">¶</a></dt>
-<dd><p>for every time step the difference to the last coordinates is calculated for an atom i
-Returns the euclidian difference to the last step as a numpy array</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atomI</strong> (<em>int</em>)</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_atom_pair_distance_mean">
-<code class="sig-name descname"><span class="pre">get_atom_pair_distance_mean</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomJ</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_atom_pair_distance_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_atom_pair_distance_mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates the mean of the euclidian distances for every timestep between the atoms i and j</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atomI</strong> (<em>int</em>)</p></li>
-<li><p><strong>atomJ</strong> (<em>int</em>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_atom_pair_distance_series">
-<code class="sig-name descname"><span class="pre">get_atom_pair_distance_series</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomJ</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_atom_pair_distance_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_atom_pair_distance_series" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a series with the euclidian distance for the atom pair i-j for every time step</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atomI</strong> (<em>int</em>)</p></li>
-<li><p><strong>atomJ</strong> (<em>int</em>)</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_cog_movement_total_series_for_atom_group">
-<code class="sig-name descname"><span class="pre">get_cog_movement_total_series_for_atom_group</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_cog_movement_total_series_for_atom_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_cog_movement_total_series_for_atom_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the total movemnt between to consecutive time steps for the center of geometry defined by a list of atoms</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atoms</strong> (<em>list[int]</em>) – the list of atoms defining the center of geometry</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>total movement (float) for every time step</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_cog_movement_vector_series_for_atom_group">
-<code class="sig-name descname"><span class="pre">get_cog_movement_vector_series_for_atom_group</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_cog_movement_vector_series_for_atom_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_cog_movement_vector_series_for_atom_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the movemnt vector between to consecutive time steps for the center of geometry defined by a list of atoms</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>atoms</strong> (<em>list[int]</em>) – the list of atoms defining the center of geometry</p></li>
-<li><p><strong>periodicBoundary</strong> (<em>bool, optional</em>) – WIP</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>numpy array with the movement vector for every time step</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.get_pdb">
-<code class="sig-name descname"><span class="pre">get_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_resn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['SOLV']</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.get_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.get_pdb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.trc.Trc.path">
-<code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.recreate_view">
+<span class="sig-name descname"><span class="pre">recreate_view</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nglview.widget.NGLWidget</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.recreate_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.recreate_view" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.radial_distribution">
-<code class="sig-name descname"><span class="pre">radial_distribution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomsFrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomsTo</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.radial_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.radial_distribution" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.rmsd">
+<span class="sig-name descname"><span class="pre">rmsd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">mdtraj.core.trajectory.Trajectory</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.rmsd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.rmsd" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.rmsd">
-<code class="sig-name descname"><span class="pre">rmsd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#pygromos.files.trajectory.trc.Trc" title="pygromos.files.trajectory.trc.Trc"><span class="pre">Trc</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.rmsd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.rmsd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the RootMeanSquareDeviation from a configuration (ref_cnf) to every frame in self</p>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save trajectory to disk, in a format determined by the filename extension</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ref_cnf</strong> (<em>trajectoy or frame (int) to use as reference</em>) – This is the reference configuration. If a int (n) is provide the nth frame will be used</p>
+<dd class="field-odd"><p><strong>filename</strong> (<em>path-like</em>) – filesystem path in which to save the trajectory. The extension will
+be parsed and will control the format.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>RMSD for every frame</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lossy</strong> (<em>bool</em>) – For .h5 or .lh5, whether or not to use compression.</p></li>
+<li><p><strong>no_models</strong> (<em>bool</em>) – For .pdb. TODO: Document this?</p></li>
+<li><p><strong>force_overwrite</strong> (<em>bool</em>) – If <cite>filename</cite> already exists, overwrite it.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.visualize">
-<code class="sig-name descname"><span class="pre">visualize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Cnf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.visualize" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.step">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">step</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.array</span></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.step" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trc.Trc.write_pdb">
-<code class="sig-name descname"><span class="pre">write_pdb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cnf_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.write_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.write_pdb" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>This function converts the atom POS db of the traj into a pdb traj.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>atoms</strong> (<em>t.List[Atom]</em>) – List of atoms</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pdb strings of that molecule</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>t.List[str]</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.to_cnf">
+<span class="sig-name descname"><span class="pre">to_cnf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_cnf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf" title="pygromos.files.coord.cnf.Cnf"><span class="pre">pygromos.files.coord.cnf.Cnf</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.to_cnf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.to_cnf" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.view">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">view</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">nglview.widget.NGLWidget</span></em><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.view" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.write" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trc.Trc.write_trc">
+<span class="sig-name descname"><span class="pre">write_trc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trc.html#Trc.write_trc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trc.Trc.write_trc" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-pygromos.files.trajectory.tre">
-<span id="pygromos-files-trajectory-tre-module"></span><h2>pygromos.files.trajectory.tre module<a class="headerlink" href="#module-pygromos.files.trajectory.tre" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.files.trajectory.tre">
+<span id="pygromos-files-trajectory-tre-module"></span><h2>pygromos.files.trajectory.tre module<a class="headerlink" href="#module-pygromos.files.trajectory.tre" title="Permalink to this headline"></a></h2>
 <p>File:            Class for tre files in pandas
 Description:</p>
 <blockquote>
@@ -511,22 +281,89 @@ The tre files are parsed into an easy to use pandas dataframe.</p>
 TODO: add support for periodic boundary condition</p>
 <p>TODO: add ene_ana functions</p>
 <dl class="py class">
-<dt id="pygromos.files.trajectory.tre.Tre">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.tre.</span></code><code class="sig-name descname"><span class="pre">Tre</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">input_value:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">auto_save=True</span></em>, <em class="sig-param"><span class="pre">stride:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em>, <em class="sig-param"><span class="pre">skip:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></em>, <em class="sig-param"><span class="pre">_ene_ana_names=&lt;class</span> <span class="pre">'pygromos.files.trajectory.tre_field_libs.ene_fields.gromos_2020_tre_block_names_table'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.tre.</span></span><span class="sig-name descname"><span class="pre">Tre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_value:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_ene_ana_names:</span> <span class="pre">pygromos.files.trajectory.tre_field_libs.ene_fields.gromos_tre_block_names_table</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.trajectory.tre_field_libs.ene_fields.gromos_2021_tre_block_names_table'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.trajectory._general_trajectory._General_Trajectory</span></code></p>
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.Tre.database">
-<code class="sig-name descname"><span class="pre">database</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.database" title="Permalink to this definition">¶</a></dt>
+<p>The Tre files are results from Gromos simulations, that store all the calculated energies and properties during the simulation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_value:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_ene_ana_names:</span> <span class="pre">pygromos.files.trajectory.tre_field_libs.ene_fields.gromos_tre_block_names_table</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.trajectory.tre_field_libs.ene_fields.gromos_2021_tre_block_names_table'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.__init__" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Build a Gromos energy trajectory file (.tre)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_value</strong> (<em>str,None</em>) – The input value can be None, or a string path to the .tre/.tre.gz file.</p></li>
+<li><p><strong>auto_save</strong> (<em>bool, optional</em>) – automatically save the file, by default True</p></li>
+<li><p><strong>stride</strong> (<em>int, optional</em>) – only read every x value, by default 1</p></li>
+<li><p><strong>skip</strong> (<em>int, optional</em>) – skip the first x timesteps, by default 0</p></li>
+<li><p><strong>_ene_ana_names</strong> (<em>gromos_tre_block_names_table, optional</em>) – get the field names after the provided standard., by default gromos_2020_tre_block_names_table</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre._get_numberOfForceGroupsFromNonbondeds">
+<span class="sig-name descname"><span class="pre">_get_numberOfForceGroupsFromNonbondeds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre._get_numberOfForceGroupsFromNonbondeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre._get_numberOfForceGroupsFromNonbondeds" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>This function gets the number of Force groups in the simulation from the nonbonded block.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>number of ForceGroups used for this tre.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre._set_data">
+<span class="sig-name descname"><span class="pre">_set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attibute_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre._set_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre._set_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>_summary_</dt><dd><p>This function extracts generially the information of a column per time</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attibute_name</strong> (<em>str</em>) – name of the target attribute</p></li>
+<li><p><strong>rows_name</strong> (<em>str</em>) – name of the block, that shall be extracted</p></li>
+<li><p><strong>field_names</strong> (<em>Tuple[str]</em>) – name of the fields in each row</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>contains the extracted information</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_Hvap">
+<span class="sig-name descname"><span class="pre">get_Hvap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gas_traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pygromos.utils.typing.Tre_Type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nMolecules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_Hvap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_Hvap" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_Hvap">
-<code class="sig-name descname"><span class="pre">get_Hvap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nMolecules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_Hvap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_Hvap" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_baths">
+<span class="sig-name descname"><span class="pre">get_baths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_baths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_baths" title="Permalink to this definition"></a></dt>
+<dd><p>extract data of the baths block</p>
+</dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_density">
-<code class="sig-name descname"><span class="pre">get_density</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_density" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_bondedContributions">
+<span class="sig-name descname"><span class="pre">get_bondedContributions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_bondedContributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_bondedContributions" title="Permalink to this definition"></a></dt>
+<dd><p>extract data of the bonded block</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_density">
+<span class="sig-name descname"><span class="pre">get_density</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_density" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the density for every frame.
 (Uses mass and the first volume entry)</p>
 <dl class="field-list simple">
@@ -540,18 +377,82 @@ TODO: add support for periodic boundary condition</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_eds">
-<code class="sig-name descname"><span class="pre">get_eds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_eds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_eds" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_eds">
+<span class="sig-name descname"><span class="pre">get_eds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_eds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_eds" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Get EDS energies if present.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns datafrae with columns for each endstate.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_precalclam">
-<code class="sig-name descname"><span class="pre">get_precalclam</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_precalclam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_precalclam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_mass">
+<span class="sig-name descname"><span class="pre">get_mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_mass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_mass" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>returns the systems mass per timestep</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>series of mass per time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_temperature">
-<code class="sig-name descname"><span class="pre">get_temperature</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_temperature" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_nonbondedContributions">
+<span class="sig-name descname"><span class="pre">get_nonbondedContributions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_nonbondedContributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_nonbondedContributions" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>This function returns a nice formatted dictionary for the nonbonded Contributions according to the Force groups of the tre file.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The dictionary containing the nonbonded contributions of the single ForceGroups with each other.
+Dict[ForceGroupI, Dict[ForceGroupJ, NonbondedEnergyContribs]]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[int, Dict[int, pd.DataFrame]]</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – returns Value error, if the dimensionality of the different contributions does not fit to the _nonbonded_contribution_names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_precalclam">
+<span class="sig-name descname"><span class="pre">get_precalclam</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_precalclam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_precalclam" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Get the energies calculated for the different defined lambda values in a trajectory.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>return the energies calculated for the different lambda values.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_specialContributions">
+<span class="sig-name descname"><span class="pre">get_specialContributions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_specialContributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_specialContributions" title="Permalink to this definition"></a></dt>
+<dd><p>extract data of the special block</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_temperature">
+<span class="sig-name descname"><span class="pre">get_temperature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_temperature" title="Permalink to this definition"></a></dt>
 <dd><p>Get the temperature in Kelvin for all temperature baths for every time step</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -564,35 +465,92 @@ TODO: add support for periodic boundary condition</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_totals">
-<code class="sig-name descname"><span class="pre">get_totals</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_temperature_Info">
+<span class="sig-name descname"><span class="pre">get_temperature_Info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_temperature_Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_temperature_Info" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>temperature baths</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns the full info of the temperature baths per bath</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[int,pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_totals_bonded">
-<code class="sig-name descname"><span class="pre">get_totals_bonded</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals_bonded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals_bonded" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totals">
+<span class="sig-name descname"><span class="pre">get_totals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals" title="Permalink to this definition"></a></dt>
+<dd><p>get all totals of the system</p>
+</dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_totals_nonbonded">
-<code class="sig-name descname"><span class="pre">get_totals_nonbonded</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals_nonbonded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals_nonbonded" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totangle">
+<span class="sig-name descname"><span class="pre">get_totangle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totangle" title="Permalink to this definition"></a></dt>
+<dd><p>get the total angle contribution/ per time</p>
+</dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.tre.Tre.get_totals_total">
-<code class="sig-name descname"><span class="pre">get_totals_total</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totals_total"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totals_total" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totbonded">
+<span class="sig-name descname"><span class="pre">get_totbonded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totbonded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totbonded" title="Permalink to this definition"></a></dt>
+<dd><p>get the total bonded contribution/ per time</p>
+</dd></dl>
 
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.tre.Tre.path">
-<code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totcov">
+<span class="sig-name descname"><span class="pre">get_totcov</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totcov"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totcov" title="Permalink to this definition"></a></dt>
+<dd><p>get the total covalent contribution/ per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totcrf">
+<span class="sig-name descname"><span class="pre">get_totcrf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totcrf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totcrf" title="Permalink to this definition"></a></dt>
+<dd><p>get the total columbic reactionfield contribution/ per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totdihedral">
+<span class="sig-name descname"><span class="pre">get_totdihedral</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totdihedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totdihedral" title="Permalink to this definition"></a></dt>
+<dd><p>get the total dihedral contribution/ per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totene">
+<span class="sig-name descname"><span class="pre">get_totene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totene" title="Permalink to this definition"></a></dt>
+<dd><p>get the total System energy / per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totkin">
+<span class="sig-name descname"><span class="pre">get_totkin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totkin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totkin" title="Permalink to this definition"></a></dt>
+<dd><p>get the total kinetic Energy / per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totlj">
+<span class="sig-name descname"><span class="pre">get_totlj</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totlj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totlj" title="Permalink to this definition"></a></dt>
+<dd><p>get the total lennard jones contribution/ per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totnonbonded">
+<span class="sig-name descname"><span class="pre">get_totnonbonded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totnonbonded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totnonbonded" title="Permalink to this definition"></a></dt>
+<dd><p>get the total nonbonded contribution/ per time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.tre.Tre.get_totpot">
+<span class="sig-name descname"><span class="pre">get_totpot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/tre.html#Tre.get_totpot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.tre.Tre.get_totpot" title="Permalink to this definition"></a></dt>
+<dd><p>get the total potential Energy / per time</p>
+</dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-pygromos.files.trajectory.trg">
-<span id="pygromos-files-trajectory-trg-module"></span><h2>pygromos.files.trajectory.trg module<a class="headerlink" href="#module-pygromos.files.trajectory.trg" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.files.trajectory.trg">
+<span id="pygromos-files-trajectory-trg-module"></span><h2>pygromos.files.trajectory.trg module<a class="headerlink" href="#module-pygromos.files.trajectory.trg" title="Permalink to this headline"></a></h2>
 <p>File:            Class for tre files in pandas
 Description:</p>
 <blockquote>
@@ -605,104 +563,77 @@ The tre files are parsed into an easy to use pandas dataframe.</p>
 TODO: add support for periodic boundary condition</p>
 <p>TODO: add ene_ana functions</p>
 <dl class="py class">
-<dt id="pygromos.files.trajectory.trg.Trg">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.trg.</span></code><code class="sig-name descname"><span class="pre">Trg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.Trg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.trg.</span></span><span class="sig-name descname"><span class="pre">Trg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.trajectory._general_trajectory._General_Trajectory</span></code></p>
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.trg.Trg.database">
-<code class="sig-name descname"><span class="pre">database</span></code><em class="property"><span class="pre">:</span> <span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.database" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.Trg.get_lambdas">
+<span class="sig-name descname"><span class="pre">get_lambdas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg.get_lambdas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.get_lambdas" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trg.Trg.get_lambdas">
-<code class="sig-name descname"><span class="pre">get_lambdas</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg.get_lambdas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.get_lambdas" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.Trg.get_precalclam">
+<span class="sig-name descname"><span class="pre">get_precalclam</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg.get_precalclam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.get_precalclam" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pygromos.files.trajectory.trg.Trg.get_precalclam">
-<code class="sig-name descname"><span class="pre">get_precalclam</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg.get_precalclam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.get_precalclam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="pygromos.files.trajectory.trg.Trg.get_totals">
-<code class="sig-name descname"><span class="pre">get_totals</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg.get_totals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.get_totals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pygromos.files.trajectory.trg.Trg.path">
-<code class="sig-name descname"><span class="pre">path</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.Trg.get_totals">
+<span class="sig-name descname"><span class="pre">get_totals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#Trg.get_totals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.Trg.get_totals" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.trg.</span></code><code class="sig-name descname"><span class="pre">gromos_2020_trg_block_names_table</span></code><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#gromos_2020_trg_block_names_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.trajectory.trg.</span></span><span class="sig-name descname"><span class="pre">gromos_2020_trg_block_names_table</span></span><a class="reference internal" href="../_modules/pygromos/files/trajectory/trg.html#gromos_2020_trg_block_names_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt id="pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.precalclam_subblock">
-<code class="sig-name descname"><span class="pre">precalclam_subblock</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['nr_lambdas',</span> <span class="pre">'A_e_lj',</span> <span class="pre">'B_e_lj',</span> <span class="pre">'A_e_crf',</span> <span class="pre">'B_e_crf',</span> <span class="pre">'AB_kinetic',</span> <span class="pre">'AB_bond',</span> <span class="pre">'AB_angle',</span> <span class="pre">'AB_improper',</span> <span class="pre">'AB_disres',</span> <span class="pre">'AB_dihres',</span> <span class="pre">'AB_disfld']</span></em><a class="headerlink" href="#pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.precalclam_subblock" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.precalclam_subblock">
+<span class="sig-name descname"><span class="pre">precalclam_subblock</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['nr_lambdas',</span> <span class="pre">'A_e_lj',</span> <span class="pre">'B_e_lj',</span> <span class="pre">'A_e_crf',</span> <span class="pre">'B_e_crf',</span> <span class="pre">'AB_kinetic',</span> <span class="pre">'AB_bond',</span> <span class="pre">'AB_angle',</span> <span class="pre">'AB_improper',</span> <span class="pre">'AB_disres',</span> <span class="pre">'AB_dihres',</span> <span class="pre">'AB_disfld']</span></em><a class="headerlink" href="#pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.precalclam_subblock" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.totals_subblock_names">
-<code class="sig-name descname"><span class="pre">totals_subblock_names</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['dHdl',</span> <span class="pre">'dKdl',</span> <span class="pre">'dVdl',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP']</span></em><a class="headerlink" href="#pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.totals_subblock_names" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.totals_subblock_names">
+<span class="sig-name descname"><span class="pre">totals_subblock_names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['dHdl',</span> <span class="pre">'dKdl',</span> <span class="pre">'dVdl',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP',</span> <span class="pre">'WIP']</span></em><a class="headerlink" href="#pygromos.files.trajectory.trg.gromos_2020_trg_block_names_table.totals_subblock_names" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-pygromos.files.trajectory">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.files.trajectory" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+<section id="module-pygromos.files.trajectory">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.files.trajectory" title="Permalink to this headline"></a></h2>
+</section>
+</section>
 
 
            </div>
-
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="pygromos.files.trajectory.blocks.html" class="btn btn-neutral float-right" title="pygromos.files.trajectory.blocks package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pygromos.files.topology.html" class="btn btn-neutral float-left" title="pygromos.files.topology package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pygromos.files.trajectory.blocks.html" class="btn btn-neutral float-right" title="pygromos.files.trajectory.blocks package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
-
-    </p>
+    <p>&#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
   </div>
 
-
-
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-
-
-
-
 
 </body>
 </html>

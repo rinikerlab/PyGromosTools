@@ -1,8 +1,18 @@
 
 
-.. image:: .img/PyGromosToolsBanner.png
-   :target: .img/PyGromosToolsBanner.png
+.. image::
+   :target:
    :alt:
+
+
+.. image:: .img/PyGromosToolsLogo_smallerDarkModeWithBorders.png#gh-dark-mode-only
+   :target: .img/PyGromosToolsLogo_smallerDarkModeWithBorders.png#gh-dark-mode-only
+   :alt: PyGromosBanDark
+
+
+.. image:: .img/PyGromosToolsLogo_smallerWithBorders.png#gh-light-mode-only
+   :target: .img/PyGromosToolsLogo_smallerWithBorders.png#gh-light-mode-only
+   :alt: PyGromosBanLight
 
 
 Welcome to PyGromosTools
@@ -14,6 +24,11 @@ Welcome to PyGromosTools
    :alt: CI
 
 
+.. image:: https://github.com/rinikerlab/PyGromosTools/actions/workflows/pre-commit.yml/badge.svg?branch=release3
+   :target: https://github.com/rinikerlab/PyGromosTools/actions/workflows/pre-commit.yml
+   :alt: pre-commit
+
+
 .. image:: https://codecov.io/gh/rinikerlab/PyGromosTools/branch/main/graph/badge.svg?token=R36KJCEKEC
    :target: https://codecov.io/gh/rinikerlab/PyGromosTools
    :alt: codecov
@@ -22,6 +37,11 @@ Welcome to PyGromosTools
 .. image:: https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&logoWidth=18
    :target: https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python
    :alt: Language grade: Python
+
+
+.. image:: https://zenodo.org/badge/323972251.svg
+   :target: https://zenodo.org/badge/latestdoi/323972251
+   :alt: DOI
 
 
 .. image:: https://img.shields.io/badge/Documentation-here-white.svg
@@ -149,54 +169,60 @@ Content
 
   Run on a local machine:
 
-  .. code-block:: python
+  ```python
+  from pygromos.files.gromos_system import Gromos_System
+  from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem
+  from pygromos.simulations.modules.preset_simulation_modules import emin
 
-     from pygromos.files.gromos_system import Gromos_System
-     from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem
-     from pygromos.simulations.modules.preset_simulation_modules import emin
+define file paths
+=================
 
-     #define file paths
-     root_dir = "./example_files/SD_Simulation"
-     root_in_dir = root_dir+"/SD_input"
-     cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
-     top_path = root_in_dir + "/6J29.top"
-     sys_name = "6J29"
+  root_dir = "./example_files/SD_Simulation"
+  root_in_dir = root_dir+"/SD_input"
+  cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
+  top_path = root_in_dir + "/6J29.top"
+  sys_name = "6J29"
 
-     #Build gromos System:
-     grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
-                                 system_name=sys_name, work_folder=root_in_dir)
+Build gromos System
+===================
 
-     #Run Emin
-     emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
-                             step_name=step_name, submission_system=subSystem())
+  grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
+                              system_name=sys_name, work_folder=root_in_dir)
 
-  Run on LSF-Cluster:
+Run Emin
+========
 
-  .. code-block:: python
+  emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
+                          step_name=step_name, submission_system=subSystem())
 
+.. code-block::
+
+
+     Run on LSF-Cluster:
+       ```python
      from pygromos.files.gromos_system import Gromos_System
      from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSystem
      from pygromos.simulations.modules.preset_simulation_modules import emin
 
-     #define file paths
+      # define file paths
      root_dir = "./example_files/SD_Simulation"
      root_in_dir = root_dir+"/SD_input"
      cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
      top_path = root_in_dir + "/6J29.top"
      sys_name = "6J29"
 
-     #Build gromos System:
+      # Build gromos System:
      grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                                system_name=sys_name, work_folder=root_in_dir)
 
-     #Run Emin
-     sub_system = subSystem(nmpi=4) #allows parallelization
+   # Run Emin
+
+     sub_system = subSystem(nmpi=4) # allows parallelization
      emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                              step_name=step_name, submission_system=sub_system)
 
-*
-  Other utilities:
 
+* Other utilities:
 
   * Bash wrappers for GROMOS
   * Amino acid library
@@ -220,6 +246,11 @@ SETUP
 
 see INSTALL.md file for more informations
 
+Contributions
+^^^^^^^^^^^^^
+
+For any contribution, please check out the CODE_OF_CONDUCT.md file and the style guide in styleguide.md.
+
 Copyright
 ^^^^^^^^^
 
@@ -227,6 +258,8 @@ Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder
 
 Acknowledgements
 ^^^^^^^^^^^^^^^^
+
+Many thanks to @robinwuff for the logo design!
 
 Project based on the
 `Computational Molecular Science Python Cookiecutter <https://github.com/molssi/cookiecutter-cms>`_ version 1.3.

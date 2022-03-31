@@ -1,69 +1,33 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>pygromos.visualization.coordinates_visualization &mdash; PyGromosTools  documentation</title>
-
-
-
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-
-
-
-
-
-
-
-
-
-
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
 
-
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 </head>
 
 <body class="wy-body-for-nav">
-
-
   <div class="wy-grid-for-nav">
-
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-
-
             <a href="../../../index.html" class="icon icon-home"> PyGromosTools
-
-
-
           </a>
-
-
-
-
-
-
-
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,83 +35,36 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-
-        </div>
-
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html#define-file-paths">define file paths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html#build-gromos-system">Build gromos System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html#run-emin">Run Emin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
 </ul>
 
-
-
         </div>
-
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-
-      <nav class="wy-nav-top" aria-label="top navigation">
-
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">PyGromosTools</a>
-
       </nav>
 
-
       <div class="wy-nav-content">
-
         <div class="rst-content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-
       <li>pygromos.visualization.coordinates_visualization</li>
-
-
       <li class="wy-breadcrumbs-aside">
-
       </li>
-
   </ul>
-
-
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -155,129 +72,68 @@
 
   <h1>Source code for pygromos.visualization.coordinates_visualization</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    in this file coordinate visualizations are implemented</span>
+<span class="sd">        In this file certain Visualization pretypes could be implemented</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
-<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="kn">import</span> <span class="n">Trc</span>
-<span class="kn">from</span> <span class="nn">pygromos.utils.amino_acids</span> <span class="kn">import</span> <span class="n">three_letter_aa_lib</span><span class="p">,</span> <span class="n">ions</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">import</span> <span class="nn">py3Dmol</span>
+<span class="kn">import</span> <span class="nn">mdtraj</span>
+<span class="kn">import</span> <span class="nn">nglview</span> <span class="k">as</span> <span class="nn">nj</span>
 
-<div class="viewcode-block" id="show_cnf"><a class="viewcode-back" href="../../../_source/pygromos.visualization.html#pygromos.visualization.coordinates_visualization.show_cnf">[docs]</a><span class="k">def</span> <span class="nf">show_cnf</span><span class="p">(</span><span class="n">cnf</span><span class="p">:</span> <span class="n">Cnf</span><span class="p">):</span>
-    <span class="n">cCNF</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.amino_acids</span> <span class="kn">import</span> <span class="n">three_letter_aa_lib</span><span class="p">,</span> <span class="n">solvents</span><span class="p">,</span> <span class="n">ions</span>
 
-    <span class="n">view</span><span class="o">=</span><span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 
-    <span class="n">solute</span> <span class="o">=</span> <span class="p">[</span><span class="n">resn</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">resn</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span><span class="p">(</span><span class="n">cCNF</span> <span class="o">!=</span><span class="s2">&quot;SOLV&quot;</span><span class="p">)]</span>
-    <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">([</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)])</span><span class="o">&gt;</span><span class="mi">15</span> <span class="ow">or</span> <span class="s2">&quot;SOLV&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
-        <span class="n">solv_cnf</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
+<div class="viewcode-block" id="visualize_system"><a class="viewcode-back" href="../../../_source/pygromos.visualization.html#pygromos.visualization.coordinates_visualization.visualize_system">[docs]</a><span class="k">def</span> <span class="nf">visualize_system</span><span class="p">(</span><span class="n">traj</span><span class="p">:</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nj</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
 
-        <span class="n">pos</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">atomP</span> <span class="ow">in</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">POSITION</span><span class="p">:</span>
-            <span class="n">atomP</span><span class="o">.</span><span class="n">atomType</span> <span class="o">=</span> <span class="n">atomP</span><span class="o">.</span><span class="n">atomType</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">atomP</span><span class="o">.</span><span class="n">resName</span> <span class="o">==</span> <span class="s2">&quot;SOLV&quot;</span><span class="p">):</span>
-                <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atomP</span><span class="p">)</span>
-        <span class="n">solv_cnf</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
-        <span class="n">solv_cnf</span><span class="o">.</span><span class="n">POSITION</span> <span class="o">=</span> <span class="n">pos</span>
+    <span class="n">protein_resi</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">traj</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)])</span>
+    <span class="n">protein_resn</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">traj</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)])</span>
 
-        <span class="n">xyz_str</span> <span class="o">=</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">()</span>
-        <span class="n">xyzd_str</span> <span class="o">=</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">get_xyz</span><span class="p">()</span>
+    <span class="n">water_resi</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">traj</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">solvents</span><span class="p">)])</span>
+    <span class="n">ions_resn</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">traj</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">ions</span><span class="p">)])</span>
 
-        <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyz_str</span><span class="p">)</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyzd_str</span><span class="p">)</span>
-
-        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">solute</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;stick&quot;</span><span class="p">:</span> <span class="p">{}})</span>
-
-        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">([</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)])</span><span class="o">&gt;</span><span class="mi">15</span><span class="p">):</span>
-            <span class="n">protein</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)]</span>
-            <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">protein</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;cartoon&quot;</span><span class="p">:</span> <span class="p">{}})</span>
-            <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;cartoon&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;arrows&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;tubes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;oval&#39;</span><span class="p">}})</span>
-
-        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="s2">&quot;SOLV&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="p">{}})</span>        <span class="c1"># Solvent</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">ions</span><span class="p">},</span>  <span class="p">{</span><span class="s2">&quot;sphere&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">:</span><span class="mf">0.7</span><span class="p">}})</span>        <span class="c1"># ions</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">protein_resi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">water_resi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">ions_resn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">representation</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cartoon&quot;</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;sele&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">protein_resi</span><span class="p">)),</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;residueindex&quot;</span><span class="p">}},</span>
+        <span class="p">]</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">nj</span><span class="o">.</span><span class="n">show_mdtraj</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span> <span class="n">representations</span><span class="o">=</span><span class="n">representation</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">xyz_str</span> <span class="o">=</span> <span class="n">cCNF</span><span class="o">.</span><span class="n">get_xyz</span><span class="p">()</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="n">xyz_str</span><span class="p">)</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;stick&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">nj</span><span class="o">.</span><span class="n">show_mdtraj</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
 
-    <span class="n">view</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">view</span></div>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">protein_resn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="s2">&quot;cartoon&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">protein_resn</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;residueindex&quot;</span><span class="p">)</span>
 
-
-
-<div class="viewcode-block" id="show_coordinate_traj"><a class="viewcode-back" href="../../../_source/pygromos.visualization.html#pygromos.visualization.coordinates_visualization.show_coordinate_traj">[docs]</a><span class="k">def</span> <span class="nf">show_coordinate_traj</span><span class="p">(</span><span class="n">trc</span><span class="p">:</span><span class="n">Trc</span><span class="p">,</span> <span class="n">cnf</span><span class="p">:</span> <span class="n">Cnf</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function visualizes the provided TRC and maps it on the</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    trc : Trc</span>
-
-<span class="sd">    cnf: Cnf</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">traj</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">addModelsAsFrames</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;stick&quot;</span><span class="p">:</span> <span class="p">{}})</span>
-
-    <span class="n">solute</span> <span class="o">=</span> <span class="p">[</span><span class="n">resn</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">resn</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span><span class="p">(</span><span class="n">resn</span> <span class="o">!=</span><span class="s2">&quot;SOLV&quot;</span><span class="p">)]</span>
-    <span class="n">aminoA</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">solute</span> <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="ow">in</span> <span class="n">three_letter_aa_lib</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aminoA</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">):</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">aminoA</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;cartoon&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;arrows&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;tubes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;oval&#39;</span><span class="p">}})</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">&#39;resn&#39;</span><span class="p">:</span> <span class="n">ions</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;sphere&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">}})</span>  <span class="c1"># ions</span>
-
-    <span class="n">view</span><span class="o">.</span><span class="n">animate</span><span class="p">({</span><span class="s2">&quot;loop&quot;</span><span class="p">:</span><span class="s2">&quot;forward&quot;</span><span class="p">})</span>
-
-    <span class="n">view</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">protein_resn</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="s2">&quot;hyperball&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">protein_resn</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">water_resi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">traj</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">water_resi</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ions_resn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="s2">&quot;hyperball&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ions_resn</span><span class="p">)),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">view</span></div>
 </pre></div>
 
            </div>
-
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.
-
-    </p>
+    <p>&#169; Copyright 2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
   </div>
 
-
-
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-
-
-
-
 
 </body>
 </html>

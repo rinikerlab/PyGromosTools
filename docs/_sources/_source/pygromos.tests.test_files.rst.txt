@@ -68,6 +68,14 @@ pygromos.tests.test\_files.test\_imd\_block module
    :undoc-members:
    :show-inheritance:
 
+pygromos.tests.test\_files.test\_mtb module
+-------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.test_mtb
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pygromos.tests.test\_files.test\_ptp module
 -------------------------------------------
 
@@ -76,10 +84,26 @@ pygromos.tests.test\_files.test\_ptp module
    :undoc-members:
    :show-inheritance:
 
+pygromos.tests.test\_files.test\_qmmm module
+--------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.test_qmmm
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pygromos.tests.test\_files.test\_repdat module
 ----------------------------------------------
 
 .. automodule:: pygromos.tests.test_files.test_repdat
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pygromos.tests.test\_files.test\_resnlib module
+-----------------------------------------------
+
+.. automodule:: pygromos.tests.test_files.test_resnlib
    :members:
    :undoc-members:
    :show-inheritance:

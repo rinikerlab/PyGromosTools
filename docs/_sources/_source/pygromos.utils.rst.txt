@@ -20,10 +20,26 @@ pygromos.utils.bash module
    :undoc-members:
    :show-inheritance:
 
+pygromos.utils.compiledProgram module
+-------------------------------------
+
+.. automodule:: pygromos.utils.compiledProgram
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pygromos.utils.pdb module
 -------------------------
 
 .. automodule:: pygromos.utils.pdb
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pygromos.utils.typing module
+----------------------------
+
+.. automodule:: pygromos.utils.typing
    :members:
    :undoc-members:
    :show-inheritance:

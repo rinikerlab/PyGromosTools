@@ -2,667 +2,91 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
-    "import os"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from pygromos.files.gromos_system.ff.forcefield_system import forcefield_system\n",
+    "import os\n",
+    "from pygromos.files.forcefield.gromos.gromosff import GromosFF\n",
     "from pygromos.files.gromos_system.gromos_system import Gromos_System\n",
-    "from pygromos.simulations.hvap_calculation.hvap_calculation import Hvap_calculation\n",
+    "from pygromos.simulations.approaches.hvap_calculation.hvap_calculation import Hvap_calculation\n",
     "from pygromos.data.simulation_parameters_templates import template_sd"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "pygro_env={'SHELL': '/bin/bash', 'LIBGL_ALWAYS_INDIRECT': '1', 'CONDA_EXE': '/home/mlehner/anaconda3/bin/conda', '_CE_M': '', 'WSL_DISTRO_NAME': 'Ubuntu-20.04', 'NAME': 'MarcSurface', 'GSETTINGS_SCHEMA_DIR': '/home/mlehner/anaconda3/envs/pygro/share/glib-2.0/schemas', 'LOGNAME': 'mlehner', 'CONDA_PREFIX': '/home/mlehner/anaconda3/envs/pygro', 'GSETTINGS_SCHEMA_DIR_CONDA_BACKUP': '', 'HOME': '/home/mlehner', 'LANG': 'C.UTF-8', 'WSL_INTEROP': '/run/WSL/451_interop', 'CONDA_PROMPT_MODIFIER': '(pygro) ', 'PERL5LIB': '/home/mlehner/anaconda3/envs/pygro/lib/perl/mm_pbsa', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'TERM': 'xterm-256color', '_CE_CONDA': '', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'mlehner', 'CONDA_SHLVL': '2', 'AMBERHOME': '/home/mlehner/anaconda3/envs/pygro', 'DISPLAY': '172.21.240.1:0', 'SHLVL': '1', 'CONDA_PYTHON_EXE': '/home/mlehner/anaconda3/bin/python', 'CONDA_DEFAULT_ENV': 'pygro', 'WSLENV': '', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PATH': '/home/mlehner/anaconda3/envs/pygro/bin:/home/mlehner/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.Ubuntu20.04onWindows_2004.2021.222.0_x64__79rhkp1fndgsc:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/Wolfram Research/WolframScript:/mnt/c/Users/thier/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/thier/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/thier/AppData/Local/GitHubDesktop/bin:/snap/bin:/usr/local/gromacs/bin/GMXRC', 'HOSTTYPE': 'x86_64', 'CONDA_PREFIX_1': '/home/mlehner/anaconda3', '_': '/home/mlehner/anaconda3/envs/pygro/bin/python3'}"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
     "work_dir=os.getcwd()+\"/example_files/Hvap_files/\"\n",
-    "gromosXX_path=None #\"/home/mlehner/gromosXX/gromosXX/BUILD/program/\"\n",
-    "gromosPP_path=None# \"/home/mlehner/gromosPlsPls/gromos++/BUILD/programs/\""
+    "gromosXX_path=None \n",
+    "gromosPP_path=None"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
-    "ff = forcefield_system(name=\"54A7\")\n",
-    "ff.mol_name = \"H2O\""
+    "ff = GromosFF(name=\"54A7\")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/init/\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/pygromos/data/simulation_parameters_templates/vacuum_sd.imd\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/init/\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/data/simulation_parameters_templates/vacuum_sd.imd\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Parsing File:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n"
-     ]
-    }
-   ],
-   "source": [
-    "groSys = Gromos_System(work_folder=work_dir+\"init/\", system_name=\"Hvap_test\", in_smiles=\"O\", auto_convert=True, Forcefield=ff, in_imd_path=template_sd, in_gromosPP_bin_dir=gromosPP_path, in_gromosXX_bin_dir=gromosXX_path)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 7,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/simulations/hvap_calculation/hvap_calculation.py:64: UserWarning: Folder does already exist\n",
-      "  warnings.warn(\"Folder does already exist\")\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:131: UserWarning: No data provided to gromos_system\n",
-      "manual work needed\n",
-      "  if verbose: warnings.warn(\"No data provided to gromos_system\\nmanual work needed\")\n"
-     ]
-    }
-   ],
-   "source": [
-    "hvap_sys=Hvap_calculation(input_system=groSys, work_folder=work_dir+\"hvap\", forcefield=ff, system_name=\"test\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
-    "hvap_sys.submissonSystem._enviroment = pygro_env"
+    "groSys = Gromos_System(work_folder=work_dir+\"init/\", system_name=\"Hvap_test\", in_smiles=\"O\", in_residue_list=[\"H2O\"],\n",
+    "                       auto_convert=True, forcefield=ff, in_imd_path=template_sd,\n",
+    "                       in_gromosPP_bin_dir=gromosPP_path, in_gromosXX_bin_dir=gromosXX_path)"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/gromos/pyGromosPP/ran_box.py:59: UserWarning: Molecules might overlap! Check cnf manually or decrease the density\n",
-      "  warnings.warn(\"Molecules might overlap! Check cnf manually or decrease the density\")\n"
-     ]
-    }
-   ],
+   "outputs": [],
+   "source": [
+    "hvap_sys=Hvap_calculation(input_system=groSys, work_folder=work_dir+\"hvap\", forcefield=ff, system_name=\"test\", useGromosPlsPls=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "hvap_sys.create_liq()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas\n",
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n",
-      "################################################################################\n",
-      "\n",
-      "1_emin\n",
-      "################################################################################\n",
-      "\n",
-      "Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\n",
-      "################################################################################\n",
-      "Simulation PREPERATION\n",
-      "################################################################################\n",
-      "\n",
-      "\n",
-      "\n",
-      "################################################################################\n",
-      "Simulation Setup:\n",
-      "################################################################################\n",
-      "\n",
-      "steps_per_run:  100\n",
-      "equis:  0\n",
-      "simulation runs:  1\n",
-      "[]\n",
-      "#####################################################################################\n",
-      "\t\tERROR in Submission\n",
-      "#####################################################################################\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 71, in submit_to_queue\n",
-      "    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 829, in execute\n",
-      "    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 752, in execute_subprocess\n",
-      "    raise ChildProcessError(msg)\n",
-      "ChildProcessError: SubProcess Failed due to returncode: 127\n",
-      " COMMAND: \n",
-      "\t/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/simulation/1_emin_1/job_1_emin_1.sh\n",
-      "STDOUT:\n",
-      "\t\n",
-      "STDERR:\n",
-      "\tb'/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/simulation/1_emin_1/job_1_emin_1.sh: line 3: python: command not found\\n'\n",
-      "\n",
-      "During handling of the above exception, another exception occurred:\n",
-      "\n",
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\", line 147, in do\n",
-      "    verbose = job_verb)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py\", line 193, in chain_submission\n",
-      "    sumbit_from_file=True, verbose=verbose)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 86, in submit_to_queue\n",
-      "    str(command))\n",
-      "ChildProcessError: command failed: \n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/simulation/1_emin_1/job_1_emin_1.sh\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/analysis/data/1_emin.cnf\n",
-      "  if(self.verbose or True): warnings.warn(\"Did not change file path as its only promised \" + str(file_obj.path))\n"
-     ]
-    },
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas\n",
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n",
-      "################################################################################\n",
-      "\n",
-      "2_eq\n",
-      "################################################################################\n",
-      "\n",
-      "File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/1_emin/analysis/data/1_emin.cnf\n",
-      "Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\n",
-      "################################################################################\n",
-      "Simulation PREPERATION\n",
-      "################################################################################\n",
-      "\n",
-      "\n",
-      "\n",
-      "################################################################################\n",
-      "Simulation Setup:\n",
-      "################################################################################\n",
-      "\n",
-      "steps_per_run:  100\n",
-      "equis:  0\n",
-      "simulation runs:  1\n",
-      "[]\n",
-      "#####################################################################################\n",
-      "\t\tERROR in Submission\n",
-      "#####################################################################################\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 71, in submit_to_queue\n",
-      "    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 829, in execute\n",
-      "    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 752, in execute_subprocess\n",
-      "    raise ChildProcessError(msg)\n",
-      "ChildProcessError: SubProcess Failed due to returncode: 127\n",
-      " COMMAND: \n",
-      "\t/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/simulation/2_eq_1/job_2_eq_1.sh\n",
-      "STDOUT:\n",
-      "\t\n",
-      "STDERR:\n",
-      "\tb'/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/simulation/2_eq_1/job_2_eq_1.sh: line 3: python: command not found\\n'\n",
-      "\n",
-      "During handling of the above exception, another exception occurred:\n",
-      "\n",
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\", line 147, in do\n",
-      "    verbose = job_verb)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py\", line 193, in chain_submission\n",
-      "    sumbit_from_file=True, verbose=verbose)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 86, in submit_to_queue\n",
-      "    str(command))\n",
-      "ChildProcessError: command failed: \n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/simulation/2_eq_1/job_2_eq_1.sh\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/analysis/data/2_eq.cnf\n",
-      "  if(self.verbose or True): warnings.warn(\"Did not change file path as its only promised \" + str(file_obj.path))\n"
-     ]
-    },
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n",
-      "################################################################################\n",
-      "\n",
-      "3_sd\n",
-      "################################################################################\n",
-      "\n",
-      "File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/2_eq/analysis/data/2_eq.cnf\n",
-      "Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\n",
-      "################################################################################\n",
-      "Simulation PREPERATION\n",
-      "################################################################################\n",
-      "\n",
-      "\n",
-      "\n",
-      "################################################################################\n",
-      "Simulation Setup:\n",
-      "################################################################################\n",
-      "\n",
-      "steps_per_run:  100\n",
-      "equis:  0\n",
-      "simulation runs:  1\n",
-      "[]\n",
-      "#####################################################################################\n",
-      "\t\tERROR in Submission\n",
-      "#####################################################################################\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 71, in submit_to_queue\n",
-      "    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 829, in execute\n",
-      "    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 752, in execute_subprocess\n",
-      "    raise ChildProcessError(msg)\n",
-      "ChildProcessError: SubProcess Failed due to returncode: 127\n",
-      " COMMAND: \n",
-      "\t/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/simulation/3_sd_1/job_3_sd_1.sh\n",
-      "STDOUT:\n",
-      "\t\n",
-      "STDERR:\n",
-      "\tb'/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/simulation/3_sd_1/job_3_sd_1.sh: line 3: python: command not found\\n'\n",
-      "\n",
-      "During handling of the above exception, another exception occurred:\n",
-      "\n",
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\", line 147, in do\n",
-      "    verbose = job_verb)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py\", line 193, in chain_submission\n",
-      "    sumbit_from_file=True, verbose=verbose)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 86, in submit_to_queue\n",
-      "    str(command))\n",
-      "ChildProcessError: command failed: \n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/simulation/3_sd_1/job_3_sd_1.sh\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_gas/3_sd/analysis/data/3_sd.cnf\n",
-      "  if(self.verbose or True): warnings.warn(\"Did not change file path as its only promised \" + str(file_obj.path))\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "hvap_sys.run_gas()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n",
-      "################################################################################\n",
-      "\n",
-      "1_emin\n",
-      "################################################################################\n",
-      "\n",
-      "Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\n",
-      "################################################################################\n",
-      "Simulation PREPERATION\n",
-      "################################################################################\n",
-      "\n",
-      "\n",
-      "\n",
-      "################################################################################\n",
-      "Simulation Setup:\n",
-      "################################################################################\n",
-      "\n",
-      "steps_per_run:  100\n",
-      "equis:  0\n",
-      "simulation runs:  1\n",
-      "[]\n",
-      "#####################################################################################\n",
-      "\t\tERROR in Submission\n",
-      "#####################################################################################\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 71, in submit_to_queue\n",
-      "    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 829, in execute\n",
-      "    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 752, in execute_subprocess\n",
-      "    raise ChildProcessError(msg)\n",
-      "ChildProcessError: SubProcess Failed due to returncode: 127\n",
-      " COMMAND: \n",
-      "\t/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/simulation/1_emin_1/job_1_emin_1.sh\n",
-      "STDOUT:\n",
-      "\t\n",
-      "STDERR:\n",
-      "\tb'/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/simulation/1_emin_1/job_1_emin_1.sh: line 3: python: command not found\\n'\n",
-      "\n",
-      "During handling of the above exception, another exception occurred:\n",
-      "\n",
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\", line 147, in do\n",
-      "    verbose = job_verb)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py\", line 193, in chain_submission\n",
-      "    sumbit_from_file=True, verbose=verbose)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 86, in submit_to_queue\n",
-      "    str(command))\n",
-      "ChildProcessError: command failed: \n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/simulation/1_emin_1/job_1_emin_1.sh\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/analysis/data/1_emin.cnf\n",
-      "  if(self.verbose or True): warnings.warn(\"Did not change file path as its only promised \" + str(file_obj.path))\n"
-     ]
-    },
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n",
-      "################################################################################\n",
-      "\n",
-      "2_eq\n",
-      "################################################################################\n",
-      "\n",
-      "File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/1_emin/analysis/data/1_emin.cnf\n",
-      "Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\n",
-      "################################################################################\n",
-      "Simulation PREPERATION\n",
-      "################################################################################\n",
-      "\n",
-      "\n",
-      "\n",
-      "################################################################################\n",
-      "Simulation Setup:\n",
-      "################################################################################\n",
-      "\n",
-      "steps_per_run:  100\n",
-      "equis:  0\n",
-      "simulation runs:  1\n",
-      "[]\n",
-      "#####################################################################################\n",
-      "\t\tERROR in Submission\n",
-      "#####################################################################################\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 71, in submit_to_queue\n",
-      "    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 829, in execute\n",
-      "    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 752, in execute_subprocess\n",
-      "    raise ChildProcessError(msg)\n",
-      "ChildProcessError: SubProcess Failed due to returncode: 127\n",
-      " COMMAND: \n",
-      "\t/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/simulation/2_eq_1/job_2_eq_1.sh\n",
-      "STDOUT:\n",
-      "\t\n",
-      "STDERR:\n",
-      "\tb'/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/simulation/2_eq_1/job_2_eq_1.sh: line 3: python: command not found\\n'\n",
-      "\n",
-      "During handling of the above exception, another exception occurred:\n",
-      "\n",
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\", line 147, in do\n",
-      "    verbose = job_verb)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py\", line 193, in chain_submission\n",
-      "    sumbit_from_file=True, verbose=verbose)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 86, in submit_to_queue\n",
-      "    str(command))\n",
-      "ChildProcessError: command failed: \n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/simulation/2_eq_1/job_2_eq_1.sh\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/analysis/data/2_eq.cnf\n",
-      "  if(self.verbose or True): warnings.warn(\"Did not change file path as its only promised \" + str(file_obj.path))\n"
-     ]
-    },
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "\n",
-      "\n",
-      "==================\n",
-      "\tCHECK dependencies\n",
-      "\n",
-      "Check /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq\n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq\n",
-      "All dependencies are correct! \n",
-      "\n",
-      "\n",
-      "Generate Empty:  imd\n",
-      "Generate Empty:  top\n",
-      "Generate Empty:  cnf\n",
-      "################################################################################\n",
-      "\n",
-      "3_sd\n",
-      "################################################################################\n",
-      "\n",
-      "File cnf is promised , can not be written: /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/2_eq/analysis/data/2_eq.cnf\n",
-      "Script:  /home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\n",
-      "################################################################################\n",
-      "Simulation PREPERATION\n",
-      "################################################################################\n",
-      "\n",
-      "\n",
-      "\n",
-      "################################################################################\n",
-      "Simulation Setup:\n",
-      "################################################################################\n",
-      "\n",
-      "steps_per_run:  100\n",
-      "equis:  0\n",
-      "simulation runs:  1\n",
-      "[]\n",
-      "#####################################################################################\n",
-      "\t\tERROR in Submission\n",
-      "#####################################################################################\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 71, in submit_to_queue\n",
-      "    process = bash.execute(command=command, catch_STD=True, env=self._enviroment)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 829, in execute\n",
-      "    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/utils/bash.py\", line 752, in execute_subprocess\n",
-      "    raise ChildProcessError(msg)\n",
-      "ChildProcessError: SubProcess Failed due to returncode: 127\n",
-      " COMMAND: \n",
-      "\t/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh\n",
-      "STDOUT:\n",
-      "\t\n",
-      "STDERR:\n",
-      "\tb'/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh: line 3: python: command not found\\n'\n",
-      "\n",
-      "During handling of the above exception, another exception occurred:\n",
-      "\n",
-      "Traceback (most recent call last):\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py\", line 147, in do\n",
-      "    verbose = job_verb)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py\", line 193, in chain_submission\n",
-      "    sumbit_from_file=True, verbose=verbose)\n",
-      "  File \"/home/bschroed/Documents/code/PyGromosTools/pygromos/hpc_queuing/submission_systems/local.py\", line 86, in submit_to_queue\n",
-      "    str(command))\n",
-      "ChildProcessError: command failed: \n",
-      "/home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh\n",
-      "/home/bschroed/Documents/code/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:551: UserWarning: Did not change file path as its only promised /home/bschroed/Documents/code/PyGromosTools/examples/example_files/Hvap_files/hvap/test_liq/3_sd/analysis/data/3_sd.cnf\n",
-      "  if(self.verbose or True): warnings.warn(\"Did not change file path as its only promised \" + str(file_obj.path))\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "hvap_sys.run_liq()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "ename": "KeyError",
-     "evalue": "'totals'",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
-      "\u001b[0;32m~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/indexes/base.py\u001b[0m in \u001b[0;36mget_loc\u001b[0;34m(self, key, method, tolerance)\u001b[0m\n\u001b[1;32m   3079\u001b[0m             \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3080\u001b[0;31m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcasted_key\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3081\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyError\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0merr\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32mpandas/_libs/index.pyx\u001b[0m in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[0;34m()\u001b[0m\n",
-      "\u001b[0;32mpandas/_libs/index.pyx\u001b[0m in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[0;34m()\u001b[0m\n",
-      "\u001b[0;32mpandas/_libs/hashtable_class_helper.pxi\u001b[0m in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[0;34m()\u001b[0m\n",
-      "\u001b[0;32mpandas/_libs/hashtable_class_helper.pxi\u001b[0m in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[0;34m()\u001b[0m\n",
-      "\u001b[0;31mKeyError\u001b[0m: 'totals'",
-      "\nThe above exception was the direct cause of the following exception:\n",
-      "\u001b[0;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
-      "\u001b[0;32m<ipython-input-12-78ce0d333dcf>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mhvap_sys\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcalc_hvap\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
-      "\u001b[0;32m~/Documents/code/PyGromosTools/pygromos/simulations/hvap_calculation/hvap_calculation.py\u001b[0m in \u001b[0;36mcalc_hvap\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    196\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    197\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0mcalc_hvap\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mfloat\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 198\u001b[0;31m         \u001b[0mh_vap\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mgroSys_liq_final\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtre\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_Hvap\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mgas\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mgroSys_gas_final\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtre\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mnMolecules\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnum_molecules\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtemperature\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtemperature\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    199\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0mh_vap\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m~/Documents/code/PyGromosTools/pygromos/files/trajectory/tre.py\u001b[0m in \u001b[0;36mget_Hvap\u001b[0;34m(self, gas, nMolecules, temperature)\u001b[0m\n\u001b[1;32m    108\u001b[0m         \u001b[0mgas_nonbonded_energy\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    109\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mtype\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mgas\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0mtype\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 110\u001b[0;31m             \u001b[0mgas_nonbonded_energy\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mgas\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_totals_nonbonded\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmean\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    111\u001b[0m         \u001b[0;32melif\u001b[0m \u001b[0mtype\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mgas\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0mfloat\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    112\u001b[0m             \u001b[0mgas_nonbonded_energy\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mgas\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m~/Documents/code/PyGromosTools/pygromos/files/trajectory/tre.py\u001b[0m in \u001b[0;36mget_totals_nonbonded\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m     48\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     49\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0mget_totals_nonbonded\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mDataFrame\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 50\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtotals_nonbonded\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdatabase\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"totals\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mapply\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;32mlambda\u001b[0m \u001b[0mx\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mx\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m2\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     51\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtotals_nonbonded\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     52\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__getitem__\u001b[0;34m(self, key)\u001b[0m\n\u001b[1;32m   3022\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnlevels\u001b[0m \u001b[0;34m>\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3023\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_getitem_multilevel\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3024\u001b[0;31m             \u001b[0mindexer\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3025\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mis_integer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mindexer\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3026\u001b[0m                 \u001b[0mindexer\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0mindexer\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m~/anaconda3/envs/pygromos/lib/python3.7/site-packages/pandas/core/indexes/base.py\u001b[0m in \u001b[0;36mget_loc\u001b[0;34m(self, key, method, tolerance)\u001b[0m\n\u001b[1;32m   3080\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcasted_key\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3081\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyError\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0merr\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3082\u001b[0;31m                 \u001b[0;32mraise\u001b[0m \u001b[0mKeyError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0merr\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3083\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3084\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mtolerance\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;31mKeyError\u001b[0m: 'totals'"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
-    "hvap_sys.calc_hvap()"
+    "hvap_sys.calc_hvap()\n"
    ]
   },
   {
@@ -674,8 +98,11 @@
   }
  ],
  "metadata": {
+  "interpreter": {
+   "hash": "b1b7b2ea43b8e767316eee98e01335d045804d2d47db68b6a5827e187ee91a7e"
+  },
   "kernelspec": {
-   "display_name": "pygromos",
+   "display_name": "Python 3.9.7 ('pygro2')",
    "language": "python",
    "name": "python3"
   },
@@ -689,9 +116,9 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.7.10"
+   "version": "3.9.7"
   }
  },
  "nbformat": 4,
- "nbformat_minor": 2
+ "nbformat_minor": 4
 }
