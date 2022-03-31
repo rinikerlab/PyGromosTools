@@ -71,3 +71,47 @@ jobs:
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Additional info about the build
+      shell: bash
+      run: |
+        uname -a
+        df -h
+        ulimit -a
+
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        environment-file:  dev/conda_envs/test_env.yaml
+        channels: conda-forge,defaults
+
+        activate-environment: pygromosTest
+        auto-update-conda: true
+        auto-activate-base: false
+        show-channel-urls: true
+
+    - name: Install package
+
+      # conda setup requires this special shell
+      shell: bash -l {0}
+      run: |
+        python -m pip install . --no-deps
+        conda list
+
+    - name: build sphinx docs
+      shell: bash -l {0}
+      run: |
+        python setup.py
+        ./docs/sphinx_project/build_docs.sh
+
+    - name: Build and Deploy
+      uses: crazy-max/github-pages-build-deploy@v1
+      with:
+        target_branch: gh-pages
+        build_dir: build
