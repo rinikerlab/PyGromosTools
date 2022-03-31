@@ -112,10 +112,12 @@ class Solvation_free_energy_calculation:
         subsystem: _SubmissionSystem = subSys_local,
         provided_topo: Top = None,
         amberscaling=False,
+        n_points: int = 21,
     ) -> None:
 
         self.verbose = verbose
         self.amberscaling = amberscaling
+        self.n_points = n_points
 
         # system variables
         if type(input_system) is Gromos_System:
@@ -194,9 +196,9 @@ class Solvation_free_energy_calculation:
         self.create_liq()
         emin_sys, jobID = self.minimize_liq(in_gromos_simulation_system=self.groSys_liq, prev_JobID=-1)
         eq_sys, jobID = self.eq_liq(in_gromos_simulation_system=emin_sys, prev_JobID=jobID)
-        ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID)
+        ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID, n_points=self.n_points)
         assert isinstance(ti_sys, Gromos_System)
-        self.calculate_solvation_free_energy()
+        self.calculate_solvation_free_energy(n_points=self.n_points)
 
     def create_liq(self):
         """
@@ -444,7 +446,7 @@ class Solvation_free_energy_calculation:
 
         return eq_sys5, JobID5
 
-    def ti_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int, n_points: int = 21):
+    def ti_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int, n_points: int = None):
         """
         Perform TI of Liquid
         Parameters
@@ -461,6 +463,8 @@ class Solvation_free_energy_calculation:
         JobID : int
             ID of last submitted job (WARNING it could be that this job finishes before some others manual check needed)
         """
+        if n_points is None:
+            n_points = self.n_points
         # First generate ptp file
         in_gromos_simulation_system = self.add_ptp_file(in_gromos_simulation_system)
 
@@ -818,7 +822,7 @@ class Solvation_free_energy_calculation:
         ti_imd.add_block(block=pert_block)
         return ti_imd
 
-    def calculate_solvation_free_energy(self, n_points: int = 21):
+    def calculate_solvation_free_energy(self, n_points: int = None):
         """
         Function to Calculate solvation free energy by integrating over lambda points
         Parameters
@@ -833,7 +837,8 @@ class Solvation_free_energy_calculation:
         error : float
             Error Estimate
         """
-
+        if n_points is None:
+            n_points = self.n_points
         # Get dhdl information
         Metrics = pd.DataFrame()
 
