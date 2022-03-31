@@ -34,13 +34,11 @@ from rdkit import Chem
 
 from pygromos.files.gromos_system import Gromos_System
 from pygromos.files.forcefield._generic_force_field import _generic_force_field
-from pygromos.files.forcefield.openff.openff import OpenFF
-from openff.toolkit.topology import Molecule
 from pygromos.files.topology.top import Top
 from pygromos.files.coord import Cnf
 
+from pygromos.simulations.hpc_queuing.submission_systems._submission_system import _SubmissionSystem
 from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSys_local
-from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSys_lsf
 from pygromos.data.simulation_parameters_templates import template_emin, template_md, template_sd
 from pygromos.simulations.modules.preset_simulation_modules import sd
 from pygromos.files.simulation_parameters.imd import Imd
@@ -92,12 +90,8 @@ class Solvation_free_energy_calculation:
         Density of the used molecule
     num_atoms : int
         Number of atoms in the molecule
-    subsystem : str
+    subsystem : Submission_system
         Subsystem to use (either lsf for LSF or other for LOCAL)
-    nmpi : int
-        Number of MPI cores to use
-    nomp : int
-        Number of OMP cores to use
     amberscaling : bool
         whether to use amberscaling (not implemented on all GROMOS Branches)
     """
@@ -107,30 +101,30 @@ class Solvation_free_energy_calculation:
         input_system: Gromos_System or str or Chem.rdchem.Mol,
         work_folder: str,
         system_name: str = "dummy",
-        forcefield: _generic_force_field = OpenFF(),
-        gromosXX: str = None,
-        gromosPP: str = None,
+        forcefield: _generic_force_field = _generic_force_field(),
+        in_gromosXX_bin_dir: str = None,
+        in_gromosPP_bin_dir: str = None,
         useGromosPlsPls: bool = True,
         verbose: bool = True,
         num_molecules: int = 512,
         density: float = 1000,
         num_atoms: int = 0,
-        subsystem: str = "lsf",
-        nmpi=6,
-        nomp=1,
-        provided_topo: str = None,
+        subsystem: _SubmissionSystem = subSys_local,
+        provided_topo: Top = None,
         amberscaling=False,
+        n_points: int = 21,
     ) -> None:
 
         self.verbose = verbose
         self.amberscaling = amberscaling
+        self.n_points = n_points
 
         # system variables
         if type(input_system) is Gromos_System:
             self.groSys_liq = input_system
         elif (type(input_system) is str) or (type(input_system) is Chem.rdchem.Mol):
             self.groSys_liq = Gromos_System(
-                system_name="ff2_" + input_system,
+                system_name=system_name,
                 work_folder=work_folder,
                 in_smiles=input_system,
                 auto_convert=True,
@@ -139,20 +133,7 @@ class Solvation_free_energy_calculation:
             )
 
             if provided_topo:
-                self.groSys_liq.top = Top(provided_topo)
-
-            # test if openforcefield is used
-            # Create Topology and convert to GROMOS
-            elif forcefield.name == "openff":
-                molecule = Molecule.from_smiles(input_system)
-                molecule.name = system_name[:4]
-                # Change name to system_name for residue
-                top = forcefield.create_top(molecule)
-
-                # Setter not working, manual check needed
-                assert isinstance(top, Top)
-                self.groSys_liq._top = top
-                self.groSys_liq.rebase_files()
+                self.groSys_liq.top = provided_topo
 
         self.work_folder = work_folder
         self.system_name = system_name
@@ -170,15 +151,17 @@ class Solvation_free_energy_calculation:
         self.groSys_liq.rebase_files()
 
         # Setup Submission system
-        self._nmpi = nmpi
-        self._nomp = nomp
         self._subsystem = subsystem
 
-        # Create System
-        self.create_new_submission_system()
-
-        self.gromosXX = self.groSys_liq.gromosXX
-        self.gromosPP = self.groSys_liq.gromosPP
+        # Setup GromosXX and GromosPP
+        if in_gromosXX_bin_dir is None:
+            self.gromosXX = self.groSys_liq.gromosXX
+        else:
+            self.gromosXX = in_gromosXX_bin_dir
+        if in_gromosPP_bin_dir is None:
+            self.gromosPP = self.groSys_liq.gromosPP
+        else:
+            self.gromosPP = self.groSys_liq.gromosPP
 
         # parameters for liquid simulation
         self.num_molecules = num_molecules
@@ -190,6 +173,7 @@ class Solvation_free_energy_calculation:
         self.imd_liq_min = self.create_liq_min_imd()
         self.imd_liq_min.write(self.work_folder + system_name + "temp_min.imd")
         self.imd_liq_min.path = self.work_folder + system_name + "temp_min.imd"
+        self.groSys_liq.imd = self.imd_liq_min
         self.imd_liq_ti = self.create_liq_ti_imd()
 
         self.groSys_liq_final = None
@@ -212,8 +196,9 @@ class Solvation_free_energy_calculation:
         self.create_liq()
         emin_sys, jobID = self.minimize_liq(in_gromos_simulation_system=self.groSys_liq, prev_JobID=-1)
         eq_sys, jobID = self.eq_liq(in_gromos_simulation_system=emin_sys, prev_JobID=jobID)
-        ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID)
-        self.calculate_solvation_free_energy(ti_sys, jobID)  # TODO: fix errors
+        ti_sys, jobID = self.ti_liq(in_gromos_simulation_system=eq_sys, prev_JobID=jobID, n_points=self.n_points)
+        assert isinstance(ti_sys, Gromos_System)
+        self.calculate_solvation_free_energy(n_points=self.n_points)
 
     def create_liq(self):
         """
@@ -279,7 +264,7 @@ class Solvation_free_energy_calculation:
             in_gromos_simulation_system=in_gromos_simulation_system,
             override_project_dir=self.groSys_liq.work_folder,
             step_name=self.system_name + "_emin",
-            submission_system=self.submissonSystem,
+            submission_system=self._subsystem,
             analysis_script=simulation_analysis.do,
             verbose=self.verbose,
         )
@@ -371,7 +356,7 @@ class Solvation_free_energy_calculation:
                 override_project_dir=self.groSys_liq.work_folder,
                 step_name="eq" + run_name,
                 in_imd_path=eq_imd,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 analysis_script=simulation_analysis.do,
                 verbose=self.verbose,
             )
@@ -381,7 +366,7 @@ class Solvation_free_energy_calculation:
                 override_project_dir=self.groSys_liq.work_folder,
                 step_name="eq" + run_name,
                 in_imd_path=eq_imd,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 analysis_script=simulation_analysis.do,
                 verbose=self.verbose,
                 previous_simulation_run=prevID,
@@ -461,7 +446,7 @@ class Solvation_free_energy_calculation:
 
         return eq_sys5, JobID5
 
-    def ti_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int, n_points: int = 21):
+    def ti_liq(self, in_gromos_simulation_system: Gromos_System, prev_JobID: int, n_points: int = None):
         """
         Perform TI of Liquid
         Parameters
@@ -478,6 +463,8 @@ class Solvation_free_energy_calculation:
         JobID : int
             ID of last submitted job (WARNING it could be that this job finishes before some others manual check needed)
         """
+        if n_points is None:
+            n_points = self.n_points
         # First generate ptp file
         in_gromos_simulation_system = self.add_ptp_file(in_gromos_simulation_system)
 
@@ -519,7 +506,7 @@ class Solvation_free_energy_calculation:
                     in_gromos_system=c_ti_sys0_prep,
                     override_project_dir=ti_dir + system_name,
                     step_name=system_name,
-                    submission_system=self.submissonSystem,
+                    submission_system=self._subsystem,
                     previous_simulation_run=prev_JobID,
                 )
             else:
@@ -541,7 +528,7 @@ class Solvation_free_energy_calculation:
                     in_gromos_system=c_ti_sys0_prep,
                     override_project_dir=ti_dir + system_name,
                     step_name=system_name,
-                    submission_system=self.submissonSystem,
+                    submission_system=self._subsystem,
                     previous_simulation_run=jobIDs[previous_system_name],
                 )
 
@@ -567,7 +554,7 @@ class Solvation_free_energy_calculation:
                 in_gromos_system=c_ti_sys1_prep,
                 override_project_dir=ti_dir + system_name,
                 step_name=system_name,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 previous_simulation_run=jobIDs[previous_system_name],
             )
 
@@ -590,7 +577,7 @@ class Solvation_free_energy_calculation:
                 in_gromos_system=c_ti_sys2_prep,
                 override_project_dir=ti_dir + system_name,
                 step_name=system_name,
-                submission_system=self.submissonSystem,
+                submission_system=self._subsystem,
                 previous_simulation_run=jobIDs[previous_system_name],
             )
 
@@ -835,7 +822,7 @@ class Solvation_free_energy_calculation:
         ti_imd.add_block(block=pert_block)
         return ti_imd
 
-    def calculate_solvation_free_energy(self, n_points: int = 21):
+    def calculate_solvation_free_energy(self, n_points: int = None):
         """
         Function to Calculate solvation free energy by integrating over lambda points
         Parameters
@@ -850,7 +837,8 @@ class Solvation_free_energy_calculation:
         error : float
             Error Estimate
         """
-
+        if n_points is None:
+            n_points = self.n_points
         # Get dhdl information
         Metrics = pd.DataFrame()
 
@@ -920,35 +908,10 @@ class Solvation_free_energy_calculation:
 
         return solv_energy, error
 
-    def create_new_submission_system(self):
-        if self._subsystem == "lsf":
-            self.submissonSystem = subSys_lsf(nmpi=self._nmpi, nomp=self._nomp, verbose=self.verbose)
-        else:
-            self.submissonSystem = subSys_local(nmpi=self._nmpi, nomp=self._nomp, verbose=self.verbose)
-
-    @property
-    def nmpi(self):
-        return self._nmpi
-
-    @nmpi.setter
-    def nmpi(self, nmpi=1):
-        self._nmpi = nmpi
-        self.create_new_submission_system()
-
-    @property
-    def nomp(self):
-        return self._nomp
-
-    @nomp.setter
-    def nomp(self, nomp=1):
-        self._nomp = nomp
-        self.create_new_submission_system()
-
     @property
     def subsystem(self):
         return self._subsystem
 
     @subsystem.setter
-    def subsystem(self, subsystem="local"):
+    def subsystem(self, subsystem=subSys_local):
         self._subsystem = subsystem
-        self.create_new_submission_system()

@@ -2,6 +2,7 @@ from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation
     Solvation_free_energy_calculation,
 )
 from pygromos.files.forcefield.openff.openff import OpenFF
+from pygromos.simulations.hpc_queuing.submission_systems.dummy import DUMMY
 import unittest
 
 
@@ -19,10 +20,8 @@ class test_sfe(unittest.TestCase):
         density=789,  # density of the liquid in kg/L
         num_molecules=512,  # number of molecules used for the calculation
         num_atoms=number_of_atoms,  # number of atoms in one molecule
-        nmpi=1,
-        nomp=1,  # number of mpi and omp cores
-        subsystem="local",  # Subsystem to use for calculation local or lsf
-        amberscaling=True,
+        subsystem=DUMMY(),  # Subsystem to use for calculation local or lsf
+        amberscaling=False,
     )  # Whether to use amberscaling (for openforcefield recommended)
 
     def test_constructor(self):
