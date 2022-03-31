@@ -21,6 +21,7 @@ dependencies:
   - sphinx
   - m2r
   - nbsphinx
+  - sphinx_rtd_theme
   # Science
   - mpmath
   - pandas
