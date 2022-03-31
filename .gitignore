@@ -122,6 +122,9 @@ ENV/
 pygromos/tests/out_testresults/*
 pygromos/tests/in_testfiles/**out*
 
+#bin
+pygromos/gromos/bin
+
 ##tutorial products
 examples/example_files
 examples/dev

@@ -1,0 +1,48 @@
+name: pygromosWithGrom
+channels:
+  - conda-forge
+  #- nvidia
+  - defaults
+dependencies:
+  # Base depends
+  - python
+  - conda-build
+  - pip
+  ## Testing
+  - pytest
+  ## Compiling Gromos
+  - gcc
+  - gfortran  # required by GSL
+  ### Configure Tools
+  - autoconf
+  - libtool
+  - automake
+  ### Gromos Libraries
+  - fftw
+  - gsl
+  ### Gromos Parallelization
+  - openmpi
+  - openmp
+  #- cuda #possible but very intense installing
+  #- cudatoolkit  #possible but very intense installing
+  ## Meta
+  - typing
+  - pre-commit
+  - jupyter
+  - tqdm
+  - ipywidgets
+  - jupytext
+  # Science
+  - mpmath
+  - pandas
+  - pytables
+  - numpy
+  - sympy
+  - scipy
+  ## Chemie
+  - openff-toolkit = 0.10.0
+  - mdtraj
+  - rdkit
+  ## Visualization
+  - matplotlib
+  - nglview
