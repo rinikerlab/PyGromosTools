@@ -1,6 +1,4 @@
-
-
-
+from pygromos.utils.typing import Union, List
 
 
 class gromosBashSyntaxParser:
@@ -11,7 +9,7 @@ class gromosBashSyntaxParser:
     """
 
     @staticmethod
-    def multiplyArgumentParser(args:(str or list(str)), multiplier:(int or list(int)) = 1) -> str:
+    def multiplyArgumentParser(args: Union[str, List[str]], multiplier: Union[int, List[int]] = 1) -> str:
         """
         Parser for multiplier syntax to gromos scripts
 
@@ -24,18 +22,18 @@ class gromosBashSyntaxParser:
         multiplier : int or list(int)
             the multiplier for each argument provided in args
         """
-        command = ""    
+        command = ""
         if multiplier != 1:
-            if type(args) == list and  len(args) >= 1:
-                if (len(args) != len(multiplier)):
+            if type(args) == list and len(args) >= 1:
+                if len(args) != len(multiplier):
                     raise ValueError("multiplier does not match the number of arguments provided!")
                 else:
                     for mult, topo in zip(multiplier, args):
-                        command+= str(mult) + ":" + topo+" "
+                        command += str(mult) + ":" + topo + " "
             else:
                 command = str(multiplier) + ":" + args
         else:
-            if type(args) == list and  len(args) >= 1:
+            if type(args) == list and len(args) >= 1:
                 command = " ".join(args)
             else:
                 command = args

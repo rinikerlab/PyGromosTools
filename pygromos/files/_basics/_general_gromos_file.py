@@ -8,47 +8,50 @@ import os
 import copy
 import inspect
 import warnings
-from typing import List, Dict, Callable
 
-from pygromos.files.blocks import _all_blocks as blocks
+from pygromos.files.blocks import all_blocks
+from pygromos.utils.typing import List, Dict, Callable, Union
 
 
-##file class
-class _general_gromos_file():
+# file class
+class _general_gromos_file:
     """_general_gromos_file
-        This class is the generic gromos class, that takes care of all common gromos file featuers.
+    This class is the generic gromos class, that takes care of all common gromos file featuers.
     """
-    _orig_file_path:str
-    path:str
+
+    _orig_file_path: str
+    path: str
     _required_blocks = ["TITLE"]
-    _blocksset_names:List[str]
+    _blocksset_names: List[str]
 
-    _gromos_file_ending : str
-    #private
-    _blocks:Dict[str, blocks._generic_gromos_block]
+    _gromos_file_ending: str
+    # private
+    _blocks: Dict[str, all_blocks._generic_gromos_block]
     _block_order: List[str] = []
-    _future_file : bool
+    _future_file: bool
 
-    def __init__(self, in_value:(str or dict or None or __class__), _future_file:bool=False):
+    def __init__(self, in_value: Union[str, dict, None], _future_file: bool = False):
         self._future_file = _future_file
-        if(isinstance(in_value, str)):
+        if isinstance(in_value, str):
             self.path = self._orig_file_path = in_value
-            if(self._future_file):
+            if self._future_file:
                 pass
-            elif (os.path.exists(in_value)):
+            elif os.path.exists(in_value):
                 self.read_blocks()
             else:
                 raise IOError("Could not find File: ", in_value)
 
-        elif(isinstance(type(in_value), __class__)):
+        elif isinstance(type(in_value), __class__):
             raise NotImplementedError("This variant is not implemented")
-        elif(in_value is None):
+
+        elif in_value is None:
             self.path = None
             self._orig_file_path = None
-            #print("Empty class")
+            # print("Empty class")
+
         else:
-            raise ValueError("The given type of input could not be translated in "+str(__class__)+".__init__")
-    
+            raise ValueError("The given type of input could not be translated in " + str(__class__) + ".__init__")
+
     def read_blocks(self):
         self._blocks = self.read_file()
         self._blocksset_names = list(self._blocks.keys())
@@ -56,16 +59,35 @@ class _general_gromos_file():
         del self._blocks
 
     def __str__(self):
-        ##first write out certain _blocks
-        out_text=""
+        # first write out certain _blocks
+        out_text = ""
         for block in self._block_order:
-            if(block in self.get_block_names() and not isinstance(getattr(self, block,), type(None))):
+            if block in self.get_block_names() and not isinstance(
+                getattr(
+                    self,
+                    block,
+                ),
+                type(None),
+            ):
                 out_text += getattr(self, block).block_to_string()
 
-        ##write out rest of _blocks
-        rest_blocks = [block for block in self.get_block_names() if (not block in self._block_order and not isinstance(getattr(self, block,), type(None)))]
+        # write out rest of _blocks
+        rest_blocks = [
+            block
+            for block in self.get_block_names()
+            if (
+                block not in self._block_order
+                and not isinstance(
+                    getattr(
+                        self,
+                        block,
+                    ),
+                    type(None),
+                )
+            )
+        ]
         for block in rest_blocks:
-            if(block is None or getattr(self, block) is None):
+            if block is None or getattr(self, block) is None:
                 continue
             else:
                 out_text += getattr(self, block).block_to_string()
@@ -80,12 +102,12 @@ class _general_gromos_file():
         preperation for pickling:
         remove the non trivial pickling parts
         """
-        skip = []
+        skip = ["_view"]
         attribute_dict = self.__dict__
-        new_dict ={}
+        new_dict = {}
         for key in attribute_dict.keys():
-            if (not isinstance(attribute_dict[key], Callable) and not key in skip):
-                new_dict.update({key:attribute_dict[key]})
+            if not isinstance(attribute_dict[key], Callable) and key not in skip:
+                new_dict.update({key: attribute_dict[key]})
 
         return new_dict
 
@@ -93,7 +115,7 @@ class _general_gromos_file():
         self.__dict__ = state
 
     def __deepcopy__(self, memo):
-        #print(self.__class__.__name__)
+        # print(self.__class__.__name__)
         copy_obj = self.__class__(in_value=None)
         copy_obj.__setstate__(copy.deepcopy(self.__getstate__()))
         return copy_obj
@@ -113,12 +135,8 @@ class _general_gromos_file():
             return True
         else:
             return False
-        
 
-        
-
-
-    def get_block_names(self)->List[str]:
+    def get_block_names(self) -> List[str]:
         """get_block_names
                     This is a function, that returns all _blocks, contained in an imd file.
 
@@ -132,7 +150,13 @@ class _general_gromos_file():
 
         return list(filter(lambda x: not x.startswith("_") and x.isupper(), vars(self).keys()))
 
-    def add_block(self, blocktitle:str=None, content:dict=None, block:blocks._generic_gromos_block=None, verbose:bool=False):
+    def add_block(
+        self,
+        blocktitle: str = None,
+        content: dict = None,
+        block: all_blocks._generic_gromos_block = None,
+        verbose: bool = False,
+    ):
         """add_block
             This method adds a gromos block to a gromos file object.
 
@@ -142,7 +166,7 @@ class _general_gromos_file():
             title of a block
         content :   str, optional
             block content
-        block : blocks._generic_gromos_block, optional
+        block : all_blocks._generic_gromos_block, optional
             block class
         verbose :   bool, optional
             shall messages be printed?
@@ -152,49 +176,57 @@ class _general_gromos_file():
         None
 
         """
-        if(block and not (blocktitle or content)):
+        if block and not (blocktitle or content):
             if verbose:
                 print("import block from " + block.name)
             blocktitle = block.name
-            setattr(self, blocktitle, block)  #modern way
+            setattr(self, blocktitle, block)  # modern way
 
-        elif(blocktitle != None and content != None):
-            #if blocktitle in self._block_names:
-            if(isinstance(content, dict)):
-                if blocktitle == "TITLE":   #TODO fIX IN PARSER
-                    self.__setattr__(blocktitle, blocks.__getattribute__(blocktitle)(content))
-                else:
-                    try:
-                        content = {k.split("(")[0]: v for k, v in content.items()}
-                        content = {k.split(":")[0]: v for k, v in content.items()}
-                        content = {k.split(" ")[0]: v for k, v in content.items()}
-                        # Required for add_block
-                        ##For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
-                        from pygromos.files.simulation_parameters.imd import Imd
-                        from pygromos.files.topology.top import Top
-                        from pygromos.files.blocks import imd_blocks, topology_blocks
+        elif blocktitle is not None and content is not None:
+            # if blocktitle in self._block_names:
+            if blocktitle == "TITLE":
+                self.__setattr__(blocktitle, all_blocks.__getattribute__(blocktitle)(content))
+            elif isinstance(content, dict):
+                try:
+                    content = {k.split("(")[0]: v for k, v in content.items()}
+                    content = {k.split(":")[0]: v for k, v in content.items()}
+                    content = {k.split(" ")[0]: v for k, v in content.items()}
+                    # Required for add_block
+                    # For nasty block seperation, as someone did not care about unique block names.... I'm looking at you vienna!
+                    from pygromos.files.simulation_parameters.imd import Imd
+                    from pygromos.files.topology.top import Top
+                    from pygromos.files.blocks import imd_blocks, topology_blocks
 
-                        if(issubclass(self.__class__, Imd)):
-                            self.kwCreateBlock(blocktitle, content, imd_blocks)
-                        elif(issubclass(self.__class__, Top)):
-                            self.kwCreateBlock(blocktitle, content, topology_blocks)
-                        else:
-                            self.kwCreateBlock(blocktitle, content, blocks)
-                    
-                        if verbose:
-                            print("++++++++++++++++++++++++++++++")
-                            print("New Block: Adding " + blocktitle + " block")
-                            print(content)
-                    except:
-                        msg ="Error while adding new value - can not resolve value names in \'" + blocktitle + "\' block!\n"
-                        msg += "Content is " + str(tuple(content.keys()))+"\n"
-                        msg += "Block knows " + str((blocks.__getattribute__(blocktitle).__init__.__code__.co_varnames)[1:]) + "\n"
-                        raise IOError(msg)
+                    if issubclass(self.__class__, Imd):
+                        self.kwCreateBlock(blocktitle, content, imd_blocks)
+                    elif issubclass(self.__class__, Top):
+                        self.kwCreateBlock(blocktitle, content, topology_blocks)
+                    else:
+                        self.kwCreateBlock(blocktitle, content, all_blocks.all_blocks)
+
+                    if verbose:
+                        print("++++++++++++++++++++++++++++++")
+                        print("New Block: Adding " + blocktitle + " block")
+                        print(content)
+                except Exception as e:
+                    msg = (
+                        "Error while adding new value - can not resolve value names in '"
+                        + blocktitle
+                        + "' block!\n"
+                        + str(e)
+                    )
+                    msg += "Content is " + str(tuple(content.keys())) + "\n"
+                    msg += (
+                        "Block knows "
+                        + str((all_blocks.get_all_blocks()[blocktitle].__init__.__code__.co_varnames)[1:])
+                        + "\n"
+                    )
+                    raise IOError(msg)
                 if verbose:
-                    print("Block "+blocktitle+" added to gromos File object.")
+                    print("Block " + blocktitle + " added to gromos File object.")
 
-            elif(isinstance(content, list)):
-                block_class = blocks.__getattribute__(blocktitle)
+            elif isinstance(content, list):
+                block_class = all_blocks.__getattribute__(blocktitle)
                 block = block_class(content)
 
                 self.__setattr__(blocktitle, block)
@@ -202,27 +234,46 @@ class _general_gromos_file():
                 if verbose:
                     print("++++++++++++++++++++++++++++++")
                     print("New Block: Adding " + blocktitle + " block")
-                    print(content)   
+                    print(content)
 
             else:
                 raise Exception("Not implemented")
 
+    def delete_block(self, blockName: str):
+        """
+        delete_block
+            This method deletes a block from a gromos file object.
+
+        Parameters
+        ----------
+        blockName :    str
+            title of a block
+        """
+        if blockName in self._blocksset_names:
+            self._blocksset_names.remove(blockName)
+        if hasattr(self, blockName):
+            delattr(self, blockName)
+
     def kwCreateBlock(self, blocktitle, content, blocks_lib):
-        block_type = blocks_lib.__getattribute__(blocktitle) #get the blocktype
-        sig = inspect.signature(block_type.__init__)    #block init signature
-        known_params = list(sig.parameters.keys())  #the params the function knows
-        known_content = {k:v for k,v in content.items() if(k in known_params)}
-        unknown_content = {k:v for k,v in content.items() if(not k in known_params)}
+        block_type = blocks_lib.__getattribute__(blocktitle)  # get the blocktype
+        sig = inspect.signature(block_type.__init__)  # block init signature
+        known_params = list(sig.parameters.keys())  # the params the function knows
+        known_content = {k: v for k, v in content.items() if (k in known_params)}
+        unknown_content = {k: v for k, v in content.items() if (k not in known_params)}
 
-        #construct class
-        self.__setattr__(blocktitle,block_type(**known_content))
+        # construct class
+        self.__setattr__(blocktitle, block_type(**known_content))
 
-        if(len(unknown_content)>0): #add unkown parameters
-            warnings.warn("FOUND UNKOWN Parameters for "+str(block_type.__name__)+" adding these params: "+str(unknown_content))
+        if len(unknown_content) > 0:  # add unkown parameters
+            warnings.warn(
+                "FOUND UNKOWN Parameters for "
+                + str(block_type.__name__)
+                + " adding these params: "
+                + str(unknown_content)
+            )
             [self.__getattribute__(blocktitle).__setattr__(k, v) for k, v in unknown_content.items()]
 
-
-    def read_file(self)->Dict[str, any]:
+    def read_file(self) -> Dict[str, any]:
         """read_file
 
             give back the content. WARNING DEAPRECEATED.
@@ -238,7 +289,7 @@ class _general_gromos_file():
         print("Begin read in of file: " + self._orig_file_path)
         raise NotImplementedError("The read in parser function for general gromos files is not implemented yet!")
 
-    def write(self, out_path:str)->str:
+    def write(self, out_path: str) -> str:
         """write
             writes a general Gromos File out
 
@@ -252,15 +303,13 @@ class _general_gromos_file():
         str
             out_path
         """
-        os.makedirs(os.path.dirname(out_path), exist_ok=True)
-        file = open(out_path, "w")
-        file.write(str(self))
-        file.close()
-        self.path = out_path
+        self._write_to_file(out_path=out_path, content_str=str(self))
+        self.path = os.path.abspath(out_path)
+        self._future_file = False
 
         return out_path
 
-    def _write_to_file(self, out_path:str, content_str:str)->str:
+    def _write_to_file(self, out_path: str, content_str: str) -> str:
         """
             write to file
         Returns
@@ -268,8 +317,8 @@ class _general_gromos_file():
 
         """
         # 1) OpenFile
-        if (isinstance(out_path, str)):
-            if (os.path.exists(os.path.dirname(out_path))):
+        if isinstance(out_path, str):
+            if os.path.exists(os.path.dirname(out_path)):
                 out_file = open(out_path, "w")
             else:
                 raise IOError("Could not find directory to write to: " + str(os.path.dirname(out_path)))

@@ -297,7 +297,7 @@ PRESSUREGROUPS
 18
 END
 LJEXCEPTIONS
-# This block defines special LJ-interactions based on atom numbers 
+# This block defines special LJ-interactions based on atom numbers
 # This overrules the normal LJ-parameters (including 1-4 interactions)
 # 	 NEX: number of exceptions
  	 0

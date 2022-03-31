@@ -1,5 +1,6 @@
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _generic_field
-from typing import Dict
+from pygromos.utils.typing import Dict
+
 
 class repex_system(_generic_gromos_block):
     def __init__(self, s: list, T: (float or list), state_eir: dict):
@@ -22,7 +23,9 @@ class repex_system(_generic_gromos_block):
         result += "s (RE-EDS) \t " + " ".join(map(str, self.s)) + "\n"
 
         for state in self.state_eir.keys():
-            result += "eir(s), numstate = " + str(state) + " (RE - EDS) " + "\t".join(map(str, self.state_eir[state])) + "\n"
+            result += (
+                "eir(s), numstate = " + str(state) + " (RE - EDS) " + "\t".join(map(str, self.state_eir[state])) + "\n"
+            )
 
         # result ="END\n"
         return result
@@ -30,26 +33,42 @@ class repex_system(_generic_gromos_block):
 
 class replica_stat(_generic_field):
     ID: int
-    partner:int
-    run:int
+    partner: int
+    run: int
 
-    li:float
-    Ti:float
-    Epoti:float
+    li: float
+    Ti: float
+    Epoti: float
 
-    lj:float
-    Tj:float
-    Epotj:float
+    lj: float
+    Tj: float
+    Epotj: float
 
-    p:float
+    p: float
     s: bool
-    si:float
-    sj:float
+    si: float
+    sj: float
 
     state_potentials: Dict[str, float]
 
-    def __init__(self, ID: int, partner: int, run: int, Ti: float, Epoti: float, Tj: float, Epotj: float,
-                 p: float, s: bool, si: float, sj: float, state_potentials: dict=None, potentials: dict=None, li: float = None, lj: float = None):
+    def __init__(
+        self,
+        ID: int,
+        partner: int,
+        run: int,
+        Ti: float,
+        Epoti: float,
+        Tj: float,
+        Epotj: float,
+        p: float,
+        s: bool,
+        si: float,
+        sj: float,
+        state_potentials: dict = None,
+        potentials: dict = None,
+        li: float = None,
+        lj: float = None,
+    ):
         """
 
         Parameters
@@ -70,9 +89,9 @@ class replica_stat(_generic_field):
         li :
         lj :
         """
-        if(isinstance(state_potentials, type(None)) and isinstance(potentials, type(None))):
+        if isinstance(state_potentials, type(None)) and isinstance(potentials, type(None)):
             raise Exception("Need either state_potential or potentials for replica_statistic.")
-        elif(isinstance(state_potentials, type(None)) and not isinstance(potentials, type(None))):
+        elif isinstance(state_potentials, type(None)) and not isinstance(potentials, type(None)):
             state_potentials = potentials
 
         self.ID = int(ID)
@@ -94,6 +113,24 @@ class replica_stat(_generic_field):
         self.state_potentials = dict(state_potentials)
 
     def to_string(self) -> str:
-        return "\t".join(
-            [str(self.ID), str(self.partner), str(self.run), str(self.li), str(self.Ti), str(self.Epoti), str(self.lj), str(self.Tj), str(self.Epotj),
-             str(self.p), str(self.s), str(self.si), str(self.sj), " ".join(list(map(str, self.state_potentials.values())))]) + "\n"
+        return (
+            "\t".join(
+                [
+                    str(self.ID),
+                    str(self.partner),
+                    str(self.run),
+                    str(self.li),
+                    str(self.Ti),
+                    str(self.Epoti),
+                    str(self.lj),
+                    str(self.Tj),
+                    str(self.Epotj),
+                    str(self.p),
+                    str(self.s),
+                    str(self.si),
+                    str(self.sj),
+                    " ".join(list(map(str, self.state_potentials.values()))),
+                ]
+            )
+            + "\n"
+        )

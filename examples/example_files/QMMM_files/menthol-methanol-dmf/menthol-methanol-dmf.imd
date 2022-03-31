@@ -1,0 +1,98 @@
+TITLE
+Demonstration of a Gromos imd file containing a QMMM block
+	 >>> Generated with PyGromosTools (riniker group) <<<
+END
+BOUNDCOND
+# 	 NTB 	 NDFMIN
+ 	 1 	 3
+END
+COMTRANSROT
+# 	 NSCM
+ 	 1000
+END
+CONSTRAINT
+# 	 NTC
+ 	 3
+# 	 NTCP 	 NTCP0(1)
+ 	 1 	 0.000100
+# 	 NTCS 	 NTCS0(1)
+ 	 1 	 0.000100
+END
+FORCE
+# 	 BONDS 	 ANGLES 	 IMPROPER 	 DIHEDRAL 	 ELECTROSTATIC 	 VDW
+ 	 0 	 1 	 1 	 1 	 1 	 1
+# 	 NEGR 	 NRE
+ 	 1 	 1951
+END
+INITIALISE
+# 	 NTIVEL 	 NTISHK 	 NTINHT 	 NTINHB
+ 	 1 	 3 	 0 	 0
+# 	 NTISHI 	 NTIRTC 	 NTICOM
+ 	 1 	 0 	 0
+# 	 NTISTI
+ 	 0
+# 	 IG 	 TEMPI
+ 	 210185 	 298.000000
+END
+MULTIBATH
+# ALGORITHM
+  0
+# NBATHS
+  1
+# TEMP0(1 ... NBATHS) 	 TAU(1 ... NBATHS)
+  298.0 	 0.1
+# DOFSET
+  1
+# LAST(1 ... DOFSET) 	 COMBATH(1 ... DOFSET) 	 IRBATH(1 ... DOFSET)
+  1951 	 1 	 1
+END
+NONBONDED
+# 	 NLRELE
+ 	 1
+# 	 APPAK 	 RCRF 	 EPSRF 	 NSLFEXCL
+ 	 0.000000 	 1.400000 	 66.700000 	 1
+# 	 NSHAPE 	 ASHAPE 	 NA2CLC 	 TOLA2 	 EPSLS
+ 	 3 	 1.400000 	 2 	 1e-10 	 0.000000
+# 	 NKX 	 NKY 	 NKZ 	 KCUT
+ 	 10 	 10 	 10 	 100.000000
+# 	 NGX 	 NGY 	 NGZ 	 NASORD 	 NFDORD 	 NALIAS 	 NSPORD
+ 	 32 	 32 	 32 	 3 	 2 	 3 	 4
+# 	 NQEVAL 	 FACCUR 	 NRDGRD 	 NWRGRD
+ 	 1000 	 1.600000 	 0 	 0
+# 	 NLRLJ 	 SLVDNS
+ 	 0 	 33.300000
+END
+PAIRLIST
+# 	 ALGORITHM 	 NSNB 	 RCUTP 	 RCUTL 	 SIZE 	 TYPE
+ 	 0 	 5 	 0.800000 	 1.400000 	 0.4 	 0
+END
+PRESSURESCALE
+# 	 COUPLE 	 SCALE 	 COMP 	 TAUP 	 VIRIAL
+ 	 2 	 1 	 0.000458 	 0.500000 	 2
+# 	 SEMIANISOTROPIC COUPLINGS(X, Y, Z)
+ 	 1 	 1 	 1
+# 	 PRES0(1...3,1...3)
+ 	 0.06102 	 0.0 	 0.0
+ 	 0.0 	 0.06102 	 0.0
+ 	 0.0 	 0.0 	 0.06102
+END
+PRINTOUT
+# 	 NTPR 	 NTPP
+ 	 10 	 0
+END
+QMMM
+# 	 NTQMMM 	 NTQMSW 	 RCUTQ 	 NTWQMMM 	 QMLJ 	 MMSCAL
+ 	 1 	 4 	 1.400000 	 0 	 0 	 -1.000000
+END
+STEP
+# 	 NSTLIM 	 T 	 DT
+ 	 100000 	 0.000000 	 0.002000
+END
+SYSTEM
+# 	 NPM 	 NSM
+ 	 1 	 0
+END
+WRITETRAJ
+# 	 NTWX 	 NTWSE 	 NTWV 	 NTWF 	 NTWE 	 NTWG 	 NTWB
+ 	 200 	 0 	 0 	 0 	 100 	 0 	 0
+END

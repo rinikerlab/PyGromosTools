@@ -1,6 +1,5 @@
 TITLE
-        Automatically generated input file
-        dsidler Sat Oct 21 10:51:41 2017
+     RE-EDS Simulations Parameters
 END
 SYSTEM
 #      NPM      NSM
@@ -145,4 +144,3 @@ WRITETRAJ
 #    NTWX     NTWSE      NTWV      NTWF      NTWE      NTWG      NTWB
      5000          0         0         0        20         0         0
 END
-

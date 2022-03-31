@@ -1,5 +1,5 @@
 TITLE
-Ligand in vaccum
+       SD Ligand in vaccum
 END
 SYSTEM
 #      NPM      NSM
@@ -53,7 +53,7 @@ PAIRLIST
 #                                atomic(1) (atom based cutoff)
 #
 #       algorithm         NSNB  RCUTP   RCUTL     SIZE  TYPE
-                0            1    7.0     7.0      3.5     1
+                0            1    1.4     1.4      3.5     1
 END
 # Longrange reaction field correction
 NONBONDED
@@ -67,19 +67,6 @@ NONBONDED
    32    32    32       3       2        3       4
 # NQEVAL   FACCUR   NRDGRD   NWRGRD   NLRLJ    SLVDNS
   100000      1.6        0        0       0      33.3
-END
-COVALENTFORM
-# NTBBH: 0,1 controls bond-stretching potential
-#        0: quartic form (default)
-#        1: harmonic form
-# NTBAH: 0,1 controls bond-angle bending potential
-#        0: cosine-harmonic (default)
-#        1: harmonic
-# NTBDN: 0,1 controls torsional dihedral potential
-#        0: arbitrary phase shifts (default)
-#        1: phase shifts limited to 0 and 180 degrees.
-#   NTBBH    NTBAH    NTBDN
-        1        1        1
 END
 STOCHDYN
 # 	 NTSD 	 NTFR 	 NSFR 	 NBREF 	 RCUTF 	 CFRIC 	 TEMPSD

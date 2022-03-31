@@ -12,7 +12,6 @@ module load openblas/0.2.8_seq
 #DO
 cd ${GXXPATH}
 mkdir LINUX -p
-cd LINUX 
+cd LINUX
 
 ../configure --prefix=${BUILDXX} --disable-debug  --enable-mpi --disable-openmp CXX=/cluster/apps/openmpi/1.6.5/x86_64/gcc_4.8.2/bin/mpiCC CC=/cluster/apps/openmpi/1.6.5/x86_64/gcc_4.8.2/bin/mpiCC
-

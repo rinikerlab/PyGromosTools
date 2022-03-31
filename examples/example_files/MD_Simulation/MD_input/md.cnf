@@ -11,7 +11,7 @@ electrostatic potential
 	 >>> line_seperator: '\n'	 field_seperator: '\t'	 comments_char: '#'
 END
 POSITION
-# 	 
+#
     1 VAL   H1         1   -0.466039509    0.107068229   -0.151069220
     1 VAL   H2         2   -0.401465786    0.026940681   -0.024813902
     1 VAL   N          3   -0.432414924    0.018324392   -0.119519889
