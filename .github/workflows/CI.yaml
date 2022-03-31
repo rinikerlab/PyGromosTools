@@ -111,7 +111,7 @@ jobs:
         ./docs/sphinx_project/build_docs.sh
 
     - name: Build and Deploy
-      uses: crazy-max/github-pages-build-deploy@v1
+      uses: JamesIves/github-pages-deploy-action@v4.2.5
       with:
-        target_branch: gh-pages
-        build_dir: build
+        branch: gh-pages # The branch the action should deploy to.
+        folder: build # The folder the action should deploy.
