@@ -107,7 +107,7 @@ jobs:
     - name: build sphinx docs
       shell: bash -l {0}
       run: |
-        python setup.py
+        python setup.py install
         cd docs/sphinx_project
         make clean;
         sphinx-apidoc -o _source ../../pygromos;
