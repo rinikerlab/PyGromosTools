@@ -17,6 +17,7 @@ dependencies:
   - sphinx
   - nbsphinx
   - sphinx_rtd_theme
+  - pandoc
   # Science
   - mpmath
   - pandas
