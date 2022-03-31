@@ -110,13 +110,14 @@ jobs:
         python setup.py install
         cd docs/sphinx_project
         make clean;
+        mkdir Examples Tutorials
         sphinx-apidoc -o _source ../../pygromos;
         cp ../../examples/ex*ipynb ./Examples;
         cp -r ../../examples/developer_examples ./Examples;
         cp ../../examples/t*ipynb ./Tutorials;
         python conf.py;
         make html;
-        cp -r _build/html/* ../
+        mv -r _build/html/* ../
 
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@v4.2.5
