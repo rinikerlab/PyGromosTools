@@ -174,10 +174,10 @@ For any contribution, please check out the CODE_OF_CONDUCT.md file and the style
 
 ### Copyright
 
-Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder
+Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder, Felix Pultar, Paul Katzberger, Candide Champion
 
 ### Acknowledgements
-Many thanks to @robinwuff for the logo design!
+Many thanks to Robin Wolf for the logo design!
 
 Project based on the
 [Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.
