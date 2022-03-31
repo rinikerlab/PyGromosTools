@@ -1,0 +1,315 @@
+TITLE
+
+	name: 	 hill_formula: C6H12
+	----------------------------------------
+	| created from OpenForceField topology |
+	| use Amber Block for OpenFF topology! |
+	----------------------------------------
+
+	 >>> Generated with python lib function_libs utilities. (riniker group)
+	 >>> line_seperator: '\n'	 field_seperator: '\t'	 comments_char: '#'
+END
+PHYSICALCONSTANTS
+# FPEPSI: 1.0/(4.0*PI*EPS0) (EPS0 is the permittivity of vacuum)
+138.9354
+# HBAR: Planck's constant HBAR = H/(2* PI)
+0.0635078
+# SPDL: Speed of light (nm/ps)
+299792.458
+# BOLTZ: Boltzmann's constant kB
+0.00831441
+END
+TOPVERSION
+2.0
+END
+ATOMTYPENAME
+2
+n16
+n2
+END
+RESNAME
+1
+C6H12
+END
+SOLUTEATOM
+#   NRP: number of solute atoms
+ 	 18
+#  ATNM: atom number
+#  MRES: residue number
+#  PANM: atom name of solute atom
+#   IAC: integer (van der Waals) atom type code
+#  MASS: mass of solute atom
+#    CG: charge of solute atom
+#   CGC: charge group code (0 or 1)
+#   INE: number of excluded atoms
+# INE14: number of 1-4 interactions
+# ATNM MRES PANM IAC     MASS       CG  CGC INE
+#                                           INE14
+	1	1	C1	1	12.01078	-0.0764	0	10	2	3	5	6	7	8
+											9	10	17	18
+										5	4	11	12	15	16
+	2	1	C2	1	12.01078	-0.0764	0	9	3	4	6	7	8	9
+											10	11	12
+										5	5	13	14	17	18
+	3	1	C3	1	12.01078	-0.0764	0	8	4	5	9	10	11	12
+											13	14
+										5	6	7	8	15	16
+	4	1	C4	1	12.01078	-0.0764	0	8	5	6	11	12	13	14
+											15	16
+										4	9	10	17	18
+	5	1	C5	1	12.01078	-0.0764	0	7	6	13	14	15	16	17
+											18
+										4	7	8	11	12
+	6	1	C6	1	12.01078	-0.0764	0	6	7	8	15	16	17	18
+										4	9	10	13	14
+	7	1	H1	2	1.007947	0.0382	0	1	8
+										4	9	10	17	18
+	8	1	H2	2	1.007947	0.0382	0	0
+										4	9	10	17	18
+	9	1	H3	2	1.007947	0.0382	0	1	10
+										2	11	12
+	10	1	H4	2	1.007947	0.0382	0	0
+										2	11	12
+	11	1	H5	2	1.007947	0.0382	0	1	12
+										2	13	14
+	12	1	H6	2	1.007947	0.0382	0	0
+										2	13	14
+	13	1	H7	2	1.007947	0.0382	0	1	14
+										2	15	16
+	14	1	H8	2	1.007947	0.0382	0	0
+										2	15	16
+	15	1	H9	2	1.007947	0.0382	0	1	16
+										2	17	18
+	16	1	H10	2	1.007947	0.0382	0	0
+										2	17	18
+	17	1	H11	2	1.007947	0.0382	0	1	18
+										0
+	18	1	H12	2	1.007947	0.0382	1	0
+										0
+END
+BONDSTRETCHTYPE
+# 	 NBTY: number of covalent bond types
+ 	 2
+# 	 CB 	 CHB 	 B0
+	4.78018e+06	2.21435e+05	1.52190e-01
+	1.29388e+07	3.09655e+05	1.09390e-01
+END
+BONDH
+# 	 NBONH: number of bonds involving H atoms in solute
+ 	 0
+# 	 IBH 	 JBH 	 ICBH
+END
+BOND
+# 	 NBON: number of bonds NOT involving H atoms in solute
+ 	 18
+# 	 IB 	 JB 	 ICB
+	1	2	1
+	1	6	1
+	1	7	2
+	1	8	2
+	2	3	1
+	2	9	2
+	2	10	2
+	3	4	1
+	3	11	2
+	3	12	2
+	4	5	1
+	4	13	2
+	4	14	2
+	5	6	1
+	5	15	2
+	5	16	2
+	6	17	2
+	6	18	2
+END
+BONDANGLEBENDTYPE
+# 	 NBTY: number of angle types
+ 	 2
+# 	 CT 	 CHT 	 T0
+	5.57203e+02	1.35622e-01	1.16548e+02
+	5.02731e+02	1.24333e-01	1.15603e+02
+END
+BONDANGLEH
+# 	 NTHEH: number of bondangles involving a H
+ 	 0
+# 	 ITH 	 JTH 	 KTH 	 ICTH
+END
+BONDANGLE
+# 	 NTHE: number of angles
+ 	 36
+# 	 IT 	 JT 	 KT 	 ICT
+	1	2	3	1
+	1	2	9	1
+	1	2	10	1
+	1	6	5	1
+	1	6	17	1
+	1	6	18	1
+	2	1	6	1
+	2	1	7	1
+	2	1	8	1
+	2	3	4	1
+	2	3	11	1
+	2	3	12	1
+	3	2	9	1
+	3	2	10	1
+	3	4	5	1
+	3	4	13	1
+	3	4	14	1
+	4	3	11	1
+	4	3	12	1
+	4	5	6	1
+	4	5	15	1
+	4	5	16	1
+	5	4	13	1
+	5	4	14	1
+	5	6	17	1
+	5	6	18	1
+	6	1	7	1
+	6	1	8	1
+	6	5	15	1
+	6	5	16	1
+	7	1	8	2
+	9	2	10	2
+	11	3	12	2
+	13	4	14	2
+	15	5	16	2
+	17	6	18	2
+END
+IMPDIHEDRALTYPE
+# 	 NQTY: number of improper dihedrals
+ 	 0
+# 	 CQ 	 Q0
+END
+IMPDIHEDRALH
+# 	 NQHIH: number of improper dihedrals involving H atoms
+ 	 0
+# 	 IQH 	 JQH 	 KQH 	 LQH 	 ICQH
+END
+IMPDIHEDRAL
+# 	 #  NQHI: number of improper dihedrals
+ 	 0
+# 	 IQ 	 JQ 	 KQ 	 LQ 	 ICQ
+END
+TORSDIHEDRALTYPE
+# 	 NPTY: number of torsion dihedrals
+ 	 5
+# 	 CP 	 PD 	 NP
+	3.85927e-01	0.00000e+00	3
+	1.32212e+00	1.80000e+02	2
+	1.35888e+00	1.80000e+02	1
+	4.35414e-01	0.00000e+00	3
+	7.99950e-01	0.00000e+00	3
+END
+DIHEDRALH
+# 	 NPHIH: number of torsion dihedrals involving H atoms
+ 	 0
+# 	 IPH 	 JPH 	 KPH 	 LPH 	 ICPH
+END
+DIHEDRAL
+# 	 NPHI: number of dihedrals NOT involving H atoms
+ 	 66
+# 	 IP 	 JP 	 KP 	 LP 	 ICP
+	1	2	3	4	1
+	1	2	3	4	2
+	1	2	3	4	3
+	1	2	3	11	4
+	1	2	3	12	4
+	1	6	5	4	1
+	1	6	5	4	2
+	1	6	5	4	3
+	1	6	5	15	4
+	1	6	5	16	4
+	2	1	6	5	1
+	2	1	6	5	2
+	2	1	6	5	3
+	2	1	6	17	4
+	2	1	6	18	4
+	2	3	4	5	1
+	2	3	4	5	2
+	2	3	4	5	3
+	2	3	4	13	4
+	2	3	4	14	4
+	3	2	1	6	1
+	3	2	1	6	2
+	3	2	1	6	3
+	3	2	1	7	4
+	3	2	1	8	4
+	3	4	5	6	1
+	3	4	5	6	2
+	3	4	5	6	3
+	3	4	5	15	4
+	3	4	5	16	4
+	4	3	2	9	4
+	4	3	2	10	4
+	4	5	6	17	4
+	4	5	6	18	4
+	5	4	3	11	4
+	5	4	3	12	4
+	5	6	1	7	4
+	5	6	1	8	4
+	6	1	2	9	4
+	6	1	2	10	4
+	6	5	4	13	4
+	6	5	4	14	4
+	7	1	2	9	5
+	7	1	2	10	5
+	7	1	6	17	5
+	7	1	6	18	5
+	8	1	2	9	5
+	8	1	2	10	5
+	8	1	6	17	5
+	8	1	6	18	5
+	9	2	3	11	5
+	9	2	3	12	5
+	10	2	3	11	5
+	10	2	3	12	5
+	11	3	4	13	5
+	11	3	4	14	5
+	12	3	4	13	5
+	12	3	4	14	5
+	13	4	5	15	5
+	13	4	5	16	5
+	14	4	5	15	5
+	14	4	5	16	5
+	15	5	6	17	5
+	15	5	6	18	5
+	16	5	6	17	5
+	16	5	6	18	5
+END
+LJPARAMETERS
+# 	 NRATT2: number of LJ interaction types = NRATT*(NRATT+1)/2
+ 	 3
+# 	 IAC 	 JAC 	 C12 	 C6 	 CS12 	 CS6
+	1	1	4.043161e-06	2.713825e-03	2.021580e-06	1.356912e-03
+	1	2	3.534573e-07	4.951254e-04	1.767286e-07	2.475627e-04
+	2	2	3.089960e-08	9.033346e-05	1.544980e-08	4.516673e-05
+END
+SOLUTEMOLECULES
+1
+18
+END
+TEMPERATUREGROUPS
+1
+18
+END
+PRESSUREGROUPS
+1
+18
+END
+LJEXCEPTIONS
+# This block defines special LJ-interactions based on atom numbers
+# This overrules the normal LJ-parameters (including 1-4 interactions)
+# 	 NEX: number of exceptions
+ 	 0
+# 	 AT1 	 AT2 	 C12 	 C6
+END
+SOLVENTATOM
+# 	 NRAM: number of atoms per solvent molecule
+ 	 0
+# 	 I 	 ANMS 	 IACS 	 MASS 	 CGS
+END
+SOLVENTCONSTR
+# 	 NCONS: number of constraints
+ 	 0
+# 	 ICONS 	 JCONS 	 CONS
+END

@@ -1,0 +1,28 @@
+TITLE
+prep_eds: EDS perturbation topology using:
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_1.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_2.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_3.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_4.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_5.top
+/home/bschroed/code/scripts/test/testfile/ptp/ligand_6.top
+
+END
+MPERTATOM
+# NJLA: number of perturbed atoms
+# NPTB: number of states
+  10    6
+# identifiers of the states
+    state0    state1    state2    state3    state4    state5
+#  NR  NAME IAC(1) CHARGE(1) ...  IAC(n) CHARGE(n)  ALPHLJ  ALPHCRF
+    1   C19  16    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    2   C18  16    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    3   C17  16    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    4   C16  12    0.36000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    5   O15   4   -0.36000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    6   C13  12    0.45000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    7   O14   1   -0.45000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    8   C12  15    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+    9   C10  14    0.23500  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+   10    N9   9   -0.41000  22    0.00000  22    0.00000  22    0.00000  22    0.00000  22    0.00000    1.00000    1.00000
+END

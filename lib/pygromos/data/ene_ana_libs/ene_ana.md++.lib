@@ -1,0 +1,185 @@
+TITLE
+  XX Library file for ene_ana
+END
+ENEVERSION
+  2018-11-29
+END
+ENERTRJ
+# block definition for the energy trajectory file.
+# which is specified by the input flag en_files of program ene_ana.
+#
+# Use keyword 'block' to specify the blocks
+#             'subblock' to specify name and dimensions of a set of data
+#             'size' to specify a size that should be read in from the file
+#                    this size can be used as dimension specification
+#                    in a subblock definition. Using the prefix 'matrix_'
+#                    with such a definition will expand the size N to
+#                    N*(N+1)/2
+#
+# Following is the definition for a gromosXX energy trajectory
+#
+  block TIMESTEP
+    subblock TIME 2 1
+  block ENERGY03
+    subblock ENER 43 1
+    size NUM_BATHS
+    subblock KINENER NUM_BATHS 3
+    size NUM_ENERGY_GROUPS
+    subblock BONDED NUM_ENERGY_GROUPS 5
+    subblock NONBONDED matrix_NUM_ENERGY_GROUPS 4
+    subblock SPECIAL NUM_ENERGY_GROUPS 11
+    size NUM_EDS_STATES
+    subblock EDS NUM_EDS_STATES 4
+    size NUM_LAMBDAS
+    subblock PRECALCLAM NUM_LAMBDAS 11
+    subblock ABDIH 1 2
+  block VOLUMEPRESSURE03
+    subblock MASS 1 1
+    size NUM_BATHS
+    subblock TEMPERATURE  NUM_BATHS 4
+    subblock VOLUME 10 1
+    subblock PRESSURE 30 1
+END
+FRENERTRJ
+# block definition for the free energy trajectory file.
+# which is specified by the input flag fr_files of program ene_ana.
+#
+# syntax as for the ENERTRJ definition
+#
+# Following is the definition for a gromosXX free energy trajectory.
+#
+  block TIMESTEP
+    subblock TIME 2 1
+  block FREEENERDERIVS03
+    subblock RLAM 1 1
+    subblock FREEENER 43 1
+    size NUM_BATHS
+    subblock FREEKINENER NUM_BATHS 3
+    size NUM_ENERGY_GROUPS
+    subblock FREEBONDED NUM_ENERGY_GROUPS 5
+    subblock FREENONBONDED matrix_NUM_ENERGY_GROUPS 4
+    subblock FREESPECIAL NUM_ENERGY_GROUPS 11
+    size NUM_EDS_STATES
+    subblock FREEEDS NUM_EDS_STATES 4
+    size NUM_LAMBDAS
+    subblock FREEPRECALCLAM NUM_LAMBDAS 11
+    subblock FREEABDIH 1 2
+END
+VARIABLES
+# Here you can define variables to be calculated by the program ene_ana
+# In principal the program refers to the blocknames you have defined above,
+# accessing individual element using array indices (one- or two-dimensional)
+#
+# Predefined as well is the Boltzmann constant (as BOLTZ = 0.00831441) and
+# the MASS which (if not present in the energy trajectory) will be calculated
+# from the topology (if inputflag @topo is given).
+#
+# Additional properties can be defined here as a direct mapping of a known
+# property or as an expression of such properties. Make sure that variables
+# and operators are always seperated by spaces. Multi-line expressions are
+# allowed.
+#
+# Examples that work with the standard gromos96 definition are
+#          given below and are actually standardly define if no library
+#          file is specified.
+time   = TIME[2]
+dvdl   = FREEENER[3]
+totene = ENER[1]
+totkin = ENER[2]
+totpot = ENER[3]
+totcov = ENER[4]
+totbond = ENER[5]
+totangle = ENER[6]
+totimproper = ENER[7]
+totdihedral = ENER[8]
+totcrossdihedral = ENER[9]
+totnonbonded = ENER[10]
+totlj = ENER[11]
+totcrf = ENER[12]
+totls = ENER[13]
+totlspair = ENER[14]
+totlsreal = ENER[15]
+totlsk = ENER[16]
+totlsa = ENER[17]
+totlsself = ENER[18]
+totlssurf = ENER[19]
+totpolself = ENER[20]
+totspecial = ENER[21]
+totsasa = ENER[22]
+totsasavol = ENER[23]
+totconstraint = ENER[24]
+totdisres = ENER[25]
+totdisfieldres = ENER[26]
+totdihres = ENER[27]
+totposres = ENER[28]
+totjval = ENER[29]
+totxray = ENER[30]
+totle = ENER[31]
+totorder = ENER[32]
+totsymm = ENER[33]
+eds_vmix = ENER[34]
+eds_vr = ENER[35]
+eds_emax = ENER[36]
+eds_emin = ENER[37]
+eds_globmin = ENER[38]
+eds_globminfluc = ENER[39]
+entropy = ENER[40]
+totqm = ENER[41]
+totbsleus = ENER[42]
+totrdc = ENER[43]
+# calculate the pressure in atm.
+pressu = PRESSURE[1] * 16.388453
+boxvol = VOLUME[1]
+# calculate the density in kg/m^3
+densit = MASS[1] * 1.66056 / VOLUME[1]
+# free energy
+totfren = FREEENER[1]
+totfrpot = FREEENER[3]
+#
+# temperature (2 baths)
+solutemp2 = TEMPERATURE[1][1]
+solvtemp2 = TEMPERATURE[2][1]
+#
+# example for 3 baths, first internal / rotational
+# second molecular translational temperature
+irtemp3 = TEMPERATURE[1][1]
+mttemp3 = TEMPERATURE[2][1]
+solvtemp3 = TEMPERATURE[3][1]
+#
+# Example: Heat of vaporization (Hvap)
+#
+# Neglecting quantum corrections for rigid bonds
+# and intermolecular vibrational energies,
+# Hvap can be estimated as
+#
+# Hvap = Ugas - Uliq + RT
+#
+# where Ugas and Uliq are the total potential energies
+# of a single molecule in the gas and liquid phase, respectively,
+# R denotes the gas constant and T the absolute temperature.
+# To calculate Hvap from an energy trajectory obtained
+# from a condensed phase simulation, Ugas = GASENER
+# has to be provided (e.g. from a separate simulation)
+# along with the number of molecules, NUMMOL, in the box
+# and the temperature TEMP, e.g:
+#
+# TEMP = 300.0
+# GASENER = 0
+# NUMMOL = 512
+# hvap = GASENER - ENER[3] / NUMMOL + BOLTZ * TEMP
+#
+# Alternatively the temperature can be made available
+# from the appropriate entry in the TEMPERATURE
+# subblock.
+#
+# VISCOSITY (used by visco program)
+diagP1 = PRESSURE[4]
+diagP2 = PRESSURE[8]
+diagP3 = PRESSURE[12]
+offP1 = PRESSURE[5]
+offP2 = PRESSURE[6]
+offP3 = PRESSURE[9]
+offP4 = PRESSURE[7]
+offP5 = PRESSURE[10]
+offP6 = PRESSURE[11]
+END
