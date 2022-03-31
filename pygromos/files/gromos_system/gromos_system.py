@@ -1037,7 +1037,13 @@ class Gromos_System:
             self.imd.MULTIBATH.adapt_multibath(last_atoms_bath=sorted_last_atoms_baths)
 
         ff_name = self.forcefield.name
-        if ff_name == "openforcefield" or ff_name == "smirnoff" or ff_name == "off" or ff_name == "amberff_gaff":
+        if (
+            ff_name == "openforcefield"
+            or ff_name == "smirnoff"
+            or ff_name == "off"
+            or ff_name == "openff"
+            or ff_name == "amberff_gaff"
+        ):
             # adjust harmonic forces
             if hasattr(self.imd, "COVALENTFORM") and not getattr(self.imd, "COVALENTFORM") is None:
                 if self.verbose:
