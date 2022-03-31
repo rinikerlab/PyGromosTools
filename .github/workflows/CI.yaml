@@ -107,8 +107,7 @@ jobs:
     - name: build sphinx docs
       shell: bash -l {0}
       run: |
-        python setup.py
-        ./docs/sphinx_project/build_docs.sh
+        python setup.py build_sphinx
 
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@v4.2.5
