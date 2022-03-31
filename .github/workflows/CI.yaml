@@ -107,7 +107,15 @@ jobs:
     - name: build sphinx docs
       shell: bash -l {0}
       run: |
-        python setup.py build_sphinx
+        python setup.py
+        make clean;
+        sphinx-apidoc -o _source ../../pygromos;
+        cp ../../examples/ex*ipynb ./Examples;
+        cp -r ../../examples/developer_examples ./Examples;
+        cp ../../examples/t*ipynb ./Tutorials;
+        python conf.py;
+        make html;
+        cp -r _build/html/* ../
 
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@v4.2.5
