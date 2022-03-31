@@ -117,7 +117,7 @@ jobs:
         cp ../../examples/t*ipynb ./Tutorials;
         python conf.py;
         make html;
-        mv -f _build/html/* ../
+        cp -rf _build/html/* ../
 
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@v4.2.5
