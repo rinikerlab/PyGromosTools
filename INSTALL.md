@@ -12,7 +12,7 @@ This will build an envrionment named pygromos.
 **Note**: if you want to develop PyGromosTools, checkout the dev/conda_envs folder, there you find environments, that contain all packages for constructing PyGromosTools.
 
 ## PyGromosTools Setup
-**Note**: If you want to use PyGromosTools with the GROMOS package (gromos.net), you need to generate the binaries for this code seperately and then can use them with PyGromosTools. 
+**Note**: If you want to use PyGromosTools with the GROMOS package (gromos.net), you need to generate the binaries for this code seperately and then can use them with PyGromosTools.
 ### Using the Package
 This is recommended if you want to use PyGromosTools, but not develop it. First activate the correct python environment, then:
 

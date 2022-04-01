@@ -158,7 +158,7 @@ Quick Start - move to the root folder of this repository:
     # build environment
     conda env create -f conda_env.yml
     conda develop -n pygromos ${PWD}
-    
+
     # activate environment
     conda activate pygromos
   ```
