@@ -7,6 +7,7 @@ extraction:
 path_classifiers:
   exclude:
     - pygromos/test
+    - docs
     - examples
     - setup.py
     - versioneer.py
