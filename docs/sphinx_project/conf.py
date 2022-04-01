@@ -50,7 +50,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx.ext.extlinks",
-    'sphinx_jekyll_builder',
 ]
 
 autosummary_generate = True
