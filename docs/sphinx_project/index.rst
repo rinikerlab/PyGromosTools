@@ -7,6 +7,7 @@
    :glob:
 
    introduction   
+   install
    Tutorials/index
    Examples/index
    _source/modules
