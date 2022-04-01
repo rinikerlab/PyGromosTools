@@ -11,9 +11,10 @@ This will build an envrionment named pygromos.
 
 **Note**: if you want to develop PyGromosTools, checkout the dev/conda_envs folder, there you find environments, that contain all packages for constructing PyGromosTools.
 
-## PygromosTools Setup
-### Installing the package
-This is recommended if you want to use PyGromosTools, but not develop it:
+## PyGromosTools Setup
+**Note**: If you want to use PyGromosTools with the GROMOS package (gromos.net), you need to generate the binaries for this code seperately and then can use them with PyGromosTools. 
+### Using the Package
+This is recommended if you want to use PyGromosTools, but not develop it. First activate the correct python environment, then:
 
 ```bash
     cd PyGromosTools
@@ -21,10 +22,10 @@ This is recommended if you want to use PyGromosTools, but not develop it:
 ```
 Make sure, that you have the GROMOS binaries around, as currently the binaries can not be shipped with the package, as it is not open-source.
 
-### Package Development
+### Developing the Package
 For using this repository and developing it, clone it into a directory on your machine.
 
-Set your python envs path to the following:
+Build your python environment, activate it and add the path to the repository root to your environment:
 ```bash
 conda develop -n <EnvironmentName> /path/to/pygromos/containint/folder/pygromos
 ```
@@ -40,5 +41,3 @@ If you implemented in your branch features, that you would like to share, just i
 
 **IMPORTANT:**
 If you decide to do a merge/pull request, please make sure to follow the coding style guidelines in styleguide.md and make sure, that your code is well documented and passes pre-commit and the tests.
-
-If you find a bug or have an feature request, please raise an Issue.

@@ -149,17 +149,10 @@ Content
   * Bash wrappers for GROMOS
   * Amino acid library
 
-General Information
+
+Quick Setup
 -------------
 
-### Specifications
-
-* Python >=3.7:
-* requires: numpy, scipy, pandas, rdkit
-
-* optional: openforcefield for OpenForceField and Serenityff functions
-
-### Quick Setup
 Quick Start - move to the root folder of this repository:
   ```bash
     # build environment
@@ -172,18 +165,37 @@ Quick Start - move to the root folder of this repository:
 
 Please make sure, that you have GROMOS (www.gromos.net) binaries around, if you want to use the MD-Package. We sadly can not provide the source code for this package, as it is currently not open-source.
 
-for more information, see INSTALL.md file for more informations
+If you find a bug or have an feature request, please raise an Issue on GitHub.
 
-### Contributions
+For more information, see INSTALL.md file for more informations.
 
+Contributions
+-------------
+
+You want to contribute? Awesome! We are happy to support you in this process.
 For any contribution, please check out the CODE_OF_CONDUCT.md file and the style guide in styleguide.md.
+There will be a small code revision for code contributions, to verify that everything is in place.
 
-### Copyright
+Publications
+-------------
+Scientific Literature using PyGromosTools:
+ * [RestraintMaker: a graph-based approach to select distance restraints in free-energy calculations with dual topology; Benjamin Ries^, Salomé Rieder^, Clemens Rhiner, Philippe H. Hünenberger and Sereina Riniker (2022). ](https://doi.org/10.1007/s10822-022-00445-6)
+ * [Relative Free-Energy Calculations for Scaffold Hopping-Type Transformations with an Automated RE-EDS Sampling Procedure; Benjamin Ries, Karl Normak, R.Gregor Weiß, Salomé Rieder, Emília P. Barros, Candide Champion, Gerhard König, Sereina Riniker (2022)](https://link.springer.com/article/10.1007/s10822-021-00436-z)
+ * [Modulation of the Passive Permeability of Semipeptidic Macrocycles: N- and C-Methylations Fine-Tune Conformation and Properties; Christian Comeau, Benjamin Ries, Thomas Stadelmann, et al. (2021)](https://pubmed.ncbi.nlm.nih.gov/33750117/)
+
+
+^ contributed equally
+
+
+Acknowledgements
+----------------
+
+Many thanks to Robin Wolf for the logo design!
+
+Copyright
+-------------
 
 Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder, Felix Pultar, Paul Katzberger, Candide Champion
-
-### Acknowledgements
-Many thanks to Robin Wolf for the logo design!
 
 Project based on the
 [Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.
