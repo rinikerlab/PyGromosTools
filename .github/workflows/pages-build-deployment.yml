@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: pages-build-deployment #Build and Deploy
 on:
   push:
     branches:
