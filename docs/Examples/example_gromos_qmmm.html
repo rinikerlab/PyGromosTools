@@ -43,6 +43,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">create top + cnf for aniline</a></li>
@@ -69,8 +71,9 @@
 <li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Example For Calculation of Self Solvation Free Energy</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
 </ul>
 
         </div>
@@ -390,7 +393,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "0997f26798784cb09f42e77b8e67163c"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "2b28e82c8abd46e9bdcdcc35d9700758"}</script></div>
 </div>
 <section id="Support-for-QMMM-functionality-in-GROMOS-input-files">
 <h1>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline"></a></h1>
@@ -1145,12 +1148,12 @@ Input <span class="ansi-green-fg">In [19]</span>, in <span class="ansi-cyan-fg">
 environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;CONDA_PROMPT_MODIFIER&#39;: &#39;(pygromosDev) &#39;,
         &#39;USER&#39;: &#39;bschroed&#39;,
-        &#39;SSH_AGENT_PID&#39;: &#39;16562&#39;,
+        &#39;SSH_AGENT_PID&#39;: &#39;15131&#39;,
         &#39;LD_LIBRARY_PATH&#39;: &#39;/home/fpultar/opt/gcc-8.2.0/lib:/home/fpultar/opt/gcc-8.2.0/lib64&#39;,
         &#39;SHLVL&#39;: &#39;2&#39;,
         &#39;HOME&#39;: &#39;/home/bschroed&#39;,
         &#39;CONDA_SHLVL&#39;: &#39;2&#39;,
-        &#39;OLDPWD&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project/_source&#39;,
+        &#39;OLDPWD&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs&#39;,
         &#39;NVM_BIN&#39;: &#39;/home/bschroed/.nvm/versions/node/v16.9.1/bin&#39;,
         &#39;NVM_INC&#39;: &#39;/home/bschroed/.nvm/versions/node/v16.9.1/include/node&#39;,
         &#39;MAKEFLAGS&#39;: &#39;&#39;,
@@ -1159,7 +1162,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;TERMINATOR_DBUS_NAME&#39;: &#39;net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3&#39;,
         &#39;WSL_DISTRO_NAME&#39;: &#39;Ubuntu&#39;,
         &#39;NVM_DIR&#39;: &#39;/home/bschroed/.nvm&#39;,
-        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/20&#39;,
+        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/19&#39;,
         &#39;WAYLAND_DISPLAY&#39;: &#39;wayland-0&#39;,
         &#39;LOGNAME&#39;: &#39;bschroed&#39;,
         &#39;_&#39;: &#39;/usr/bin/make&#39;,
@@ -1179,11 +1182,11 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;LANG&#39;: &#39;C.UTF-8&#39;,
         &#39;LS_COLORS&#39;: &#39;rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:&#39;,
         &#39;GSETTINGS_SCHEMA_DIR&#39;: &#39;/home/bschroed/miniconda3/envs/pygromosDev/share/glib-2.0/schemas&#39;,
-        &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/ssh-JmgWpSflEp3r/agent.16561&#39;,
+        &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/ssh-EjAXfLQAA8lu/agent.15130&#39;,
         &#39;CONDA_PYTHON_EXE&#39;: &#39;/home/bschroed/miniconda3/bin/python&#39;,
         &#39;SHELL&#39;: &#39;/bin/bash&#39;,
-        &#39;TERMINATOR_UUID&#39;: &#39;urn:uuid:9a1a9ed2-3168-463f-9db4-2294fca61508&#39;,
-        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/20&#39;,
+        &#39;TERMINATOR_UUID&#39;: &#39;urn:uuid:154cdd0b-4b98-4dee-9da0-f92e1f6ad668&#39;,
+        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/19&#39;,
         &#39;LESSCLOSE&#39;: &#39;/usr/bin/lesspipe %s %s&#39;,
         &#39;CONDA_DEFAULT_ENV&#39;: &#39;pygromosDev&#39;,
         &#39;PWD&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project&#39;,
@@ -1199,7 +1202,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;DOCUTILSCONFIG&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project/docutils.conf&#39;,
         &#39;RDBASE&#39;: &#39;/home/bschroed/miniconda3/envs/pygromosDev/share/RDKit&#39;,
         &#39;PYDEVD_USE_FRAME_EVAL&#39;: &#39;NO&#39;,
-        &#39;JPY_PARENT_PID&#39;: &#39;29138&#39;,
+        &#39;JPY_PARENT_PID&#39;: &#39;29079&#39;,
         &#39;CLICOLOR&#39;: &#39;1&#39;,
         &#39;PAGER&#39;: &#39;cat&#39;,
         &#39;GIT_PAGER&#39;: &#39;cat&#39;,
@@ -1324,7 +1327,7 @@ Input <span class="ansi-green-fg">In [24]</span>, in <span class="ansi-cyan-fg">
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"50a2a76274a44a09b760797f2c679a8b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0997f26798784cb09f42e77b8e67163c": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_50a2a76274a44a09b760797f2c679a8b"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"11407517864e40789576ee833b028638": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "2b28e82c8abd46e9bdcdcc35d9700758": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_11407517864e40789576ee833b028638"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 
 
