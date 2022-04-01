@@ -21,10 +21,10 @@ import pygromos  # noqa: F401
 
 project = "PyGromosTools"
 copyright = (
-    "2020, Benjamin Ries, Mark Lehner, Salome Rieder. Project structure based on the "
+    "2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the "
     "Computational Molecular Science Python Cookiecutter version 1.3"
 )
-author = "Benjamin Ries, Mark Lehner, Salome Rieder"
+author = "Benjamin Ries, Marc Lehner, Salome Rieder"
 
 # The short X.Y version
 version = ""

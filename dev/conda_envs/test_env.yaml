@@ -13,6 +13,11 @@ dependencies:
   ## Meta
   - typing
   - pre-commit
+  - m2r
+  - sphinx
+  - nbsphinx
+  - sphinx_rtd_theme
+  - pandoc
   # Science
   - mpmath
   - pandas
