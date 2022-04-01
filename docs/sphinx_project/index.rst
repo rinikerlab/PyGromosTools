@@ -6,10 +6,12 @@
    :maxdepth: 3
    :glob:
 
-   introduction
-   Examples/index
+   introduction   
    Tutorials/index
+   Examples/index
    _source/modules
+   styleguide
+   code_of_conduct
 
 Indices and tables
 ==================

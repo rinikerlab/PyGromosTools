@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Examples" href="Examples/index.html" />
+    <link rel="next" title="Installation guide" href="install.html" />
     <link rel="prev" title="Welcome to PyGromosTools" href="index.html" /> 
 </head>
 
@@ -41,20 +41,21 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to PyGromosTools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general">General</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#general-information">General Information</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#specifications">Specifications</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#setup">SETUP</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#contributions">Contributions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#copyright">Copyright</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#content">Content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-setup">Quick Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#publications">Publications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copyright">Copyright</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
 </ul>
 
         </div>
@@ -114,15 +115,16 @@
 <a class="reference external image-reference" href="https://lgtm.com/projects/g/rinikerlab/PyGromosTools/context:python"><img alt="Language grade: Python" src="https://img.shields.io/lgtm/grade/python/g/rinikerlab/PyGromosTools.svg?logo=lgtm&amp;logoWidth=18" /></a>
 <a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/323972251"><img alt="DOI" src="https://zenodo.org/badge/323972251.svg" /></a>
 <a class="reference external image-reference" href="https://rinikerlab.github.io/PyGromosTools/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-here-white.svg" /></a>
-<section id="general">
-<h2>Introduction<a class="headerlink" href="#general" title="Permalink to this headline"></a></h2>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
 <blockquote>
 <div><p>The aim of the module is to bring GROMOS to the Python3 World!
 This repository should make it easier to work with GROMOS in Python and should enable the user to write cleaner, more reliable and adaptable code.</p>
 <p>General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.</p>
 </div></blockquote>
-<p>Content</p>
-<hr class="docutils" />
+</section>
+<section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline"></a></h2>
 <ul>
 <li><p>GROMOS wrappers</p>
 <ul class="simple">
@@ -267,34 +269,46 @@ print(imd)
 </li>
 </ul>
 </section>
-<section id="general-information">
-<h2>General Information<a class="headerlink" href="#general-information" title="Permalink to this headline"></a></h2>
-<section id="specifications">
-<h3>Specifications<a class="headerlink" href="#specifications" title="Permalink to this headline"></a></h3>
-<ul class="simple">
-<li><p>Python &gt;=3.7:</p></li>
-<li><p>requires: numpy, scipy, pandas, rdkit</p></li>
-<li><p>optional: openforcefield for OpenForceField and Serenityff functions</p></li>
-</ul>
-</section>
-<section id="setup">
-<h3>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline"></a></h3>
-<p>see INSTALL.md file for more informations</p>
+<section id="quick-setup">
+<h2>Quick Setup<a class="headerlink" href="#quick-setup" title="Permalink to this headline"></a></h2>
+<p>Quick Start - move to the root folder of this repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># build environment</span>
+conda env create -f conda_env.yml
+conda develop -n pygromos <span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>
+
+<span class="c1"># activate environment</span>
+conda activate pygromos
+</pre></div>
+</div>
+<p>Please make sure, that you have GROMOS (www.gromos.net) binaries around, if you want to use the MD-Package. We sadly can not provide the source code for this package, as it is currently not open-source.</p>
+<p>If you find a bug or have an feature request, please raise an Issue on GitHub.</p>
+<p>For more information, see INSTALL.md file for more informations.</p>
 </section>
 <section id="contributions">
-<h3>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline"></a></h3>
-<p>For any contribution, please check out the CODE_OF_CONDUCT.md file and the style guide in styleguide.md.</p>
+<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline"></a></h2>
+<p>You want to contribute? Awesome! We are happy to support you in this process.
+For any contribution, please check out the CODE_OF_CONDUCT.md file and the style guide in styleguide.md.
+There will be a small code revision for code contributions, to verify that everything is in place.</p>
 </section>
-<section id="copyright">
-<h3>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline"></a></h3>
-<p>Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder, Felix Pultar, Paul Katzberger, Candide Champion</p>
+<section id="publications">
+<h2>Publications<a class="headerlink" href="#publications" title="Permalink to this headline"></a></h2>
+<p>Scientific Literature using PyGromosTools:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://doi.org/10.1007/s10822-022-00445-6">RestraintMaker: a graph-based approach to select distance restraints in free-energy calculations with dual topology; Benjamin Ries^, Salomé Rieder^, Clemens Rhiner, Philippe H. Hünenberger and Sereina Riniker (2022).</a></p></li>
+<li><p><a class="reference external" href="https://link.springer.com/article/10.1007/s10822-021-00436-z">Relative Free-Energy Calculations for Scaffold Hopping-Type Transformations with an Automated RE-EDS Sampling Procedure; Benjamin Ries, Karl Normak, R.Gregor Weiß, Salomé Rieder, Emília P. Barros, Candide Champion, Gerhard König, Sereina Riniker (2022)</a></p></li>
+<li><p><a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/33750117/">Modulation of the Passive Permeability of Semipeptidic Macrocycles: N- and C-Methylations Fine-Tune Conformation and Properties; Christian Comeau, Benjamin Ries, Thomas Stadelmann, et al. (2021)</a></p></li>
+</ul>
+<p>^ contributed equally</p>
 </section>
 <section id="acknowledgements">
-<h3>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline"></a></h3>
+<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline"></a></h2>
 <p>Many thanks to Robin Wolf for the logo design!</p>
+</section>
+<section id="copyright">
+<h2>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline"></a></h2>
+<p>Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder, Felix Pultar, Paul Katzberger, Candide Champion</p>
 <p>Project based on the
 <a class="reference external" href="https://github.com/molssi/cookiecutter-cms">Computational Molecular Science Python Cookiecutter</a> version 1.3.</p>
-</section>
 </section>
 </section>
 
@@ -303,7 +317,7 @@ print(imd)
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to PyGromosTools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
