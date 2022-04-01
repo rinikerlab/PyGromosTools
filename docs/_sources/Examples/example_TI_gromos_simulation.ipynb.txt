@@ -1,0 +1,417 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "# TI Calculation\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#for analysis\n",
+    "from matplotlib import pyplot as plt\n",
+    "%matplotlib inline\n",
+    "\n",
+    "import os\n",
+    "import numpy as np\n",
+    "import pygromos\n",
+    "from pygromos.files.gromos_system import Gromos_System\n",
+    "from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
+    "from pygromos.files.blocks.imd_blocks import PERTURBATION, WRITETRAJ\n",
+    "\n",
+    "from pygromos.utils import bash"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Input files"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "root_dir = os.path.abspath(os.path.dirname(pygromos.__file__)+\"/../examples/example_files/TI_Calculation\")\n",
+    "root_in_dir = root_dir+\"/TI_input\"\n",
+    "cnf_path = root_in_dir+\"/M030_6KET.cnf\"\n",
+    "top_path = root_in_dir + \"/M030_6KET.top\"\n",
+    "disres_path = root_in_dir+\"/M030_6KET.disres\"\n",
+    "\n",
+    "\n",
+    "sys_name = \"M030_to_6KET\"\n",
+    "lam = 0\n",
+    "\n",
+    "project_dir = bash.make_folder(root_dir+\"/\"+sys_name)\n",
+    "input_dir = bash.make_folder(project_dir+\"/input\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Vacuum Simulation\n",
+    "\n",
+    "### Direction A->B\n",
+    "\n",
+    "#### Setup:\n",
+    "\n",
+    "\n",
+    "##### Build pertubation file\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.topology.ptp import Pertubation_topology\n",
+    "from pygromos.files.blocks.topology_blocks import pertubation_lam_state, atom_lam_pertubation_state, PERTATOMPARAM, TITLE\n",
+    "\n",
+    "\n",
+    "#External imd_changes:\n",
+    "grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,\n",
+    "                            in_disres_path=disres_path,\n",
+    "                            system_name=sys_name, work_folder=input_dir)\n",
+    "\n",
+    "\n",
+    "#Build up lambda - States\n",
+    "pert_atoms=[]\n",
+    "for atom_line in grom_system.top.SOLUTEATOM:\n",
+    "    states = {}\n",
+    "    phys_state = pertubation_lam_state(IAC=atom_line.IAC, MASS=atom_line.MASS, CHARGE=atom_line.CG)\n",
+    "    states = {atom_line.MRES: phys_state }\n",
+    "\n",
+    "    pert_atom = atom_lam_pertubation_state(atom_line.ATNM,RES=atom_line.MRES,NAME=atom_line.PANM, STATES=states)\n",
+    "    pert_atoms.append(pert_atom)\n",
+    "pert_atom_block = PERTATOMPARAM(pert_atoms)\n",
+    "\n",
+    "# Generate ptp file\n",
+    "grom_system.ptp = Pertubation_topology(in_value = None)\n",
+    "grom_system.ptp.PERTATOMPARAM = pert_atom_block\n",
+    "grom_system.ptp.TITLE = TITLE(\"Automatic generated pertubation file. \")\n",
+    "\n",
+    "grom_system.ptp"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "##Write out all generated files\n",
+    "grom_system.rebase_files()\n",
+    "\n",
+    "##save Input System\n",
+    "grom_system.save(root_dir+\"/initial_startSys.obj\")\n",
+    "grom_system"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### RUN Emin"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# PREPARE EMIN\n",
+    "## IMPORT\n",
+    "from pygromos.data.simulation_parameters_templates import template_emin_vac\n",
+    "from pygromos.simulations.modules.preset_simulation_modules import emin\n",
+    "\n",
+    "grom_system = Gromos_System.load(root_dir+\"/initial_startSys.obj\")\n",
+    "step_name  = \"a_emin\" #also the dir_name, out prefix etc.\n",
+    "grom_system.imd = template_emin_vac #read template imd\n",
+    "\n",
+    "#Pertubation for molecules to sim params\n",
+    "pert_block  =  PERTURBATION(NTG=1, NRDGL=0, RLAM=lam, DLAMT=0,\n",
+    "                            ALPHC=0.5, ALPHLJ=0.5, NLAM=2, NSCALE=0)\n",
+    "grom_system.imd.add_block(block=pert_block)\n",
+    "\n",
+    "#save checkpoint system\n",
+    "step_dir = project_dir+\"/\"+step_name\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#EXECUTE EMIN\n",
+    "emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=project_dir,\n",
+    "                          step_name=step_name, submission_system=subSystem())\n",
+    "\n",
+    "emin_gromos_system.save(step_dir+\"/emin_out.obj\")\n",
+    "emin_gromos_system"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## RUN Test SD EQ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.simulation_parameters_templates import template_sd\n",
+    "from pygromos.simulations.modules.preset_simulation_modules import sd\n",
+    "\n",
+    "grom_system = Gromos_System.load(root_dir+\"/M030_to_6KET/a_emin/emin_out.obj\")\n",
+    "step_name  = \"b_vacuum_sd\"\n",
+    "grom_system.imd = template_sd\n",
+    "\n",
+    "#Pertubation\n",
+    "pert_block  =  PERTURBATION(NTG=1, NRDGL=0, RLAM=lam, DLAMT=0,\n",
+    "                            ALPHC=0.5, ALPHLJ=0.5, NLAM=2, NSCALE=0)\n",
+    "grom_system.imd.add_block(block=pert_block)\n",
+    "\n",
+    "#write out trajs:\n",
+    "write_traj = WRITETRAJ(NTWX=100, NTWE=100)\n",
+    "grom_system.imd.add_block(block=write_traj)\n",
+    "step_dir = project_dir+\"/\"+step_name\n",
+    "\n",
+    "#further mods:\n",
+    "grom_system.imd.CONSTRAINT.NTC = 3\n",
+    "grom_system.imd.FORCE.BONDS = 0\n",
+    "\n",
+    "grom_system.imd.COVALENTFORM.NTBAH = 0\n",
+    "grom_system.imd.COVALENTFORM.NTBDN = 0\n",
+    "grom_system.imd.COVALENTFORM.NTBBH = 0\n",
+    "\n",
+    "grom_system.imd.STEP.NSTLIM = 30000\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sd_gromos_system, jobID  = sd(in_gromos_system=grom_system, project_dir=project_dir,\n",
+    "                              step_name=step_name, submission_system=subSystem(), in_imd_path=None,\n",
+    "                      equilibration_runs=1, simulation_runs=1)\n",
+    "sd_gromos_system.save(step_dir+\"/sd_out_system.obj\")\n",
+    "sd_gromos_system"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Further Analysis:\n",
+    "Transform the trc into a pdb traj to check it out with pymol :!)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#final analysis dir:\n",
+    "from pygromos.utils import bash\n",
+    "\n",
+    "out_ana = project_dir+\"/c_ana\"\n",
+    "if(not os.path.exists(out_ana)):\n",
+    "    bash.make_folder(out_ana)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "project_dir"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.coord import Cnf\n",
+    "in_path=project_dir+\"/a_emin/analysis/data/a_emin.cnf\"\n",
+    "cnf_file = Cnf(in_path)\n",
+    "cnf_file.write_pdb(in_path.replace(\"cnf\", \"pdb\"))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cnf_file.visualize()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.trajectory.trc import Trc\n",
+    "\n",
+    "in_path=project_dir+\"/b_vacuum_sd/analysis/data/b_vacuum_sd.trc.h5\"\n",
+    "\n",
+    "trc = Trc(input_value=in_path)\n",
+    "trc.write_pdb(out_ana+\"/sd_traj.pdb\", cnf_file=cnf_path)#grom_system.cnf.path)\n",
+    "trc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.trajectory.tre import Tre\n",
+    "\n",
+    "in_path=project_dir+\"/b_vacuum_sd/analysis/data/b_vacuum_sd.tre.h5\"\n",
+    "\n",
+    "tre = Tre(input_value=in_path)\n",
+    "tre\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Plot Potential Energies\n",
+    "V_tot = np.array(list(map(lambda x: x[2], tre.database.totals)))\n",
+    "step = len(tre.database.TIMESTEP_time)//10\n",
+    "\n",
+    "plt.plot(tre.database.TIMESTEP_time, V_tot)\n",
+    "plt.xticks(np.round(list(tre.database.TIMESTEP_time[::step]),2))\n",
+    "plt.xlabel(\"$t~[ps]$\")\n",
+    "plt.ylabel(\"$V~[kJ]$\")\n",
+    "plt.title(\"V total timeseries\")\n",
+    "plt.savefig(out_ana+\"/potential_energy_timeseries.png\")\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Lambda Sampling\n",
+    "\n",
+    "### Setup again"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "import numpy as np\n",
+    "from pygromos.files.gromos_system import Gromos_System\n",
+    "from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
+    "\n",
+    "from pygromos.utils import bash\n",
+    "sys_name = \"M030_to_6KET\"\n",
+    "root_dir = os.getcwd()+\"/example_files/TI_Calculation\"\n",
+    "\n",
+    "project_dir = bash.make_folder(root_dir+\"/\"+sys_name)\n",
+    "sys_path = root_dir+\"/M030_to_6KET/b_vacuum_sd/sd_out_system.obj\"\n",
+    "sd_gromos_system = Gromos_System.load(sys_path)\n",
+    "\n",
+    "sd_gromos_system.imd.WRITETRAJ.NTWG =  sd_gromos_system.imd.WRITETRAJ.NTWX = sd_gromos_system.imd.WRITETRAJ.NTWE =10\n",
+    "sd_gromos_system.imd.STEP = 100\n",
+    "\n",
+    "sd_gromos_system"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Submission"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.simulations.modules.ti_modules import TI_sampling\n",
+    "\n",
+    "step_name  = \"d_lambda_sampling\"\n",
+    "\n",
+    "\n",
+    "TI_sampling(in_gromos_system = sd_gromos_system, project_dir=project_dir, step_name  = step_name,\n",
+    "            lambda_values= np.arange(0, 1.1, 0.1),\n",
+    "            subSystem=subSystem(), n_simulation_repetitions = 3, n_equilibrations = 1)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "language_info": {
+   "name": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

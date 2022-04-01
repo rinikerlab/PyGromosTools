@@ -1,0 +1,1212 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>TI Calculation &mdash; PyGromosTools  documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="create top + cnf for aniline" href="example_amber2gromos.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+
+
+
+          </a>
+
+
+
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#define-file-paths">define file paths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#build-gromos-system">Build gromos System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html#run-emin">Run Emin</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">TI Calculation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Imports">Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Input-files">Input files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Vacuum-Simulation">Vacuum Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Direction-A-&gt;B">Direction A-&gt;B</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RUN-Emin">RUN Emin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#RUN-Test-SD-EQ">RUN Test SD EQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Further-Analysis:">Further Analysis:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Lambda-Sampling">Lambda Sampling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Setup-again">Setup again</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Submission">Submission</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">create top + cnf for aniline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-CHCl3">create top + cnf for aniline, solvated in CHCl3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">create top + cnf for aniline, solvated in TIP3P water</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Example Notebook for the Usage of the New Submission System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Example For Calculation of Self Solvation Free Energy</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+
+          <li><a href="index.html">Examples</a> &raquo;</li>
+
+      <li>TI Calculation</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="../_sources/Examples/example_TI_gromos_simulation.ipynb.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="TI-Calculation">
+<h1>TI Calculation<a class="headerlink" href="#TI-Calculation" title="Permalink to this headline">¶</a></h1>
+<section id="Imports">
+<h2>Imports<a class="headerlink" href="#Imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#for analysis</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pygromos</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.imd_blocks</span> <span class="kn">import</span> <span class="n">PERTURBATION</span><span class="p">,</span> <span class="n">WRITETRAJ</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "9e46337205b74dbbba2950935cf39868"}</script></div>
+</div>
+</section>
+<section id="Input-files">
+<h2>Input files<a class="headerlink" href="#Input-files" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pygromos</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/../examples/example_files/TI_Calculation&quot;</span><span class="p">)</span>
+<span class="n">root_in_dir</span> <span class="o">=</span> <span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/TI_input&quot;</span>
+<span class="n">cnf_path</span> <span class="o">=</span> <span class="n">root_in_dir</span><span class="o">+</span><span class="s2">&quot;/M030_6KET.cnf&quot;</span>
+<span class="n">top_path</span> <span class="o">=</span> <span class="n">root_in_dir</span> <span class="o">+</span> <span class="s2">&quot;/M030_6KET.top&quot;</span>
+<span class="n">disres_path</span> <span class="o">=</span> <span class="n">root_in_dir</span><span class="o">+</span><span class="s2">&quot;/M030_6KET.disres&quot;</span>
+
+
+<span class="n">sys_name</span> <span class="o">=</span> <span class="s2">&quot;M030_to_6KET&quot;</span>
+<span class="n">lam</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">project_dir</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">sys_name</span><span class="p">)</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/input&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Vacuum-Simulation">
+<h2>Vacuum Simulation<a class="headerlink" href="#Vacuum-Simulation" title="Permalink to this headline">¶</a></h2>
+<section id="Direction-A-&gt;B">
+<h3>Direction A-&gt;B<a class="headerlink" href="#Direction-A->B" title="Permalink to this headline">¶</a></h3>
+<section id="Setup:">
+<h4>Setup:<a class="headerlink" href="#Setup:" title="Permalink to this headline">¶</a></h4>
+<section id="Build-pertubation-file">
+<h5>Build pertubation file<a class="headerlink" href="#Build-pertubation-file" title="Permalink to this headline">¶</a></h5>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.topology.ptp</span> <span class="kn">import</span> <span class="n">Pertubation_topology</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.topology_blocks</span> <span class="kn">import</span> <span class="n">pertubation_lam_state</span><span class="p">,</span> <span class="n">atom_lam_pertubation_state</span><span class="p">,</span> <span class="n">PERTATOMPARAM</span><span class="p">,</span> <span class="n">TITLE</span>
+
+
+<span class="c1">#External imd_changes:</span>
+<span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">in_cnf_path</span><span class="o">=</span><span class="n">cnf_path</span><span class="p">,</span> <span class="n">in_top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span>
+                            <span class="n">in_disres_path</span><span class="o">=</span><span class="n">disres_path</span><span class="p">,</span>
+                            <span class="n">system_name</span><span class="o">=</span><span class="n">sys_name</span><span class="p">,</span> <span class="n">work_folder</span><span class="o">=</span><span class="n">input_dir</span><span class="p">)</span>
+
+
+<span class="c1">#Build up lambda - States</span>
+<span class="n">pert_atoms</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">atom_line</span> <span class="ow">in</span> <span class="n">grom_system</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">SOLUTEATOM</span><span class="p">:</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">phys_state</span> <span class="o">=</span> <span class="n">pertubation_lam_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="n">atom_line</span><span class="o">.</span><span class="n">IAC</span><span class="p">,</span> <span class="n">MASS</span><span class="o">=</span><span class="n">atom_line</span><span class="o">.</span><span class="n">MASS</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=</span><span class="n">atom_line</span><span class="o">.</span><span class="n">CG</span><span class="p">)</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="p">{</span><span class="n">atom_line</span><span class="o">.</span><span class="n">MRES</span><span class="p">:</span> <span class="n">phys_state</span> <span class="p">}</span>
+
+    <span class="n">pert_atom</span> <span class="o">=</span> <span class="n">atom_lam_pertubation_state</span><span class="p">(</span><span class="n">atom_line</span><span class="o">.</span><span class="n">ATNM</span><span class="p">,</span><span class="n">RES</span><span class="o">=</span><span class="n">atom_line</span><span class="o">.</span><span class="n">MRES</span><span class="p">,</span><span class="n">NAME</span><span class="o">=</span><span class="n">atom_line</span><span class="o">.</span><span class="n">PANM</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="n">states</span><span class="p">)</span>
+    <span class="n">pert_atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pert_atom</span><span class="p">)</span>
+<span class="n">pert_atom_block</span> <span class="o">=</span> <span class="n">PERTATOMPARAM</span><span class="p">(</span><span class="n">pert_atoms</span><span class="p">)</span>
+
+<span class="c1"># Generate ptp file</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">ptp</span> <span class="o">=</span> <span class="n">Pertubation_topology</span><span class="p">(</span><span class="n">in_value</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">ptp</span><span class="o">.</span><span class="n">PERTATOMPARAM</span> <span class="o">=</span> <span class="n">pert_atom_block</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">ptp</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">TITLE</span><span class="p">(</span><span class="s2">&quot;Automatic generated pertubation file. &quot;</span><span class="p">)</span>
+
+<span class="n">grom_system</span><span class="o">.</span><span class="n">ptp</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TITLE
+Automatic generated pertubation file.
+        &gt;&gt;&gt; Generated with PyGromosTools (riniker group) &lt;&lt;&lt;
+END
+PERTATOMPARAM
+# NJLA           NPTB =          2
+         26
+# state_identifiers
+#        state1          state2
+#    NR   RES  NAME  IAC1mass1   CHARGE1  IAC2mass2   CHARGE2    ALPHLJ     ALPHCRF
+    1     1    C9    16 15.035    0.05200    22 15.035    0.00000    1.00000    1.00000
+    2     1    C6    64 12.011    0.21300    22 12.011    0.00000    1.00000    1.00000
+    3     1    C2    64 12.011   -0.43400    22 12.011    0.00000    1.00000    1.00000
+    4     1    H2    20 1.008    0.16900    22 1.008    0.00000    1.00000    1.00000
+    5     1    C4    64 12.011    0.21300    22 12.011    0.00000    1.00000    1.00000
+    6     1    C7    16 15.035    0.05200    22 15.035    0.00000    1.00000    1.00000
+    7     1    C1    64 12.011   -0.43400    22 12.011    0.00000    1.00000    1.00000
+    8     1    H1    20 1.008    0.16900    22 1.008    0.00000    1.00000    1.00000
+    9     1    C5    64 12.011    0.21300    22 12.011    0.00000    1.00000    1.00000
+   10     1    C3    64 12.011   -0.43400    22 12.011    0.00000    1.00000    1.00000
+   11     1    H3    20 1.008    0.16900    22 1.008    0.00000    1.00000    1.00000
+   12     1    C8    16 15.035    0.05200    22 15.035    0.00000    1.00000    1.00000
+   13     2    H8    22 1.008    0.00000    59 1.008    0.45800    1.00000    1.00000
+   14     2    O1    22 15.9994    0.00000    68 15.9994   -0.62000    1.00000    1.00000
+   15     2    C5    22 12.011    0.00000    64 12.011    0.48400    1.00000    1.00000
+   16     2    C2    22 12.011    0.00000    64 12.011   -0.35300    1.00000    1.00000
+   17     2    H2    22 1.008    0.00000    20 1.008    0.18400    1.00000    1.00000
+   18     2    C1    22 12.011    0.00000    64 12.011   -0.10700    1.00000    1.00000
+   19     2    H1    22 1.008    0.00000    20 1.008    0.15200    1.00000    1.00000
+   20     2    C3    22 12.011    0.00000    64 12.011   -0.29800    1.00000    1.00000
+   21     2    H3    22 1.008    0.00000    20 1.008    0.14200    1.00000    1.00000
+   22     2    C6    22 12.011    0.00000    64 12.011    0.40300    1.00000    1.00000
+   23     2    C4    22 12.011    0.00000    64 12.011   -0.53100    1.00000    1.00000
+   24     2    H4    22 1.008    0.00000    20 1.008    0.19400    1.00000    1.00000
+   25     2    O2    22 15.9994    0.00000     4 15.9994   -0.38700    1.00000    1.00000
+   26     2    C7    22 15.035    0.00000    16 15.035    0.27900    1.00000    1.00000
+END
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##Write out all generated files</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span>
+
+<span class="c1">##save Input System</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/initial_startSys.obj&quot;</span><span class="p">)</span>
+<span class="n">grom_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mlehner/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:869: UserWarning: Did not change file path as its only promised None
+  warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+File imd is empty , can not be written!
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">PicklingError</span>                             Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/1350499474.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg">##save Input System</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>grom_system<span class="ansi-blue-fg">.</span>save<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/initial_startSys.obj&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">save</span><span class="ansi-blue-fg">(self, path, safe)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1182</span>
+<span class="ansi-green-intense-fg ansi-bold">   1183</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> safe_skip<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1184</span><span class="ansi-red-fg">             </span>pickle<span class="ansi-blue-fg">.</span>dump<span class="ansi-blue-fg">(</span>obj<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">,</span> file<span class="ansi-blue-fg">=</span>bufferdWriter<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1185</span>             bufferdWriter<span class="ansi-blue-fg">.</span>close<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1186</span>             self<span class="ansi-blue-fg">.</span>_checkpoint_path <span class="ansi-blue-fg">=</span> path
+
+<span class="ansi-red-fg">PicklingError</span>: Can&#39;t pickle &lt;class &#39;pygromos.files.blocks.topology_blocks.pertubationLamState&#39;&gt;: attribute lookup pertubationLamState on pygromos.files.blocks.topology_blocks failed
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+<section id="RUN-Emin">
+<h3>RUN Emin<a class="headerlink" href="#RUN-Emin" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PREPARE EMIN</span>
+<span class="c1">## IMPORT</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_emin_vac</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">emin</span>
+
+<span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/initial_startSys.obj&quot;</span><span class="p">)</span>
+<span class="n">step_name</span>  <span class="o">=</span> <span class="s2">&quot;a_emin&quot;</span> <span class="c1">#also the dir_name, out prefix etc.</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">template_emin_vac</span> <span class="c1">#read template imd</span>
+
+<span class="c1">#Pertubation for molecules to sim params</span>
+<span class="n">pert_block</span>  <span class="o">=</span>  <span class="n">PERTURBATION</span><span class="p">(</span><span class="n">NTG</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NRDGL</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">RLAM</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">DLAMT</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">ALPHC</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ALPHLJ</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">NLAM</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">NSCALE</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">pert_block</span><span class="p">)</span>
+
+<span class="c1">#save checkpoint system</span>
+<span class="n">step_dir</span> <span class="o">=</span> <span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">step_name</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">EOFError</span>                                  Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/2801381650.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>simulations<span class="ansi-blue-fg">.</span>modules<span class="ansi-blue-fg">.</span>preset_simulation_modules <span class="ansi-green-fg">import</span> emin
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>grom_system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/initial_startSys.obj&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> step_name  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;a_emin&#34;</span> <span class="ansi-red-fg">#also the dir_name, out prefix etc.</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> grom_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> template_emin_vac <span class="ansi-red-fg">#read template imd</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(cls, path)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1199</span>             <span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Please give as parameter a path:str or a File Buffer.&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1200</span>
+<span class="ansi-green-fg">-&gt; 1201</span><span class="ansi-red-fg">         </span>obj <span class="ansi-blue-fg">=</span> pickle<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>file<span class="ansi-blue-fg">=</span>bufferedReader<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1202</span>
+<span class="ansi-green-intense-fg ansi-bold">   1203</span>         bufferedReader<span class="ansi-blue-fg">.</span>close<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">EOFError</span>: Ran out of input
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXECUTE EMIN</span>
+<span class="n">emin_gromos_system</span><span class="p">,</span> <span class="n">jobID</span> <span class="o">=</span> <span class="n">emin</span><span class="p">(</span><span class="n">in_gromos_system</span><span class="o">=</span><span class="n">grom_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span>
+                          <span class="n">step_name</span><span class="o">=</span><span class="n">step_name</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">subSystem</span><span class="p">())</span>
+
+<span class="n">emin_gromos_system</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step_dir</span><span class="o">+</span><span class="s2">&quot;/emin_out.obj&quot;</span><span class="p">)</span>
+<span class="n">emin_gromos_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/2924865560.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg">#EXECUTE EMIN</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=project_dir,
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg">                           step_name=step_name, submission_system=subSystem())
+</span><span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> emin_gromos_system<span class="ansi-blue-fg">.</span>save<span class="ansi-blue-fg">(</span>step_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/emin_out.obj&#34;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;step_name&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="RUN-Test-SD-EQ">
+<h2>RUN Test SD EQ<a class="headerlink" href="#RUN-Test-SD-EQ" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_sd</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">sd</span>
+
+<span class="n">grom_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/M030_to_6KET/a_emin/emin_out.obj&quot;</span><span class="p">)</span>
+<span class="n">step_name</span>  <span class="o">=</span> <span class="s2">&quot;b_vacuum_sd&quot;</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">template_sd</span>
+
+<span class="c1">#Pertubation</span>
+<span class="n">pert_block</span>  <span class="o">=</span>  <span class="n">PERTURBATION</span><span class="p">(</span><span class="n">NTG</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NRDGL</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">RLAM</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">DLAMT</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">ALPHC</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ALPHLJ</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">NLAM</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">NSCALE</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">pert_block</span><span class="p">)</span>
+
+<span class="c1">#write out trajs:</span>
+<span class="n">write_traj</span> <span class="o">=</span> <span class="n">WRITETRAJ</span><span class="p">(</span><span class="n">NTWX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">NTWE</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">write_traj</span><span class="p">)</span>
+<span class="n">step_dir</span> <span class="o">=</span> <span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">step_name</span>
+
+<span class="c1">#further mods:</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">CONSTRAINT</span><span class="o">.</span><span class="n">NTC</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">FORCE</span><span class="o">.</span><span class="n">BONDS</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">COVALENTFORM</span><span class="o">.</span><span class="n">NTBAH</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">COVALENTFORM</span><span class="o">.</span><span class="n">NTBDN</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">COVALENTFORM</span><span class="o">.</span><span class="n">NTBBH</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">grom_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">STEP</span><span class="o">.</span><span class="n">NSTLIM</span> <span class="o">=</span> <span class="mi">30000</span>
+<br/><br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/2267890137.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>simulations<span class="ansi-blue-fg">.</span>modules<span class="ansi-blue-fg">.</span>preset_simulation_modules <span class="ansi-green-fg">import</span> sd
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>grom_system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/M030_to_6KET/a_emin/emin_out.obj&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> step_name  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;b_vacuum_sd&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> template_sd
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(cls, path)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1193</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">   1194</span>         <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> str<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1195</span><span class="ansi-red-fg">             </span>bufferedReader <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;rb&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1196</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> io<span class="ansi-blue-fg">.</span>BufferedReader<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1197</span>             bufferedReader <span class="ansi-blue-fg">=</span> path
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/mlehner/PyGromosTools/examples/example_files/TI_Calculation/M030_to_6KET/a_emin/emin_out.obj&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sd_gromos_system</span><span class="p">,</span> <span class="n">jobID</span>  <span class="o">=</span> <span class="n">sd</span><span class="p">(</span><span class="n">in_gromos_system</span><span class="o">=</span><span class="n">grom_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span>
+                              <span class="n">step_name</span><span class="o">=</span><span class="n">step_name</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">subSystem</span><span class="p">(),</span> <span class="n">in_imd_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">equilibration_runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simulation_runs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sd_gromos_system</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step_dir</span><span class="o">+</span><span class="s2">&quot;/sd_out_system.obj&quot;</span><span class="p">)</span>
+<span class="n">sd_gromos_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/3904397583.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> sd_gromos_system, jobID  = sd(in_gromos_system=grom_system, project_dir=project_dir,
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">                               </span>step_name<span class="ansi-blue-fg">=</span>step_name<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>subSystem<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> in_imd_path<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                       equilibration_runs=1, simulation_runs=1)
+<span class="ansi-green-intense-fg ansi-bold">      4</span> sd_gromos_system<span class="ansi-blue-fg">.</span>save<span class="ansi-blue-fg">(</span>step_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/sd_out_system.obj&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> sd_gromos_system
+
+<span class="ansi-red-fg">NameError</span>: name &#39;step_name&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="Further-Analysis:">
+<h2>Further Analysis:<a class="headerlink" href="#Further-Analysis:" title="Permalink to this headline">¶</a></h2>
+<p>Transform the trc into a pdb traj to check it out with pymol :!)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#final analysis dir:</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+
+<span class="n">out_ana</span> <span class="o">=</span> <span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/c_ana&quot;</span>
+<span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_ana</span><span class="p">)):</span>
+    <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">out_ana</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">project_dir</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;/home/mlehner/PyGromosTools/examples/example_files/TI_Calculation/M030_to_6KET&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.coord</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="n">in_path</span><span class="o">=</span><span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/a_emin/analysis/data/a_emin.cnf&quot;</span>
+<span class="n">cnf_file</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+<span class="n">cnf_file</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">in_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;cnf&quot;</span><span class="p">,</span> <span class="s2">&quot;pdb&quot;</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/3863714800.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>coord <span class="ansi-green-fg">import</span> Cnf
+<span class="ansi-green-intense-fg ansi-bold">      2</span> in_path<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/a_emin/analysis/data/a_emin.cnf&#34;</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>cnf_file <span class="ansi-blue-fg">=</span> Cnf<span class="ansi-blue-fg">(</span>in_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> cnf_file<span class="ansi-blue-fg">.</span>write_pdb<span class="ansi-blue-fg">(</span>in_path<span class="ansi-blue-fg">.</span>replace<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;cnf&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;pdb&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/coord/cnf.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, clean_resiNumbers_by_Name, verbose, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     78</span>         <span class="ansi-red-fg"># general import</span>
+<span class="ansi-green-intense-fg ansi-bold">     79</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 80</span><span class="ansi-red-fg">             </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">=</span>in_value<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">=</span>_future_file<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     81</span>             <span class="ansi-green-fg">if</span> hasattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;POSITION&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     82</span>                 <span class="ansi-green-fg">if</span> clean_resiNumbers_by_Name<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     40</span>                 self<span class="ansi-blue-fg">.</span>read_blocks<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     41</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 42</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not find File: &#34;</span><span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     43</span>
+<span class="ansi-green-intense-fg ansi-bold">     44</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> __class__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] /home/mlehner/PyGromosTools/examples/example_files/TI_Calculation/M030_to_6KET/a_emin/analysis/data/a_emin.cnf
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cnf_file</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/1453570617.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cnf_file<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;cnf_file&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="kn">import</span> <span class="n">Trc</span>
+
+<span class="n">in_path</span><span class="o">=</span><span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/b_vacuum_sd/analysis/data/b_vacuum_sd.trc.h5&quot;</span>
+
+<span class="n">trc</span> <span class="o">=</span> <span class="n">Trc</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="n">in_path</span><span class="p">)</span>
+<span class="n">trc</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">out_ana</span><span class="o">+</span><span class="s2">&quot;/sd_traj.pdb&quot;</span><span class="p">,</span> <span class="n">cnf_file</span><span class="o">=</span><span class="n">cnf_path</span><span class="p">)</span><span class="c1">#grom_system.cnf.path)</span>
+<span class="n">trc</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/2170265952.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> in_path<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/b_vacuum_sd/analysis/data/b_vacuum_sd.trc.h5&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>input_value<span class="ansi-blue-fg">=</span>in_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> trc<span class="ansi-blue-fg">.</span>write_pdb<span class="ansi-blue-fg">(</span>out_ana<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/sd_traj.pdb&#34;</span><span class="ansi-blue-fg">,</span> cnf_file<span class="ansi-blue-fg">=</span>cnf_path<span class="ansi-blue-fg">)</span><span class="ansi-red-fg">#grom_system.cnf.path)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> trc
+
+<span class="ansi-red-fg">TypeError</span>: __init__() got an unexpected keyword argument &#39;input_value&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre</span> <span class="kn">import</span> <span class="n">Tre</span>
+
+<span class="n">in_path</span><span class="o">=</span><span class="n">project_dir</span><span class="o">+</span><span class="s2">&quot;/b_vacuum_sd/analysis/data/b_vacuum_sd.tre.h5&quot;</span>
+
+<span class="n">tre</span> <span class="o">=</span> <span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="n">in_path</span><span class="p">)</span>
+<span class="n">tre</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/3112055316.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> in_path<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/b_vacuum_sd/analysis/data/b_vacuum_sd.tre.h5&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>tre <span class="ansi-blue-fg">=</span> Tre<span class="ansi-blue-fg">(</span>input_value<span class="ansi-blue-fg">=</span>in_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> tre
+<span class="ansi-green-intense-fg ansi-bold">      7</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/tre.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, input_value, auto_save, stride, skip, _ene_ana_names)</span>
+<span class="ansi-green-intense-fg ansi-bold">     84</span>             get the field names after the provided standard<span class="ansi-blue-fg">.</span><span class="ansi-blue-fg">,</span> by default gromos_2020_tre_block_names_table
+<span class="ansi-green-intense-fg ansi-bold">     85</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 86</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>input_value<span class="ansi-blue-fg">,</span> auto_save<span class="ansi-blue-fg">=</span>auto_save<span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">=</span>stride<span class="ansi-blue-fg">,</span> skip<span class="ansi-blue-fg">=</span>skip<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     87</span>         self<span class="ansi-blue-fg">.</span>tre_block_name_table <span class="ansi-blue-fg">=</span> _ene_ana_names
+<span class="ansi-green-intense-fg ansi-bold">     88</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, input_value, auto_save, stride, skip)</span>
+<span class="ansi-green-intense-fg ansi-bold">     52</span>                 bash<span class="ansi-blue-fg">.</span>compress_gzip<span class="ansi-blue-fg">(</span>tmp_input<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     53</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 54</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>_read_from_file<span class="ansi-blue-fg">(</span>input_path<span class="ansi-blue-fg">=</span>input_value<span class="ansi-blue-fg">,</span> auto_save<span class="ansi-blue-fg">=</span>auto_save<span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">=</span>stride<span class="ansi-blue-fg">,</span> skip<span class="ansi-blue-fg">=</span>skip<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     55</span>             self<span class="ansi-blue-fg">.</span>path <span class="ansi-blue-fg">=</span> input_value
+<span class="ansi-green-intense-fg ansi-bold">     56</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py</span> in <span class="ansi-cyan-fg">_read_from_file</span><span class="ansi-blue-fg">(self, input_path, auto_save, stride, skip)</span>
+<span class="ansi-green-intense-fg ansi-bold">    184</span>     <span class="ansi-green-fg">def</span> _read_from_file<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> input_path<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> auto_save<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> skip<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    185</span>         <span class="ansi-green-fg">if</span> input_path<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.h5&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 186</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_read_db_from_hf5<span class="ansi-blue-fg">(</span>input_path<span class="ansi-blue-fg">=</span>input_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    187</span>         <span class="ansi-green-fg">elif</span> re<span class="ansi-blue-fg">.</span>search<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;\.tr.$&#34;</span><span class="ansi-blue-fg">,</span> input_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>  <span class="ansi-red-fg"># noqa: W605</span>
+<span class="ansi-green-intense-fg ansi-bold">    188</span>             self<span class="ansi-blue-fg">.</span>_read_trajectory<span class="ansi-blue-fg">(</span>input_path<span class="ansi-blue-fg">=</span>input_path<span class="ansi-blue-fg">,</span> auto_save<span class="ansi-blue-fg">=</span>auto_save<span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">=</span>stride<span class="ansi-blue-fg">,</span> skip<span class="ansi-blue-fg">=</span>skip<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py</span> in <span class="ansi-cyan-fg">_read_db_from_hf5</span><span class="ansi-blue-fg">(self, input_path, title)</span>
+<span class="ansi-green-intense-fg ansi-bold">    192</span>     <span class="ansi-green-fg">def</span> _read_db_from_hf5<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> input_path<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> title<span class="ansi-blue-fg">:</span> str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Read from hdf save \nContains only database\n&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    193</span>         self<span class="ansi-blue-fg">.</span>TITLE <span class="ansi-blue-fg">=</span> title
+<span class="ansi-green-fg">--&gt; 194</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>database <span class="ansi-blue-fg">=</span> pandas<span class="ansi-blue-fg">.</span>read_hdf<span class="ansi-blue-fg">(</span>path_or_buf<span class="ansi-blue-fg">=</span>input_path<span class="ansi-blue-fg">,</span> key<span class="ansi-blue-fg">=</span>input_path<span class="ansi-blue-fg">.</span>split<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    195</span>
+<span class="ansi-green-intense-fg ansi-bold">    196</span>     <span class="ansi-green-fg">def</span> _raw_read_trajectory<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> input_path<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> skip<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> collections<span class="ansi-blue-fg">.</span>defaultdict<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/pandas/io/pytables.py</span> in <span class="ansi-cyan-fg">read_hdf</span><span class="ansi-blue-fg">(path_or_buf, key, mode, errors, where, start, stop, columns, iterator, chunksize, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    425</span>
+<span class="ansi-green-intense-fg ansi-bold">    426</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> exists<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 427</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> FileNotFoundError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#34;File {path_or_buf} does not exist&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    428</span>
+<span class="ansi-green-intense-fg ansi-bold">    429</span>         store <span class="ansi-blue-fg">=</span> HDFStore<span class="ansi-blue-fg">(</span>path_or_buf<span class="ansi-blue-fg">,</span> mode<span class="ansi-blue-fg">=</span>mode<span class="ansi-blue-fg">,</span> errors<span class="ansi-blue-fg">=</span>errors<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: File /home/mlehner/PyGromosTools/examples/example_files/TI_Calculation/M030_to_6KET/b_vacuum_sd/analysis/data/b_vacuum_sd.tre.h5 does not exist
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Plot Potential Energies</span>
+<span class="n">V_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">totals</span><span class="p">)))</span>
+<span class="n">step</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">TIMESTEP_time</span><span class="p">)</span><span class="o">//</span><span class="mi">10</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">TIMESTEP_time</span><span class="p">,</span> <span class="n">V_tot</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">TIMESTEP_time</span><span class="p">[::</span><span class="n">step</span><span class="p">]),</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t~[ps]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$V~[kJ]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;V total timeseries&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_ana</span><span class="o">+</span><span class="s2">&quot;/potential_energy_timeseries.png&quot;</span><span class="p">)</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/1933029475.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg">#Plot Potential Energies</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>V_tot <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> tre<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>totals<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> step <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>tre<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>TIMESTEP_time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">//</span><span class="ansi-cyan-fg">10</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>tre<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>TIMESTEP_time<span class="ansi-blue-fg">,</span> V_tot<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;tre&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="Lambda-Sampling">
+<h2>Lambda Sampling<a class="headerlink" href="#Lambda-Sampling" title="Permalink to this headline">¶</a></h2>
+<section id="Setup-again">
+<h3>Setup again<a class="headerlink" href="#Setup-again" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span> <span class="k">as</span> <span class="n">subSystem</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="n">sys_name</span> <span class="o">=</span> <span class="s2">&quot;M030_to_6KET&quot;</span>
+<span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;/example_files/TI_Calculation&quot;</span>
+
+<span class="n">project_dir</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">sys_name</span><span class="p">)</span>
+<span class="n">sys_path</span> <span class="o">=</span> <span class="n">root_dir</span><span class="o">+</span><span class="s2">&quot;/M030_to_6KET/b_vacuum_sd/sd_out_system.obj&quot;</span>
+<span class="n">sd_gromos_system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sys_path</span><span class="p">)</span>
+
+<span class="n">sd_gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWG</span> <span class="o">=</span>  <span class="n">sd_gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWX</span> <span class="o">=</span> <span class="n">sd_gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWE</span> <span class="o">=</span><span class="mi">10</span>
+<span class="n">sd_gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">STEP</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">sd_gromos_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/1582497655.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> root_dir <span class="ansi-blue-fg">=</span> os<span class="ansi-blue-fg">.</span>getcwd<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/example_files/TI_Calculation&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg"> </span>project_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/&#34;</span><span class="ansi-blue-fg">+</span>sys_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span> sys_path <span class="ansi-blue-fg">=</span> root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/M030_to_6KET/b_vacuum_sd/sd_out_system.obj&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span> sd_gromos_system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>sys_path<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: could not make folder:
+ /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Submission">
+<h2>Submission<a class="headerlink" href="#Submission" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.simulations.modules.ti_modules</span> <span class="kn">import</span> <span class="n">TI_sampling</span>
+
+<span class="n">step_name</span>  <span class="o">=</span> <span class="s2">&quot;d_lambda_sampling&quot;</span>
+
+
+<span class="n">TI_sampling</span><span class="p">(</span><span class="n">in_gromos_system</span> <span class="o">=</span> <span class="n">sd_gromos_system</span><span class="p">,</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">step_name</span>  <span class="o">=</span> <span class="n">step_name</span><span class="p">,</span>
+            <span class="n">lambda_values</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
+            <span class="n">subSystem</span><span class="o">=</span><span class="n">subSystem</span><span class="p">(),</span> <span class="n">n_simulation_repetitions</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n_equilibrations</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_26823/408988705.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> TI_sampling(in_gromos_system = sd_gromos_system, project_dir=project_dir, step_name  = step_name,
+</span><span class="ansi-green-intense-fg ansi-bold">      7</span>             lambda_values<span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>arange<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1.1</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">0.1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>             subSystem=subSystem(), n_simulation_repetitions = 3, n_equilibrations = 1)
+
+<span class="ansi-red-fg">NameError</span>: name &#39;sd_gromos_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"658cc50d7feb43c59e867dbe951ff3a7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "9e46337205b74dbbba2950935cf39868": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_658cc50d7feb43c59e867dbe951ff3a7"}}}, "version_major": 2, "version_minor": 0}
+</script></section>
+</section>
+
+
+           </div>
+
+          </div>
+          <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="example_amber2gromos.html" class="btn btn-neutral float-right" title="create top + cnf for aniline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>
