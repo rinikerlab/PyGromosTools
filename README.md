@@ -14,7 +14,7 @@ Welcome to PyGromosTools
 [![DOI](https://zenodo.org/badge/323972251.svg)](https://zenodo.org/badge/latestdoi/323972251)
 [![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://rinikerlab.github.io/PyGromosTools/)
 
-General
+Description
 -------------
 
    The aim of the module is to bring GROMOS to the Python3 World!
@@ -23,7 +23,6 @@ General
    General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.
 
 Content
-
 -------------
 
 * GROMOS wrappers
@@ -161,8 +160,19 @@ General Information
 * optional: openforcefield for OpenForceField and Serenityff functions
 
 ### SETUP
+Quick Start - move to the root folder of this repository:
+  ```bash
+    # build environment
+    conda env create -f conda_env.yml
+    conda develop -n pygromos ${PWD}
+    
+    # activate environment
+    conda activate pygromos
+  ```
 
-see INSTALL.md file for more informations
+Please make sure, that you have GROMOS (www.gromos.net) binaries around, if you want to use the MD-Package. We sadly can not provide the source code for this package, as it is currently not open-source.
+
+for more information, see INSTALL.md file for more informations
 
 ### Contributions
 
