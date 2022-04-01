@@ -6,3 +6,4 @@ Examples
    :glob:
 
    example*
+   developer_examples/index

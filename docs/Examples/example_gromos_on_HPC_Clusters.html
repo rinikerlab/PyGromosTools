@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Example Notebook for the Usage of the New Submission System &mdash; PyGromosTools  documentation</title>
+  <title>Usage of the PyGromosTools on HPC-cluster &mdash; PyGromosTools  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -22,8 +22,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Support for QMMM functionality in GROMOS input files" href="example_gromos_qmmm.html" />
-    <link rel="prev" title="create top + cnf for aniline" href="example_amber2gromos.html" /> 
+    <link rel="next" title="QM/MM in Gromos" href="example_gromos_qmmm.html" />
+    <link rel="prev" title="Amber2Gromos Example" href="example_amber2gromos.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,14 +43,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">create top + cnf for aniline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-CHCl3">create top + cnf for aniline, solvated in CHCl3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">create top + cnf for aniline, solvated in TIP3P water</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Example Notebook for the Usage of the New Submission System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Usage of the PyGromosTools on HPC-cluster</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Initialization">Initialization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Energy-minimization">Energy minimization</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Print-out-the-new-file-paths">Print out the new file paths</a></li>
@@ -63,11 +60,11 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Example For Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">QM/MM in Gromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_examples/index.html">Developer Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
@@ -90,7 +87,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Examples</a> &raquo;</li>
-      <li>Example Notebook for the Usage of the New Submission System</li>
+      <li>Usage of the PyGromosTools on HPC-cluster</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/Examples/example_gromos_on_HPC_Clusters.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -370,8 +367,8 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<section id="Example-Notebook-for-the-Usage-of-the-New-Submission-System">
-<h1>Example Notebook for the Usage of the New Submission System<a class="headerlink" href="#Example-Notebook-for-the-Usage-of-the-New-Submission-System" title="Permalink to this headline"></a></h1>
+<section id="Usage-of-the-PyGromosTools-on-HPC-cluster">
+<h1>Usage of the PyGromosTools on HPC-cluster<a class="headerlink" href="#Usage-of-the-PyGromosTools-on-HPC-cluster" title="Permalink to this headline"></a></h1>
 <p>Note that you need support for the new <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> submission system shipped with <code class="docutils literal notranslate"><span class="pre">relase3</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -387,7 +384,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "d4e7477ffcb04cb29d12ffd1176978e7"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "6815cf57d7534cc2ab71b850410bea72"}</script></div>
 </div>
 <section id="Initialization">
 <h2>Initialization<a class="headerlink" href="#Initialization" title="Permalink to this headline"></a></h2>
@@ -657,7 +654,7 @@ Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&
 </pre></div></div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"af114114e5164eedb57e2024b27db56e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "d4e7477ffcb04cb29d12ffd1176978e7": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_af114114e5164eedb57e2024b27db56e"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"4aa39cd0d0674f89a0338c27b291aee7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6815cf57d7534cc2ab71b850410bea72": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_4aa39cd0d0674f89a0338c27b291aee7"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 </section>
@@ -666,8 +663,8 @@ Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="example_amber2gromos.html" class="btn btn-neutral float-left" title="create top + cnf for aniline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="example_gromos_qmmm.html" class="btn btn-neutral float-right" title="Support for QMMM functionality in GROMOS input files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_amber2gromos.html" class="btn btn-neutral float-left" title="Amber2Gromos Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_gromos_qmmm.html" class="btn btn-neutral float-right" title="QM/MM in Gromos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
