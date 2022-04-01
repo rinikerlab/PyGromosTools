@@ -16,9 +16,9 @@ repos:
     rev: v4.1.0
     hooks:
       - id: trailing-whitespace
-        exclude: 'docs/*'
+        exclude:  docs
       - id: end-of-file-fixer
-        exclude: 'docs/*'
+        exclude: docs
       - id: check-yaml
         args: ["--unsafe"]
       - id: check-added-large-files
