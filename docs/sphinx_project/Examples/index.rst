@@ -6,4 +6,4 @@ Examples
    :glob:
 
    example*
-   developer_examples/index.rst
+   developer_examples/index
