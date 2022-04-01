@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Support for QMMM functionality in GROMOS input files &mdash; PyGromosTools  documentation</title>
+  <title>QM/MM in Gromos &mdash; PyGromosTools  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -22,8 +22,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="example_hvap.html" />
-    <link rel="prev" title="Example Notebook for the Usage of the New Submission System" href="example_gromos_on_HPC_Clusters.html" /> 
+    <link rel="next" title="Calculation of free energy of evaporization" href="example_hvap.html" />
+    <link rel="prev" title="Usage of the PyGromosTools on HPC-cluster" href="example_gromos_on_HPC_Clusters.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,32 +43,35 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">create top + cnf for aniline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-CHCl3">create top + cnf for aniline, solvated in CHCl3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">create top + cnf for aniline, solvated in TIP3P water</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Example Notebook for the Usage of the New Submission System</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Load-an-imd-file-containing-a-QMMM-block">Load an <code class="docutils literal notranslate"><span class="pre">imd</span></code> file containing a QMMM block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Print-out-different-sections-of-the-QMMM-block">Print out different sections of the QMMM block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Change-a-block-value-and-print-again">Change a block value and print again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">QM/MM in Gromos</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Support-for-QMMM-functionality-in-GROMOS-input-files">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Load-an-imd-file-containing-a-QMMM-block">Load an <code class="docutils literal notranslate"><span class="pre">imd</span></code> file containing a QMMM block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Print-out-different-sections-of-the-QMMM-block">Print out different sections of the QMMM block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Change-a-block-value-and-print-again">Change a block value and print again</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Title-block">Title block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#QMZONE-block">QMZONE block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#QMUNIT-block">QMUNIT block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#XTBELEMENTS-block">XTBELEMENTS block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file">A helper function that returns all QM engines specified in the QM/MM specification file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object">Store your QMMM specification file with all your other simulation files in a <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Title-block">Title block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#QMZONE-block">QMZONE block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#QMUNIT-block">QMUNIT block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#XTBELEMENTS-block">XTBELEMENTS block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file">A helper function that returns all QM engines specified in the QM/MM specification file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object">Store your QMMM specification file with all your other simulation files in a <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Example For Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_examples/index.html">Developer Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
@@ -91,7 +94,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Examples</a> &raquo;</li>
-      <li>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</li>
+      <li>QM/MM in Gromos</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/Examples/example_gromos_qmmm.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -371,6 +374,8 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
+<section id="QM/MM-in-Gromos">
+<h1>QM/MM in Gromos<a class="headerlink" href="#QM/MM-in-Gromos" title="Permalink to this headline"></a></h1>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -393,10 +398,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "2b28e82c8abd46e9bdcdcc35d9700758"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f4b53cb2528342b8904568075a42eb4f"}</script></div>
 </div>
 <section id="Support-for-QMMM-functionality-in-GROMOS-input-files">
-<h1>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline"></a></h1>
+<h2>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline"></a></h2>
 <p>This notebook demonstrates support of <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> for QM/MM functionality.</p>
 <p><a class="reference external" href="https://github.com/rinikerlab/PyGromosTools/blob/qmmm/examples/example_gromos_qmmm.ipynb">https://github.com/rinikerlab/PyGromosTools/blob/qmmm/examples/example_gromos_qmmm.ipynb</a> (part of the <code class="docutils literal notranslate"><span class="pre">qmmm</span></code> branch and soon to be merged to <code class="docutils literal notranslate"><span class="pre">release3</span></code>)</p>
 <p>Author: Felix Pultar</p>
@@ -407,7 +412,7 @@ div.rendered_html tbody tr:hover {
 <li><p>Running QM/MM simulations</p></li>
 </ul>
 <section id="Load-an-imd-file-containing-a-QMMM-block">
-<h2>Load an <code class="docutils literal notranslate"><span class="pre">imd</span></code> file containing a QMMM block<a class="headerlink" href="#Load-an-imd-file-containing-a-QMMM-block" title="Permalink to this headline"></a></h2>
+<h3>Load an <code class="docutils literal notranslate"><span class="pre">imd</span></code> file containing a QMMM block<a class="headerlink" href="#Load-an-imd-file-containing-a-QMMM-block" title="Permalink to this headline"></a></h3>
 <p>Simple demonstration of how to handle <code class="docutils literal notranslate"><span class="pre">.imd</span></code> files.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -528,7 +533,7 @@ END
 </div>
 </section>
 <section id="Print-out-different-sections-of-the-QMMM-block">
-<h2>Print out different sections of the QMMM block<a class="headerlink" href="#Print-out-different-sections-of-the-QMMM-block" title="Permalink to this headline"></a></h2>
+<h3>Print out different sections of the QMMM block<a class="headerlink" href="#Print-out-different-sections-of-the-QMMM-block" title="Permalink to this headline"></a></h3>
 <p>Print out selected parameters from the <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> block or also the <code class="docutils literal notranslate"><span class="pre">TITLE</span></code> block.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -552,7 +557,7 @@ Demonstration of a Gromos imd file containing a QMMM block
 </div>
 </section>
 <section id="Change-a-block-value-and-print-again">
-<h2>Change a block value and print again<a class="headerlink" href="#Change-a-block-value-and-print-again" title="Permalink to this headline"></a></h2>
+<h3>Change a block value and print again<a class="headerlink" href="#Change-a-block-value-and-print-again" title="Permalink to this headline"></a></h3>
 <p>Just change values of the <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> block like with other <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> blocks.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -578,7 +583,7 @@ END
 </section>
 </section>
 <section id="Directly-manipulate-a-QMMM-specification-file">
-<h1>Directly manipulate a QMMM specification file<a class="headerlink" href="#Directly-manipulate-a-QMMM-specification-file" title="Permalink to this headline"></a></h1>
+<h2>Directly manipulate a QMMM specification file<a class="headerlink" href="#Directly-manipulate-a-QMMM-specification-file" title="Permalink to this headline"></a></h2>
 <p>The QMMM object allows to directly interact with QM/MM specification files. Future releases of <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> will also support generation of <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> files from coordinate files (<code class="docutils literal notranslate"><span class="pre">.cnf</span></code>, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdb</span></code>).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -621,9 +626,9 @@ File <span class="ansi-green-fg">~/Documents/projects/PyGromosTools/pygromos/fil
 </div>
 </section>
 <section id="Print-out-and-change-some-blocks-in-the-QMMM-specification-file">
-<h1>Print out and change some blocks in the QMMM specification file<a class="headerlink" href="#Print-out-and-change-some-blocks-in-the-QMMM-specification-file" title="Permalink to this headline"></a></h1>
+<h2>Print out and change some blocks in the QMMM specification file<a class="headerlink" href="#Print-out-and-change-some-blocks-in-the-QMMM-specification-file" title="Permalink to this headline"></a></h2>
 <section id="Title-block">
-<h2>Title block<a class="headerlink" href="#Title-block" title="Permalink to this headline"></a></h2>
+<h3>Title block<a class="headerlink" href="#Title-block" title="Permalink to this headline"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> specification file can be handled like any other <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> file.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -652,7 +657,7 @@ Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&
 </div>
 </section>
 <section id="QMZONE-block">
-<h2>QMZONE block<a class="headerlink" href="#QMZONE-block" title="Permalink to this headline"></a></h2>
+<h3>QMZONE block<a class="headerlink" href="#QMZONE-block" title="Permalink to this headline"></a></h3>
 <p>Print out the <code class="docutils literal notranslate"><span class="pre">QMZONE</span></code> section that defines which atoms will be treated quantum-mechanically.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -685,7 +690,7 @@ Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&
 </div>
 </section>
 <section id="QMUNIT-block">
-<h2>QMUNIT block<a class="headerlink" href="#QMUNIT-block" title="Permalink to this headline"></a></h2>
+<h3>QMUNIT block<a class="headerlink" href="#QMUNIT-block" title="Permalink to this headline"></a></h3>
 <p>Print out the <code class="docutils literal notranslate"><span class="pre">QMUNIT</span></code> block that defines some unit conversions between the MD engine and the QM software.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -720,7 +725,7 @@ Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&
 </div>
 </section>
 <section id="XTBELEMENTS-block">
-<h2>XTBELEMENTS block<a class="headerlink" href="#XTBELEMENTS-block" title="Permalink to this headline"></a></h2>
+<h3>XTBELEMENTS block<a class="headerlink" href="#XTBELEMENTS-block" title="Permalink to this headline"></a></h3>
 <p>Print and update the <code class="docutils literal notranslate"><span class="pre">XTBELEMENTS</span></code> block</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -804,7 +809,7 @@ Input <span class="ansi-green-fg">In [11]</span>, in <span class="ansi-cyan-fg">
 </div>
 </section>
 <section id="A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file">
-<h2>A helper function that returns all QM engines specified in the QM/MM specification file<a class="headerlink" href="#A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file" title="Permalink to this headline"></a></h2>
+<h3>A helper function that returns all QM engines specified in the QM/MM specification file<a class="headerlink" href="#A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file" title="Permalink to this headline"></a></h3>
 <p>There is also a sanity check in the constructor of <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> to see if you did not accidentally add more than one QM engine.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -829,7 +834,7 @@ Input <span class="ansi-green-fg">In [12]</span>, in <span class="ansi-cyan-fg">
 </div>
 </section>
 <section id="Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object">
-<h2>Store your QMMM specification file with all your other simulation files in a <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object<a class="headerlink" href="#Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object" title="Permalink to this headline"></a></h2>
+<h3>Store your QMMM specification file with all your other simulation files in a <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object<a class="headerlink" href="#Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object" title="Permalink to this headline"></a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
@@ -935,7 +940,7 @@ Input <span class="ansi-green-fg">In [14]</span>, in <span class="ansi-cyan-fg">
 </section>
 </section>
 <section id="Run-QM/MM-Simulations">
-<h1>Run QM/MM Simulations<a class="headerlink" href="#Run-QM/MM-Simulations" title="Permalink to this headline"></a></h1>
+<h2>Run QM/MM Simulations<a class="headerlink" href="#Run-QM/MM-Simulations" title="Permalink to this headline"></a></h2>
 <p>QM/MM calculations are possible with a special in-house build of <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -1148,12 +1153,12 @@ Input <span class="ansi-green-fg">In [19]</span>, in <span class="ansi-cyan-fg">
 environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;CONDA_PROMPT_MODIFIER&#39;: &#39;(pygromosDev) &#39;,
         &#39;USER&#39;: &#39;bschroed&#39;,
-        &#39;SSH_AGENT_PID&#39;: &#39;15131&#39;,
+        &#39;SSH_AGENT_PID&#39;: &#39;16562&#39;,
         &#39;LD_LIBRARY_PATH&#39;: &#39;/home/fpultar/opt/gcc-8.2.0/lib:/home/fpultar/opt/gcc-8.2.0/lib64&#39;,
-        &#39;SHLVL&#39;: &#39;2&#39;,
+        &#39;SHLVL&#39;: &#39;1&#39;,
         &#39;HOME&#39;: &#39;/home/bschroed&#39;,
         &#39;CONDA_SHLVL&#39;: &#39;2&#39;,
-        &#39;OLDPWD&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs&#39;,
+        &#39;OLDPWD&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project/Examples&#39;,
         &#39;NVM_BIN&#39;: &#39;/home/bschroed/.nvm/versions/node/v16.9.1/bin&#39;,
         &#39;NVM_INC&#39;: &#39;/home/bschroed/.nvm/versions/node/v16.9.1/include/node&#39;,
         &#39;MAKEFLAGS&#39;: &#39;&#39;,
@@ -1162,7 +1167,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;TERMINATOR_DBUS_NAME&#39;: &#39;net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3&#39;,
         &#39;WSL_DISTRO_NAME&#39;: &#39;Ubuntu&#39;,
         &#39;NVM_DIR&#39;: &#39;/home/bschroed/.nvm&#39;,
-        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/19&#39;,
+        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/20&#39;,
         &#39;WAYLAND_DISPLAY&#39;: &#39;wayland-0&#39;,
         &#39;LOGNAME&#39;: &#39;bschroed&#39;,
         &#39;_&#39;: &#39;/usr/bin/make&#39;,
@@ -1182,11 +1187,11 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;LANG&#39;: &#39;C.UTF-8&#39;,
         &#39;LS_COLORS&#39;: &#39;rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:&#39;,
         &#39;GSETTINGS_SCHEMA_DIR&#39;: &#39;/home/bschroed/miniconda3/envs/pygromosDev/share/glib-2.0/schemas&#39;,
-        &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/ssh-EjAXfLQAA8lu/agent.15130&#39;,
+        &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/ssh-JmgWpSflEp3r/agent.16561&#39;,
         &#39;CONDA_PYTHON_EXE&#39;: &#39;/home/bschroed/miniconda3/bin/python&#39;,
         &#39;SHELL&#39;: &#39;/bin/bash&#39;,
-        &#39;TERMINATOR_UUID&#39;: &#39;urn:uuid:154cdd0b-4b98-4dee-9da0-f92e1f6ad668&#39;,
-        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/19&#39;,
+        &#39;TERMINATOR_UUID&#39;: &#39;urn:uuid:9a1a9ed2-3168-463f-9db4-2294fca61508&#39;,
+        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/20&#39;,
         &#39;LESSCLOSE&#39;: &#39;/usr/bin/lesspipe %s %s&#39;,
         &#39;CONDA_DEFAULT_ENV&#39;: &#39;pygromosDev&#39;,
         &#39;PWD&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project&#39;,
@@ -1202,7 +1207,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;DOCUTILSCONFIG&#39;: &#39;/home/bschroed/Documents/projects/PyGromosTools/docs/sphinx_project/docutils.conf&#39;,
         &#39;RDBASE&#39;: &#39;/home/bschroed/miniconda3/envs/pygromosDev/share/RDKit&#39;,
         &#39;PYDEVD_USE_FRAME_EVAL&#39;: &#39;NO&#39;,
-        &#39;JPY_PARENT_PID&#39;: &#39;29079&#39;,
+        &#39;JPY_PARENT_PID&#39;: &#39;11568&#39;,
         &#39;CLICOLOR&#39;: &#39;1&#39;,
         &#39;PAGER&#39;: &#39;cat&#39;,
         &#39;GIT_PAGER&#39;: &#39;cat&#39;,
@@ -1327,15 +1332,16 @@ Input <span class="ansi-green-fg">In [24]</span>, in <span class="ansi-cyan-fg">
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"11407517864e40789576ee833b028638": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "2b28e82c8abd46e9bdcdcc35d9700758": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_11407517864e40789576ee833b028638"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"b01b77f8c1e04ee4ba32dbcf52c95d61": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f4b53cb2528342b8904568075a42eb4f": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_b01b77f8c1e04ee4ba32dbcf52c95d61"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="example_gromos_on_HPC_Clusters.html" class="btn btn-neutral float-left" title="Example Notebook for the Usage of the New Submission System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="example_hvap.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_gromos_on_HPC_Clusters.html" class="btn btn-neutral float-left" title="Usage of the PyGromosTools on HPC-cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_hvap.html" class="btn btn-neutral float-right" title="Calculation of free energy of evaporization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

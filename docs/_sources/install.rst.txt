@@ -19,7 +19,7 @@ This will build an envrionment named pygromos.
 PyGromosTools Setup
 -------------------
 
-**Note**\ : If you want to use PyGromosTools with the GROMOS package (gromos.net), you need to generate the binaries for this code seperately and then can use them with PyGromosTools. 
+**Note**\ : If you want to use PyGromosTools with the GROMOS package (gromos.net), you need to generate the binaries for this code seperately and then can use them with PyGromosTools.
 
 Using the Package
 ^^^^^^^^^^^^^^^^^

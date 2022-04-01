@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>create top + cnf for aniline &mdash; PyGromosTools  documentation</title>
+  <title>Amber2Gromos Example &mdash; PyGromosTools  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -22,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Example Notebook for the Usage of the New Submission System" href="example_gromos_on_HPC_Clusters.html" />
+    <link rel="next" title="Usage of the PyGromosTools on HPC-cluster" href="example_gromos_on_HPC_Clusters.html" />
     <link rel="prev" title="TI Calculation" href="example_TI_gromos_simulation.html" /> 
 </head>
 
@@ -43,19 +43,21 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">create top + cnf for aniline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-top-+-cnf-for-aniline,-solvated-in-CHCl3">create top + cnf for aniline, solvated in CHCl3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">create top + cnf for aniline, solvated in TIP3P water</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Example Notebook for the Usage of the New Submission System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Example For Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Amber2Gromos Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-top-+-cnf-for-aniline">create top + cnf for aniline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-top-+-cnf-for-aniline,-solvated-in-CHCl3">create top + cnf for aniline, solvated in CHCl3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">create top + cnf for aniline, solvated in TIP3P water</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">QM/MM in Gromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_examples/index.html">Developer Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
@@ -78,7 +80,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Examples</a> &raquo;</li>
-      <li>create top + cnf for aniline</li>
+      <li>Amber2Gromos Example</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/Examples/example_amber2gromos.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -358,6 +360,8 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
+<section id="Amber2Gromos-Example">
+<h1>Amber2Gromos Example<a class="headerlink" href="#Amber2Gromos-Example" title="Permalink to this headline"></a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -395,7 +399,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="create-top-+-cnf-for-aniline">
-<h1>create top + cnf for aniline<a class="headerlink" href="#create-top-+-cnf-for-aniline" title="Permalink to this headline"></a></h1>
+<h2>create top + cnf for aniline<a class="headerlink" href="#create-top-+-cnf-for-aniline" title="Permalink to this headline"></a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -562,7 +566,7 @@ converted coordinates saved to /home/salome/PhD/pyg/PyGromosTools/examples/examp
 </div>
 </section>
 <section id="create-top-+-cnf-for-aniline,-solvated-in-CHCl3">
-<h1>create top + cnf for aniline, solvated in CHCl3<a class="headerlink" href="#create-top-+-cnf-for-aniline,-solvated-in-CHCl3" title="Permalink to this headline"></a></h1>
+<h2>create top + cnf for aniline, solvated in CHCl3<a class="headerlink" href="#create-top-+-cnf-for-aniline,-solvated-in-CHCl3" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -764,7 +768,7 @@ True
 </div>
 </section>
 <section id="create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water">
-<h1>create top + cnf for aniline, solvated in TIP3P water<a class="headerlink" href="#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water" title="Permalink to this headline"></a></h1>
+<h2>create top + cnf for aniline, solvated in TIP3P water<a class="headerlink" href="#create-top-+-cnf-for-aniline,-solvated-in-TIP3P-water" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -964,13 +968,14 @@ converted coordinates saved to /home/salome/PhD/pyg/PyGromosTools/examples/examp
 </div>
 </div>
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="example_TI_gromos_simulation.html" class="btn btn-neutral float-left" title="TI Calculation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="example_gromos_on_HPC_Clusters.html" class="btn btn-neutral float-right" title="Example Notebook for the Usage of the New Submission System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example_gromos_on_HPC_Clusters.html" class="btn btn-neutral float-right" title="Usage of the PyGromosTools on HPC-cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
