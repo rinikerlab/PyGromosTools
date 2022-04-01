@@ -76,6 +76,23 @@ out_rst_file = open(os.getcwd() + "/introduction.rst", "w")
 out_rst_file.writelines(output)
 out_rst_file.close()
 
+output = parse_from_file("../../INSTALL.md")
+print(output)
+out_rst_file = open(os.getcwd() + "/install.rst", "w")
+out_rst_file.writelines(output)
+out_rst_file.close()
+
+output = parse_from_file("../../CODE_OF_CONDUCT.md")
+print(output)
+out_rst_file = open(os.getcwd() + "/code_of_conduct.rst", "w")
+out_rst_file.writelines(output)
+out_rst_file.close()
+
+output = parse_from_file("../../styleguide.md")
+print(output)
+out_rst_file = open(os.getcwd() + "/styleguide.rst", "w")
+out_rst_file.writelines(output)
+out_rst_file.close()
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
