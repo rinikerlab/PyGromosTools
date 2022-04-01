@@ -159,7 +159,7 @@ General Information
 
 * optional: openforcefield for OpenForceField and Serenityff functions
 
-### SETUP
+### Quick Setup
 Quick Start - move to the root folder of this repository:
   ```bash
     # build environment
