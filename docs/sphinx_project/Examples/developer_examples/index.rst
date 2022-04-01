@@ -1,4 +1,4 @@
-Examples
+Developer Examples
 ========
 
 .. toctree::
@@ -6,4 +6,3 @@ Examples
    :glob:
 
    example*
-   developer_examples/index.rst
