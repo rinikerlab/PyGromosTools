@@ -1,6 +1,13 @@
 {
  "cells": [
   {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Amber2Gromos Example"
+   ]
+  },
+  {
    "cell_type": "code",
    "execution_count": 1,
    "metadata": {},
@@ -44,7 +51,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# create top + cnf for aniline"
+    "## create top + cnf for aniline"
    ]
   },
   {
@@ -212,7 +219,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# create top + cnf for aniline, solvated in CHCl3"
+    "## create top + cnf for aniline, solvated in CHCl3"
    ]
   },
   {
@@ -419,7 +426,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# create top + cnf for aniline, solvated in TIP3P water"
+    "## create top + cnf for aniline, solvated in TIP3P water"
    ]
   },
   {

@@ -1,74 +1,38 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>&lt;no title&gt; &mdash; PyGromosTools  documentation</title>
-
-
-
-
-
-
-
-
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-
-
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenFF Automatic Parametrization &mdash; PyGromosTools  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-
-
-
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Example For Calculation of Self Solvation Free Energy" href="example_solvation_free_energy.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="example_hvap.html" />
+    <link rel="next" title="Calculation of Self Solvation Free Energy" href="example_solvation_free_energy.html" />
+    <link rel="prev" title="Calculation of free energy of evaporization" href="example_hvap.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-
-
             <a href="../index.html" class="icon icon-home"> PyGromosTools
-
-
-
           </a>
-
-
-
-
-
-
-
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,92 +40,53 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
-              <ul>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html#define-file-paths">define file paths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html#build-gromos-system">Build gromos System</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html#run-emin">Run Emin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_qmmm.html">QM/MM in Gromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_examples/index.html">Developer Examples</a></li>
 </ul>
-
-
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
 
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-
-      <nav class="wy-nav-top" aria-label="top navigation">
-
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">PyGromosTools</a>
-
       </nav>
 
-
       <div class="wy-nav-content">
-
         <div class="rst-content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Examples</a> &raquo;</li>
-
-      <li>&lt;no title&gt;</li>
-
-
+      <li>OpenFF Automatic Parametrization</li>
       <li class="wy-breadcrumbs-aside">
-
-
             <a href="../_sources/Examples/example_openff.ipynb.txt" rel="nofollow"> View page source</a>
-
-
       </li>
-
   </ul>
-
-
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
-
+             
+  
 <style>
 /* CSS for nbsphinx extension */
 
@@ -431,6 +356,8 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
+<section id="OpenFF-Automatic-Parametrization">
+<h1>OpenFF Automatic Parametrization<a class="headerlink" href="#OpenFF-Automatic-Parametrization" title="Permalink to this headline"></a></h1>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -447,6 +374,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+Warning: importing &#39;simtk.openmm&#39; is deprecated.  Import &#39;openmm&#39; instead.
 Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field Toolkit does not require the OpenEye Toolkits, and can use RDKit/AmberTools instead. However, if you have a valid license for the OpenEye Toolkits, consider installing them for faster performance and additional file format support: https://docs.eyesopen.com/toolkits/python/quickstart-python/linuxosx.html OpenEye offers free Toolkit licenses for academics: https://www.eyesopen.com/academic-licensing
 </pre></div></div>
 </div>
@@ -454,7 +382,7 @@ Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "956c24e9287643b6a2f7abd278c59ed0"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "aefef015b178404b93d35fbfe2a2dd54"}</script></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -477,7 +405,7 @@ Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Found off: /home/mlehner/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+Found off: /home/bschroed/Documents/projects/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -494,12 +422,25 @@ Found off: /home/mlehner/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstr
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Found off: /home/mlehner/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+Found off: /home/bschroed/Documents/projects/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+/bin/bash: /home/bschroed/miniconda3/envs/pygromosDev/lib/libtinfo.so.6: no version information available (required by /bin/bash)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -689,55 +630,38 @@ END
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"0ccce7c7d12647f38e4c6e5065b6a393": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "956c24e9287643b6a2f7abd278c59ed0": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_0ccce7c7d12647f38e4c6e5065b6a393"}}}, "version_major": 2, "version_minor": 0}
-</script>
+{"state": {"e72f3371f3804930818fa1bfd04cdf97": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "aefef015b178404b93d35fbfe2a2dd54": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_e72f3371f3804930818fa1bfd04cdf97"}}}, "version_major": 2, "version_minor": 0}
+</script></section>
+
 
            </div>
-
           </div>
-          <footer>
-
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-
-        <a href="example_solvation_free_energy.html" class="btn btn-neutral float-right" title="Example For Calculation of Self Solvation Free Energy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-
-
-        <a href="example_hvap.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example_hvap.html" class="btn btn-neutral float-left" title="Calculation of free energy of evaporization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_solvation_free_energy.html" class="btn btn-neutral float-right" title="Calculation of Self Solvation Free Energy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
-
-    </p>
+    <p>&#169; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-
-
-
-
+  </script> 
 
 </body>
 </html>

@@ -1,58 +1,43 @@
 # Installation guide
 
-## Specifications
+## Environment Setup
 
-Make sure to have the following packages installed:
- * Python >=3.7:
- * requires: numpy, scipy, pandas, rdkit
- * optional: openforcefield for OpenForceField and Serenityff functions
-
-```bash
-#with pip installer:
-pip install <package_name>
-#or if you use conda:
-conda install <package_name>
-```
-
-or even simpler from the provided yml enviroment file shipped with the package:
+To use PyGromosTools, you need an environment setup, like specified in the conda_env.yml.
+You simply can build such an environment with conda from the provided yml enviroment file shipped with the package:
 ```bash
 conda env create -f conda_env.yml
 ```
+This will build an envrionment named pygromos.
 
-## SETUP
+**Note**: if you want to develop PyGromosTools, checkout the dev/conda_envs folder, there you find environments, that contain all packages for constructing PyGromosTools.
 
-### Installing the package
+## PyGromosTools Setup
+**Note**: If you want to use PyGromosTools with the GROMOS package (gromos.net), you need to generate the binaries for this code seperately and then can use them with PyGromosTools.
+### Using the Package
+This is recommended if you want to use PyGromosTools, but not develop it. First activate the correct python environment, then:
 
 ```bash
     cd PyGromosTools
     python setup.py install
 ```
+Make sure, that you have the GROMOS binaries around, as currently the binaries can not be shipped with the package, as it is not open-source.
 
-### Package Development
+### Developing the Package
+For using this repository and developing it, clone it into a directory on your machine.
 
-For using this repository and developing it, clone it into a directory on your machine and add the path to the repo to your python path.
-
-```bash
-PYTHONPATH=${PYTHONPATH}:/path/to/pygromos/containint/folder/pygromos
-```
-
-If you are using Anaconda, you might need to use to this instead (requires conda_build to be installed in conda):
-
+Build your python environment, activate it and add the path to the repository root to your environment:
 ```bash
 conda develop -n <EnvironmentName> /path/to/pygromos/containint/folder/pygromos
 ```
 
-Please if your writing code for this repository, first develop it on an own branch or a fork (see GitHub fork).
+If you write code for this repository, first develop it on a seperated branch or a fork (see GitHub fork).
 
 ```bash
      git branch <MyBranch>    #generate your branch
      git checkout <MyBranch>  #switch to your branch
-     git merge master   #for adding new features from master to your branch
 ```
 
-If you implemented in your branch features, that you would like to share, just issue a merge/pull request with the master branch on github.
+If you implemented in your branch features, that you would like to share, just issue a merge/pull request with the master branch on GitHub. We are looking forward to it!
 
-IMPORTANT:
+**IMPORTANT:**
 If you decide to do a merge/pull request, please make sure to follow the coding style guidelines in styleguide.md and make sure, that your code is well documented and passes pre-commit and the tests.
-
-If you find a bug or have an feature request, please raise an Issue.

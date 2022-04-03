@@ -14,7 +14,7 @@ Welcome to PyGromosTools
 [![DOI](https://zenodo.org/badge/323972251.svg)](https://zenodo.org/badge/latestdoi/323972251)
 [![Documentation](https://img.shields.io/badge/Documentation-here-white.svg)](https://rinikerlab.github.io/PyGromosTools/)
 
-General
+Description
 -------------
 
    The aim of the module is to bring GROMOS to the Python3 World!
@@ -23,7 +23,6 @@ General
    General informations about functions can be found in our wiki and usage example for many general functions and theire relations are shown in jupyter notebooks in the examples in the example folder.
 
 Content
-
 -------------
 
 * GROMOS wrappers
@@ -106,20 +105,17 @@ Content
   from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem
   from pygromos.simulations.modules.preset_simulation_modules import emin
 
-# define file paths
+  # define file paths
   root_dir = "./example_files/SD_Simulation"
   root_in_dir = root_dir+"/SD_input"
   cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
   top_path = root_in_dir + "/6J29.top"
   sys_name = "6J29"
 
-# Build gromos System
-
+  # Build gromos System
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                               system_name=sys_name, work_folder=root_in_dir)
-
-# Run Emin
-
+  # Run Emin
   emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                           step_name=step_name, submission_system=subSystem())
 
@@ -131,19 +127,18 @@ Content
   from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSystem
   from pygromos.simulations.modules.preset_simulation_modules import emin
 
-   # define file paths
+  # define file paths
   root_dir = "./example_files/SD_Simulation"
   root_in_dir = root_dir+"/SD_input"
   cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
   top_path = root_in_dir + "/6J29.top"
   sys_name = "6J29"
 
-   # Build gromos System:
+  # Build gromos System:
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                             system_name=sys_name, work_folder=root_in_dir)
 
-# Run Emin
-
+  # Run Emin
   sub_system = subSystem(nmpi=4) # allows parallelization
   emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
                           step_name=step_name, submission_system=sub_system)
@@ -154,30 +149,53 @@ Content
   * Bash wrappers for GROMOS
   * Amino acid library
 
-General Information
+
+Quick Setup
 -------------
 
-### Specifications
+Quick Start - move to the root folder of this repository:
+  ```bash
+    # build environment
+    conda env create -f conda_env.yml
+    conda develop -n pygromos ${PWD}
 
-* Python >=3.7:
-* requires: numpy, scipy, pandas, rdkit
+    # activate environment
+    conda activate pygromos
+  ```
 
-* optional: openforcefield for OpenForceField and Serenityff functions
+Please make sure, that you have GROMOS (www.gromos.net) binaries around, if you want to use the MD-Package. We sadly can not provide the source code for this package, as it is currently not open-source.
 
-### SETUP
+If you find a bug or have an feature request, please raise an Issue on GitHub.
 
-see INSTALL.md file for more informations
+For more information, see INSTALL.md file for more informations.
 
-### Contributions
+Contributions
+-------------
 
+You want to contribute? Awesome! We are happy to support you in this process.
 For any contribution, please check out the CODE_OF_CONDUCT.md file and the style guide in styleguide.md.
+There will be a small code revision for code contributions, to verify that everything is in place.
 
-### Copyright
+Publications
+-------------
+Scientific Literature using PyGromosTools:
+ * [RestraintMaker: a graph-based approach to select distance restraints in free-energy calculations with dual topology; Benjamin Ries^, Salomé Rieder^, Clemens Rhiner, Philippe H. Hünenberger and Sereina Riniker (2022). ](https://doi.org/10.1007/s10822-022-00445-6)
+ * [Relative Free-Energy Calculations for Scaffold Hopping-Type Transformations with an Automated RE-EDS Sampling Procedure; Benjamin Ries, Karl Normak, R.Gregor Weiß, Salomé Rieder, Emília P. Barros, Candide Champion, Gerhard König, Sereina Riniker (2022)](https://link.springer.com/article/10.1007/s10822-021-00436-z)
+ * [Modulation of the Passive Permeability of Semipeptidic Macrocycles: N- and C-Methylations Fine-Tune Conformation and Properties; Christian Comeau, Benjamin Ries, Thomas Stadelmann, et al. (2021)](https://pubmed.ncbi.nlm.nih.gov/33750117/)
+
+
+^ contributed equally
+
+
+Acknowledgements
+----------------
+
+Many thanks to Robin Wolf for the logo design!
+
+Copyright
+-------------
 
 Copyright (c) 2020, Benjamin Ries, Marc Lehner, Salome Rieder, Felix Pultar, Paul Katzberger, Candide Champion
-
-### Acknowledgements
-Many thanks to Robin Wolf for the logo design!
 
 Project based on the
 [Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.3.

@@ -1,72 +1,38 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SD Simulations with Submission System &mdash; PyGromosTools  documentation</title>
-
-
-
-
-
-
-
-
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-
-
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-
-
-
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Gromos Trajectory evaluation with Pygromos and Pandas" href="dev_example_gromos_trajectories.html" />
+    <link rel="prev" title="PyGromos File Examples" href="dev_example_gromos_files.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-
-
             <a href="../../index.html" class="icon icon-home"> PyGromosTools
-
-
-
           </a>
-
-
-
-
-
-
-
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,90 +40,70 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
-              <ul>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Welcome to PyGromosTools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html#define-file-paths">define file paths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html#build-gromos-system">Build gromos System</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html#run-emin">Run Emin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_qmmm.html">QM/MM in Gromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Developer Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dev_example_PyGromosPP.html">Implemented pyGromosPP programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SD Simulations with Submission System</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Imports">Imports</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Input-files">Input files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RUN-Emin">RUN Emin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RUN-SD-Simulation">RUN SD Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Further-Analysis:">Further Analysis:</a></li>
 </ul>
-
-
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html">Gromos Tutorial Pipeline - OLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html">Submission Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_topology_creation.html">Topology creation and modifications with PyGromosTools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
 
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-
-      <nav class="wy-nav-top" aria-label="top navigation">
-
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">PyGromosTools</a>
-
       </nav>
 
-
       <div class="wy-nav-content">
-
         <div class="rst-content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+          <li><a href="index.html">Developer Examples</a> &raquo;</li>
       <li>SD Simulations with Submission System</li>
-
-
       <li class="wy-breadcrumbs-aside">
-
-
             <a href="../../_sources/Examples/developer_examples/dev_example_gromos_simulation.ipynb.txt" rel="nofollow"> View page source</a>
-
-
       </li>
-
   </ul>
-
-
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
-
+             
+  
 <style>
 /* CSS for nbsphinx extension */
 
@@ -428,9 +374,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="SD-Simulations-with-Submission-System">
-<h1>SD Simulations with Submission System<a class="headerlink" href="#SD-Simulations-with-Submission-System" title="Permalink to this headline">¶</a></h1>
+<h1>SD Simulations with Submission System<a class="headerlink" href="#SD-Simulations-with-Submission-System" title="Permalink to this headline"></a></h1>
 <section id="Imports">
-<h2>Imports<a class="headerlink" href="#Imports" title="Permalink to this headline">¶</a></h2>
+<h2>Imports<a class="headerlink" href="#Imports" title="Permalink to this headline"></a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -452,11 +398,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "39b73b3f798645178f6177485710e0e0"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "38f3b242db594277894d271a515e3507"}</script></div>
 </div>
 </section>
 <section id="Input-files">
-<h2>Input files<a class="headerlink" href="#Input-files" title="Permalink to this headline">¶</a></h2>
+<h2>Input files<a class="headerlink" href="#Input-files" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -477,7 +423,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="RUN-Emin">
-<h2>RUN Emin<a class="headerlink" href="#RUN-Emin" title="Permalink to this headline">¶</a></h2>
+<h2>RUN Emin<a class="headerlink" href="#RUN-Emin" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -510,7 +456,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;/home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/test.obj&#39;
+&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/test.obj&#39;
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -553,8 +499,8 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_23995/1439388997.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grom_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">grom_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cnf</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">visualize</span>()
 
 <span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
@@ -586,7 +532,7 @@ a_vacuum_emin
 ################################################################################
 
 ============================================================
-FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/analysis/data/a_vacuum_emin.cnf
+FOUND RESULT: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/analysis/data/a_vacuum_emin.cnf
  GOING TO SKIPT THIS SUBMISSION!
 </pre></div></div>
 </div>
@@ -599,15 +545,15 @@ FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/S
 
 GROMOS SYSTEM: a_vacuum_emin
 ################################################################################
-WORKDIR: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input
-LAST CHECKPOINT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/test.obj
+WORKDIR: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input
+LAST CHECKPOINT: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/test.obj
 
 GromosXX_bin: None
 GromosPP_bin: None
 FILES:
-        imd: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.imd
-        top: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.top
-        cnf: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/analysis/data/a_vacuum_emin.cnf
+        imd: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.imd
+        top: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.top
+        cnf: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/analysis/data/a_vacuum_emin.cnf
 FUTURE PROMISE: False
 SYSTEM:
         Solute: [&#39;6J29&#39;]  resID: [1]  natoms: 27
@@ -631,8 +577,8 @@ SYSTEM:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_23995/448785403.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>emin_gromos_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">emin_gromos_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cnf</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">visualize</span>()
 
 <span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
@@ -654,15 +600,15 @@ SYSTEM:
 
 GROMOS SYSTEM: a_vacuum_emin
 ################################################################################
-WORKDIR: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input
-LAST CHECKPOINT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/test.obj
+WORKDIR: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input
+LAST CHECKPOINT: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/test.obj
 
 GromosXX_bin: None
 GromosPP_bin: None
 FILES:
-        imd: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.imd
-        top: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.top
-        cnf: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/analysis/data/a_vacuum_emin.cnf
+        imd: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.imd
+        top: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/input/a_vacuum_emin.top
+        cnf: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/a_vacuum_emin/analysis/data/a_vacuum_emin.cnf
 FUTURE PROMISE: False
 SYSTEM:
         Solute: [&#39;6J29&#39;]  resID: [1]  natoms: 27
@@ -685,12 +631,12 @@ SYSTEM:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;/home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/analysis/data&#39;
+&#39;/home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/analysis/data&#39;
 </pre></div></div>
 </div>
 </section>
 <section id="RUN-SD-Simulation">
-<h2>RUN SD Simulation<a class="headerlink" href="#RUN-SD-Simulation" title="Permalink to this headline">¶</a></h2>
+<h2>RUN SD Simulation<a class="headerlink" href="#RUN-SD-Simulation" title="Permalink to this headline"></a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -722,7 +668,7 @@ b_vacuum_sd
 ################################################################################
 
 ============================================================
-FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/SD_input/b_vacuum_sd/analysis/data/b_vacuum_sd.cnf
+FOUND RESULT: /home/bschroed/Documents/projects/PyGromosTools/examples/example_files/SD_Simulation/SD_input/b_vacuum_sd/analysis/data/b_vacuum_sd.cnf
  GOING TO SKIPT THIS SUBMISSION!
 </pre></div></div>
 </div>
@@ -733,17 +679,17 @@ FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/S
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_23995/4108162448.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+Input <span class="ansi-green-fg">In [12]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 13&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> jobID <span style="color: rgb(98,98,98)">=</span> sd_gromos_system<span style="color: rgb(98,98,98)">.</span>_last_jobID
 <span class="ansi-green-intense-fg ansi-bold">     11</span> sd_gromos_system
-<span class="ansi-green-intense-fg ansi-bold">     12</span>
-<span class="ansi-green-fg">---&gt; 13</span><span class="ansi-red-fg"> </span>sd_gromos_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 13</span> <span class="ansi-yellow-bg">sd_gromos_system</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cnf</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">visualize</span>()
 
 <span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 </section>
 <section id="Further-Analysis:">
-<h2>Further Analysis:<a class="headerlink" href="#Further-Analysis:" title="Permalink to this headline">¶</a></h2>
+<h2>Further Analysis:<a class="headerlink" href="#Further-Analysis:" title="Permalink to this headline"></a></h2>
 <p>Transform the trc into a pdb traj to check it out with pymol :!)</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -759,7 +705,7 @@ FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/S
 </div>
 </div>
 <section id="Coordinate-Analysis">
-<h3>Coordinate Analysis<a class="headerlink" href="#Coordinate-Analysis" title="Permalink to this headline">¶</a></h3>
+<h3>Coordinate Analysis<a class="headerlink" href="#Coordinate-Analysis" title="Permalink to this headline"></a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -772,112 +718,29 @@ FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/S
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/miniconda3/envs/pygromosDev/lib/python3.9/site-packages/mdtraj/core/trajectory.py:438: UserWarning: top= kwargs ignored since this file parser does not support it
+  warnings.warn(&#39;top= kwargs ignored since this file parser does not support it&#39;)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NoSuchNodeError</span>                           Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_23995/2930333405.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>trajectory<span class="ansi-blue-fg">.</span>trc <span class="ansi-green-fg">import</span> Trc
-<span class="ansi-green-intense-fg ansi-bold">      2</span>
-<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>trc <span class="ansi-blue-fg">=</span> sd_gromos_system<span class="ansi-blue-fg">.</span>trc
-<span class="ansi-green-intense-fg ansi-bold">      4</span> trc<span class="ansi-blue-fg">.</span>write_pdb<span class="ansi-blue-fg">(</span>out_ana<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/sd_traj.pdb&#34;</span><span class="ansi-blue-fg">,</span> cnf_file<span class="ansi-blue-fg">=</span>cnf_path<span class="ansi-blue-fg">)</span><span class="ansi-red-fg">#grom_system.cnf.path)</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [14]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 4&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">files</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">trajectory</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">trc</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Trc
+<span class="ansi-green-intense-fg ansi-bold">      3</span> trc <span style="color: rgb(98,98,98)">=</span> sd_gromos_system<span style="color: rgb(98,98,98)">.</span>trc
+<span class="ansi-green-fg">----&gt; 4</span> <span class="ansi-yellow-bg">trc</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">write_pdb</span>(out_ana<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/sd_traj.pdb</span><span style="color: rgb(175,0,0)">&#34;</span>, cnf_file<span style="color: rgb(98,98,98)">=</span>cnf_path)<span style="color: rgb(95,135,135)">#grom_system.cnf.path)</span>
 <span class="ansi-green-intense-fg ansi-bold">      5</span> trc
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">trc</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    657</span>     <span class="ansi-green-fg">def</span> trc<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> Trc<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    658</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>_trc <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">and</span> <span class="ansi-blue-fg">&#34;trc&#34;</span> <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>_traj_files_path <span class="ansi-green-fg">and</span> self<span class="ansi-blue-fg">.</span>cnf <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">and</span> <span class="ansi-green-fg">not</span> self<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>_future_file<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 659</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>traj_path<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>_traj_files_path<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;trc&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> in_cnf<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    660</span>         <span class="ansi-green-fg">elif</span> self<span class="ansi-blue-fg">.</span>_trc <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">and</span> <span class="ansi-blue-fg">&#34;trc&#34;</span> <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>_traj_files_path<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    661</span>             self<span class="ansi-blue-fg">.</span>_trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>traj_path<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>_traj_files_path<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;trc&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/trc.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, xyz, topology, time, unitcell_lengths, unitcell_angles, traj_path, in_cnf, timestep_duration, _future_file)</span>
-<span class="ansi-green-intense-fg ansi-bold">     55</span>
-<span class="ansi-green-intense-fg ansi-bold">     56</span>         <span class="ansi-green-fg">if</span> traj_path <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">and</span> <span class="ansi-blue-fg">(</span>traj_path<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.h5&#34;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> traj_path<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.hf5&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 57</span><span class="ansi-red-fg">             </span>trj <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>traj_path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     58</span>             self<span class="ansi-blue-fg">.</span>__dict__<span class="ansi-blue-fg">.</span>update<span class="ansi-blue-fg">(</span>vars<span class="ansi-blue-fg">(</span>trj<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/trc.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(cls, in_path, in_cnf_path, timestep_duration)</span>
-<span class="ansi-green-intense-fg ansi-bold">    496</span>             o <span class="ansi-blue-fg">=</span> cls<span class="ansi-blue-fg">(</span>traj_path<span class="ansi-blue-fg">=</span>in_path<span class="ansi-blue-fg">,</span> in_cnf_path<span class="ansi-blue-fg">=</span>in_cnf_path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    497</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 498</span><span class="ansi-red-fg">             </span>so <span class="ansi-blue-fg">=</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>in_path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    499</span>             o = cls(
-<span class="ansi-green-intense-fg ansi-bold">    500</span>                 xyz<span class="ansi-blue-fg">=</span>so<span class="ansi-blue-fg">.</span>xyz<span class="ansi-blue-fg">,</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(filenames, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1323</span>         As requested by the various load functions <span class="ansi-blue-fg">-</span><span class="ansi-blue-fg">-</span> it depends on the extension
-<span class="ansi-green-intense-fg ansi-bold">   1324</span>         &#34;&#34;&#34;
-<span class="ansi-green-fg">-&gt; 1325</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> load<span class="ansi-blue-fg">(</span>filenames<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1326</span>
-<span class="ansi-green-intense-fg ansi-bold">   1327</span>     <span class="ansi-green-fg">def</span> _savers<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(filename_or_filenames, discard_overlapping_frames, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    394</span>     topkwargs<span class="ansi-blue-fg">.</span>pop<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;stride&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    395</span>     topkwargs<span class="ansi-blue-fg">.</span>pop<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;start&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 396</span><span class="ansi-red-fg">     </span>kwargs<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;top&#34;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> _parse_topology<span class="ansi-blue-fg">(</span>kwargs<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;top&#34;</span><span class="ansi-blue-fg">,</span> filename_or_filenames<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>topkwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    397</span>
-<span class="ansi-green-intense-fg ansi-bold">    398</span>     <span class="ansi-red-fg">#get the right loader</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">_parse_topology</span><span class="ansi-blue-fg">(top, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    172</span>         topology <span class="ansi-blue-fg">=</span> top<span class="ansi-blue-fg">.</span>topology
-<span class="ansi-green-intense-fg ansi-bold">    173</span>     <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>top<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">(</span>string_types<span class="ansi-blue-fg">,</span> os<span class="ansi-blue-fg">.</span>PathLike<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">and</span> <span class="ansi-blue-fg">(</span>ext <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;.pdb&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;.pdb.gz&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;.h5&#39;</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;.lh5&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 174</span><span class="ansi-red-fg">         </span>_traj <span class="ansi-blue-fg">=</span> load_frame<span class="ansi-blue-fg">(</span>top<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    175</span>         topology <span class="ansi-blue-fg">=</span> _traj<span class="ansi-blue-fg">.</span>topology
-<span class="ansi-green-intense-fg ansi-bold">    176</span>     <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>top<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">(</span>string_types<span class="ansi-blue-fg">,</span> os<span class="ansi-blue-fg">.</span>PathLike<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">and</span> <span class="ansi-blue-fg">(</span>ext <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;.prmtop&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;.parm7&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;.prm7&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">load_frame</span><span class="ansi-blue-fg">(filename, index, top, atom_indices, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    312</span>         _assert_files_or_dirs_exist<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    313</span>
-<span class="ansi-green-fg">--&gt; 314</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> loader<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> frame<span class="ansi-blue-fg">=</span>index<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    315</span>
-<span class="ansi-green-intense-fg ansi-bold">    316</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/formats/hdf5.py</span> in <span class="ansi-cyan-fg">load_hdf5</span><span class="ansi-blue-fg">(filename, stride, atom_indices, frame)</span>
-<span class="ansi-green-intense-fg ansi-bold">    117</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    118</span>             n_frames <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
-<span class="ansi-green-fg">--&gt; 119</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> f<span class="ansi-blue-fg">.</span>read_as_traj<span class="ansi-blue-fg">(</span>n_frames<span class="ansi-blue-fg">=</span>n_frames<span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">=</span>stride<span class="ansi-blue-fg">,</span> atom_indices<span class="ansi-blue-fg">=</span>atom_indices<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    120</span>
-<span class="ansi-green-intense-fg ansi-bold">    121</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/formats/hdf5.py</span> in <span class="ansi-cyan-fg">read_as_traj</span><span class="ansi-blue-fg">(self, n_frames, stride, atom_indices)</span>
-<span class="ansi-green-intense-fg ansi-bold">    516</span>
-<span class="ansi-green-intense-fg ansi-bold">    517</span>         initial <span class="ansi-blue-fg">=</span> int<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_frame_index<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 518</span><span class="ansi-red-fg">         </span>data <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span>n_frames<span class="ansi-blue-fg">=</span>n_frames<span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">=</span>stride<span class="ansi-blue-fg">,</span> atom_indices<span class="ansi-blue-fg">=</span>atom_indices<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    519</span>         <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    520</span>             <span class="ansi-green-fg">return</span> Trajectory<span class="ansi-blue-fg">(</span>xyz<span class="ansi-blue-fg">=</span>np<span class="ansi-blue-fg">.</span>zeros<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> topology<span class="ansi-blue-fg">.</span>n_atoms<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> topology<span class="ansi-blue-fg">=</span>topology<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/formats/hdf5.py</span> in <span class="ansi-cyan-fg">read</span><span class="ansi-blue-fg">(self, n_frames, stride, atom_indices)</span>
-<span class="ansi-green-intense-fg ansi-bold">    570</span>             stride <span class="ansi-blue-fg">=</span> int<span class="ansi-blue-fg">(</span>stride<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    571</span>
-<span class="ansi-green-fg">--&gt; 572</span><span class="ansi-red-fg">         </span>total_n_frames <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_handle<span class="ansi-blue-fg">.</span>root<span class="ansi-blue-fg">.</span>coordinates<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    573</span>         frame_slice <span class="ansi-blue-fg">=</span> slice<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_frame_index<span class="ansi-blue-fg">,</span> min<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_frame_index <span class="ansi-blue-fg">+</span> n_frames<span class="ansi-blue-fg">,</span> total_n_frames<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> stride<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    574</span>         <span class="ansi-green-fg">if</span> frame_slice<span class="ansi-blue-fg">.</span>stop <span class="ansi-blue-fg">-</span> frame_slice<span class="ansi-blue-fg">.</span>start <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/tables/group.py</span> in <span class="ansi-cyan-fg">__getattr__</span><span class="ansi-blue-fg">(self, name)</span>
-<span class="ansi-green-intense-fg ansi-bold">    796</span>             self<span class="ansi-blue-fg">.</span>_g_add_children_names<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    797</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>__dict__<span class="ansi-blue-fg">[</span>name<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">--&gt; 798</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_f_get_child<span class="ansi-blue-fg">(</span>name<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    799</span>
-<span class="ansi-green-intense-fg ansi-bold">    800</span>     <span class="ansi-green-fg">def</span> __setattr__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> name<span class="ansi-blue-fg">,</span> value<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/tables/group.py</span> in <span class="ansi-cyan-fg">_f_get_child</span><span class="ansi-blue-fg">(self, childname)</span>
-<span class="ansi-green-intense-fg ansi-bold">    680</span>         self<span class="ansi-blue-fg">.</span>_g_check_open<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    681</span>
-<span class="ansi-green-fg">--&gt; 682</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_g_check_has_child<span class="ansi-blue-fg">(</span>childname<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    683</span>
-<span class="ansi-green-intense-fg ansi-bold">    684</span>         childpath <span class="ansi-blue-fg">=</span> join_path<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_v_pathname<span class="ansi-blue-fg">,</span> childname<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/tables/group.py</span> in <span class="ansi-cyan-fg">_g_check_has_child</span><span class="ansi-blue-fg">(self, name)</span>
-<span class="ansi-green-intense-fg ansi-bold">    373</span>         node_type <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_g_get_objinfo<span class="ansi-blue-fg">(</span>name<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    374</span>         <span class="ansi-green-fg">if</span> node_type <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#34;NoSuchNode&#34;</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 375</span><span class="ansi-red-fg">             raise NoSuchNodeError(
-</span><span class="ansi-green-intense-fg ansi-bold">    376</span>                 <span class="ansi-blue-fg">&#34;group ``%s`` does not have a child named ``%s``&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    377</span>                 % (self._v_pathname, name))
-
-<span class="ansi-red-fg">NoSuchNodeError</span>: group ``/`` does not have a child named ``coordinates``
+<span class="ansi-red-fg">AttributeError</span>: &#39;Trc&#39; object has no attribute &#39;write_pdb&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -895,17 +758,17 @@ FOUND RESULT: /home/mlehner/PyGromosTools/examples/example_files/SD_Simulation/S
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_23995/1162602346.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>traj <span class="ansi-blue-fg">=</span> trc<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span>grom_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [15]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span> traj <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">trc</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">visualize</span>(grom_system<span style="color: rgb(98,98,98)">.</span>cnf)
 <span class="ansi-green-intense-fg ansi-bold">      2</span> traj
 
-<span class="ansi-red-fg">NameError</span>: name &#39;trc&#39; is not defined
+<span class="ansi-red-fg">AttributeError</span>: &#39;Trc&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 </section>
 <section id="Energy-Analysis">
-<h3>Energy Analysis<a class="headerlink" href="#Energy-Analysis" title="Permalink to this headline">¶</a></h3>
+<h3>Energy Analysis<a class="headerlink" href="#Energy-Analysis" title="Permalink to this headline"></a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -954,53 +817,64 @@ Frames:         63       Columns:       13
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/Examples_developer_examples_dev_example_gromos_simulation_24_0.png" src="../../_images/Examples_developer_examples_dev_example_gromos_simulation_24_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+Input <span class="ansi-green-fg">In [17]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 3&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)">#Plot Potential Energies</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> V_tot <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>array(<span style="color: rgb(0,135,0)">list</span>(<span style="color: rgb(0,135,0)">map</span>(<span class="ansi-bold" style="color: rgb(0,135,0)">lambda</span> x: x[<span style="color: rgb(98,98,98)">2</span>], tre<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>totals)))
+<span class="ansi-green-fg">----&gt; 3</span> step <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">len</span>(<span class="ansi-yellow-bg">tre</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">database</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">TIMESTEP_time</span>)<span style="color: rgb(98,98,98)">/</span><span style="color: rgb(98,98,98)">/</span><span style="color: rgb(98,98,98)">10</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span style="color: rgb(98,98,98)">.</span>plot(tre<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>TIMESTEP_time, V_tot)
+<span class="ansi-green-intense-fg ansi-bold">      6</span> plt<span style="color: rgb(98,98,98)">.</span>xticks(np<span style="color: rgb(98,98,98)">.</span>round(<span style="color: rgb(0,135,0)">list</span>(tre<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>TIMESTEP_time[::step]),<span style="color: rgb(98,98,98)">2</span>))
+
+File <span class="ansi-green-fg">~/miniconda3/envs/pygromosDev/lib/python3.9/site-packages/pandas/core/generic.py:5583</span>, in <span class="ansi-cyan-fg">NDFrame.__getattr__</span><span class="ansi-blue-fg">(self, name)</span>
+<span class="ansi-green-intense-fg ansi-bold">   5576</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> (
+<span class="ansi-green-intense-fg ansi-bold">   5577</span>     name <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_internal_names_set
+<span class="ansi-green-intense-fg ansi-bold">   5578</span>     <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> name <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_metadata
+<span class="ansi-green-intense-fg ansi-bold">   5579</span>     <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> name <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_accessors
+<span class="ansi-green-intense-fg ansi-bold">   5580</span>     <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_info_axis<span style="color: rgb(98,98,98)">.</span>_can_hold_identifiers_and_holds_name(name)
+<span class="ansi-green-intense-fg ansi-bold">   5581</span> ):
+<span class="ansi-green-intense-fg ansi-bold">   5582</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span>[name]
+<span class="ansi-green-fg">-&gt; 5583</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">object</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,255)">__getattribute__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-red-fg">AttributeError</span>: &#39;DataFrame&#39; object has no attribute &#39;TIMESTEP_time&#39;
+</pre></div></div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"3d8447f6b12b4ca88e1f9139c7de4f12": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "39b73b3f798645178f6177485710e0e0": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_3d8447f6b12b4ca88e1f9139c7de4f12"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"6cd87e229b71431f9ed0a508b1478c1e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "38f3b242db594277894d271a515e3507": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_6cd87e229b71431f9ed0a508b1478c1e"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 </section>
 
 
            </div>
-
           </div>
-          <footer>
-
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dev_example_gromos_files.html" class="btn btn-neutral float-left" title="PyGromos File Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dev_example_gromos_trajectories.html" class="btn btn-neutral float-right" title="Gromos Trajectory evaluation with Pygromos and Pandas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
-
-    </p>
+    <p>&#169; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-
-
-
-
+  </script> 
 
 </body>
 </html>
