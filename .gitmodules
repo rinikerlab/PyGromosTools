@@ -1,6 +1,6 @@
-[submodule "pygromos/gromos/gromosPlsPls"]
-	path = pygromos/gromos/gromosPlsPls
-	url = https://gromosx.boku.ac.at/gromos/gromosPlsPls.git
-[submodule "pygromos/gromos/gromosXX"]
-	path = pygromos/gromos/gromosXX
-	url = https://gromosx.boku.ac.at/gromos/gromosXX.git
+# [submodule "pygromos/gromos/gromosPlsPls"]
+# 	path = pygromos/gromos/gromosPlsPls
+# 	url = https://gromosx.boku.ac.at/gromos/gromosPlsPls.git
+# [submodule "pygromos/gromos/gromosXX"]
+# 	path = pygromos/gromos/gromosXX
+# 	url = https://gromosx.boku.ac.at/gromos/gromosXX.git
