@@ -6,6 +6,8 @@ import sys
 from setuptools import setup, find_packages
 import versioneer
 
+# If you want to include the submodules GromosXX and Gromos++ pleas uncomment the lines in .gitmodules
+
 short_description = __doc__.split("\n")
 
 # from https://github.com/pytest-dev/pytest-runner#conditional-requirement

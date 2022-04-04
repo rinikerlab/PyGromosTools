@@ -7,6 +7,13 @@ from collections import OrderedDict
 from pygromos.utils import bash
 from pygromos.utils.utils import spacer, spacer2
 
+"""
+    These functioons build a Gromos++ and GromosXX binary with conda.
+
+    If you want to use these features please uncomment all lines in .gitmodules
+    and provide the correct credetials for the gitlab repository.
+"""
+
 
 def default_install(nCores: int = 1, _timing_dict: dict = {}, verbose: bool = False):
     root_dir = os.path.dirname(__file__)
