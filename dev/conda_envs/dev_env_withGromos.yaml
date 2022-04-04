@@ -26,6 +26,7 @@ dependencies:
   #- cuda #possible but very intense installing
   #- cudatoolkit  #possible but very intense installing
   ## Meta
+  - conda-build
   - typing
   - pre-commit
   - jupyter

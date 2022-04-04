@@ -18,6 +18,7 @@ dependencies:
   - nbsphinx
   - sphinx_rtd_theme
   - pandoc
+  - conda-build
   # Science
   - mpmath
   - pandas
