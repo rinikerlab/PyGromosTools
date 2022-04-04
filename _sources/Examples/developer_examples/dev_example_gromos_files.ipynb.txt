@@ -1,0 +1,544 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "# PyGromos File Examples"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import os, sys\n",
+    "root_dir = os.getcwd()\n",
+    "\n",
+    "#if package is not installed and path not set correct - this helps you out :)\n",
+    "sys.path.append(root_dir+\"/..\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## IMD - Simulation Paramter File"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.simulation_parameters.imd import Imd\n",
+    "\n",
+    "#load template IMD - simulation parameter filess\n",
+    "from pygromos.data.simulation_parameters_templates import template_md\n",
+    "imd = Imd(template_md)\n",
+    "\n",
+    "#change number of simulation steps and Temperatures\n",
+    "imd.STEP.NSTLIM = 500\n",
+    "print(imd.STEP)\n",
+    "\n",
+    "simulation_temperature = 420\n",
+    "imd.MULTIBATH.TEMP0 = [simulation_temperature for x in range(imd.MULTIBATH.NBATHS)]\n",
+    "print(imd.MULTIBATH)\n",
+    "\n",
+    "\n",
+    "#store file\n",
+    "out_imd_path=\"./test.imd\"\n",
+    "out_imd = imd.write(out_imd_path)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## CNF - Coordinate File"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.coord import Cnf\n",
+    "\n",
+    "in_cnf=\"../example_files/MD_Simulation/MD_input/in_md.cnf\"\n",
+    "\n",
+    "cnf = Cnf(in_cnf)\n",
+    "\n",
+    "#print(cnf.residues) #noisy\n",
+    "cnf.view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Deleting Residues"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "[ cnf.delete_residue(resID=x) for x in range(1,3)]\n",
+    "cnf.view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Generate position Restraint Files"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "restraint_residues = [k  for k in cnf.residues if (k!= \"SOLV\")]\n",
+    "posres_file = cnf.gen_possrespec(residues=restraint_residues)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "refpos_file = cnf.gen_refpos()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Compact all"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "\"\"\"\n",
+    "    CNF\n",
+    "\"\"\"\n",
+    "from pygromos.files.coord import Cnf\n",
+    "from pygromos.tests import in_testfiles\n",
+    "#load_cnf\n",
+    "in_cnf= in_testfiles.in_test_file_path+\"/cnf/in_cnf1.cnf\"\n",
+    "out_cnf=\"../example_files/new.cnf\"\n",
+    "\n",
+    "cnf = Cnf(in_cnf)\n",
+    "\n",
+    "#get residues of cnf\n",
+    "residues = cnf.get_residues()\n",
+    "\n",
+    "#Delete Residues\n",
+    "delete_ligands = [\"delete ME!\"]\n",
+    "for resn in delete_ligands:\n",
+    "    cnf.delete_residue(resName=resn)\n",
+    "\n",
+    "#set new title\n",
+    "lig_sys = [\"lig1\", \"lig2\", \"lig3\"]\n",
+    "cnf.TITLE.content = \"  Ligands:\\t \" + \" \".join(lig_sys) + \"\\n\"\n",
+    "\n",
+    "#cleaning\n",
+    "cnf.clean_posiResNums()\n",
+    "\n",
+    "#get_file content:\n",
+    "#print(cnf) #a lot of output ;)\n",
+    "\n",
+    "#store again\n",
+    "out_cnf = cnf.write(out_path=out_cnf)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    },
+    "tags": []
+   },
+   "source": [
+    "## TOP - Topology File\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.topology import top\n",
+    "from pygromos.tests import in_testfiles\n",
+    "\n",
+    "top_file_path = in_testfiles.in_test_file_path+\"/top/test.top\"\n",
+    "top_file = top.Top(top_file_path)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "top_file.SOLUTEMOLECULES\n",
+    "#top_file.SOLUTEATOM #noisy :)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## TRC - Coordinate Trajectory File"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import glob\n",
+    "from pygromos.files.trajectory.trc import Trc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "trc_file = Trc(traj_path='../example_files/Traj_files/b_emin_vacuum_1.trc',\n",
+    "          in_cnf='../example_files/Traj_files/b_emin_vacuum.cnf')\n",
+    "print(trc_file)\n",
+    "\n",
+    "trc_file.view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Other Files\n",
+    "\n",
+    "### MTB - topology building block file\n",
+    "\n",
+    "  **to be implemented!**\n",
+    "  \n",
+    "### IFP - topology parameter file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "\n",
+    "from pygromos.files.topology import ifp\n",
+    "from pygromos.data.ff import Gromos54A7\n",
+    "\n",
+    "#parse forcefield file\n",
+    "myfp = ifp.Ifp(Gromos54A7.ifp)\n",
+    "myfp.write(os.getcwd()+\"/fun.ifp\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "#parse output and write out again\n",
+    "test = ifp.Ifp(os.getcwd()+\"/fun.ifp\")\n",
+    "test"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "### disres - distance restraint file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.topology import disres\n",
+    "from pygromos.tests import in_testfiles\n",
+    "\n",
+    "disres_file_path = in_testfiles.in_test_file_path+\"/top/disres5.disres\"\n",
+    "disres_file = disres.Disres(disres_file_path)\n",
+    "disres_file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"\\t\".join(disres_file.DISTANCERESSPEC.RESTRAINTHEADER))\n",
+    "print(disres_file.DISTANCERESSPEC.RESTRAINTS[0])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## PTP - Pertubations for free energy calculations\n",
+    "\n",
+    "Here I try to give a few example on what s possible with the ptp obj in pygromos."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from pygromos.files.topology.ptp import Pertubation_topology as PTP\n",
+    "from pygromos.files.blocks.pertubation_blocks import  MPERTATOM, atom_eds_pertubation_state, pertubation_eds_state\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### defining some state types for later use :)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "dummy_type = pertubation_eds_state(IAC=22, CHARGE=0.0)\n",
+    "my_type = pertubation_eds_state(IAC=99, CHARGE=-1.0)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Read in ptp file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "#Read in ptp file:\n",
+    "from pygromos.tests import in_testfiles\n",
+    "\n",
+    "path= in_testfiles.in_test_file_path+\"/ptp/eds_short.ptp\"\n",
+    "ptp = PTP(path)\n",
+    "print(ptp)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### delete full state"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "ptp.MPERTATOM.delete_state(stateIDs=[1,3])\n",
+    "\n",
+    "print(ptp)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### delete specific atoms"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "ptp.MPERTATOM.delete_atom(atomNR=[1,2,7,8,9])\n",
+    "print(ptp)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Add atom or state or overwrite atominformation (except atom.NR)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "numStates=1\n",
+    "new_atoms_state = [atom_eds_pertubation_state(NR=x, NAME=\"H\", STATES={7: my_type}) for x in range(1, 4+1)]\n",
+    "ptp.add_block(block=MPERTATOM(NJLA=len(new_atoms_state), NPTB=numStates, STATEATOMS=new_atoms_state))\n",
+    "\n",
+    "print(ptp)"
+   ]
+  }
+ ],
+ "metadata": {
+  "interpreter": {
+   "hash": "b1b7b2ea43b8e767316eee98e01335d045804d2d47db68b6a5827e187ee91a7e"
+  },
+  "kernelspec": {
+   "display_name": "pygro2",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Examples &mdash; PyGromosTools  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Implemented pyGromosPP programs" href="dev_example_PyGromosPP.html" />
+    <link rel="prev" title="Calculation of Self Solvation Free Energy" href="../example_solvation_free_energy.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> PyGromosTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_qmmm.html">QM/MM in Gromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Developer Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_PyGromosPP.html">Implemented pyGromosPP programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_simulation.html">SD Simulations with Submission System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html">Gromos Tutorial Pipeline - OLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html">Submission Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_topology_creation.html">Topology creation and modifications with PyGromosTools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyGromosTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+      <li>Developer Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Examples/developer_examples/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="developer-examples">
+<h1>Developer Examples<a class="headerlink" href="#developer-examples" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_PyGromosPP.html">Implemented pyGromosPP programs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_PyGromosPP.html#Ran_Box">Ran_Box</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_gromos_files.html">PyGromos File Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_files.html#IMD---Simulation-Paramter-File">IMD - Simulation Paramter File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_files.html#CNF---Coordinate-File">CNF - Coordinate File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#Deleting-Residues">Deleting Residues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#Generate-position-Restraint-Files">Generate position Restraint Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#Compact-all">Compact all</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_files.html#TOP---Topology-File">TOP - Topology File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_files.html#TRC---Coordinate-Trajectory-File">TRC - Coordinate Trajectory File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_files.html#Other-Files">Other Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#MTB---topology-building-block-file">MTB - topology building block file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#IFP---topology-parameter-file">IFP - topology parameter file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#disres---distance-restraint-file">disres - distance restraint file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_files.html#PTP---Pertubations-for-free-energy-calculations">PTP - Pertubations for free energy calculations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#defining-some-state-types-for-later-use-:)">defining some state types for later use :)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#Read-in-ptp-file">Read in ptp file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#delete-full-state">delete full state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#delete-specific-atoms">delete specific atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html#Add-atom-or-state-or-overwrite-atominformation-(except-atom.NR)">Add atom or state or overwrite atominformation (except atom.NR)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_gromos_simulation.html">SD Simulations with Submission System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_simulation.html#Imports">Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_simulation.html#Input-files">Input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_simulation.html#RUN-Emin">RUN Emin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_simulation.html#RUN-SD-Simulation">RUN SD Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_simulation.html#Further-Analysis:">Further Analysis:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_simulation.html#Coordinate-Analysis">Coordinate Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_simulation.html#Energy-Analysis">Energy Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_trajectories.html#Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos">Example file for the evaluation of GROMOS trajectory files in pygromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_trajectories.html#1)-TRC">1) TRC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#1.1)-TRC-import">1.1) TRC import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#1.2)-TRC-file-handling">1.2) TRC file handling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#Save-as-.h5">Save as .h5</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#1.3)-TRC-Calculate">1.3) TRC Calculate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#1.4)-TRC-Visualization">1.4) TRC Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#Do-some-changes-and-see-how-the-visualization-changes">Do some changes and see how the visualization changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#let’s-find-hydrogenbonds">let’s find hydrogenbonds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#add-surface">add surface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#remove-surface">remove surface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#add-transperent-cartoon">add transperent cartoon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#show-distance-between-atom-pair">show distance between atom pair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#once-you-are-happy-with-the-result-render-and-download-image">once you are happy with the result render and download image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_trajectories.html#Go-crazy-and-make-a-movie-to-show-off">Go crazy and make a movie to show off</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_trajectories.html#2)-TRE">2) TRE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#2.1)-Tre-import-and-structure">2.1) Tre import and structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#2.2)-Common-Tre-functions">2.2) Common Tre functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#\lambda-Sampling-&amp;-TREs"><span class="math notranslate nohighlight">\(\lambda\)</span>-Sampling &amp; TREs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html#EDS-in-TREs">EDS in TREs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_trajectories.html#Concatenate-and-Copy-multiple-Trajectories">Concatenate and Copy multiple Trajectories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html">Gromos Tutorial Pipeline - OLD</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Build-initial-files">Build initial files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#generate-Topology">generate Topology</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#build-single-topologies">build single topologies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#combine-topology">combine topology</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#generate-coordinates">generate coordinates</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#add-hydrogens">add hydrogens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#cnf-to-pdb">cnf to pdb</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#energy-minimization---Vacuum">energy minimization - Vacuum</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Solvatistation-and-Solvent-Energy-Minimization">Solvatistation and Solvent Energy Minimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#build-box-system">build box system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#to-pdb">to pdb</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Add-Ions">Add Ions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Energy-Minimization-BOX">Energy Minimization BOX</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Simulation">Simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Equilibration-NVP">Equilibration NVP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#MD-NVP">MD NVP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html#Analysis">Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_submission_systems.html">Submission Systems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_submission_systems.html#Local-Submission">Local Submission</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_submission_systems.html#LSF-Submission">LSF Submission</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html#Queue-Checking:">Queue Checking:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html#Submission:">Submission:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html#Submitting-multiple-jobs">Submitting multiple jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html#Killing-a-jobs">Killing a jobs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_example_topology_creation.html">Topology creation and modifications with PyGromosTools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_topology_creation.html#Automatic-System-generation-and-combining-of-topologies">Automatic System generation and combining of topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_example_topology_creation.html#Manual-topology-modifications">Manual topology modifications</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../example_solvation_free_energy.html" class="btn btn-neutral float-left" title="Calculation of Self Solvation Free Energy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dev_example_PyGromosPP.html" class="btn btn-neutral float-right" title="Implemented pyGromosPP programs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
