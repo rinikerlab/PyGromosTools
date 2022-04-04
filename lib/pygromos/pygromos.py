@@ -6,4 +6,4 @@ Handles the primary functions
 """
 import os
 
-package_path = os.path.abspath(os.path.dirname(__file__) + "..")
+package_path = os.path.abspath(os.path.dirname(__file__) + "/..")
