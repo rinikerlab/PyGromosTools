@@ -399,7 +399,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "28a9ef283646413499ba6dedb827a185"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "8056bb329ddb4674b7c6f725aeb6b132"}</script></div>
 </div>
 <section id="Support-for-QMMM-functionality-in-GROMOS-input-files">
 <h2>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline"></a></h2>
@@ -439,20 +439,20 @@ Input <span class="ansi-green-fg">In [2]</span>, in <span class="ansi-cyan-fg">&
 <span class="ansi-green-intense-fg ansi-bold">      3</span> imd_file<span style="color: rgb(98,98,98)">.</span>TITLE<span style="color: rgb(98,98,98)">.</span>content <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Demonstration of a Gromos imd file containing a QMMM block</span><span style="color: rgb(175,0,0)">&#34;</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> imd_file
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/simulation_parameters/imd.py:68</span>, in <span class="ansi-cyan-fg">Imd.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/simulation_parameters/imd.py:68</span>, in <span class="ansi-cyan-fg">Imd.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
 <span class="ansi-green-intense-fg ansi-bold">     67</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, in_value: <span style="color: rgb(0,135,0)">str</span>, _future_file: <span style="color: rgb(0,135,0)">bool</span> <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>):
 <span class="ansi-green-fg">---&gt; 68</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,255)">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">in_value</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">in_value</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">_future_file</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">_future_file</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">     70</span>     <span style="color: rgb(95,135,135)"># TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks</span>
 <span class="ansi-green-intense-fg ansi-bold">     71</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> block <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">sorted</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_block_names()):
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/_basics/_general_gromos_file.py:42</span>, in <span class="ansi-cyan-fg">_general_gromos_file.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/_basics/_general_gromos_file.py:42</span>, in <span class="ansi-cyan-fg">_general_gromos_file.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
 <span class="ansi-green-intense-fg ansi-bold">     40</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>read_blocks()
 <span class="ansi-green-intense-fg ansi-bold">     41</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
 <span class="ansi-green-fg">---&gt; 42</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">IOError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Could not find File: </span><span style="color: rgb(175,0,0)">&#34;</span>, in_value)
 <span class="ansi-green-intense-fg ansi-bold">     44</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(<span style="color: rgb(0,135,0)">type</span>(in_value), <span style="color: rgb(0,0,135)">__class__</span>):
 <span class="ansi-green-intense-fg ansi-bold">     45</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">NotImplementedError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">This variant is not implemented</span><span style="color: rgb(175,0,0)">&#34;</span>)
 
-<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] /usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/QMMM_files/md.imd
+<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] /home/runner/micromamba/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/QMMM_files/md.imd
 </pre></div></div>
 </div>
 </section>
@@ -539,13 +539,13 @@ Input <span class="ansi-green-fg">In [5]</span>, in <span class="ansi-cyan-fg">&
 <span class="ansi-green-fg">----&gt; 2</span> qmmm_file <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">QMMM</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/home/fpultar/Documents/repos/PyGromosTools/examples/example_files/QMMM_files/menthol-methanol-dmf.qmmm</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> <span style="color: rgb(0,135,0)">print</span>(qmmm_file)
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/qmmm/qmmm.py:36</span>, in <span class="ansi-cyan-fg">QMMM.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/qmmm/qmmm.py:36</span>, in <span class="ansi-cyan-fg">QMMM.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
 <span class="ansi-green-intense-fg ansi-bold">     35</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, in_value: <span style="color: rgb(0,135,0)">str</span>, _future_file: <span style="color: rgb(0,135,0)">bool</span> <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>):
 <span class="ansi-green-fg">---&gt; 36</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,255)">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">in_value</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">in_value</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">_future_file</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">_future_file</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">     38</span>     <span style="color: rgb(95,135,135)"># TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks</span>
 <span class="ansi-green-intense-fg ansi-bold">     39</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> block <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">sorted</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_block_names()):
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/_basics/_general_gromos_file.py:42</span>, in <span class="ansi-cyan-fg">_general_gromos_file.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/_basics/_general_gromos_file.py:42</span>, in <span class="ansi-cyan-fg">_general_gromos_file.__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
 <span class="ansi-green-intense-fg ansi-bold">     40</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>read_blocks()
 <span class="ansi-green-intense-fg ansi-bold">     41</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
 <span class="ansi-green-fg">---&gt; 42</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">IOError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Could not find File: </span><span style="color: rgb(175,0,0)">&#34;</span>, in_value)
@@ -815,7 +815,7 @@ Input <span class="ansi-green-fg">In [13]</span>, in <span class="ansi-cyan-fg">
 <span class="ansi-green-intense-fg ansi-bold">     10</span> <span style="color: rgb(95,135,135)"># specify prepared topology, configuration, QMMM specification file, and input file</span>
 <span class="ansi-green-intense-fg ansi-bold">     11</span> system<span style="color: rgb(98,98,98)">.</span>top <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/home/fpultar/Documents/repos/PyGromosTools/examples/example_files/QMMM_files/</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>system_name<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">-all-atom_54a7.top</span><span style="color: rgb(175,0,0)">&#34;</span>
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
 <span class="ansi-green-intense-fg ansi-bold">    217</span> <span style="color: rgb(95,135,135)"># import files:</span>
 <span class="ansi-green-intense-fg ansi-bold">    218</span> file_mapping <span style="color: rgb(98,98,98)">=</span> {
 <span class="ansi-green-intense-fg ansi-bold">    219</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">imd</span><span style="color: rgb(175,0,0)">&#34;</span>: in_imd_path,
@@ -827,14 +827,14 @@ File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/pyth
 <span class="ansi-green-intense-fg ansi-bold">    230</span> <span style="color: rgb(95,135,135)"># System Information:</span>
 <span class="ansi-green-intense-fg ansi-bold">    231</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_cnf<span style="color: rgb(98,98,98)">.</span>_future_file:
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
 <span class="ansi-green-intense-fg ansi-bold">    828</span> <span style="color: rgb(95,135,135)"># Check if system folder is present</span>
 <span class="ansi-green-intense-fg ansi-bold">    829</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>exists(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder):
 <span class="ansi-green-fg">--&gt; 830</span>     <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_work_folder</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">    831</span> check_file_paths<span style="color: rgb(98,98,98)">.</span>append(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder)
 <span class="ansi-green-intense-fg ansi-bold">    833</span> <span style="color: rgb(95,135,135)"># Check if file- paths are valid</span>
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
 <span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
 <span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
 <span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
@@ -931,7 +931,7 @@ Input <span class="ansi-green-fg">In [15]</span>, in <span class="ansi-cyan-fg">
 <span class="ansi-green-intense-fg ansi-bold">     21</span> <span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">     23</span> system
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
 <span class="ansi-green-intense-fg ansi-bold">    217</span> <span style="color: rgb(95,135,135)"># import files:</span>
 <span class="ansi-green-intense-fg ansi-bold">    218</span> file_mapping <span style="color: rgb(98,98,98)">=</span> {
 <span class="ansi-green-intense-fg ansi-bold">    219</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">imd</span><span style="color: rgb(175,0,0)">&#34;</span>: in_imd_path,
@@ -943,14 +943,14 @@ File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/pyth
 <span class="ansi-green-intense-fg ansi-bold">    230</span> <span style="color: rgb(95,135,135)"># System Information:</span>
 <span class="ansi-green-intense-fg ansi-bold">    231</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_cnf<span style="color: rgb(98,98,98)">.</span>_future_file:
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
 <span class="ansi-green-intense-fg ansi-bold">    828</span> <span style="color: rgb(95,135,135)"># Check if system folder is present</span>
 <span class="ansi-green-intense-fg ansi-bold">    829</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>exists(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder):
 <span class="ansi-green-fg">--&gt; 830</span>     <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_work_folder</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">    831</span> check_file_paths<span style="color: rgb(98,98,98)">.</span>append(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder)
 <span class="ansi-green-intense-fg ansi-bold">    833</span> <span style="color: rgb(95,135,135)"># Check if file- paths are valid</span>
 
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
 <span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
 <span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
 <span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
@@ -1082,15 +1082,14 @@ Input <span class="ansi-green-fg">In [19]</span>, in <span class="ansi-cyan-fg">
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 environ{&#39;DEPLOYMENT_BASEPATH&#39;: &#39;/opt/runner&#39;,
-        &#39;CONDA_PROMPT_MODIFIER&#39;: &#39;&#39;,
+        &#39;CONDA_PROMPT_MODIFIER&#39;: &#39;(pygromosTest) &#39;,
         &#39;DOTNET_NOLOGO&#39;: &#39;1&#39;,
         &#39;USER&#39;: &#39;runner&#39;,
         &#39;CI&#39;: &#39;true&#39;,
-        &#39;GITHUB_ENV&#39;: &#39;/home/runner/work/_temp/_runner_file_commands/set_env_b3979794-2ab2-4643-b476-7334139a6594&#39;,
+        &#39;GITHUB_ENV&#39;: &#39;/home/runner/work/_temp/_runner_file_commands/set_env_39a8e609-a83c-4a05-8e83-377d0dfb3269&#39;,
         &#39;PIPX_HOME&#39;: &#39;/opt/pipx&#39;,
         &#39;JAVA_HOME_8_X64&#39;: &#39;/usr/lib/jvm/temurin-8-jdk-amd64&#39;,
         &#39;SHLVL&#39;: &#39;1&#39;,
-        &#39;CONDA_PKGS_DIR&#39;: &#39;/home/runner/conda_pkgs_dir&#39;,
         &#39;HOME&#39;: &#39;/home/runner&#39;,
         &#39;CONDA_SHLVL&#39;: &#39;1&#39;,
         &#39;OLDPWD&#39;: &#39;/home/runner/work/PyGromosTools/PyGromosTools&#39;,
@@ -1109,7 +1108,6 @@ environ{&#39;DEPLOYMENT_BASEPATH&#39;: &#39;/opt/runner&#39;,
         &#39;GITHUB_HEAD_REF&#39;: &#39;&#39;,
         &#39;MAKEFLAGS&#39;: &#39;&#39;,
         &#39;GITHUB_GRAPHQL_URL&#39;: &#39;https://api.github.com/graphql&#39;,
-        &#39;_CE_M&#39;: &#39;&#39;,
         &#39;NVM_DIR&#39;: &#39;/home/runner/.nvm&#39;,
         &#39;DOTNET_SKIP_FIRST_TIME_EXPERIENCE&#39;: &#39;1&#39;,
         &#39;ImageVersion&#39;: &#39;20220330.0&#39;,
@@ -1118,36 +1116,36 @@ environ{&#39;DEPLOYMENT_BASEPATH&#39;: &#39;/opt/runner&#39;,
         &#39;SWIFT_PATH&#39;: &#39;/usr/share/swift/usr/bin&#39;,
         &#39;RUNNER_OS&#39;: &#39;Linux&#39;,
         &#39;GITHUB_WORKFLOW&#39;: &#39;pages-build-deployment&#39;,
-        &#39;JOURNAL_STREAM&#39;: &#39;8:22300&#39;,
+        &#39;JOURNAL_STREAM&#39;: &#39;8:21283&#39;,
         &#39;_&#39;: &#39;/usr/bin/make&#39;,
         &#39;RUNNER_USER&#39;: &#39;runner&#39;,
         &#39;CHROMEWEBDRIVER&#39;: &#39;/usr/local/share/chrome_driver&#39;,
         &#39;GOROOT_1_15_X64&#39;: &#39;/opt/hostedtoolcache/go/1.15.15/x64&#39;,
         &#39;GOROOT_1_16_X64&#39;: &#39;/opt/hostedtoolcache/go/1.16.15/x64&#39;,
-        &#39;GITHUB_RUN_ID&#39;: &#39;2090742217&#39;,
+        &#39;GITHUB_RUN_ID&#39;: &#39;2090888857&#39;,
         &#39;GITHUB_REF_TYPE&#39;: &#39;branch&#39;,
         &#39;GITHUB_BASE_REF&#39;: &#39;&#39;,
         &#39;GOROOT_1_17_X64&#39;: &#39;/opt/hostedtoolcache/go/1.17.8/x64&#39;,
         &#39;ImageOS&#39;: &#39;ubuntu20&#39;,
-        &#39;AMBERHOME&#39;: &#39;/usr/share/miniconda/envs/pygromosTest&#39;,
+        &#39;AMBERHOME&#39;: &#39;/home/runner/micromamba/envs/pygromosTest&#39;,
         &#39;BOOTSTRAP_HASKELL_NONINTERACTIVE&#39;: &#39;1&#39;,
-        &#39;_CE_CONDA&#39;: &#39;&#39;,
         &#39;PERFLOG_LOCATION_SETTING&#39;: &#39;RUNNER_PERFLOG&#39;,
         &#39;GOROOT_1_18_X64&#39;: &#39;/opt/hostedtoolcache/go/1.18.0/x64&#39;,
         &#39;GITHUB_ACTION_REPOSITORY&#39;: &#39;&#39;,
-        &#39;PATH&#39;: &#39;/usr/share/miniconda/envs/pygromosTest/bin:/usr/share/miniconda/condabin:/usr/share/miniconda/condabin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/runner/.dotnet/tools/home/fpultar/opt/gcc-8.2.0/bin&#39;,
+        &#39;PATH&#39;: &#39;/home/runner/micromamba/envs/pygromosTest/bin:/home/runner/micromamba/condabin:/home/runner/micromamba-bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/runner/.dotnet/tools/home/fpultar/opt/gcc-8.2.0/bin&#39;,
         &#39;RUNNER_TOOL_CACHE&#39;: &#39;/opt/hostedtoolcache&#39;,
-        &#39;INVOCATION_ID&#39;: &#39;6c2331bff5704fe597d6c6cc7a98452e&#39;,
         &#39;DOTNET_MULTILEVEL_LOOKUP&#39;: &#39;0&#39;,
+        &#39;INVOCATION_ID&#39;: &#39;5c1385632a1040e3976519206d823cda&#39;,
         &#39;HOMEBREW_CELLAR&#39;: &#39;/home/linuxbrew/.linuxbrew/Cellar&#39;,
         &#39;ANT_HOME&#39;: &#39;/usr/share/ant&#39;,
-        &#39;RUNNER_TRACKING_ID&#39;: &#39;github_4c9b810f-33d7-4d8b-9be1-287ae70ce573&#39;,
+        &#39;RUNNER_TRACKING_ID&#39;: &#39;github_7bd6b767-e760-43a4-bb09-8f1a70653fdb&#39;,
         &#39;GITHUB_ACTION&#39;: &#39;__run_3&#39;,
         &#39;RUNNER_ARCH&#39;: &#39;X64&#39;,
-        &#39;GITHUB_RUN_NUMBER&#39;: &#39;53&#39;,
-        &#39;PERL5LIB&#39;: &#39;/usr/share/miniconda/envs/pygromosTest/lib/perl/mm_pbsa&#39;,
+        &#39;GITHUB_RUN_NUMBER&#39;: &#39;55&#39;,
+        &#39;PERL5LIB&#39;: &#39;/home/runner/micromamba/envs/pygromosTest/lib/perl/mm_pbsa&#39;,
         &#39;AGENT_TOOLSDIRECTORY&#39;: &#39;/opt/hostedtoolcache&#39;,
         &#39;MAKELEVEL&#39;: &#39;1&#39;,
+        &#39;MAMBA_ROOT_PREFIX&#39;: &#39;/home/runner/micromamba&#39;,
         &#39;VCPKG_INSTALLATION_ROOT&#39;: &#39;/usr/local/share/vcpkg&#39;,
         &#39;LANG&#39;: &#39;C.UTF-8&#39;,
         &#39;GITHUB_REPOSITORY&#39;: &#39;rinikerlab/PyGromosTools&#39;,
@@ -1156,11 +1154,12 @@ environ{&#39;DEPLOYMENT_BASEPATH&#39;: &#39;/opt/runner&#39;,
         &#39;XDG_CONFIG_HOME&#39;: &#39;/home/runner/.config&#39;,
         &#39;RUNNER_NAME&#39;: &#39;GitHub Actions 11&#39;,
         &#39;ANDROID_NDK_ROOT&#39;: &#39;/usr/local/lib/android/sdk/ndk-bundle&#39;,
-        &#39;GSETTINGS_SCHEMA_DIR&#39;: &#39;/usr/share/miniconda/envs/pygromosTest/share/glib-2.0/schemas&#39;,
+        &#39;GSETTINGS_SCHEMA_DIR&#39;: &#39;/home/runner/micromamba/envs/pygromosTest/share/glib-2.0/schemas&#39;,
         &#39;GITHUB_ACTION_REF&#39;: &#39;&#39;,
-        &#39;CONDA_PYTHON_EXE&#39;: &#39;/usr/share/miniconda/bin/python&#39;,
         &#39;DEBIAN_FRONTEND&#39;: &#39;noninteractive&#39;,
+        &#39;STATS_KEEPALIVE&#39;: &#39;false&#39;,
         &#39;GITHUB_ACTIONS&#39;: &#39;true&#39;,
+        &#39;STATS_PFS&#39;: &#39;true&#39;,
         &#39;GITHUB_REF_PROTECTED&#39;: &#39;true&#39;,
         &#39;RUNNER_PERFLOG&#39;: &#39;/home/runner/perflog&#39;,
         &#39;CONDA_DEFAULT_ENV&#39;: &#39;pygromosTest&#39;,
@@ -1168,37 +1167,38 @@ environ{&#39;DEPLOYMENT_BASEPATH&#39;: &#39;/opt/runner&#39;,
         &#39;ACCEPT_EULA&#39;: &#39;Y&#39;,
         &#39;GITHUB_WORKSPACE&#39;: &#39;/home/runner/work/PyGromosTools/PyGromosTools&#39;,
         &#39;GITHUB_RUN_ATTEMPT&#39;: &#39;1&#39;,
-        &#39;GITHUB_SHA&#39;: &#39;218132d260e648007999e3eb0d4bb252531baeba&#39;,
+        &#39;GITHUB_SHA&#39;: &#39;c934076f4f3d146458b5614016926de28e28b2bd&#39;,
         &#39;GITHUB_ACTOR&#39;: &#39;MTLehner&#39;,
         &#39;GITHUB_REF&#39;: &#39;refs/heads/main&#39;,
+        &#39;MAMBA_EXE&#39;: &#39;/home/runner/micromamba-bin/micromamba&#39;,
         &#39;ANDROID_SDK_ROOT&#39;: &#39;/usr/local/lib/android/sdk&#39;,
         &#39;LEIN_HOME&#39;: &#39;/usr/local/lib/lein&#39;,
-        &#39;GITHUB_PATH&#39;: &#39;/home/runner/work/_temp/_runner_file_commands/add_path_b3979794-2ab2-4643-b476-7334139a6594&#39;,
+        &#39;GITHUB_PATH&#39;: &#39;/home/runner/work/_temp/_runner_file_commands/add_path_39a8e609-a83c-4a05-8e83-377d0dfb3269&#39;,
         &#39;JAVA_HOME&#39;: &#39;/usr/lib/jvm/temurin-11-jdk-amd64&#39;,
         &#39;PWD&#39;: &#39;/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project&#39;,
         &#39;RUNNER_WORKSPACE&#39;: &#39;/home/runner/work/PyGromosTools&#39;,
-        &#39;LEIN_JAR&#39;: &#39;/usr/local/lib/lein/self-installs/leiningen-2.9.8-standalone.jar&#39;,
         &#39;GITHUB_EVENT_NAME&#39;: &#39;push&#39;,
         &#39;XDG_DATA_DIRS&#39;: &#39;/usr/local/share:/usr/share:/var/lib/snapd/desktop&#39;,
         &#39;GITHUB_SERVER_URL&#39;: &#39;https://github.com&#39;,
         &#39;ANDROID_HOME&#39;: &#39;/usr/local/lib/android/sdk&#39;,
-        &#39;CONDA_EXE&#39;: &#39;/usr/share/miniconda/bin/conda&#39;,
+        &#39;LEIN_JAR&#39;: &#39;/usr/local/lib/lein/self-installs/leiningen-2.9.8-standalone.jar&#39;,
+        &#39;NVM_CD_FLAGS&#39;: &#39;&#39;,
         &#39;GECKOWEBDRIVER&#39;: &#39;/usr/local/share/gecko_driver&#39;,
         &#39;HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS&#39;: &#39;3650&#39;,
         &#39;HOMEBREW_NO_AUTO_UPDATE&#39;: &#39;1&#39;,
         &#39;HOMEBREW_REPOSITORY&#39;: &#39;/home/linuxbrew/.linuxbrew/Homebrew&#39;,
-        &#39;CONDA_PREFIX&#39;: &#39;/usr/share/miniconda/envs/pygromosTest&#39;,
+        &#39;CONDA_PREFIX&#39;: &#39;/home/runner/micromamba/envs/pygromosTest&#39;,
         &#39;SGX_AESM_ADDR&#39;: &#39;1&#39;,
         &#39;MFLAGS&#39;: &#39;&#39;,
         &#39;GSETTINGS_SCHEMA_DIR_CONDA_BACKUP&#39;: &#39;&#39;,
         &#39;CHROME_BIN&#39;: &#39;/usr/bin/google-chrome&#39;,
         &#39;SELENIUM_JAR_PATH&#39;: &#39;/usr/share/java/selenium-server.jar&#39;,
         &#39;ANDROID_NDK_HOME&#39;: &#39;/usr/local/lib/android/sdk/ndk-bundle&#39;,
-        &#39;GITHUB_STEP_SUMMARY&#39;: &#39;/home/runner/work/_temp/_runner_file_commands/step_summary_b3979794-2ab2-4643-b476-7334139a6594&#39;,
+        &#39;GITHUB_STEP_SUMMARY&#39;: &#39;/home/runner/work/_temp/_runner_file_commands/step_summary_39a8e609-a83c-4a05-8e83-377d0dfb3269&#39;,
         &#39;DOCUTILSCONFIG&#39;: &#39;/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/docutils.conf&#39;,
-        &#39;RDBASE&#39;: &#39;/usr/share/miniconda/envs/pygromosTest/share/RDKit&#39;,
+        &#39;RDBASE&#39;: &#39;/home/runner/micromamba/envs/pygromosTest/share/RDKit&#39;,
         &#39;PYDEVD_USE_FRAME_EVAL&#39;: &#39;NO&#39;,
-        &#39;JPY_PARENT_PID&#39;: &#39;3742&#39;,
+        &#39;JPY_PARENT_PID&#39;: &#39;3190&#39;,
         &#39;TERM&#39;: &#39;xterm-color&#39;,
         &#39;CLICOLOR&#39;: &#39;1&#39;,
         &#39;PAGER&#39;: &#39;cat&#39;,
@@ -1325,7 +1325,7 @@ Input <span class="ansi-green-fg">In [24]</span>, in <span class="ansi-cyan-fg">
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"f732b41b06ed4a9fb26597e24073ebf3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "28a9ef283646413499ba6dedb827a185": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_f732b41b06ed4a9fb26597e24073ebf3"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"d82a75b9aa144e359d3c924736965355": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "8056bb329ddb4674b7c6f725aeb6b132": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_d82a75b9aa144e359d3c924736965355"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
