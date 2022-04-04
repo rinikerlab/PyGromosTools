@@ -7,7 +7,7 @@
 
 .. image:: .img/PyGromosToolsLogo_smallerDarkModeWithBorders.png#gh-dark-mode-only
    :target: .img/PyGromosToolsLogo_smallerDarkModeWithBorders.png#gh-dark-mode-only
-   :alt: PyGromosBanDark
+   :alt: 
 
 
 .. image:: .img/PyGromosToolsLogo_smallerWithBorders.png#gh-light-mode-only
