@@ -37,7 +37,7 @@ jobs:
         ulimit -a
 
 
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: mamba-org/provision-with-micromamba@main
       with:
         python-version: ${{ matrix.python-version }}
         environment-file:  dev/conda_envs/test_env.yaml

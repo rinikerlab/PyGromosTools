@@ -21,7 +21,7 @@ jobs:
           uname -a
           df -h
           ulimit -a
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: mamba-org/provision-with-micromamba@main
         with:
           python-version: ${{ matrix.python-version }}
           environment-file:  dev/conda_envs/test_env.yaml
@@ -45,7 +45,7 @@ jobs:
           python setup.py install
           cd docs/sphinx_project
           make clean;
-          mkdir Examples Tutorials
+          mkdir -p Examples Tutorials
           sphinx-apidoc -o _source ../../pygromos;
           cp ../../examples/ex*ipynb ./Examples;
           cp -r ../../examples/developer_examples ./Examples;
