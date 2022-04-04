@@ -35,6 +35,7 @@ jobs:
       - name: build sphinx docs
         shell: bash -l {0}
         run: |
+          conda develop .
           cd docs/sphinx_project
           make clean;
           mkdir -p Examples Tutorials
