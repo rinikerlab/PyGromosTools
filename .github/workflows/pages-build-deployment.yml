@@ -21,7 +21,7 @@ jobs:
           uname -a
           df -h
           ulimit -a
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: mamba-org/provision-with-micromamba@main # conda-incubator/setup-miniconda@v2
         with:
           python-version: ${{ matrix.python-version }}
           environment-file:  dev/conda_envs/test_env.yaml
@@ -42,7 +42,7 @@ jobs:
       - name: build sphinx docs
         shell: bash -l {0}
         run: |
-          python setup.py install
+          conda develop .
           cd docs/sphinx_project
           make clean;
           mkdir -p Examples Tutorials
