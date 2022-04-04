@@ -11,6 +11,7 @@ dependencies:
   - pytest-cov
   - codecov
   ## Meta
+  - conda-build
   - typing
   - pre-commit
   - jupyter
