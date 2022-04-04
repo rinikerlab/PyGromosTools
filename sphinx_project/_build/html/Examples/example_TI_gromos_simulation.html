@@ -399,7 +399,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "4ceb1ec221944632a6bdead8a0f22750"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "cdae8d4203cc4679b8ef58c3f99f3137"}</script></div>
 </div>
 </section>
 <section id="Input-files">
@@ -428,7 +428,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/runner/micromamba/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
+mkdir: cannot create directory ‘/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -444,7 +444,7 @@ Input <span class="ansi-green-fg">In [2]</span>, in <span class="ansi-cyan-fg">&
 <span class="ansi-green-fg">---&gt; 11</span> project_dir <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">root_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg">sys_name</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">     12</span> input_dir <span style="color: rgb(98,98,98)">=</span> bash<span style="color: rgb(98,98,98)">.</span>make_folder(project_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/input</span><span style="color: rgb(175,0,0)">&#34;</span>)
 
-File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
 <span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
 <span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
 <span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
@@ -452,7 +452,7 @@ File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/si
 <span class="ansi-green-intense-fg ansi-bold">    561</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">WARNING:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)"> Did not build already existing folder: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> in_directory_path, category<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(215,95,95)">UserWarning</span>)
 
 <span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/runner/micromamba/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/M030_to_6KET
+ /usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/M030_to_6KET
 </pre></div></div>
 </div>
 </section>
@@ -588,7 +588,7 @@ Input <span class="ansi-green-fg">In [5]</span>, in <span class="ansi-cyan-fg">&
 <span class="ansi-green-intense-fg ansi-bold">      7</span> step_name  <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">a_emin</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(95,135,135)">#also the dir_name, out prefix etc.</span>
 <span class="ansi-green-intense-fg ansi-bold">      8</span> grom_system<span style="color: rgb(98,98,98)">.</span>imd <span style="color: rgb(98,98,98)">=</span> template_emin_vac <span style="color: rgb(95,135,135)">#read template imd</span>
 
-File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:1195</span>, in <span class="ansi-cyan-fg">Gromos_System.load</span><span class="ansi-blue-fg">(cls, path)</span>
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:1195</span>, in <span class="ansi-cyan-fg">Gromos_System.load</span><span class="ansi-blue-fg">(cls, path)</span>
 <span class="ansi-green-intense-fg ansi-bold">   1191</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
 <span class="ansi-green-intense-fg ansi-bold">   1192</span> <span style="color: rgb(175,0,0)">This method stores the Class as binary obj to a given path or fileBuffer.</span>
 <span class="ansi-green-intense-fg ansi-bold">   1193</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
@@ -597,7 +597,7 @@ File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/si
 <span class="ansi-green-intense-fg ansi-bold">   1196</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(path, io<span style="color: rgb(98,98,98)">.</span>BufferedReader):
 <span class="ansi-green-intense-fg ansi-bold">   1197</span>     bufferedReader <span style="color: rgb(98,98,98)">=</span> path
 
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/runner/micromamba/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/initial_startSys.obj&#39;
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/initial_startSys.obj&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -681,7 +681,7 @@ Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&
 <span class="ansi-green-intense-fg ansi-bold">      5</span> step_name  <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">b_vacuum_sd</span><span style="color: rgb(175,0,0)">&#34;</span>
 <span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system<span style="color: rgb(98,98,98)">.</span>imd <span style="color: rgb(98,98,98)">=</span> template_sd
 
-File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:1195</span>, in <span class="ansi-cyan-fg">Gromos_System.load</span><span class="ansi-blue-fg">(cls, path)</span>
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/files/gromos_system/gromos_system.py:1195</span>, in <span class="ansi-cyan-fg">Gromos_System.load</span><span class="ansi-blue-fg">(cls, path)</span>
 <span class="ansi-green-intense-fg ansi-bold">   1191</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
 <span class="ansi-green-intense-fg ansi-bold">   1192</span> <span style="color: rgb(175,0,0)">This method stores the Class as binary obj to a given path or fileBuffer.</span>
 <span class="ansi-green-intense-fg ansi-bold">   1193</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
@@ -690,7 +690,7 @@ File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/si
 <span class="ansi-green-intense-fg ansi-bold">   1196</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(path, io<span style="color: rgb(98,98,98)">.</span>BufferedReader):
 <span class="ansi-green-intense-fg ansi-bold">   1197</span>     bufferedReader <span style="color: rgb(98,98,98)">=</span> path
 
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/runner/micromamba/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/M030_to_6KET/a_emin/emin_out.obj&#39;
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/examples/example_files/TI_Calculation/M030_to_6KET/a_emin/emin_out.obj&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -968,7 +968,7 @@ Input <span class="ansi-green-fg">In [16]</span>, in <span class="ansi-cyan-fg">
 <span class="ansi-green-intense-fg ansi-bold">     11</span> sys_path <span style="color: rgb(98,98,98)">=</span> root_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/M030_to_6KET/b_vacuum_sd/sd_out_system.obj</span><span style="color: rgb(175,0,0)">&#34;</span>
 <span class="ansi-green-intense-fg ansi-bold">     12</span> sd_gromos_system <span style="color: rgb(98,98,98)">=</span> Gromos_System<span style="color: rgb(98,98,98)">.</span>load(sys_path)
 
-File <span class="ansi-green-fg">~/micromamba/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/pygromosTest/lib/python3.9/site-packages/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
 <span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
 <span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
 <span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
@@ -1024,7 +1024,7 @@ Input <span class="ansi-green-fg">In [17]</span>, in <span class="ansi-cyan-fg">
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"d01abb7d61aa4250aa5ecad918fc2a68": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "4ceb1ec221944632a6bdead8a0f22750": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_d01abb7d61aa4250aa5ecad918fc2a68"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"f80f01283a49488ebd07c81d78ffa2ef": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "cdae8d4203cc4679b8ef58c3f99f3137": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_f80f01283a49488ebd07c81d78ffa2ef"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
