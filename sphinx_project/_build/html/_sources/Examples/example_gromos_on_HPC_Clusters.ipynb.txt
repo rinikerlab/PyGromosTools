@@ -5,7 +5,7 @@
    "id": "758ed277-d094-45f0-866b-6706487b3820",
    "metadata": {},
    "source": [
-    "# Usage of the PyGromosTools on HPC-cluster"
+    "# Usage of PyGromosTools on HPC-cluster"
    ]
   },
   {
@@ -24,8 +24,11 @@
    "outputs": [],
    "source": [
     "# necessary imports are the Gromos_System and convenience functions emin and md\n",
+    "from pygromos.simulations.hpc_queuing.submission_systems import lsf\n",
     "from pygromos.files.gromos_system.gromos_system import Gromos_System\n",
-    "from pygromos.simulations.modules.preset_simulation_modules import emin, md"
+    "from pygromos.simulations.modules.preset_simulation_modules import emin, md\n",
+    "\n",
+    "submission_system = lsf.Lsf(nmpi=3) # this is for IBMs job queue!"
    ]
   },
   {
@@ -64,6 +67,7 @@
     "    in_cnf_path=in_cnf_path,\n",
     "    in_gromosPP_bin_dir=gromosPP,\n",
     "    in_gromosXX_bin_dir=gromosXX,\n",
+    "    submission_system=submission_system,\n",
     "    verbose=False\n",
     ")"
    ]
@@ -85,11 +89,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "c81d1a74-7d0c-4cfe-8756-71a5b0063a44",
    "metadata": {},
-   "outputs": [],
    "source": [
     "# run energy minimization\n",
     "minimized_system = emin(system)"
@@ -112,11 +114,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "8fe3fe44-fa4b-4c47-8a5a-09fa55b350dd",
    "metadata": {},
-   "outputs": [],
    "source": [
     "print(minimized_system.imd.path)\n",
     "print(minimized_system.top.path)\n",
@@ -132,13 +132,11 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "c7859522-dc5a-4ad9-aa38-a4b8436562f9",
    "metadata": {},
-   "outputs": [],
    "source": [
-    "minimized_system.cnf.visualize()"
+    "minimized_system.cnf.view"
    ]
   },
   {
@@ -150,11 +148,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "56a74099-4305-40da-a5d9-13614b54b5eb",
    "metadata": {},
-   "outputs": [],
    "source": [
     "# Reset the old imd from emin \n",
     "minimized_system.imd = None"
@@ -169,11 +165,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "853edff2-bf4e-481c-b1cb-22477eea2839",
    "metadata": {},
-   "outputs": [],
    "source": [
     "md_system = md(minimized_system, equilibration_runs=1, simulation_runs=2)"
    ]
@@ -187,11 +181,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "5cde9523-4592-40cf-b514-2136e5502871",
    "metadata": {},
-   "outputs": [],
    "source": [
     "print(md_system.imd.path)\n",
     "print(md_system.top.path)\n",
@@ -207,11 +199,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
+   "cell_type": "raw",
    "id": "4b331168-329f-4f19-9ed1-ed1b8641fefc",
    "metadata": {},
-   "outputs": [],
    "source": [
     "md_system.cnf.visualize()"
    ]
