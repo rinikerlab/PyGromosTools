@@ -435,7 +435,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "system.cnf.visualize()"
+    "system.cnf.view"
    ]
   },
   {
@@ -547,7 +547,7 @@
    "outputs": [],
    "source": [
     "# visualize the last .cnf - you are done!\n",
-    "production_system.cnf.visualize()"
+    "production_system.cnf.view"
    ]
   },
   {
