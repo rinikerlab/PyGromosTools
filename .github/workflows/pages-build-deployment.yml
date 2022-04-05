@@ -31,24 +31,24 @@ jobs:
           auto-update-conda: true
           auto-activate-base: false
           show-channel-urls: true
-
-      - name: build sphinx docs
-        shell: bash -l {0}
-        run: |
-          conda develop .
-          cd docs/sphinx_project
-          make clean;
-          mkdir -p Examples Tutorials
-          sphinx-apidoc -o _source ../../pygromos;
-          cp ../../examples/ex*ipynb ./Examples;
-          cp -r ../../examples/developer_examples ./Examples;
-          cp ../../examples/t*ipynb ./Tutorials;
-          python conf.py;
-          make html;
-          cp -rf _build/html/* ../
       # No auto deploy without gromos on GitHub CI
-      # - name: Build and Deploy
-      #   uses: JamesIves/github-pages-deploy-action@v4.2.5
-      #   with:
-      #     branch: gh-pages # The branch the action should deploy to.
-      #     folder: docs # The folder the action should deploy.
+      # - name: build sphinx docs
+      #   shell: bash -l {0}
+      #   run: |
+      #     conda develop .
+      #     cd docs/sphinx_project
+      #     make clean;
+      #     mkdir -p Examples Tutorials
+      #     sphinx-apidoc -o _source ../../pygromos;
+      #     cp ../../examples/ex*ipynb ./Examples;
+      #     cp -r ../../examples/developer_examples ./Examples;
+      #     cp ../../examples/t*ipynb ./Tutorials;
+      #     python conf.py;
+      #     make html;
+      #     cp -rf _build/html/* ../
+
+      - name: Build and Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: docs # The folder the action should deploy.
