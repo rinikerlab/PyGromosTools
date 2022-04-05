@@ -1815,7 +1815,7 @@ class DISTANCERES(_generic_imd_block):
         NTDIRA: int = 0,
         CDIR: int = 0,
         DIR0: int = 0,
-        TAUDIR: int = 0,
+        TAUDIR: int = 1,
         FORCESCALE: int = 0,
         VDIR: int = 0,
         NTWDIR: int = 0,
