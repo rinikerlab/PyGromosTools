@@ -46,8 +46,9 @@ jobs:
           python conf.py;
           make html;
           cp -rf _build/html/* ../
-      - name: Build and Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.2.5
-        with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: docs # The folder the action should deploy.
+      # No auto deploy without gromos on GitHub CI
+      # - name: Build and Deploy
+      #   uses: JamesIves/github-pages-deploy-action@v4.2.5
+      #   with:
+      #     branch: gh-pages # The branch the action should deploy to.
+      #     folder: docs # The folder the action should deploy.
