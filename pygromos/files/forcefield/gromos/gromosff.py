@@ -21,7 +21,7 @@ class GromosFF(_generic_force_field):
         super().__init__(name, path_to_files, auto_import, verbose)
         if auto_import:
             self.auto_import_ff()
-        self.gromosPP = GromosPP(None)
+        self.gromosPP = GromosPP()
 
     def auto_import_ff(self):
         if self.name in ["2016H66", "gromos2016H66", "gromos"]:
@@ -39,7 +39,7 @@ class GromosFF(_generic_force_field):
 
     def create_top(self, mol: str, in_top: Top = None, **kwargs) -> Top:
         if "residue_list" in kwargs:
-            if self.gromosPP._check_all_binaries():
+            if self.gromosPP._found_binary["make_top"]:
                 residue_list = kwargs["residue_list"]
                 work_dir = kwargs["work_folder"]
                 self.gromosPP.make_top(
