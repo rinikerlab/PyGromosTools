@@ -459,7 +459,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "673c395a36df464a9141212cb02ff497"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "8f976c13a1fc49fca37c65bf09826360"}</script></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -489,49 +489,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/init/’: No such file or directory
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17463/3298346033.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> groSys = Gromos_System(work_folder=work_dir+&#34;init/&#34;, system_name=&#34;Hvap_test&#34;, in_smiles=&#34;O&#34;, in_residue_list=[&#34;H2O&#34;],
-</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                        auto_convert<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">,</span> forcefield<span class="ansi-blue-fg">=</span>ff<span class="ansi-blue-fg">,</span> in_imd_path<span class="ansi-blue-fg">=</span>template_sd<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                        in_gromosPP_bin_dir=gromosPP_path, in_gromosXX_bin_dir=gromosXX_path)
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
-<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
-<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    229</span>
-<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
-<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    832</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/init/
+/home/mlehner/PyGromosTools/pygromos/files/forcefield/gromos/gromosff.py:54: UserWarning: Could not create topology, gromos binaries not found
+  warnings.warn(&#34;Could not create topology, gromos binaries not found&#34;)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -545,14 +509,10 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17463/594395416.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hvap_sys<span class="ansi-blue-fg">=</span>Hvap_calculation<span class="ansi-blue-fg">(</span>input_system<span class="ansi-blue-fg">=</span>groSys<span class="ansi-blue-fg">,</span> work_folder<span class="ansi-blue-fg">=</span>work_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;hvap&#34;</span><span class="ansi-blue-fg">,</span> forcefield<span class="ansi-blue-fg">=</span>ff<span class="ansi-blue-fg">,</span> system_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;test&#34;</span><span class="ansi-blue-fg">,</span> useGromosPlsPls<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;groSys&#39; is not defined
+/home/mlehner/PyGromosTools/pygromos/simulations/approaches/hvap_calculation/hvap_calculation.py:99: UserWarning: Folder does already exist
+  warnings.warn(&#34;Folder does already exist&#34;)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -563,17 +523,78 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SubProcess Failed due to returncode: 1
+ COMMAND:
+        com_top @topo 512:/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/Hvap_test.top @param 1 @solv 1
+STDOUT:
+        NONE
+STDERR:
+        NONE
+ran_box @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/Hvap_test.top @pbc r @pos /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/Hvap_test.cnf @nsm 512 @dens 489.99999999999994  @thresh 0.12 @layer  &gt; /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/temp.cnf
+
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17463/3907949876.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_9095/3907949876.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hvap_sys<span class="ansi-blue-fg">.</span>create_liq<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/approaches/hvap_calculation/hvap_calculation.py</span> in <span class="ansi-cyan-fg">create_liq</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    160</span>         <span class="ansi-red-fg"># create liq cnf</span>
+<span class="ansi-green-intense-fg ansi-bold">    161</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>useGromosPlsPls<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 162</span><span class="ansi-red-fg">             self.gromosPP.ran_box(
+</span><span class="ansi-green-intense-fg ansi-bold">    163</span>                 in_top_path<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>groSys_gas<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    164</span>                 in_cnf_path<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>groSys_gas<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/gromos/_gromosClass.py</span> in <span class="ansi-cyan-fg">convert_pyGromos_types</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     76</span>
+<span class="ansi-green-intense-fg ansi-bold">     77</span>             <span class="ansi-red-fg"># print(&#34;Converter2: &#34;, func.__name__, self, nargs, kwargs)</span>
+<span class="ansi-green-fg">---&gt; 78</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> func<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>nargs<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     79</span>
+<span class="ansi-green-intense-fg ansi-bold">     80</span>         <span class="ansi-green-fg">return</span> convert_pyGromos_types
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/gromos/gromosPP.py</span> in <span class="ansi-cyan-fg">ran_box</span><span class="ansi-blue-fg">(self, in_top_path, in_cnf_path, out_cnf_path, periodic_boundary_condition, nmolecule, dens, threshold, layer, boxsize, fixfirst, seed, _binary_name, verbose, return_command_only)</span>
+<span class="ansi-green-intense-fg ansi-bold">    984</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> return_command_only<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    985</span>             print<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 986</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    987</span>             <span class="ansi-green-fg">return</span> out_cnf_path
+<span class="ansi-green-intense-fg ansi-bold">    988</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    933</span>     command<span class="ansi-blue-fg">:</span> Union<span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">,</span> List<span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">:</span> Union<span class="ansi-blue-fg">[</span>bool<span class="ansi-blue-fg">,</span> str<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">:</span> dict <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+<span class="ansi-green-intense-fg ansi-bold">    937</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    827</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;\nSTDERR:\n\t&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;RETURN: &#34;</span><span class="ansi-blue-fg">,</span> r<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 1
+ COMMAND:
+        ran_box @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/Hvap_test.top @pbc r @pos /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/Hvap_test.cnf @nsm 512 @dens 489.99999999999994  @thresh 0.12 @layer  &gt; /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/temp.cnf
+
+STDOUT:
+
+STDERR:
+        b&#39;WARNING: No topology given or no value for atomic_mass_unit in topology file.\n&#39;
+        b&#39;         Setting atomic_mass_unit to hardcoded value from gmath/Physics.cc:\n&#39;
+        b&#39;         atomic_mass_unit = 1.66054e-27\n&#39;
+        b&#39;Ginstream: TITLE block expected. Found: \n&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -589,12 +610,30 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17463/3467261131.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hvap_sys<span class="ansi-blue-fg">.</span>run_gas<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+################################################################################
 
-<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+1_emin
+################################################################################
+
+============================================================
+FOUND RESULT: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/1_emin/analysis/data/1_emin.cnf
+ GOING TO SKIPT THIS SUBMISSION!
+################################################################################
+
+2_eq
+################################################################################
+
+============================================================
+FOUND RESULT: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/2_eq/analysis/data/2_eq.cnf
+ GOING TO SKIPT THIS SUBMISSION!
+################################################################################
+
+3_sd
+################################################################################
+
+============================================================
+FOUND RESULT: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_gas/3_sd/analysis/data/3_sd.cnf
+ GOING TO SKIPT THIS SUBMISSION!
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -605,17 +644,331 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################################################################
+
+1_emin
+################################################################################
+
+============================================================
+FOUND RESULT: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/1_emin/analysis/data/1_emin.cnf
+ GOING TO SKIPT THIS SUBMISSION!
+################################################################################
+
+2_eq
+################################################################################
+
+============================================================
+FOUND RESULT: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/2_eq/analysis/data/2_eq.cnf
+ GOING TO SKIPT THIS SUBMISSION!
+################################################################################
+
+3_sd
+################################################################################
+
+Script:  /home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py
+
+################################################################################
+Simulation Setup:
+################################################################################
+
+steps_per_run:  50000
+equis:  0
+simulation runs:  1
+#####################################################################################
+                ERROR in Submission
+#####################################################################################
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
+    process = bash.execute(command=command, catch_STD=True, env=self.environment)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute
+    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess
+    raise ChildProcessError(msg)
+ChildProcessError: SubProcess Failed due to returncode: 1
+ COMMAND:
+        /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh
+STDOUT:
+        b&#39;Could not find TMPDIR!\n&#39;
+        b&#39; Switched to outdir for work\n&#39;
+        b&#39;workDIR: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1\n&#39;
+        b&#34;input:  &lt;class &#39;str&#39;&gt; None\n&#34;
+        b&#34;gromosXX._bin:  &lt;class &#39;str&#39;&gt; \n&#34;
+        b&#34;gromosXX.bin:  &lt;class &#39;NoneType&#39;&gt; None\n&#34;
+        b&#39;________________________________________\n&#39;
+        b&#39;\n&#39;
+        b&#39; start MD 3_sd_1.imd\n&#39;
+        b&#39;\n&#39;
+        b&#39;COMMAND:  export OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;Failed! process returned: \n&#39;
+        b&#39; Err: \n&#39;
+        b&#39;SubProcess Failed due to returncode: 139\n&#39;
+        b&#39; COMMAND: \n&#39;
+        b&#39;\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;STDOUT:\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;STDERR:\n&#39;
+        b&#34;\tb&#39;Segmentation fault\\n&#39;\n&#34;
+        b&#39;GROMOS OUTPUT:\n&#39;
+STDERR:
+        b&#39;Traceback (most recent call last):\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/simulation_workers/simulation_run_worker.py&#34;, line 202, in work\n&#39;
+        b&#39;    omd_file_path = gromosXX.md_run(\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/gromos/_gromosClass.py&#34;, line 78, in convert_pyGromos_types\n&#39;
+        b&#39;    return func(self, *nargs, **kwargs)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/gromos/gromosXX.py&#34;, line 215, in md_run\n&#39;
+        b&#39;    process = bash.execute(command_text)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute\n&#39;
+        b&#39;    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess\n&#39;
+        b&#39;    raise ChildProcessError(msg)\n&#39;
+        b&#39;ChildProcessError: SubProcess Failed due to returncode: 139\n&#39;
+        b&#39; COMMAND: \n&#39;
+        b&#39;\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;STDOUT:\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;STDERR:\n&#39;
+        b&#34;\tb&#39;Segmentation fault\\n&#39;\n&#34;
+        b&#39;\n&#39;
+        b&#39;Failed during simulations: \n&#39;
+        b&#34;&lt;class &#39;ChildProcessError&#39;&gt;\n&#34;
+        b&#39;(&#34;SubProcess Failed due to returncode: 139\\n COMMAND: \\n\\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\\n\\nSTDOUT:\\n\\t\\nSTDERR:\\n\\tb\&#39;Segmentation fault\\\\n\&#39;&#34;,)\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 188, in do
+    previous_job_ID, tmp_jobname, in_simSystem = chain_submission(
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 308, in chain_submission
+    previous_job_ID = job_submission_system.submit_to_queue(sub_job)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 84, in submit_to_queue
+    print(process)
+UnboundLocalError: local variable &#39;process&#39; referenced before assignment
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 71, in submit_to_queue
+    process = bash.execute(command=command, catch_STD=True, env=self.environment)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute
+    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess
+    raise ChildProcessError(msg)
+ChildProcessError: SubProcess Failed due to returncode: 1
+ COMMAND:
+        /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh
+STDOUT:
+        b&#39;Could not find TMPDIR!\n&#39;
+        b&#39; Switched to outdir for work\n&#39;
+        b&#39;workDIR: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1\n&#39;
+        b&#34;input:  &lt;class &#39;str&#39;&gt; None\n&#34;
+        b&#34;gromosXX._bin:  &lt;class &#39;str&#39;&gt; \n&#34;
+        b&#34;gromosXX.bin:  &lt;class &#39;NoneType&#39;&gt; None\n&#34;
+        b&#39;________________________________________\n&#39;
+        b&#39;\n&#39;
+        b&#39; start MD 3_sd_1.imd\n&#39;
+        b&#39;\n&#39;
+        b&#39;COMMAND:  export OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;Failed! process returned: \n&#39;
+        b&#39; Err: \n&#39;
+        b&#39;SubProcess Failed due to returncode: 139\n&#39;
+        b&#39; COMMAND: \n&#39;
+        b&#39;\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;STDOUT:\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;STDERR:\n&#39;
+        b&#34;\tb&#39;Segmentation fault\\n&#39;\n&#34;
+        b&#39;GROMOS OUTPUT:\n&#39;
+STDERR:
+        b&#39;Traceback (most recent call last):\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/simulation_workers/simulation_run_worker.py&#34;, line 202, in work\n&#39;
+        b&#39;    omd_file_path = gromosXX.md_run(\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/gromos/_gromosClass.py&#34;, line 78, in convert_pyGromos_types\n&#39;
+        b&#39;    return func(self, *nargs, **kwargs)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/gromos/gromosXX.py&#34;, line 215, in md_run\n&#39;
+        b&#39;    process = bash.execute(command_text)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute\n&#39;
+        b&#39;    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess\n&#39;
+        b&#39;    raise ChildProcessError(msg)\n&#39;
+        b&#39;ChildProcessError: SubProcess Failed due to returncode: 139\n&#39;
+        b&#39; COMMAND: \n&#39;
+        b&#39;\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;STDOUT:\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;STDERR:\n&#39;
+        b&#34;\tb&#39;Segmentation fault\\n&#39;\n&#34;
+        b&#39;\n&#39;
+        b&#39;Failed during simulations: \n&#39;
+        b&#34;&lt;class &#39;ChildProcessError&#39;&gt;\n&#34;
+        b&#39;(&#34;SubProcess Failed due to returncode: 139\\n COMMAND: \\n\\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\\n\\nSTDOUT:\\n\\t\\nSTDERR:\\n\\tb\&#39;Segmentation fault\\\\n\&#39;&#34;,)\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 188, in do
+    previous_job_ID, tmp_jobname, in_simSystem = chain_submission(
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py&#34;, line 308, in chain_submission
+    previous_job_ID = job_submission_system.submit_to_queue(sub_job)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py&#34;, line 84, in submit_to_queue
+    print(process)
+UnboundLocalError: local variable &#39;process&#39; referenced before assignment
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py&#34;, line 208, in simulation
+    last_jobID = simulation_scheduler.do(**MD_job_vars)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py&#34;, line 234, in do
+    raise IOError(&#34;ERROR in SUBMISSION!&#34;) from err
+OSError: ERROR in SUBMISSION!
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17463/783684269.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py</span> in <span class="ansi-cyan-fg">submit_to_queue</span><span class="ansi-blue-fg">(self, sub_job)</span>
+<span class="ansi-green-intense-fg ansi-bold">     70</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 71</span><span class="ansi-red-fg">                 </span>process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>environment<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     72</span>                 std_out_buff <span class="ansi-blue-fg">=</span> map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 1
+ COMMAND:
+        /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/job_3_sd_1.sh
+STDOUT:
+        b&#39;Could not find TMPDIR!\n&#39;
+        b&#39; Switched to outdir for work\n&#39;
+        b&#39;workDIR: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1\n&#39;
+        b&#34;input:  &lt;class &#39;str&#39;&gt; None\n&#34;
+        b&#34;gromosXX._bin:  &lt;class &#39;str&#39;&gt; \n&#34;
+        b&#34;gromosXX.bin:  &lt;class &#39;NoneType&#39;&gt; None\n&#34;
+        b&#39;________________________________________\n&#39;
+        b&#39;\n&#39;
+        b&#39; start MD 3_sd_1.imd\n&#39;
+        b&#39;\n&#39;
+        b&#39;COMMAND:  export OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;Failed! process returned: \n&#39;
+        b&#39; Err: \n&#39;
+        b&#39;SubProcess Failed due to returncode: 139\n&#39;
+        b&#39; COMMAND: \n&#39;
+        b&#39;\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;STDOUT:\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;STDERR:\n&#39;
+        b&#34;\tb&#39;Segmentation fault\\n&#39;\n&#34;
+        b&#39;GROMOS OUTPUT:\n&#39;
+STDERR:
+        b&#39;Traceback (most recent call last):\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/workers/simulation_workers/simulation_run_worker.py&#34;, line 202, in work\n&#39;
+        b&#39;    omd_file_path = gromosXX.md_run(\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/gromos/_gromosClass.py&#34;, line 78, in convert_pyGromos_types\n&#39;
+        b&#39;    return func(self, *nargs, **kwargs)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/gromos/gromosXX.py&#34;, line 215, in md_run\n&#39;
+        b&#39;    process = bash.execute(command_text)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 935, in execute\n&#39;
+        b&#39;    return execute_subprocess(command=command, verbose=verbose, catch_STD=catch_STD, env=env)\n&#39;
+        b&#39;  File &#34;/home/mlehner/PyGromosTools/pygromos/utils/bash.py&#34;, line 829, in execute_subprocess\n&#39;
+        b&#39;    raise ChildProcessError(msg)\n&#39;
+        b&#39;ChildProcessError: SubProcess Failed due to returncode: 139\n&#39;
+        b&#39; COMMAND: \n&#39;
+        b&#39;\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\n&#39;
+        b&#39;\n&#39;
+        b&#39;STDOUT:\n&#39;
+        b&#39;\t\n&#39;
+        b&#39;STDERR:\n&#39;
+        b&#34;\tb&#39;Segmentation fault\\n&#39;\n&#34;
+        b&#39;\n&#39;
+        b&#39;Failed during simulations: \n&#39;
+        b&#34;&lt;class &#39;ChildProcessError&#39;&gt;\n&#34;
+        b&#39;(&#34;SubProcess Failed due to returncode: 139\\n COMMAND: \\n\\texport OMP_NUM_THREADS=4  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/input/3_sd.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Hvap_files/hvap/test_liq/3_sd/simulation/3_sd_1/3_sd_1.imd @fin 3_sd_1.cnf @trc 3_sd_1.trc @tre 3_sd_1.tre &gt; 3_sd_1.omd\\n\\nSTDOUT:\\n\\t\\nSTDERR:\\n\\tb\&#39;Segmentation fault\\\\n\&#39;&#34;,)\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">UnboundLocalError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py</span> in <span class="ansi-cyan-fg">do</span><span class="ansi-blue-fg">(in_simSystem, out_dir_path, simulation_run_num, equilibration_run_num, initialize_first_run, reinitialize_every_run, analysis_script_path, submission_system, previous_job_ID, _no_double_submit_check, _work_dir, verbose, verbose_lvl)</span>
+<span class="ansi-green-intense-fg ansi-bold">    187</span>         previous_job_ID <span class="ansi-blue-fg">=</span> previous_job_ID <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>eq_job_id <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> eq_job_id
+<span class="ansi-green-fg">--&gt; 188</span><span class="ansi-red-fg">         previous_job_ID, tmp_jobname, in_simSystem = chain_submission(
+</span><span class="ansi-green-intense-fg ansi-bold">    189</span>             simSystem<span class="ansi-blue-fg">=</span>in_simSystem<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/scheduler_functions.py</span> in <span class="ansi-cyan-fg">chain_submission</span><span class="ansi-blue-fg">(simSystem, out_dir_path, out_prefix, chain_job_repetitions, worker_script, job_submission_system, jobname, run_analysis_script_every_x_runs, in_analysis_script_path, start_run_index, prefix_command, previous_job_ID, work_dir, initialize_first_run, reinitialize_every_run, verbose, verbose_lvl)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                 )
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                 </span>previous_job_ID <span class="ansi-blue-fg">=</span> job_submission_system<span class="ansi-blue-fg">.</span>submit_to_queue<span class="ansi-blue-fg">(</span>sub_job<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                 <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/local.py</span> in <span class="ansi-cyan-fg">submit_to_queue</span><span class="ansi-blue-fg">(self, sub_job)</span>
+<span class="ansi-green-intense-fg ansi-bold">     83</span>                 <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 84</span><span class="ansi-red-fg">                     </span>print<span class="ansi-blue-fg">(</span>process<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     85</span>                 <span class="ansi-green-fg">except</span> ChildProcessError<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">UnboundLocalError</span>: local variable &#39;process&#39; referenced before assignment
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py</span> in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    207</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 208</span><span class="ansi-red-fg">             </span>last_jobID <span class="ansi-blue-fg">=</span> simulation_scheduler<span class="ansi-blue-fg">.</span>do<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">**</span>MD_job_vars<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    209</span>     <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.py</span> in <span class="ansi-cyan-fg">do</span><span class="ansi-blue-fg">(in_simSystem, out_dir_path, simulation_run_num, equilibration_run_num, initialize_first_run, reinitialize_every_run, analysis_script_path, submission_system, previous_job_ID, _no_double_submit_check, _work_dir, verbose, verbose_lvl)</span>
+<span class="ansi-green-intense-fg ansi-bold">    233</span>         traceback<span class="ansi-blue-fg">.</span>print_exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 234</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;ERROR in SUBMISSION!&#34;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">from</span> err
+<span class="ansi-green-intense-fg ansi-bold">    235</span>
+
+<span class="ansi-red-fg">OSError</span>: ERROR in SUBMISSION!
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_9095/783684269.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hvap_sys<span class="ansi-blue-fg">.</span>run_liq<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/approaches/hvap_calculation/hvap_calculation.py</span> in <span class="ansi-cyan-fg">run_liq</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    252</span>         sys_eq_liq<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>imd_liq_md
+<span class="ansi-green-intense-fg ansi-bold">    253</span>         sys_eq_liq<span class="ansi-blue-fg">.</span>prepare_for_simulation<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 254</span><span class="ansi-red-fg">         sys_md_liq = simulation(
+</span><span class="ansi-green-intense-fg ansi-bold">    255</span>             in_gromos_simulation_system<span class="ansi-blue-fg">=</span>sys_eq_liq<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    256</span>             override_project_dir<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>groSys_liq<span class="ansi-blue-fg">.</span>work_folder<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py</span> in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    209</span>     <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    210</span>         traceback<span class="ansi-blue-fg">.</span>print_exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 211</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not submit the commands\n\t&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    212</span>
+<span class="ansi-green-intense-fg ansi-bold">    213</span>     time<span class="ansi-blue-fg">.</span>sleep<span class="ansi-blue-fg">(</span>time_wait_s_for_filesystem<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not submit the commands
+        ERROR in SUBMISSION!
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -632,11 +985,18 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17463/2387715759.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_9095/2387715759.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hvap_sys<span class="ansi-blue-fg">.</span>calc_hvap<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;hvap_sys&#39; is not defined
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/approaches/hvap_calculation/hvap_calculation.py</span> in <span class="ansi-cyan-fg">calc_hvap</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    264</span>
+<span class="ansi-green-intense-fg ansi-bold">    265</span>     <span class="ansi-green-fg">def</span> calc_hvap<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> float<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 266</span><span class="ansi-red-fg">         h_vap = self.groSys_liq_final.tre.get_Hvap(
+</span><span class="ansi-green-intense-fg ansi-bold">    267</span>             gas_traj<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>groSys_gas_final<span class="ansi-blue-fg">.</span>tre<span class="ansi-blue-fg">,</span> nMolecules<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>num_molecules<span class="ansi-blue-fg">,</span> temperature<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>temperature
+<span class="ansi-green-intense-fg ansi-bold">    268</span>         )
+
+<span class="ansi-red-fg">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;tre&#39;
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -648,7 +1008,7 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"865c91c103e246b4afd210add45a6db7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "673c395a36df464a9141212cb02ff497": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_865c91c103e246b4afd210add45a6db7"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"cf736b7e947d4008b73a6993884d2892": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "8f976c13a1fc49fca37c65bf09826360": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_cf736b7e947d4008b73a6993884d2892"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 
 
