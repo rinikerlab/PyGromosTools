@@ -7,6 +7,7 @@ sphinx-apidoc -o _source ../../pygromos;
 
 cp ../../examples/ex*ipynb ./Examples;
 cp -r ../../examples/developer_examples ./Examples;
+cp -r ../../examples/example_files ./Examples;
 cp ../../examples/t*ipynb ./Tutorials;
 
 python conf.py;
