@@ -1,10 +1,7 @@
 import re
 import inspect
-import __main__
 import numpy as np
 from enum import Enum
-from collections import namedtuple
-
 from pygromos.files.blocks._general_blocks import TITLE as generic_TITLE
 from pygromos.files.blocks._general_blocks import _generic_gromos_block, _iterable_gromos_block, _generic_field
 from pygromos.utils.typing import (
@@ -22,6 +19,7 @@ from pygromos.utils.typing import (
     RESNAME_Type,
 )
 
+from pygromos.files.blocks.pertubation_blocks import pertubation_lam_state_nonbonded as pertubation_lam_state
 
 """
    ENUMS
@@ -509,14 +507,6 @@ class special_atom_lj_pair_type(_generic_field):
         )
         return str_line
 
-
-"""
-    Pertubations
-"""
-
-pertubation_lam_state = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
-setattr(__main__, pertubation_lam_state.__name__, pertubation_lam_state)
-pertubation_lam_state.__module__ = "__main__"
 
 """
     NON-BONDED TERM BLOCKS
