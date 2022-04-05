@@ -174,7 +174,7 @@
 
 <div class="viewcode-block" id="TI_sampling"><a class="viewcode-back" href="../../../../_source/pygromos.simulations.modules.html#pygromos.simulations.modules.ti_modules.TI_sampling">[docs]</a><span class="k">def</span> <span class="nf">TI_sampling</span><span class="p">(</span>
     <span class="n">in_gromos_system</span><span class="p">:</span> <span class="n">Gromos_System</span><span class="p">,</span>
-    <span class="n">project_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">project_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;lambda_sampling&quot;</span><span class="p">,</span>
     <span class="n">lambda_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
     <span class="n">subSystem</span><span class="p">:</span> <span class="n">_SubmissionSystem</span> <span class="o">=</span> <span class="n">LOCAL</span><span class="p">(),</span>
@@ -217,6 +217,9 @@
 <span class="sd">        lam_system: Gromos_System</span>
 <span class="sd">            Gromos system of the simulation submitted last</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">project_dir</span> <span class="o">=</span> <span class="n">in_gromos_system</span><span class="o">.</span><span class="n">work_folder</span>
 
     <span class="n">work_dir</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">project_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">step_name</span><span class="p">)</span>
 
@@ -284,7 +287,7 @@
     <span class="n">previous_simulation_run</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">analysis_script</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">Gromos_System</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gromos_System</span><span class="p">:</span>
     <span class="n">template_control_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s2">&quot;concat&quot;</span><span class="p">:</span> <span class="p">{</span>

@@ -9,7 +9,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Topology creation and modifications with PyGromosTools &mdash; PyGromosTools  documentation</title>
+  <title>Creating and modifying Topologies &mdash; PyGromosTools  documentation</title>
   
 
   
@@ -94,7 +94,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../example_TI_gromos_simulation.html">TI Calculation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example_amber2gromos.html">Amber2Gromos Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_on_HPC_Clusters.html">Usage of PyGromosTools on HPC-cluster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example_gromos_qmmm.html">QM/MM in Gromos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example_hvap.html">Calculation of free energy of evaporization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example_openff.html">OpenFF Automatic Parametrization</a></li>
@@ -103,10 +103,10 @@
 <li class="toctree-l3"><a class="reference internal" href="dev_example_PyGromosPP.html">Implemented pyGromosPP programs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html">PyGromos File Examples</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_simulation.html">SD Simulations with Submission System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html">Gromos Trajectory evaluation with Pygromos and Pandas</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html">Gromos Tutorial Pipeline - OLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_trajectories.html">Gromos Trajectory Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html">Gromos Tutorial Pipeline - on a low level</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html">Submission Systems</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Topology creation and modifications with PyGromosTools</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Creating and modifying Topologies</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Automatic-System-generation-and-combining-of-topologies">Automatic System generation and combining of topologies</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Manual-topology-modifications">Manual topology modifications</a></li>
 </ul>
@@ -167,7 +167,7 @@
         
           <li><a href="index.html">Developer Examples</a> &raquo;</li>
         
-      <li>Topology creation and modifications with PyGromosTools</li>
+      <li>Creating and modifying Topologies</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -456,8 +456,8 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<section id="Topology-creation-and-modifications-with-PyGromosTools">
-<h1>Topology creation and modifications with PyGromosTools<a class="headerlink" href="#Topology-creation-and-modifications-with-PyGromosTools" title="Permalink to this headline">¶</a></h1>
+<section id="Creating-and-modifying-Topologies">
+<h1>Creating and modifying Topologies<a class="headerlink" href="#Creating-and-modifying-Topologies" title="Permalink to this headline">¶</a></h1>
 <p>PyGromosTools offers a wide variaty of tools and functions to assist in the creation and modification of specialized topologies.</p>
 <p>In the following notebook we will demonstrate some of the functions and theire usage. These functions and workflows should work with all supported forcfields, but we will use OpenForceField due to the fact that it is independant of make_top and a Gromos++ installation.</p>
 <div class="nbinput nblast docutils container">
@@ -474,7 +474,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
-<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.ff.forcefield_system</span> <span class="kn">import</span> <span class="n">forcefield_system</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield.openff</span> <span class="kn">import</span> <span class="n">openff</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
 </pre></div>
 </div>
@@ -483,21 +483,14 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "1e5f45914e3942ef9387383780f977f3"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "377fda067d184803950579cfce1dbb3e"}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ModuleNotFoundError</span>                       Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/706441224.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>gromos_system<span class="ansi-blue-fg">.</span>gromos_system <span class="ansi-green-fg">import</span> Gromos_System
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>gromos_system<span class="ansi-blue-fg">.</span>ff<span class="ansi-blue-fg">.</span>forcefield_system <span class="ansi-green-fg">import</span> forcefield_system
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>topology<span class="ansi-blue-fg">.</span>top <span class="ansi-green-fg">import</span> Top
-
-<span class="ansi-red-fg">ModuleNotFoundError</span>: No module named &#39;pygromos.files.gromos_system.ff&#39;
+Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field Toolkit does not require the OpenEye Toolkits, and can use RDKit/AmberTools instead. However, if you have a valid license for the OpenEye Toolkits, consider installing them for faster performance and additional file format support: https://docs.eyesopen.com/toolkits/python/quickstart-python/linuxosx.html OpenEye offers free Toolkit licenses for academics: https://www.eyesopen.com/academic-licensing
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -517,7 +510,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># defining the forcefield we want to use. In case a Gromos system is used make sure to have a valid Gromos++ installation and define the gromos++ path in Gromos_System or add it to you Path.</span>
-<span class="n">ff</span> <span class="o">=</span> <span class="n">forcefield_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">ff</span> <span class="o">=</span> <span class="n">openff</span><span class="o">.</span><span class="n">OpenFF</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -526,13 +519,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/3430551732.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># defining the forcefield we want to use. In case a Gromos system is used make sure to have a valid Gromos++ installation and define the gromos++ path in Gromos_System or add it to you Path.</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>ff <span class="ansi-blue-fg">=</span> forcefield_system<span class="ansi-blue-fg">(</span>name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;off&#34;</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;forcefield_system&#39; is not defined
+Found off: /home/mlehner/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -560,7 +547,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We define our Gromos_system. Note the option auto_convert=True to automatically genarte a valid topology from the molecule defined in mol and the forcefield defined in ff.</span>
-<span class="n">grosys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">Forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">rdkitMol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">grosys</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">Forcefield</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span>
+                       <span class="n">rdkitMol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span> <span class="n">auto_convert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -570,12 +558,13 @@ div.rendered_html tbody tr:hover {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/2847303599.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_9256/701023652.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># We define our Gromos_system. Note the option auto_convert=True to automatically genarte a valid topology from the molecule defined in mol and the forcefield defined in ff.</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">(</span>work_folder<span class="ansi-blue-fg">=</span>root_dir<span class="ansi-blue-fg">,</span> system_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;test&#34;</span><span class="ansi-blue-fg">,</span> Forcefield<span class="ansi-blue-fg">=</span>ff<span class="ansi-blue-fg">,</span> rdkitMol<span class="ansi-blue-fg">=</span>mol<span class="ansi-blue-fg">,</span> auto_convert<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> grosys = Gromos_System(work_folder=root_dir, system_name=&#34;test&#34;, Forcefield=ff,
+</span><span class="ansi-green-intense-fg ansi-bold">      3</span>                        rdkitMol=mol, auto_convert=True)
 
-<span class="ansi-red-fg">NameError</span>: name &#39;ff&#39; is not defined
+<span class="ansi-red-fg">TypeError</span>: __init__() got an unexpected keyword argument &#39;Forcefield&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -594,7 +583,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/2102199860.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/2102199860.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># The topology created in the last step printed</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>TITLE
 
@@ -602,7 +591,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <p>After the automatic creation of this topology for a Cyclohexan molecule we could try to make a liquid topology. Therefore we want to have multiple copies of our topology in one single topology.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -610,20 +599,6 @@ div.rendered_html tbody tr:hover {
 <span class="n">retTop</span><span class="o">=</span><span class="n">Top</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/410468238.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># define a new, empty top</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>retTop<span class="ansi-blue-fg">=</span>Top<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;Top&#39; is not defined
-</pre></div></div>
 </div>
 <p>With the “+=” operator we can add multiple topologies to a single topology. Or multiply the topology in a for loop. This alows costum topologies for liquids. After the loop we can reasign the variable to our Gromos_System and check if the additional molecules were added.</p>
 <div class="nbinput docutils container">
@@ -643,12 +618,12 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/683585292.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/683585292.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">for</span> _ <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">10</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     </span>retTop <span class="ansi-blue-fg">+=</span> grosys<span class="ansi-blue-fg">.</span>top
 <span class="ansi-green-intense-fg ansi-bold">      3</span> grosys<span class="ansi-blue-fg">.</span>top <span class="ansi-blue-fg">=</span> retTop
 
-<span class="ansi-red-fg">NameError</span>: name &#39;retTop&#39; is not defined
+<span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -667,7 +642,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/2118717882.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/2118717882.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># we added 10 copies of the initial moleucle to retTop and our new topology now contains 10 molecules in the RESNAME block.</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>RESNAME
 
@@ -689,7 +664,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/2483109453.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/2483109453.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>make_ordered<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
@@ -711,12 +686,12 @@ div.rendered_html tbody tr:hover {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/1925938220.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_9256/1925938220.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># create a topology for Toluene</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>tolTop <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">(</span>work_folder<span class="ansi-blue-fg">=</span>root_dir<span class="ansi-blue-fg">,</span> system_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;TOL&#34;</span><span class="ansi-blue-fg">,</span> in_smiles<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;c1ccccc1C&#34;</span><span class="ansi-blue-fg">,</span> Forcefield<span class="ansi-blue-fg">=</span>ff<span class="ansi-blue-fg">,</span> auto_convert<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>top
 
-<span class="ansi-red-fg">NameError</span>: name &#39;ff&#39; is not defined
+<span class="ansi-red-fg">TypeError</span>: __init__() got an unexpected keyword argument &#39;Forcefield&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -735,7 +710,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/3231132463.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/3231132463.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># add the toluene topology to our main topology</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top <span class="ansi-blue-fg">+=</span> tolTop
 
@@ -757,7 +732,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/180763974.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/180763974.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>tolTop<span class="ansi-blue-fg">.</span>LJPARAMETERS<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>C6
 
 <span class="ansi-red-fg">NameError</span>: name &#39;tolTop&#39; is not defined
@@ -779,7 +754,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/289077257.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/289077257.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># check if it was added properly</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>RESNAME
 
@@ -807,7 +782,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/3075195395.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/3075195395.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>add_block<span class="ansi-blue-fg">(</span>blocktitle<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;TITLE&#34;</span><span class="ansi-blue-fg">,</span> content<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;This is a new Title&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
@@ -828,7 +803,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/2483109453.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/2483109453.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>make_ordered<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
@@ -849,7 +824,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/1590183265.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/1590183265.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>TITLE
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
@@ -872,7 +847,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/2956282460.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/2956282460.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># We add a ion named &#39;XX&#39; with charge +1 and certain LJ-Parameters to the main topology</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>add_new_atom<span class="ansi-blue-fg">(</span>PANM<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;XX&#34;</span><span class="ansi-blue-fg">,</span> CG<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> C6<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1e-3</span><span class="ansi-blue-fg">,</span> C12<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1e-6</span><span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
 
@@ -895,7 +870,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/3448078290.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/3448078290.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Check for the new Atomtype &#39;XX&#39;</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>ATOMTYPENAME
 
@@ -917,7 +892,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/3351878566.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/3351878566.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>SOLUTEATOM
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
@@ -938,7 +913,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8008/1101117236.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_9256/1101117236.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grosys<span class="ansi-blue-fg">.</span>rebase_files<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grosys&#39; is not defined
@@ -953,7 +928,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"8d95d6793b7e45f5ab35be9c5023cbe3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "1e5f45914e3942ef9387383780f977f3": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_8d95d6793b7e45f5ab35be9c5023cbe3"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"d9f016bf16c44ab3ba42aef8bb8c9d80": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "377fda067d184803950579cfce1dbb3e": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_d9f016bf16c44ab3ba42aef8bb8c9d80"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
