@@ -493,7 +493,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "5271a05967d44d85a1732fab3cfebce5"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "e631100b6a6f434588241e693bdefbb0"}</script></div>
 </div>
 <section id="Build-initial-files">
 <h2>Build initial files<a class="headerlink" href="#Build-initial-files" title="Permalink to this headline">¶</a></h2>
@@ -530,37 +530,13 @@ div.rendered_html tbody tr:hover {
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/2242863237.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>ff <span class="ansi-green-fg">import</span> Gromos54A7
-<span class="ansi-green-intense-fg ansi-bold">      2</span>
-<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>topo_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#39;/a_topo&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg">## Make Cl-</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo
+&#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo/peptide.top&#39;
 </pre></div></div>
 </div>
 </section>
@@ -576,17 +552,12 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/3710573730.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>top_system <span class="ansi-blue-fg">=</span> topo_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/vac_sys.top&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> gromPP<span class="ansi-blue-fg">.</span>com_top<span class="ansi-blue-fg">(</span>in_topo_paths<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">[</span>top_peptide<span class="ansi-blue-fg">,</span> top_cl<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> topo_multiplier<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> out_top_path<span class="ansi-blue-fg">=</span>top_system<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;topo_dir&#39; is not defined
+&#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo/vac_sys.top&#39;
 </pre></div></div>
 </div>
 </section>
@@ -606,37 +577,19 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/b_coord’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/4257591329.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>coord_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/b_coord&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> in_pdb <span class="ansi-blue-fg">=</span> input_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/peptide.pdb&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> cnf_peptide <span class="ansi-blue-fg">=</span> coord_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/cnf_vacuum_peptide.cnf&#34;</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/4257591329.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span>
 <span class="ansi-green-intense-fg ansi-bold">      5</span> cnf_peptide <span class="ansi-blue-fg">=</span> gromPP<span class="ansi-blue-fg">.</span>pdb2gromos<span class="ansi-blue-fg">(</span>in_pdb_path<span class="ansi-blue-fg">=</span>in_pdb<span class="ansi-blue-fg">,</span> in_top_path<span class="ansi-blue-fg">=</span>top_peptide<span class="ansi-blue-fg">,</span> out_cnf_path<span class="ansi-blue-fg">=</span>cnf_peptide<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>Cnf<span class="ansi-blue-fg">(</span>cnf_peptide<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/b_coord
+<span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 <section id="add-hydrogens">
@@ -658,20 +611,20 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/3640015462.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cnf_hpeptide <span class="ansi-blue-fg">=</span> coord_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/vacuum_hpeptide.cnf&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> cnf_hpeptide <span class="ansi-blue-fg">=</span> gromPP<span class="ansi-blue-fg">.</span>protonate<span class="ansi-blue-fg">(</span>in_cnf_path<span class="ansi-blue-fg">=</span>cnf_peptide<span class="ansi-blue-fg">,</span> in_top_path<span class="ansi-blue-fg">=</span>top_peptide<span class="ansi-blue-fg">,</span> out_cnf_path<span class="ansi-blue-fg">=</span>cnf_hpeptide<span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/3640015462.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> cnf_hpeptide <span class="ansi-blue-fg">=</span> coord_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/vacuum_hpeptide.cnf&#34;</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>cnf_hpeptide <span class="ansi-blue-fg">=</span> gromPP<span class="ansi-blue-fg">.</span>protonate<span class="ansi-blue-fg">(</span>in_cnf_path<span class="ansi-blue-fg">=</span>cnf_peptide<span class="ansi-blue-fg">,</span> in_top_path<span class="ansi-blue-fg">=</span>top_peptide<span class="ansi-blue-fg">,</span> out_cnf_path<span class="ansi-blue-fg">=</span>cnf_hpeptide<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> Cnf<span class="ansi-blue-fg">(</span>cnf_hpeptide<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;coord_dir&#39; is not defined
+<span class="ansi-red-fg">AttributeError</span>: &#39;GromosPP&#39; object has no attribute &#39;protonate&#39;
 </pre></div></div>
 </div>
 </section>
 <section id="cnf-to-pdb">
 <h4>cnf to pdb<a class="headerlink" href="#cnf-to-pdb" title="Permalink to this headline">¶</a></h4>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
@@ -680,21 +633,6 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
                                <span class="n">periodic_boundary_condition</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">out_file_format</span><span class="o">=</span><span class="s2">&quot;pdb&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/3784546545.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>out_pdb <span class="ansi-blue-fg">=</span> coord_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/vacuum_hpeptide.pdb&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> out_pdb = gromPP.frameout(in_coord_path=cnf_hpeptide, in_top_path=top_peptide, out_file_path=out_pdb,
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                                periodic_boundary_condition=&#34;v&#34;, out_file_format=&#34;pdb&#34;, time=0)
-
-<span class="ansi-red-fg">NameError</span>: name &#39;coord_dir&#39; is not defined
-</pre></div></div>
 </div>
 </section>
 </section>
@@ -737,34 +675,19 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/c_vacuum_emin’: No such file or directory
+COMMAND:  export OMP_NUM_THREADS=1  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo/peptide.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/b_coord/vacuum_hpeptide.cnf @input /home/mlehner/PyGromosTools/pygromos/data/simulation_parameters_templates/vac_emin.imd @fin /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/c_vacuum_emin/vacuum_emin.cnf &gt; /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/c_vacuum_emin/vacuum_emin.omd
+
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/189351535.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;vacuum_emin&#34;</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>vacuum_emin_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/c_&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> os<span class="ansi-blue-fg">.</span>chdir<span class="ansi-blue-fg">(</span>vacuum_emin_dir<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/c_vacuum_emin
+&#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/c_vacuum_emin/vacuum_emin.cnf&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -784,14 +707,14 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/1872843602.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/1872843602.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>simulations<span class="ansi-blue-fg">.</span>modules<span class="ansi-blue-fg">.</span>preset_simulation_modules <span class="ansi-green-fg">import</span> emin
 <span class="ansi-green-intense-fg ansi-bold">      2</span>
 <span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>emin_gromos_system<span class="ansi-blue-fg">,</span> jobID <span class="ansi-blue-fg">=</span> emin<span class="ansi-blue-fg">(</span>in_gromos_system<span class="ansi-blue-fg">=</span>grom_system<span class="ansi-blue-fg">,</span> project_dir<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> emin_gromos_system
 
-<span class="ansi-red-fg">NameError</span>: name &#39;grom_system&#39; is not defined
+<span class="ansi-red-fg">TypeError</span>: emin() got an unexpected keyword argument &#39;project_dir&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -809,7 +732,7 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/448785403.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_7349/448785403.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>emin_gromos_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;emin_gromos_system&#39; is not defined
@@ -837,42 +760,24 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/d_box’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/3965972887.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>solvent_coordinates <span class="ansi-green-fg">import</span> spc
-<span class="ansi-green-intense-fg ansi-bold">      2</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;box&#34;</span>
-<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>box_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/d_&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> cnf_box = gromPP.sim_box(in_top_path=top_peptide, in_cnf_path=cnf_emin_vacuum,in_solvent_cnf_file_path=spc,
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/3965972887.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span>                          periodic_boundary_condition=&#34;r&#34;, minwall=0.8, threshold=0.23, rotate=True)
+<span class="ansi-green-intense-fg ansi-bold">      8</span>
+<span class="ansi-green-fg">----&gt; 9</span><span class="ansi-red-fg"> </span>Cnf<span class="ansi-blue-fg">(</span>cnf_box<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/d_box
+<span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 <section id="to-pdb">
 <h4>to pdb<a class="headerlink" href="#to-pdb" title="Permalink to this headline">¶</a></h4>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
@@ -882,22 +787,6 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
                                <span class="n">periodic_boundary_condition</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">out_file_format</span><span class="o">=</span><span class="s2">&quot;pdb&quot;</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="s2">&quot;ALL&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/2885867994.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>out_pdb <span class="ansi-blue-fg">=</span> box_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;.pdb&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> out_pdb = gromPP.frameout(in_coord_path=cnf_box, in_top_path=top_peptide, out_file_path=out_pdb,
-<span class="ansi-green-intense-fg ansi-bold">      4</span>                                periodic_boundary_condition=&#34;r&#34;, out_file_format=&#34;pdb&#34;, include=&#34;ALL&#34;, time=0)
-
-<span class="ansi-red-fg">NameError</span>: name &#39;box_dir&#39; is not defined
-</pre></div></div>
 </div>
 </section>
 </section>
@@ -917,21 +806,27 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ion @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo/peptide.top @pos /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/d_box/box.cnf @pbc v @potential 0.8 @mindist 0.8 @negative 2 CL-
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/3614874038.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;ion&#34;</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> cnf_ion = gromPP.ion(in_cnf_path=cnf_box,
-</span><span class="ansi-green-intense-fg ansi-bold">      3</span>                      in_top_path<span class="ansi-blue-fg">=</span>top_peptide<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>                      out_cnf_path<span class="ansi-blue-fg">=</span>box_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;.cnf&#34;</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/3614874038.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      5</span>                      negative=[2, &#34;CL-&#34;],verbose=True           )
+<span class="ansi-green-intense-fg ansi-bold">      6</span>
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg"> </span>Cnf<span class="ansi-blue-fg">(</span>cnf_ion<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;cnf_box&#39; is not defined
+<span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 </section>
@@ -976,37 +871,14 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/2695739971.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;box_emin&#34;</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>box_emin_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/e_&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> os<span class="ansi-blue-fg">.</span>chdir<span class="ansi-blue-fg">(</span>box_emin_dir<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span>
+POSRES /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin/box_emin_posres.pos
+COMMAND:  export OMP_NUM_THREADS=1  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/a_topo/vac_sys.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/d_box/ion.cnf @input /home/mlehner/PyGromosTools/pygromos/data/simulation_parameters_templates/emin.imd @posresspec /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin/box_emin_posres.pos @refpos /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin/box_emin_refpos.rpf @fin /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin/box_emin.cnf &gt; /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin/box_emin.omd
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/e_box_emin
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1023,11 +895,11 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/768396752.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/768396752.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>Cnf<span class="ansi-blue-fg">(</span>cnf_emin_box<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;cnf_emin_box&#39; is not defined
+<span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 </section>
@@ -1078,37 +950,13 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/2228932994.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;eq_NVP&#34;</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>eq_NVP_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/f_&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> os<span class="ansi-blue-fg">.</span>chdir<span class="ansi-blue-fg">(</span>eq_NVP_dir<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP
+&#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP/eq_NVP.cnf&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1128,14 +976,42 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/325201585.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cnf <span class="ansi-blue-fg">=</span> Cnf<span class="ansi-blue-fg">(</span>cnf_eq_NVP<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>out_eq_NVP<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;.trc&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/325201585.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> cnf <span class="ansi-blue-fg">=</span> Cnf<span class="ansi-blue-fg">(</span>cnf_eq_NVP<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>out_eq_NVP<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;.trc&#34;</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> trc<span class="ansi-blue-fg">.</span>cog_reframe<span class="ansi-blue-fg">(</span>cnf<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> trc<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span>cnf<span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;cnf_eq_NVP&#39; is not defined
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/trc.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, xyz, topology, time, unitcell_lengths, unitcell_angles, traj_path, in_cnf, timestep_duration, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">    108</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> <span class="ansi-blue-fg">(</span>xyz <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">and</span> topology <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 110</span><span class="ansi-red-fg">             super().__init__(
+</span><span class="ansi-green-intense-fg ansi-bold">    111</span>                 xyz<span class="ansi-blue-fg">=</span>xyz<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    112</span>                 topology<span class="ansi-blue-fg">=</span>topology<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, xyz, topology, time, unitcell_lengths, unitcell_angles)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1224</span>         <span class="ansi-red-fg"># the xyz, we can check that it lines up (e.g. n_atoms), with the topology</span>
+<span class="ansi-green-intense-fg ansi-bold">   1225</span>         self<span class="ansi-blue-fg">.</span>topology <span class="ansi-blue-fg">=</span> topology
+<span class="ansi-green-fg">-&gt; 1226</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>xyz <span class="ansi-blue-fg">=</span> xyz
+<span class="ansi-green-intense-fg ansi-bold">   1227</span>
+<span class="ansi-green-intense-fg ansi-bold">   1228</span>         <span class="ansi-red-fg"># _rmsd_traces are the inner product of each centered conformation,</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">xyz</span><span class="ansi-blue-fg">(self, value)</span>
+<span class="ansi-green-intense-fg ansi-bold">    937</span>             shape <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    938</span>
+<span class="ansi-green-fg">--&gt; 939</span><span class="ansi-red-fg">         value = ensure_type(value, np.float32, 3, &#39;xyz&#39;, shape=shape,
+</span><span class="ansi-green-intense-fg ansi-bold">    940</span>                             warn_on_cast=False, add_newaxis_on_deficient_ndim=True)
+<span class="ansi-green-intense-fg ansi-bold">    941</span>         self<span class="ansi-blue-fg">.</span>_xyz <span class="ansi-blue-fg">=</span> value
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/utils/validation.py</span> in <span class="ansi-cyan-fg">ensure_type</span><span class="ansi-blue-fg">(val, dtype, ndim, name, length, can_be_none, shape, warn_on_cast, add_newaxis_on_deficient_ndim)</span>
+<span class="ansi-green-intense-fg ansi-bold">     99</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>val<span class="ansi-blue-fg">,</span> collections<span class="ansi-blue-fg">.</span>abc<span class="ansi-blue-fg">.</span>Sequence<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    100</span>                 <span class="ansi-red-fg"># sequences are easy. these are like lists and stuff</span>
+<span class="ansi-green-fg">--&gt; 101</span><span class="ansi-red-fg">                 </span>val <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>val<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    102</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    103</span>                 <span class="ansi-red-fg"># this is a generator...</span>
+
+<span class="ansi-red-fg">ValueError</span>: could not convert string to float: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP/eq_NVP.trc&#39;
 </pre></div></div>
 </div>
 </section>
@@ -1150,16 +1026,31 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/2711284005.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>grom_system
 
-<span class="ansi-red-fg">NameError</span>: name &#39;grom_system&#39; is not defined
+GROMOS SYSTEM: in_eq_NVP
+################################################################################
+WORKDIR: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP
+LAST CHECKPOINT: None
+
+GromosXX_bin: None
+GromosPP_bin: None
+FILES:
+        imd: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP/in_eq_NVP.imd
+        top: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP/in_eq_NVP.top
+        cnf: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/f_eq_NVP/in_eq_NVP.cnf
+FUTURE PROMISE: False
+SYSTEM:
+        PROTEIN:        protein  nresidues: 5 natoms: 71
+        LIGANDS:        []  resID: []  natoms: 0
+        Non-LIGANDS:    [&#39;CL-&#39;]  nmolecules: 0  natoms: 2
+        SOLVENT:        SOLV  nmolecules: 930  natoms: 2790
+
+
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1203,34 +1094,19 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md’: No such file or directory
+COMMAND:  export OMP_NUM_THREADS=1  &amp;&amp;  md @topo /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/in_md.top @conf /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/in_md.cnf @input /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/in_md.imd @fin /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/md.cnf @trc /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/md.trc @tre /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/md.tre &gt; /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/md.omd
+
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/1858083578.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;md&#34;</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>md_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/g_&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> os<span class="ansi-blue-fg">.</span>chdir<span class="ansi-blue-fg">(</span>md_dir<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md
+&#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/md.cnf&#39;
 </pre></div></div>
 </div>
 </section>
@@ -1254,14 +1130,14 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/227614321.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cnf <span class="ansi-blue-fg">=</span> Cnf<span class="ansi-blue-fg">(</span>cnf_md<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/227614321.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> cnf <span class="ansi-blue-fg">=</span> Cnf<span class="ansi-blue-fg">(</span>cnf_md<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg">#shows pbc :)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;cnf_md&#39; is not defined
+<span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1281,17 +1157,45 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/153322794.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_7349/153322794.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>out_md<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;.trc&#34;</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> trc<span class="ansi-blue-fg">.</span>TITLE <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>trc<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> trc<span class="ansi-blue-fg">.</span>cog_reframe<span class="ansi-blue-fg">(</span>cnf<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> trc<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span>cnf<span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;out_md&#39; is not defined
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/trajectory/trc.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, xyz, topology, time, unitcell_lengths, unitcell_angles, traj_path, in_cnf, timestep_duration, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">    108</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> <span class="ansi-blue-fg">(</span>xyz <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">and</span> topology <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 110</span><span class="ansi-red-fg">             super().__init__(
+</span><span class="ansi-green-intense-fg ansi-bold">    111</span>                 xyz<span class="ansi-blue-fg">=</span>xyz<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    112</span>                 topology<span class="ansi-blue-fg">=</span>topology<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, xyz, topology, time, unitcell_lengths, unitcell_angles)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1224</span>         <span class="ansi-red-fg"># the xyz, we can check that it lines up (e.g. n_atoms), with the topology</span>
+<span class="ansi-green-intense-fg ansi-bold">   1225</span>         self<span class="ansi-blue-fg">.</span>topology <span class="ansi-blue-fg">=</span> topology
+<span class="ansi-green-fg">-&gt; 1226</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>xyz <span class="ansi-blue-fg">=</span> xyz
+<span class="ansi-green-intense-fg ansi-bold">   1227</span>
+<span class="ansi-green-intense-fg ansi-bold">   1228</span>         <span class="ansi-red-fg"># _rmsd_traces are the inner product of each centered conformation,</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/core/trajectory.py</span> in <span class="ansi-cyan-fg">xyz</span><span class="ansi-blue-fg">(self, value)</span>
+<span class="ansi-green-intense-fg ansi-bold">    937</span>             shape <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    938</span>
+<span class="ansi-green-fg">--&gt; 939</span><span class="ansi-red-fg">         value = ensure_type(value, np.float32, 3, &#39;xyz&#39;, shape=shape,
+</span><span class="ansi-green-intense-fg ansi-bold">    940</span>                             warn_on_cast=False, add_newaxis_on_deficient_ndim=True)
+<span class="ansi-green-intense-fg ansi-bold">    941</span>         self<span class="ansi-blue-fg">.</span>_xyz <span class="ansi-blue-fg">=</span> value
+
+<span class="ansi-green-fg">~/anaconda3/envs/pygro2/lib/python3.9/site-packages/mdtraj/utils/validation.py</span> in <span class="ansi-cyan-fg">ensure_type</span><span class="ansi-blue-fg">(val, dtype, ndim, name, length, can_be_none, shape, warn_on_cast, add_newaxis_on_deficient_ndim)</span>
+<span class="ansi-green-intense-fg ansi-bold">     99</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>val<span class="ansi-blue-fg">,</span> collections<span class="ansi-blue-fg">.</span>abc<span class="ansi-blue-fg">.</span>Sequence<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    100</span>                 <span class="ansi-red-fg"># sequences are easy. these are like lists and stuff</span>
+<span class="ansi-green-fg">--&gt; 101</span><span class="ansi-red-fg">                 </span>val <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>val<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    102</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    103</span>                 <span class="ansi-red-fg"># this is a generator...</span>
+
+<span class="ansi-red-fg">ValueError</span>: could not convert string to float: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/g_md/md.trc&#39;
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -1300,37 +1204,6 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">md_dir</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/h_ana’: No such file or directory
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_16122/3341002831.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> out_prefix <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;ana&#34;</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>md_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/h_&#34;</span><span class="ansi-blue-fg">+</span>out_prefix<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> os<span class="ansi-blue-fg">.</span>chdir<span class="ansi-blue-fg">(</span>md_dir<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/Tutorial_System/h_ana
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -1341,7 +1214,7 @@ mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_projec
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"01201aea587341578abcc76a1770b8eb": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5271a05967d44d85a1732fab3cfebce5": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_01201aea587341578abcc76a1770b8eb"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"e7d9040d8c2a44d2b28a7e59c3136049": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "e631100b6a6f434588241e693bdefbb0": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_e7d9040d8c2a44d2b28a7e59c3136049"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
