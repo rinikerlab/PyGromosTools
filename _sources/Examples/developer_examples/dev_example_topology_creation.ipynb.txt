@@ -44,7 +44,7 @@
    "outputs": [],
    "source": [
     "# setting the work directory\n",
-    "root_dir = os.getcwd()+\"/example_files/topo_tutorial/\""
+    "root_dir = os.path.abspath(\"../example_files/topo_tutorial/\")"
    ]
   },
   {

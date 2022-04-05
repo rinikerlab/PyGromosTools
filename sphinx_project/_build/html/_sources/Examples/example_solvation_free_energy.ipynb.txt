@@ -50,7 +50,7 @@
    "outputs": [],
    "source": [
     "smiles = \"c1ccccc1\"\n",
-    "workfolder = project_dir = os.path.abspath(os.path.dirname(pygromos.__file__)+\"/../examples/example_files/solvation_free_energy\")"
+    "workfolder = project_dir = os.path.abspath(\"example_files/solvation_free_energy\")"
    ]
   },
   {
