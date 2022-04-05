@@ -484,7 +484,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "629be3304c5145a2838089e152a7ca6e"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "50dc6fddcf114c4daa28f056e0a13f3f"}</script></div>
 </div>
 <section id="Support-for-QMMM-functionality-in-GROMOS-input-files">
 <h2>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline">¶</a></h2>
@@ -512,33 +512,109 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2146202794.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> imd_path <span class="ansi-blue-fg">=</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>abspath<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;example_files/QMMM_files/md.imd&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>imd_file <span class="ansi-blue-fg">=</span> Imd<span class="ansi-blue-fg">(</span>imd_path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> imd_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Demonstration of a Gromos imd file containing a QMMM block&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> imd_file
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/simulation_parameters/imd.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
-<span class="ansi-green-intense-fg ansi-bold">     66</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">=</span>in_value<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">=</span>_future_file<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span>
-<span class="ansi-green-intense-fg ansi-bold">     70</span>         <span class="ansi-red-fg"># TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks</span>
-
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
-<span class="ansi-green-intense-fg ansi-bold">     40</span>                 self<span class="ansi-blue-fg">.</span>read_blocks<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     41</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 42</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not find File: &#34;</span><span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     43</span>
-<span class="ansi-green-intense-fg ansi-bold">     44</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> __class__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/QMMM_files/md.imd
+TITLE
+Demonstration of a Gromos imd file containing a QMMM block
+        &gt;&gt;&gt; Generated with PyGromosTools (riniker group) &lt;&lt;&lt;
+END
+BOUNDCOND
+#        NTB     NDFMIN
+         1       3
+END
+COMTRANSROT
+#        NSCM
+         1000
+END
+CONSTRAINT
+#        NTC
+         3
+#        NTCP    NTCP0(1)
+         1       0.000100
+#        NTCS    NTCS0(1)
+         1       0.000100
+END
+FORCE
+#        BONDS   ANGLES          IMPROPER        DIHEDRAL        ELECTROSTATIC   VDW
+         0       1       1       1       1       1
+#        NEGR    NRE
+         1       3613
+END
+INITIALISE
+#        NTIVEL          NTISHK          NTINHT          NTINHB
+         1       3       0       0
+#        NTISHI          NTIRTC          NTICOM
+         1       0       0
+#        NTISTI
+         0
+#        IG      TEMPI
+         210185          298.000000
+END
+MULTIBATH
+# ALGORITHM
+  0
+# NBATHS
+  1
+# TEMP0(1 ... NBATHS)    TAU(1 ... NBATHS)
+  298.0          0.1
+# DOFSET
+  1
+# LAST(1 ... DOFSET)     COMBATH(1 ... DOFSET)   IRBATH(1 ... DOFSET)
+  3613   1       1
+END
+NONBONDED
+#        NLRELE
+         1
+#        APPAK   RCRF    EPSRF   NSLFEXCL
+         0.000000        1.400000        66.700000       1
+#        NSHAPE          ASHAPE          NA2CLC          TOLA2   EPSLS
+         3       1.400000        2       1e-10   0.000000
+#        NKX     NKY     NKZ     KCUT
+         10      10      10      100.000000
+#        NGX     NGY     NGZ     NASORD          NFDORD          NALIAS          NSPORD
+         32      32      32      3       2       3       4
+#        NQEVAL          FACCUR          NRDGRD          NWRGRD
+         1000    1.600000        0       0
+#        NLRLJ   SLVDNS
+         0       33.300000
+END
+PAIRLIST
+#        ALGORITHM       NSNB    RCUTP   RCUTL   SIZE    TYPE
+         0       5       0.800000        1.400000        0.4     0
+END
+PRESSURESCALE
+#        COUPLE          SCALE   COMP    TAUP    VIRIAL
+         2       1       0.000458        0.500000        2
+#        SEMIANISOTROPIC COUPLINGS(X, Y, Z)
+         1       1       1
+#        PRES0(1...3,1...3)
+         0.06102         0.0     0.0
+         0.0     0.06102         0.0
+         0.0     0.0     0.06102
+END
+PRINTOUT
+#        NTPR    NTPP
+         10      0
+END
+QMMM
+#        NTQMMM          NTQMSW          RCUTQ   NTWQMMM         QMLJ    MMSCAL
+         1       5       1.400000        0       0       -1.000000
+END
+STEP
+#        NSTLIM          T       DT
+         100000          0.000000        0.002000
+END
+SYSTEM
+#        NPM     NSM
+         1       0
+END
+WRITETRAJ
+#        NTWX    NTWSE   NTWV    NTWF    NTWE    NTWG    NTWB
+         200     0       0       0       100     0       0
+END
 </pre></div></div>
 </div>
 </section>
@@ -560,14 +636,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2592676062.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>imd_file<span class="ansi-blue-fg">.</span>QMMM<span class="ansi-blue-fg">.</span>NTQMMM<span class="ansi-blue-fg">)</span> <span class="ansi-red-fg"># QM/MM toggled on/off</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>imd_file<span class="ansi-blue-fg">.</span>QMMM<span class="ansi-blue-fg">.</span>NTQMSW<span class="ansi-blue-fg">)</span> <span class="ansi-red-fg"># which QM/MM engine</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>imd_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;imd_file&#39; is not defined
+1
+5
+Demonstration of a Gromos imd file containing a QMMM block
 </pre></div></div>
 </div>
 </section>
@@ -584,17 +655,15 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/1144744683.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>imd_file<span class="ansi-blue-fg">.</span>QMMM<span class="ansi-blue-fg">.</span>NTQMSW <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">4</span> <span class="ansi-red-fg"># switch to ORCA as QM software</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> imd_file<span class="ansi-blue-fg">.</span>QMMM
-
-<span class="ansi-red-fg">NameError</span>: name &#39;imd_file&#39; is not defined
+QMMM
+#        NTQMMM          NTQMSW          RCUTQ   NTWQMMM         QMLJ    MMSCAL
+         1       4       1.400000        0       0       -1.000000
+END
 </pre></div></div>
 </div>
 </section>
@@ -607,7 +676,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># instantiate the file object</span>
-<span class="n">qmmm_file</span> <span class="o">=</span> <span class="n">QMMM</span><span class="p">(</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf.qmmm&quot;</span><span class="p">)</span>
+<span class="n">qmmm_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf.qmmm&quot;</span><span class="p">)</span>
+<span class="n">qmmm_file</span> <span class="o">=</span> <span class="n">QMMM</span><span class="p">(</span><span class="n">qmmm_file_path</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="p">)</span>
 <span class="c1"># There will be warnings if more than one QM engine is selected</span>
 </pre></div>
@@ -618,29 +688,55 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/3437060600.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># instantiate the file object</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>qmmm_file <span class="ansi-blue-fg">=</span> QMMM<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;example_files/QMMM_files/menthol-methanol-dmf.qmmm&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># There will be warnings if more than one QM engine is selected</span>
+TITLE
+menthol-methanol-dmf, qmmm specification file
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/qmmm/qmmm.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
-<span class="ansi-green-intense-fg ansi-bold">     34</span>
-<span class="ansi-green-intense-fg ansi-bold">     35</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 36</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">=</span>in_value<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">=</span>_future_file<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     37</span>
-<span class="ansi-green-intense-fg ansi-bold">     38</span>         <span class="ansi-red-fg"># TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks</span>
+        &gt;&gt;&gt; Generated with PyGromosTools (riniker group) &lt;&lt;&lt;
+END
+QMUNIT
+# QLGL           QEGE           QCGC           QIGI
+0.052918         2625.5          1.0     0.1
+END
+QMZONE
+# QMEN                       QMEI  QMEZ  QMEB
+H                               1     1     0
+C                               2     6     0
+H                               3     1     0
+H                               4     1     0
+C                               5     6     0
+H                               6     1     0
+C                               7     6     0
+H                               8     1     0
+H                               9     1     0
+H                              10     1     0
+C                              11     6     0
+H                              12     1     0
+C                              13     6     0
+H                              14     1     0
+H                              15     1     0
+C                              16     6     0
+H                              17     1     0
+H                              18     1     0
+C                              19     6     0
+H                              20     1     0
+C                              21     6     0
+H                              22     1     0
+H                              23     1     0
+H                              24     1     0
+C                              25     6     0
+H                              26     1     0
+H                              27     1     0
+C                              28     6     0
+H                              29     1     0
+O                              30     8     0
+H                              31     1     0
+END
+XTBELEMENTS
+1
+6
+8
+END
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
-<span class="ansi-green-intense-fg ansi-bold">     40</span>                 self<span class="ansi-blue-fg">.</span>read_blocks<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     41</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 42</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not find File: &#34;</span><span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     43</span>
-<span class="ansi-green-intense-fg ansi-bold">     44</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> __class__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] example_files/QMMM_files/menthol-methanol-dmf.qmmm
 </pre></div></div>
 </div>
 </section>
@@ -664,14 +760,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/3522135427.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> qmmm_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Custom file header&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+[&#39;menthol-methanol-dmf, qmmm specification file\n&#39;]
+Custom file header
 </pre></div></div>
 </div>
 </section>
@@ -695,14 +785,41 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/4196296852.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-red-fg"># third value: element number according to the PSE</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># fourth value: indicate whether bond can be broken or not, default = 0</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>QMZONE<span class="ansi-blue-fg">)</span>
+QMZONE
+# QMEN                       QMEI  QMEZ  QMEB
+H                               1     1     0
+C                               2     6     0
+H                               3     1     0
+H                               4     1     0
+C                               5     6     0
+H                               6     1     0
+C                               7     6     0
+H                               8     1     0
+H                               9     1     0
+H                              10     1     0
+C                              11     6     0
+H                              12     1     0
+C                              13     6     0
+H                              14     1     0
+H                              15     1     0
+C                              16     6     0
+H                              17     1     0
+H                              18     1     0
+C                              19     6     0
+H                              20     1     0
+C                              21     6     0
+H                              22     1     0
+H                              23     1     0
+H                              24     1     0
+C                              25     6     0
+H                              26     1     0
+H                              27     1     0
+C                              28     6     0
+H                              29     1     0
+O                              30     8     0
+H                              31     1     0
+END
 
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
 </pre></div></div>
 </div>
 </section>
@@ -727,14 +844,11 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/1212175820.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># third value: Gromos charge to QM charge (the same in this case)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg"># fourth value: QM input units to Gromos input units (e.g. Angstrom to nm)</span>
-<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>QMUNIT<span class="ansi-blue-fg">)</span>
+QMUNIT
+# QLGL           QEGE           QCGC           QIGI
+0.052918         2625.5          1.0     0.1
+END
 
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
 </pre></div></div>
 </div>
 </section>
@@ -755,13 +869,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/234956547.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
+XTBELEMENTS
+1
+6
+8
+END
 
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+[[&#39;1&#39;], [&#39;6&#39;], [&#39;8&#39;]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -775,27 +889,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[[&#39;1&#39;], [&#39;2&#39;], [&#39;3&#39;], [&#39;4&#39;], [&#39;5&#39;], [&#39;6&#39;], [&#39;7&#39;], [&#39;8&#39;], [&#39;9&#39;], [&#39;10&#39;]]
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2199286763.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> xtbelements_new  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> j <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">11</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>xtbelements_new<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS<span class="ansi-blue-fg">.</span>content <span class="ansi-blue-fg">=</span> xtbelements_new
-
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+[[&#39;1&#39;], [&#39;2&#39;], [&#39;3&#39;], [&#39;4&#39;], [&#39;5&#39;], [&#39;6&#39;], [&#39;7&#39;], [&#39;8&#39;], [&#39;9&#39;], [&#39;10&#39;]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -808,17 +907,23 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/493323477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># show the updated section in the file</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS
-
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+XTBELEMENTS
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+END
 </pre></div></div>
 </div>
 </section>
@@ -838,12 +943,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/198690903.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>get_qm_engines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+[&#39;XTB&#39;]
 </pre></div></div>
 </div>
 </section>
@@ -876,51 +976,31 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/3927061813.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-red-fg"># create a Gromos_System object from scratch</span>
-<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span>system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">(</span>work_folder<span class="ansi-blue-fg">,</span> system_name<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-red-fg"># specify prepared topology, configuration, QMMM specification file, and input file</span>
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
-<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
-<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    229</span>
-<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
+GROMOS SYSTEM: menthol-methanol-dmf
+################################################################################
+WORKDIR: example_files/menthol-methanol-dmf
+LAST CHECKPOINT: None
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
-<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    832</span>
+GromosXX_bin: None
+GromosPP_bin: None
+FILES:
+        imd: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/menthol-methanol-dmf/menthol-methanol-dmf.imd
+        top: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/menthol-methanol-dmf/menthol-methanol-dmf.top
+        cnf: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/menthol-methanol-dmf/menthol-methanol-dmf.cnf
+        qmmm: /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/menthol-methanol-dmf/menthol-methanol-dmf.qmmm
+FUTURE PROMISE: False
+SYSTEM:
+        Solute: [&#39;0RHW&#39;, &#39;TUU2&#39;, &#39;TUU3&#39;, &#39;TUU4&#39;, &#39;TUU5&#39;, &#39;TUU6&#39;, &#39;TUU7&#39;, &#39;TUU8&#39;, &#39;TUU9&#39;, &#39;TUU10&#39;, &#39;TUU11&#39;, &#39;TUU12&#39;, &#39;TUU13&#39;, &#39;TUU14&#39;, &#39;TUU15&#39;, &#39;TUU16&#39;, &#39;TUU17&#39;, &#39;TUU18&#39;, &#39;TUU19&#39;, &#39;TUU20&#39;, &#39;TUU21&#39;, &#39;TUU22&#39;, &#39;TUU23&#39;, &#39;TUU24&#39;, &#39;TUU25&#39;, &#39;TUU26&#39;, &#39;TUU27&#39;, &#39;TUU28&#39;, &#39;TUU29&#39;, &#39;TUU30&#39;, &#39;TUU31&#39;, &#39;TUU32&#39;, &#39;TUU33&#39;, &#39;TUU34&#39;, &#39;TUU35&#39;, &#39;TUU36&#39;, &#39;TUU37&#39;, &#39;TUU38&#39;, &#39;TUU39&#39;, &#39;TUU40&#39;, &#39;TUU41&#39;, &#39;TUU42&#39;, &#39;TUU43&#39;, &#39;TUU44&#39;, &#39;TUU45&#39;, &#39;TUU46&#39;, &#39;TUU47&#39;, &#39;TUU48&#39;, &#39;TUU49&#39;, &#39;TUU50&#39;, &#39;TUU51&#39;, &#39;TUU52&#39;, &#39;TUU53&#39;, &#39;TUU54&#39;, &#39;TUU55&#39;, &#39;TUU56&#39;, &#39;TUU57&#39;, &#39;TUU58&#39;, &#39;TUU59&#39;, &#39;TUU60&#39;, &#39;TUU61&#39;, &#39;TUU62&#39;, &#39;TUU63&#39;, &#39;TUU64&#39;, &#39;TUU65&#39;, &#39;TUU66&#39;, &#39;TUU67&#39;, &#39;TUU68&#39;, &#39;TUU69&#39;, &#39;TUU70&#39;, &#39;TUU71&#39;, &#39;TUU72&#39;, &#39;TUU73&#39;, &#39;TUU74&#39;, &#39;TUU75&#39;, &#39;TUU76&#39;, &#39;TUU77&#39;, &#39;TUU78&#39;, &#39;TUU79&#39;, &#39;TUU80&#39;, &#39;TUU81&#39;, &#39;TUU82&#39;, &#39;TUU83&#39;, &#39;TUU84&#39;, &#39;TUU85&#39;, &#39;TUU86&#39;, &#39;TUU87&#39;, &#39;TUU88&#39;, &#39;TUU89&#39;, &#39;TUU90&#39;, &#39;TUU91&#39;, &#39;TUU92&#39;, &#39;TUU93&#39;, &#39;TUU94&#39;, &#39;TUU95&#39;, &#39;TUU96&#39;, &#39;TUU97&#39;, &#39;TUU98&#39;, &#39;TUU99&#39;, &#39;TUU100&#39;, &#39;TUU101&#39;, &#39;TUU102&#39;, &#39;TUU103&#39;, &#39;TUU104&#39;, &#39;TUU105&#39;, &#39;TUU106&#39;, &#39;TUU107&#39;, &#39;TUU108&#39;, &#39;TUU109&#39;, &#39;TUU110&#39;, &#39;TUU111&#39;, &#39;TUU112&#39;, &#39;TUU113&#39;, &#39;TUU114&#39;, &#39;TUU115&#39;, &#39;TUU116&#39;, &#39;TUU117&#39;, &#39;TUU118&#39;, &#39;TUU119&#39;, &#39;TUU120&#39;, &#39;TUU121&#39;, &#39;TUU122&#39;, &#39;TUU123&#39;, &#39;TUU124&#39;, &#39;TUU125&#39;, &#39;TUU126&#39;, &#39;TUU127&#39;, &#39;TUU128&#39;, &#39;TUU129&#39;, &#39;TUU130&#39;, &#39;TUU131&#39;, &#39;TUU132&#39;, &#39;TUU133&#39;, &#39;TUU134&#39;, &#39;TUU135&#39;, &#39;TUU136&#39;, &#39;TUU137&#39;, &#39;TUU138&#39;, &#39;TUU139&#39;, &#39;TUU140&#39;, &#39;TUU141&#39;, &#39;TUU142&#39;, &#39;TUU143&#39;, &#39;TUU144&#39;, &#39;TUU145&#39;, &#39;TUU146&#39;, &#39;TUU147&#39;, &#39;TUU148&#39;, &#39;TUU149&#39;, &#39;TUU150&#39;, &#39;TUU151&#39;, &#39;TUU152&#39;, &#39;TUU153&#39;, &#39;TUU154&#39;, &#39;TUU155&#39;, &#39;TUU156&#39;, &#39;TUU157&#39;, &#39;TUU158&#39;, &#39;TUU159&#39;, &#39;TUU160&#39;, &#39;TUU161&#39;, &#39;TUU162&#39;, &#39;TUU163&#39;, &#39;TUU164&#39;, &#39;TUU165&#39;, &#39;TUU166&#39;, &#39;TUU167&#39;, &#39;TUU168&#39;, &#39;TUU169&#39;, &#39;TUU170&#39;, &#39;TUU171&#39;, &#39;TUU172&#39;, &#39;TUU173&#39;, &#39;TUU174&#39;, &#39;TUU175&#39;, &#39;TUU176&#39;, &#39;TUU177&#39;, &#39;TUU178&#39;, &#39;TUU179&#39;, &#39;TUU180&#39;, &#39;TUU181&#39;, &#39;TUU182&#39;, &#39;TUU183&#39;, &#39;TUU184&#39;, &#39;TUU185&#39;, &#39;TUU186&#39;, &#39;TUU187&#39;, &#39;TUU188&#39;, &#39;TUU189&#39;, &#39;TUU190&#39;, &#39;TUU191&#39;, &#39;TUU192&#39;, &#39;TUU193&#39;, &#39;TUU194&#39;, &#39;TUU195&#39;, &#39;TUU196&#39;, &#39;TUU197&#39;, &#39;TUU198&#39;, &#39;TUU199&#39;, &#39;TUU200&#39;, &#39;TUU201&#39;, &#39;ERI202&#39;, &#39;ERI203&#39;, &#39;ERI204&#39;, &#39;ERI205&#39;, &#39;ERI206&#39;, &#39;ERI207&#39;, &#39;ERI208&#39;, &#39;ERI209&#39;, &#39;ERI210&#39;, &#39;ERI211&#39;, &#39;ERI212&#39;, &#39;ERI213&#39;, &#39;ERI214&#39;, &#39;ERI215&#39;, &#39;ERI216&#39;, &#39;ERI217&#39;, &#39;ERI218&#39;, &#39;ERI219&#39;, &#39;ERI220&#39;, &#39;ERI221&#39;, &#39;ERI222&#39;, &#39;ERI223&#39;, &#39;ERI224&#39;, &#39;ERI225&#39;, &#39;ERI226&#39;, &#39;ERI227&#39;, &#39;ERI228&#39;, &#39;ERI229&#39;, &#39;ERI230&#39;, &#39;ERI231&#39;, &#39;ERI232&#39;, &#39;ERI233&#39;, &#39;ERI234&#39;, &#39;ERI235&#39;, &#39;ERI236&#39;, &#39;ERI237&#39;, &#39;ERI238&#39;, &#39;ERI239&#39;, &#39;ERI240&#39;, &#39;ERI241&#39;, &#39;ERI242&#39;, &#39;ERI243&#39;, &#39;ERI244&#39;, &#39;ERI245&#39;, &#39;ERI246&#39;, &#39;ERI247&#39;, &#39;ERI248&#39;, &#39;ERI249&#39;, &#39;ERI250&#39;, &#39;ERI251&#39;, &#39;ERI252&#39;, &#39;ERI253&#39;, &#39;ERI254&#39;, &#39;ERI255&#39;, &#39;ERI256&#39;, &#39;ERI257&#39;, &#39;ERI258&#39;, &#39;ERI259&#39;, &#39;ERI260&#39;, &#39;ERI261&#39;]  resID: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261]  natoms: 1951
+        SOLVENT:        []  nmolecules: 0  natoms: 0
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
 
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- example_files/menthol-methanol-dmf
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -933,17 +1013,109 @@ mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/780775887.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># the imd file has been adapted (force groups, multibath, etc.)</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>system<span class="ansi-blue-fg">.</span>imd
-
-<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+TITLE
+Demonstration of a Gromos imd file containing a QMMM block
+        &gt;&gt;&gt; Generated with PyGromosTools (riniker group) &lt;&lt;&lt;
+END
+BOUNDCOND
+#        NTB     NDFMIN
+         1       3
+END
+COMTRANSROT
+#        NSCM
+         1000
+END
+CONSTRAINT
+#        NTC
+         3
+#        NTCP    NTCP0(1)
+         1       0.000100
+#        NTCS    NTCS0(1)
+         1       0.000100
+END
+FORCE
+#        BONDS   ANGLES          IMPROPER        DIHEDRAL        ELECTROSTATIC   VDW
+         0       1       1       1       1       1
+#        NEGR    NRE
+         1       1951
+END
+INITIALISE
+#        NTIVEL          NTISHK          NTINHT          NTINHB
+         1       3       0       0
+#        NTISHI          NTIRTC          NTICOM
+         1       0       0
+#        NTISTI
+         0
+#        IG      TEMPI
+         210185          298.000000
+END
+MULTIBATH
+# ALGORITHM
+  0
+# NBATHS
+  1
+# TEMP0(1 ... NBATHS)    TAU(1 ... NBATHS)
+  298.0          0.1
+# DOFSET
+  1
+# LAST(1 ... DOFSET)     COMBATH(1 ... DOFSET)   IRBATH(1 ... DOFSET)
+  1951   1       1
+END
+NONBONDED
+#        NLRELE
+         1
+#        APPAK   RCRF    EPSRF   NSLFEXCL
+         0.000000        1.400000        66.700000       1
+#        NSHAPE          ASHAPE          NA2CLC          TOLA2   EPSLS
+         3       1.400000        2       1e-10   0.000000
+#        NKX     NKY     NKZ     KCUT
+         10      10      10      100.000000
+#        NGX     NGY     NGZ     NASORD          NFDORD          NALIAS          NSPORD
+         32      32      32      3       2       3       4
+#        NQEVAL          FACCUR          NRDGRD          NWRGRD
+         1000    1.600000        0       0
+#        NLRLJ   SLVDNS
+         0       33.300000
+END
+PAIRLIST
+#        ALGORITHM       NSNB    RCUTP   RCUTL   SIZE    TYPE
+         0       5       0.800000        1.400000        0.4     0
+END
+PRESSURESCALE
+#        COUPLE          SCALE   COMP    TAUP    VIRIAL
+         2       1       0.000458        0.500000        2
+#        SEMIANISOTROPIC COUPLINGS(X, Y, Z)
+         1       1       1
+#        PRES0(1...3,1...3)
+         0.06102         0.0     0.0
+         0.0     0.06102         0.0
+         0.0     0.0     0.06102
+END
+PRINTOUT
+#        NTPR    NTPP
+         10      0
+END
+QMMM
+#        NTQMMM          NTQMSW          RCUTQ   NTWQMMM         QMLJ    MMSCAL
+         1       4       1.400000        0       0       -1.000000
+END
+STEP
+#        NSTLIM          T       DT
+         100000          0.000000        0.002000
+END
+SYSTEM
+#        NPM     NSM
+         1       0
+END
+WRITETRAJ
+#        NTWX    NTWSE   NTWV    NTWF    NTWE    NTWG    NTWB
+         200     0       0       0       100     0       0
+END
 </pre></div></div>
 </div>
 </section>
@@ -981,51 +1153,30 @@ mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such file or directory
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/4203308730.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-red-fg"># system</span>
-<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg"> system = Gromos_System(
-</span><span class="ansi-green-intense-fg ansi-bold">     15</span>     work_folder<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">     16</span>     system_name<span class="ansi-blue-fg">,</span>
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
-<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
-<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    229</span>
-<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
+GROMOS SYSTEM: menthol-methanol-dmf
+################################################################################
+WORKDIR: example_files/menthol-methanol-dmf
+LAST CHECKPOINT: None
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
-<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    832</span>
+GromosXX_bin: None
+GromosPP_bin: None
+FILES:
+        imd: None
+        top: example_files/QMMM_files/menthol-methanol-dmf-all-atom_54a7.top
+        cnf: example_files/QMMM_files/menthol-methanol-dmf-all-atom-init_54a7.cnf
+FUTURE PROMISE: False
+SYSTEM:
+        Solute: [&#39;0RHW&#39;, &#39;TUU2&#39;, &#39;TUU3&#39;, &#39;TUU4&#39;, &#39;TUU5&#39;, &#39;TUU6&#39;, &#39;TUU7&#39;, &#39;TUU8&#39;, &#39;TUU9&#39;, &#39;TUU10&#39;, &#39;TUU11&#39;, &#39;TUU12&#39;, &#39;TUU13&#39;, &#39;TUU14&#39;, &#39;TUU15&#39;, &#39;TUU16&#39;, &#39;TUU17&#39;, &#39;TUU18&#39;, &#39;TUU19&#39;, &#39;TUU20&#39;, &#39;TUU21&#39;, &#39;TUU22&#39;, &#39;TUU23&#39;, &#39;TUU24&#39;, &#39;TUU25&#39;, &#39;TUU26&#39;, &#39;TUU27&#39;, &#39;TUU28&#39;, &#39;TUU29&#39;, &#39;TUU30&#39;, &#39;TUU31&#39;, &#39;TUU32&#39;, &#39;TUU33&#39;, &#39;TUU34&#39;, &#39;TUU35&#39;, &#39;TUU36&#39;, &#39;TUU37&#39;, &#39;TUU38&#39;, &#39;TUU39&#39;, &#39;TUU40&#39;, &#39;TUU41&#39;, &#39;TUU42&#39;, &#39;TUU43&#39;, &#39;TUU44&#39;, &#39;TUU45&#39;, &#39;TUU46&#39;, &#39;TUU47&#39;, &#39;TUU48&#39;, &#39;TUU49&#39;, &#39;TUU50&#39;, &#39;TUU51&#39;, &#39;TUU52&#39;, &#39;TUU53&#39;, &#39;TUU54&#39;, &#39;TUU55&#39;, &#39;TUU56&#39;, &#39;TUU57&#39;, &#39;TUU58&#39;, &#39;TUU59&#39;, &#39;TUU60&#39;, &#39;TUU61&#39;, &#39;TUU62&#39;, &#39;TUU63&#39;, &#39;TUU64&#39;, &#39;TUU65&#39;, &#39;TUU66&#39;, &#39;TUU67&#39;, &#39;TUU68&#39;, &#39;TUU69&#39;, &#39;TUU70&#39;, &#39;TUU71&#39;, &#39;TUU72&#39;, &#39;TUU73&#39;, &#39;TUU74&#39;, &#39;TUU75&#39;, &#39;TUU76&#39;, &#39;TUU77&#39;, &#39;TUU78&#39;, &#39;TUU79&#39;, &#39;TUU80&#39;, &#39;TUU81&#39;, &#39;TUU82&#39;, &#39;TUU83&#39;, &#39;TUU84&#39;, &#39;TUU85&#39;, &#39;TUU86&#39;, &#39;TUU87&#39;, &#39;TUU88&#39;, &#39;TUU89&#39;, &#39;TUU90&#39;, &#39;TUU91&#39;, &#39;TUU92&#39;, &#39;TUU93&#39;, &#39;TUU94&#39;, &#39;TUU95&#39;, &#39;TUU96&#39;, &#39;TUU97&#39;, &#39;TUU98&#39;, &#39;TUU99&#39;, &#39;TUU100&#39;, &#39;TUU101&#39;, &#39;TUU102&#39;, &#39;TUU103&#39;, &#39;TUU104&#39;, &#39;TUU105&#39;, &#39;TUU106&#39;, &#39;TUU107&#39;, &#39;TUU108&#39;, &#39;TUU109&#39;, &#39;TUU110&#39;, &#39;TUU111&#39;, &#39;TUU112&#39;, &#39;TUU113&#39;, &#39;TUU114&#39;, &#39;TUU115&#39;, &#39;TUU116&#39;, &#39;TUU117&#39;, &#39;TUU118&#39;, &#39;TUU119&#39;, &#39;TUU120&#39;, &#39;TUU121&#39;, &#39;TUU122&#39;, &#39;TUU123&#39;, &#39;TUU124&#39;, &#39;TUU125&#39;, &#39;TUU126&#39;, &#39;TUU127&#39;, &#39;TUU128&#39;, &#39;TUU129&#39;, &#39;TUU130&#39;, &#39;TUU131&#39;, &#39;TUU132&#39;, &#39;TUU133&#39;, &#39;TUU134&#39;, &#39;TUU135&#39;, &#39;TUU136&#39;, &#39;TUU137&#39;, &#39;TUU138&#39;, &#39;TUU139&#39;, &#39;TUU140&#39;, &#39;TUU141&#39;, &#39;TUU142&#39;, &#39;TUU143&#39;, &#39;TUU144&#39;, &#39;TUU145&#39;, &#39;TUU146&#39;, &#39;TUU147&#39;, &#39;TUU148&#39;, &#39;TUU149&#39;, &#39;TUU150&#39;, &#39;TUU151&#39;, &#39;TUU152&#39;, &#39;TUU153&#39;, &#39;TUU154&#39;, &#39;TUU155&#39;, &#39;TUU156&#39;, &#39;TUU157&#39;, &#39;TUU158&#39;, &#39;TUU159&#39;, &#39;TUU160&#39;, &#39;TUU161&#39;, &#39;TUU162&#39;, &#39;TUU163&#39;, &#39;TUU164&#39;, &#39;TUU165&#39;, &#39;TUU166&#39;, &#39;TUU167&#39;, &#39;TUU168&#39;, &#39;TUU169&#39;, &#39;TUU170&#39;, &#39;TUU171&#39;, &#39;TUU172&#39;, &#39;TUU173&#39;, &#39;TUU174&#39;, &#39;TUU175&#39;, &#39;TUU176&#39;, &#39;TUU177&#39;, &#39;TUU178&#39;, &#39;TUU179&#39;, &#39;TUU180&#39;, &#39;TUU181&#39;, &#39;TUU182&#39;, &#39;TUU183&#39;, &#39;TUU184&#39;, &#39;TUU185&#39;, &#39;TUU186&#39;, &#39;TUU187&#39;, &#39;TUU188&#39;, &#39;TUU189&#39;, &#39;TUU190&#39;, &#39;TUU191&#39;, &#39;TUU192&#39;, &#39;TUU193&#39;, &#39;TUU194&#39;, &#39;TUU195&#39;, &#39;TUU196&#39;, &#39;TUU197&#39;, &#39;TUU198&#39;, &#39;TUU199&#39;, &#39;TUU200&#39;, &#39;TUU201&#39;, &#39;ERI202&#39;, &#39;ERI203&#39;, &#39;ERI204&#39;, &#39;ERI205&#39;, &#39;ERI206&#39;, &#39;ERI207&#39;, &#39;ERI208&#39;, &#39;ERI209&#39;, &#39;ERI210&#39;, &#39;ERI211&#39;, &#39;ERI212&#39;, &#39;ERI213&#39;, &#39;ERI214&#39;, &#39;ERI215&#39;, &#39;ERI216&#39;, &#39;ERI217&#39;, &#39;ERI218&#39;, &#39;ERI219&#39;, &#39;ERI220&#39;, &#39;ERI221&#39;, &#39;ERI222&#39;, &#39;ERI223&#39;, &#39;ERI224&#39;, &#39;ERI225&#39;, &#39;ERI226&#39;, &#39;ERI227&#39;, &#39;ERI228&#39;, &#39;ERI229&#39;, &#39;ERI230&#39;, &#39;ERI231&#39;, &#39;ERI232&#39;, &#39;ERI233&#39;, &#39;ERI234&#39;, &#39;ERI235&#39;, &#39;ERI236&#39;, &#39;ERI237&#39;, &#39;ERI238&#39;, &#39;ERI239&#39;, &#39;ERI240&#39;, &#39;ERI241&#39;, &#39;ERI242&#39;, &#39;ERI243&#39;, &#39;ERI244&#39;, &#39;ERI245&#39;, &#39;ERI246&#39;, &#39;ERI247&#39;, &#39;ERI248&#39;, &#39;ERI249&#39;, &#39;ERI250&#39;, &#39;ERI251&#39;, &#39;ERI252&#39;, &#39;ERI253&#39;, &#39;ERI254&#39;, &#39;ERI255&#39;, &#39;ERI256&#39;, &#39;ERI257&#39;, &#39;ERI258&#39;, &#39;ERI259&#39;, &#39;ERI260&#39;, &#39;ERI261&#39;]  resID: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261]  natoms: 1951
+        SOLVENT:        []  nmolecules: 0  natoms: 0
 
-<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    559</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
 
-<span class="ansi-red-fg">OSError</span>: could not make folder:
- example_files/menthol-methanol-dmf
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1042,11 +1193,11 @@ mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/844308420.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_8795/844308420.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+<span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1061,19 +1212,119 @@ mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################################################################
+
+emin
+################################################################################
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mlehner/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:869: UserWarning: Did not change file path as its only promised None
+  warnings.warn(&#34;Did not change file path as its only promised &#34; + str(file_obj.path))
+/home/mlehner/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py:114: UserWarning: Template_imd_path was used: /home/mlehner/PyGromosTools/pygromos/data/simulation_parameters_templates/emin.imd
+  warnings.warn(&#34;Template_imd_path was used: &#34; + _template_imd_path)
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py&#34;, line 130, in simulation
+    gromos_system.rebase_files()
+  File &#34;/home/mlehner/PyGromosTools/pygromos/files/gromos_system/gromos_system.py&#34;, line 880, in rebase_files
+    self.write_files()
+  File &#34;/home/mlehner/PyGromosTools/pygromos/files/gromos_system/gromos_system.py&#34;, line 1120, in write_files
+    file_obj.write(file_obj.path)
+  File &#34;/home/mlehner/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py&#34;, line 306, in write
+    self._write_to_file(out_path=out_path, content_str=str(self))
+  File &#34;/home/mlehner/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py&#34;, line 324, in _write_to_file
+    raise IOError(&#34;Could not find directory to write to: &#34; + str(os.path.dirname(out_path)))
+OSError: Could not find directory to write to: example_files/menthol-methanol-dmf/emin/input
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &#34;/home/mlehner/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py&#34;, line 136, in simulation
+    raise Exception(&#34;Could not prepare the gromos System\n\t&#34; + &#34;\n\t&#34;.join(map(str, err.args)))
+Exception: Could not prepare the gromos System
+        Could not find directory to write to: example_files/menthol-methanol-dmf/emin/input
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/178837208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py</span> in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    129</span>             <span class="ansi-red-fg"># Write out, all non promised files</span>
+<span class="ansi-green-fg">--&gt; 130</span><span class="ansi-red-fg">             </span>gromos_system<span class="ansi-blue-fg">.</span>rebase_files<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    131</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">rebase_files</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    879</span>         self<span class="ansi-blue-fg">.</span>_update_all_file_paths<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 880</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>write_files<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    881</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">write_files</span><span class="ansi-blue-fg">(self, cnf, imd, top, ptp, disres, posres, refpos, qmmm, mol, all, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1119</span>                         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Write out: &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>file_name<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\t&#34;</span> <span class="ansi-blue-fg">+</span> file_obj<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">-&gt; 1120</span><span class="ansi-red-fg">                     </span>file_obj<span class="ansi-blue-fg">.</span>write<span class="ansi-blue-fg">(</span>file_obj<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1121</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">write</span><span class="ansi-blue-fg">(self, out_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    305</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 306</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_write_to_file<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">=</span>out_path<span class="ansi-blue-fg">,</span> content_str<span class="ansi-blue-fg">=</span>str<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>         self<span class="ansi-blue-fg">.</span>path <span class="ansi-blue-fg">=</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>abspath<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">_write_to_file</span><span class="ansi-blue-fg">(self, out_path, content_str)</span>
+<span class="ansi-green-intense-fg ansi-bold">    323</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 324</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not find directory to write to: &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>dirname<span class="ansi-blue-fg">(</span>out_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    325</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: Could not find directory to write to: example_files/menthol-methanol-dmf/emin/input
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py</span> in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    135</span>         <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 136</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not prepare the gromos System\n\t&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    137</span>         <span class="ansi-red-fg"># do</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not prepare the gromos System
+        Could not find directory to write to: example_files/menthol-methanol-dmf/emin/input
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_8795/178837208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># energy minimize the system</span>
 <span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>minimized_system <span class="ansi-blue-fg">=</span> emin<span class="ansi-blue-fg">(</span>system<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/modules/preset_simulation_modules.py</span> in <span class="ansi-cyan-fg">emin</span><span class="ansi-blue-fg">(in_gromos_system, step_name, override_project_dir, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, _template_imd_path, _no_double_submit_check, initialize_first_run, analysis_script, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">     42</span>             template_emin_control_dict<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;concat&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;cat_trg&#34;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span>
+<span class="ansi-green-intense-fg ansi-bold">     43</span>
+<span class="ansi-green-fg">---&gt; 44</span><span class="ansi-red-fg">     return simulation(
+</span><span class="ansi-green-intense-fg ansi-bold">     45</span>         in_gromos_simulation_system<span class="ansi-blue-fg">=</span>in_gromos_system<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     46</span>         override_project_dir<span class="ansi-blue-fg">=</span>override_project_dir<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/modules/general_simulation_modules.py</span> in <span class="ansi-cyan-fg">simulation</span><span class="ansi-blue-fg">(in_gromos_simulation_system, override_project_dir, step_name, in_imd_path, submission_system, simulation_runs, equilibration_runs, previous_simulation_run, force_simulation, initialize_first_run, reinitialize_every_run, analysis_script, analysis_control_dict, _no_double_submit_check, _work_dir, verbose, verbose_lvl, _template_imd_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    196</span>     <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    197</span>         traceback<span class="ansi-blue-fg">.</span>print_exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 198</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not prepare the command block\n\t&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    199</span>
+<span class="ansi-green-intense-fg ansi-bold">    200</span>     <span class="ansi-red-fg"># schedule</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not prepare the command block
+        Could not prepare the gromos System
+        Could not find directory to write to: example_files/menthol-methanol-dmf/emin/input
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1096,7 +1347,7 @@ mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2801463477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8795/2801463477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># new imd file for equilibration</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> in_imd_path  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">f&#34;example_files/QMMM_files/menthol-methanol-dmf-eq.imd&#34;</span>
 <span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> in_imd_path
@@ -1123,7 +1374,7 @@ mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2240818067.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8795/2240818067.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># equilibrate the system</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>equilibrated_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">,</span> step_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;eq&#34;</span><span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> equilibrated_system
@@ -1163,7 +1414,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;CONDA_SHLVL&#39;: &#39;2&#39;,
         &#39;OLDPWD&#39;: &#39;/home/mlehner/PyGromosTools&#39;,
         &#39;CC_FOR_BUILD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-cc&#39;,
-        &#39;VSCODE_IPC_HOOK_CLI&#39;: &#39;/mnt/wslg/runtime-dir/vscode-ipc-338f28cb-186b-4530-932d-b7a523f13b69.sock&#39;,
+        &#39;VSCODE_IPC_HOOK_CLI&#39;: &#39;/mnt/wslg/runtime-dir/vscode-ipc-63bf7068-58f1-4145-b923-c1d0d0d92134.sock&#39;,
         &#39;TERM_PROGRAM_VERSION&#39;: &#39;1.66.0&#39;,
         &#39;CONDA_TOOLCHAIN_BUILD&#39;: &#39;x86_64-conda-linux-gnu&#39;,
         &#39;F90&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
@@ -1257,7 +1508,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;DOCUTILSCONFIG&#39;: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/docutils.conf&#39;,
         &#39;RDBASE&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/share/RDKit&#39;,
         &#39;PYDEVD_USE_FRAME_EVAL&#39;: &#39;NO&#39;,
-        &#39;JPY_PARENT_PID&#39;: &#39;15154&#39;,
+        &#39;JPY_PARENT_PID&#39;: &#39;4884&#39;,
         &#39;CLICOLOR&#39;: &#39;1&#39;,
         &#39;PAGER&#39;: &#39;cat&#39;,
         &#39;GIT_PAGER&#39;: &#39;cat&#39;,
@@ -1294,7 +1545,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2075562488.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8795/2075562488.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># new imd file for QM/MM run</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> in_imd_path  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">f&#34;example_files/QMMM_files/md.imd&#34;</span>
 <span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>equilibrated_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> in_imd_path
@@ -1320,7 +1571,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/2112366208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8795/2112366208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># print the relevant QMMM block in the new imd file</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>equilibrated_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>QMMM
 
@@ -1343,7 +1594,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/3371366635.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8795/3371366635.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># go QM/MM!</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>production_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>equilibrated_system<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
 
@@ -1366,7 +1617,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_17114/1050048346.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8795/1050048346.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># visualize the last .cnf - you are done!</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>production_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
@@ -1382,7 +1633,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"917fcf3c62b04428a05c3b6cf914a1ec": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "629be3304c5145a2838089e152a7ca6e": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_917fcf3c62b04428a05c3b6cf914a1ec"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"68b74a49191c41b498cedfe30c848851": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "50dc6fddcf114c4daa28f056e0a13f3f": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_68b74a49191c41b498cedfe30c848851"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 

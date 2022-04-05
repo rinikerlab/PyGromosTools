@@ -2,6 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
+   "id": "c6fba6a6",
    "metadata": {},
    "source": [
     "# QM/MM in Gromos"
@@ -151,7 +152,8 @@
    "outputs": [],
    "source": [
     "# instantiate the file object\n",
-    "qmmm_file = QMMM(\"example_files/QMMM_files/menthol-methanol-dmf.qmmm\")\n",
+    "qmmm_file_path = os.path.abspath(\"example_files/QMMM_files/menthol-methanol-dmf.qmmm\")\n",
+    "qmmm_file = QMMM(qmmm_file_path)\n",
     "print(qmmm_file)\n",
     "# There will be warnings if more than one QM engine is selected"
    ]
