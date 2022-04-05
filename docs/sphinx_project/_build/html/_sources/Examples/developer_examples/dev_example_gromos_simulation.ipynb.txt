@@ -52,7 +52,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "root_dir = project_dir = \"../example_files/SD_Simulation/\"\n",
+    "root_dir = project_dir = os.path.abspath(\"../example_files/SD_Simulation/\")\n",
     "root_in_dir = root_dir+\"/SD_input\"\n",
     "cnf_path = root_in_dir+\"/6J29_unitedatom_optimised_geometry.cnf\"\n",
     "top_path = root_in_dir + \"/6J29.top\"\n",
