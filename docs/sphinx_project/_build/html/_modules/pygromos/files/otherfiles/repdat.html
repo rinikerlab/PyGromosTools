@@ -1,0 +1,698 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.otherfiles.repdat &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.otherfiles.repdat</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.otherfiles.repdat</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">FUNCTIONLIB:            Repdat File</span>
+<span class="sd">Description:</span>
+<span class="sd">    From a Replica-Exchange simulation a repdat file will be created, that gives insight on the replica exchanges of the simulation</span>
+<span class="sd">Author: Benjamin Schroeder</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files._basics</span> <span class="kn">import</span> <span class="n">_general_gromos_file</span><span class="p">,</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">replica_exchange_blocks</span> <span class="k">as</span> <span class="n">blocks</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Repdat_Type</span>
+
+
+<div class="viewcode-block" id="Repdat"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat">[docs]</a><span class="k">class</span> <span class="nc">Repdat</span><span class="p">(</span><span class="n">_general_gromos_file</span><span class="o">.</span><span class="n">_general_gromos_file</span><span class="p">):</span>  <span class="c1">#</span>
+    <span class="sd">&quot;&quot;&quot;Replica exchange statistic file</span>
+<span class="sd">    This class is a representation for all transition information during a replica exchange run. it adds some useful functionality.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_gromos_file_ending</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;repstat&quot;</span>
+    <span class="n">SYSTEM</span><span class="p">:</span> <span class="n">blocks</span><span class="o">.</span><span class="n">repex_system</span>
+    <span class="n">DATA</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+
+    <span class="c1"># transition_traces[replica][[&quot;trials&quot;, &quot;positions&quot;. &quot;state_pot&quot;]]</span>
+    <span class="n">transition_traces</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># count_state_per_position[replicaposition][[&quot;tot_nup&quot;, &quot;tot_ndown&quot;, &quot;states_index&quot;, &quot;dt&quot;, &quot;dt_nup&quot;, &quot;dt_ndown&quot;]]</span>
+    <span class="n">count_state_per_position</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># count_state_per_position[replica]</span>
+    <span class="n">replica_round_trips</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Repdat.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Repdat_Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_path :    str</span>
+<span class="sd">             path to gromos repdadat file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">system</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">read_repdat</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">Vj_header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">input_path</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not correct yet!&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repdat._clean_replica_round_trips"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat._clean_replica_round_trips">[docs]</a>    <span class="k">def</span> <span class="nf">_clean_replica_round_trips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replica_round_trips</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;_clean_replica_round_trips - privat</span>
+
+<span class="sd">            This function cleans up so that the minimal rountrip number in a roundtrip dict is 0</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        replica_round_trips : Dict[int:int]</span>
+<span class="sd">            a dictionary containing all replica roundtrip counts</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int:int]</span>
+<span class="sd">            a dictionary containing all replica roundtrip counts with lowest value 0</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># clean up indices that are -1</span>
+        <span class="n">clean_replica_round_trips</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">replica_round_trips</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">clean_replica_round_trips</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">item</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">clean_replica_round_trips</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">clean_replica_round_trips</span></div>
+
+<div class="viewcode-block" id="Repdat._caculate_transition_traces"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat._caculate_transition_traces">[docs]</a>    <span class="k">def</span> <span class="nf">_caculate_transition_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;_caculate_transition_traces</span>
+<span class="sd">            calculates the transition traces for all replicas from raw data and stores them in self.transition_traces.</span>
+<span class="sd">            In the end you recieve the trace a replica coord system moved through s dist</span>
+<span class="sd">            format: {replicaID: {[trials...], [position...], [PotE...]}}</span>
+<span class="sd">        TODO: refactor code!</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">replicas</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="c1"># follow transitions of one state</span>
+        <span class="n">transition_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">replicas</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>  <span class="c1"># keeps track of unique id and current replica position.</span>
+        <span class="n">tmp_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">replicas</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+        <span class="n">transition_result_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;trial&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;state_pot&quot;</span><span class="p">:</span> <span class="p">[]}</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">replicas</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>  <span class="c1"># init transition dicts following one replica with inital start</span>
+
+        <span class="c1"># go through repda and count</span>
+        <span class="n">tmp_run</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">tmp_run</span> <span class="o">!=</span> <span class="n">row</span><span class="o">.</span><span class="n">run</span><span class="p">:</span>  <span class="c1"># new trial</span>
+                <span class="n">transition_dict</span> <span class="o">=</span> <span class="n">tmp_dict</span>
+                <span class="n">tmp_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">replicas</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+                <span class="n">tmp_run</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">run</span>
+
+            <span class="c1"># Exchange Replica</span>
+            <span class="n">replica</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">transition_dict</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">ID</span><span class="p">)])</span>  <span class="c1"># get the replica unique id</span>
+            <span class="c1"># record Exchange</span>
+            <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># only hit when exchange and not partner already exchangeds</span>
+                <span class="c1"># new_pos</span>
+                <span class="n">transition_result_dict</span><span class="p">[</span><span class="n">replica</span><span class="p">][</span><span class="s2">&quot;trial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">run</span><span class="p">))</span>
+                <span class="n">transition_result_dict</span><span class="p">[</span><span class="n">replica</span><span class="p">][</span><span class="s2">&quot;position&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">partner</span><span class="p">))</span>
+                <span class="n">transition_result_dict</span><span class="p">[</span><span class="n">replica</span><span class="p">][</span><span class="s2">&quot;state_pot&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">state_potentials</span><span class="p">)</span>
+                <span class="c1"># exchange reps</span>
+                <span class="n">tmp_dict</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">partner</span><span class="p">)]</span> <span class="o">=</span> <span class="n">replica</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">transition_result_dict</span><span class="p">[</span><span class="n">replica</span><span class="p">][</span><span class="s2">&quot;trial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">run</span><span class="p">))</span>
+                <span class="n">transition_result_dict</span><span class="p">[</span><span class="n">replica</span><span class="p">][</span><span class="s2">&quot;position&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">ID</span><span class="p">))</span>
+                <span class="n">transition_result_dict</span><span class="p">[</span><span class="n">replica</span><span class="p">][</span><span class="s2">&quot;state_pot&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">state_potentials</span><span class="p">)</span>
+                <span class="n">tmp_dict</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">ID</span><span class="p">)]</span> <span class="o">=</span> <span class="n">replica</span>
+
+            <span class="c1"># if (replica == 2 and row.run &lt; 10):</span>
+            <span class="c1">#    print(&quot;trial &quot;, row.run, &quot;ID &quot;, row.ID, &quot;partner &quot;, row.partner)</span>
+            <span class="c1">#    print(&quot;replica: &quot;, transition_dict[row.ID], &quot;vs.&quot;, transition_dict[row.partner])</span>
+            <span class="c1">#    print(&quot;transd&quot;, transition_result_dict[2][&quot;position&quot;])</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">transition_result_dict</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">transition_result_dict</span><span class="p">}</span>
+        <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;replicaID&quot;</span><span class="p">,</span> <span class="n">replicaID</span><span class="p">)</span> <span class="k">for</span> <span class="n">replicaID</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">traces</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transition_traces</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">traces</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repdat._calculate_ndowns_nups_for_each_state"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat._calculate_ndowns_nups_for_each_state">[docs]</a>    <span class="k">def</span> <span class="nf">_calculate_ndowns_nups_for_each_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">time_stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_state_potential_treshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;_calculate_ndowns_nups_for_each_state</span>
+
+<span class="sd">                        calculates the visit counts for each replicaID position (Temperature or s_value).</span>
+<span class="sd">            It splits into substates depending on the state potentials, to destinguish which state passed by.</span>
+<span class="sd">            Up and Downs are counted from top to bottom.</span>
+<span class="sd">            Additionally also a time dependend series is generated. This can be binned by the  argument time_window.</span>
+<span class="sd">            If the min_state_potential_treshold is given, than a minimal state is also dependent on the other states, if they are below the threshold, the state is undefined.</span>
+
+<span class="sd">            In the end you recieve the position state visit counts in a dict:</span>
+<span class="sd">            format: {{replicaposition:{&quot;tot_nup&quot;:[], &quot;tot_ndown&quot;:[], &quot;dt&quot;:float, &quot;dt_nup&quot;:[], &quot;dt_ndown&quot;:[]}}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        time_stride :  int, optional</span>
+<span class="sd">            determines the window bin size of flow trajectory for each replicaID. This there are total_transitions/time_window bins containing time_window many flow values. default -1 counts all frames</span>
+<span class="sd">        min_state_potential_treshold :  float, optional</span>
+<span class="sd">             a threshold, defining if a state is governing a system at a time point t</span>
+<span class="sd">        verbose :   bool, optional</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># define needed stuff for calc:</span>
+        <span class="n">replica_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_replica_traces</span><span class="p">()</span>
+        <span class="n">num_states</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">state_eir</span><span class="p">)</span>
+        <span class="n">num_replica</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">time_stride</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">time_stride</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># arbitrary window size value, that seems reasonable!  len(replica_traces[list(replica_traces.keys())[0]][&quot;trial&quot;]) * 0.01</span>
+
+        <span class="n">extreme_positions</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span><span class="p">)</span>  <span class="c1"># gives the extreme values of the replicaID dist</span>
+        <span class="n">replica_extreme_position_memory</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">replica</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>  <span class="c1"># which replicaID visited which extreme?</span>
+        <span class="n">replica_extreme_position_memory</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">extreme_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_replica</span><span class="p">:</span> <span class="n">extreme_positions</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+        <span class="p">)</span>  <span class="c1"># init pos1 and last one</span>
+
+        <span class="c1"># result vars</span>
+        <span class="c1"># for easier keeping track of state indices</span>
+        <span class="n">state_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_states</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="n">min_state_potential_treshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># add an undef state if multiple residues are below threshold.</span>
+            <span class="n">state_index</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;undefined&quot;</span><span class="p">:</span> <span class="n">num_states</span><span class="p">})</span>
+            <span class="n">num_states</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">count_state_perpos</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">positionID</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;tot_nup&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_index</span><span class="p">],</span>
+                <span class="s2">&quot;tot_ndown&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_index</span><span class="p">],</span>
+                <span class="s2">&quot;dt&quot;</span><span class="p">:</span> <span class="n">time_stride</span><span class="p">,</span>
+                <span class="s2">&quot;pot_tresh&quot;</span><span class="p">:</span> <span class="n">min_state_potential_treshold</span><span class="p">,</span>
+                <span class="s2">&quot;states_index&quot;</span><span class="p">:</span> <span class="n">state_index</span><span class="p">,</span>
+                <span class="s2">&quot;dt_nup&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_index</span><span class="p">]],</span>
+                <span class="s2">&quot;dt_ndown&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_index</span><span class="p">]],</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">positionID</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;general: &quot;</span><span class="p">,</span> <span class="n">extreme_positions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time_window_size: &quot;</span><span class="p">,</span> <span class="n">time_stride</span><span class="p">)</span>
+        <span class="c1"># if verbose: print(&quot;INITIAL&quot;)</span>
+        <span class="c1"># if verbose: print(&quot;Initial count_per_repPos\n&quot;, count_state_per_position)</span>
+        <span class="c1"># if verbose: print(&quot;Initial current_extremePos_replica\n&quot;, replica_extreme_position_memory)</span>
+
+        <span class="c1"># as side product easily the round trips can be calculated!</span>
+        <span class="n">replica_round_trips</span> <span class="o">=</span> <span class="p">{</span><span class="n">replica</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+        <span class="n">replica_round_trips</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">replica_round_trips</span><span class="p">[</span><span class="n">num_replica</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">replicaID</span><span class="p">,</span> <span class="n">trial</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">pot_energies</span><span class="p">)</span> <span class="ow">in</span> <span class="n">replica_traces</span><span class="p">[::</span><span class="n">time_stride</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="s2">&quot;dt_ndown&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_index</span><span class="p">])</span>
+            <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="s2">&quot;dt_nup&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_index</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">extreme_positions</span> <span class="ow">and</span> <span class="n">replica_extreme_position_memory</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="o">!=</span> <span class="n">position</span><span class="p">:</span>
+                <span class="n">replica_extreme_position_memory</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">replicaID</span><span class="p">:</span> <span class="n">position</span><span class="p">})</span>
+                <span class="n">replica_round_trips</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># This replicaID has already seen an extreme pos</span>
+            <span class="k">if</span> <span class="n">replica_extreme_position_memory</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="ow">in</span> <span class="n">extreme_positions</span><span class="p">:</span>
+                <span class="c1"># who is the active state?</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">min_state_potential_treshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="p">):</span>  <span class="c1"># NEW shall no other state be in an undersampling situation?</span>
+                    <span class="n">undersampling_state_energies</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">pot_energies</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="k">if</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_state_potential_treshold</span><span class="p">)</span>
+                    <span class="p">]</span>
+                    <span class="k">if</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+                        <span class="n">undersampling_state_energies</span>
+                    <span class="p">):</span>  <span class="c1"># clean active states - only one state at a time underSampling</span>
+                        <span class="n">active_state</span> <span class="o">=</span> <span class="n">undersampling_state_energies</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">undersampling_state_energies</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>  <span class="c1"># no clear state presen skip</span>
+                        <span class="n">active_state</span> <span class="o">=</span> <span class="n">state_index</span><span class="p">[</span><span class="s2">&quot;undefined&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">undersampling_state_energies</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">pot_energies</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                    <span class="p">]</span>  <span class="c1"># if(float(val) &lt; 200)]</span>
+                    <span class="n">active_state</span> <span class="o">=</span> <span class="n">undersampling_state_energies</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">undersampling_state_energies</span><span class="p">))</span>
+
+                <span class="c1"># determine if replicaID comes from top or bottom and add +1 to stat</span>
+                <span class="k">if</span> <span class="n">replica_extreme_position_memory</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="o">==</span> <span class="n">extreme_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>  <span class="c1"># coming from top</span>
+                    <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="s2">&quot;tot_ndown&quot;</span><span class="p">][</span><span class="n">active_state</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="s2">&quot;dt_ndown&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">active_state</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">replica_extreme_position_memory</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="o">==</span> <span class="n">extreme_positions</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># coming_from bottom</span>
+                    <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="s2">&quot;tot_nup&quot;</span><span class="p">][</span><span class="n">active_state</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="s2">&quot;dt_nup&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">active_state</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># NEW has never seen any thing</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A replicaID has never seen a extreme position should not reach this code!&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">FINAL&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final extreme_positions&quot;</span><span class="p">,</span> <span class="n">replica_extreme_position_memory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Final position counts totup/totdown: &quot;</span><span class="p">,</span>
+                <span class="p">[</span>
+                    <span class="p">(</span><span class="n">count_state_perpos</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="s2">&quot;tot_nup&quot;</span><span class="p">],</span> <span class="n">count_state_perpos</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="s2">&quot;tot_ndown&quot;</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">count_state_perpos</span>
+                <span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final positoin counts keys&quot;</span><span class="p">,</span> <span class="n">count_state_perpos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;counted rountrips per replicaID!: &quot;</span><span class="p">,</span> <span class="n">replica_round_trips</span><span class="p">)</span>
+
+        <span class="c1"># store trajs in pd.dataframes.</span>
+        <span class="n">tmp_counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_replica_round_trips</span><span class="p">(</span><span class="n">replica_round_trips</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">tmp_counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;state_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;states_index&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;states_index&quot;</span><span class="p">])]</span>
+
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;dt_nup&quot;</span><span class="p">])</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">column_names</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dt_nup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;dt_ndown&quot;</span><span class="p">])</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">column_names</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dt_ndown&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_state_per_position</span> <span class="o">=</span> <span class="n">count_state_perpos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replica_round_trips</span> <span class="o">=</span> <span class="n">tmp_counts</span></div>
+
+<div class="viewcode-block" id="Repdat._calculate_replica_roundtrips"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat._calculate_replica_roundtrips">[docs]</a>    <span class="k">def</span> <span class="nf">_calculate_replica_roundtrips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;_calculate_replica_roundtrips</span>
+<span class="sd">                        This function is calculating the roundtrips over all replica positions for each replica.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># define needed stuff for calc:</span>
+        <span class="n">replica_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_replica_traces</span><span class="p">()</span>
+        <span class="n">num_replica</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="n">extreme_positions</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span><span class="p">)</span>  <span class="c1"># gives the extreme values of the replica dist</span>
+        <span class="n">replica_extreme_position_memory</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">replica</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>  <span class="c1"># which replica visited which extreme?</span>
+        <span class="n">replica_extreme_position_memory</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">extreme_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_replica</span><span class="p">:</span> <span class="n">extreme_positions</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+        <span class="p">)</span>  <span class="c1"># init pos1 and last one</span>
+
+        <span class="c1"># as side product easily the round trips can be calculated!</span>
+        <span class="n">replica_round_trips</span> <span class="o">=</span> <span class="p">{</span><span class="n">replica</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replica</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+        <span class="n">replica_round_trips</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">replica_round_trips</span><span class="p">[</span><span class="n">num_replica</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># only go over_extreme postitions.</span>
+        <span class="n">extreme_position_trace</span> <span class="o">=</span> <span class="n">replica_traces</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">replica_traces</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">extreme_positions</span><span class="p">)]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+            <span class="s2">&quot;trial&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">replicaID</span><span class="p">,</span> <span class="n">trial</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">pot_energies</span><span class="p">)</span> <span class="ow">in</span> <span class="n">extreme_position_trace</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+            <span class="s2">&quot;trial&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>  <span class="c1"># go through each replica trace</span>
+            <span class="c1"># print(trial, position, pot_energies)</span>
+            <span class="k">if</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">extreme_positions</span> <span class="ow">and</span> <span class="n">replica_extreme_position_memory</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="o">!=</span> <span class="n">position</span><span class="p">:</span>
+                <span class="n">replica_extreme_position_memory</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">replicaID</span><span class="p">:</span> <span class="n">position</span><span class="p">})</span>
+                <span class="n">replica_round_trips</span><span class="p">[</span><span class="n">replicaID</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replica_round_trips</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_replica_round_trips</span><span class="p">(</span><span class="n">replica_round_trips</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repdat.append"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repdat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Repdat_Type</span><span class="p">],</span> <span class="n">Repdat_Type</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;append</span>
+
+<span class="sd">            This function concatenates two repdat files into the executing obj.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        repdat :    List[Repdat] or Repdat</span>
+<span class="sd">            one or multiple Repdat files.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if(self.system != repdat.system):</span>
+        <span class="c1">#    raise ValueError(&quot;The two repdats seem not to come from the same simulation, as the system settings are different!&quot;)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">repdat</span><span class="p">,</span> <span class="n">List</span><span class="p">):</span>
+            <span class="n">repdat</span> <span class="o">=</span> <span class="p">[</span><span class="n">repdat</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">repdat</span><span class="p">)],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clean_file_runs</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Repdat.clean_file_runs"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.clean_file_runs">[docs]</a>    <span class="k">def</span> <span class="nf">clean_file_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">starting_trial</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;clean_file</span>
+<span class="sd">                Updates the run numbers to be continous sequential. (for example needed for concatenation)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        starting_trial: int, optional</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">starting_trial</span> <span class="o">+</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">s</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">index</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Repdat.get_replica_traces"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.get_replica_traces">[docs]</a>    <span class="k">def</span> <span class="nf">get_replica_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recalculate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;get_replica_traces</span>
+<span class="sd">                        returns a replica_traces dictionary.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recalculate :   bool, optional</span>
+<span class="sd">            shall the dict be recalculated, if already present?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int, Dict[str,List[float]]]</span>
+<span class="sd">            dictionary containing all individual replica_traces</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transition_traces</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_caculate_transition_traces</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transition_traces</span></div>
+
+<div class="viewcode-block" id="Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.get_replicaPosition_dependend_nup_ndown_for_each_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_replicaPosition_dependend_nup_ndown_for_each_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">time_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">potential_treshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">recalculate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+        <span class="sd">&quot;&quot;&quot;get_replicaPosition_dependend_nup_ndown_for_each_state</span>
+<span class="sd">            This function is returning the replica position visit counts by each simulation state, per state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        time_window_size : int, optional</span>
+<span class="sd">            how many timesteps shall be binned into one bin?</span>
+<span class="sd">        potential_treshold :    float, optional</span>
+<span class="sd">            if defined, and there is a time window, in which multiple states are below this threshold, the count is in an undefined state.</span>
+<span class="sd">        recalculate :   bool, optional</span>
+<span class="sd">            shall the dict be recalculated?</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int, Dict[str, Union[List or float]]]</span>
+<span class="sd">            returns a dict for all replica positions and their state visit counts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count_state_per_position</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_ndowns_nups_for_each_state</span><span class="p">(</span>
+                <span class="n">time_stride</span><span class="o">=</span><span class="n">time_window_size</span><span class="p">,</span> <span class="n">min_state_potential_treshold</span><span class="o">=</span><span class="n">potential_treshold</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">count_state_per_position</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">time_window_size</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">count_state_per_position</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;pot_tresh&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">potential_treshold</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_ndowns_nups_for_each_state</span><span class="p">(</span>
+                    <span class="n">time_stride</span><span class="o">=</span><span class="n">time_window_size</span><span class="p">,</span> <span class="n">min_state_potential_treshold</span><span class="o">=</span><span class="n">potential_treshold</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_state_per_position</span></div>
+
+<div class="viewcode-block" id="Repdat.get_replicaPosition_dependend_nup_ndown"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.get_replicaPosition_dependend_nup_ndown">[docs]</a>    <span class="k">def</span> <span class="nf">get_replicaPosition_dependend_nup_ndown</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">time_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">potential_treshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">recalculate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+        <span class="sd">&quot;&quot;&quot;get_replicaPosition_dependend_nup_ndown</span>
+<span class="sd">                    This function is returning the replica position visit counts by all simulation state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        time_window_size :  int,optional</span>
+<span class="sd">            how many timesteps shall be binned into one bin?</span>
+<span class="sd">        potential_treshold :    float</span>
+<span class="sd">            if defined, and there is a time window, in which multiple states are below this threshold, the count is in an undefined state.</span>
+<span class="sd">        recalculate :   bool</span>
+<span class="sd">            shall the dict be recalculated?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int, Dict[str, Union[List or float]]]</span>
+<span class="sd">            returns a dict for all replica positions and the visit counts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replicas_pos_visit_counts</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+            <span class="n">replicas_pos_visit_counts</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">replica</span><span class="p">,</span> <span class="n">statistics</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_replicaPosition_dependend_nup_ndown_for_each_state</span><span class="p">(</span>
+                <span class="n">time_window_size</span><span class="o">=</span><span class="n">time_window_size</span><span class="p">,</span> <span class="n">potential_treshold</span><span class="o">=</span><span class="n">potential_treshold</span><span class="p">,</span> <span class="n">recalculate</span><span class="o">=</span><span class="n">recalculate</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">replica_pos_visit_counts</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">replica</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;tot_nup&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;tot_nup&quot;</span><span class="p">]),</span>
+                        <span class="s2">&quot;tot_ndown&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;tot_ndown&quot;</span><span class="p">]),</span>
+                        <span class="s2">&quot;dt&quot;</span><span class="p">:</span> <span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;dt_nup&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;dt_nup&quot;</span><span class="p">])),</span>
+                        <span class="s2">&quot;dt_ndown&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;dt_ndown&quot;</span><span class="p">])),</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="n">replicas_pos_visit_counts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">replica_pos_visit_counts</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">replicas_pos_visit_counts</span></div>
+
+<div class="viewcode-block" id="Repdat.get_replica_roundtrips"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.get_replica_roundtrips">[docs]</a>    <span class="k">def</span> <span class="nf">get_replica_roundtrips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recalculate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;get_replica_roundtrips</span>
+<span class="sd">                    This function is returning the count of rountrips (RT) for each replica.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recalculate : bool</span>
+<span class="sd">            shall the dict be recalculated?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int, int]</span>
+<span class="sd">            returns a dict for all replica and their rountrip counts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replica_round_trips</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_replica_roundtrips</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">replica_round_trips</span></div>
+
+<div class="viewcode-block" id="Repdat.write"><a class="viewcode-back" href="../../../../_source/pygromos.files.otherfiles.html#pygromos.files.otherfiles.repdat.Repdat.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;write</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_path :  str</span>
+<span class="sd">            determines the output path for repdat file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            out_path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#======================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#======================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)))</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DATA COLS: &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">out_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;state_potentials&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">out_path</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

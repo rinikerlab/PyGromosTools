@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.trajectory.tre &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.trajectory.tre</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.trajectory.tre</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">File:            Class for tre files in pandas</span>
+<span class="sd">Description:</span>
+<span class="sd">    The pandas trajectory TRE class offers a easy method to process GROMOS&#39;s .tre files in python</span>
+<span class="sd">    The tre files are parsed into an easy to use pandas dataframe.</span>
+
+<span class="sd">    This class should be a alternative for the data post processing with ene_ana in gromos++</span>
+
+<span class="sd">Author: Marc Thierry Lehner</span>
+
+<span class="sd">TODO: add stride option to all member functions</span>
+<span class="sd">TODO: add support for periodic boundary condition</span>
+
+<span class="sd">TODO: add ene_ana functions</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># imports</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">pygromos.files.trajectory._general_trajectory</span> <span class="k">as</span> <span class="nn">traj</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre_field_libs.ene_fields</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">gromos_2021_tre_block_names_table</span><span class="p">,</span>
+    <span class="n">gromos_tre_block_names_table</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tre_Type</span>
+<span class="kn">from</span> <span class="nn">pygromos.analysis</span> <span class="kn">import</span> <span class="n">energy_analysis</span> <span class="k">as</span> <span class="n">ea</span>
+
+
+<div class="viewcode-block" id="Tre"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre">[docs]</a><span class="k">class</span> <span class="nc">Tre</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">_General_Trajectory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Tre files are results from Gromos simulations, that store all the calculated energies and properties during the simulation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_gromos_file_ending</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tre&quot;</span>
+    <span class="n">_contributions_nonbonded_names</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Lennard-Jones&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Coulomb/RF&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lattice sum real&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lattice sum reciproc&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_contributions_bonded_names</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;bond&quot;</span><span class="p">,</span> <span class="s2">&quot;angle&quot;</span><span class="p">,</span> <span class="s2">&quot;improper&quot;</span><span class="p">,</span> <span class="s2">&quot;dihedral&quot;</span><span class="p">,</span> <span class="s2">&quot;crossdihedral&quot;</span><span class="p">)</span>
+    <span class="n">_contributions_baths</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;kinetic total&quot;</span><span class="p">,</span> <span class="s2">&quot;centre of mass&quot;</span><span class="p">,</span> <span class="s2">&quot;internal/rotational&quot;</span><span class="p">)</span>
+    <span class="n">_contributions_special</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;constraints&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pos. restraints&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dist. restraints&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;disfield res&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dihe. restr.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SASA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SASA volume&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;jvalue&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rdc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;local elevation&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path integral&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;angle restraint&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_contributions_temperature</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="s2">&quot;com&quot;</span><span class="p">,</span> <span class="s2">&quot;ir&quot;</span><span class="p">,</span> <span class="s2">&quot;scaling factor&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tre.__init__"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">auto_save</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">_ene_ana_names</span><span class="p">:</span> <span class="n">gromos_tre_block_names_table</span> <span class="o">=</span> <span class="n">gromos_2021_tre_block_names_table</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Build a Gromos energy trajectory file (.tre)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_value : str,None</span>
+<span class="sd">            The input value can be None, or a string path to the .tre/.tre.gz file.</span>
+<span class="sd">        auto_save : bool, optional</span>
+<span class="sd">            automatically save the file, by default True</span>
+<span class="sd">        stride : int, optional</span>
+<span class="sd">            only read every x value, by default 1</span>
+<span class="sd">        skip : int, optional</span>
+<span class="sd">            skip the first x timesteps, by default 0</span>
+<span class="sd">        _ene_ana_names : gromos_tre_block_names_table, optional</span>
+<span class="sd">            get the field names after the provided standard., by default gromos_2020_tre_block_names_table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="n">auto_save</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="n">skip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span> <span class="o">=</span> <span class="n">_ene_ana_names</span>
+
+        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span>
+        <span class="k">if</span> <span class="s2">&quot;step&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">step</span></div>
+
+    <span class="sd">&quot;&quot;&quot;--------------------------------------------------------------</span>
+<span class="sd">    Basic getters for Subblocks and Subsubblocks</span>
+<span class="sd">    -----------------------------------------------------------------</span>
+
+<span class="sd">        The following functions, return well formated values from the tre trajectories.</span>
+
+
+<span class="sd">      ENERGY03 - fields:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tre.get_totals"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totals">[docs]</a>    <span class="k">def</span> <span class="nf">get_totals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get all totals of the system</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># print(self.database[&quot;totals&quot;][0].shape, self.database[&quot;totals&quot;][0])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;totals&quot;</span><span class="p">):</span>
+            <span class="n">totals_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="s2">&quot;totals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">totals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">totals_data</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">totals_subblock_names</span><span class="p">[:</span> <span class="n">totals_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totals</span></div>
+
+<div class="viewcode-block" id="Tre.get_totene"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totene">[docs]</a>    <span class="k">def</span> <span class="nf">get_totene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total System energy / per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totene&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totene</span></div>
+
+<div class="viewcode-block" id="Tre.get_totkin"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totkin">[docs]</a>    <span class="k">def</span> <span class="nf">get_totkin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total kinetic Energy / per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totkin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totkin&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totkin</span></div>
+
+<div class="viewcode-block" id="Tre.get_totpot"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totpot">[docs]</a>    <span class="k">def</span> <span class="nf">get_totpot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total potential Energy / per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totpot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totpot&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totpot</span></div>
+
+<div class="viewcode-block" id="Tre.get_totcov"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totcov">[docs]</a>    <span class="k">def</span> <span class="nf">get_totcov</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total covalent contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totcov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totcov&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totcov</span></div>
+
+<div class="viewcode-block" id="Tre.get_totbonded"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totbonded">[docs]</a>    <span class="k">def</span> <span class="nf">get_totbonded</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total bonded contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totbonded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totbond&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totbonded</span></div>
+
+<div class="viewcode-block" id="Tre.get_totangle"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totangle">[docs]</a>    <span class="k">def</span> <span class="nf">get_totangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total angle contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totangle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totangle&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totangle</span></div>
+
+<div class="viewcode-block" id="Tre.get_totdihedral"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totdihedral">[docs]</a>    <span class="k">def</span> <span class="nf">get_totdihedral</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total dihedral contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totdihedral</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totdihedral&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totdihedral</span></div>
+
+<div class="viewcode-block" id="Tre.get_totnonbonded"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totnonbonded">[docs]</a>    <span class="k">def</span> <span class="nf">get_totnonbonded</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total nonbonded contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totnonbonded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totnonbonded&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totnonbonded</span></div>
+
+<div class="viewcode-block" id="Tre.get_totlj"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totlj">[docs]</a>    <span class="k">def</span> <span class="nf">get_totlj</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total lennard jones contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totlj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totlj&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totlj</span></div>
+
+<div class="viewcode-block" id="Tre.get_totcrf"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_totcrf">[docs]</a>    <span class="k">def</span> <span class="nf">get_totcrf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the total columbic reactionfield contribution/ per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totcrf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()[</span><span class="s2">&quot;totcrf&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">totcrf</span></div>
+
+<div class="viewcode-block" id="Tre.get_baths"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_baths">[docs]</a>    <span class="k">def</span> <span class="nf">get_baths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        extract data of the baths block</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">attibute_name</span><span class="o">=</span><span class="s2">&quot;baths&quot;</span><span class="p">,</span> <span class="n">rows_name</span><span class="o">=</span><span class="s2">&quot;baths&quot;</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_baths</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre.get_bondedContributions"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_bondedContributions">[docs]</a>    <span class="k">def</span> <span class="nf">get_bondedContributions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        extract data of the bonded block</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span>
+            <span class="n">attibute_name</span><span class="o">=</span><span class="s2">&quot;bondedContributions&quot;</span><span class="p">,</span> <span class="n">rows_name</span><span class="o">=</span><span class="s2">&quot;bonded&quot;</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_bonded_names</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre.get_nonbondedContributions"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_nonbondedContributions">[docs]</a>    <span class="k">def</span> <span class="nf">get_nonbondedContributions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function returns a nice formatted dictionary for the nonbonded Contributions according to the Force groups of the tre file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int, Dict[int, pd.DataFrame]]</span>
+<span class="sd">            The dictionary containing the nonbonded contributions of the single ForceGroups with each other.</span>
+<span class="sd">            Dict[ForceGroupI, Dict[ForceGroupJ, NonbondedEnergyContribs]]</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            returns Value error, if the dimensionality of the different contributions does not fit to the _nonbonded_contribution_names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;forceGroupNonbondedContributions&quot;</span><span class="p">):</span>
+            <span class="c1"># Check contibution_dimensionalities</span>
+            <span class="n">nFFContributions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">nonbonded</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">nFFContributions</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_nonbonded_names</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;The dimensionality of the NonbondedContributions is not corresponding to the expected dimensionality.</span><span class="se">\n</span><span class="s2"> expected: &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_nonbonded_names</span><span class="p">))</span>
+                    <span class="o">+</span> <span class="s2">&quot; </span><span class="se">\t</span><span class="s2"> found: &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nFFContributions</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Get the number of force groups:</span>
+            <span class="n">nForceGroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_numberOfForceGroupsFromNonbondeds</span><span class="p">()</span>
+
+            <span class="c1"># Generate dictionary for the different contributions</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">forceGroupNonbondedContributions</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">nForceGroup</span><span class="p">):</span>
+                <span class="n">forceGroupNonbondedContributions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">nForceGroup</span><span class="p">):</span>
+                    <span class="n">forceGroupNonbondedContributions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                        <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">nonbonded</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">2</span><span class="p">])),</span>
+                        <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_nonbonded_names</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">forceGroupNonbondedContributions</span> <span class="o">=</span> <span class="n">forceGroupNonbondedContributions</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forceGroupNonbondedContributions</span></div>
+
+<div class="viewcode-block" id="Tre.get_specialContributions"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_specialContributions">[docs]</a>    <span class="k">def</span> <span class="nf">get_specialContributions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>  <span class="c1"># CHECK THIS</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        extract data of the special block</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span>
+            <span class="n">attibute_name</span><span class="o">=</span><span class="s2">&quot;specialContributions&quot;</span><span class="p">,</span> <span class="n">rows_name</span><span class="o">=</span><span class="s2">&quot;special&quot;</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_special</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre.get_eds"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_eds">[docs]</a>    <span class="k">def</span> <span class="nf">get_eds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get EDS energies if present.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            returns datafrae with columns for each endstate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;eds&quot;</span><span class="p">):</span>
+            <span class="n">num_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="s2">&quot;eds&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">num_states</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">state_strings</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">[</span>
+                        <span class="n">column</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">state_row</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">eds_subblock_names_singleState</span>
+                    <span class="p">]</span>
+                    <span class="k">for</span> <span class="n">state_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_states</span><span class="p">))</span>
+                <span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">eds_subblock_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;numstates&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">eds_subblock_names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">state_strings</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">eds_subblock_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;numstates&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="s2">&quot;eds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span>
+                <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">eds_subblock_names</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eds</span></div>
+
+<div class="viewcode-block" id="Tre.get_precalclam"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_precalclam">[docs]</a>    <span class="k">def</span> <span class="nf">get_precalclam</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get the energies calculated for the different defined lambda values in a trajectory.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            return the energies calculated for the different lambda values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;precalclam&quot;</span><span class="p">):</span>
+            <span class="n">num_lam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="s2">&quot;precalclam&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">num_lam</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">state_strings</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="n">column</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">state_row</span><span class="p">)</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">lam_subblock_names_singleLam</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">state_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_lam</span><span class="p">))</span>
+                <span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">lam_subblock_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nr_lambdas&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">lam_subblock_names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">state_strings</span><span class="p">)))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">lam_subblock_names</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;A_dihedral&quot;</span><span class="p">,</span> <span class="s2">&quot;B_dihedral&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">lam_subblock_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nr_lambdas&quot;</span><span class="p">,</span> <span class="s2">&quot;A_dihedral&quot;</span><span class="p">,</span> <span class="s2">&quot;B_dihedral&quot;</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">precalclam</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="s2">&quot;precalclam&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span>
+                <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tre_block_name_table</span><span class="o">.</span><span class="n">lam_subblock_names</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">precalclam</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      VOLUMEPRESSURE03 - fields:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tre.get_mass"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_mass">[docs]</a>    <span class="k">def</span> <span class="nf">get_mass</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            returns the systems mass per timestep</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.Series</span>
+<span class="sd">            series of mass per time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">mass</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;mass&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre.get_temperature_Info"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_temperature_Info">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperature_Info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            temperature baths</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[int,pd.DataFrame]</span>
+<span class="sd">            returns the full info of the temperature baths per bath</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span>
+            <span class="n">attibute_name</span><span class="o">=</span><span class="s2">&quot;temperatureInfo&quot;</span><span class="p">,</span> <span class="n">rows_name</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_contributions_temperature</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre.get_temperature"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperature</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>  <span class="c1"># CHECK THIS - tempcontrib:total             com               ir                scaling factor</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the temperature in Kelvin for all temperature baths for every time step</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            pandas dataframe with all temperatures</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tmps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">row_d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bath&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span> <span class="n">temp</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">temp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">])}</span>
+            <span class="n">tmps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_d</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tmps</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">)</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      UTILS</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tre._set_data"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre._set_data">[docs]</a>    <span class="k">def</span> <span class="nf">_set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attibute_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rows_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_names</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;_summary_</span>
+<span class="sd">            This function extracts generially the information of a column per time</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        attibute_name : str</span>
+<span class="sd">            name of the target attribute</span>
+<span class="sd">        rows_name : str</span>
+<span class="sd">            name of the block, that shall be extracted</span>
+<span class="sd">        field_names : Tuple[str]</span>
+<span class="sd">            name of the fields in each row</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            contains the extracted information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attibute_name</span><span class="p">):</span>
+            <span class="n">nDimGroups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="n">rows_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attibute_name</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nDimGroups</span><span class="p">):</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attibute_name</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="n">i</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                            <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="n">rows_name</span><span class="p">]))),</span>
+                            <span class="n">columns</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
+                            <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attibute_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre._get_numberOfForceGroupsFromNonbondeds"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre._get_numberOfForceGroupsFromNonbondeds">[docs]</a>    <span class="k">def</span> <span class="nf">_get_numberOfForceGroupsFromNonbondeds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function gets the number of Force groups in the simulation from the nonbonded block.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            number of ForceGroups used for this tre.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nForceGroupDim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">nonbonded</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">nForceGroup</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nForceGroupDim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">+=</span> <span class="n">nForceGroup</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="n">nForceGroupDim</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">nForceGroup</span>
+            <span class="k">elif</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">nForceGroupDim</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;That should not happen!&quot;</span><span class="p">)</span></div>
+
+    <span class="sd">&quot;&quot;&quot;--------------------------------------------------------------</span>
+<span class="sd">    Additional predefined function for common analysis</span>
+<span class="sd">    -----------------------------------------------------------------</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tre.get_density"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_density">[docs]</a>    <span class="k">def</span> <span class="nf">get_density</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the density for every frame.</span>
+<span class="sd">        (Uses mass and the first volume entry)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Dataframe with the densities for all time steps</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">[[</span><span class="s2">&quot;mass&quot;</span><span class="p">,</span> <span class="s2">&quot;volume&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ea</span><span class="o">.</span><span class="n">get_density</span><span class="p">(</span><span class="n">mass</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">volume</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tre.get_Hvap"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre.get_Hvap">[docs]</a>    <span class="k">def</span> <span class="nf">get_Hvap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gas_traj</span><span class="p">:</span> <span class="n">Tre_Type</span><span class="p">,</span> <span class="n">nMolecules</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">gas_totpot_energy</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">gas_traj</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">gas_totpot_energy</span> <span class="o">=</span> <span class="n">gas_traj</span><span class="o">.</span><span class="n">get_totpot</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">gas_traj</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="n">gas_totpot_energy</span> <span class="o">=</span> <span class="n">gas_traj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Did not understand the type of gas. Allowed are float (E_gas) or Tre (gas_trajectory)&quot;</span><span class="p">)</span>
+        <span class="n">liq_totpot_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_totpot</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># get temperature from liq trajectory if not given</span>
+        <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_temperature</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># calculate heat of vaporization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heat_vap</span> <span class="o">=</span> <span class="n">ea</span><span class="o">.</span><span class="n">get_Hvap</span><span class="p">(</span>
+            <span class="n">liq_totpot_energy</span><span class="o">=</span><span class="n">liq_totpot_energy</span><span class="p">,</span>
+            <span class="n">gas_totpot_energy</span><span class="o">=</span><span class="n">gas_totpot_energy</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+            <span class="n">nMolecules</span><span class="o">=</span><span class="n">nMolecules</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">heat_vap</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

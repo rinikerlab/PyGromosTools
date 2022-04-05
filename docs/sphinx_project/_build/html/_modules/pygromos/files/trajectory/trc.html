@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.trajectory.trc &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.trajectory.trc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.trajectory.trc</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">File:            Class for trc files in pandas</span>
+<span class="sd">Description:</span>
+<span class="sd">    The pandas trajectory TRC class offers a easy method to process GROMOS&#39;s .trc files in python</span>
+<span class="sd">    The trc files are parsed into an easy to use pandas dataframe</span>
+
+<span class="sd">Author: Marc Thierry Lehner</span>
+
+<span class="sd">TODO: add stride option to all member functions</span>
+<span class="sd">TODO: add support for periodic boundary condition</span>
+<span class="sd">TODO: add support for rdkit mol selector</span>
+<span class="sd">TODO: add support for rdkit conformers</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># imports</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">mdtraj</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nglview</span> <span class="k">as</span> <span class="nn">nj</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">TITLE</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.coord_blocks</span> <span class="kn">import</span> <span class="n">POSITION</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">pygromos.visualization.coordinates_visualization</span> <span class="kn">import</span> <span class="n">visualize_system</span>
+
+
+<div class="viewcode-block" id="Trc"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc">[docs]</a><span class="k">class</span> <span class="nc">Trc</span><span class="p">(</span><span class="n">mdtraj</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">):</span>
+    <span class="c1"># Attributes</span>
+    <span class="n">TITLE</span><span class="p">:</span> <span class="n">TITLE</span>
+
+    <span class="n">_future_file</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Todo: we need to set this variable.</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">topology</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">unitcell_lengths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">unitcell_angles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">traj_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_cnf</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Cnf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timestep_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">,</span>
+        <span class="n">_future_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="n">_future_file</span>
+        <span class="k">if</span> <span class="n">xyz</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">topology</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">traj_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">in_cnf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">traj_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">traj_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">traj_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.hf5&quot;</span><span class="p">)):</span>
+            <span class="n">trj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">traj_path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">trj</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">traj_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">traj_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.trc&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">traj_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.trc.gz&quot;</span><span class="p">)):</span>
+
+            <span class="c1"># Parse TRC</span>
+            <span class="n">compress</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">traj_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">):</span>
+                <span class="n">traj_path</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">compress_gzip</span><span class="p">(</span><span class="n">in_path</span><span class="o">=</span><span class="n">traj_path</span><span class="p">,</span> <span class="n">extract</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">compress</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">unitcell_angles</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">unitcell_lengths</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">traj_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">xyz</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">unitcell_lengths</span><span class="p">,</span> <span class="n">unitcell_angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_trc_efficiently</span><span class="p">(</span><span class="n">traj_path</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">compress</span><span class="p">:</span>
+                <span class="n">traj_path</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">compress_gzip</span><span class="p">(</span><span class="n">in_path</span><span class="o">=</span><span class="n">traj_path</span><span class="p">)</span>
+
+            <span class="c1"># Topology from Cnf</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">in_cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">,</span> <span class="n">Cnf</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">,</span> <span class="s2">&quot;POSITION&quot;</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">in_cnf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dummy_cnf</span><span class="p">(</span><span class="n">xyz</span><span class="p">)</span>
+
+            <span class="c1"># get cnf boxDims</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">,</span> <span class="s2">&quot;GENBOX&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">unitcell_lengths</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">unitcell_angles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">unitcell_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">in_cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">unitcell_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">in_cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Topo tmp file</span>
+            <span class="n">tmpFile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;_tmp.pdb&quot;</span><span class="p">)</span>
+            <span class="n">in_cnf</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">tmpFile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">single</span> <span class="o">=</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">load_pdb</span><span class="p">(</span><span class="n">tmpFile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">tmpFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span>
+                <span class="n">topology</span><span class="o">=</span><span class="n">single</span><span class="o">.</span><span class="n">topology</span><span class="p">,</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">unitcell_lengths</span><span class="o">=</span><span class="n">unitcell_lengths</span><span class="p">,</span>
+                <span class="n">unitcell_angles</span><span class="o">=</span><span class="n">unitcell_angles</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="n">step</span>
+
+        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="n">xyz</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">topology</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span>
+                <span class="n">topology</span><span class="o">=</span><span class="n">topology</span><span class="p">,</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">unitcell_lengths</span><span class="o">=</span><span class="n">unitcell_lengths</span><span class="p">,</span>
+                <span class="n">unitcell_angles</span><span class="o">=</span><span class="n">unitcell_angles</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">/</span> <span class="n">timestep_duration</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">TITLE</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot; Generic Title... to be changed by YOU!&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_unitcell_lengths</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_unitcell_angles</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_topology</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">traj_path</span>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">attribs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;xyz&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span><span class="p">),</span>
+            <span class="s2">&quot;topology&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_topology</span><span class="p">),</span>
+            <span class="s2">&quot;unitcell_lengths&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unitcell_lengths</span><span class="p">),</span>
+            <span class="s2">&quot;unitcell_angles&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unitcell_angles</span><span class="p">),</span>
+            <span class="s2">&quot;traj_path&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">),</span>
+            <span class="s2">&quot;_future_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_future_file</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">additional_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;unitcell_angles&quot;</span><span class="p">,</span> <span class="s2">&quot;unitcell_angles&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional_key</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional_key</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">attribs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">additional_key</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional_key</span><span class="p">))})</span>
+
+        <span class="n">cCls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">**</span><span class="n">attribs</span><span class="p">)</span>
+        <span class="n">cCls</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">)</span>
+        <span class="n">cCls</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="p">)</span>
+        <span class="n">cCls</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cCls</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;_step&quot;</span><span class="p">):</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;_time&quot;</span><span class="p">):</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;TITLE&quot;</span><span class="p">):</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">t</span>
+
+<div class="viewcode-block" id="Trc.get_dummy_cnf"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.get_dummy_cnf">[docs]</a>    <span class="k">def</span> <span class="nf">get_dummy_cnf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cnf</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">coords</span>
+
+        <span class="n">new_Cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">new_Cnf</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s2">&quot;THis is a dummy top depending on the first Frame.&quot;</span><span class="p">)</span>
+        <span class="n">new_Cnf</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span>
+            <span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;POSITION&quot;</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">coords</span><span class="o">.</span><span class="n">atomP</span><span class="p">(</span><span class="n">resID</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">resName</span><span class="o">=</span><span class="s2">&quot;DUM&quot;</span><span class="p">,</span> <span class="n">atomType</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">atomID</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">xp</span><span class="o">=</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">yp</span><span class="o">=</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">zp</span><span class="o">=</span><span class="n">coord</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_Cnf</span></div>
+
+<div class="viewcode-block" id="Trc.parse_trc_efficiently"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.parse_trc_efficiently">[docs]</a>    <span class="k">def</span> <span class="nf">parse_trc_efficiently</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">traj_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_blockMap</span><span class="p">(</span><span class="n">in_trc_path</span><span class="o">=</span><span class="n">traj_path</span><span class="p">)</span>
+        <span class="c1"># build block mapping</span>
+        <span class="n">rep_time</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">[</span><span class="s2">&quot;TIMESTEP&quot;</span><span class="p">]</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">[</span><span class="s2">&quot;TITLE&quot;</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">[</span><span class="s2">&quot;POSITIONRED&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">timestep_block_length</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span> <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="s2">&quot;commentLines&quot;</span><span class="p">])]</span>
+        <span class="p">)</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">[</span><span class="s2">&quot;POSITIONRED&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">[</span><span class="s2">&quot;commentLines&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># block mapping logic</span>
+        <span class="n">base_rows</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="p">(</span>
+                <span class="p">(((</span><span class="n">x</span> <span class="o">-</span> <span class="n">title</span><span class="p">)</span> <span class="o">%</span> <span class="n">timestep_block_length</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">)</span> <span class="ow">and</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">title</span><span class="p">)</span> <span class="o">%</span> <span class="n">timestep_block_length</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">))</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">title</span><span class="p">)</span> <span class="o">%</span> <span class="n">timestep_block_length</span> <span class="o">==</span> <span class="n">rep_time</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">title</span>
+            <span class="k">else</span> <span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="n">unitcell_length</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">unitcell_angles</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">genbox_present</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;GENBOX&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_map</span><span class="p">:</span>
+            <span class="n">genbox_present</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">chunk</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="c1"># timestep_block_length += 7</span>
+            <span class="n">skip_rows1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">base_rows</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">title</span><span class="p">)</span> <span class="o">%</span> <span class="n">timestep_block_length</span> <span class="o">==</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">title</span><span class="p">)</span> <span class="o">%</span> <span class="n">timestep_block_length</span> <span class="o">==</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">skip_rows</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">title</span><span class="p">)</span> <span class="ow">or</span> <span class="n">skip_rows1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="n">unitcell_length</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">unitcell_angles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">skip_rows</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">title</span><span class="p">)</span> <span class="ow">or</span> <span class="n">base_rows</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># parsing</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span>
+            <span class="n">traj_path</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="n">skip_rows</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunk</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="n">genbox_present</span><span class="p">:</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">step</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+                <span class="n">unitcell_length</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">unitcell_angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">step</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># make np.Arrays</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">genbox_present</span><span class="p">:</span>
+            <span class="n">unitcell_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unitcell_length</span><span class="p">)</span>
+            <span class="n">unitcell_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unitcell_angles</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">unitcell_length</span><span class="p">,</span> <span class="n">unitcell_angles</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step</span>
+
+    <span class="c1"># Analysis of traj</span>
+<div class="viewcode-block" id="Trc.rmsd"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.rmsd">[docs]</a>    <span class="k">def</span> <span class="nf">rmsd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">reference</span><span class="p">:</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">Trajectory</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">time_scale</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;rmsd&quot;</span><span class="p">:</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">rmsd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">reference_frame</span><span class="p">)},</span> <span class="n">index</span><span class="o">=</span><span class="n">time_scale</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trc.distances"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.distances">[docs]</a>    <span class="k">def</span> <span class="nf">distances</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">atom_pairs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+        <span class="n">periodic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">opt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">compute_distances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atom_pairs</span><span class="o">=</span><span class="n">atom_pairs</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">opt</span><span class="p">)</span>
+        <span class="n">time_scale</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">atom_pairs</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">T</span><span class="p">)},</span> <span class="n">index</span><span class="o">=</span><span class="n">time_scale</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_generate_blockMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_trc_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="n">block_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">in_trc_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handle</span><span class="p">:</span>
+            <span class="n">inBlock</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">inTitleBlock</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">blockKey</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">nLines</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">nCommentLines</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">titleStr</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">max_it</span> <span class="o">=</span> <span class="mi">1000000</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">max_it</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">file_handle</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+                    <span class="n">nCommentLines</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="s2">&quot;END&quot;</span> <span class="o">==</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                    <span class="n">block_map</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">blockKey</span><span class="p">:</span> <span class="n">nLines</span><span class="p">})</span>
+                    <span class="k">if</span> <span class="n">blockKey</span> <span class="o">==</span> <span class="n">TITLE</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+                        <span class="n">inTitleBlock</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">TITLE</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">titleStr</span><span class="p">))</span>
+                    <span class="n">inBlock</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="k">elif</span> <span class="ow">not</span> <span class="n">inBlock</span><span class="p">:</span>
+                    <span class="n">blockKey</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">blockKey</span> <span class="ow">in</span> <span class="n">block_map</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">blockKey</span> <span class="o">==</span> <span class="n">TITLE</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+                        <span class="n">inTitleBlock</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">inBlock</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">nLines</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="k">elif</span> <span class="n">inTitleBlock</span><span class="p">:</span>
+                    <span class="n">titleStr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># this is a potential danger</span>
+                <span class="n">nLines</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">TITLE</span><span class="o">.</span><span class="vm">__name__</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">TITLE</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;Empty TITLE&quot;</span><span class="p">)</span>
+
+        <span class="n">block_map</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;commentLines&quot;</span><span class="p">:</span> <span class="n">nCommentLines</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">block_map</span>
+
+    <span class="c1"># Visualizaton</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nj</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_view&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="p">,</span> <span class="n">nj</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">)</span> <span class="ow">or</span> <span class="n">re_create</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_view</span> <span class="o">=</span> <span class="n">nj</span><span class="o">.</span><span class="n">show_mdtraj</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">clear_representations</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="s2">&quot;licorice&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view</span>
+
+<div class="viewcode-block" id="Trc.recreate_view"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.recreate_view">[docs]</a>    <span class="k">def</span> <span class="nf">recreate_view</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nj</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span> <span class="o">=</span> <span class="n">visualize_system</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view</span></div>
+
+    <span class="c1"># io</span>
+
+    <span class="n">_formatting</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">format_float_positional</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Trc.write_trc"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.write_trc">[docs]</a>    <span class="k">def</span> <span class="nf">write_trc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+        <span class="n">first_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_TITLE_entry</span><span class="p">()</span>
+        <span class="n">array_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_entry</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)):</span>
+            <span class="n">array_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generate_entry_for_frame</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">array_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">array</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trc.generate_entry_for_frame"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.generate_entry_for_frame">[docs]</a>    <span class="k">def</span> <span class="nf">generate_entry_for_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># TIMESTEP</span>
+        <span class="n">length</span> <span class="o">+=</span> <span class="mi">2</span>  <span class="c1"># Positionred</span>
+        <span class="n">length</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Add comments</span>
+        <span class="n">length</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">10</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">length</span> <span class="o">+=</span> <span class="mi">7</span>
+
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">length</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+
+        <span class="c1"># Add TIMESTEP</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;TIMESTEP&quot;</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">frame_id</span><span class="p">],</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;END&quot;</span>
+
+        <span class="c1"># Add POSITIONRED</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;POSITIONRED&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">4</span>
+
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">block</span> <span class="o">*</span> <span class="mi">10</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="n">frame_id</span><span class="p">][</span><span class="n">block</span> <span class="o">*</span> <span class="mi">10</span> <span class="p">:</span> <span class="p">(</span><span class="n">block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="p">:],</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
+            <span class="n">start</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mi">10</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">array_last</span> <span class="o">=</span> <span class="n">last</span> <span class="o">+</span> <span class="mi">7</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">array_last</span> <span class="o">=</span> <span class="n">last</span>
+
+        <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="n">frame_id</span><span class="p">][</span><span class="o">-</span><span class="n">last</span><span class="p">:,</span> <span class="p">:],</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;END&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">),</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GENBOX&quot;</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">[</span><span class="n">frame_id</span><span class="p">],</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unitcell_angles</span><span class="p">[</span><span class="n">frame_id</span><span class="p">],</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formatting</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_left</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">array_last</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;END&quot;</span>
+
+        <span class="k">return</span> <span class="n">array</span></div>
+
+<div class="viewcode-block" id="Trc.generate_TITLE_entry"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.generate_TITLE_entry">[docs]</a>    <span class="k">def</span> <span class="nf">generate_TITLE_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># TITLE will only be one line</span>
+
+        <span class="c1"># Add comments</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">length</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+
+        <span class="c1"># Add Title</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;TITLE&quot;</span>
+
+        <span class="n">titlestring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="n">titlestring</span> <span class="o">+=</span> <span class="n">t</span>
+
+        <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">titlestring</span>
+        <span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;END&quot;</span>
+
+        <span class="k">return</span> <span class="n">array</span></div>
+
+<div class="viewcode-block" id="Trc.to_cnf"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.to_cnf">[docs]</a>    <span class="k">def</span> <span class="nf">to_cnf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">base_cnf</span><span class="p">:</span> <span class="n">Cnf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">coords</span>
+
+        <span class="k">if</span> <span class="n">frame_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">frame_id</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">content_str</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;THIS IS THE FRAME AT TIMESTEP: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">frame_id</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s2">&quot; OF THE TRAJECTORY WITH TITLE: </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">base_cnf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_Cnf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dummy_cnf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">base_cnf</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Cnf</span><span class="p">:</span>
+                <span class="n">new_Cnf</span> <span class="o">=</span> <span class="n">base_cnf</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_Cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">base_cnf</span><span class="p">)</span>
+        <span class="n">new_Cnf</span><span class="o">.</span><span class="n">TITLE</span> <span class="o">=</span> <span class="n">TITLE</span><span class="p">(</span><span class="n">content_str</span><span class="p">)</span>
+
+        <span class="n">new_Cnf</span><span class="o">.</span><span class="n">POSITION</span> <span class="o">=</span> <span class="n">POSITION</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">coords</span><span class="o">.</span><span class="n">atomP</span><span class="p">(</span>
+                    <span class="n">resID</span><span class="o">=</span><span class="n">new_Cnf</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">resID</span><span class="p">,</span>
+                    <span class="n">resName</span><span class="o">=</span><span class="n">new_Cnf</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">resName</span><span class="p">,</span>
+                    <span class="n">atomType</span><span class="o">=</span><span class="n">new_Cnf</span><span class="o">.</span><span class="n">POSITION</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">atomType</span><span class="p">,</span>
+                    <span class="n">atomID</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">xp</span><span class="o">=</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">yp</span><span class="o">=</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">zp</span><span class="o">=</span><span class="n">coord</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="n">frame_id</span><span class="p">])</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">new_Cnf</span><span class="p">,</span> <span class="s2">&quot;GENBOX&quot;</span><span class="p">):</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">[</span><span class="n">frame_id</span><span class="p">])</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_angles</span><span class="p">[</span><span class="n">frame_id</span><span class="p">])</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">euler</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">pygromos.files.blocks.coord_blocks</span> <span class="kn">import</span> <span class="n">GENBOX</span>
+
+            <span class="n">box_block</span> <span class="o">=</span> <span class="n">GENBOX</span><span class="p">(</span>
+                <span class="n">pbc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]),</span> <span class="n">angles</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unitcell_angles</span><span class="p">[</span><span class="n">frame_id</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">box_block</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">new_Cnf</span><span class="p">,</span> <span class="s2">&quot;TIMESTEP&quot;</span><span class="p">):</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">TIMESTEP</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+            <span class="n">new_Cnf</span><span class="o">.</span><span class="n">TIMESTEP</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">new_Cnf</span></div>
+
+<div class="viewcode-block" id="Trc.save"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+        <span class="c1"># write out</span>
+        <span class="k">if</span> <span class="n">out_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.trc&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">out_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.trc.gz&quot;</span><span class="p">):</span>
+            <span class="n">out_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_trc</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out_path</span></div>
+
+<div class="viewcode-block" id="Trc.write"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trc.load"><a class="viewcode-back" href="../../../../_source/pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">in_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_cnf_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">timestep_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">any</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">in_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.trc&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">in_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.trc.gz&quot;</span><span class="p">):</span>
+            <span class="n">o</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="n">in_path</span><span class="p">,</span> <span class="n">in_cnf_path</span><span class="o">=</span><span class="n">in_cnf_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">so</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+            <span class="n">o</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+                <span class="n">xyz</span><span class="o">=</span><span class="n">so</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span>
+                <span class="n">topology</span><span class="o">=</span><span class="n">so</span><span class="o">.</span><span class="n">topology</span><span class="p">,</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">so</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">unitcell_lengths</span><span class="o">=</span><span class="n">so</span><span class="o">.</span><span class="n">unitcell_lengths</span><span class="p">,</span>
+                <span class="n">unitcell_angles</span><span class="o">=</span><span class="n">so</span><span class="o">.</span><span class="n">unitcell_angles</span><span class="p">,</span>
+                <span class="n">timestep_duration</span><span class="o">=</span><span class="n">timestep_duration</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">o</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

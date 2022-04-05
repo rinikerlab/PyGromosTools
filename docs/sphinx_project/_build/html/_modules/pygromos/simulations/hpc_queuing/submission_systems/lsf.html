@@ -1,0 +1,617 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.simulations.hpc_queuing.submission_systems.lsf &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../submission_systems.html">pygromos.simulations.hpc_queuing.submission_systems</a> &raquo;</li>
+        
+      <li>pygromos.simulations.hpc_queuing.submission_systems.lsf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.simulations.hpc_queuing.submission_systems.lsf</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems._submission_system</span> <span class="kn">import</span> <span class="n">_SubmissionSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.submission_job</span> <span class="kn">import</span> <span class="n">Submission_job</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+
+
+<div class="viewcode-block" id="LSF"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF">[docs]</a><span class="k">class</span> <span class="nc">LSF</span><span class="p">(</span><span class="n">_SubmissionSystem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;LSF</span>
+<span class="sd">    This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_dummy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_refresh_job_queue_list_all_s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># update the job-queue list every x seconds</span>
+    <span class="n">_job_queue_time_stamp</span><span class="p">:</span> <span class="n">datetime</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">submission</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">nomp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">nmpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">job_duration</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;24:00&quot;</span><span class="p">,</span>
+        <span class="n">max_storage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">environment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">block_double_submission</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">bjobs_only_same_host</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">chain_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;done&quot;</span><span class="p">,</span>
+        <span class="n">begin_mail</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">end_mail</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">zip_trajectories</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># general settings for the submission system</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="n">nmpi</span><span class="o">=</span><span class="n">nmpi</span><span class="p">,</span>
+            <span class="n">nomp</span><span class="o">=</span><span class="n">nomp</span><span class="p">,</span>
+            <span class="n">job_duration</span><span class="o">=</span><span class="n">job_duration</span><span class="p">,</span>
+            <span class="n">max_storage</span><span class="o">=</span><span class="n">max_storage</span><span class="p">,</span>
+            <span class="n">submission</span><span class="o">=</span><span class="n">submission</span><span class="p">,</span>
+            <span class="n">environment</span><span class="o">=</span><span class="n">environment</span><span class="p">,</span>
+            <span class="n">block_double_submission</span><span class="o">=</span><span class="n">block_double_submission</span><span class="p">,</span>
+            <span class="n">chain_prefix</span><span class="o">=</span><span class="n">chain_prefix</span><span class="p">,</span>
+            <span class="n">begin_mail</span><span class="o">=</span><span class="n">begin_mail</span><span class="p">,</span>
+            <span class="n">end_mail</span><span class="o">=</span><span class="n">end_mail</span><span class="p">,</span>
+            <span class="n">zip_trajectories</span><span class="o">=</span><span class="n">zip_trajectories</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Only LSF specific settings:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bjobs_only_same_host</span> <span class="o">=</span> <span class="n">bjobs_only_same_host</span>
+
+<div class="viewcode-block" id="LSF.submit_to_queue"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF.submit_to_queue">[docs]</a>    <span class="k">def</span> <span class="nf">submit_to_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_job</span><span class="p">:</span> <span class="n">Submission_job</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function submits the given command to the LSF QUEUE</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        submission_job : Submission_job</span>
+<span class="sd">            the job to be submitted</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># job_properties:Job_properties=None, &lt;- currently not usd</span>
+        <span class="n">orig_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+        <span class="c1"># generate submission_string:</span>
+        <span class="n">submission_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># QUEUE checking to not double submit</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_double_submission</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submission</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;check queue&quot;</span><span class="p">)</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">SKIP - FOUND JOB: </span><span class="se">\t\t</span><span class="s2">&quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ids</span><span class="p">))</span>
+                        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2"> with jobname: &quot;</span>
+                        <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span>
+                    <span class="p">)</span>
+                <span class="k">return</span> <span class="n">ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span><span class="p">)</span>
+            <span class="n">command_file_path</span> <span class="o">=</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span> <span class="o">+</span> <span class="s2">&quot;/job_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.sh&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command_file_path</span> <span class="o">=</span> <span class="s2">&quot;./job_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.sh&quot;</span>
+
+        <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot;bsub &quot;</span>
+        <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -J&quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -W &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_job_duration</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">post_execution_command</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s1">&#39;-Ep &quot;&#39;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">post_execution_command</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">outLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">errLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">outLog</span> <span class="o">=</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span> <span class="o">+</span> <span class="s2">&quot;.out&quot;</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -o &quot;</span> <span class="o">+</span> <span class="n">outLog</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">outLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -o &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">outLog</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">errLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -e &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">errLog</span>
+
+        <span class="n">nCPU</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nmpi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nomp</span>
+        <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -n &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nCPU</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="c1"># TODO: add GPU support</span>
+        <span class="c1"># add_string = &quot;&quot;</span>
+        <span class="c1"># add_string= &quot;-R \&quot;select[model==XeonGold_5118 || model==XeonGold_6150 || model==XeonE3_1585Lv5 || model==XeonE3_1284Lv4 || model==XeonE7_8867v3 || model == XeonGold_6140 || model==XeonGold_6150 ]\&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_storage</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -R rusage[mem=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_storage</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;] &quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">queue_after_jobID</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">sub_job</span><span class="o">.</span><span class="n">queue_after_jobID</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">queue_after_jobID</span> <span class="o">!=</span> <span class="s2">&quot;0&quot;</span>
+        <span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s1">&#39; -w &quot;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chain_prefix</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">queue_after_jobID</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&quot; &#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_begin_mail</span><span class="p">:</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -B &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_mail</span><span class="p">:</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -N &quot;</span>
+
+        <span class="n">sub_job</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># remove trailing line breaks</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nomp</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;export OMP_NUM_THREADS=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">sumbit_from_file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;writing tmp-submission-file to: &quot;</span><span class="p">,</span> <span class="n">command_file_path</span><span class="p">)</span>
+            <span class="n">command_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">command_file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">command_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#!/bin/bash</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">command_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">command_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="n">command_file_path</span>
+
+            <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;chmod +x &quot;</span> <span class="o">+</span> <span class="n">command_file_path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_environment</span><span class="p">)</span>
+
+        <span class="c1"># finalize string</span>
+        <span class="n">submission_string</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">submission_string</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="o">+</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submission Command: </span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">submission_string</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submission</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dummy</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">out_process</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">submission_string</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_environment</span><span class="p">)</span>
+                <span class="n">std_out</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">out_process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+
+                <span class="c1"># next sopt_job is queued with id:</span>
+                <span class="n">id_start</span> <span class="o">=</span> <span class="n">std_out</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)</span>
+                <span class="n">id_end</span> <span class="o">=</span> <span class="n">std_out</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+                <span class="n">job_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">std_out</span><span class="p">[</span><span class="n">id_start</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">id_end</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;process returned id: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_id</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">job_id</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not get at job ID!&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s2">&quot;could not submit this command: </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">submission_string</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">job_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">orig_dir</span><span class="p">)</span>
+        <span class="n">sub_job</span><span class="o">.</span><span class="n">jobID</span> <span class="o">=</span> <span class="n">job_id</span>
+        <span class="k">return</span> <span class="n">job_id</span></div>
+
+<div class="viewcode-block" id="LSF.submit_jobAarray_to_queue"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF.submit_jobAarray_to_queue">[docs]</a>    <span class="k">def</span> <span class="nf">submit_jobAarray_to_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_job</span><span class="p">:</span> <span class="n">Submission_job</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This functioncan be used for submission of a job array. The ammount of jobs is determined by  the difference:</span>
+<span class="sd">                    end_job-start_job</span>
+<span class="sd">        An array index variable is defined called ${JOBID} inside the command representing job x in the array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sub_job: Submission_job</span>
+<span class="sd">            the job to be submitted</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">         int</span>
+<span class="sd">            return job ID</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># QUEUE checking to not double submit</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submission</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_double_submission</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;check queue&quot;</span><span class="p">)</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">SKIP - FOUND JOB: </span><span class="se">\t\t</span><span class="s2">&quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ids</span><span class="p">))</span>
+                        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2"> with jobname: &quot;</span>
+                        <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span>
+                    <span class="p">)</span>
+                <span class="k">return</span> <span class="n">ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># generate submission_string:</span>
+        <span class="n">submission_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot;cd &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">submit_from_dir</span> <span class="o">+</span> <span class="s2">&quot; &amp;&amp; &quot;</span>
+
+        <span class="k">if</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobLim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">jobLim</span> <span class="o">=</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">end_job</span> <span class="o">-</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">start_job</span>
+
+        <span class="n">jobName</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">start_job</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">end_job</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]%&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jobLim</span><span class="p">)</span>
+
+        <span class="n">submission_string</span> <span class="o">+=</span> <span class="s1">&#39;bsub -J &quot; &#39;</span> <span class="o">+</span> <span class="n">jobName</span> <span class="o">+</span> <span class="s1">&#39; &quot; -W &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_job_duration</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">jobGroup</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -g &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobGroup</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">outLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">errLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">outLog</span> <span class="o">=</span> <span class="n">jobName</span> <span class="o">+</span> <span class="s2">&quot;.out&quot;</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -oo &quot;</span> <span class="o">+</span> <span class="n">outLog</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">outLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -oo &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">outLog</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">errLog</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -eo &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">errLog</span>
+
+        <span class="n">nCPU</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nmpi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nomp</span>
+        <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -n &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nCPU</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_storage</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s1">&#39; -R &quot;rusage[mem=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_storage</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&quot; &#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">queue_after_jobID</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -w &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chain_prefix</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sub_job</span><span class="o">.</span><span class="n">queue_after_jobID</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&quot; &#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_begin_mail</span><span class="p">:</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -B &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_mail</span><span class="p">:</span>
+            <span class="n">submission_string</span> <span class="o">+=</span> <span class="s2">&quot; -N &quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nomp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot; export OMP_NUM_THREADS=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &amp;&amp; &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+
+        <span class="c1"># finalize string</span>
+        <span class="n">submission_string</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">submission_string</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="o">+</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submission Command: </span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">submission_string</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submission</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dummy</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">std_out_buff</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">submission_string</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_environment</span><span class="p">)</span>
+                <span class="n">std_out</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">std_out_buff</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+
+                <span class="c1"># next sopt_job is queued with id:</span>
+                <span class="n">id_start</span> <span class="o">=</span> <span class="n">std_out</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)</span>
+                <span class="n">id_end</span> <span class="o">=</span> <span class="n">std_out</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+                <span class="n">job_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">std_out</span><span class="p">[</span><span class="n">id_start</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">id_end</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;process returned id: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_id</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">job_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">job_id</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not get at job ID!&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span>
+                    <span class="s2">&quot;could not submit this command: </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">submission_string</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">job_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">sub_job</span><span class="o">.</span><span class="n">jobID</span> <span class="o">=</span> <span class="n">job_id</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Job Queue Managment</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LSF.get_queued_jobs"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF.get_queued_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">get_queued_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function updates the job-list of the queueing system in the class.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            returns the job_queue as pandas dataFrame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Do we need an update of the job list?</span>
+        <span class="n">check_job_list</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_job_queue_time_stamp&quot;</span><span class="p">):</span>
+            <span class="n">last_update</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_time_stamp</span>
+            <span class="n">check_job_list</span> <span class="o">=</span> <span class="n">last_update</span><span class="o">.</span><span class="n">seconds</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_job_queue_list_all_s</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submission</span><span class="p">:</span>  <span class="c1"># shortcut to reduce queue calls!</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span>
+        <span class="k">if</span> <span class="n">check_job_list</span><span class="p">:</span>
+            <span class="c1"># try getting the lsf queue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dummy</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># get all running and pending jobs</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bjobs_only_same_host</span><span class="p">:</span>
+                        <span class="n">out_process</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;bjobs -w | grep &#39;$HOSTNAME|JOBID&#39;&quot;</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">out_process</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;bjobs -w&quot;</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">job_list_str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">out_process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+
+                    <span class="c1"># get all finished jobs</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bjobs_only_same_host</span><span class="p">:</span>
+                        <span class="n">out_process</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;bjobs -wd | grep &#39;$HOSTNAME|JOBID&#39;&quot;</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">out_process</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;bjobs -wd&quot;</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">job_list_finished_str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">out_process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_time_stamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not get job_list!</span><span class="se">\n</span><span class="s2">err:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">job_list_str</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">job_list_finished_str</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># format information:</span>
+            <span class="n">jlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">job_list_str</span><span class="p">))</span>
+            <span class="n">jlist_fin</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">job_list_finished_str</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">jlist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="n">jlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">jobs</span> <span class="o">=</span> <span class="n">jlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">jlist_fin</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+                <span class="n">jobs_dict</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+                    <span class="n">jobID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">user</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">queue</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="n">from_host</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                    <span class="n">exec_host</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+                    <span class="n">job_name</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+                    <span class="n">submit_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]),</span> <span class="s2">&quot;%Y %b </span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">jobID</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">from_host</span><span class="p">,</span> <span class="n">exec_host</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">submit_time</span><span class="p">]</span>
+                    <span class="n">jobs_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">jobID</span><span class="p">:</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">values</span><span class="p">)}})</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">jobs_dict</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                        <span class="s2">&quot;JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skipping refresh of job list, as the last update is &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">last_update</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;s ago&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span></div>
+
+<div class="viewcode-block" id="LSF.search_queue_for_jobid"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF.search_queue_for_jobid">[docs]</a>    <span class="k">def</span> <span class="nf">search_queue_for_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_queued_jobs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span><span class="o">.</span><span class="n">JOBID</span> <span class="o">==</span> <span class="n">job_id</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LSF.search_queue_for_jobname"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF.search_queue_for_jobname">[docs]</a>    <span class="k">def</span> <span class="nf">search_queue_for_jobname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">regex</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;search_queue_for_jobname</span>
+
+<span class="sd">            this jobs searches the job queue for a certain job name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        job_name :  str</span>
+<span class="sd">        regex:  bool, optional</span>
+<span class="sd">            if the string is a Regular Expression</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            the output of the queue containing the jobname</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_queued_jobs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">regex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span><span class="o">.</span><span class="n">JOB_NAME</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">job_name</span><span class="p">))</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_job_queue_list</span><span class="o">.</span><span class="n">JOB_NAME</span> <span class="o">==</span> <span class="n">job_name</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        kill jobs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LSF.kill_jobs"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.hpc_queuing.submission_systems.html#pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF.kill_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">kill_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">regex</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            this function can be used to terminate or remove pending jobs from the queue.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            name of the job to be killed</span>
+<span class="sd">        regex : bool</span>
+<span class="sd">            if true, all jobs matching job_name get killed!</span>
+<span class="sd">        job_ids : Union[List[int], int]</span>
+<span class="sd">            job Ids to be killed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">job_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">job_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="n">job_name</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">job_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">job_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">job_ids</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please provide either job_name or job_ids!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stopping: &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">)))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;bkill &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">)))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="s2">&quot;Job has already finished&quot;</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">]):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job has already finished&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s2">&quot;could not execute this command: </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

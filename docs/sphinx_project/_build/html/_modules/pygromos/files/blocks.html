@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.blocks &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.blocks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.blocks</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="c1"># from pygromos.files.blocks import _general_block</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">coord_blocks</span> <span class="k">as</span> <span class="n">coords</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">imd_blocks</span> <span class="k">as</span> <span class="n">imd</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">topology_blocks</span> <span class="k">as</span> <span class="n">topo</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">mtb_blocks</span> <span class="k">as</span> <span class="n">mtb</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">pertubation_blocks</span> <span class="k">as</span> <span class="n">ptp</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">qmmm_blocks</span> <span class="k">as</span> <span class="n">qmm</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">replica_exchange_blocks</span> <span class="k">as</span> <span class="n">repdat</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks</span> <span class="kn">import</span> <span class="n">miscBlocks</span> <span class="k">as</span> <span class="n">misc</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">_generic_gromos_block</span> <span class="k">as</span> <span class="n">_ggb</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">_iterable_gromos_block</span> <span class="k">as</span> <span class="n">_igb</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">TIMESTEP</span> <span class="k">as</span> <span class="n">generic_TIMESTEP</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">TITLE</span> <span class="k">as</span> <span class="n">generic_TITLE</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">TRAJ</span> <span class="k">as</span> <span class="n">generic_TRAJ</span>
+
+<span class="c1"># forward declarations</span>
+<span class="n">TITLE</span><span class="p">:</span> <span class="n">generic_TITLE</span> <span class="o">=</span> <span class="n">generic_TITLE</span>
+<span class="n">TIMESTEP</span><span class="p">:</span> <span class="n">generic_TIMESTEP</span> <span class="o">=</span> <span class="n">generic_TIMESTEP</span>
+<span class="n">TRAJ</span><span class="p">:</span> <span class="n">generic_TRAJ</span> <span class="o">=</span> <span class="n">generic_TRAJ</span>
+<span class="n">_generic_gromos_block</span><span class="p">:</span> <span class="n">_ggb</span> <span class="o">=</span> <span class="n">_ggb</span>
+<span class="n">_iterable_gromos_block</span><span class="p">:</span> <span class="n">_igb</span> <span class="o">=</span> <span class="n">_igb</span>
+
+
+<div class="viewcode-block" id="all_blocks_class"><a class="viewcode-back" href="../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.all_blocks_class">[docs]</a><span class="k">class</span> <span class="nc">all_blocks_class</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is a very simplistic block library containing all present gromos blocks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_block_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">coords</span><span class="p">,</span> <span class="n">imd</span><span class="p">,</span> <span class="n">topo</span><span class="p">,</span> <span class="n">mtb</span><span class="p">,</span> <span class="n">ptp</span><span class="p">,</span> <span class="n">qmm</span><span class="p">,</span> <span class="n">repdat</span><span class="p">,</span> <span class="n">misc</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">block_types</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_block_types</span><span class="p">:</span>
+            <span class="p">[</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">block_types</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">_generic_gromos_block</span><span class="p">))</span>
+            <span class="p">]</span>
+
+<div class="viewcode-block" id="all_blocks_class.get_all_blocks"><a class="viewcode-back" href="../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.all_blocks_class.get_all_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<span class="n">all_blocks</span> <span class="o">=</span> <span class="n">all_blocks_class</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

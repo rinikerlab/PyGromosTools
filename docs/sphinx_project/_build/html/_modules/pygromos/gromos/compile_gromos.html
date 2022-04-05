@@ -1,0 +1,693 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.gromos.compile_gromos &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.gromos.compile_gromos</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.gromos.compile_gromos</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">spacer</span><span class="p">,</span> <span class="n">spacer2</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    These functioons build a Gromos++ and GromosXX binary with conda.</span>
+
+<span class="sd">    If you want to use these features please uncomment all lines in .gitmodules</span>
+<span class="sd">    and provide the correct credetials for the gitlab repository.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="default_install"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.compile_gromos.default_install">[docs]</a><span class="k">def</span> <span class="nf">default_install</span><span class="p">(</span><span class="n">nCores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">install_gromos</span><span class="p">(</span>
+        <span class="n">root_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span>
+        <span class="n">do_clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">gromosXX_with_mpi</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">gromosPP_with_omp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">recompile_from_scratch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">nCore</span><span class="o">=</span><span class="n">nCores</span><span class="p">,</span>
+        <span class="n">_timing_dict</span><span class="o">=</span><span class="n">_timing_dict</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="install_gromos"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.compile_gromos.install_gromos">[docs]</a><span class="k">def</span> <span class="nf">install_gromos</span><span class="p">(</span>
+    <span class="n">root_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">nCore</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">gromosXX_with_mpi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">gromosXX_with_omp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">gromosXX_with_cuda</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gromosPP_with_omp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">gromosPP_with_debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">gromosXX_with_debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">do_compile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">do_clean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">recompile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">recompile_from_scratch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">_do_gromosPP</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">_do_gromosXX</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">_timing_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Install the gromos simulation packages. As a helper: to get the dependencies right, install and activate the provided pygromos environments!</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    root_dir : str</span>
+<span class="sd">        this dir contains the gromosXX and the gromosPP git repositories</span>
+<span class="sd">    nCore : int, optional</span>
+<span class="sd">        how many cores should be used to compile?, by default 1</span>
+<span class="sd">    gromosXX_with_cuda_dir : str, optional</span>
+<span class="sd">        use the following cuda path and activate cuda support, by default None</span>
+<span class="sd">    gromosXX_with_omp : bool, optional</span>
+<span class="sd">        should gromosXX be compiled with omp - Warning dont combine wiht mpi!, by default False</span>
+<span class="sd">    gromosXX_with_mpi : bool, optional</span>
+<span class="sd">        should gromosXX be compiled wiht mpi - Warning dont combine with omp!, by default False</span>
+<span class="sd">    gromosPP_with_omp : bool, optional</span>
+<span class="sd">        should gromosPP be compiled with omp, by default False</span>
+<span class="sd">    gromosPP_with_debug : bool, optional</span>
+<span class="sd">        set gromosPP debug flag, by default False</span>
+<span class="sd">    gromosXX_with_debug : bool, optional</span>
+<span class="sd">        set gromosXX debug flag, by default False</span>
+<span class="sd">    do_compile : bool, optional</span>
+<span class="sd">        compile the programms, by default True</span>
+<span class="sd">    do_clean : bool, optional</span>
+<span class="sd">        clean up and remove the programs (can be used together with do_compile to get a clean start), by default False</span>
+<span class="sd">    recompile : bool, optional</span>
+<span class="sd">        recompile the programs with make, by default False</span>
+<span class="sd">    recompile_from_scratch : bool, optional</span>
+<span class="sd">        recompile with configure and make, by default False</span>
+<span class="sd">    _do_gromosPP : bool, optional</span>
+<span class="sd">        install the gromosPP program, by default True</span>
+<span class="sd">    _do_gromosXX : bool, optional</span>
+<span class="sd">        install the gromosXX program, by default True</span>
+<span class="sd">    _timing_dict : dict, optional</span>
+<span class="sd">        structure for storing timings of process, by default {}</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        compiling is fun, I can tell you more!, by default True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">root_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">do_clean</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_do_gromosPP</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> CLEAN GROMOSPP </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer</span><span class="p">)</span>
+            <span class="n">gromosPP_path</span> <span class="o">=</span> <span class="n">root_dir</span> <span class="o">+</span> <span class="s2">&quot;/gromosPlsPls/gromos++&quot;</span>
+            <span class="n">gromosPP_build_path</span> <span class="o">=</span> <span class="n">gromosPP_path</span> <span class="o">+</span> <span class="s2">&quot;/build&quot;</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gromosPP_build_path</span><span class="p">):</span>
+                <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_clean_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="n">_make_clean</span><span class="p">(</span><span class="n">gromosPP_build_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+                <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_clean_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">_do_gromosXX</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> CLEAN GROMOSXX </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer</span><span class="p">)</span>
+            <span class="n">gromosXX_path</span> <span class="o">=</span> <span class="n">root_dir</span> <span class="o">+</span> <span class="s2">&quot;/gromosXX/gromosXX&quot;</span>
+            <span class="n">gromosXX_build_path</span> <span class="o">=</span> <span class="n">gromosXX_path</span> <span class="o">+</span> <span class="s2">&quot;/build&quot;</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gromosXX_build_path</span><span class="p">):</span>
+                <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_clean_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="n">_make_clean</span><span class="p">(</span><span class="n">gromosXX_build_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+                <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_clean_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">do_compile</span><span class="p">:</span>
+        <span class="n">binary_dir</span> <span class="o">=</span> <span class="n">root_dir</span> <span class="o">+</span> <span class="s2">&quot;/bin&quot;</span>
+        <span class="k">if</span> <span class="n">_do_gromosXX</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> BUILD GROMOSXX </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer</span><span class="p">)</span>
+            <span class="n">gromosXX_path</span> <span class="o">=</span> <span class="n">root_dir</span> <span class="o">+</span> <span class="s2">&quot;/gromosXX/gromosXX&quot;</span>
+            <span class="n">gromosXX_build_path</span> <span class="o">=</span> <span class="n">gromosXX_path</span> <span class="o">+</span> <span class="s2">&quot;/build&quot;</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gromosXX_build_path</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recompile_from_scratch</span><span class="p">:</span>
+                <span class="n">_configure_gromosXX_autotools</span><span class="p">(</span>
+                    <span class="n">build_dir</span><span class="o">=</span><span class="n">gromosXX_build_path</span><span class="p">,</span>
+                    <span class="n">binary_dir</span><span class="o">=</span><span class="n">binary_dir</span><span class="p">,</span>
+                    <span class="n">with_mpi</span><span class="o">=</span><span class="n">gromosXX_with_mpi</span><span class="p">,</span>
+                    <span class="n">with_omp</span><span class="o">=</span><span class="n">gromosXX_with_omp</span><span class="p">,</span>
+                    <span class="n">with_cuda_dir</span><span class="o">=</span><span class="n">gromosXX_with_cuda</span><span class="p">,</span>
+                    <span class="n">with_debug</span><span class="o">=</span><span class="n">gromosXX_with_debug</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gromosXX_build_path</span> <span class="o">+</span> <span class="s2">&quot;/bin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recompile</span> <span class="ow">or</span> <span class="n">recompile_from_scratch</span><span class="p">:</span>
+                <span class="n">_make_compile</span><span class="p">(</span>
+                    <span class="n">build_dir</span><span class="o">=</span><span class="n">gromosXX_build_path</span><span class="p">,</span>
+                    <span class="n">nCore</span><span class="o">=</span><span class="n">nCore</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                    <span class="n">_timing_dict</span><span class="o">=</span><span class="n">_timing_dict</span><span class="p">,</span>
+                    <span class="n">_timing_prefix</span><span class="o">=</span><span class="s2">&quot;gromosXX_&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">_do_gromosPP</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> BUILD GROMOSPP </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer</span><span class="p">)</span>
+            <span class="n">gromosPP_path</span> <span class="o">=</span> <span class="n">root_dir</span> <span class="o">+</span> <span class="s2">&quot;/gromosPlsPls/gromos++&quot;</span>
+            <span class="n">gromosPP_build_path</span> <span class="o">=</span> <span class="n">gromosPP_path</span> <span class="o">+</span> <span class="s2">&quot;/build&quot;</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gromosPP_build_path</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recompile_from_scratch</span><span class="p">:</span>
+                <span class="n">_configure_gromosPP_autotools</span><span class="p">(</span>
+                    <span class="n">build_dir</span><span class="o">=</span><span class="n">gromosPP_build_path</span><span class="p">,</span>
+                    <span class="n">binary_dir</span><span class="o">=</span><span class="n">binary_dir</span><span class="p">,</span>
+                    <span class="n">with_omp</span><span class="o">=</span><span class="n">gromosPP_with_omp</span><span class="p">,</span>
+                    <span class="n">with_debug</span><span class="o">=</span><span class="n">gromosPP_with_debug</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gromosPP_build_path</span> <span class="o">+</span> <span class="s2">&quot;/bin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recompile</span> <span class="ow">or</span> <span class="n">recompile_from_scratch</span><span class="p">:</span>
+                <span class="n">_make_compile</span><span class="p">(</span>
+                    <span class="n">build_dir</span><span class="o">=</span><span class="n">gromosPP_build_path</span><span class="p">,</span>
+                    <span class="n">nCore</span><span class="o">=</span><span class="n">nCore</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                    <span class="n">_timing_dict</span><span class="o">=</span><span class="n">_timing_dict</span><span class="p">,</span>
+                    <span class="n">_timing_prefix</span><span class="o">=</span><span class="s2">&quot;gromosPP_&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="c1"># TIMINGS Printout</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="s2">&quot; TIMINGS:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_timing_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+        <span class="c1"># get duration</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="s2">&quot; duration:&quot;</span><span class="p">)</span>
+        <span class="n">durations</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">({})</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_timing_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s2">&quot;start&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+                <span class="n">end_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;_end&quot;</span><span class="p">),</span> <span class="n">keys</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">durations</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">=</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">end_key</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">durations</span><span class="p">[</span><span class="n">prefix</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="_configure_gromosPP_autotools"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.compile_gromos._configure_gromosPP_autotools">[docs]</a><span class="k">def</span> <span class="nf">_configure_gromosPP_autotools</span><span class="p">(</span>
+    <span class="n">build_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">binary_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">with_omp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">with_debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">_timing_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Setting the configurations for the compiling gromosPP process. (uses autotools)</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    build_dir : str</span>
+<span class="sd">        directory, that should be used for building</span>
+<span class="sd">    binary_dir : str, optional</span>
+<span class="sd">        directory in which the binaries should be written to, by default None</span>
+<span class="sd">    with_omp : bool, optional</span>
+<span class="sd">        should gromosPP be compiled with omp, by default False</span>
+<span class="sd">    with_debug : bool, optional</span>
+<span class="sd">        set gromos debug flag, by default False</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        compiling is fun, I can tell you more!, by default True</span>
+<span class="sd">    _timing_dict : dict, optional</span>
+<span class="sd">        structure for storing timings of process, by default {}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
+
+    <span class="c1"># Initial config</span>
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_init_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&gt; INIT </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_init_start&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workdir:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;./Config.sh&quot;</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_init_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_init_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_init_start&quot;</span><span class="p">]),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Configure</span>
+    <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_conf_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="s2">&quot;/configure.log&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&gt; CONFIGURE </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_conf_start&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;log_file: &quot;</span><span class="p">,</span> <span class="n">log_file</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">binary_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;--bindir&quot;</span><span class="p">:</span> <span class="n">binary_dir</span><span class="p">})</span>
+
+    <span class="n">flags</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">with_omp</span><span class="p">:</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--enable-openmp&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_debug</span><span class="p">:</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--enable-debug&quot;</span><span class="p">)</span>
+
+    <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; --with-gsl=$(gsl-config --prefix) &quot;</span><span class="p">)</span>  <span class="c1"># this is required for gromosPP</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;../configure &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">flag</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">flags</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;command: &quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_conf_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_conf_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosPP_conf_start&quot;</span><span class="p">]),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_configure_gromosXX_autotools"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.compile_gromos._configure_gromosXX_autotools">[docs]</a><span class="k">def</span> <span class="nf">_configure_gromosXX_autotools</span><span class="p">(</span>
+    <span class="n">build_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">binary_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">with_cuda_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">with_omp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">with_mpi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">with_debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">_timing_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Setting the configurations for the compiling gromosXX process. (uses autotools)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    build_dir : str</span>
+<span class="sd">        directory, that should be used for building</span>
+<span class="sd">    binary_dir : str, optional</span>
+<span class="sd">        directory in which the binaries should be written to, by default None</span>
+<span class="sd">    with_cuda_dir : str, optional</span>
+<span class="sd">        use the following cuda path and activate cuda support, by default None</span>
+<span class="sd">    with_omp : bool, optional</span>
+<span class="sd">        should gromosXX be compiled with omp - Warning dont combine wiht mpi!, by default False</span>
+<span class="sd">    with_mpi : bool, optional</span>
+<span class="sd">        should gromosXX be compiled wiht mpi - Warning dont combine with omp!, by default False</span>
+<span class="sd">    with_debug : bool, optional</span>
+<span class="sd">        set gromos debug flag, by default False</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        compiling is fun, I can tell you more!, by default True</span>
+<span class="sd">    _timing_dict : dict, optional</span>
+<span class="sd">        structure for storing timings of process, by default {}</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if wrong value was passed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
+
+    <span class="c1"># Initial config</span>
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_init_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&gt; INIT </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_init_start&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workdir:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;./Config.sh&quot;</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_init_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_init_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_init_start&quot;</span><span class="p">]),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Configure</span>
+    <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="s2">&quot;/configure.log&quot;</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_conf_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&gt; CONFIGURE </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_conf_start&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workdir:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;log_file: &quot;</span><span class="p">,</span> <span class="n">log_file</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">binary_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;--bindir&quot;</span><span class="p">:</span> <span class="n">binary_dir</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">with_cuda_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;--with-cuda&quot;</span><span class="p">:</span> <span class="n">with_cuda_dir</span><span class="p">})</span>
+
+    <span class="n">flags</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">with_omp</span> <span class="ow">and</span> <span class="n">with_mpi</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not use with_omp and with_mpi at the same time!&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_omp</span><span class="p">:</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--enable-openmp&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_mpi</span><span class="p">:</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--enable-mpi&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_debug</span><span class="p">:</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--enable-debug&quot;</span><span class="p">)</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;../configure &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">flag</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">flags</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;command: &quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_conf_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_conf_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="s2">&quot;gromosXX_conf_start&quot;</span><span class="p">]),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_make_compile"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.compile_gromos._make_compile">[docs]</a><span class="k">def</span> <span class="nf">_make_compile</span><span class="p">(</span>
+    <span class="n">build_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nCore</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">_timing_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function triggers make and make install in the build_dir.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    build_dir : str</span>
+<span class="sd">        directory prepared for make.</span>
+<span class="sd">    nCore : int, optional</span>
+<span class="sd">        how many cores for each make command?, by default 1</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        make, make things and talk loudly about it! , by default True</span>
+<span class="sd">    _timing_dict : dict, optional</span>
+<span class="sd">        structure for storing timings of process, by default {}</span>
+<span class="sd">    _timing_prefix : str, optional</span>
+<span class="sd">        prefix for timing keys, by default &quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="s2">&quot;/make.log&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;make -j&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nCore</span><span class="p">)</span>
+
+    <span class="c1"># Compile</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&gt; MAKE </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_start&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;log_file: &quot;</span><span class="p">,</span> <span class="n">log_file</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;command: &quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;duration: &quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_start&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Create Binaries</span>
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="s2">&quot;/makeInstall.log&quot;</span>
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_install_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="s2">&quot;/make_install.log&quot;</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;make -j&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nCore</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; install&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&gt; INSTALL </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_start&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;log_file: &quot;</span><span class="p">,</span> <span class="n">log_file</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;command: &quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">catch_STD</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_install_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;duration: &quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span>
+                <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_install_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_install_start&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_make_clean"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.compile_gromos._make_clean">[docs]</a><span class="k">def</span> <span class="nf">_make_clean</span><span class="p">(</span>
+    <span class="n">build_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nCore</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">_timing_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function triggers make clean and removes the build_dir.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    build_dir : str</span>
+<span class="sd">        directory prepared for make.</span>
+<span class="sd">    nCore : int, optional</span>
+<span class="sd">        how many cores for each make command?, by default 1</span>
+<span class="sd">    verbose: bool, optional</span>
+<span class="sd">        cleaning, cleaning, every thing gets so shiny and I can sing!, by default True</span>
+<span class="sd">    _timing_dict : dict, optional</span>
+<span class="sd">        structure for storing timings of process, by default {}</span>
+<span class="sd">    _timing_prefix : str, optional</span>
+<span class="sd">        prefix for timing keys, by default &quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">build_dir</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;make -j&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nCore</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; clean&quot;</span>
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_clean_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;command: &quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start time: &quot;</span><span class="p">,</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_clean_start&quot;</span><span class="p">])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;remove dir: &quot;</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">)</span>
+
+    <span class="n">bash</span><span class="o">.</span><span class="n">remove_file</span><span class="p">(</span><span class="n">build_dir</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_clean_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;duration: &quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_clean_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">_timing_dict</span><span class="p">[</span><span class="n">_timing_prefix</span> <span class="o">+</span> <span class="s2">&quot;make_clean_start&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># Main function</span>
+    <span class="c1"># try modifying path if necessary</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">dynamic_parser</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">dynamic_parser</span><span class="p">(</span><span class="n">install_gromos</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Run MD-Worker&quot;</span><span class="p">)</span>
+
+    <span class="n">install_gromos</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+
+    <span class="c1"># default_install(nCores=nCores, verbose=True)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

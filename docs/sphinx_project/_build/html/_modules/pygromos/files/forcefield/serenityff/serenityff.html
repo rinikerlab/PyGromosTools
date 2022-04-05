@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.forcefield.serenityff.serenityff &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.forcefield.serenityff.serenityff</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.forcefield.serenityff.serenityff</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">simtk</span> <span class="kn">import</span> <span class="n">unit</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.data</span> <span class="kn">import</span> <span class="n">topology_templates</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield.openff.openff</span> <span class="kn">import</span> <span class="n">OpenFF</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield._generic_force_field</span> <span class="kn">import</span> <span class="n">_generic_force_field</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield.serenityff.serenityff_data</span> <span class="kn">import</span> <span class="n">serenityff_C12</span><span class="p">,</span> <span class="n">serenityff_C6</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
+
+
+<div class="viewcode-block" id="SerenityFF"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.serenityff.html#pygromos.files.forcefield.serenityff.serenityff.SerenityFF">[docs]</a><span class="k">class</span> <span class="nc">SerenityFF</span><span class="p">(</span><span class="n">_generic_force_field</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;serenity&quot;</span><span class="p">,</span> <span class="n">path_to_files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">auto_import</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path_to_files</span><span class="p">,</span> <span class="n">auto_import</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">auto_import</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auto_import_ff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span> <span class="o">=</span> <span class="n">OpenFF</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path_to_files</span><span class="p">,</span> <span class="n">auto_import</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SerenityFF.auto_import_ff"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.serenityff.html#pygromos.files.forcefield.serenityff.serenityff.SerenityFF.auto_import_ff">[docs]</a>    <span class="k">def</span> <span class="nf">auto_import_ff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="n">topology_templates</span><span class="o">.</span><span class="n">topology_template_dir</span> <span class="o">+</span> <span class="s2">&quot;/blank_template+spc.top&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">develop</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C12_input</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_charges</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serenityFFelements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;Br&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C6_pattern</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C12_pattern</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SerenityFF.create_top"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.serenityff.html#pygromos.files.forcefield.serenityff.serenityff.SerenityFF.create_top">[docs]</a>    <span class="k">def</span> <span class="nf">create_top</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_top</span><span class="p">:</span> <span class="n">Top</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">C12_input</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+        <span class="n">partial_charges</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">in_top</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">gromosTop</span> <span class="o">=</span> <span class="n">in_top</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">_init_mol_for_convert</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">convertResname</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">convertBonds</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">convertAngles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">convertTosions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">convertImproper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">convert_other_stuff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_serenityff_nonBonded</span><span class="p">(</span><span class="n">C12_input</span><span class="o">=</span><span class="n">C12_input</span><span class="p">,</span> <span class="n">partial_charges</span><span class="o">=</span><span class="n">partial_charges</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">gromosTop</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span></div>
+
+<div class="viewcode-block" id="SerenityFF.read_pattern"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.serenityff.html#pygromos.files.forcefield.serenityff.serenityff.SerenityFF.read_pattern">[docs]</a>    <span class="k">def</span> <span class="nf">read_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C6orC12</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;C6&quot;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">serenityFFelements</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">C6orC12</span> <span class="o">==</span> <span class="s2">&quot;C6&quot;</span><span class="p">:</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="n">serenityff_C6</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="n">serenityff_C12</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">infile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">infile</span><span class="p">:</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">C6orC12</span> <span class="o">==</span> <span class="s2">&quot;C6&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">C6_pattern</span><span class="p">[</span><span class="n">element</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">C12_pattern</span><span class="p">[</span><span class="n">element</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                <span class="n">infile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;WIP&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_pattern_matching_for_one_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;H&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">():</span>
+        <span class="c1"># TODO: add C12 support</span>
+
+        <span class="n">return_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C6_pattern</span><span class="p">[</span><span class="n">element</span><span class="p">]):</span>
+            <span class="c1"># create pattern and init some variables</span>
+            <span class="n">mol_pattern</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">idx_in_rdkmol</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># find the atom for which the pattern was made</span>
+            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol_pattern</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomMapNum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+
+            <span class="c1"># get all matches</span>
+
+            <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">mol_pattern</span><span class="p">,</span> <span class="n">uniquify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                    <span class="n">idx_in_rdkmol</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                    <span class="n">return_dict</span><span class="p">[</span><span class="n">idx_in_rdkmol</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">element</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">pattern</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">return_dict</span>
+
+<div class="viewcode-block" id="SerenityFF.get_LJ_parameters"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.serenityff.html#pygromos.files.forcefield.serenityff.serenityff.SerenityFF.get_LJ_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_LJ_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">return_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop</span><span class="p">:</span>
+            <span class="c1"># get all elements in self.mol</span>
+            <span class="n">contained_elements_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                <span class="n">element</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()</span>
+                <span class="n">contained_elements_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+
+            <span class="c1"># pattern matching for all elements contained in self.mol</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">contained_elements_set</span><span class="p">:</span>
+                <span class="n">return_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pattern_matching_for_one_element</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;WIP&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">return_dict</span></div>
+
+<div class="viewcode-block" id="SerenityFF.create_serenityff_nonBonded"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.serenityff.html#pygromos.files.forcefield.serenityff.serenityff.SerenityFF.create_serenityff_nonBonded">[docs]</a>    <span class="k">def</span> <span class="nf">create_serenityff_nonBonded</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">C12_input</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span> <span class="n">partial_charges</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_pattern</span><span class="p">()</span>
+        <span class="n">c6dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_LJ_parameters</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">createVdWexclusionList</span><span class="p">()</span>
+            <span class="n">moleculeItr</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+                <span class="n">panm_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;vdW&quot;</span><span class="p">]:</span>
+                    <span class="n">force</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;vdW&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                    <span class="n">ATNM</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">MRES</span> <span class="o">=</span> <span class="n">moleculeItr</span>
+                    <span class="n">element_symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()</span>
+                    <span class="n">panm_dict</span><span class="p">[</span><span class="n">element_symbol</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">PANM</span> <span class="o">=</span> <span class="n">element_symbol</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">panm_dict</span><span class="p">[</span><span class="n">element_symbol</span><span class="p">])</span>
+                    <span class="n">IAC</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># will not be used if we use automatic</span>
+                    <span class="n">MASS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">mass</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">dalton</span><span class="p">)</span>
+                    <span class="n">CG</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop</span><span class="p">:</span>
+                        <span class="n">CG</span> <span class="o">=</span> <span class="n">partial_charges</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+                    <span class="k">if</span> <span class="n">ATNM</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">():</span>
+                        <span class="n">CGC</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">CGC</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">exclusionList13</span><span class="p">:</span>
+                        <span class="n">openFFexList13</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">exclusionList13</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+                        <span class="n">INE</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">openFFexList13</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">INE</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">exclusionList14</span><span class="p">:</span>
+                        <span class="n">openFFexList14</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">exclusionList14</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+                        <span class="n">INE14</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">openFFexList14</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">INE14</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="n">epsilon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">force</span><span class="o">.</span><span class="n">epsilon</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">kilojoule_per_mole</span><span class="p">))</span>
+                    <span class="n">rmin</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">force</span><span class="o">.</span><span class="n">rmin_half</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">nanometer</span><span class="p">)</span>
+                    <span class="n">C6</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">c6dict</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># ** 2</span>
+                    <span class="n">CS6</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">C6</span>
+                    <span class="n">C12</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="p">(</span><span class="n">rmin</span><span class="o">**</span><span class="mi">12</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop</span><span class="p">:</span>
+                        <span class="n">C12</span> <span class="o">=</span> <span class="n">C12_input</span><span class="p">[(</span><span class="n">c6dict</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])]</span>
+                    <span class="n">CS12</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">C12</span>
+                    <span class="n">IACname</span> <span class="o">=</span> <span class="n">c6dict</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_atom</span><span class="p">(</span>
+                        <span class="n">ATNM</span><span class="o">=</span><span class="n">ATNM</span><span class="p">,</span>
+                        <span class="n">MRES</span><span class="o">=</span><span class="n">MRES</span><span class="p">,</span>
+                        <span class="n">PANM</span><span class="o">=</span><span class="n">PANM</span><span class="p">,</span>
+                        <span class="n">IAC</span><span class="o">=</span><span class="n">IAC</span><span class="p">,</span>
+                        <span class="n">MASS</span><span class="o">=</span><span class="n">MASS</span><span class="p">,</span>
+                        <span class="n">CG</span><span class="o">=</span><span class="n">CG</span><span class="p">,</span>
+                        <span class="n">CGC</span><span class="o">=</span><span class="n">CGC</span><span class="p">,</span>
+                        <span class="n">INE</span><span class="o">=</span><span class="n">INE</span><span class="p">,</span>
+                        <span class="n">INE14</span><span class="o">=</span><span class="n">INE14</span><span class="p">,</span>
+                        <span class="n">C6</span><span class="o">=</span><span class="n">C6</span><span class="p">,</span>
+                        <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span>
+                        <span class="n">CS6</span><span class="o">=</span><span class="n">CS6</span><span class="p">,</span>
+                        <span class="n">CS12</span><span class="o">=</span><span class="n">CS12</span><span class="p">,</span>
+                        <span class="n">IACname</span><span class="o">=</span><span class="n">IACname</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">moleculeItr</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;WIP&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

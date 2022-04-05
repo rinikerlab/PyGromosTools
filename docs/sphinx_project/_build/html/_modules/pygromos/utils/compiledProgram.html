@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.utils.compiledProgram &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.utils.compiledProgram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.utils.compiledProgram</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This abstract parent class, should provide functionality for  checking if binaries are present.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+
+
+<div class="viewcode-block" id="_compiled_program"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.compiledProgram._compiled_program">[docs]</a><span class="k">class</span> <span class="nc">_compiled_program</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class contains functions, that are required to detect if a binary program is accesible.</span>
+<span class="sd">    It tracks the presence of the binary dir and wraps the gromos functionality with wrappers, that check on function call if the binary is present.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_bin</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">_force_bin_present</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">_check_binary_paths</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="n">_found_binary_dir</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>  <span class="c1"># found? binary dir</span>
+    <span class="n">_found_binary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>  <span class="c1"># found? binary</span>
+    <span class="n">_found_binary_paths</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>  <span class="c1"># the found binary paths.</span>
+
+<div class="viewcode-block" id="_compiled_program.__init__"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.compiledProgram._compiled_program.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">in_bin_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">_force_bin_present</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">_check_binary_paths</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The  _compiled_program parent class can be used, to ensure on runtime, that certain binaries are present.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_bin_dir : Union[str, None]</span>
+<span class="sd">            directory that should contain the binaries. If None, the assumption is made, that the path is part of the PATH variable.</span>
+<span class="sd">        _force_bin_present : bool, optional</span>
+<span class="sd">            if True, the check_binary or check_binary_folder will throw errors, if they don&#39;t find the targets, by default True</span>
+<span class="sd">        _dont_check_binary : bool, optional</span>
+<span class="sd">            This is a kill switch for all checks of this class., by default False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[str, None]</span>
+<span class="sd">            _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># init structures</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span> <span class="o">=</span> <span class="n">_force_bin_present</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_function_binary</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_paths</span> <span class="o">=</span> <span class="n">_check_binary_paths</span>
+
+        <span class="c1"># Check initial status of binaries</span>
+        <span class="k">if</span> <span class="n">in_bin_dir</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">in_bin_dir</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span> <span class="ow">or</span> <span class="n">in_bin_dir</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">elif</span> <span class="n">in_bin_dir</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">=</span> <span class="n">in_bin_dir</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">=</span> <span class="n">in_bin_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_dir</span><span class="p">(</span><span class="n">in_bin_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_all_binaries</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wrap_programms_with_binary_checks</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        preperation for pickling:</span>
+<span class="sd">        remove the non trivial pickling parts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;_bin&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span><span class="p">,</span>
+            <span class="s2">&quot;_check_binary_paths&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_paths</span><span class="p">,</span>
+            <span class="s2">&quot;_force_bin_present&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_function_binary</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Check initial status of binaries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_all_binaries</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wrap_programms_with_binary_checks</span><span class="p">()</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        properties</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This attribute is the binary directory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_bin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span>
+
+    <span class="nd">@bin</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_bin_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">in_bin_dir</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">in_bin_dir</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span> <span class="ow">or</span> <span class="n">in_bin_dir</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">elif</span> <span class="n">in_bin_dir</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">=</span> <span class="n">in_bin_dir</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">=</span> <span class="n">in_bin_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_dir</span><span class="p">(</span><span class="n">in_bin_dir</span><span class="o">=</span><span class="n">in_bin_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_all_binaries</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wrap_programms_with_binary_checks</span><span class="p">()</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checking functions:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_compiled_program._check_binary"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.compiledProgram._compiled_program._check_binary">[docs]</a>    <span class="k">def</span> <span class="nf">_check_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_program</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            this function checks if the binary exists in the given binary dir. (if binary_dir == None -&gt; it will check the PATH variable.)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        test_program : str</span>
+<span class="sd">            name of the binary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            if the binary was found</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        IOError</span>
+<span class="sd">            If the binary dir was not found and _dont_check_bin was False (default: False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">test_program</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span><span class="p">[</span><span class="n">test_program</span><span class="p">])</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_paths</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bash</span><span class="o">.</span><span class="n">command_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">test_program</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span><span class="p">[</span><span class="n">test_program</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_paths</span><span class="p">[</span><span class="n">test_program</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">test_program</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">test_program</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bash</span><span class="o">.</span><span class="n">command_exists</span><span class="p">(</span><span class="n">test_program</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span><span class="p">[</span><span class="n">test_program</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_paths</span><span class="p">[</span><span class="n">test_program</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_program</span>
+            <span class="k">return</span> <span class="n">test_program</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span><span class="p">[</span><span class="n">test_program</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span>
+                    <span class="s2">&quot;No binary could be found! Please make sure, the program was compiled and the path were passed to this obj.&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; provided binary path: &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">binary name: &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">test_program</span><span class="p">)</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="_compiled_program._check_binary_dir"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.compiledProgram._compiled_program._check_binary_dir">[docs]</a>    <span class="k">def</span> <span class="nf">_check_binary_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_bin_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            this fuction checks and records if the provided binary dir was found.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_bin_dir : str</span>
+<span class="sd">            the expected binary dir.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Does the binary dir exist?</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        IOError</span>
+<span class="sd">            If the binary dir was not found and _dont_check_bin was False (default: False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">in_bin_dir</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span><span class="p">[</span><span class="n">in_bin_dir</span><span class="p">]</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_paths</span><span class="p">:</span>  <span class="c1"># did we already check this</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_bin_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">in_bin_dir</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">bash</span><span class="o">.</span><span class="n">directory_exists</span><span class="p">(</span><span class="n">in_bin_dir</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span><span class="p">[</span><span class="n">in_bin_dir</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">in_bin_dir</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="n">in_bin_dir</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span> <span class="ow">and</span> <span class="p">(</span><span class="n">in_bin_dir</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">in_bin_dir</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">in_bin_dir</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span><span class="p">[</span><span class="n">in_bin_dir</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_found_binary_dir</span><span class="p">[</span><span class="n">in_bin_dir</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span>
+                    <span class="s2">&quot;No binary directory could be found! Please make sure the directory exists! &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; and either pass the path to the binary directory or set the PATH variable. The given folder path was: &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_bin_dir</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="_compiled_program._check_all_binaries"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.compiledProgram._compiled_program._check_all_binaries">[docs]</a>    <span class="k">def</span> <span class="nf">_check_all_binaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_force_bin_present</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function checks all present programs of this class, if the binary can be found and executed.</span>
+<span class="sd">        It does not trigger an Exception, if a binary cannot be found, except force_present is True.</span>
+<span class="sd">        However it records, if a binary not found in the _function_binary dict.</span>
+<span class="sd">        The recorded information is used to add restrictive wrappers to the progams, that can throw errors on executions (if _dont_check_bin attribute is False)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        force_present : bool, optional</span>
+<span class="sd">            the function can be restrictive and throw errors, if a function was not found, by default False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            all binaries present?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">funcs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;bin&quot;</span><span class="p">)}</span>
+        <span class="n">tmp_dont_check_bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">funcs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">binary</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;_binary_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary</span><span class="p">(</span><span class="n">test_program</span><span class="o">=</span><span class="n">binary</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_function_binary</span><span class="p">[</span><span class="n">binary</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_force_bin_present</span> <span class="o">=</span> <span class="n">tmp_dont_check_bin</span>
+
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_found_binary</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Utils for the binary wrapping to check binary on the fly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_compiled_program._check_binaries_decorator"><a class="viewcode-back" href="../../../_source/pygromos.utils.html#pygromos.utils.compiledProgram._compiled_program._check_binaries_decorator">[docs]</a>    <span class="k">def</span> <span class="nf">_check_binaries_decorator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function wrapper adds a binary check before, the function is executed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        func : callable</span>
+<span class="sd">            function using a binary and having the parameter _binary_name:str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        callable</span>
+<span class="sd">            wrapped function</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            if no binary can be found in the function call or definition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">control_binary</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">any</span><span class="p">:</span>
+            <span class="c1"># print(&quot;binaryChecker&quot;, func.__name__, args, kwargs)</span>
+
+            <span class="n">func_signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;_binary_name&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;_binary_name&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="s2">&quot;_binary_name&quot;</span> <span class="ow">in</span> <span class="n">func_signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">func_signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;_binary_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Could not find Binary name in function signature: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> found: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>  <span class="c1"># avoid double selfing</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">control_binary</span></div>
+
+    <span class="k">def</span> <span class="nf">__wrap_programms_with_binary_checks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Wraps all functions with the __check_binaries_decorator</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        remove : bool, optional</span>
+<span class="sd">            remove all wrappers?, by default False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_binary_paths</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">binary</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_binary</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>  <span class="c1"># or self._found_binary[binary]:</span>
+                    <span class="n">v</span><span class="p">[</span><span class="n">func</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">v</span><span class="p">[</span><span class="n">func</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_binaries_decorator</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

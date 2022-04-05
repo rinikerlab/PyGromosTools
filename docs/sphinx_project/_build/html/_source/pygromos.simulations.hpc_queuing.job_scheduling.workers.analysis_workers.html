@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers package" href="pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.html" />
+    <link rel="prev" title="pygromos.simulations.hpc_queuing.job_scheduling.workers package" href="pygromos.simulations.hpc_queuing.job_scheduling.workers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.html">pygromos.simulations package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.hpc_queuing.html">pygromos.simulations.hpc_queuing package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.hpc_queuing.job_scheduling.html">pygromos.simulations.hpc_queuing.job_scheduling package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.hpc_queuing.job_scheduling.workers.html">pygromos.simulations.hpc_queuing.job_scheduling.workers package</a> &raquo;</li>
+        
+      <li>pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pygromos-simulations-hpc-queuing-job-scheduling-workers-analysis-workers-package">
+<h1>pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers package<a class="headerlink" href="#pygromos-simulations-hpc-queuing-job-scheduling-workers-analysis-workers-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis">
+<span id="pygromos-simulations-hpc-queuing-job-scheduling-workers-analysis-workers-simulation-analysis-module"></span><h2>pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis module<a class="headerlink" href="#module-pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.do">
+<span class="sig-prename descclassname"><span class="pre">pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.</span></span><span class="sig-name descname"><span class="pre">do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_simulation_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_analysis_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_processes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.html#do"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.do" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function is a analysis framework structure, that starts an analysis folder containing a data folder with all concatenated files, from which analysis can be started.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_simulation_dir</strong> (<em>str</em>) – input simulation directory (with succesfully finished simulations)</p></li>
+<li><p><strong>out_analysis_dir</strong> (<em>str</em>) – output directory</p></li>
+<li><p><strong>sim_prefix</strong> (<em>str</em>) – prefix of the simulation == name of simulation</p></li>
+<li><p><strong>n_processes</strong> (<em>int, optional</em>) – WARNING: parallelization is currently not implemented!, by default 1</p></li>
+<li><p><strong>control_dict</strong> (<em>dict, optional</em>) – control structure, steering the executions, by default None</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – bla bla, by default True</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.gather_simulation_step_file_paths">
+<span class="sig-prename descclassname"><span class="pre">pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.</span></span><span class="sig-name descname"><span class="pre">gather_simulation_step_file_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filePrefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileSuffixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['.tre',</span> <span class="pre">'.tre.tar.gz']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalNumberingSort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.html#gather_simulation_step_file_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.gather_simulation_step_file_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>gather_replica_file_paths</p>
+<blockquote>
+<div><p>Finds all trajectory paths in a simulation folder.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_folder</strong> (<em>str</em>) – folder, containing the files</p></li>
+<li><p><strong>replicas</strong> (<em>int</em>) – Number of replicas</p></li>
+<li><p><strong>filePrefix</strong> (<em>str, optional</em>) – str prefix the desired files</p></li>
+<li><p><strong>fileSuffixes</strong> (<em>str, optional</em>) – str suffix of the desired files</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – toggle verbosity</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.project_concatenation">
+<span class="sig-prename descclassname"><span class="pre">pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.</span></span><span class="sig-name descname"><span class="pre">project_concatenation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/simulations/hpc_queuing/job_scheduling/workers/analysis_workers/simulation_analysis.html#project_concatenation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers.simulation_analysis.project_concatenation" title="Permalink to this definition">¶</a></dt>
+<dd><p>concatenation of the simulation data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_folder</strong> (<em>str</em>) – folder containing the simulation results</p></li>
+<li><p><strong>out_folder</strong> (<em>str</em>) – folder that should contain the concatenated out files</p></li>
+<li><p><strong>in_prefix</strong> (<em>str</em>) – prefix of the simulation files.</p></li>
+<li><p><strong>control_dict</strong> (<em>Dict[str, bool]</em>) – control of what should be executed</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – baeeeeh baeeeeh, by default False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>resulting cnf path.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers.html" class="btn btn-neutral float-right" title="pygromos.simulations.hpc_queuing.job_scheduling.workers.simulation_workers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pygromos.simulations.hpc_queuing.job_scheduling.workers.html" class="btn btn-neutral float-left" title="pygromos.simulations.hpc_queuing.job_scheduling.workers package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

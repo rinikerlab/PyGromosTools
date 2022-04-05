@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.simulations.modules.general_simulation_modules &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.simulations.modules.general_simulation_modules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.simulations.modules.general_simulation_modules</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files.coord</span> <span class="kn">import</span> <span class="n">cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="kn">import</span> <span class="n">Trc</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre</span> <span class="kn">import</span> <span class="n">Tre</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.trg</span> <span class="kn">import</span> <span class="n">Trg</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.job_scheduling.schedulers</span> <span class="kn">import</span> <span class="n">simulation_scheduler</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers</span> <span class="kn">import</span> <span class="n">simulation_analysis</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems._submission_system</span> <span class="kn">import</span> <span class="n">_SubmissionSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span><span class="p">,</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">spacer</span> <span class="k">as</span> <span class="n">spacer</span><span class="p">,</span> <span class="n">time_wait_s_for_filesystem</span>
+
+
+<div class="viewcode-block" id="simulation"><a class="viewcode-back" href="../../../../_source/pygromos.simulations.modules.html#pygromos.simulations.modules.general_simulation_modules.simulation">[docs]</a><span class="k">def</span> <span class="nf">simulation</span><span class="p">(</span>
+    <span class="n">in_gromos_simulation_system</span><span class="p">:</span> <span class="n">Gromos_System</span><span class="p">,</span>
+    <span class="n">override_project_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">step_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sim&quot;</span><span class="p">,</span>
+    <span class="n">in_imd_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">submission_system</span><span class="p">:</span> <span class="n">_SubmissionSystem</span> <span class="o">=</span> <span class="n">LOCAL</span><span class="p">(),</span>
+    <span class="n">simulation_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">equilibration_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">previous_simulation_run</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force_simulation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">initialize_first_run</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">reinitialize_every_run</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">analysis_script</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+    <span class="n">analysis_control_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">_no_double_submit_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">_work_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">_template_imd_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gromos_System</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is a generic simulation block, that can be used to run and schedule simulations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_gromos_simulation_system : Gromos_System</span>
+<span class="sd">        gromos system that contains the information of the files, that are required for the simulation run.</span>
+<span class="sd">    override_project_dir : str</span>
+<span class="sd">        parent project directory</span>
+<span class="sd">    step_name :  str, optional</span>
+<span class="sd">        name of the step - used as jobname and folder in the project dir.</span>
+<span class="sd">    in_imd_path : str, optional</span>
+<span class="sd">        if a path to an imd file is given here, it will be used!</span>
+<span class="sd">    submission_system : _SubmissionSystem, optional</span>
+<span class="sd">        the system, that should be used to submit a job</span>
+<span class="sd">    simulation_runs : int, optional</span>
+<span class="sd">        number of sequential simulation runs</span>
+<span class="sd">    equilibration_runs : int, optional</span>
+<span class="sd">        number of equilibration runs, that will not appear in the final traj</span>
+<span class="sd">    previous_simulation_run : int, optional</span>
+<span class="sd">        job-ID of the previous simulation</span>
+<span class="sd">    force_simulation : bool, optional</span>
+<span class="sd">        if simulation already exist, shall it be overwritten?</span>
+<span class="sd">    analysis_script : callable, optional</span>
+<span class="sd">        script that is used to analyse the job</span>
+<span class="sd">    analysis_control_dict : dict, optional</span>
+<span class="sd">        sub selection of steps, for the analysis script, that should be executed</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        &quot;baeh, baeh, baeh&quot;  - a wise black-nose sheep from ausserberg.</span>
+<span class="sd">    verbose_lvl : int, optional</span>
+<span class="sd">        how much baeh?</span>
+<span class="sd">    _template_imd_path : str, optional</span>
+<span class="sd">        default template imd</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Gromos_System,</span>
+<span class="sd">        returns a new gromos system which is containing the simulation info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># PREPERATIONS</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gromos_system</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">in_gromos_simulation_system</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">previous_simulation_run</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">gromos_system</span><span class="o">.</span><span class="n">_last_jobID</span> <span class="o">=</span> <span class="n">previous_simulation_run</span>
+
+            <span class="c1"># check if override dir is given and set project to correct location</span>
+            <span class="k">if</span> <span class="n">override_project_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">init_work_folder</span> <span class="o">=</span> <span class="n">override_project_dir</span>
+                <span class="n">step_dir</span> <span class="o">=</span> <span class="n">override_project_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">step_name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">init_work_folder</span> <span class="o">=</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">work_folder</span>
+                <span class="n">step_dir</span> <span class="o">=</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">step_name</span>
+
+            <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">step_dir</span><span class="p">)</span>
+            <span class="n">out_input_dir</span> <span class="o">=</span> <span class="n">step_dir</span> <span class="o">+</span> <span class="s2">&quot;/input&quot;</span>
+            <span class="n">out_simulation_dir</span> <span class="o">=</span> <span class="n">step_dir</span> <span class="o">+</span> <span class="s2">&quot;/simulation&quot;</span>
+            <span class="n">out_analysis_dir</span> <span class="o">=</span> <span class="n">step_dir</span> <span class="o">+</span> <span class="s2">&quot;/analysis&quot;</span>
+            <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">out_input_dir</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">step_dir</span><span class="p">)</span>
+
+            <span class="c1"># Prepare gromos system:</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">=</span> <span class="n">out_input_dir</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">step_name</span>
+
+            <span class="k">if</span> <span class="n">in_imd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">in_imd_path</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;TITLE&quot;</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">elif</span> <span class="n">_template_imd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Template_imd_path was used: &quot;</span> <span class="o">+</span> <span class="n">_template_imd_path</span><span class="p">)</span>
+                <span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">_template_imd_path</span>
+                <span class="n">gromos_system</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Could not find any .imd path (gromos system has no imd, in_imd_path not given and also no _template_imd_path!)&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">out_analysis_cnf</span> <span class="o">=</span> <span class="n">out_analysis_dir</span> <span class="o">+</span> <span class="s2">&quot;/data/&quot;</span> <span class="o">+</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">step_name</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">spacer</span><span class="p">)</span>
+
+            <span class="c1"># Write out, all non promised files</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span>
+
+            <span class="c1"># Write Out Ana Script</span>
+            <span class="n">in_analysis_control_dict</span> <span class="o">=</span> <span class="n">analysis_control_dict</span>
+            <span class="n">n_analysis_processors</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Maybe in the future: 5 if(nmpi&gt;5) else 1</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not prepare the gromos System</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">)))</span>
+        <span class="c1"># do</span>
+        <span class="k">if</span> <span class="n">analysis_script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">analysis_control_dict</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">simulation_analysis</span><span class="o">.</span><span class="n">template_control_dict</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">in_analysis_control_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">in_analysis_control_dict</span>
+            <span class="p">)</span>
+
+            <span class="n">analysis_vars</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;in_simulation_dir&quot;</span><span class="p">:</span> <span class="n">out_simulation_dir</span><span class="p">,</span>
+                    <span class="s2">&quot;sim_prefix&quot;</span><span class="p">:</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="s2">&quot;out_analysis_dir&quot;</span><span class="p">:</span> <span class="n">out_analysis_dir</span><span class="p">,</span>
+                    <span class="s2">&quot;gromosPP_bin_dir&quot;</span><span class="p">:</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">_bin</span><span class="p">,</span>
+                    <span class="s2">&quot;control_dict&quot;</span><span class="p">:</span> <span class="n">analysis_control_dict</span><span class="p">,</span>
+                    <span class="s2">&quot;n_processes&quot;</span><span class="p">:</span> <span class="n">n_analysis_processors</span><span class="p">,</span>
+                    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="n">verbose</span><span class="p">,</span>
+                    <span class="s2">&quot;verbose_lvl&quot;</span><span class="p">:</span> <span class="n">verbose_lvl</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">in_analysis_script_path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">write_job_script</span><span class="p">(</span>
+                    <span class="n">out_script_path</span><span class="o">=</span><span class="n">step_dir</span> <span class="o">+</span> <span class="s2">&quot;/job_analysis.py&quot;</span><span class="p">,</span>
+                    <span class="n">target_function</span><span class="o">=</span><span class="n">analysis_script</span><span class="p">,</span>
+                    <span class="n">variable_dict</span><span class="o">=</span><span class="n">analysis_vars</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not prepare the analysis script</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">in_analysis_script_path</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Write Out schedulling Script</span>
+        <span class="c1"># Build analysis_script</span>
+        <span class="n">MD_job_vars</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;in_simSystem&quot;</span><span class="p">:</span> <span class="n">gromos_system</span><span class="p">,</span>
+                <span class="s2">&quot;out_dir_path&quot;</span><span class="p">:</span> <span class="n">out_simulation_dir</span><span class="p">,</span>
+                <span class="s2">&quot;simulation_run_num&quot;</span><span class="p">:</span> <span class="n">simulation_runs</span><span class="p">,</span>
+                <span class="s2">&quot;equilibration_run_num&quot;</span><span class="p">:</span> <span class="n">equilibration_runs</span><span class="p">,</span>
+                <span class="s2">&quot;submission_system&quot;</span><span class="p">:</span> <span class="n">submission_system</span><span class="p">,</span>
+                <span class="s2">&quot;analysis_script_path&quot;</span><span class="p">:</span> <span class="n">in_analysis_script_path</span><span class="p">,</span>
+                <span class="s2">&quot;initialize_first_run&quot;</span><span class="p">:</span> <span class="n">initialize_first_run</span><span class="p">,</span>
+                <span class="s2">&quot;reinitialize_every_run&quot;</span><span class="p">:</span> <span class="n">reinitialize_every_run</span><span class="p">,</span>
+                <span class="s2">&quot;previous_job_ID&quot;</span><span class="p">:</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">_last_jobID</span><span class="p">,</span>
+                <span class="s2">&quot;_no_double_submit_check&quot;</span><span class="p">:</span> <span class="n">_no_double_submit_check</span><span class="p">,</span>
+                <span class="s2">&quot;_work_dir&quot;</span><span class="p">:</span> <span class="n">_work_dir</span><span class="p">,</span>
+                <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="n">verbose</span><span class="p">,</span>
+                <span class="s2">&quot;verbose_lvl&quot;</span><span class="p">:</span> <span class="n">verbose_lvl</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">write_job_script</span><span class="p">(</span>
+                <span class="n">out_script_path</span><span class="o">=</span><span class="n">step_dir</span> <span class="o">+</span> <span class="s2">&quot;/schedule_MD_job.py&quot;</span><span class="p">,</span>
+                <span class="n">target_function</span><span class="o">=</span><span class="n">simulation_scheduler</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+                <span class="n">variable_dict</span><span class="o">=</span><span class="n">MD_job_vars</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not prepare the scheduling script</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">)))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exception</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not prepare the command block</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">)))</span>
+
+    <span class="c1"># schedule</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_analysis_cnf</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_simulation_dir</span> <span class="o">+</span> <span class="s2">&quot;.tar&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_simulation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">spacer2</span> <span class="o">+</span> <span class="s2">&quot;FOUND RESULT: &quot;</span> <span class="o">+</span> <span class="n">out_analysis_cnf</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> GOING TO SKIPT THIS SUBMISSION!&quot;</span><span class="p">)</span>
+            <span class="c1"># warnings.warn(&quot;Skipping active submission, as result CNF was found: \n&quot;+out_analysis_cnf)</span>
+            <span class="n">last_jobID</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">last_jobID</span> <span class="o">=</span> <span class="n">simulation_scheduler</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="o">**</span><span class="n">MD_job_vars</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exception</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not submit the commands</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">)))</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_wait_s_for_filesystem</span><span class="p">)</span>
+
+    <span class="c1"># Return the promise final system</span>
+    <span class="k">if</span> <span class="n">in_analysis_script_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_simulation_dir</span><span class="p">):</span>
+        <span class="n">cnfs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">out_simulation_dir</span> <span class="o">+</span> <span class="s2">&quot;/*/*cnf&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="p">)</span>
+        <span class="n">last_cnf</span> <span class="o">=</span> <span class="n">cnfs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">gromos_system</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">Cnf</span><span class="p">(</span><span class="n">last_cnf</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_analysis_cnf</span><span class="p">):</span>
+        <span class="n">gromos_system</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">Cnf</span><span class="p">(</span><span class="n">out_analysis_cnf</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gromos_system</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">Cnf</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">gromos_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">gromos_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">out_analysis_dir</span> <span class="o">+</span> <span class="s2">&quot;/data/&quot;</span> <span class="o">+</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span>
+
+    <span class="c1"># Return trajectories if available</span>
+    <span class="n">gromos_system</span><span class="o">.</span><span class="n">_traj_files_path</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;WRITETRAJ&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWX</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">final_trc_file</span> <span class="o">=</span> <span class="n">out_analysis_dir</span> <span class="o">+</span> <span class="s2">&quot;/data/&quot;</span> <span class="o">+</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.trc&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_trc_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trc</span> <span class="o">=</span> <span class="n">final_trc_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_trc_file</span><span class="p">):</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trc</span> <span class="o">=</span> <span class="n">final_trc_file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trc</span> <span class="o">=</span> <span class="n">Trc</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trc</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trc</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">final_trc_file</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;WRITETRAJ&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWE</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">final_tre_file</span> <span class="o">=</span> <span class="n">out_analysis_dir</span> <span class="o">+</span> <span class="s2">&quot;/data/&quot;</span> <span class="o">+</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.tre&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_tre_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">tre</span> <span class="o">=</span> <span class="n">final_tre_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_tre_file</span><span class="p">):</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">tre</span> <span class="o">=</span> <span class="n">final_tre_file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">tre</span> <span class="o">=</span> <span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">tre</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">tre</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">final_tre_file</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;WRITETRAJ&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWG</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">final_trg_file</span> <span class="o">=</span> <span class="n">out_analysis_dir</span> <span class="o">+</span> <span class="s2">&quot;/data/&quot;</span> <span class="o">+</span> <span class="n">gromos_system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.trg&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_trg_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trg</span> <span class="o">=</span> <span class="n">Trg</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="n">final_trg_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_trg_file</span><span class="p">):</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trg</span> <span class="o">=</span> <span class="n">Trg</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="n">final_trg_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trg</span> <span class="o">=</span> <span class="n">Trg</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trg</span><span class="o">.</span><span class="n">_future_file</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">gromos_system</span><span class="o">.</span><span class="n">trg</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">final_trg_file</span>
+
+    <span class="c1"># Set work_folder to initial work folder path to avoid nested simulations</span>
+    <span class="c1"># However, do not update all file names (work_folder_no_update) to avoid</span>
+    <span class="c1"># compromising the file system structure</span>
+    <span class="n">gromos_system</span><span class="o">.</span><span class="n">work_folder_no_update</span><span class="p">(</span><span class="n">init_work_folder</span><span class="p">)</span>
+    <span class="n">gromos_system</span><span class="o">.</span><span class="n">_last_jobID</span> <span class="o">=</span> <span class="n">last_jobID</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">init_work_folder</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gromos_system</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

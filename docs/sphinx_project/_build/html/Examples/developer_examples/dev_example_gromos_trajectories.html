@@ -1,0 +1,2594 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Gromos Trajectory evaluation with Pygromos and Pandas &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Gromos Tutorial Pipeline - OLD" href="dev_example_gromos_tutorial_on_low_level.html" />
+    <link rel="prev" title="SD Simulations with Submission System" href="dev_example_gromos_simulation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_gromos_qmmm.html">QM/MM in Gromos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Developer Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dev_example_PyGromosPP.html">Implemented pyGromosPP programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_files.html">PyGromos File Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_simulation.html">SD Simulations with Submission System</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Gromos Trajectory evaluation with Pygromos and Pandas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos">Example file for the evaluation of GROMOS trajectory files in pygromos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-TRC">1) TRC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-TRE">2) TRE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Concatenate-and-Copy-multiple-Trajectories">Concatenate and Copy multiple Trajectories</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_gromos_tutorial_on_low_level.html">Gromos Tutorial Pipeline - OLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_submission_systems.html">Submission Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_example_topology_creation.html">Topology creation and modifications with PyGromosTools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Examples</a> &raquo;</li>
+        
+      <li>Gromos Trajectory evaluation with Pygromos and Pandas</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Examples/developer_examples/dev_example_gromos_trajectories.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Gromos-Trajectory-evaluation-with-Pygromos-and-Pandas">
+<h1>Gromos Trajectory evaluation with Pygromos and Pandas<a class="headerlink" href="#Gromos-Trajectory-evaluation-with-Pygromos-and-Pandas" title="Permalink to this headline">¶</a></h1>
+<section id="Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos">
+<h2>Example file for the evaluation of GROMOS trajectory files in pygromos<a class="headerlink" href="#Example-file-for-the-evaluation-of-GROMOS-trajectory-files-in-pygromos" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#specific imports from pygromos for trc and tre file support</span>
+<span class="kn">import</span> <span class="nn">pygromos.files.trajectory.trc</span> <span class="k">as</span> <span class="nn">traj_trc</span>
+<span class="kn">import</span> <span class="nn">pygromos.files.trajectory.tre</span> <span class="k">as</span> <span class="nn">traj_tre</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "854ec9af74954e70812a1da4b48e861a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="1)-TRC">
+<h2>1) TRC<a class="headerlink" href="#1)-TRC" title="Permalink to this headline">¶</a></h2>
+<section id="1.1)-TRC-import">
+<h3>1.1) TRC import<a class="headerlink" href="#1.1)-TRC-import" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the trajectory file into a Trc class</span>
+<span class="n">trc</span> <span class="o">=</span> <span class="n">traj_trc</span><span class="o">.</span><span class="n">Trc</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="s1">&#39;../example_files/Traj_files/b_emin_vacuum_1.trc&#39;</span><span class="p">,</span>
+          <span class="n">in_cnf</span><span class="o">=</span><span class="s1">&#39;../example_files/Traj_files/b_emin_vacuum.cnf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The TRC class bridges the GROMOS TRC file based strucutres and mdtraj.Trajectories.</p>
+<p>One can read in TRCs and use them just like mdtraj.Trajectories. One can than write them out both as .h5 as well as GROMOS .trc/trc.gz files.</p>
+<p>If you have a function that’s generally useful, please contact the developers to possibly add it to the pygromos code to help other people :)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">trc</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;TITLE&#39;,
+ &#39;atom_slice&#39;,
+ &#39;center_coordinates&#39;,
+ &#39;distances&#39;,
+ &#39;generate_TITLE_entry&#39;,
+ &#39;generate_entry_for_frame&#39;,
+ &#39;get_dummy_cnf&#39;,
+ &#39;image_molecules&#39;,
+ &#39;join&#39;,
+ &#39;load&#39;,
+ &#39;make_molecules_whole&#39;,
+ &#39;n_atoms&#39;,
+ &#39;n_chains&#39;,
+ &#39;n_frames&#39;,
+ &#39;n_residues&#39;,
+ &#39;openmm_boxes&#39;,
+ &#39;openmm_positions&#39;,
+ &#39;parse_trc_efficiently&#39;,
+ &#39;path&#39;,
+ &#39;recreate_view&#39;,
+ &#39;remove_solvent&#39;,
+ &#39;restrict_atoms&#39;,
+ &#39;rmsd&#39;,
+ &#39;save&#39;,
+ &#39;save_amberrst7&#39;,
+ &#39;save_binpos&#39;,
+ &#39;save_dcd&#39;,
+ &#39;save_dtr&#39;,
+ &#39;save_gro&#39;,
+ &#39;save_gsd&#39;,
+ &#39;save_hdf5&#39;,
+ &#39;save_lammpstrj&#39;,
+ &#39;save_lh5&#39;,
+ &#39;save_mdcrd&#39;,
+ &#39;save_netcdf&#39;,
+ &#39;save_netcdfrst&#39;,
+ &#39;save_pdb&#39;,
+ &#39;save_tng&#39;,
+ &#39;save_trr&#39;,
+ &#39;save_xtc&#39;,
+ &#39;save_xyz&#39;,
+ &#39;slice&#39;,
+ &#39;smooth&#39;,
+ &#39;stack&#39;,
+ &#39;step&#39;,
+ &#39;superpose&#39;,
+ &#39;time&#39;,
+ &#39;timestep&#39;,
+ &#39;to_cnf&#39;,
+ &#39;top&#39;,
+ &#39;topology&#39;,
+ &#39;unitcell_angles&#39;,
+ &#39;unitcell_lengths&#39;,
+ &#39;unitcell_vectors&#39;,
+ &#39;unitcell_volumes&#39;,
+ &#39;view&#39;,
+ &#39;write&#39;,
+ &#39;write_trc&#39;,
+ &#39;xyz&#39;]
+</pre></div></div>
+</div>
+</section>
+<section id="1.2)-TRC-file-handling">
+<h3>1.2) TRC file handling<a class="headerlink" href="#1.2)-TRC-file-handling" title="Permalink to this headline">¶</a></h3>
+<section id="Save-as-.h5">
+<h4>Save as .h5<a class="headerlink" href="#Save-as-.h5" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;./traj.h5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;./traj.h5&#39;
+</pre></div></div>
+</div>
+<section id="Save-as-trc">
+<h5>Save as trc<a class="headerlink" href="#Save-as-trc" title="Permalink to this headline">¶</a></h5>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;./traj.trc.gz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="export-last-frame-as-cnf">
+<h5>export last frame as cnf<a class="headerlink" href="#export-last-frame-as-cnf" title="Permalink to this headline">¶</a></h5>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_cnf</span><span class="p">(</span><span class="n">base_cnf</span><span class="o">=</span><span class="s1">&#39;../example_files/Traj_files/b_emin_vacuum.cnf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TITLE
+THIS IS THE FRAME AT TIMESTEP: 4.0 OF THE TRAJECTORY WITH TITLE: MD++steepest descent energy minimization of the peptide in vacuum&gt;&gt;&gt; Generated with PyGromosTools (riniker group) &lt;&lt;&lt;position trajectoryEND
+POSITION
+#
+    1 VAL   H1         0    0.858298182    1.499708533    1.397253275
+    1 VAL   H2         1    0.953678370    1.440333724    1.515184283
+    1 VAL   N          2    0.913451612    1.421260476    1.425633550
+    1 VAL   H3         3    0.855719924    1.339777827    1.431015491
+    1 VAL   CA         4    1.022031069    1.399157882    1.329032302
+    1 VAL   CB         5    0.952420831    1.374197721    1.195075631
+    1 VAL   CG1        6    0.913190961    1.499370813    1.116295457
+    1 VAL   CG2        7    1.026286483    1.267775059    1.113663197
+    1 VAL   C          8    1.119535685    1.516167402    1.343593240
+    1 VAL   O          9    1.121832848    1.571724653    1.453307033
+    2 TYR   N         10    1.202524424    1.547034740    1.244336247
+    2 TYR   H         11    1.207148552    1.490973473    1.161649466
+    2 TYR   CA        12    1.303517222    1.653589725    1.236642957
+    2 TYR   CB        13    1.247369647    1.791285038    1.200619698
+    2 TYR   CG        14    1.197796106    1.877276540    1.317051053
+    2 TYR   CD1       15    1.071256876    1.857888699    1.371185541
+    2 TYR   HD1       16    0.993085802    1.811082721    1.311375499
+    2 TYR   CD2       17    1.288784027    1.961568475    1.379797101
+    2 TYR   HD2       18    1.383159995    1.985753894    1.330927134
+    2 TYR   CE1       19    1.040328622    1.914669991    1.494227052
+    2 TYR   HE1       20    0.939020157    1.905765176    1.533425450
+    2 TYR   CE2       21    1.257037044    2.019920826    1.501881838
+    2 TYR   HE2       22    1.325480461    2.093687534    1.543774128
+    2 TYR   CZ        23    1.134425282    1.992075920    1.561123490
+    2 TYR   OH        24    1.123193622    2.005527496    1.695985913
+    2 TYR   HH        25    1.175849319    2.085860014    1.723783255
+    2 TYR   C         26    1.418586850    1.648926616    1.337371469
+    2 TYR   O         27    1.523679972    1.595995188    1.301521301
+    3 ARG   N         28    1.396972656    1.675651789    1.465864182
+    3 ARG   H         29    1.309179425    1.712227583    1.496792197
+    3 ARG   CA        30    1.504508853    1.665650368    1.565602183
+    3 ARG   CB        31    1.486977339    1.767935872    1.678033829
+    3 ARG   CG        32    1.373603702    1.738026977    1.776329041
+    3 ARG   CD        33    1.415657640    1.794736385    1.912081718
+    3 ARG   NE        34    1.386569738    1.698562503    2.019374609
+    3 ARG   HE        35    1.292315245    1.701340795    2.052666664
+    3 ARG   CZ        36    1.472650051    1.610763788    2.072641850
+    3 ARG   NH1       37    1.596361995    1.592568755    2.024506330
+    3 ARG   HH11      38    1.661001921    1.530819535    2.069304466
+    3 ARG   HH12      39    1.621459961    1.630685449    1.935536146
+    3 ARG   NH2       40    1.436868072    1.541736007    2.181771994
+    3 ARG   HH21      41    1.500163198    1.475605249    2.222011805
+    3 ARG   HH22      42    1.348556042    1.557563543    2.225923061
+    3 ARG   C         43    1.542207122    1.526291847    1.616297126
+    3 ARG   O         44    1.574849486    1.506344676    1.733203053
+    4 LYSH  N         45    1.538578033    1.431676269    1.522896171
+    4 LYSH  H         46    1.539155364    1.463887453    1.428223729
+    4 LYSH  CA        47    1.564581990    1.287459135    1.534663439
+    4 LYSH  CB        48    1.482068777    1.220921040    1.644995928
+    4 LYSH  CG        49    1.553891420    1.094621658    1.692990303
+    4 LYSH  CD        50    1.455659389    0.988943756    1.743898392
+    4 LYSH  CE        51    1.532733679    0.865419090    1.790902019
+    4 LYSH  NZ        52    1.442433715    0.751384020    1.812048912
+    4 LYSH  HZ1       53    1.408901930    0.719389319    1.723440170
+    4 LYSH  HZ2       54    1.364803195    0.780083120    1.868170381
+    4 LYSH  HZ3       55    1.491788745    0.677637756    1.858152866
+    4 LYSH  C         56    1.540888786    1.215819478    1.401547551
+    4 LYSH  O         57    1.445617437    1.139712334    1.385369897
+    5 GLN   N         58    1.620790362    1.257511973    1.303739190
+    5 GLN   H         59    1.691180825    1.327280164    1.317106128
+    5 GLN   CA        60    1.639090419    1.212603927    1.164958239
+    5 GLN   CB        61    1.516473532    1.236391783    1.076570988
+    5 GLN   CG        62    1.487887502    1.382966638    1.043351531
+    5 GLN   CD        63    1.366745234    1.400402308    0.951538980
+    5 GLN   OE1       64    1.254561663    1.426969886    0.994376242
+    5 GLN   NE2       65    1.389542460    1.397161841    0.820551813
+    5 GLN   HE21      66    1.312573314    1.408466220    0.757729173
+    5 GLN   HE22      67    1.483796239    1.384176731    0.789786577
+    5 GLN   C         68    1.759001017    1.293522954    1.115122199
+    5 GLN   O1        69    1.792673707    1.280218840    0.995480478
+    5 GLN   O2        70    1.810874224    1.373489738    1.196003079
+END
+GENBOX
+    0
+    0.000000000    0.000000000    0.000000000
+    0.000000000    0.000000000    0.000000000
+    0.000000000    0.000000000    0.000000000
+    0.000000000    0.000000000    0.000000000
+END
+</pre></div></div>
+</div>
+</section>
+<section id="Get-selection-of-trajectories">
+<h5>Get selection of trajectories<a class="headerlink" href="#Get-selection-of-trajectories" title="Permalink to this headline">¶</a></h5>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="p">[::</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">n_frames</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+9
+</pre></div></div>
+</div>
+</section>
+<section id="Save-out-selection">
+<h5>Save out selection<a class="headerlink" href="#Save-out-selection" title="Permalink to this headline">¶</a></h5>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="p">[::</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;9_frames.trc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="1.3)-TRC-Calculate">
+<h3>1.3) TRC Calculate<a class="headerlink" href="#1.3)-TRC-Calculate" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate the rmsd to the initial frame (0th frame).</span>
+<span class="c1"># Alternatively a different trajectory can be provide as argument to the rmsd function.</span>
+<span class="c1"># The accepted arguments are integer or single trajectory frame.</span>
+<span class="n">rmsd</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">rmsd</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Which returns the rmsd for every time frame to the initial frame.</span>
+<span class="c1"># It can be seen how the rmsd slowly gets larger as the simulations get farther away from the initial setup.</span>
+<span class="n">rmsd</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rmsd</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0.00</th>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>0.05</th>
+      <td>0.013725</td>
+    </tr>
+    <tr>
+      <th>0.10</th>
+      <td>0.022836</td>
+    </tr>
+    <tr>
+      <th>0.15</th>
+      <td>0.030384</td>
+    </tr>
+    <tr>
+      <th>0.20</th>
+      <td>0.036549</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>3.80</th>
+      <td>0.177028</td>
+    </tr>
+    <tr>
+      <th>3.85</th>
+      <td>0.177924</td>
+    </tr>
+    <tr>
+      <th>3.90</th>
+      <td>0.178814</td>
+    </tr>
+    <tr>
+      <th>3.95</th>
+      <td>0.179699</td>
+    </tr>
+    <tr>
+      <th>4.00</th>
+      <td>0.180578</td>
+    </tr>
+  </tbody>
+</table>
+<p>81 rows × 1 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The mean over all frames can be easily taken with the pandas function mean()</span>
+<span class="n">rmsd</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+rmsd    0.121639
+dtype: float32
+</pre></div></div>
+</div>
+</section>
+<section id="1.4)-TRC-Visualization">
+<h3>1.4) TRC Visualization<a class="headerlink" href="#1.4)-TRC-Visualization" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">view</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">view</span>
+<span class="n">view</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "13f73da546ca4e9780ad10293eef8b2d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<section id="Do-some-changes-and-see-how-the-visualization-changes">
+<h4>Do some changes and see how the visualization changes<a class="headerlink" href="#Do-some-changes-and-see-how-the-visualization-changes" title="Permalink to this headline">¶</a></h4>
+<p>To jump to a certain frame, use the slider in the widget or select frames with the following cell:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="mi">70</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="let’s-find-hydrogenbonds">
+<h4>let’s find hydrogenbonds<a class="headerlink" href="#let’s-find-hydrogenbonds" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">add_contact</span><span class="p">(</span><span class="n">hydrogenBond</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="add-surface">
+<h4>add surface<a class="headerlink" href="#add-surface" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">add_surface</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="remove-surface">
+<h4>remove surface<a class="headerlink" href="#remove-surface" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">remove_surface</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="add-transperent-cartoon">
+<h4>add transperent cartoon<a class="headerlink" href="#add-transperent-cartoon" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="s2">&quot;cartoon&quot;</span><span class="p">,</span><span class="n">selection</span><span class="o">=</span><span class="s2">&quot;protein&quot;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="show-distance-between-atom-pair">
+<h4>show distance between atom pair<a class="headerlink" href="#show-distance-between-atom-pair" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">atom_pair</span><span class="o">=</span><span class="p">[[</span><span class="mi">10</span><span class="p">,</span><span class="mi">16</span><span class="p">]],</span> <span class="n">label_color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgrey&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="once-you-are-happy-with-the-result-render-and-download-image">
+<h4>once you are happy with the result render and download image<a class="headerlink" href="#once-you-are-happy-with-the-result-render-and-download-image" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">download_image</span><span class="p">(</span><span class="s1">&#39;first_protein.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Go-crazy-and-make-a-movie-to-show-off">
+<h4>Go crazy and make a movie to show off<a class="headerlink" href="#Go-crazy-and-make-a-movie-to-show-off" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### uncomment this for fast installation of NOT provided package</span>
+<span class="c1"># import sys</span>
+<span class="c1"># !{sys.executable} -m pip install moviepy</span>
+
+<span class="kn">import</span> <span class="nn">moviepy.editor</span> <span class="k">as</span> <span class="nn">mpy</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">import</span> <span class="nn">tqdm</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Setup frames</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trc</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+<span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;0image</span><span class="si">{}</span><span class="s1">.png&#39;</span>
+<span class="n">download_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="n">imagefiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">download_dir</span> <span class="o">+</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+
+<span class="c1"># render frames</span>
+<span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">frames</span><span class="p">)):</span>
+    <span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span> <span class="c1"># depending on the speed of the computer this might need to be increased</span>
+    <span class="n">trc</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">download_image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># depending on the speed of the computer this might need to be increased</span>
+
+<span class="c1"># set frames per second and generate object</span>
+<span class="n">frame_per_second</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">mpy</span><span class="o">.</span><span class="n">ImageSequenceClip</span><span class="p">(</span><span class="n">imagefiles</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">frame_per_second</span><span class="p">)</span>
+<span class="n">im</span><span class="o">.</span><span class="n">write_gif</span><span class="p">(</span><span class="s1">&#39;protein.gif&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">frame_per_second</span><span class="p">)</span>
+
+<span class="c1"># show movie</span>
+<span class="n">display</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&lt;img src=&#39;protein.gif&#39;&gt;&lt;/img&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="2)-TRE">
+<h2>2) TRE<a class="headerlink" href="#2)-TRE" title="Permalink to this headline">¶</a></h2>
+<section id="2.1)-Tre-import-and-structure">
+<h3>2.1) Tre import and structure<a class="headerlink" href="#2.1)-Tre-import-and-structure" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the trajectory file into a Tre class</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre_field_libs.ene_fields</span> <span class="kn">import</span> <span class="n">gromos_2015_tre_block_names_table</span>
+
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;../example_files/Traj_files/test_CHE_H2O_bilayer.tre&quot;</span><span class="p">,</span> <span class="n">_ene_ana_names</span><span class="o">=</span><span class="n">gromos_2015_tre_block_names_table</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py:296: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;, &#39;mass&#39;,
+       &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+      dtype=&#39;object&#39;)]
+
+  self.database.to_hdf(
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre</span><span class="o">.</span><span class="n">database</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>step</th>
+      <th>time</th>
+      <th>totals</th>
+      <th>baths</th>
+      <th>bonded</th>
+      <th>nonbonded</th>
+      <th>special</th>
+      <th>eds</th>
+      <th>mass</th>
+      <th>temperature</th>
+      <th>volume</th>
+      <th>pressure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.0</td>
+      <td>[-408806.2436, 393521.852, -802328.0956, 13840...</td>
+      <td>[[99739.83003, 29519.49412, 70220.33591], [293...</td>
+      <td>[[0.0, 49931.35526, 0.0, 88472.52195, 0.0]]</td>
+      <td>[[984602.6158, -1925334.589, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[296.2008302, 350.6569429, 278.0450574, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[29.98293036, 94773.2037, 131128.599, 30.37611...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1000</td>
+      <td>2.0</td>
+      <td>[-411576.4224, 392980.7347, -804557.157, 13955...</td>
+      <td>[[99960.45845, 29481.77196, 70478.6865], [2930...</td>
+      <td>[[0.0, 50409.38587, 0.0, 89141.04865, 0.0]]</td>
+      <td>[[988489.6284, -1932597.22, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[296.8560381, 350.2088478, 279.0680247, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[32.10481199, 92112.53213, 131040.7862, 26.183...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2000</td>
+      <td>4.0</td>
+      <td>[-409167.9172, 392370.1191, -801538.0363, 1389...</td>
+      <td>[[100096.9564, 29163.29693, 70933.65948], [292...</td>
+      <td>[[0.0, 50155.81989, 0.0, 88764.59053, 0.0]]</td>
+      <td>[[983688.8106, -1924147.257, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[297.2614008, 346.4257383, 280.8695397, 0.999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[28.23515616, 96520.43393, 130756.5894, 30.172...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3000</td>
+      <td>6.0</td>
+      <td>[-408468.813, 392911.3266, -801380.1396, 13890...</td>
+      <td>[[100572.3051, 29097.77284, 71474.53225], [292...</td>
+      <td>[[0.0, 50205.91055, 0.0, 88694.38663, 0.0]]</td>
+      <td>[[984891.3076, -1925171.744, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[298.6730603, 345.647389, 283.0111843, 1.0000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[28.79320593, 96009.21744, 130922.0286, 24.551...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4000</td>
+      <td>8.0</td>
+      <td>[-409322.7261, 391652.3813, -800975.1074, 1398...</td>
+      <td>[[100279.2719, 28656.33854, 71622.93335], [291...</td>
+      <td>[[0.0, 50608.00218, 0.0, 89216.65927, 0.0]]</td>
+      <td>[[980597.3587, -1921397.128, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[297.8028294, 340.4036676, 283.5987946, 0.999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[24.7954137, 100472.9563, 130538.2987, 27.3050...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5000</td>
+      <td>10.0</td>
+      <td>[-409060.5321, 391503.6168, -800564.1489, 1401...</td>
+      <td>[[99621.54627, 28465.00254, 71156.54373], [291...</td>
+      <td>[[0.0, 50668.20147, 0.0, 89507.19113, 0.0]]</td>
+      <td>[[980518.6316, -1921258.173, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[295.8495588, 338.1308206, 281.7520741, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[24.44895665, 100856.1354, 130501.386, 20.8121...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6000</td>
+      <td>12.0</td>
+      <td>[-407724.5301, 393376.3395, -801100.8696, 1399...</td>
+      <td>[[100618.1056, 29001.93804, 71616.16754], [292...</td>
+      <td>[[0.0, 50612.96859, 0.0, 89338.70979, 0.0]]</td>
+      <td>[[980975.7104, -1922028.258, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[298.8090756, 344.5089841, 283.5720046, 0.999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[24.88400774, 100946.7969, 131119.5628, 21.646...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7000</td>
+      <td>14.0</td>
+      <td>[-406045.9433, 393472.141, -799518.0842, 14009...</td>
+      <td>[[101200.4734, 29288.55636, 71911.91706], [292...</td>
+      <td>[[0.0, 50652.38951, 0.0, 89438.21007, 0.0]]</td>
+      <td>[[979207.7071, -1918816.391, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[300.5385535, 347.9136733, 284.743057, 1.0000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[22.9661595, 103318.3573, 131165.6623, 27.4988...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8000</td>
+      <td>16.0</td>
+      <td>[-408499.0398, 391678.3093, -800177.3491, 1397...</td>
+      <td>[[100402.1573, 28648.71805, 71753.43928], [291...</td>
+      <td>[[0.0, 50465.54724, 0.0, 89294.44028, 0.0]]</td>
+      <td>[[977305.7837, -1917243.12, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[298.1677666, 340.3131452, 284.115547, 0.9999...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[19.87564957, 106444.6562, 130544.6054, 14.226...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9000</td>
+      <td>18.0</td>
+      <td>[-406991.4101, 392482.0724, -799473.4824, 1399...</td>
+      <td>[[100192.0289, 28084.21204, 72107.81681], [292...</td>
+      <td>[[0.0, 50693.74147, 0.0, 89209.25341, 0.0]]</td>
+      <td>[[976722.0947, -1916098.572, 0.0, 0.0]]</td>
+      <td>[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...</td>
+      <td>[0.0]</td>
+      <td>[1277287.736]</td>
+      <td>[[297.5437407, 333.6074763, 285.5187434, 1.000...</td>
+      <td>[2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...</td>
+      <td>[18.24226614, 108700.5608, 130819.9731, 21.832...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">tre</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;ENEVERSION&#39;,
+ &#39;TITLE&#39;,
+ &#39;add_traj&#39;,
+ &#39;database&#39;,
+ &#39;get_Hvap&#39;,
+ &#39;get_baths&#39;,
+ &#39;get_bondedContributions&#39;,
+ &#39;get_density&#39;,
+ &#39;get_eds&#39;,
+ &#39;get_mass&#39;,
+ &#39;get_nonbondedContributions&#39;,
+ &#39;get_precalclam&#39;,
+ &#39;get_specialContributions&#39;,
+ &#39;get_temperature&#39;,
+ &#39;get_temperature_Info&#39;,
+ &#39;get_time_step&#39;,
+ &#39;get_totals&#39;,
+ &#39;get_totangle&#39;,
+ &#39;get_totbonded&#39;,
+ &#39;get_totcov&#39;,
+ &#39;get_totcrf&#39;,
+ &#39;get_totdihedral&#39;,
+ &#39;get_totene&#39;,
+ &#39;get_totkin&#39;,
+ &#39;get_totlj&#39;,
+ &#39;get_totnonbonded&#39;,
+ &#39;get_totpot&#39;,
+ &#39;path&#39;,
+ &#39;step&#39;,
+ &#39;time&#39;,
+ &#39;tre_block_name_table&#39;,
+ &#39;write&#39;]
+</pre></div></div>
+</div>
+<p>Tre files contain all energy related data (like split up energy terms, temperature, pressure, …..). In PyGromos they generally share the same block structure as other files, but all the data inside the specific timesteps is stored efficiently inside a pandas DataFrame, here called tre.database . This database offers manipulation with all pandas functions. Alternatively many common functions are provided inside the Tre class.</p>
+<p>This class should in principle replace further usage of the gromos++ ene_ana function, since all these operation can be done efficiently on the pandas DataFrame.</p>
+<p>We are currently working on adding more common functions to the Tre class. If you find a useful function please contact the developers so the function can be added for general usage :)</p>
+</section>
+<section id="2.2)-Common-Tre-functions">
+<h3>2.2) Common Tre functions<a class="headerlink" href="#2.2)-Common-Tre-functions" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the average density over all timesteps</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">get_density</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+874.6072007296449
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the mean temperature over all frames for all baths in the system. In this example two baths with slightly different temperatures.</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">get_temperature</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+bath1    297.770285
+bath2    297.713431
+dtype: float64
+</pre></div></div>
+</div>
+<p>Tables and lists inside the database are stored in numpy arrays. For example the two temperatures from the previous example are stored in a numpy array of size 2 since it has two temperature baths</p>
+<p>Specific values inside a tre file can also be directly accessed with numpy and pandas syntax</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+step                                                        2000
+time                                                         4.0
+totals         [-409167.9172, 392370.1191, -801538.0363, 1389...
+baths          [[100096.9564, 29163.29693, 70933.65948], [292...
+bonded               [[0.0, 50155.81989, 0.0, 88764.59053, 0.0]]
+nonbonded                [[983688.8106, -1924147.257, 0.0, 0.0]]
+special        [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,...
+eds                                                        [0.0]
+mass                                               [1277287.736]
+temperature    [[297.2614008, 346.4257383, 280.8695397, 0.999...
+volume         [2425.07286, 8.463596169, 0.0, 0.0, 0.0, 8.463...
+pressure       [28.23515616, 96520.43393, 130756.5894, 30.172...
+Name: 2, dtype: object
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># select the first nonbonded energy value for the first force group over all time frames</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="p">[</span><span class="s2">&quot;nonbonded&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    984602.6158
+1    988489.6284
+2    983688.8106
+3    984891.3076
+4    980597.3587
+5    980518.6316
+6    980975.7104
+7    979207.7071
+8    977305.7837
+9    976722.0947
+Name: nonbonded, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>totene</th>
+      <th>totkin</th>
+      <th>totpot</th>
+      <th>totcov</th>
+      <th>totbond</th>
+      <th>totangle</th>
+      <th>totimproper</th>
+      <th>totdihedral</th>
+      <th>totcrossdihedral</th>
+      <th>totnonbonded</th>
+      <th>...</th>
+      <th>totjval</th>
+      <th>totxray</th>
+      <th>totle</th>
+      <th>totorder</th>
+      <th>totsymm</th>
+      <th>eds_vr,entropy</th>
+      <th>totqm</th>
+      <th>totbsleus</th>
+      <th>totrdc</th>
+      <th>wip1</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0.0</th>
+      <td>-408806.2436</td>
+      <td>393521.8520</td>
+      <td>-802328.0956</td>
+      <td>138403.8772</td>
+      <td>0.0</td>
+      <td>49931.35526</td>
+      <td>0.0</td>
+      <td>88472.52195</td>
+      <td>0.0</td>
+      <td>-940731.9728</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2.0</th>
+      <td>-411576.4224</td>
+      <td>392980.7347</td>
+      <td>-804557.1570</td>
+      <td>139550.4345</td>
+      <td>0.0</td>
+      <td>50409.38587</td>
+      <td>0.0</td>
+      <td>89141.04865</td>
+      <td>0.0</td>
+      <td>-944107.5915</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4.0</th>
+      <td>-409167.9172</td>
+      <td>392370.1191</td>
+      <td>-801538.0363</td>
+      <td>138920.4104</td>
+      <td>0.0</td>
+      <td>50155.81989</td>
+      <td>0.0</td>
+      <td>88764.59053</td>
+      <td>0.0</td>
+      <td>-940458.4467</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>6.0</th>
+      <td>-408468.8130</td>
+      <td>392911.3266</td>
+      <td>-801380.1396</td>
+      <td>138900.2972</td>
+      <td>0.0</td>
+      <td>50205.91055</td>
+      <td>0.0</td>
+      <td>88694.38663</td>
+      <td>0.0</td>
+      <td>-940280.4368</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>8.0</th>
+      <td>-409322.7261</td>
+      <td>391652.3813</td>
+      <td>-800975.1074</td>
+      <td>139824.6615</td>
+      <td>0.0</td>
+      <td>50608.00218</td>
+      <td>0.0</td>
+      <td>89216.65927</td>
+      <td>0.0</td>
+      <td>-940799.7689</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>10.0</th>
+      <td>-409060.5321</td>
+      <td>391503.6168</td>
+      <td>-800564.1489</td>
+      <td>140175.3926</td>
+      <td>0.0</td>
+      <td>50668.20147</td>
+      <td>0.0</td>
+      <td>89507.19113</td>
+      <td>0.0</td>
+      <td>-940739.5415</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>12.0</th>
+      <td>-407724.5301</td>
+      <td>393376.3395</td>
+      <td>-801100.8696</td>
+      <td>139951.6784</td>
+      <td>0.0</td>
+      <td>50612.96859</td>
+      <td>0.0</td>
+      <td>89338.70979</td>
+      <td>0.0</td>
+      <td>-941052.5480</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>14.0</th>
+      <td>-406045.9433</td>
+      <td>393472.1410</td>
+      <td>-799518.0842</td>
+      <td>140090.5996</td>
+      <td>0.0</td>
+      <td>50652.38951</td>
+      <td>0.0</td>
+      <td>89438.21007</td>
+      <td>0.0</td>
+      <td>-939608.6838</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>16.0</th>
+      <td>-408499.0398</td>
+      <td>391678.3093</td>
+      <td>-800177.3491</td>
+      <td>139759.9875</td>
+      <td>0.0</td>
+      <td>50465.54724</td>
+      <td>0.0</td>
+      <td>89294.44028</td>
+      <td>0.0</td>
+      <td>-939937.3367</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>18.0</th>
+      <td>-406991.4101</td>
+      <td>392482.0724</td>
+      <td>-799473.4824</td>
+      <td>139902.9949</td>
+      <td>0.0</td>
+      <td>50693.74147</td>
+      <td>0.0</td>
+      <td>89209.25341</td>
+      <td>0.0</td>
+      <td>-939376.4773</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 38 columns</p>
+</div></div>
+</div>
+</section>
+<section id="\lambda-Sampling-&amp;-TREs">
+<h3><span class="math notranslate nohighlight">\(\lambda\)</span>-Sampling &amp; TREs<a class="headerlink" href="#\lambda-Sampling-&-TREs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the trajectory file into a Tre class</span>
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;../example_files/Traj_files/RAFE_TI_l0_5.tre&quot;</span><span class="p">)</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">get_precalclam</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py:296: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
+       &#39;precalclam&#39;, &#39;mass&#39;, &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+      dtype=&#39;object&#39;)]
+
+  self.database.to_hdf(
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>nr_lambdas</th>
+      <th>A_e_lj_1</th>
+      <th>B_e_lj_1</th>
+      <th>A_e_crf_1</th>
+      <th>B_e_crf_1</th>
+      <th>AB_kinetic_1</th>
+      <th>AB_bond_1</th>
+      <th>AB_angle_1</th>
+      <th>AB_improper_1</th>
+      <th>AB_disres_1</th>
+      <th>...</th>
+      <th>B_e_crf_2</th>
+      <th>AB_kinetic_2</th>
+      <th>AB_bond_2</th>
+      <th>AB_angle_2</th>
+      <th>AB_improper_2</th>
+      <th>AB_disres_2</th>
+      <th>AB_dihres_2</th>
+      <th>AB_disfld_2</th>
+      <th>A_dihedral</th>
+      <th>B_dihedral</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0.0</th>
+      <td>2.0</td>
+      <td>-4.469426</td>
+      <td>-53.669555</td>
+      <td>-79.373179</td>
+      <td>-52.887373</td>
+      <td>36.091797</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-122.394320</td>
+      <td>36.091797</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1.0</th>
+      <td>2.0</td>
+      <td>-55.493090</td>
+      <td>-58.228689</td>
+      <td>-86.711496</td>
+      <td>-52.410062</td>
+      <td>44.886645</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-122.457590</td>
+      <td>44.886645</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2.0</th>
+      <td>2.0</td>
+      <td>-3.935587</td>
+      <td>-54.492379</td>
+      <td>-79.515189</td>
+      <td>-54.142546</td>
+      <td>46.199981</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-139.035309</td>
+      <td>46.199981</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3.0</th>
+      <td>2.0</td>
+      <td>-44.047130</td>
+      <td>-54.945185</td>
+      <td>-83.150923</td>
+      <td>-53.673066</td>
+      <td>41.268221</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-130.358158</td>
+      <td>41.268221</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4.0</th>
+      <td>2.0</td>
+      <td>-23.340313</td>
+      <td>-52.961388</td>
+      <td>-75.743516</td>
+      <td>-53.920133</td>
+      <td>36.680211</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-134.272063</td>
+      <td>36.680211</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>495.0</th>
+      <td>2.0</td>
+      <td>39.941549</td>
+      <td>-64.577818</td>
+      <td>-71.993096</td>
+      <td>-53.485889</td>
+      <td>35.829309</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-130.534976</td>
+      <td>35.829309</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>496.0</th>
+      <td>2.0</td>
+      <td>-8.487283</td>
+      <td>-54.840254</td>
+      <td>-73.625420</td>
+      <td>-54.112768</td>
+      <td>33.260161</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-117.262832</td>
+      <td>33.260161</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>497.0</th>
+      <td>2.0</td>
+      <td>29.934914</td>
+      <td>-54.557127</td>
+      <td>-76.326046</td>
+      <td>-51.811587</td>
+      <td>41.735086</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-104.326673</td>
+      <td>41.735086</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>498.0</th>
+      <td>2.0</td>
+      <td>-35.691879</td>
+      <td>-60.330236</td>
+      <td>-77.859153</td>
+      <td>-54.295433</td>
+      <td>44.944847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-123.231158</td>
+      <td>44.944847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>499.0</th>
+      <td>2.0</td>
+      <td>21.308545</td>
+      <td>-58.470225</td>
+      <td>-72.376205</td>
+      <td>-53.554977</td>
+      <td>41.740483</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>-125.539239</td>
+      <td>41.740483</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>500 rows × 25 columns</p>
+</div></div>
+</div>
+</section>
+<section id="EDS-in-TREs">
+<h3>EDS in TREs<a class="headerlink" href="#EDS-in-TREs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the trajectory file into a Tre class</span>
+<span class="n">tre</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;../example_files/Traj_files/RAFE_eds.tre&quot;</span><span class="p">)</span>
+<span class="n">tre</span><span class="o">.</span><span class="n">get_eds</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py:296: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
+       &#39;precalclam&#39;, &#39;mass&#39;, &#39;temperature&#39;, &#39;volume&#39;, &#39;pressure&#39;],
+      dtype=&#39;object&#39;)]
+
+  self.database.to_hdf(
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>numstates</th>
+      <th>total_1</th>
+      <th>nonbonded_1</th>
+      <th>special_1</th>
+      <th>offset_1</th>
+      <th>total_2</th>
+      <th>nonbonded_2</th>
+      <th>special_2</th>
+      <th>offset_2</th>
+      <th>total_3</th>
+      <th>...</th>
+      <th>special_7</th>
+      <th>offset_7</th>
+      <th>total_8</th>
+      <th>nonbonded_8</th>
+      <th>special_8</th>
+      <th>offset_8</th>
+      <th>total_9</th>
+      <th>nonbonded_9</th>
+      <th>special_9</th>
+      <th>offset_9</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0.00</th>
+      <td>9.0</td>
+      <td>-304.241276</td>
+      <td>-304.241276</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-309.738568</td>
+      <td>-309.738568</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-286.397004</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-306.757290</td>
+      <td>-306.757290</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.661115e+05</td>
+      <td>1.661115e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.04</th>
+      <td>9.0</td>
+      <td>-327.432243</td>
+      <td>-327.432243</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-343.990987</td>
+      <td>-343.990987</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-330.156886</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-337.505471</td>
+      <td>-337.505471</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.114028e+05</td>
+      <td>2.114028e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.08</th>
+      <td>9.0</td>
+      <td>-342.969913</td>
+      <td>-342.969913</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-348.338017</td>
+      <td>-348.338017</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-342.678812</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-343.085575</td>
+      <td>-343.085575</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.335587e+05</td>
+      <td>2.335587e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.12</th>
+      <td>9.0</td>
+      <td>-307.787722</td>
+      <td>-307.787722</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-320.642022</td>
+      <td>-320.642022</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-275.892803</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-287.546356</td>
+      <td>-287.546356</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.263949e+05</td>
+      <td>1.263949e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.16</th>
+      <td>9.0</td>
+      <td>-325.101329</td>
+      <td>-325.101329</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-333.832261</td>
+      <td>-333.832261</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-309.882401</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-328.133697</td>
+      <td>-328.133697</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.637117e+05</td>
+      <td>3.637117e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.20</th>
+      <td>9.0</td>
+      <td>-341.014069</td>
+      <td>-341.014069</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-338.126642</td>
+      <td>-338.126642</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-319.108916</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-331.591241</td>
+      <td>-331.591241</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.426647e+06</td>
+      <td>3.426647e+06</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.24</th>
+      <td>9.0</td>
+      <td>-332.591891</td>
+      <td>-332.591891</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-313.860613</td>
+      <td>-313.860613</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-270.145527</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-295.307547</td>
+      <td>-295.307547</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6.720166e+05</td>
+      <td>6.720166e+05</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.28</th>
+      <td>9.0</td>
+      <td>-384.741762</td>
+      <td>-384.741762</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-379.723111</td>
+      <td>-379.723111</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-340.573094</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-363.097220</td>
+      <td>-363.097220</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6.147874e+04</td>
+      <td>6.147874e+04</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.32</th>
+      <td>9.0</td>
+      <td>-341.408526</td>
+      <td>-341.408526</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-352.793311</td>
+      <td>-352.793311</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-268.495614</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-327.075935</td>
+      <td>-327.075935</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.863084e+04</td>
+      <td>2.863084e+04</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0.36</th>
+      <td>9.0</td>
+      <td>-336.573404</td>
+      <td>-336.573404</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-340.350887</td>
+      <td>-340.350887</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-238.003947</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-325.957742</td>
+      <td>-325.957742</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.048352e+04</td>
+      <td>3.048352e+04</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 37 columns</p>
+</div></div>
+</div>
+</section>
+</section>
+<section id="Concatenate-and-Copy-multiple-Trajectories">
+<h2>Concatenate and Copy multiple Trajectories<a class="headerlink" href="#Concatenate-and-Copy-multiple-Trajectories" title="Permalink to this headline">¶</a></h2>
+<p>Trajectories offer a wide range of additional file manipulations. Trajectory classes can be copied (deep) and added to each other to concatenate multiple small simulation pieces into one large trajectory.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre_copy</span> <span class="o">=</span> <span class="n">traj_tre</span><span class="o">.</span><span class="n">Tre</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="n">tre</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre_copy</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(10, 13)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre_combined</span> <span class="o">=</span> <span class="n">tre</span> <span class="o">+</span> <span class="n">tre_copy</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/bschroed/Documents/projects/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py:180: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  new_traj.database = self.database.append(new_data, ignore_index=True)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(20, 13)
+</pre></div></div>
+</div>
+<p>In the new combined trajectory we have one long trajectory made from the two smaller ones. The length is one element shorter, since normally the last element of the first trajectory and the first element of the second trajectory is the same element. This can be controlled via the option “skip_new_0=True” in the add_traj() function which is the core of the “+” operator for trajectories. In the following line the default behavior can be seen as a smooth numbering in the TIMESTEPs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">time</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0     0.00
+1     0.04
+2     0.08
+3     0.12
+4     0.16
+5     0.20
+6     0.24
+7     0.28
+8     0.32
+9     0.36
+10    0.00
+11    0.04
+12    0.08
+13    0.12
+14    0.16
+15    0.20
+16    0.24
+17    0.28
+18    0.32
+19    0.36
+Name: time, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tre_combined</span><span class="o">.</span><span class="n">database</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">tre</span><span class="o">.</span><span class="n">database</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+20 10
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dev_example_gromos_tutorial_on_low_level.html" class="btn btn-neutral float-right" title="Gromos Tutorial Pipeline - OLD" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dev_example_gromos_simulation.html" class="btn btn-neutral float-left" title="SD Simulations with Submission System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1438 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>QM/MM in Gromos &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Calculation of free energy of evaporization" href="example_hvap.html" />
+    <link rel="prev" title="Usage of the PyGromosTools on HPC-cluster" href="example_gromos_on_HPC_Clusters.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example_TI_gromos_simulation.html">TI Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_amber2gromos.html">Amber2Gromos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_gromos_on_HPC_Clusters.html">Usage of the PyGromosTools on HPC-cluster</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">QM/MM in Gromos</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Support-for-QMMM-functionality-in-GROMOS-input-files">Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Load-an-imd-file-containing-a-QMMM-block">Load an <code class="docutils literal notranslate"><span class="pre">imd</span></code> file containing a QMMM block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Print-out-different-sections-of-the-QMMM-block">Print out different sections of the QMMM block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Change-a-block-value-and-print-again">Change a block value and print again</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Directly-manipulate-a-QMMM-specification-file">Directly manipulate a QMMM specification file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Print-out-and-change-some-blocks-in-the-QMMM-specification-file">Print out and change some blocks in the QMMM specification file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Title-block">Title block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#QMZONE-block">QMZONE block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#QMUNIT-block">QMUNIT block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#XTBELEMENTS-block">XTBELEMENTS block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file">A helper function that returns all QM engines specified in the QM/MM specification file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object">Store your QMMM specification file with all your other simulation files in a <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Run-QM/MM-Simulations">Run QM/MM Simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example_hvap.html">Calculation of free energy of evaporization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_openff.html">OpenFF Automatic Parametrization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_solvation_free_energy.html">Calculation of Self Solvation Free Energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_examples/index.html">Developer Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>QM/MM in Gromos</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Examples/example_gromos_qmmm.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="QM/MM-in-Gromos">
+<h1>QM/MM in Gromos<a class="headerlink" href="#QM/MM-in-Gromos" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># necessary imports are the Gromos_System and convenience functions emin and md</span>
+<span class="kn">import</span> <span class="nn">pygromos</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.simulation_parameters.imd</span> <span class="kn">import</span> <span class="n">Imd</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.qmmm.qmmm</span> <span class="kn">import</span> <span class="n">QMMM</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">emin</span><span class="p">,</span> <span class="n">md</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.simulation_parameters_templates</span> <span class="kn">import</span> <span class="n">template_emin</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span>
+
+<span class="c1"># for file paths</span>
+<span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "5ebf59bc7fb94623870aae2d45e97f8c"}</script></div>
+</div>
+<section id="Support-for-QMMM-functionality-in-GROMOS-input-files">
+<h2>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline">¶</a></h2>
+<p>This notebook demonstrates support of <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> for QM/MM functionality.</p>
+<p><a class="reference external" href="https://github.com/rinikerlab/PyGromosTools/blob/qmmm/examples/example_gromos_qmmm.ipynb">https://github.com/rinikerlab/PyGromosTools/blob/qmmm/examples/example_gromos_qmmm.ipynb</a> (part of the <code class="docutils literal notranslate"><span class="pre">qmmm</span></code> branch and soon to be merged to <code class="docutils literal notranslate"><span class="pre">release3</span></code>)</p>
+<p>Author: Felix Pultar</p>
+<p>Features include:</p>
+<ul class="simple">
+<li><p>QM/MM blocks in <code class="docutils literal notranslate"><span class="pre">imd</span></code> files</p></li>
+<li><p>QM/MM specification files</p></li>
+<li><p>Running QM/MM simulations</p></li>
+</ul>
+<section id="Load-an-imd-file-containing-a-QMMM-block">
+<h3>Load an <code class="docutils literal notranslate"><span class="pre">imd</span></code> file containing a QMMM block<a class="headerlink" href="#Load-an-imd-file-containing-a-QMMM-block" title="Permalink to this headline">¶</a></h3>
+<p>Simple demonstration of how to handle <code class="docutils literal notranslate"><span class="pre">.imd</span></code> files.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imd_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;example_files/QMMM_files/md.imd&quot;</span><span class="p">)</span>
+<span class="n">imd_file</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">imd_path</span><span class="p">)</span>
+<span class="n">imd_file</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Demonstration of a Gromos imd file containing a QMMM block&quot;</span>
+<span class="n">imd_file</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2146202794.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> imd_path <span class="ansi-blue-fg">=</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>abspath<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;example_files/QMMM_files/md.imd&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>imd_file <span class="ansi-blue-fg">=</span> Imd<span class="ansi-blue-fg">(</span>imd_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> imd_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Demonstration of a Gromos imd file containing a QMMM block&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> imd_file
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/simulation_parameters/imd.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     66</span>
+<span class="ansi-green-intense-fg ansi-bold">     67</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">=</span>in_value<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">=</span>_future_file<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     69</span>
+<span class="ansi-green-intense-fg ansi-bold">     70</span>         <span class="ansi-red-fg"># TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     40</span>                 self<span class="ansi-blue-fg">.</span>read_blocks<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     41</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 42</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not find File: &#34;</span><span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     43</span>
+<span class="ansi-green-intense-fg ansi-bold">     44</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> __class__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/QMMM_files/md.imd
+</pre></div></div>
+</div>
+</section>
+<section id="Print-out-different-sections-of-the-QMMM-block">
+<h3>Print out different sections of the QMMM block<a class="headerlink" href="#Print-out-different-sections-of-the-QMMM-block" title="Permalink to this headline">¶</a></h3>
+<p>Print out selected parameters from the <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> block or also the <code class="docutils literal notranslate"><span class="pre">TITLE</span></code> block.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">imd_file</span><span class="o">.</span><span class="n">QMMM</span><span class="o">.</span><span class="n">NTQMMM</span><span class="p">)</span> <span class="c1"># QM/MM toggled on/off</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">imd_file</span><span class="o">.</span><span class="n">QMMM</span><span class="o">.</span><span class="n">NTQMSW</span><span class="p">)</span> <span class="c1"># which QM/MM engine</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">imd_file</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2592676062.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>imd_file<span class="ansi-blue-fg">.</span>QMMM<span class="ansi-blue-fg">.</span>NTQMMM<span class="ansi-blue-fg">)</span> <span class="ansi-red-fg"># QM/MM toggled on/off</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>imd_file<span class="ansi-blue-fg">.</span>QMMM<span class="ansi-blue-fg">.</span>NTQMSW<span class="ansi-blue-fg">)</span> <span class="ansi-red-fg"># which QM/MM engine</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>imd_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;imd_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="Change-a-block-value-and-print-again">
+<h3>Change a block value and print again<a class="headerlink" href="#Change-a-block-value-and-print-again" title="Permalink to this headline">¶</a></h3>
+<p>Just change values of the <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> block like with other <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> blocks.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imd_file</span><span class="o">.</span><span class="n">QMMM</span><span class="o">.</span><span class="n">NTQMSW</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># switch to ORCA as QM software</span>
+<span class="n">imd_file</span><span class="o">.</span><span class="n">QMMM</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/1144744683.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>imd_file<span class="ansi-blue-fg">.</span>QMMM<span class="ansi-blue-fg">.</span>NTQMSW <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">4</span> <span class="ansi-red-fg"># switch to ORCA as QM software</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> imd_file<span class="ansi-blue-fg">.</span>QMMM
+
+<span class="ansi-red-fg">NameError</span>: name &#39;imd_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Directly-manipulate-a-QMMM-specification-file">
+<h2>Directly manipulate a QMMM specification file<a class="headerlink" href="#Directly-manipulate-a-QMMM-specification-file" title="Permalink to this headline">¶</a></h2>
+<p>The QMMM object allows to directly interact with QM/MM specification files. Future releases of <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> will also support generation of <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> files from coordinate files (<code class="docutils literal notranslate"><span class="pre">.cnf</span></code>, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdb</span></code>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># instantiate the file object</span>
+<span class="n">qmmm_file</span> <span class="o">=</span> <span class="n">QMMM</span><span class="p">(</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf.qmmm&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="p">)</span>
+<span class="c1"># There will be warnings if more than one QM engine is selected</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/3437060600.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># instantiate the file object</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>qmmm_file <span class="ansi-blue-fg">=</span> QMMM<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;example_files/QMMM_files/menthol-methanol-dmf.qmmm&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># There will be warnings if more than one QM engine is selected</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/qmmm/qmmm.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     34</span>
+<span class="ansi-green-intense-fg ansi-bold">     35</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 36</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">=</span>in_value<span class="ansi-blue-fg">,</span> _future_file<span class="ansi-blue-fg">=</span>_future_file<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     37</span>
+<span class="ansi-green-intense-fg ansi-bold">     38</span>         <span class="ansi-red-fg"># TODO: maybe somebody can make a better solution for this. This is a ugly fix to unify the structure of the blocks</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/_basics/_general_gromos_file.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, in_value, _future_file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     40</span>                 self<span class="ansi-blue-fg">.</span>read_blocks<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     41</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 42</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">raise</span> IOError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not find File: &#34;</span><span class="ansi-blue-fg">,</span> in_value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     43</span>
+<span class="ansi-green-intense-fg ansi-bold">     44</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>in_value<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> __class__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: [Errno Could not find File: ] example_files/QMMM_files/menthol-methanol-dmf.qmmm
+</pre></div></div>
+</div>
+</section>
+<section id="Print-out-and-change-some-blocks-in-the-QMMM-specification-file">
+<h2>Print out and change some blocks in the QMMM specification file<a class="headerlink" href="#Print-out-and-change-some-blocks-in-the-QMMM-specification-file" title="Permalink to this headline">¶</a></h2>
+<section id="Title-block">
+<h3>Title block<a class="headerlink" href="#Title-block" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> specification file can be handled like any other <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="n">qmmm_file</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Custom file header&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/3522135427.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> qmmm_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Custom file header&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>TITLE<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="QMZONE-block">
+<h3>QMZONE block<a class="headerlink" href="#QMZONE-block" title="Permalink to this headline">¶</a></h3>
+<p>Print out the <code class="docutils literal notranslate"><span class="pre">QMZONE</span></code> section that defines which atoms will be treated quantum-mechanically.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># as in other Gromos files, the first bunch of characters are ignored and used to comment, e.g. name of the atom</span>
+<span class="c1"># second value: index of te position (starting from 1)</span>
+<span class="c1"># third value: element number according to the PSE</span>
+<span class="c1"># fourth value: indicate whether bond can be broken or not, default = 0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">QMZONE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/4196296852.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-red-fg"># third value: element number according to the PSE</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># fourth value: indicate whether bond can be broken or not, default = 0</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>QMZONE<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="QMUNIT-block">
+<h3>QMUNIT block<a class="headerlink" href="#QMUNIT-block" title="Permalink to this headline">¶</a></h3>
+<p>Print out the <code class="docutils literal notranslate"><span class="pre">QMUNIT</span></code> block that defines some unit conversions between the MD engine and the QM software.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># usually, these conversion factors are hard-coded in Gromos; left for historical reasons</span>
+<span class="c1"># first value: QM length to Gromos length (e.g. Bohr to nm)</span>
+<span class="c1"># second value: QM energy to Gromos energy (e.g. Hartree to kJ / mol)</span>
+<span class="c1"># third value: Gromos charge to QM charge (the same in this case)</span>
+<span class="c1"># fourth value: QM input units to Gromos input units (e.g. Angstrom to nm)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">QMUNIT</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/1212175820.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># third value: Gromos charge to QM charge (the same in this case)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg"># fourth value: QM input units to Gromos input units (e.g. Angstrom to nm)</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>QMUNIT<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="XTBELEMENTS-block">
+<h3>XTBELEMENTS block<a class="headerlink" href="#XTBELEMENTS-block" title="Permalink to this headline">¶</a></h3>
+<p>Print and update the <code class="docutils literal notranslate"><span class="pre">XTBELEMENTS</span></code> block</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">XTBELEMENTS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">XTBELEMENTS</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/234956547.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS<span class="ansi-blue-fg">.</span>content<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># replace element numbers manually with the first ten elements of the PSE</span>
+<span class="n">xtbelements_new</span>  <span class="o">=</span> <span class="p">[[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">xtbelements_new</span><span class="p">)</span>
+<span class="n">qmmm_file</span><span class="o">.</span><span class="n">XTBELEMENTS</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">xtbelements_new</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[&#39;1&#39;], [&#39;2&#39;], [&#39;3&#39;], [&#39;4&#39;], [&#39;5&#39;], [&#39;6&#39;], [&#39;7&#39;], [&#39;8&#39;], [&#39;9&#39;], [&#39;10&#39;]]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2199286763.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> xtbelements_new  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> j <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">11</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>xtbelements_new<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS<span class="ansi-blue-fg">.</span>content <span class="ansi-blue-fg">=</span> xtbelements_new
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the updated section in the file</span>
+<span class="n">qmmm_file</span><span class="o">.</span><span class="n">XTBELEMENTS</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/493323477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># show the updated section in the file</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>qmmm_file<span class="ansi-blue-fg">.</span>XTBELEMENTS
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file">
+<h3>A helper function that returns all QM engines specified in the QM/MM specification file<a class="headerlink" href="#A-helper-function-that-returns-all-QM-engines-specified-in-the-QM/MM-specification-file" title="Permalink to this headline">¶</a></h3>
+<p>There is also a sanity check in the constructor of <code class="docutils literal notranslate"><span class="pre">QMMM</span></code> to see if you did not accidentally add more than one QM engine.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">qmmm_file</span><span class="o">.</span><span class="n">get_qm_engines</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/198690903.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>qmmm_file<span class="ansi-blue-fg">.</span>get_qm_engines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;qmmm_file&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+<section id="Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object">
+<h3>Store your QMMM specification file with all your other simulation files in a <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object<a class="headerlink" href="#Store-your-QMMM-specification-file-with-all-your-other-simulation-files-in-a-Gromos_System-object" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># that&#39;s what we want to simulate</span>
+<span class="n">system_name</span> <span class="o">=</span> <span class="s2">&quot;menthol-methanol-dmf&quot;</span>
+
+<span class="c1"># that&#39;s where we want to simulate it at</span>
+<span class="n">work_folder</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/</span><span class="si">{</span><span class="n">system_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># create a Gromos_System object from scratch</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span><span class="n">work_folder</span><span class="p">,</span> <span class="n">system_name</span><span class="p">)</span>
+
+<span class="c1"># specify prepared topology, configuration, QMMM specification file, and input file</span>
+<span class="n">system</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/</span><span class="si">{</span><span class="n">system_name</span><span class="si">}</span><span class="s2">-all-atom_54a7.top&quot;</span>
+<span class="n">system</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/</span><span class="si">{</span><span class="n">system_name</span><span class="si">}</span><span class="s2">-all-atom-init_54a7.cnf&quot;</span>
+<span class="n">system</span><span class="o">.</span><span class="n">qmmm</span> <span class="o">=</span> <span class="n">qmmm_file</span>
+<span class="n">system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">imd_file</span>
+
+<span class="c1"># clean up</span>
+<span class="n">system</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span>
+
+<span class="c1"># all your simulation files now live in the work folder</span>
+<span class="n">system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such file or directory
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/3927061813.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-red-fg"># create a Gromos_System object from scratch</span>
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span>system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">(</span>work_folder<span class="ansi-blue-fg">,</span> system_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-red-fg"># specify prepared topology, configuration, QMMM specification file, and input file</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
+<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    229</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
+<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    832</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: could not make folder:
+ example_files/menthol-methanol-dmf
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the imd file has been adapted (force groups, multibath, etc.)</span>
+<span class="n">system</span><span class="o">.</span><span class="n">imd</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/780775887.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># the imd file has been adapted (force groups, multibath, etc.)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>system<span class="ansi-blue-fg">.</span>imd
+
+<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Run-QM/MM-Simulations">
+<h2>Run QM/MM Simulations<a class="headerlink" href="#Run-QM/MM-Simulations" title="Permalink to this headline">¶</a></h2>
+<p>QM/MM calculations are possible with a special in-house build of <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># binaries (not yet QM/MM)</span>
+<span class="n">gromosPP</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">gromosXX</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># folders and title</span>
+<span class="n">system_name</span> <span class="o">=</span> <span class="s2">&quot;menthol-methanol-dmf&quot;</span>
+<span class="n">work_folder</span> <span class="o">=</span>  <span class="sa">f</span><span class="s2">&quot;example_files/</span><span class="si">{</span><span class="n">system_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># files</span>
+<span class="n">in_cnf_path</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf-all-atom-init_54a7.cnf&quot;</span>
+<span class="n">in_top_path</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf-all-atom_54a7.top&quot;</span>
+
+<span class="c1"># system</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span>
+    <span class="n">work_folder</span><span class="p">,</span>
+    <span class="n">system_name</span><span class="p">,</span>
+    <span class="n">in_top_path</span><span class="o">=</span><span class="n">in_top_path</span><span class="p">,</span>
+    <span class="n">in_cnf_path</span><span class="o">=</span><span class="n">in_cnf_path</span><span class="p">,</span>
+    <span class="n">in_gromosPP_bin_dir</span><span class="o">=</span><span class="n">gromosPP</span><span class="p">,</span>
+    <span class="n">in_gromosXX_bin_dir</span><span class="o">=</span><span class="n">gromosXX</span>
+<span class="p">)</span>
+
+<span class="n">system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+mkdir: cannot create directory ‘example_files/menthol-methanol-dmf’: No such file or directory
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/4203308730.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-red-fg"># system</span>
+<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg"> system = Gromos_System(
+</span><span class="ansi-green-intense-fg ansi-bold">     15</span>     work_folder<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     system_name<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
+<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    229</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
+<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    832</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">OSError</span>: could not make folder:
+ example_files/menthol-methanol-dmf
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/844308420.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a local submission system and specify the number of cores</span>
+<span class="n">submit</span> <span class="o">=</span> <span class="n">LOCAL</span><span class="p">(</span><span class="n">nomp</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># energy minimize the system</span>
+<span class="n">minimized_system</span> <span class="o">=</span> <span class="n">emin</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">submit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/178837208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># energy minimize the system</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>minimized_system <span class="ansi-blue-fg">=</span> emin<span class="ansi-blue-fg">(</span>system<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># new imd file for equilibration</span>
+<span class="n">in_imd_path</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf-eq.imd&quot;</span>
+<span class="n">minimized_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">in_imd_path</span>
+<span class="n">minimized_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">STEP</span><span class="o">.</span><span class="n">NSTLIM</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">minimized_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">STEP</span><span class="o">.</span><span class="n">DT</span> <span class="o">=</span> <span class="mf">0.002</span> <span class="c1"># 2.0 fs</span>
+<span class="n">minimized_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2801463477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># new imd file for equilibration</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> in_imd_path  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">f&#34;example_files/QMMM_files/menthol-methanol-dmf-eq.imd&#34;</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> in_imd_path
+<span class="ansi-green-intense-fg ansi-bold">      4</span> minimized_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>STEP<span class="ansi-blue-fg">.</span>NSTLIM <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">1000</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> minimized_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>STEP<span class="ansi-blue-fg">.</span>DT <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0.002</span> <span class="ansi-red-fg"># 2.0 fs</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># equilibrate the system</span>
+<span class="n">equilibrated_system</span> <span class="o">=</span> <span class="n">md</span><span class="p">(</span><span class="n">minimized_system</span><span class="p">,</span> <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;eq&quot;</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">submit</span><span class="p">)</span>
+<span class="n">equilibrated_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2240818067.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># equilibrate the system</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>equilibrated_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">,</span> step_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;eq&#34;</span><span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> equilibrated_system
+
+<span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load your favorite GCC version (required for your special GROMOS QM/MM build)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;/opt/gcc-8.2.0/bin&quot;</span> <span class="c1">#Change here!</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LD_LIBRARY_PATH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/opt/gcc-8.2.0/lib:/home/fpultar/opt/gcc-8.2.0/lib64&quot;</span> <span class="c1">#Change here!</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
+        &#39;CONDA_PROMPT_MODIFIER&#39;: &#39;(pygro2) &#39;,
+        &#39;USER&#39;: &#39;mlehner&#39;,
+        &#39;CXXFLAGS&#39;: &#39;-fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;OBJCOPY&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-objcopy&#39;,
+        &#39;GIT_ASKPASS&#39;: &#39;/home/mlehner/.vscode-server/bin/e18005f0f1b33c29e81d732535d8c0e47cafb0b5/extensions/git/dist/askpass.sh&#39;,
+        &#39;GCC_RANLIB&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ranlib&#39;,
+        &#39;SIZE&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-size&#39;,
+        &#39;LD_LIBRARY_PATH&#39;: &#39;/opt/gcc-8.2.0/lib:/home/fpultar/opt/gcc-8.2.0/lib64&#39;,
+        &#39;SHLVL&#39;: &#39;2&#39;,
+        &#39;DEBUG_CXXFLAGS&#39;: &#39;-fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-all -fno-plt -Og -g -Wall -Wextra -fvar-tracking-assignments -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;HOME&#39;: &#39;/home/mlehner&#39;,
+        &#39;CONDA_SHLVL&#39;: &#39;2&#39;,
+        &#39;OLDPWD&#39;: &#39;/home/mlehner/PyGromosTools&#39;,
+        &#39;CC_FOR_BUILD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-cc&#39;,
+        &#39;VSCODE_IPC_HOOK_CLI&#39;: &#39;/mnt/wslg/runtime-dir/vscode-ipc-338f28cb-186b-4530-932d-b7a523f13b69.sock&#39;,
+        &#39;TERM_PROGRAM_VERSION&#39;: &#39;1.66.0&#39;,
+        &#39;CONDA_TOOLCHAIN_BUILD&#39;: &#39;x86_64-conda-linux-gnu&#39;,
+        &#39;F90&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
+        &#39;VSCODE_GIT_ASKPASS_MAIN&#39;: &#39;/home/mlehner/.vscode-server/bin/e18005f0f1b33c29e81d732535d8c0e47cafb0b5/extensions/git/dist/askpass-main.js&#39;,
+        &#39;LDFLAGS&#39;: &#39;-Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,--allow-shlib-undefined -Wl,-rpath,/home/mlehner/anaconda3/envs/pygro2/lib -Wl,-rpath-link,/home/mlehner/anaconda3/envs/pygro2/lib -L/home/mlehner/anaconda3/envs/pygro2/lib&#39;,
+        &#39;FC&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
+        &#39;STRINGS&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-strings&#39;,
+        &#39;VSCODE_GIT_ASKPASS_NODE&#39;: &#39;/home/mlehner/.vscode-server/bin/e18005f0f1b33c29e81d732535d8c0e47cafb0b5/node&#39;,
+        &#39;MAKEFLAGS&#39;: &#39;&#39;,
+        &#39;CPP&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-cpp&#39;,
+        &#39;COLORTERM&#39;: &#39;truecolor&#39;,
+        &#39;_CE_M&#39;: &#39;&#39;,
+        &#39;WSL_DISTRO_NAME&#39;: &#39;Ubuntu-20.04&#39;,
+        &#39;F77&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
+        &#39;F95&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-f95&#39;,
+        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/6&#39;,
+        &#39;ELFEDIT&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-elfedit&#39;,
+        &#39;STRIP&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-strip&#39;,
+        &#39;WAYLAND_DISPLAY&#39;: &#39;wayland-0&#39;,
+        &#39;GCC&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc&#39;,
+        &#39;LOGNAME&#39;: &#39;mlehner&#39;,
+        &#39;_&#39;: &#39;/usr/bin/make&#39;,
+        &#39;WSL_INTEROP&#39;: &#39;/run/WSL/1599_interop&#39;,
+        &#39;PULSE_SERVER&#39;: &#39;/mnt/wslg/PulseServer&#39;,
+        &#39;NAME&#39;: &#39;MarcSurface&#39;,
+        &#39;AR&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ar&#39;,
+        &#39;READELF&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-readelf&#39;,
+        &#39;AS&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-as&#39;,
+        &#39;GXX&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-g++&#39;,
+        &#39;TERM&#39;: &#39;xterm-color&#39;,
+        &#39;FC_FOR_BUILD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
+        &#39;CXXFILT&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-c++filt&#39;,
+        &#39;AMBERHOME&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2&#39;,
+        &#39;_CE_CONDA&#39;: &#39;&#39;,
+        &#39;BUILD&#39;: &#39;x86_64-conda-linux-gnu&#39;,
+        &#39;PATH&#39;: &#39;/usr/local/cuda-11.4/bin:/home/mlehner/.vscode-server/bin/e18005f0f1b33c29e81d732535d8c0e47cafb0b5/bin/remote-cli:/usr/local/cuda-11.4/bin:/home/mlehner/anaconda3/envs/pygro2/bin:/home/mlehner/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/libnvvp:/mnt/c/Python39/Scripts:/mnt/c/Python39:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/nodejs:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files (x86)/Yarn/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2020.3.1:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Program Files/Wolfram Research/WolframScript:/mnt/c/Users/thier/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/thier/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/thier/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/thier/AppData/Roaming/npm:/mnt/c/Users/thier/AppData/Local/Yarn/bin:/mnt/c/ProgramData/Anaconda3:/mnt/c/ProgramData/Anaconda3/Scripts:/snap/bin:/home/mlehner/gromacs-2020.4/build/bin:/usr/local/gromacs/bin/GMXRC:/home/mlehner/gromosXX/gromosXX/BUILD/program:/home/mlehner/gromosPlsPls/gromos++/BUILD/programs:/home/mlehner/gromacs-2020.4/build/bin:/usr/local/gromacs/bin/GMXRC:/home/mlehner/gromosXX/gromosXX/BUILD/program:/home/mlehner/gromosPlsPls/gromos++/BUILD/programs/opt/gcc-8.2.0/bin&#39;,
+        &#39;CFLAGS&#39;: &#39;-march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;XDG_RUNTIME_DIR&#39;: &#39;/mnt/wslg/runtime-dir&#39;,
+        &#39;PERL5LIB&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/lib/perl/mm_pbsa&#39;,
+        &#39;build_alias&#39;: &#39;x86_64-conda-linux-gnu&#39;,
+        &#39;MAKELEVEL&#39;: &#39;1&#39;,
+        &#39;DISPLAY&#39;: &#39;:0&#39;,
+        &#39;GCC_AR&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ar&#39;,
+        &#39;CONDA_PREFIX_1&#39;: &#39;/home/mlehner/anaconda3&#39;,
+        &#39;DEBUG_CFLAGS&#39;: &#39;-march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-all -fno-plt -Og -g -Wall -Wextra -fvar-tracking-assignments -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;LANG&#39;: &#39;C.UTF-8&#39;,
+        &#39;_CONDA_PYTHON_SYSCONFIGDATA_NAME&#39;: &#39;_sysconfigdata_x86_64_conda_cos6_linux_gnu&#39;,
+        &#39;LS_COLORS&#39;: &#39;rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:&#39;,
+        &#39;VSCODE_GIT_IPC_HANDLE&#39;: &#39;/mnt/wslg/runtime-dir/vscode-git-c2fb3e520e.sock&#39;,
+        &#39;TERM_PROGRAM&#39;: &#39;vscode&#39;,
+        &#39;CPPFLAGS&#39;: &#39;-DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;GSETTINGS_SCHEMA_DIR&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/share/glib-2.0/schemas&#39;,
+        &#39;CONDA_PYTHON_EXE&#39;: &#39;/home/mlehner/anaconda3/bin/python&#39;,
+        &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+        &#39;DEBUG_FFLAGS&#39;: &#39;-fopenmp -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include -fopenmp -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-all -fno-plt -Og -g -Wall -Wextra -fcheck=all -fbacktrace -fimplicit-none -fvar-tracking-assignments -ffunction-sections -pipe&#39;,
+        &#39;CMAKE_ARGS&#39;: &#39;-DCMAKE_AR=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ar -DCMAKE_CXX_COMPILER_AR=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ar -DCMAKE_C_COMPILER_AR=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ar -DCMAKE_RANLIB=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ranlib -DCMAKE_CXX_COMPILER_RANLIB=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ranlib -DCMAKE_C_COMPILER_RANLIB=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ranlib -DCMAKE_LINKER=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ld -DCMAKE_STRIP=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-strip&#39;,
+        &#39;HOST&#39;: &#39;x86_64-conda-linux-gnu&#39;,
+        &#39;CXX&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-c++&#39;,
+        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/6&#39;,
+        &#39;DEBUG_CPPFLAGS&#39;: &#39;-D_DEBUG -D_FORTIFY_SOURCE=2 -Og -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;LESSCLOSE&#39;: &#39;/usr/bin/lesspipe %s %s&#39;,
+        &#39;CONDA_DEFAULT_ENV&#39;: &#39;pygro2&#39;,
+        &#39;DEBUG_FORTRANFLAGS&#39;: &#39;-fopenmp -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include -fopenmp -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-all -fno-plt -Og -g -Wall -Wextra -fcheck=all -fbacktrace -fimplicit-none -fvar-tracking-assignments -ffunction-sections -pipe&#39;,
+        &#39;GCC_NM&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-nm&#39;,
+        &#39;ADDR2LINE&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-addr2line&#39;,
+        &#39;GFORTRAN&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
+        &#39;CONDA_BUILD_SYSROOT&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/x86_64-conda-linux-gnu/sysroot&#39;,
+        &#39;VSCODE_GIT_ASKPASS_EXTRA_ARGS&#39;: &#39;&#39;,
+        &#39;LD_GOLD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ld.gold&#39;,
+        &#39;PWD&#39;: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project&#39;,
+        &#39;CONDA_EXE&#39;: &#39;/home/mlehner/anaconda3/bin/conda&#39;,
+        &#39;XDG_DATA_DIRS&#39;: &#39;/usr/local/share:/usr/share:/var/lib/snapd/desktop&#39;,
+        &#39;LD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ld&#39;,
+        &#39;FFLAGS&#39;: &#39;-fopenmp -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;GPROF&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gprof&#39;,
+        &#39;RANLIB&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ranlib&#39;,
+        &#39;CONDA_TOOLCHAIN_HOST&#39;: &#39;x86_64-conda-linux-gnu&#39;,
+        &#39;CC&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-cc&#39;,
+        &#39;MFLAGS&#39;: &#39;&#39;,
+        &#39;GSETTINGS_SCHEMA_DIR_CONDA_BACKUP&#39;: &#39;&#39;,
+        &#39;FORTRANFLAGS&#39;: &#39;-fopenmp -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
+        &#39;host_alias&#39;: &#39;x86_64-conda-linux-gnu&#39;,
+        &#39;CONDA_PREFIX&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2&#39;,
+        &#39;CXX_FOR_BUILD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-c++&#39;,
+        &#39;HOSTTYPE&#39;: &#39;x86_64&#39;,
+        &#39;CUDA_PATH&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2&#39;,
+        &#39;WSLENV&#39;: &#39;VSCODE_WSL_EXT_LOCATION/up&#39;,
+        &#39;NM&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-nm&#39;,
+        &#39;CMAKE_PREFIX_PATH&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2:/home/mlehner/anaconda3/envs/pygro2/x86_64-conda-linux-gnu/sysroot/usr&#39;,
+        &#39;OBJDUMP&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-objdump&#39;,
+        &#39;DOCUTILSCONFIG&#39;: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/docutils.conf&#39;,
+        &#39;RDBASE&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/share/RDKit&#39;,
+        &#39;PYDEVD_USE_FRAME_EVAL&#39;: &#39;NO&#39;,
+        &#39;JPY_PARENT_PID&#39;: &#39;9403&#39;,
+        &#39;CLICOLOR&#39;: &#39;1&#39;,
+        &#39;PAGER&#39;: &#39;cat&#39;,
+        &#39;GIT_PAGER&#39;: &#39;cat&#39;,
+        &#39;MPLBACKEND&#39;: &#39;module://matplotlib_inline.backend_inline&#39;}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># new imd file for QM/MM run</span>
+<span class="n">in_imd_path</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/md.imd&quot;</span>
+<span class="n">equilibrated_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="n">in_imd_path</span>
+<span class="n">equilibrated_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">STEP</span><span class="o">.</span><span class="n">NSTLIM</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">equilibrated_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">STEP</span><span class="o">.</span><span class="n">DT</span> <span class="o">=</span> <span class="mf">0.0005</span> <span class="c1"># 0.5 fs</span>
+<span class="c1"># qmmm specification file</span>
+<span class="n">equilibrated_system</span><span class="o">.</span><span class="n">qmmm</span> <span class="o">=</span> <span class="n">QMMM</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;example_files/QMMM_files/menthol-methanol-dmf.qmmm&quot;</span><span class="p">)</span>
+
+<span class="c1"># now you want to switch to your special build of GROMOS :)</span>
+<span class="n">gromosXX</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># path to freshly compiled gromos &quot;build-gcc-8.2.0-release/program&quot;</span>
+<span class="n">equilibrated_system</span><span class="o">.</span><span class="n">gromosXX</span> <span class="o">=</span> <span class="n">gromosXX</span>
+
+<span class="c1"># check if everying is correct</span>
+<span class="c1"># note that the new .imd file and .qmmm file still live in the old location</span>
+<span class="c1"># while the .cnf file and .top file result from a previous simulation (equilibration)</span>
+<span class="n">equilibrated_system</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2075562488.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># new imd file for QM/MM run</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> in_imd_path  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">f&#34;example_files/QMMM_files/md.imd&#34;</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>equilibrated_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> in_imd_path
+<span class="ansi-green-intense-fg ansi-bold">      4</span> equilibrated_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>STEP<span class="ansi-blue-fg">.</span>NSTLIM <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">100</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> equilibrated_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>STEP<span class="ansi-blue-fg">.</span>DT <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0.0005</span> <span class="ansi-red-fg"># 0.5 fs</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;equilibrated_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print the relevant QMMM block in the new imd file</span>
+<span class="n">equilibrated_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">QMMM</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/2112366208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># print the relevant QMMM block in the new imd file</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>equilibrated_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>QMMM
+
+<span class="ansi-red-fg">NameError</span>: name &#39;equilibrated_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># go QM/MM!</span>
+<span class="n">production_system</span> <span class="o">=</span> <span class="n">md</span><span class="p">(</span><span class="n">equilibrated_system</span><span class="p">,</span> <span class="n">submission_system</span><span class="o">=</span><span class="n">submit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/3371366635.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># go QM/MM!</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>production_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>equilibrated_system<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;equilibrated_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize the last .cnf - you are done!</span>
+<span class="n">production_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_11353/1050048346.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># visualize the last .cnf - you are done!</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>production_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;production_system&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"90b99aa8b64745b29f056ae23468f258": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5ebf59bc7fb94623870aae2d45e97f8c": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_90b99aa8b64745b29f056ae23468f258"}}}, "version_major": 2, "version_minor": 0}
+</script></section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="example_hvap.html" class="btn btn-neutral float-right" title="Calculation of free energy of evaporization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="example_gromos_on_HPC_Clusters.html" class="btn btn-neutral float-left" title="Usage of the PyGromosTools on HPC-cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

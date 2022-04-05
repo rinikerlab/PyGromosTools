@@ -1,0 +1,572 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.forcefield.amber.amberff &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.forcefield.amber.amberff</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.forcefield.amber.amberff</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+
+
+<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield._generic_force_field</span> <span class="kn">import</span> <span class="n">_generic_force_field</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.gromos</span> <span class="kn">import</span> <span class="n">GromosPP</span>
+<span class="kn">from</span> <span class="nn">pygromos.data</span> <span class="kn">import</span> <span class="n">topology_templates</span>
+<span class="kn">from</span> <span class="nn">pygromos</span> <span class="kn">import</span> <span class="n">data</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="AmberFF"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.AmberFF">[docs]</a><span class="k">class</span> <span class="nc">AmberFF</span><span class="p">(</span><span class="n">_generic_force_field</span><span class="p">):</span>
+    <span class="c1"># static variables to control solvation</span>
+    <span class="n">solvate</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">solventbox</span> <span class="o">=</span> <span class="s2">&quot;TIP3PBOX&quot;</span>
+
+    <span class="c1"># don&#39;t remove temporary directories after execution by default</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;amber&quot;</span><span class="p">,</span> <span class="n">path_to_files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">auto_import</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path_to_files</span><span class="o">=</span><span class="n">path_to_files</span><span class="p">,</span> <span class="n">auto_import</span><span class="o">=</span><span class="n">auto_import</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">auto_import</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auto_import_ff</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AmberFF.auto_import_ff"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.AmberFF.auto_import_ff">[docs]</a>    <span class="k">def</span> <span class="nf">auto_import_ff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># check path</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">,</span> <span class="n">List</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;tleap&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;tleap&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/../&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;Could not import GAFF FF as ambertools was missing! &quot;</span> <span class="s2">&quot;Please install the package for this feature!&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found amber: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">amber_bindir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span> <span class="o">+</span> <span class="s2">&quot;/bin&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaprc_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span> <span class="o">+</span> <span class="s2">&quot;/dat/leap/cmd/leaprc.gaff&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span> <span class="o">+</span> <span class="s2">&quot;/dat/leap/cmd/leaprc.water.tip3p&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frcmod_files</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">amber_basedir</span> <span class="o">+</span> <span class="s2">&quot;/dat/leap/parm/frcmod.chcl3&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">leaprc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaprc_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">leaprc</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;could not find ff file &quot;</span> <span class="o">+</span> <span class="n">leaprc</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">frcmod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frcmod_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">frcmod</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;could not find ff file &quot;</span> <span class="o">+</span> <span class="n">frcmod</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AmberFF.create_top"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.AmberFF.create_top">[docs]</a>    <span class="k">def</span> <span class="nf">create_top</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_top</span><span class="p">:</span> <span class="n">Top</span><span class="p">,</span> <span class="n">in_mol2_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">work_folder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gromosPP</span><span class="p">:</span> <span class="n">GromosPP</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Top</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">mol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_mol2_file</span> <span class="o">=</span> <span class="n">in_mol2_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">=</span> <span class="n">work_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span> <span class="o">=</span> <span class="n">gromosPP</span>
+
+        <span class="k">if</span> <span class="n">in_mol2_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_mol2</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">amber</span> <span class="o">=</span> <span class="n">amber2gromos</span><span class="p">(</span>
+            <span class="n">in_mol2_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_mol2_file</span><span class="p">,</span>
+            <span class="n">mol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">,</span>
+            <span class="n">forcefield</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">gromosPP</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="p">,</span>
+            <span class="n">work_folder</span><span class="o">=</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">solvate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solvate</span><span class="p">,</span>
+            <span class="n">solventbox</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span><span class="p">,</span>
+            <span class="n">clean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">in_top</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber</span><span class="o">.</span><span class="n">get_gromos_topology</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_top</span><span class="p">,</span> <span class="n">Top</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">in_top</span> <span class="o">+</span> <span class="n">Top</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber</span><span class="o">.</span><span class="n">get_gromos_topology</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_top</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="n">in_top</span><span class="p">)</span> <span class="o">+</span> <span class="n">Top</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber</span><span class="o">.</span><span class="n">get_gromos_topology</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;in_top is of wrong type&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span></div>
+
+<div class="viewcode-block" id="AmberFF.create_cnf"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.AmberFF.create_cnf">[docs]</a>    <span class="k">def</span> <span class="nf">create_cnf</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_cnf</span><span class="p">:</span> <span class="n">Top</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">work_folder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">in_mol2_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gromosPP</span><span class="p">:</span> <span class="n">GromosPP</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cnf</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">amber</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_mol2</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">amber</span> <span class="o">=</span> <span class="n">amber2gromos</span><span class="p">(</span>
+                <span class="n">in_mol2_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_mol2_file</span><span class="p">,</span>
+                <span class="n">mol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">,</span>
+                <span class="n">forcefield</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">gromosPP</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="p">,</span>
+                <span class="n">work_folder</span><span class="o">=</span><span class="n">work_folder</span><span class="p">,</span>
+                <span class="n">solvate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solvate</span><span class="p">,</span>
+                <span class="n">solventbox</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span><span class="p">,</span>
+                <span class="n">clean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">in_cnf</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber</span><span class="o">.</span><span class="n">get_gromos_coordinate_file</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">,</span> <span class="n">Cnf</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">in_cnf</span> <span class="o">+</span> <span class="n">Cnf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber</span><span class="o">.</span><span class="n">get_gromos_coordinate_file</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">in_cnf</span><span class="p">)</span> <span class="o">+</span> <span class="n">Cnf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amber</span><span class="o">.</span><span class="n">get_gromos_coordinate_file</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;in_cnf is of wrong type&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnf</span></div>
+
+<div class="viewcode-block" id="AmberFF.create_mol2"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.AmberFF.create_mol2">[docs]</a>    <span class="k">def</span> <span class="nf">create_mol2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="amber2gromos"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos">[docs]</a><span class="k">class</span> <span class="nc">amber2gromos</span><span class="p">:</span>
+<div class="viewcode-block" id="amber2gromos.__init__"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_mol2_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mol</span><span class="p">:</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">,</span>
+        <span class="n">gromosPP</span><span class="p">:</span> <span class="n">GromosPP</span><span class="p">,</span>
+        <span class="n">forcefield</span><span class="p">:</span> <span class="n">_generic_force_field</span><span class="p">,</span>
+        <span class="n">work_folder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+        <span class="n">solvate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">solventbox</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">clean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        uses the ambertools programs antechamber, parmchk, and tleap together with</span>
+<span class="sd">        the GROMOS++ program amber2gromos to generate a GROMOS topology and coordinate file</span>
+<span class="sd">        for a given molecule</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_mol2_file : str</span>
+<span class="sd">            mol2 file for molecule to be parameterized</span>
+<span class="sd">        mol: Chem.rdchem.Mol</span>
+<span class="sd">            rdkit molecule of the molecule in in_mol2_file</span>
+<span class="sd">        gromosPP: GromosPP</span>
+<span class="sd">        forcefield: forcefield_system</span>
+<span class="sd">        work_folder: str, optional</span>
+<span class="sd">            where to generate the topology + cnf (default: &quot;.&quot;)</span>
+<span class="sd">        solvate: bool, optional</span>
+<span class="sd">            should the topology be solvated? (default: False)</span>
+<span class="sd">        solventbox: str, optional</span>
+<span class="sd">            what solvent should be used for solvation? e.g. TIP3PBOX or CHCL3BOX (default: TIP3PBOX)</span>
+<span class="sd">        clean: bool, optional</span>
+<span class="sd">            should temporary ambertool files be removed after parameterization? (default: False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_mol2_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">in_mol2_file</span><span class="p">)</span>
+
+        <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">work_folder</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">mol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span> <span class="o">=</span> <span class="n">forcefield</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span> <span class="o">=</span> <span class="n">gromosPP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solvate</span> <span class="o">=</span> <span class="n">solvate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">=</span> <span class="n">solventbox</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_mol2_file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># ambertools pipeline to generate pdb, crd and prm files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">antechamber</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmchk</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tleap</span><span class="p">()</span>
+
+        <span class="c1"># convert AMBER files to GROMOS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amber2gromos</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cleanup</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="amber2gromos.antechamber"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.antechamber">[docs]</a>    <span class="k">def</span> <span class="nf">antechamber</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        executes the ambertools program antechamber</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span> <span class="o">=</span> <span class="s2">&quot;antechamber_tmp&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span><span class="p">)</span>
+
+        <span class="n">net_charge</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdmolops</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_out_mol2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.mol2&quot;</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">amber_bindir</span> <span class="o">+</span> <span class="s2">&quot;/antechamber&quot;</span><span class="p">]</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_mol2_file</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-fi&quot;</span><span class="p">,</span> <span class="s2">&quot;mol2&quot;</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_out_mol2</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-fo&quot;</span><span class="p">,</span> <span class="s2">&quot;mol2&quot;</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;bcc&quot;</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-nc&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">net_charge</span><span class="p">)])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;execution of parmchk2 not successful for: &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="amber2gromos.parmchk"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.parmchk">[docs]</a>    <span class="k">def</span> <span class="nf">parmchk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        executes the ambertools program parmchk</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span> <span class="o">=</span> <span class="s2">&quot;parmchk_tmp&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmchk_out_frcmod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.frcmod&quot;</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">amber_bindir</span> <span class="o">+</span> <span class="s2">&quot;/parmchk2&quot;</span><span class="p">]</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_out_mol2</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;mol2&quot;</span><span class="p">])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmchk_out_frcmod</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;execution of parmchk2 not successful for: &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="amber2gromos.tleap"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.tleap">[docs]</a>    <span class="k">def</span> <span class="nf">tleap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        executes the ambertools program tleap</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span> <span class="o">=</span> <span class="s2">&quot;tleap_tmp&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span><span class="p">)</span>
+
+        <span class="n">cmd_file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.cmd&quot;</span>
+        <span class="n">cmd_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">cmd_file_name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prm_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.leap.prm&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crd_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.leap.crd&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.leap.pdb&quot;</span>
+
+        <span class="k">for</span> <span class="n">leaprc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">leaprc_files</span><span class="p">:</span>
+            <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;source &quot;</span> <span class="o">+</span> <span class="n">leaprc</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">frcmod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">frcmod_files</span><span class="p">:</span>
+            <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;loadamberparams &quot;</span> <span class="o">+</span> <span class="n">frcmod</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;set default pbradii mbondi</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;set default nocenter on</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;frcmod_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot; = loadamberparams &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmchk_out_frcmod</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot; = loadmol2 &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">antechamber_out_mol2</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvate</span><span class="p">:</span>
+            <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;solvateBox &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">+</span> <span class="s2">&quot; 14 0.75</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prm_file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prm_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">+</span> <span class="s2">&quot;.prm&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">crd_file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crd_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">+</span> <span class="s2">&quot;.crd&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pdb_file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pdb_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">+</span> <span class="s2">&quot;.pdb&quot;</span>
+
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;saveamberparm &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">prm_file</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">crd_file</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;savepdb &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb_file</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;quit</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cmd_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Forcefield</span><span class="o">.</span><span class="n">amber_bindir</span> <span class="o">+</span> <span class="s2">&quot;/tleap&quot;</span><span class="p">]</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">cmd_file_name</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;execution of parmchk2 not successful for: &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="amber2gromos.amber2gromos"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.amber2gromos">[docs]</a>    <span class="k">def</span> <span class="nf">amber2gromos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        converts an AMBER (GAFF) parameter and crd file to a GROMOS top and cnf file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">+</span> <span class="s2">&quot;.top&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.top&quot;</span>
+        <span class="n">spc_template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">topology_templates</span><span class="o">.</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/spc.top&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">amber2gromos</span><span class="p">(</span><span class="n">ambertop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prm_file</span><span class="p">,</span> <span class="n">solvent</span><span class="o">=</span><span class="n">spc_template</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;converted topology saved to &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span><span class="p">)</span>
+
+        <span class="n">pdb2g96_lib</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/pdb2g96.lib&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solventbox</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol2_name</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">pdb2gromos</span><span class="p">(</span>
+            <span class="n">in_top_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span><span class="p">,</span>
+            <span class="n">in_pdb_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pdb_file</span><span class="p">,</span>
+            <span class="n">in_lib_path</span><span class="o">=</span><span class="n">pdb2g96_lib</span><span class="p">,</span>
+            <span class="n">out_cnf_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvate</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crd_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">last_line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">last_line</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">last_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.1</span>  <span class="c1"># x-coordinate in nm</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">last_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.1</span>  <span class="c1"># y-coordinate in nm</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">last_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.1</span>  <span class="c1"># z-coordinate in nm</span>
+
+            <span class="n">a1</span> <span class="o">=</span> <span class="n">last_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># box angle</span>
+            <span class="n">a2</span> <span class="o">=</span> <span class="n">last_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># box angle</span>
+            <span class="n">a3</span> <span class="o">=</span> <span class="n">last_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># box angle</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span><span class="p">,</span> <span class="s2">&quot;tmp_cnf&quot;</span><span class="p">)</span>
+            <span class="n">file_out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">file_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;tmp_cnf&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file_in</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;GENBOX&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;GENBOX</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;    1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                        <span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a2</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;    0.000000000    0.000000000    0.000000000</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;    0.000000000    0.000000000    0.000000000</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END&quot;</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+            <span class="n">file_in</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;tmp_cnf&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;converted coordinates saved to &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="amber2gromos.get_gromos_topology"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.get_gromos_topology">[docs]</a>    <span class="k">def</span> <span class="nf">get_gromos_topology</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            returns the path to the converted GROMOS topology</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromos_topology</span></div>
+
+<div class="viewcode-block" id="amber2gromos.get_gromos_coordinate_file"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.get_gromos_coordinate_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_gromos_coordinate_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            returns the path to the converted GROMOS coordinate file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromos_coordinate_file</span></div>
+
+<div class="viewcode-block" id="amber2gromos.cleanup"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.amber.html#pygromos.files.forcefield.amber.amberff.amber2gromos.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        removes temporary parmchk, antechamber, and tleap directories</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tleap_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">antechamber_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parmchk_dir</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

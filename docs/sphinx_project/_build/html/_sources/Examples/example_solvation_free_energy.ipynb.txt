@@ -1,0 +1,258 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "72f1ce38-58d7-4a3b-9d3a-dce74d35aa63",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "# Calculation of Self Solvation Free Energy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "75236443-70b8-4449-80b2-25860d238d7f",
+   "metadata": {},
+   "source": [
+    "## Do Imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "94d48e51-6f17-4dec-ac58-a9fc8e5f43f8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "from rdkit import Chem\n",
+    "import pygromos\n",
+    "from pygromos.files.forcefield.openff.openff import OpenFF\n",
+    "from pygromos.files.gromos_system.gromos_system import Gromos_System\n",
+    "from pygromos.simulations.approaches.solvation_free_energy_calculation.solvation_free_energy import Solvation_free_energy_calculation\n",
+    "from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "052c5ab1-b4e7-4b35-bff8-7b59ed59208b",
+   "metadata": {},
+   "source": [
+    "## Choose Molecule to run calculation for"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5df95e95-01e7-4092-85e3-e3cf1323981b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "smiles = \"c1ccccc1\"\n",
+    "workfolder = project_dir = os.path.abspath(\"example_files/solvation_free_energy\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ba09b82b-1c1f-48ef-be77-0b0f91d126ed",
+   "metadata": {},
+   "source": [
+    "### create the gromos_system from a smile and get the number of atoms"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ca203374",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "groSys = Gromos_System(work_folder=workfolder, system_name=\"test\", in_smiles=smiles, forcefield=OpenFF(), auto_convert=True)\n",
+    "number_of_atoms = groSys.mol.GetNumAtoms()\n",
+    "print(\"Number of atoms:\", number_of_atoms)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a5122674",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "subSys = LOCAL() # use the local submission system (for cluster use LSF)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8895b4c7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "n_points = 5 # Number of Lambda points to calculate (typically 21)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b6e2e24b-e946-4e3d-8d26-73a4406ed3b3",
+   "metadata": {},
+   "source": [
+    "## Create The Solvation free energy calculation system"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4d40ad51-654a-4594-b4a3-2133a369abe3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sf = Solvation_free_energy_calculation(input_system=groSys, # Gromos_System, SMILES (str) or rdkit Mol\n",
+    "                                       work_folder=workfolder, # Folder to do calculations in\n",
+    "                                       system_name=\"test\", # Name of the system (does not need to be smiles but convenient)\n",
+    "                                       forcefield=OpenFF(), # Force field to use\n",
+    "                                       density=789, # density of the liquid in kg/L\n",
+    "                                       num_molecules=512, # number of molecules used for the calculation\n",
+    "                                       num_atoms=number_of_atoms, # number of atoms in one molecule\n",
+    "                                       subsystem=subSys, # Subsystem to use for calculation local or lsf\n",
+    "                                       amberscaling=False, # Whether to use amberscaling (for openforcefield recommended)\n",
+    "                                       n_points=n_points) # Number of Lambda points to calculate (typically 21)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b2f60e6e-ddd6-4083-94c7-34b34703e3ab",
+   "metadata": {},
+   "source": [
+    "### Create Liquid"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "014136a1-8d0b-435c-b7d9-65c53e93d6b6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sf.create_liq()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5837a049-0596-46bd-89f6-5b48e32abb0b",
+   "metadata": {},
+   "source": [
+    "### Minimize Liquid"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d2e42771-a59f-4cc8-a8fe-cfcd4594bf2a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_sys, jobID = sf.minimize_liq(in_gromos_simulation_system=sf.groSys_liq,prev_JobID=-1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "00828090-cfe4-4a5f-95b8-e95888601c00",
+   "metadata": {},
+   "source": [
+    "### Change the number of cores for longer runs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fa47f5ce-5bcb-4ead-8dfe-1e8daeac6ce7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sf.subsystem.nomp = 6"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8378b895-17f6-4afa-bb4f-4b970d6ee7fe",
+   "metadata": {},
+   "source": [
+    "## Equilibrate System"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "44e50e70-93fb-4010-bc6f-81cdbce7bbd4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "eq_sys, jobID = sf.eq_liq(in_gromos_simulation_system=emin_sys,prev_JobID=jobID)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2b48e02f-7e66-4d16-bb7c-05248b4ba7dc",
+   "metadata": {},
+   "source": [
+    "## Do TI calculation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "99c54250-dabe-48fa-a26f-966516569bca",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ti_sys, jobID = sf.ti_liq(in_gromos_simulation_system=eq_sys,\n",
+    "                          prev_JobID=jobID,\n",
+    "                          n_points=n_points)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ac9fc432-63ff-476a-aeb4-b1fe028873e8",
+   "metadata": {},
+   "source": [
+    "## Read out results"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0ae0200b-7c7f-4a74-94e5-b7801f31b6ba",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sf.calculate_solvation_free_energy(n_points=n_points)"
+   ]
+  }
+ ],
+ "metadata": {
+  "interpreter": {
+   "hash": "b1b7b2ea43b8e767316eee98e01335d045804d2d47db68b6a5827e187ee91a7e"
+  },
+  "kernelspec": {
+   "display_name": "Python 3.9.7 ('pygro2')",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

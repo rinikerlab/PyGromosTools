@@ -1,0 +1,2014 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "# Gromos Tutorial\n",
+    "This tutorial will provide a quick introduction to how to setup, perform and analyze a MD simulation of a peptide in Gromos.\n",
+    "\n",
+    "First we will generated the required input files, afterwards the simulation will be prepared with energy minimizations and equilibration.\n",
+    "Finally a short MD simulation will be executed and quickly analyzed.\n",
+    "\n",
+    "But first some minor definitions will be prepared."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "# Check if the path to this pacakge is set, else try to add it.\n",
+    "try:\n",
+    "    import pygromos\n",
+    "except:\n",
+    "    import os, sys, copy\n",
+    "    root_dir = os.getcwd()\n",
+    "    sys.path.append(root_dir+\"/..\")\n",
+    "\n",
+    "    #if package is not installed and path not set correct - this helps you out :)\n",
+    "    import pygromos\n",
+    "\n",
+    "from pygromos.utils import bash\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#General path definitions:\n",
+    "## Project dir - The project dir will contain  all files and results generated from this notebook. \n",
+    "project_dir = os.path.abspath(\"example_files/Tutorial_System\")\n",
+    "input_dir = project_dir+\"/input\" # contains prepared files (pdb of the peptide)\n",
+    "\n",
+    "## Gromos Bin Path\n",
+    "gromosXX_bin = None\n",
+    "gromosPP_bin = None #None uses the Path variable - can be used . if you require a specific compiled gromos version, add a path here.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Build the input files\n",
+    "When a simulation study of a particular system or process is to be carried out, a number of choices have to\n",
+    "be made with respect to the set-up of the simulation. \n",
+    "\n",
+    "In PyGromosTools, the central hub to manage all these files is a GromosSystem object. Each file can be stored or generated with this object and it can be used to construct the system, that should be simulated.\n",
+    "\n",
+    "\n",
+    "The essential files of a Simulation are:\n",
+    "* a topology file, containing all the topological and force-field information of the molecular system to be studied.\n",
+    "* a coordinate file, representing the system of interest.\n",
+    "* a simulation parameter file, telling the simulation engine, which simulation technique should be used and which physical parameters should be set.\n",
+    "  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.gromos_system import Gromos_System\n",
+    "\n",
+    "# Build Gromos System object\n",
+    "build_system = Gromos_System(work_folder=project_dir, system_name='peptide')\n",
+    "\n",
+    "#set file building folder\n",
+    "build_system.work_folder = bash.make_folder(project_dir+\"/a_build_initial_files\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Expert Tip**:\n",
+    "Whenever you wonder about what a class or a function in our package does, you can use the standard help function of Python to get the information of the Docstring of the source code! This often helps understanding the code."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(build_system)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### The Topology File\n",
+    "The first task is to generate a molecular topology file containing the topological and force-field data concerning the molecular system under consideration. Specifying a complete molecular topology for a large molecule, however, is a tedious task.\n",
+    "Therefore, in GROMOS a molecular topology is generated from molecular topology building blocks which carry the topological\n",
+    "information of molecules like amino acid residues, nucleotides, etc., see Vol. 3. The molecular topology building blocks can be linked together into a complete molecular topology file using the GROMOS++ program *make_top*.\n",
+    "\n",
+    "Many molecular topology building blocks are available in the molecular topology building block files (*\\*.mtb*), which are standard data files that come together with the GROMOS package. \n",
+    "\n",
+    "\n",
+    "In case the needed molecular topology building blocks are not part of the standard distribution, they must be constructed. \n",
+    "Constructing a new topology building block may require estimation of additional force-field parameters, which have to be added to the interaction function parameter file (*\\*.ifp*).\n",
+    " \n",
+    "When generating a molecular topology for the system of interest one should also address the protonation state of the molecular groups according to the pH and of the solvent and counter ions that need to be included in the simulation box. \n",
+    "In case of a molecular complex, e.g. a DNA-protein complex, the two separately generated molecular topologies for the protein and the DNA can be merged using the GROMOS++ program com top.\n",
+    "\n",
+    "\n",
+    "\n",
+    "#### Building the Topology File\n",
+    "In this section you should build a molecular topology of a linear charged penta-peptide with water as a solvent, including two Cl− counter ions.\n",
+    "\n",
+    "**programs: make_top, check_top**\n",
+    "\n",
+    "##### build topology for single molecule\n",
+    "You will build the molecular topology file of the linear charged penta-peptide Val-Tyr-Arg-Lys-Gln by\n",
+    "using the GROMOS++ program *make_top*. As input following parameters will be provided:\n",
+    "* **in_building_block_lib_path**: the molecular topology building block file is specified. In the code below, you will see, that we gather the forcefield information from the *Gromos54A7* force field, which is directly provided by PyGromosTools\n",
+    "* **in_parameter_lib_path**: specifies the interaction function parameter file. Also here we take the parameters directly from the *Gromos54A7* forcefield from PyGromosTools.\n",
+    "* **in_solvent**: The string name of the desired solvent.\n",
+    "* **in_sequence**: the sequence of the building blocks for the amino acid residues, including the amino and carboxy terminus\n",
+    "is specified (*NH3+ VAL TYR ARG LYSH GLN COO-*). (Notice that both termini are charged)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.ff import Gromos54A7 #Get standard information of the GROMOS54A7 force field.\n",
+    "\n",
+    "#Generate the topology\n",
+    "build_system.make_top(in_sequence=\"NH3+ VAL TYR ARG LYSH GLN COO-\",\n",
+    "                     in_solvent=\"H2O\",\n",
+    "                     in_building_block_lib_path = Gromos54A7.mtb,\n",
+    "                     in_parameter_lib_path= Gromos54A7.ifp)\n",
+    "\n",
+    "#Here the residues in the topology file will be printed out :)  - this corresponds to the RESNAME Block in the topology file:\n",
+    "build_system.top.RESNAME"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### The Coordinate File\n",
+    "Coordinates for biomolecules are often available from X-ray or NMR experiments and can be obtained in\n",
+    "*Protein Data Bank* (*PDB*) format, which can be converted to *GROMOS* format using the GROMOS++\n",
+    "program *pdb2g96*. However, the conversion is not always straightforward since the naming and numbering\n",
+    "of the atoms in the *PDB* format usually do not match the *GROMOS* format. \n",
+    "\n",
+    "Moreover, the coordinates for hydrogen atoms are not present in the *PDB* files \n",
+    "(when the structure was determined using X-ray diffraction data) and have to be generated using the GROMOS++ program *gch*.\n",
+    "\n",
+    "When the structure is determined using NMR data, the PDB structure often contains more hydrogen atoms than are needed for GROMOS,\n",
+    "as in the GROMOS force field only polar and aromatic hydrogens are explicitly represented. Aliphatic\n",
+    "hydrogens are non-existing due to the use of so-called united atoms. The aliphatic hydrogen and carbon\n",
+    "atoms are merged to form united atoms which have their own parameters. If no atomic coordinates for the\n",
+    "solute are available from experimental data, the coordinates have to be generated using molecular modeling\n",
+    "software. Often parts of the structure (e.g. flexible loops) are not resolved in the experiment and therefore\n",
+    "not available in the PDB and have to be modeled as well. \n",
+    "\n",
+    "#### Periodic Boxes\n",
+    "When a simulation of a solute in solution is to be carried out, a (periodic) box (be it rectangular, triclinic or truncated octahedral) is put around the solute\n",
+    "and filled with solvent molecules up to the required density. The solvent coordinates can e.g. be generated using the GROMOS++ program sim box. The generated box should be sufficiently large to allow the use of a reasonable non-bonded interaction cut-off radius. Putting the solute in a box of solvent using the *sim_box* program will result in several high-energy atom-atom contacts at the solute-solvent interface and at the box edges. In order to relax the generated configuration the solvent configuration should be energy minimized while positionally restraining the solute. Counter-ion atomic coordinates can then be generated using the GROMOS++ program *ion*, which can replace a number of solvent molecules by ions.\n",
+    "\n",
+    "**programs: pdb2g96, gch**\n",
+    "\n",
+    "\n",
+    "#### Building the Coordinate File\n",
+    "The initial coordinate *.pdb* file is already provided in the *input* directory as *peptide.pdb*. \n",
+    "Open the file *peptide.pdb* and check if the atom names match the names in the molecular topology object **SOLUTEATOM** block.\n",
+    "In the pdb file *peptide.pdb* the coordinates for hydrogen atoms are not given and have to be generated.\n",
+    "If the atom names are correct, you can continue in the second next cell by converting the *PDB* file *peptide.pdb* into the GROMOS format using the GROMOS++ program *pdb2g96*.\n",
+    "The hydrogen atoms will be added to the coordinate file according to the topological requirements.\n",
+    "\n",
+    "***\n",
+    "**Warning**: When converting coordinate files from the Protein Data Bank to GROMOS format many difficulties may emerge. If you encounter problems using the pdb2g96 program, have a look at Sec. 4-7.3. There you can find further documentation on the advanced usage of this program. Especially the use of a library\n",
+    "that matches residue and atom names might be useful in many cases. pdb2g96.lib which you can find in the directory is an example of the PDB library file.\n",
+    "***\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Compare the atom names of the pdb file input/peptide.pdb with the printed ones here:\n",
+    "build_system.top.SOLUTEATOM"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Generate coordinate file:\n",
+    "build_system.pdb2gromos(in_pdb_path=input_dir+\"/peptide.pdb\")\n",
+    "\n",
+    "#show the coordinates that were generated.\n",
+    "build_system.cnf.view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### Initial Write out\n",
+    " Next we will write out all generated files, such we have the initial products of our efforts."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Now write all files, such that you can check them directly.\n",
+    "print(\"Path before rebase: \"+str(build_system.cnf.path))\n",
+    "build_system.rebase_files()\n",
+    "\n",
+    "#check this \n",
+    "print(\"Path after rebase: \"+build_system.cnf.path)\n",
+    "\n",
+    "#Check also how the system path and attributes were automatically updated.\n",
+    "build_system\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "#### add hydrogens\n",
+    "Have a look at the cnf coordinates in the GromosSystem (next cell). You will notice that the hydrogen atoms have been added\n",
+    "to the coordinate file with the Cartesian coordinates being set to zero. \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#print x lines of the Position Block of valine\n",
+    "print(\"\".join([str(atomP) for atomP in build_system.cnf.POSITION if(\"VAL\" == atomP.resName)]))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\n",
+    "In order to generate meaningful coordinates for the hydrogen atoms run the GROMOS++ program *protonate* (or gch). It will generate the coordinates\n",
+    "for hydrogen atoms by geometric means using the information from the molecular topology file.\n",
+    "The argument *tolerance* sets the tolerance that is used for keeping the coordinates of hydrogens that are already present in the coordinate file.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Add the hydrogen positions\n",
+    "build_system.add_hydrogens()\n",
+    "\n",
+    "#store the current files with a different name:\n",
+    "build_system.name = \"peptideH\"\n",
+    "build_system.rebase_files()\n",
+    "\n",
+    "#visualize again the nice structure\n",
+    "build_system.cnf.view\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Optional: Convert cnf to pdb\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pdb_path = build_system.cnf.write_pdb(build_system.work_folder+\"/vacuum_hpeptide.pdb\")\n",
+    "pdb_path"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Energy Minimization - Vacuum\n",
+    "\n",
+    "Before putting the penta-peptide into a box of solvent, its configuration can be relaxed by energy minimisation.\n",
+    "\n",
+    "#### Simulation Parameter File\n",
+    "The GROMOS simulation parameter file (also called imd) template_emin_vac can be parsed like follows and contains the following blocks:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.simulation_parameters_templates import  template_emin_vac\n",
+    "\n",
+    "#load simulation parameter file (Imd) File\n",
+    "build_system.imd = template_emin_vac\n",
+    "\n",
+    "#for nicer code we will store the simulation parameter file in a variable.\n",
+    "emin_vac_imd_file = build_system.imd\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### TITLE Block\n",
+    "In the TITLE block you specify what is done with following input file, so you know what you did with it later and can easily reuse it."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.TITLE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### ENERGYMIN Block\n",
+    "\n",
+    "The existence of the ENERGYMIN block means that Gromos will perform an energy minimisation\n",
+    "(EM) run. The NTEM switch indicates which minimisation algorithm to be used. With NTEM = 1 we indicate\n",
+    "that the steepest-descent algorithm (Sec. 2-11.2) is used. NCYC gives the number of steps before resetting of\n",
+    "conjugate-gradient search direction in case we would use the conjugate gradient method (NTEM = 2). Using\n",
+    "DELE the energy threshold (the difference in energy between two energy minimisation steps) for stopping the\n",
+    "minimisation process (convergence) is specified. The initial step size and maximum step size is given in DX0\n",
+    "and DXM, respectively. Using FLIM the absolute value of the forces can be limited to a maximum value before\n",
+    "the algorithm is applied (see also 4-93)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.ENERGYMIN)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# The current ENERGYMIN Block\n",
+    "emin_vac_imd_file.ENERGYMIN"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### SYSTEM Block\n",
+    "In the SYSTEM block you specify the number of solutes (NPM) and solvent (NSM) molecules. You only have\n",
+    "one solute NPM = 1 and no solvent molecules NSM = 0 because you still did not add any solvent molecules\n",
+    "to the configuration file and the peptide is still in vacuum. Otherwise you would have to tell MD++ how\n",
+    "many solvent molecules you are using."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.SYSTEM)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.SYSTEM\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### STEP Block\n",
+    "\n",
+    "The step block takes core of how long and with "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.STEP)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.STEP"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the BOUNDCOND block you specify which periodic boundary conditions (PBC) you are going to use in the\n",
+    "EM procedure. NTB = 0 defines a vacuum simulation: PBC are not applied. To indicate the truncated\n",
+    "octahedron (t) PBC, NTB is set to -1, for rectangular (r) PBC NTB is 1, and for the triclinic (c) PBC NTB is\n",
+    "2. NDFMIN defines the number of degrees of freedom subtracted from the total number of degrees of freedom\n",
+    "for the calculation of the temperature.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.BOUNDCOND)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.BOUNDCOND"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "With the PRINTOUT block you can specify how often (every NTPRth step) you are printing out the energies\n",
+    "to the output file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.PRINTOUT)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.PRINTOUT"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Bonds vibrate at high frequencies (hν ≫ kBT ). Therefore, these vibrations are of quantum-mechanical\n",
+    "nature. So constraining the bond lengths is a better approximation than treating them as classical harmonic\n",
+    "oscillators. Constraining all bond lengths of the solute and solvent (NTC=3) allows the use of a rather large\n",
+    "time step of 2 fs. In this example the constraints are imposed by the SHAKE algorithm for both solute\n",
+    "(NTCP=1) and solvent (NTCS=1) with a tolerance of 0.0001. See 4-90 for more information."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.CONSTRAINT)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.CONSTRAINT"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the FORCE block you tell MD++ which terms it should use for the energy and force calculation. For bond\n",
+    "angles, improper dihedrals, torsional dihedrals and the non-bonded interactions the standard terms of the\n",
+    "GROMOS force field are switched on (1). Because we are using bond-length constraints and the SHAKE\n",
+    "algorithm, we have to switch off (0) the bond-stretching terms for the bonds involving hydrogen atoms and\n",
+    "not involving hydrogen atoms..\n",
+    "In the last line of this block, the energy groups are defined. In general, we define one or more energy\n",
+    "groups for every molecule, and one comprising all the solvent molecules. The first integer is the number of\n",
+    "energy groups we want to use (in the present case we only have one energy group). The following numbers\n",
+    "are the atom sequence numbers of the last atom of each energy group. By defining these energy groups we\n",
+    "7-9\n",
+    "tell MD++ to sum up the energies between the atoms within these groups and calculate the inter-group\n",
+    "energies, which can be very useful."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.FORCE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the PAIRLIST block you specify which algorithm you will use for the pairlist generation. The cut-off used\n",
+    "in the short-range pairlist construction is given by RCUTP and for GROMOS it is usually 0.8 nm. The cut-off\n",
+    "used in the long-range interactions is given by RCUTL and for GROMOS it is usually 1.4 nm. The pairlist is\n",
+    "generated every 5th (NSNB) step. TYPE specifies the type of the cut-off, whether it is based on the distance\n",
+    "between charge-groups (0) or on the distance between atoms (1).\n",
+    "\n",
+    "***\n",
+    "**Warning**: Think very carefully about the definition of energy groups before running the simulation. Energies\n",
+    "of energy groups can not be calculated from the trajectories in an efficient way. So, changing an energy-group\n",
+    "definition will result in rerunning the simulation.\n",
+    "***\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.PAIRLIST)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.PAIRLIST"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the NONBONDED block you specify using NLRELE which method for the evaluation of long-range electrostatic\n",
+    "interactions is used. Since you will use the reaction-field method, the value of NLRELE should be equal to\n",
+    "1. The long-range electrostatic interactions are truncated beyond a certain cutoff (RCUTL in the PAIRLIST\n",
+    "block). Beyond the reaction-field cut-off radius (RCRF) the electrostatic interactions are replaced by a static\n",
+    "reaction field with a dielectric permittivity of EPSRF. RCRF and RCUTL should be identical. Because we are\n",
+    "doing the energy minimisation in vacuo EPSRF is set to 1. With NSLFEXCL equal to 1, you include the\n",
+    "contributions of excluded atoms to the electrostatic energy. The ionic strength of the continuum is set to 0\n",
+    "(APPAK). All other switches are not used for the reaction-field method. See 4-98 for more information.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(emin_vac_imd_file.NONBONDED)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "emin_vac_imd_file.NONBONDED"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Perform Emin\n",
+    "In order to run the MD++ program, a shell script needs to be prepared. Open the shell script em peptide.\n",
+    "run and adapt the paths and the names of the files according to your system.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.simulations.modules.preset_simulation_modules import emin\n",
+    "\n",
+    "out_prefix = \"emin_vacuum\"\n",
+    "\n",
+    "## Preparing emin gromos system\n",
+    "in_emin_system = build_system.copy()\n",
+    "in_emin_system.work_folder = project_dir\n",
+    "in_emin_system._gromosXX_bin_dir = gromosXX_bin\n",
+    "in_emin_system.imd = emin_vac_imd_file # This step is not necessary, as we did this before\n",
+    "\n",
+    "from pygromos.files.blocks.imd_blocks import WRITETRAJ\n",
+    "in_emin_system.imd.add_block(block=WRITETRAJ(NTWE=25, NTWX=25))\n",
+    "\n",
+    "in_emin_system.prepare_for_simulation()\n",
+    "\n",
+    "in_emin_system"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_emin_system = emin(in_gromos_system=in_emin_system,\n",
+    "                       step_name=\"b_\"+out_prefix)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Analysis \n",
+    "Once the energy minimisation is finished, the file with the minimized coordinates, peptide min.cnf, and the general output file, em peptide.omd, that reports the progress of the minimisation, will be written out.\n",
+    "Have a look at both files and check if the minimisation has finished successfully. \n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_emin_system.cnf.view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This is nice, but how do we actually get to this structure! In the next cell the development of the total Potential  energy over the energyminimization steps is shown. As you can see, the Potential energy of the whole system is decreasing, which indicates a relaxatio of the peptide structure and an optimization of the different forcefield terms. Ergo finding a minimal total potential system energy as possible is desirable in energyminimizations."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_emin_system.tre.get_totals().totene.plot(xlabel=\"steps\", ylabel=\"$V_{tot}~[kJ/mol]$\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The effect seend in the total potential energy can also be observed of course in the peptide molecue coordinats."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "view = out_emin_system.trc.view\n",
+    "view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally we wan to store our energy minimization results as a python pickle obj."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_emin_system_path = out_emin_system.save(out_emin_system.work_folder+\"/emin_vac_result.obj\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#if you want to load the file:\n",
+    "#out_emin_system = Gromos_System.load(out_emin_system.work_folder+\"/emin_vac_result.obj\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Solvatistation and Solvent Energy Minimization\n",
+    "\n",
+    "Now you can put the energy minimized penta-peptide in a box of solvent to simulate an aequos environment. This can be done with the *sim_box* function of the gromosSyste, which can solvate the solute in a pre-equilibrated box of solvent molecules. As input for the function *sim_box* you have to specify the following input arguments:\n",
+    "* **periodic_boundary_condition**: the resulting box shape under the argument (r - rectangular, t - truncated octahedron, c - triclinic)\n",
+    "* **in_solvent_cnf_file_path**: the coordinate file of the pre-equilibrated box of solvent molecules under the argument (we are using a template $H_2O$ of the SPC model provided in pygromos.data.solvent_coordinates)\n",
+    "* **minwall**: minimum solute-to-wall distance in $nm$\n",
+    "* **threshold**: the minimum solute-to-solvent distance ins $nm$\n",
+    "* **rotate**: If you are using a rectangular box (@pbc r) it is recommended to use an additional argument. With this additional argument the solute can be rotated (before solvating) such that the largest distance between any two solute atoms is directed along the z-axis, and the largest atom-atom distance in the xy-plane lies in the y-direction. An input file sim box peptide.arg is already prepared. \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(out_emin_system.sim_box)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "vars(out_emin_system.trc).keys()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### build box system\n",
+    "To put the solvent box around the penta-peptide use following commands:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.solvent_coordinates import spc\n",
+    "\n",
+    "#setup a fresh gromos System:\n",
+    "box_system = out_emin_system.copy()\n",
+    "#box_system = gromos_system.Gromos_System.load(out_emin_system_path) #if you do this step after a break, you could also decide to load the serialized obj from before.\n",
+    "\n",
+    "box_system.imd = None\n",
+    "box_system.name = \"solvate_box\"\n",
+    "box_system.work_folder = bash.make_folder(project_dir+\"/c_\"+box_system.name)\n",
+    "\n",
+    "\n",
+    "## set box and solvate the system\n",
+    "box_system.cnf.add_empty_box()\n",
+    "box_system.sim_box(in_solvent_cnf_file_path=spc,\n",
+    "                 periodic_boundary_condition=\"r\",\n",
+    "                 minwall=0.8,\n",
+    "                 threshold=0.23,\n",
+    "                 rotate=False)\n",
+    "\n",
+    "#box_system.cnf\n",
+    "box_system.rebase_files() #write out the files (optional) - so you can check them in the folder\n",
+    "box_system.cnf.view #show the results"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "### Add Ions\n",
+    "After solvating the system, two $Cl-$ ions shall be added to the box as counter charges for the two positive peptide residues (Arginine and Lysine).\n",
+    "\n",
+    "To add the ions, we need to know the name of the building block in Gromos54A7. We can checkout the names of the Atomtype names in the topology of our system: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print([ a for a in box_system.top.ATOMTYPENAME])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "After finding the atomtype name (hint: 'CL-'), we next can use it to add two of these ions to our system with the ion function."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(box_system.ion)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.solvent_coordinates import spc\n",
+    "\n",
+    "## Build directory and setup a fresh Gromos System\n",
+    "ion_system = box_system.copy() \n",
+    "ion_system.name = \"ion\"\n",
+    "ion_system.work_folder = bash.make_folder(project_dir+\"/d_\"+ion_system.name)\n",
+    "\n",
+    "#Add the ions to the System\n",
+    "ion_system.ion(negative=[2, \"CL-\"])\n",
+    "\n",
+    "\n",
+    "ion_system.rebase_files()   #write out the files, so you can check them (optional)\n",
+    "ion_system.cnf.view  #show the results."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "### Energy Minimization BOX\n",
+    "\n",
+    "In order to relax the unfavorable atom-atom contacts between the solute and the solvent, energy minimization of the solvent should be performed while keeping the solute positionally restrained (i.e. connecting the atom to a reference position by a spring). In order to do that two additional files, in which the positionally restrained atoms and the reference coordinates are specified, have to be generated from the coordinate file in our gromos system. Afterwards, we are going to run the second energy minimization"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### build posistion restraints\n",
+    "To apply position restraints to our simulation for the peptide, we first need to generate a selection of residues, that shall not be modified by the energyminimization. This translates to the residues of the peptide. After this the function generate_posres can be used to generate two files.\n",
+    "* **position restraints - posres(.por)**\n",
+    "    This file defines the selection of atoms, that shall be restrained during the simulation.\n",
+    "* **reference position - refpos (.rpf)**\n",
+    "    This files defines a reference position for the system. Gromos will restrain the selected atoms in the posres file to the reference position file. So if the atom position during the simulation deviates from the refpos file, the program will restrain the atom, such it moves towards the reference position.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "from pygromos.simulations.modules.preset_simulation_modules import emin\n",
+    "from pygromos.data.simulation_parameters_templates import template_emin\n",
+    "\n",
+    "# Preparing emin gromos system\n",
+    "in_eminBox_system = ion_system.copy()\n",
+    "in_eminBox_system.name = \"emin_solvBox\"\n",
+    "in_eminBox_system.work_folder = project_dir\n",
+    "\n",
+    "# Build position restraints\n",
+    "## Build selection for residues\n",
+    "restrain_res = [k for k in in_eminBox_system.cnf.residues if(not k in (\"CL-\", \"SOLV\"))]\n",
+    "print(\"Selection of residues: \", restrain_res)\n",
+    "## Build the restrain files\n",
+    "in_eminBox_system.generate_posres(residues=restrain_res)\n",
+    "\n",
+    "# Check simulation params\n",
+    "in_eminBox_system.imd = template_emin   #Here we use template simulation parameters, The blocks are the same as above in the vacuum case with slight deviations.\n",
+    "in_eminBox_system.imd.INITIALISE.NTISHI = 1\n",
+    "\n",
+    "in_eminBox_system.prepare_for_simulation()\n",
+    "\n",
+    "in_eminBox_system"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the ouptut of the in_eminBox_system two new files appeared the posres and refpos file:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(in_eminBox_system.posres)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "in_eminBox_system.refpos "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Perform Emin\n",
+    "Now we will perform the solvent box energy minimization with the restrained peptide."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# run emin\n",
+    "out_eminBox_system = emin(in_gromos_system=in_eminBox_system, \n",
+    "                          step_name=\"e_\"+in_eminBox_system.name)\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Whoops what happened here? What you see is the effect of the periodic box and the  peptide placed directly at the corners of the box. \n",
+    "This is absolutely ok and there is nothing to worry about. We can recenter the peptide and then we see the expected same configuration like from the vacuum emin."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#show resulting coordinates\n",
+    "view = out_eminBox_system.cnf.view\n",
+    "view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now lets fix that!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#out_eminBox_system.cnf.recenter_pbc()\n",
+    "\n",
+    "out_eminBox_system.cnf.recreate_view()\n",
+    "recentered_view = out_eminBox_system.cnf.view\n",
+    "recentered_view"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_eminBox_system_path = out_eminBox_system.save(out_eminBox_system.work_folder+\"/emin_box_result.obj\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Thermalisation and equilibration.\n",
+    "\n",
+    "In the previous steps you have generated a topology and initial coordinates of your system. At this point,\n",
+    "you have to generate initial velocities. In the process of thermalisation and equilibration, initial velocities\n",
+    "are sampled from a Maxwell-Boltzmann distribution at a low temperature and the system is slowly heated\n",
+    "up to the final production simulation temperature. The atoms of the solute are again positionally restrained and\n",
+    "these restraints are loosened while heating up. With the help of these restraints you make sure that the\n",
+    "random initial velocities do not disrupt the initial conformation too much.\n",
+    "\n",
+    "### Simulation Paramters\n",
+    "To performe the described equilibration we require additional Simulation Parameter blocks that will be described in the following. First we will load a simulation parameter template for MD simulations."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.simulation_parameters_templates import template_md_tut as template_md\n",
+    "from pygromos.files.simulation_parameters import imd\n",
+    "\n",
+    "\n",
+    "md_imd_file = imd.Imd(template_md) #in_eq_system.imd\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Initialise Block\n",
+    "In the INITIALISE block the NTIVEL tells GROMOS whether it should generate the initial velocities or\n",
+    "read them from the configuration file. NTISHK is used to restore bond length constraints (SHAKE). NTINHT\n",
+    "and NTINHB are only used for Nose-Hoover thermo- and barostats and can be ignored in our case. Every\n",
+    "time an atom is leaving the periodic box and entering it from the opposite site this incident is recorded in\n",
+    "the so-called lattice shift vectors. Using NTISHI we want to make sure that these vectors are initialised to\n",
+    "zero. As you don’t want to use roto-translational constraints NTIRTC can be ignored. NTICOM is used for\n",
+    "initial removal of centre of mass motion. NTISTI is used to reset the stochastic integrals used in stochastic\n",
+    "dynamics (SD) simulations. IG is the random number generator seed and TEMPI the initial temperature used\n",
+    "to generate the Maxwell-Boltzmann distribution for generation of initial velocities. See also 4-94 for more\n",
+    "information."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.INITIALISE)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And now we will check the set options in our template:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.INITIALISE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### System Block\n",
+    "In the SYSTEM block you would need to replace NSM with the number of solvent molecules in your system, but the *prepare_simulation* function takes care of that for you. \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#The last SOLV molecule can be found out like this:\n",
+    "str(out_eminBox_system.cnf.POSITION[-1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#the template currently contains these values - note NSM is 1172, which is wrong!\n",
+    "md_imd_file.SYSTEM"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### STEP Block\n",
+    "In the STEP block you specify how many steps you want to simulate (NSTLIM), at what time your simulation\n",
+    "starts (T) and how big the integration time step (DT) is. In this case you want to start at time 0 and you\n",
+    "want to carry out a 20 ps simulation, because the time unit happens to be ps."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.STEP)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.STEP"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### BOUNDCOND Block\n",
+    "As previously described, with the BOUNDCOND block you specify which PBC you will use. With NTB=1 you\n",
+    "specify rectangular PBC."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.BOUNDCOND)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.BOUNDCOND"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### MULTIBATH Block\n",
+    "\n",
+    "In our case we want to run the simulation at constant temperature. For this purpose, we have to add the\n",
+    "MULTIBATH input block (see 4-96). First we specify which algorithm we will use. In this case we will use\n",
+    "the weak-coupling scheme (ALGORITHM=0). How many temperature baths we want to couple to the system\n",
+    "is specified by NBATHS. You can specify the temperature using the TEMP0 parameter. TAUT is the coupling\n",
+    "time used in the weak-coupling method for this bath. DOFSET specifies the number of distiguishable sets\n",
+    "of degrees of freedom. LAST is pointing to the last atom for the set of degrees of freedom; thus, you put\n",
+    "the number of last atom of your system instead of LSTATM. COMBATH is the temperature bath to which we\n",
+    "want to couple the centre of mass motion of this set of degrees of freedom IRBATH is the temperature bath\n",
+    "to which the internal and rotational degrees of freedom of this set of degrees of freedom are coupled."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.MULTIBATH)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.MULTIBATH"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### COMTRANSROT Block\n",
+    "This block is needed to remove the centre of mass motion (translation and rotation). Without this block it\n",
+    "can happen that all the kinetic energy is converted to centre of mass translation (flying ice cube problem).\n",
+    "With *NSCM* we specify how often the center-of-mass (COM) motion is removed. If *NSCM* is $< 0$ translation\n",
+    "and rotation motion are removed every $|$ *NSCM* $|$ th step. If *NSCM* is $> 0$ only translation motion is removed\n",
+    "every *NSCM*th step."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.COMTRANSROT)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.COMTRANSROT"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### COVALENTFORM Block\n",
+    "This block is needed to define which functional form we will use for bond-stretching (NTBBH), bond-angle\n",
+    "bending (NTBAH) and for torsional dihedral (NTBDN). We just use the default options for all functional forms."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.COVALENTFORM)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.COVALENTFORM"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### WRITETRAJ Block\n",
+    "Gromos MD simulations produce a massive amount of data and it is impossible to store all the data it produces. The\n",
+    "WRITETRAJ block meets this demand: Here you specify how often the coordinate trajectory (*NTWX*), the\n",
+    "velocity trajectory (*NTWV*), the force trajectory (*NTWF*), the energy trajectory (*NTWE*), the free energy trajectory\n",
+    "(*NTWG*) and the block averaged energy trajectory (*NTWB*) are written out. In the present case, we are only\n",
+    "interested in the coordinates (*NTWX*) and energies (*NTWE*) and we write them every 100th step. The second\n",
+    "switch (*NTWSE*) defines selection criterion for trajectories: if NTWSE = 0 the normal coordinate trajectory will\n",
+    "be written, or if *NTWSE* $> 0$ a minimum energy trajectory will be written.\n",
+    "\n",
+    "***\n",
+    "\n",
+    "**Warning**: It makes no sense to write out configurations too often. First, it needs a lot of disk space. Second,\n",
+    "the data is highly correlated and so no additional information is gained from it\n",
+    "***"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.WRITETRAJ)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.WRITETRAJ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### PRINTOUT Block\n",
+    "This block is very similar to the *WRITETRAJ* block but the information about the energies (*NTPR*) is printed\n",
+    "to the output file (.omd). By giving *NTPP*, dihedral angle transitions are written to the special trajectory (.trs).\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.PRINTOUT)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.PRINTOUT"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### PAIRLIST Block\n",
+    "MD++ knows different algorithms for the generation of the pairlist, a list containing the atoms interacting\n",
+    "with each other. Here, we use a grid based pairlist generation: \n",
+    "the space is discretized into grid cells and only the neighboring cells are searched for interacting partners. \n",
+    "The use of this algorithm results in a\n",
+    "The pairlist is generated every 5th (*NSNB*) step. \n",
+    "*RCUTP* and *RCUTL* are the cutoffs for the pairlist construction for the short-range and the long-range interactions.\n",
+    "The pairlist is generated every 5th (*NSNB*) step. *RCUTP* and *RCUTL* are the cutoffs for the pairlist construction for\n",
+    "the short-range and the long-range interactions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "help(md_imd_file.PAIRLIST)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.PAIRLIST"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### POSITIONRES Block\n",
+    "Finally, we want to restrain the position of our solute. The restraining is achieved by a harmonic special\n",
+    "force term with a force constant of *CPOR*."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.files.blocks.imd_blocks import POSITIONRES\n",
+    "\n",
+    "help(POSITIONRES)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "md_imd_file.add_block(block=POSITIONRES(NTPOR=1, NTPORB=1, CPOR=25000))\n",
+    "\n",
+    "md_imd_file.POSITIONRES"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now you should know the main blocks of the Gromos input files.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "### Perform Thermalisation\n",
+    "Next we will run multiple simulations, which will slowly heat up the simulation system. This can easily be done by modifying parameters on the run. First we will setup a gromos system and prepare it. Next we will perform the simulations.\n",
+    "\n",
+    "***\n",
+    "**Warning**: Depending on your system’s speed this will take up to five hours. As we are using the simulation\n",
+    "directory as the working directory there will be an error message after every job which can be ignored.\n",
+    "***\n",
+    "\n",
+    "***\n",
+    " *Hint* : Have a look at all the output files eq peptide *.omd. If anything goes wrong, a message will be\n",
+    "printed to the output file.\n",
+    "***"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.simulations.modules.preset_simulation_modules import md\n",
+    "\n",
+    "## Preparing emin gromos system\n",
+    "in_eq_system = out_eminBox_system.copy()\n",
+    "in_eq_system.name = \"eq_thermalisation\"\n",
+    "in_eq_system.work_folder = project_dir\n",
+    "\n",
+    "### Build position restraints\n",
+    "restrain_res = [k for k in in_eq_system.cnf.residues if(not k in (\"CL-\", \"SOLV\"))]\n",
+    "in_eq_system.generate_posres(residues=restrain_res)\n",
+    "\n",
+    "### Check simulation params\n",
+    "in_eq_system.imd = md_imd_file\n",
+    "\n",
+    "### Set simulation lengths: \n",
+    "in_eq_system.imd.STEP.NSTLIM = 1000 # each temperature will do 1000 steps, this might take some time!\n",
+    "\n",
+    "in_eq_system.prepare_for_simulation(not_ligand_residues=[\"CL-\"])\n",
+    "sys_same = in_eq_system.name\n",
+    "\n",
+    "in_eq_system"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "After preparing the system we can now start simulating."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## run Thermalisation.\n",
+    "from pygromos.simulations.modules.preset_simulation_modules import simulation\n",
+    "\n",
+    "temperatures = [60, 120, 180, 240, 300] #the temperatures we want to simulate.\n",
+    "\n",
+    "print(\"Heating upt to: \", end=\"\\t\")\n",
+    "for runID, temperature in enumerate(temperatures):\n",
+    "    print(temperature, end=\"\\t\")\n",
+    "    \n",
+    "    #adapt temperature\n",
+    "    in_eq_system.imd.MULTIBATH.TEMP0 = [temperature for x in range(in_eq_system.imd.MULTIBATH.NBATHS)]\n",
+    "\n",
+    "    #turn off the posres for the last run.\n",
+    "    if(runID+1 == len(temperatures)): #Last Run\n",
+    "        in_eq_system.imd.POSITIONRES.NTPOR = 0\n",
+    "        in_eq_system.imd.POSITIONRES.CPOR = 0\n",
+    "\n",
+    "        out_eq_system = simulation(in_gromos_simulation_system=in_eq_system,\n",
+    "                                   step_name=\"f_\"+sys_same,\n",
+    "                                   simulation_runs=runID+1)\n",
+    "        break\n",
+    "    else:\n",
+    "        out_eq_system = simulation(in_gromos_simulation_system=in_eq_system,\n",
+    "                                   step_name=\"f_\"+sys_same,\n",
+    "                                   simulation_runs=runID+1,\n",
+    "                                   analysis_script=None,\n",
+    "                                   verbose=False)\n",
+    "    \n",
+    "    in_eq_system = out_eq_system\n",
+    "\n",
+    "    \n",
+    "print(\"done\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#This took some time, so lets store it! So we can use it later again.\n",
+    "out_eq_therm_system_path = out_eq_system.save(out_eq_system.work_folder+\"/eq_therm_result2.obj\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Analysis of Thermalisation:\n",
+    "Next we want to check the results of our Thermalisation. We will have a look at the coordinate trajectory and the temperatures of the system."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Check the coordinate traj\n",
+    "First we will check the trajectory of the termalisation. Again we first need to shift the coordinates, so we can se the fully connected peptide."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "coordinate_traj = out_eq_system.trc\n",
+    "coordinate_traj.image_molecules()\n",
+    "view = coordinate_traj.view\n",
+    "view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Check the temperature\n",
+    "After this, we would like to see the temperature development. \n",
+    "First lets collect all temperature calculations from the simulation:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "energy_traj = out_eq_system.tre\n",
+    "temperatures= energy_traj.get_temperature()\n",
+    "temperatures"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next we want to visualize the data to get an impresstionof what happened. \n",
+    "Can you see how the Temperature was constantly raised per simulation and started to equilibrate forming plateus?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from matplotlib import pyplot as plt\n",
+    "\n",
+    "plt.plot(temperatures.bath1, label=\"TBath1\")\n",
+    "plt.plot(temperatures.bath2, label=\"TBath2\")\n",
+    "\n",
+    "plt.legend()\n",
+    "plt.ylabel(\"$T~[K]$\")\n",
+    "plt.xlabel(\"$t~[ps]$\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Molecular dynamics sampling simulation.\n",
+    "The equilibration period already produced a short simulation at constant temperature and volume. At\n",
+    "this point we want to elongate the simulation to a nanosecond under constant temperature and pressure.\n",
+    "\n",
+    "### Simulation Paramters\n",
+    "First, we don’t use position restraining anymore and so, the POSITIONRES block in the next step.\n",
+    "Next we want to simulate under constant pressure rather than constant volume (NVT-> NPT). For this purpose we have to add\n",
+    "an additional block:\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.data.simulation_parameters_templates import template_md_tut as template_md\n",
+    "from pygromos.files.simulation_parameters.imd import Imd\n",
+    "\n",
+    "imd_file = Imd(template_md)\n",
+    "\n",
+    "help(imd_file.PRESSURESCALE)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the PRESSURESCALE block we tell Gromos to calculate and scale the pressure by setting *COUPLE* to $2$. As\n",
+    "the box should be isotropically scaled we set *SCALE* equal to $1$. The weak-coupling method (Sec. 2-12.2.2)\n",
+    "uses two additional parameters: *COMP* is the isothermal compressibility and *TAUP* is the coupling time. We\n",
+    "are calculating the molecular virial (*VIRIAL* is equal to $2$), so intramolecular forces don’t contribute to the\n",
+    "pressure. The next line is only used for semi-anisotropic pressure coupling and can be ignored in our case.\n",
+    "Finally, we have to specify the reference pressure in a tensor form\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "imd_file.PRESSURESCALE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Perform MD - Production\n",
+    "In the other blocks only minor things have changed: the temperature was set to 300K and the trajectories\n",
+    "are written out less often (every 250th step only). Next we are going to set up the Gromos System. We will remove the position restraints and the old trajectories."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pygromos.simulations.modules.preset_simulation_modules import md\n",
+    "\n",
+    "in_md_system = out_eq_system.copy()\n",
+    "\n",
+    "in_md_system.work_folder = project_dir\n",
+    "in_md_system.name = \"md\"\n",
+    "\n",
+    "### Check simulation params\n",
+    "in_md_system.imd = imd_file \n",
+    "\n",
+    "## imd parameters\n",
+    "in_md_system.imd.STEP.NSTLIM = 1000\n",
+    "in_md_system.imd.WRITETRAJ.NTWX = 10\n",
+    "in_md_system.imd.WRITETRAJ.NTWE = 10\n",
+    "in_md_system.imd.INITIALISE.NTIVEL = 0\n",
+    "\n",
+    "in_md_system.prepare_for_simulation()\n",
+    "\n",
+    "in_md_system"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_md_system = md(in_gromos_system=in_md_system,\n",
+    "                   step_name=\"g_\"+in_md_system.name,\n",
+    "                   simulation_runs=3)\n",
+    "out_md_system"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_md_system_path = out_md_system.save(out_md_system.work_folder+\"/md_result.obj\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "After all the jobs are finished, you should start to analyse the trajectories.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Analysis\n",
+    "\n",
+    "#### First Look Analysis\n",
+    "Let's first have a look on the final coordinates."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out_md_system.cnf.shift_periodic_boundary()\n",
+    "out_md_system.cnf.recenter_pbc()\n",
+    "out_md_system.cnf.recreate_view()\n",
+    "out_md_system.cnf.view"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "coordinate_traj = out_md_system.trc\n",
+    "\n",
+    "coordinate_traj.image_molecules()\n",
+    "coordinate_traj.recreate_view()\n",
+    "view = coordinate_traj.view\n",
+    "view"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "\n",
+    "#### Energy Analysis\n",
+    "The program calculates the average of the specified properties as well as the root-mean-square deviations\n",
+    "(rmsd) and a statistical error estimate (error est.). The error estimate is calculated from block averages\n",
+    "of growing sizes extrapolating to infinite block size1\n",
+    "\n",
+    "***\n",
+    "**Warning:** Sometimes the error estimates are NaN (not a number), which is due to the fact that we do not\n",
+    "have enough values to calculate a meaningful error estimate.\n",
+    "***"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "energy_traj = out_md_system.tre\n",
+    "total_energies = energy_traj.get_totals()\n",
+    "total_energies"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Next we plot some data of the energies to se their development.\n",
+    "\n",
+    "time_axis = energy_traj.time\n",
+    "total_energies.totpot.plot(legend=True)\n",
+    "total_energies.totkin.plot(legend=True)\n",
+    "total_energies.totene.plot(xlabel=\"t [ps]\", ylabel=\"V [kJ/mol]\", title=\"Simulation Data\", legend=True)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the Following we want to see the different contributions of the molecules with their VdW and Culomb interaxtions.\n",
+    " we add up the van der Waals and Coulomb energies of the peptide-peptide interactions.\n",
+    "\n",
+    "Now we want to look at two variables:\n",
+    "* peptide_water_nonbonded\n",
+    "* peptide_Cl_nonbonded\n",
+    "\n",
+    "The information about the nonbondeds can be retrieved from the ForceGroup Nonbonded contributions.\n",
+    "If you check the used imd file, you reckognize three Force groups in the FORCEGROUP block. These are limited by the last atom of the group and you can check the group atoms in the topology or coordinate file. \n",
+    "They should correspond here to:\n",
+    "1. Peptide\n",
+    "2. 2 Cl- ions\n",
+    "3. Water molecules\n",
+    "\n",
+    "The interactions of these forcegroups are stored in the following pattern, which can be adapted to any force group number (PseudoCode: for i in range(1+nFroceGroups) for j in range(i, nFroceGroups)):\n",
+    "\n",
+    "1. ForceGroup - 1. ForceGroup: intra force group nonbondeds (peptide - peptide)\n",
+    "1. ForceGroup - 2. ForceGroup: inter force group nonbondeds between force group 1 and 2 (peptide - Cl-)\n",
+    "1. ForceGroup - 3. ForceGroup: inter force group nonbondeds between force group 1 and 3 (peptide - Water)\n",
+    "2. ForceGroup - 2. ForceGroup: intra force group nonbondeds (Cl- - Cl-)\n",
+    "3. ForceGroup - 3. ForceGroup: inter force group nonbondeds between force group 2 and 3 (Cl- - Water)\n",
+    "4. ForceGroup - 3. ForceGroup: intra force group nonbondeds (Water - Water)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#First lets get the Force Group Energy contributions:\n",
+    "forceGroupNonbondedContributions = energy_traj.get_nonbondedContributions()\n",
+    "\n",
+    "#Here we give each Force Group contribution category nice names:\n",
+    "peptide_peptide_nonbonded = forceGroupNonbondedContributions[1][1]\n",
+    "peptide_Cl_nonbonded = forceGroupNonbondedContributions[1][2]\n",
+    "peptide_water_nonbonded = forceGroupNonbondedContributions[1][3]\n",
+    "\n",
+    "Cl_Cl_nonbonded = forceGroupNonbondedContributions[2][2]\n",
+    "Cl_water_nonbonded = forceGroupNonbondedContributions[2][3]\n",
+    "\n",
+    "water_water_nonbonded = forceGroupNonbondedContributions[3][3]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Here we look at the different Nonbonded contributions of each \n",
+    "peptide_peptide_nonbonded.plot(title=\"Peptide_intra_Nonbondeds\", ylabel=\"V [kJ/mol]\", xlabel=\"writeOuts\", subplots=True)\n",
+    "Cl_Cl_nonbonded.plot(title=\"CL_intra_Nonbondeds\", ylabel=\"V [kJ/mol]\", xlabel=\"writeOuts\", subplots=True)\n",
+    "water_water_nonbonded.plot(title=\"Water_intra_Nonbondeds\", ylabel=\"V [kJ/mol]\", xlabel=\"writeOuts\", subplots=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Next we calculate the sum of all contributions\n",
+    "#The sum over the axis 1 sums up all contribution types for a timestep t.\n",
+    "peptide_peptide_nonbonded.sum(axis=1).plot(label=\"peptide - peptide\", legend=True)\n",
+    "peptide_Cl_nonbonded.sum(axis=1).plot(label=\"peptide - Cl-\", legend=True)\n",
+    "peptide_water_nonbonded.sum(axis=1).plot(label=\"peptide - Water\", ylabel=\"V [kJ/mol]\", xlabel=\"writeOuts\", title=\"Peptide Nonbondeds\", legend=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Here we look at the total nonbonded Contributions of the peptide \n",
+    "peptide_nonbonded = peptide_peptide_nonbonded+peptide_Cl_nonbonded+peptide_water_nonbonded\n",
+    "#The sum over the axis 1 sums up all contribution types for a timestep t.\n",
+    "peptide_nonbonded.sum(axis=1).plot( label=\"peptide\", ylabel=\"V [kJ/mol]\", xlabel=\"steps\", title=\"Total Nonbonded Contributions of peptide\", legend=True)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "source": [
+    "#### Coordinate Analysis\n",
+    "In the next step, we want to have a look at the coordinates of our simulation.\n",
+    "first we will dcalculate the rmsd, second we will analyse the distance of the CL- to the positive charged atoms in the peptide. \n",
+    "\n",
+    "\n",
+    "\n",
+    "***\n",
+    "**Warning**: Under Development ;)\n",
+    "***"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "final_coordinate = out_md_system.cnf\n",
+    "coordinate_traj = out_md_system.trc\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "coordinate_traj.rmsd(1).sum(axis=1).plot(ylabel=\"RMSD\", xlabel=\"t [ps]\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Distance CL- to the peptide"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"CL- atoms:\", [(ap.atomType, ap.atomID) for ap in final_coordinate.POSITION if(ap.resName == \"CL-\")])\n",
+    "print(\"ARG atoms:\", [(ap.atomType, ap.atomID) for ap in final_coordinate.POSITION if(ap.resName == \"ARG\")])\n",
+    "print(\"LYSH atoms:\", [(ap.atomType, ap.atomID) for ap in final_coordinate.POSITION if(ap.resName == \"LYSH\")])\n",
+    "print(\"NTERM atoms:\", [(ap.atomType, ap.atomID) for ap in final_coordinate.POSITION if(ap.resName == \"VAL\")])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Calculate the distances now to the different CL- ions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "coordinate_traj.distances(atom_pairs=[[72, 37], [73, 37]]).plot(label=\"CL-1/2 - ARG-CZ\", legend=True, xlabel=\"t [ps]\", ylabel=\"r [nm]\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "coordinate_traj.distances(atom_pairs=[[72, 53], [73, 53]]).plot(label=\"CL-1/2 - LYSH-NZ\", legend=True, xlabel=\"t [ps]\", ylabel=\"r [nm]\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "coordinate_traj.distances(atom_pairs=[[72, 3], [73, 3]]).plot(label=\"CL-1/2 - N-TERM\", legend=True, xlabel=\"t [ps]\", ylabel=\"r [nm]\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "interpreter": {
+   "hash": "e7d5b70120806d05daeaf98b799438b40f063b8cf99696cad03a40d92a237582"
+  },
+  "kernelspec": {
+   "display_name": "Python 3.9.10 ('pygromosDev')",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

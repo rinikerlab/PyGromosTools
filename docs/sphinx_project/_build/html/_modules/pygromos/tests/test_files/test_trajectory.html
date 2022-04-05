@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.tests.test_files.test_trajectory &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.tests.test_files.test_trajectory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.tests.test_files.test_trajectory</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">testing</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory</span> <span class="kn">import</span> <span class="n">_general_trajectory</span> <span class="k">as</span> <span class="n">gt</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory</span> <span class="kn">import</span> <span class="n">trc</span><span class="p">,</span> <span class="n">tre</span><span class="p">,</span> <span class="n">trg</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.trajectory.tre_field_libs</span> <span class="kn">import</span> <span class="n">ene_fields</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
+<span class="kn">from</span> <span class="nn">pygromos.tests.test_files</span> <span class="kn">import</span> <span class="n">out_test_root_dir</span>
+
+<span class="n">root_out</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">out_test_root_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;trajs_&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="traj_standard_tests"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests">[docs]</a><span class="k">class</span> <span class="nc">traj_standard_tests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">class_name</span><span class="p">:</span> <span class="n">gt</span><span class="o">.</span><span class="n">_General_Trajectory</span> <span class="o">=</span> <span class="n">gt</span><span class="o">.</span><span class="n">_General_Trajectory</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_file_h5_path</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">outpath</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># Constructors</span>
+<div class="viewcode-block" id="traj_standard_tests.test_constructor_empty"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests.test_constructor_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+
+<div class="viewcode-block" id="traj_standard_tests.test_constructor_trg_file_path"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests.test_constructor_trg_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_trg_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+        <span class="c1"># print(t.database.columns)</span>
+        <span class="c1"># print(t.database.head())</span>
+
+<div class="viewcode-block" id="traj_standard_tests.test_constructor_trg_h5_file_path"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests.test_constructor_trg_h5_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_trg_h5_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+
+<div class="viewcode-block" id="traj_standard_tests.test_write"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests.test_write">[docs]</a>    <span class="k">def</span> <span class="nf">test_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">):</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="traj_standard_tests.setUp"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="traj_standard_tests.test_add"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.traj_standard_tests.test_add">[docs]</a>    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;traj_standard_tests&quot;</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="c1"># addition</span>
+        <span class="n">tre_3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span>
+        <span class="n">tre_3</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span></div></div>
+        <span class="c1"># print(self.t1, tre_3)</span>
+        <span class="c1"># print(tre_3)</span>
+
+
+<div class="viewcode-block" id="test_trc"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc">[docs]</a><span class="k">class</span> <span class="nc">test_trc</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">class_name</span> <span class="o">=</span> <span class="n">trc</span><span class="o">.</span><span class="n">Trc</span>
+    <span class="n">help_class</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trc/in_test.cnf&quot;</span><span class="p">)</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trc/in_test.trc&quot;</span>
+    <span class="n">in_file_path_h5</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trc/in_test_trc.h5&quot;</span>
+    <span class="n">in_file_w_genbox_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trc/in_test_genbox.trc&quot;</span>
+    <span class="n">in_file_w_genbox_cnf_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trc/in_test_genbox.cnf&quot;</span>
+
+    <span class="n">outpath</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_trc1.h5&quot;</span>
+    <span class="n">trc_outpath</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_.trc.gz&quot;</span>
+
+    <span class="c1"># Constructors</span>
+<div class="viewcode-block" id="test_trc.test_constructor_empty"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_constructor_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+
+<div class="viewcode-block" id="test_trc.test_constructor_trc_file_path"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_constructor_trc_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_trc_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+
+<div class="viewcode-block" id="test_trc.test_constructor_trc_file_noTop_path"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_constructor_trc_file_noTop_path">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_trc_file_noTop_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+
+<div class="viewcode-block" id="test_trc.test_constructor_trc_h5_file_path"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_constructor_trc_h5_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">test_constructor_trc_h5_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path_h5</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">)</span></div>
+        <span class="c1"># print(t)</span>
+
+<div class="viewcode-block" id="test_trc.test_write"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_write">[docs]</a>    <span class="k">def</span> <span class="nf">test_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_trc.test_trc_with_boxes_traj"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_trc_with_boxes_traj">[docs]</a>    <span class="k">def</span> <span class="nf">test_trc_with_boxes_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_w_genbox_cnf_path</span><span class="p">)</span>
+        <span class="n">t_origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_w_genbox_path</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_w_genbox_cnf_path</span><span class="p">)</span>
+
+        <span class="c1"># CNF was the last frame:</span>
+        <span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">actual</span><span class="o">=</span><span class="n">t_origin</span><span class="o">.</span><span class="n">_unitcell_lengths</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">desired</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+
+        <span class="c1"># these should not be equal! as the box changes in NPT over time</span>
+        <span class="k">assert</span> <span class="n">t_origin</span><span class="o">.</span><span class="n">_unitcell_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">c</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">t_origin</span><span class="o">.</span><span class="n">_unitcell_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">c</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">t_origin</span><span class="o">.</span><span class="n">_unitcell_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="n">c</span><span class="o">.</span><span class="n">GENBOX</span><span class="o">.</span><span class="n">length</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="test_trc.test_to_trc_file"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_to_trc_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_trc_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Read in trc</span>
+        <span class="n">t_origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+
+        <span class="c1"># take a subset of frames</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t_origin</span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">]]</span>
+
+        <span class="c1"># write trc</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">write_trc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trc_outpath</span><span class="p">)</span>
+
+        <span class="c1"># read in new trc</span>
+        <span class="n">t_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trc_outpath</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+
+        <span class="c1"># test if new trc coordinates have correct shapes</span>
+        <span class="k">assert</span> <span class="n">t_new</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">t_new</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">t_origin</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">t_new</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">t_origin</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="test_trc.test_to_conf"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trc.test_to_conf">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">traj_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">in_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+
+        <span class="c1"># TEST DUMMY</span>
+        <span class="n">conf_60</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">to_cnf</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">conf_60_None</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">60</span><span class="p">]</span><span class="o">.</span><span class="n">to_cnf</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">conf_60</span> <span class="o">==</span> <span class="n">conf_60_None</span>
+
+        <span class="c1"># TEST with base</span>
+        <span class="n">conf_60</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">to_cnf</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">base_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+        <span class="n">conf_60_None</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">60</span><span class="p">]</span><span class="o">.</span><span class="n">to_cnf</span><span class="p">(</span><span class="n">base_cnf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">help_class</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">conf_60</span> <span class="o">==</span> <span class="n">conf_60_None</span></div></div>
+
+
+<div class="viewcode-block" id="test_tre"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_tre">[docs]</a><span class="k">class</span> <span class="nc">test_tre</span><span class="p">(</span><span class="n">traj_standard_tests</span><span class="p">):</span>
+    <span class="n">class_name</span> <span class="o">=</span> <span class="n">tre</span><span class="o">.</span><span class="n">Tre</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/tre/in_tre1.tre&quot;</span>
+    <span class="n">in_file2_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/tre/in_tre2.tre&quot;</span>
+    <span class="n">in_file_eds_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/tre/in_eds.tre&quot;</span>
+    <span class="n">in_file_lam_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/tre/in_lam.tre&quot;</span>
+    <span class="n">in_file_h5_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/tre/in_tre1.tre.h5&quot;</span>
+    <span class="n">outpath</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_tre1.tre.h5&quot;</span>
+
+<div class="viewcode-block" id="test_tre.test_get_totals"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_tre.test_get_totals">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_totals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">tre_block_name_table</span> <span class="o">=</span> <span class="n">ene_fields</span><span class="o">.</span><span class="n">gromos_2015_tre_block_names_table</span>
+        <span class="n">tots_ene</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tots_ene</span><span class="p">)</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="test_tre.test_get_eds"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_tre.test_get_eds">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_eds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_eds_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">eds_ene</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_eds</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">eds_ene</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">eds_ene</span><span class="o">.</span><span class="n">numstates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Number of num_states should be two&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">eds_ene</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">37</span><span class="p">),</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;The traj should have 500 timesteps and 23 fields for precalclam&quot;</span><span class="p">)</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="test_tre.test_get_lam"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_tre.test_get_lam">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_lam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_lam_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">lam_ene</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_precalclam</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">lam_ene</span><span class="p">,</span> <span class="n">lam_ene</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">lam_ene</span><span class="o">.</span><span class="n">nr_lambdas</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Number of lambdas should be two&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">lam_ene</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;The traj should have 5 timesteps and 23 fields for precalclam&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="test_trg"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trg">[docs]</a><span class="k">class</span> <span class="nc">test_trg</span><span class="p">(</span><span class="n">traj_standard_tests</span><span class="p">):</span>
+    <span class="n">class_name</span> <span class="o">=</span> <span class="n">trg</span><span class="o">.</span><span class="n">Trg</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trg/test.trg&quot;</span>
+    <span class="n">in_file_h5_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/trg/test.trg.h5&quot;</span>
+    <span class="n">outpath</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_tre1.tre.h5&quot;</span>
+
+    <span class="c1"># Test Get functions</span>
+
+<div class="viewcode-block" id="test_trg.test_get_totals"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trg.test_get_totals">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_totals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">totals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="o">.</span><span class="n">get_totals</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">totals</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_trg.test_get_lambdas"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trg.test_get_lambdas">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_lambdas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lambdas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="o">.</span><span class="n">get_lambdas</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">lambdas</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_trg.test_get_precalclam"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_trajectory.test_trg.test_get_precalclam">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_precalclam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file_path</span><span class="p">,</span> <span class="n">auto_save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">precalclam</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_precalclam</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">precalclam</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

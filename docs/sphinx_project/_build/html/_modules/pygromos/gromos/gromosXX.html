@@ -1,0 +1,658 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.gromos.gromosXX &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.gromos.gromosXX</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.gromos.gromosXX</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">FUNCTIONLIB:            wrapper for gromosXX</span>
+<span class="sd">Description:</span>
+<span class="sd">    This file contains python wrappers for the bash commandline of gromosXX</span>
+
+<span class="sd">Author: Benjamin Schroeder</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.simulation_parameters.imd</span> <span class="kn">import</span> <span class="n">Imd</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">time_wait_s_for_filesystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.gromos._gromosClass</span> <span class="kn">import</span> <span class="n">_gromosClass</span>
+
+
+<div class="viewcode-block" id="_GromosXX"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosXX._GromosXX">[docs]</a><span class="k">class</span> <span class="nc">_GromosXX</span><span class="p">(</span><span class="n">_gromosClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GromosXX</span>
+
+<span class="sd">    This is the gromosXX baseclass. This should be inherited by a concrete class that might reimplement some new features, that are version dependent.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    bin :   str, optional</span>
+<span class="sd">        This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_GromosXX.__init__"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosXX._GromosXX.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">gromosXX_bin_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">_check_binary_paths</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructing a gromosXX object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gromosXX_bin_dir :   str, optional</span>
+<span class="sd">            This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.</span>
+<span class="sd">        _dont_check_binary : bool, optional</span>
+<span class="sd">            This flag removes the checks of the binary presence for this obj. This can make sense if system access is slow!, by default False - checks will be made</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># lazy me - doc text for functions:</span>
+        <span class="n">functions_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    Methods:</span><span class="se">\n</span><span class="s2">    ---------</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)))]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="n">functions_text</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_bin_dir</span><span class="o">=</span><span class="n">gromosXX_bin_dir</span><span class="p">,</span> <span class="n">_check_binary_paths</span><span class="o">=</span><span class="n">_check_binary_paths</span>
+        <span class="p">)</span>  <span class="c1"># initialises the binary checks</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GromosXX Programms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_GromosXX.md_run"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosXX._GromosXX.md_run">[docs]</a>    <span class="nd">@_gromosClass</span><span class="o">.</span><span class="n">_gromosTypeConverter</span>
+    <span class="k">def</span> <span class="nf">md_run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_topo_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_coord_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_imd_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">out_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_pert_topo_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_disres_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_posresspec_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_refpos_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_qmmm_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">nomp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">nmpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">out_trc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_tre</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">_binary_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;md&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is a wrapper for gromosXX md_mpi. You can directly execute the gromosXX md_mpi in a bash enviroment here.</span>
+
+<span class="sd">        Warnings</span>
+<span class="sd">        --------</span>
+<span class="sd">            Hybrid jobs are possible, but very difficult to implement correctly to Euler and performance gain is questionable.</span>
+<span class="sd">            If OMP should be used, I suggest the md_run - function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_topo_path :    str</span>
+<span class="sd">                    This is the path to the input topology file (x.top)</span>
+
+<span class="sd">        in_coord_path :    str</span>
+<span class="sd">                    This is the path to the input coordinate file (x.cnf)</span>
+
+<span class="sd">        in_imd_path :    str</span>
+<span class="sd">                    This is the path to the input simulation parameter file (x.imd)</span>
+
+<span class="sd">        out_prefix :    str</span>
+<span class="sd">                    This prefix, define the output name.</span>
+
+<span class="sd">        in_pert_topo_path : str, optional</span>
+<span class="sd">                    This is the path to the pertubation file (x.ptp)</span>
+
+<span class="sd">        in_disres_path :    str, optional</span>
+<span class="sd">                    This is the path to the distance restraint file (x.dat)</span>
+
+<span class="sd">        in_posresspec_path :    str, optional</span>
+<span class="sd">                    This is the path to the position restraint file (x.pos)</span>
+
+<span class="sd">        in_refpos_path :    str, optional</span>
+<span class="sd">                    This is the path to the reference position file (x.rpf)</span>
+
+<span class="sd">        nomp :  int, optional</span>
+<span class="sd">                    How many omp cores shall be used? Prerequesite, gromos was compiled with -enableOMP</span>
+
+<span class="sd">        nmpi : int, optional</span>
+<span class="sd">                    How many mpi cores shall be used? Prerequesite, gromos was compiled with -enableMPI (and suggested to have -disableOMP)</span>
+
+<span class="sd">        out_trc :   bool, optional</span>
+<span class="sd">                    do you want to output a coordinate trajectory (x.trc) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_tre :   bool, optional</span>
+<span class="sd">                    do you want to output a coordinate trajectory (x.trc) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_trs :   bool, optional</span>
+<span class="sd">                    do you want to output a coordinate trajectory (x.trc) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_trg :   bool, optional</span>
+<span class="sd">                    do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            returns the log_file_path of the simulation.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ChildProcessError</span>
+<span class="sd">            If the execution of the simulation fails, this error is raised.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        md_run, repex_mpi</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># BUILD UP str. Command</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">nmpi</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">nomp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There are no Hybrid NMPI and NOMP jobs possible with gromos!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">nmpi</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;mpirun -n &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmpi</span> <span class="o">*</span> <span class="n">nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">]</span>  <span class="c1"># --loadbalance  &quot; --cpus-per-proc &quot; +  + &quot; &quot;</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span> <span class="o">+</span> <span class="s2">&quot;_mpi&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">nomp</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;export OMP_NUM_THREADS=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;  &amp;&amp; &quot;</span><span class="p">]</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span><span class="p">]</span>
+
+        <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@topo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_topo_path</span><span class="p">)]</span>
+        <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@conf&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_coord_path</span><span class="p">)]</span>
+        <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@input&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_imd_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_pert_topo_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@pttopo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_pert_topo_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_disres_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@distrest&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_disres_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_posresspec_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;POSRES&quot;</span><span class="p">,</span> <span class="n">in_posresspec_path</span><span class="p">)</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@posresspec&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_posresspec_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_refpos_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@refpos&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_refpos_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_qmmm_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@qmmm&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_qmmm_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@fin&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span><span class="p">]</span>
+            <span class="n">log_file_path</span> <span class="o">=</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.omd&quot;</span>
+
+            <span class="k">if</span> <span class="n">out_trc</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trc&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.trc&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">out_trv</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trv&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.trv&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">out_trf</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trf&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.trf&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">out_tre</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@tre&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.tre&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">out_trs</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trs&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.trs&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">out_trg</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trg&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.trg&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Outprefix needs to be string got: &quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">))</span>
+
+        <span class="n">command_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &gt; &quot;</span> <span class="o">+</span> <span class="n">log_file_path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;COMMAND: &quot;</span><span class="p">,</span> <span class="n">command_text</span><span class="p">)</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">bash</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command_text</span><span class="p">)</span>
+        <span class="n">md_run_return</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+        <span class="c1"># bash.wait_for_fileSystem(out_prefix+&quot;.cnf&quot;)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_wait_s_for_filesystem</span><span class="p">)</span>
+        <span class="n">log_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+        <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">REMARKS</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">failed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">md_run_return</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">RUN:</span><span class="se">\t</span><span class="s2">SUCESSFUL</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">RUN:</span><span class="se">\t</span><span class="s2">FAILED</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">omd_file_content</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_lines</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">omd_file_content</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">omd_file_content</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> None&quot;</span><span class="p">)</span>
+            <span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">TIME:</span><span class="se">\n\t</span><span class="s2">start: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">end: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Duration:</span><span class="se">\t</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; d:hh:s.ms</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s2">&quot;GromosXX MD Run Failed!</span><span class="se">\n\n</span><span class="s2">LOG:&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+
+        <span class="k">return</span> <span class="n">log_file_path</span></div>
+
+<div class="viewcode-block" id="_GromosXX.repex_run"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosXX._GromosXX.repex_run">[docs]</a>    <span class="nd">@_gromosClass</span><span class="o">.</span><span class="n">_gromosTypeConverter</span>
+    <span class="k">def</span> <span class="nf">repex_run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_topo_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_coord_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_imd_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">out_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_pert_topo_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_disres_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_posresspec_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">in_refpos_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">out_tre</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">out_trs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_trv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">nomp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">nmpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">_binary_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;repex_mpi&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is a wrapper for gromosXX repex_mpi. You can directly execute the gromosXX repex_mpi in a bash enviroment here.</span>
+
+<span class="sd">        Warnings</span>
+<span class="sd">        --------</span>
+<span class="sd">            Hybrid jobs are possible, but very difficult to implement correctly to Euler and performance gain is questionable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        in_topo_path :    str</span>
+<span class="sd">                    This is the path to the input topology file (x.top)</span>
+
+<span class="sd">        in_coord_path :    str</span>
+<span class="sd">                    This is the path to the input coordinate file (x.cnf)</span>
+
+<span class="sd">        in_imd_path :    str</span>
+<span class="sd">                    This is the path to the input simulation parameter file (x.imd) - needs to contain a Replica Exchange or RE-EDS block.</span>
+
+<span class="sd">        out_prefix :    str</span>
+<span class="sd">                    This prefix, define the output name.</span>
+
+<span class="sd">        in_pert_topo_path : str, optional</span>
+<span class="sd">                    This is the path to the pertubation file (x.ptp)</span>
+
+<span class="sd">        in_disres_path :    str, optional</span>
+<span class="sd">                    This is the path to the distance restraint file (x.dat)</span>
+
+<span class="sd">        in_posresspec_path :    str, optional</span>
+<span class="sd">                    This is the path to the position restraint file (x.pos)</span>
+
+<span class="sd">        in_refpos_path :    str, optional</span>
+<span class="sd">                    This is the path to the reference position file (x.rpf)</span>
+
+<span class="sd">        nomp :  int, optional</span>
+<span class="sd">                    How many omp cores shall be used? Prerequesite, gromos was compiled with -enableOMP</span>
+
+<span class="sd">        nmpi : int, optional</span>
+<span class="sd">                    How many mpi cores shall be used? Prerequesite, gromos was compiled with -enableMPI (and suggested to have -disableOMP)</span>
+
+<span class="sd">        out_trc :   bool, optional</span>
+<span class="sd">                    do you want to output a coordinate trajectory (x.trc) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_tre :   bool, optional</span>
+<span class="sd">                    do you want to output a coordinate trajectory (x.trc) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_trs :   bool, optional</span>
+<span class="sd">                    do you want to output a coordinate trajectory (x.trc) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_trg :   bool, optional</span>
+<span class="sd">                    do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_trf :   bool, optional</span>
+<span class="sd">                    do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        out_trv :   bool, optional</span>
+<span class="sd">                    do you want to output the free energy trajectory (x.trg) file? (needs also an output number in write block of imd!)</span>
+
+<span class="sd">        queueing_systems : NONE</span>
+<span class="sd">            This var is not in use yet! - under development</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            returns the log_file_path of the simulation.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ChildProcessError</span>
+<span class="sd">            If the execution of the simulation fails, this error is raised.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        md_run, md_mpi_run</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">nomp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># OMP Hybrid sopt_job?</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;export OMP_NUM_THREADS=&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nomp</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; &amp;&amp; mpirun -n &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmpi</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; --loadbalance --cpus-per-proc &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nomp</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mpirun&quot;</span><span class="p">,</span> <span class="s2">&quot;-n &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmpi</span><span class="p">)]</span>
+
+        <span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bin</span> <span class="o">+</span> <span class="n">_binary_name</span><span class="p">)</span>
+
+        <span class="c1"># input params check</span>
+        <span class="k">if</span> <span class="n">in_topo_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@topo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_topo_path</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Did not get an input top file. Got: &quot;</span> <span class="o">+</span> <span class="n">in_topo_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">in_imd_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@input&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_imd_path</span><span class="p">)]</span>
+
+            <span class="c1"># Input cnf file depends if we have the CONT keyword or not</span>
+            <span class="c1"># with CONT == 1, the convention is to give the name of the</span>
+            <span class="c1"># file without the &quot;_1&quot; extension</span>
+            <span class="n">imd</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">in_imd_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;REPLICA&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">imd</span><span class="o">.</span><span class="n">REPLICA</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">imd</span><span class="o">.</span><span class="n">REPLICA</span><span class="o">.</span><span class="n">CONT</span><span class="p">:</span>
+                <span class="n">tmp_path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">in_coord_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">in_coord_path</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">+</span> <span class="s2">&quot;/*.cnf&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">in_coord_path</span> <span class="o">=</span> <span class="n">in_coord_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_1.cnf&quot;</span><span class="p">,</span> <span class="s2">&quot;.cnf&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;REPLICA_EDS&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">imd</span><span class="o">.</span><span class="n">REPLICA_EDS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">imd</span><span class="o">.</span><span class="n">REPLICA_EDS</span><span class="o">.</span><span class="n">CONT</span><span class="p">:</span>
+                <span class="n">tmp_path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">in_coord_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">in_coord_path</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">+</span> <span class="s2">&quot;/*.cnf&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">in_coord_path</span> <span class="o">=</span> <span class="n">in_coord_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_1.cnf&quot;</span><span class="p">,</span> <span class="s2">&quot;.cnf&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Did not get an input imd file. Got: &quot;</span> <span class="o">+</span> <span class="n">in_imd_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">in_coord_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@conf&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_coord_path</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Did not get an input coord file. Got: &quot;</span> <span class="o">+</span> <span class="n">in_coord_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">in_pert_topo_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@pttopo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_pert_topo_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_disres_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@distrest&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_disres_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_posresspec_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@posresspec&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_posresspec_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">in_refpos_path</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@refpos&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_refpos_path</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">out_prefix</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@fin&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">out_trc</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trc&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.trc&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">out_trs</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trs&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.trs&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">out_tre</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@tre&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.tre&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">out_trg</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trg&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.trg&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">out_trf</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trf&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.trf&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">out_trv</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@trv&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.trv&quot;</span><span class="p">)]</span>
+
+        <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@repout&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_repout.dat&quot;</span><span class="p">)]</span>
+        <span class="n">command</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;@repdat&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_repdat.dat&quot;</span><span class="p">)]</span>
+
+        <span class="n">log_file_path</span> <span class="o">=</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;.omd&quot;</span>
+        <span class="n">command_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">log_file_path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">command_text</span><span class="p">)</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;echo &quot;&quot; &gt;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;START: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_time</span><span class="p">))</span>
+
+        <span class="c1"># bash.execute(command, verbose=True)</span>
+        <span class="n">md_run</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command_text</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_wait_s_for_filesystem</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;END: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_time</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MDRUN OUT: &quot;</span><span class="p">,</span> <span class="n">md_run</span><span class="p">)</span>
+        <span class="c1"># if (md_run != 0):</span>
+        <span class="c1">#    raise ChildProcessError(&quot;GromosXX REPEX Run Failed!\n \t return value: &quot; + str(md_run) + &quot;\n\tLOG:&quot; + &quot;\n\t\t&quot;.join(open(log_file_path, &quot;r&quot;).readlines()))</span>
+
+        <span class="k">return</span> <span class="n">log_file_path</span></div></div>
+
+
+<div class="viewcode-block" id="GromosXX"><a class="viewcode-back" href="../../../_source/pygromos.gromos.html#pygromos.gromos.gromosXX.GromosXX">[docs]</a><span class="k">class</span> <span class="nc">GromosXX</span><span class="p">(</span><span class="n">_GromosXX</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GromosXX</span>
+
+<span class="sd">    This is the class represents gromosXX.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    bin :   str, optional</span>
+<span class="sd">        This is the path to the folder containing the binaries of gromosXX. If None, the bash enviroment variables  will be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gromosXX_bin_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">_check_binary_paths</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">gromosXX_bin_dir</span><span class="o">=</span><span class="n">gromosXX_bin_dir</span><span class="p">,</span> <span class="n">_check_binary_paths</span><span class="o">=</span><span class="n">_check_binary_paths</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

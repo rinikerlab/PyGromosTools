@@ -1,0 +1,564 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.gromos_system package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.files.otherfiles package" href="pygromos.files.otherfiles.html" />
+    <link rel="prev" title="pygromos.files.forcefield.serenityff.serenityff_data package" href="pygromos.files.forcefield.serenityff.serenityff_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+          <li><a href="pygromos.files.html">pygromos.files package</a> &raquo;</li>
+        
+      <li>pygromos.files.gromos_system package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/pygromos.files.gromos_system.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pygromos-files-gromos-system-package">
+<h1>pygromos.files.gromos_system package<a class="headerlink" href="#pygromos-files-gromos-system-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.files.gromos_system.gromos_system">
+<span id="pygromos-files-gromos-system-gromos-system-module"></span><h2>pygromos.files.gromos_system.gromos_system module<a class="headerlink" href="#module-pygromos.files.gromos_system.gromos_system" title="Permalink to this headline">¶</a></h2>
+<p>File:            gromos_system.py
+Warnings:        this class is WIP!</p>
+<p>Description:</p>
+<p>This is a super class for the collection of all Gromos files used inside a project.
+Bundle files with the system’s topology, coordinates, input parameters, etc. and
+start your simulations from here.</p>
+<p>Author: Marc Lehner, Benjamin Ries, Felix Pultar
+test</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.gromos_system.gromos_system.</span></span><span class="sig-name descname"><span class="pre">Gromos_System</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_folder:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdkitMol:</span> <span class="pre">typing.Optional[rdkit.Chem.rdchem.Mol]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_mol2_file:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readIn:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forcefield:</span> <span class="pre">pygromos.files.forcefield._generic_force_field._generic_force_field</span> <span class="pre">=</span> <span class="pre">&lt;pygromos.files.forcefield._generic_force_field._generic_force_field</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_convert:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt_imd_automatically:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_smiles:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_residue_list:</span> <span class="pre">typing.Optional[typing.List]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_top_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_cnf_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_imd_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_disres_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_ptp_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_posres_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_refpos_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_qmmm_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_gromosXX_bin_dir:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_gromosPP_bin_dir:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_folder:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdkitMol:</span> <span class="pre">typing.Optional[rdkit.Chem.rdchem.Mol]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_mol2_file:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readIn:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forcefield:</span> <span class="pre">pygromos.files.forcefield._generic_force_field._generic_force_field</span> <span class="pre">=</span> <span class="pre">&lt;pygromos.files.forcefield._generic_force_field._generic_force_field</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_convert:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt_imd_automatically:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_smiles:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_residue_list:</span> <span class="pre">typing.Optional[typing.List]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_top_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_cnf_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_imd_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_disres_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_ptp_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_posres_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_refpos_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_qmmm_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_gromosXX_bin_dir:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_gromosPP_bin_dir:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>The Gromos_System class is the central unit of PyGromosTools for files and states.
+With this class all files can be read-in or the files can be automatically generated from smiles.
+Additionally to that can all gromos++ functions be used from the Gromos System, so system generation can be easily accomplished.</p>
+<p>if you want to remove all binary checks, do the following:
+&gt;&gt;&gt; from pygromos.files.gromos_system.gromos_system import Gromos_System
+&gt;&gt;&gt; Gromos_System._gromos_noBinary_checks = True
+&gt;&gt;&gt; sys = Gromos_System()</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>work_folder</strong> (<em>str</em>) – This gives the initial working folder for the system.</p></li>
+<li><p><strong>system_name</strong> (<em>str</em>) – the name of the system, also used as file prefix</p></li>
+<li><p><strong>in_smiles</strong> (<em>str, optional</em>) – Molecule input SMILES for file generation, by default None</p></li>
+<li><p><strong>in_top_path</strong> (<em>str, optional</em>) – input Gromos topology path (.top), by default None</p></li>
+<li><p><strong>in_cnf_path</strong> (<em>str, optional</em>) – input Gromos coordinate path (.cnf), by default None</p></li>
+<li><p><strong>in_imd_path</strong> (<em>str, optional</em>) – input Gromos simulation parameters path (.imd), by default None</p></li>
+<li><p><strong>in_disres_path</strong> (<em>str, optional</em>) – input Gromos distance restraint path (.disres), by default None</p></li>
+<li><p><strong>in_ptp_path</strong> (<em>str, optional</em>) – input pertubation file for free energy calculations (.ptp), by default None</p></li>
+<li><p><strong>in_posres_path</strong> (<em>str, optional</em>) – input position restraints file (.por), by default None</p></li>
+<li><p><strong>in_qmmm_path</strong> (<em>str, optional</em>) – qmmm parameter file (.qmmm), by default None</p></li>
+<li><p><strong>in_refpos_path</strong> (<em>str, optional</em>) – input reference position file (.rpf), by default None</p></li>
+<li><p><strong>in_gromosXX_bin_dir</strong> (<em>str, optional</em>) – path to the binary dir of GromosXX, by default None -&gt; uses the set binaries in the PATH variable</p></li>
+<li><p><strong>in_gromosPP_bin_dir</strong> (<em>str, optional</em>) – path to the binary dir of GromosPP, by default None -&gt; uses the set binaries in the PATH variable</p></li>
+<li><p><strong>rdkitMol</strong> (<em>Chem.rdchem.Mol, optional</em>) – input rdkit Molecule, by default None</p></li>
+<li><p><strong>in_mol2_file</strong> (<em>str, optional</em>) – path to input mol2 file, by default None</p></li>
+<li><p><strong>readIn</strong> (<em>bool, optional</em>) – readIn all provided files?, by default True</p></li>
+<li><p><strong>Forcefield</strong> (<em>forcefield_system, optional</em>) – input PyGromos - forcefield Class , by default forcefield_system()</p></li>
+<li><p><strong>auto_convert</strong> (<em>bool, optional</em>) – automatically convert rdkit MOL and smiles to gromos files, by default False</p></li>
+<li><p><strong>adapt_imd_automatically</strong> (<em>bool, optional</em>) – adjust the input imd file to the GromosSystem, by default True</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – Stay a while and listen!, by default False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Warning</strong> – Rises warning if files are not present.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.adapt_imd">
+<span class="sig-name descname"><span class="pre">adapt_imd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">not_ligand_residues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.adapt_imd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.adapt_imd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.all_file_paths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">all_file_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.all_file_paths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.all_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">all_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.all_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.auto_convert">
+<span class="sig-name descname"><span class="pre">auto_convert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.auto_convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.auto_convert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.cnf">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cnf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.coord.html#pygromos.files.coord.cnf.Cnf" title="pygromos.files.coord.cnf.Cnf"><span class="pre">pygromos.files.coord.cnf.Cnf</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.cnf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.disres">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">disres</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.topology.html#pygromos.files.topology.disres.Disres" title="pygromos.files.topology.disres.Disres"><span class="pre">pygromos.files.topology.disres.Disres</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.disres" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.generate_posres">
+<span class="sig-name descname"><span class="pre">generate_posres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">residues:</span> <span class="pre">typing.List</span> <span class="pre">=</span> <span class="pre">[&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">keep_residues:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.generate_posres"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.generate_posres" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.get_file_paths">
+<span class="sig-name descname"><span class="pre">get_file_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.get_file_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.get_file_paths" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>get the paths of the files in a dict.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns alle file paths, with attribute file name as key.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.get_script_generation_command">
+<span class="sig-name descname"><span class="pre">get_script_generation_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_prefixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.get_script_generation_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.get_script_generation_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.gromosPP">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gromosPP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.gromos.html#pygromos.gromos.gromosPP.GromosPP" title="pygromos.gromos.gromosPP.GromosPP"><span class="pre">pygromos.gromos.gromosPP.GromosPP</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.gromosPP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.gromosPP_bin_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gromosPP_bin_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.gromosPP_bin_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.gromosXX">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gromosXX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.gromos.html#pygromos.gromos.gromosXX.GromosXX" title="pygromos.gromos.gromosXX.GromosXX"><span class="pre">pygromos.gromos.gromosXX.GromosXX</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.gromosXX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.gromosXX_bin_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gromosXX_bin_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.gromosXX_bin_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.imd">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">imd</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.simulation_parameters.html#pygromos.files.simulation_parameters.imd.Imd" title="pygromos.files.simulation_parameters.imd.Imd"><span class="pre">pygromos.files.simulation_parameters.imd.Imd</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.imd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_io.FileIO</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method stores the Class as binary obj to a given path or fileBuffer.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.non_ligand_info">
+<span class="sig-name descname"><span class="pre">non_ligand_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pygromos.files.coord.cnf.ligands_info</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.non_ligand_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.optional_files">
+<span class="sig-name descname"><span class="pre">optional_files</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'disres':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.topology.disres.Disres'&gt;,</span> <span class="pre">'posres':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.coord.posres.Position_Restraints'&gt;,</span> <span class="pre">'ptp':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.topology.ptp.Pertubation_topology'&gt;,</span> <span class="pre">'qmmm':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.qmmm.qmmm.QMMM'&gt;,</span> <span class="pre">'refpos':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.coord.refpos.Reference_Position'&gt;}</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.optional_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.parse_attribute_files">
+<span class="sig-name descname"><span class="pre">parse_attribute_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readIn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.parse_attribute_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.parse_attribute_files" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function sets dynamically builds the output folder, the file objs of this class and checks their dependencies.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_mapping</strong> (<em>Dict[str, Union[str, None]]</em>) – attribute name: input path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.posres">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">posres</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.coord.html#pygromos.files.coord.posres.Position_Restraints" title="pygromos.files.coord.posres.Position_Restraints"><span class="pre">pygromos.files.coord.posres.Position_Restraints</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.posres" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.prepare_for_simulation">
+<span class="sig-name descname"><span class="pre">prepare_for_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">not_ligand_residues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.prepare_for_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.prepare_for_simulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.protein_info">
+<span class="sig-name descname"><span class="pre">protein_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pygromos.files.coord.cnf.protein_info</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.protein_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.ptp">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ptp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.topology.html#pygromos.files.topology.ptp.Pertubation_topology" title="pygromos.files.topology.ptp.Pertubation_topology"><span class="pre">pygromos.files.topology.ptp.Pertubation_topology</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.ptp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.qmmm">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qmmm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.qmmm.html#pygromos.files.qmmm.qmmm.QMMM" title="pygromos.files.qmmm.qmmm.QMMM"><span class="pre">pygromos.files.qmmm.qmmm.QMMM</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.qmmm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.rdkit2Gromos">
+<span class="sig-name descname"><span class="pre">rdkit2Gromos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.rdkit2Gromos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.rdkit2Gromos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.rdkit2GromosName">
+<span class="sig-name descname"><span class="pre">rdkit2GromosName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.rdkit2GromosName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.rdkit2GromosName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.rdkitImport">
+<span class="sig-name descname"><span class="pre">rdkitImport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputMol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">rdkit.Chem.rdchem.Mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.rdkitImport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.rdkitImport" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.read_files">
+<span class="sig-name descname"><span class="pre">read_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.read_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.read_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.rebase_files">
+<span class="sig-name descname"><span class="pre">rebase_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.rebase_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.rebase_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.refpos">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">refpos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.coord.html#pygromos.files.coord.refpos.Reference_Position" title="pygromos.files.coord.refpos.Reference_Position"><span class="pre">pygromos.files.coord.refpos.Reference_Position</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.refpos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.required_files">
+<span class="sig-name descname"><span class="pre">required_files</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cnf':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.coord.cnf.Cnf'&gt;,</span> <span class="pre">'imd':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.simulation_parameters.imd.Imd'&gt;,</span> <span class="pre">'top':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.topology.top.Top'&gt;}</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.required_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.residue_list">
+<span class="sig-name descname"><span class="pre">residue_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.residue_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_io.FileIO</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method stores the Class as binary obj to a given path or fileBuffer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.solute_info">
+<span class="sig-name descname"><span class="pre">solute_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pygromos.files.coord.cnf.solute_info</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.solute_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.solvent_info">
+<span class="sig-name descname"><span class="pre">solvent_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pygromos.files.coord.cnf.solvent_info</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.solvent_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.top">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.topology.html#pygromos.files.topology.top.Top" title="pygromos.files.topology.top.Top"><span class="pre">pygromos.files.topology.top.Top</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.top" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.traj_files">
+<span class="sig-name descname"><span class="pre">traj_files</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'trc':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.trajectory.trc.Trc'&gt;,</span> <span class="pre">'tre':</span> <span class="pre">&lt;class</span> <span class="pre">'pygromos.files.trajectory.tre.Tre'&gt;}</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.traj_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.trc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.trajectory.html#pygromos.files.trajectory.trc.Trc" title="pygromos.files.trajectory.trc.Trc"><span class="pre">pygromos.files.trajectory.trc.Trc</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.trc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.tre">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tre</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.trajectory.html#pygromos.files.trajectory.tre.Tre" title="pygromos.files.trajectory.tre.Tre"><span class="pre">pygromos.files.trajectory.tre.Tre</span></a></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.tre" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.work_folder">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">work_folder</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.work_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.work_folder_no_update">
+<span class="sig-name descname"><span class="pre">work_folder_no_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.work_folder_no_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.work_folder_no_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.gromos_system.gromos_system.Gromos_System.write_files">
+<span class="sig-name descname"><span class="pre">write_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ptp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disres</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posres</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refpos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qmmm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/gromos_system/gromos_system.html#Gromos_System.write_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.gromos_system.gromos_system.Gromos_System.write_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.files.gromos_system">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.files.gromos_system" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pygromos.files.otherfiles.html" class="btn btn-neutral float-right" title="pygromos.files.otherfiles package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pygromos.files.forcefield.serenityff.serenityff_data.html" class="btn btn-neutral float-left" title="pygromos.files.forcefield.serenityff.serenityff_data package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

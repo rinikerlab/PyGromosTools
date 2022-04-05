@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.simulations.approaches.hvap_calculation.hvap_calculation &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.simulations.approaches.hvap_calculation.hvap_calculation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.simulations.approaches.hvap_calculation.hvap_calculation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">File:            automatic calculation of Hvap</span>
+<span class="sd">Warnings: this class is WIP!</span>
+
+<span class="sd">Description:</span>
+<span class="sd">    For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated.</span>
+
+<span class="sd">    Main elements:</span>
+<span class="sd">        1) create single molecule topo and conformation</span>
+<span class="sd">        2) run gas (single molecule) minimization</span>
+<span class="sd">        3) run gas SD simulation (and equilibaration)</span>
+<span class="sd">        4) generate multi molecule (liquid) topo and conformation</span>
+<span class="sd">        5) run liquid minimization</span>
+<span class="sd">        6) run liquid MD run (and equilibaration)</span>
+<span class="sd">        7) calculate Hvap from gas and liquid trajectories</span>
+
+<span class="sd">Author: Marc Lehner</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.gromos.pyGromosPP.ran_box</span> <span class="kn">import</span> <span class="n">ran_box</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.approaches.hvap_calculation</span> <span class="kn">import</span> <span class="n">hvap_input_files</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield._generic_force_field</span> <span class="kn">import</span> <span class="n">_generic_force_field</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems</span> <span class="kn">import</span> <span class="n">get_submission_system</span><span class="p">,</span> <span class="n">_submission_system</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.modules.general_simulation_modules</span> <span class="kn">import</span> <span class="n">simulation</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.job_scheduling.workers.analysis_workers</span> <span class="kn">import</span> <span class="n">simulation_analysis</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files.simulation_parameters.imd</span> <span class="kn">import</span> <span class="n">Imd</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">time_wait_s_for_filesystem</span>
+
+<span class="c1"># automatically get Local or LSF submission system (depending on hostname)</span>
+<span class="n">subSystem</span> <span class="o">=</span> <span class="n">get_submission_system</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Hvap_calculation"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation">[docs]</a><span class="k">class</span> <span class="nc">Hvap_calculation</span><span class="p">:</span>
+    <span class="n">dens_modifier</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span>
+    <span class="n">submissonSystem_gas</span><span class="p">:</span> <span class="n">_submission_system</span>
+    <span class="n">submissonSystem_liq</span><span class="p">:</span> <span class="n">_submission_system</span>
+
+<div class="viewcode-block" id="Hvap_calculation.__init__"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_system</span><span class="p">:</span> <span class="n">Gromos_System</span> <span class="ow">or</span> <span class="nb">str</span> <span class="ow">or</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">,</span>
+        <span class="n">work_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">system_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span><span class="p">,</span>
+        <span class="n">forcefield</span><span class="p">:</span> <span class="n">_generic_force_field</span> <span class="o">=</span> <span class="n">_generic_force_field</span><span class="p">(),</span>
+        <span class="n">in_gromosXX_bin_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_gromosPP_bin_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">useGromosPlsPls</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;For a given gromos_system (or smiles) the heat of vaporization is automaticaly calculated</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_system : Gromos_SystemorstrorChem.rdchem.Mol</span>
+<span class="sd">            single molecule gromos_sytem or rdkit Molecule or SMILES</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># system variables</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">input_system</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Gromos_System</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span> <span class="o">=</span> <span class="n">input_system</span>
+            <span class="k">if</span> <span class="n">in_gromosXX_bin_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">gromosXX</span> <span class="o">=</span> <span class="n">in_gromosXX_bin_dir</span>
+            <span class="k">if</span> <span class="n">in_gromosPP_bin_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">gromosPP</span> <span class="o">=</span> <span class="n">in_gromosPP_bin_dir</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">input_system</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">input_system</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span> <span class="o">=</span> <span class="n">Gromos_System</span><span class="p">(</span>
+                <span class="n">work_folder</span><span class="o">=</span><span class="n">work_folder</span><span class="p">,</span>
+                <span class="n">system_name</span><span class="o">=</span><span class="n">system_name</span><span class="p">,</span>
+                <span class="n">in_smiles</span><span class="o">=</span><span class="n">input_system</span><span class="p">,</span>
+                <span class="n">in_gromosXX_bin_dir</span><span class="o">=</span><span class="n">in_gromosXX_bin_dir</span><span class="p">,</span>
+                <span class="n">in_gromosPP_bin_dir</span><span class="o">=</span><span class="n">in_gromosPP_bin_dir</span><span class="p">,</span>
+                <span class="n">forcefield</span><span class="o">=</span><span class="n">forcefield</span><span class="p">,</span>
+                <span class="n">in_imd_path</span><span class="o">=</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_gas_sd</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">=</span> <span class="n">work_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_name</span> <span class="o">=</span> <span class="n">system_name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_gas</span> <span class="o">=</span> <span class="n">subSystem</span><span class="p">(</span><span class="n">job_duration</span><span class="o">=</span><span class="s2">&quot;4:00&quot;</span><span class="p">)</span>
+        <span class="c1"># give the liquid simulation as much cores as possible to speedup the long liquid simulation.</span>
+        <span class="c1"># if you use a mpi version of gromos use nmpi=4 (or more)</span>
+        <span class="c1"># the attribute can be overwritten by the user at runtime after the class is initiated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_liq</span> <span class="o">=</span> <span class="n">subSystem</span><span class="p">(</span><span class="n">nomp</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">job_duration</span><span class="o">=</span><span class="s2">&quot;24:00&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create folders and structure</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">work_folder</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Folder does already exist&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">=</span> <span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">system_name</span> <span class="o">+</span> <span class="s2">&quot;_gas&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">=</span> <span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">system_name</span> <span class="o">+</span> <span class="s2">&quot;_liq&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosXX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">gromosXX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">gromosPP</span>
+
+        <span class="c1"># define template imd files (overwritte for specific systems)</span>
+        <span class="c1"># made for small molecule Hvap calculation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd_gas_min</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_emin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd_gas_eq</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_gas_sd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd_gas_sd</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_gas_sd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd_liq_min</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_emin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd_liq_eq</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_liquid_eq</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imd_liq_md</span> <span class="o">=</span> <span class="n">Imd</span><span class="p">(</span><span class="n">hvap_input_files</span><span class="o">.</span><span class="n">imd_hvap_liquid_md</span><span class="p">)</span>
+
+        <span class="c1"># parameters for liquid simulation</span>
+        <span class="c1"># used to multiply the single molecule system</span>
+        <span class="c1"># made for small molecule Hvap calculation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span> <span class="o">=</span> <span class="mi">512</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">density</span> <span class="o">=</span> <span class="mi">700</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mf">298.15</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas_final</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq_final</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">useGromosPlsPls</span> <span class="o">=</span> <span class="n">useGromosPlsPls</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span></div>
+
+<div class="viewcode-block" id="Hvap_calculation.run"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_liq</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_gas</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_liq</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_hvap</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Hvap_calculation.create_liq"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation.create_liq">[docs]</a>    <span class="k">def</span> <span class="nf">create_liq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># create liq top</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useGromosPlsPls</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">com_top</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                    <span class="n">topo_multiplier</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span><span class="p">,</span>
+                    <span class="n">out_top_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/temp.top&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">tempTop</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/temp.top&quot;</span><span class="p">)</span>
+                <span class="n">tempTop</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;temp.top&quot;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_wait_s_for_filesystem</span><span class="p">)</span>  <span class="c1"># wait for file to write and close</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">tempTop</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">top</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">top</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span>
+
+        <span class="c1"># create liq cnf</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useGromosPlsPls</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosPP</span><span class="o">.</span><span class="n">ran_box</span><span class="p">(</span>
+                <span class="n">in_top_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="n">in_cnf_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="n">out_cnf_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/temp.cnf&quot;</span><span class="p">,</span>
+                <span class="n">nmolecule</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span><span class="p">,</span>
+                <span class="n">dens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dens_modifier</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">density</span><span class="p">,</span>
+                <span class="n">threshold</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+                <span class="n">layer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ran_box</span><span class="p">(</span>
+                <span class="n">in_top_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="n">in_cnf_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="n">out_cnf_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/temp.cnf&quot;</span><span class="p">,</span>
+                <span class="n">nmolecule</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span><span class="p">,</span>
+                <span class="n">dens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dens_modifier</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">density</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_wait_s_for_filesystem</span><span class="p">)</span>  <span class="c1"># wait for file to write and close</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_folder</span> <span class="o">+</span> <span class="s2">&quot;/temp.cnf&quot;</span>
+
+        <span class="c1"># reset liq system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">rebase_files</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Hvap_calculation.run_gas"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation.run_gas">[docs]</a>    <span class="k">def</span> <span class="nf">run_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imd_gas_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+        <span class="n">sys_emin_gas</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">(</span>
+            <span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="p">,</span>
+            <span class="n">override_project_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;1_emin&quot;</span><span class="p">,</span>
+            <span class="n">submission_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_gas</span><span class="p">,</span>
+            <span class="n">analysis_script</span><span class="o">=</span><span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># eq</span>
+        <span class="n">sys_emin_gas</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imd_gas_eq</span>
+        <span class="n">sys_emin_gas</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+        <span class="n">sys_eq_gas</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">(</span>
+            <span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">sys_emin_gas</span><span class="p">,</span>
+            <span class="n">override_project_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;2_eq&quot;</span><span class="p">,</span>
+            <span class="n">submission_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_gas</span><span class="p">,</span>
+            <span class="n">analysis_script</span><span class="o">=</span><span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># sd</span>
+        <span class="n">sys_eq_gas</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imd_gas_eq</span>
+        <span class="n">sys_eq_gas</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+        <span class="n">sys_sd_gas</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">(</span>
+            <span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">sys_eq_gas</span><span class="p">,</span>
+            <span class="n">override_project_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;3_sd&quot;</span><span class="p">,</span>
+            <span class="n">submission_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_gas</span><span class="p">,</span>
+            <span class="n">analysis_script</span><span class="o">=</span><span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas_final</span> <span class="o">=</span> <span class="n">sys_sd_gas</span></div>
+
+<div class="viewcode-block" id="Hvap_calculation.run_liq"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation.run_liq">[docs]</a>    <span class="k">def</span> <span class="nf">run_liq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># minsys_emin_liq, jobID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imd_liq_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+        <span class="n">sys_emin_liq</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">(</span>
+            <span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="p">,</span>
+            <span class="n">override_project_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;1_emin&quot;</span><span class="p">,</span>
+            <span class="n">submission_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_liq</span><span class="p">,</span>
+            <span class="n">analysis_script</span><span class="o">=</span><span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># eq</span>
+        <span class="n">sys_emin_liq</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imd_liq_eq</span>
+        <span class="n">sys_emin_liq</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+        <span class="n">sys_eq_liq</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">(</span>
+            <span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">sys_emin_liq</span><span class="p">,</span>
+            <span class="n">override_project_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;2_eq&quot;</span><span class="p">,</span>
+            <span class="n">submission_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_liq</span><span class="p">,</span>
+            <span class="n">analysis_script</span><span class="o">=</span><span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># md</span>
+        <span class="n">sys_eq_liq</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imd_liq_md</span>
+        <span class="n">sys_eq_liq</span><span class="o">.</span><span class="n">prepare_for_simulation</span><span class="p">()</span>
+        <span class="n">sys_md_liq</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">(</span>
+            <span class="n">in_gromos_simulation_system</span><span class="o">=</span><span class="n">sys_eq_liq</span><span class="p">,</span>
+            <span class="n">override_project_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq</span><span class="o">.</span><span class="n">work_folder</span><span class="p">,</span>
+            <span class="n">step_name</span><span class="o">=</span><span class="s2">&quot;3_sd&quot;</span><span class="p">,</span>
+            <span class="n">submission_system</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submissonSystem_liq</span><span class="p">,</span>
+            <span class="n">analysis_script</span><span class="o">=</span><span class="n">simulation_analysis</span><span class="o">.</span><span class="n">do</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq_final</span> <span class="o">=</span> <span class="n">sys_md_liq</span></div>
+
+<div class="viewcode-block" id="Hvap_calculation.calc_hvap"><a class="viewcode-back" href="../../../../../_source/pygromos.simulations.approaches.hvap_calculation.html#pygromos.simulations.approaches.hvap_calculation.hvap_calculation.Hvap_calculation.calc_hvap">[docs]</a>    <span class="k">def</span> <span class="nf">calc_hvap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">h_vap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groSys_liq_final</span><span class="o">.</span><span class="n">tre</span><span class="o">.</span><span class="n">get_Hvap</span><span class="p">(</span>
+            <span class="n">gas_traj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groSys_gas_final</span><span class="o">.</span><span class="n">tre</span><span class="p">,</span> <span class="n">nMolecules</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_molecules</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">h_vap</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

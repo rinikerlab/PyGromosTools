@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../_static/underscore.js"></script>
+        <script src="../../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems._submission_system</span> <span class="kn">import</span> <span class="n">_SubmissionSystem</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.submission_job</span> <span class="kn">import</span> <span class="n">Submission_job</span>
+<span class="kn">from</span> <span class="nn">pygromos.simulations.hpc_queuing.submission_systems.local</span> <span class="kn">import</span> <span class="n">LOCAL</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils</span> <span class="kn">import</span> <span class="n">bash</span>
+<span class="kn">from</span> <span class="nn">pygromos.utils.utils</span> <span class="kn">import</span> <span class="n">spacer3</span>
+
+
+<div class="viewcode-block" id="do_skip_job"><a class="viewcode-back" href="../../../../../../_source/pygromos.simulations.hpc_queuing.job_scheduling.schedulers.html#pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.do_skip_job">[docs]</a><span class="k">def</span> <span class="nf">do_skip_job</span><span class="p">(</span>
+    <span class="n">tmp_out_cnf</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">simSystem</span><span class="p">:</span> <span class="n">Gromos_System</span><span class="p">,</span>
+    <span class="n">tmp_jobname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">job_submission_system</span><span class="p">:</span> <span class="n">_SubmissionSystem</span><span class="p">,</span>
+    <span class="n">previous_job</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function returns true if the job was already submitted or already finished, as well as the job id.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tmp_out_cnf : str</span>
+<span class="sd">        the possible final out cnf</span>
+<span class="sd">    simSystem : Gromos_System</span>
+<span class="sd">        the simulation system</span>
+<span class="sd">    tmp_jobname : str</span>
+<span class="sd">        possible job-name</span>
+<span class="sd">    job_submission_system : _SubmissionSystem</span>
+<span class="sd">        submission system</span>
+<span class="sd">    previous_job : int</span>
+<span class="sd">        job, that was submitted before this one.</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        more bla bla, by default True</span>
+<span class="sd">    verbose_lvl : int, optional</span>
+<span class="sd">        nicely define ammount of bla bla, by default 1</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[bool, int]</span>
+<span class="sd">        the bool tells, if the job was already submitted,</span>
+<span class="sd">        the id is the possibly found job id of the job, if it is in the queue.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IOError</span>
+<span class="sd">        if a tmp_out_cnf is present, we assume the simulation run was successfull. If it can not be parsed in, something else is a problem, but we should not continue our chain!</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if multiple jobs with same name were found in the queue, we assume, the search regex did not work.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if job with same name is already in the queue!</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking if jobs was already submitted or done&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">block_double_submission</span><span class="p">:</span>  <span class="c1"># can we find an job with this name in the queue?</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking for jobs with name: &quot;</span> <span class="o">+</span> <span class="n">tmp_jobname</span><span class="p">)</span>
+        <span class="n">queued_job_ids</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="n">job_name</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)):</span>
+            <span class="n">queued_job_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="o">.</span><span class="n">STAT</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;RUN&quot;</span><span class="p">,</span> <span class="s2">&quot;PEND&quot;</span><span class="p">]))</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">JOBID</span><span class="p">)</span>
+
+        <span class="c1"># check if already submitted</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># check if job is already submitted:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="s2">SKIP job Submission: &quot;</span>
+                    <span class="o">+</span> <span class="n">tmp_jobname</span>
+                    <span class="o">+</span> <span class="s2">&quot; was already submitted to the queue! </span><span class="se">\n\t\t\t\t</span><span class="s2">SKIP</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="s2">submitted IDS: &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t\t\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">queued_job_ids</span><span class="p">))</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">simSystem</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">tmp_out_cnf</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Tried to read found cnf file: &quot;</span> <span class="o">+</span> <span class="n">tmp_out_cnf</span> <span class="o">+</span> <span class="s2">&quot;. FAILED! </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queued_job_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">previous_job</span> <span class="o">=</span> <span class="n">queued_job_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TRY to attach next job to &quot;</span><span class="p">,</span> <span class="n">previous_job</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">there are multiple jobs, that could be the precessor. &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">queued_job_ids</span><span class="p">))</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">previous_job</span>
+
+    <span class="c1"># Check if run was already finished:</span>
+    <span class="n">tmp_out_cnfs_regex</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_out_cnf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;*.cnf&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking for resulting files: &quot;</span> <span class="o">+</span> <span class="n">tmp_out_cnfs_regex</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">tmp_out_cnfs_regex</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># was this job already run and finished?</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2"> NOT SUBMITTED!(inScript) as these Files were found: </span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">tmp_out_cnfs_regex</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">simSystem</span><span class="p">,</span> <span class="s2">&quot;coord_seeds&quot;</span><span class="p">,</span> <span class="n">tmp_out_cnf</span><span class="p">)</span>  <span class="c1"># set next coord Files</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">simSystem</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">previous_job</span></div>
+
+
+<div class="viewcode-block" id="chain_submission"><a class="viewcode-back" href="../../../../../../_source/pygromos.simulations.hpc_queuing.job_scheduling.schedulers.html#pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.chain_submission">[docs]</a><span class="k">def</span> <span class="nf">chain_submission</span><span class="p">(</span>
+    <span class="n">simSystem</span><span class="p">:</span> <span class="n">Gromos_System</span><span class="p">,</span>
+    <span class="n">out_dir_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">out_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">chain_job_repetitions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">worker_script</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">job_submission_system</span><span class="p">:</span> <span class="n">_SubmissionSystem</span><span class="p">,</span>
+    <span class="n">jobname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">run_analysis_script_every_x_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">in_analysis_script_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">start_run_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">prefix_command</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">previous_job_ID</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">work_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">initialize_first_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">reinitialize_every_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Gromos_System</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        this function submits a chain of simulation steps to the queuing system and does the file managment.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    simSystem : Gromos_System</span>
+<span class="sd">        simulation system</span>
+<span class="sd">    out_dir_path : str</span>
+<span class="sd">        out directory path</span>
+<span class="sd">    out_prefix : str</span>
+<span class="sd">        out prefix for simulation files</span>
+<span class="sd">    chain_job_repetitions : int</span>
+<span class="sd">        how often, should the simulation be repeated (in continuation)</span>
+<span class="sd">    worker_script : str</span>
+<span class="sd">        worker, that should be submitted. This script will be executed at each scheduled job.</span>
+<span class="sd">    job_submission_system : _SubmissionSystem</span>
+<span class="sd">        submission system, what type of submission?</span>
+<span class="sd">    jobname : str</span>
+<span class="sd">        name of the simulation job</span>
+<span class="sd">    run_analysis_script_every_x_runs : int, optional</span>
+<span class="sd">        run analysis in between - (careful will not be overwritten, make sure final analysis is correct.), by default 0</span>
+<span class="sd">    in_analysis_script_path : str, optional</span>
+<span class="sd">        analysis script for simulation, that should be applied (will at least be applied after the full simulation chain.), by default &quot;&quot;</span>
+<span class="sd">    start_run_index : int, optional</span>
+<span class="sd">        start index of the job chain., by default 1</span>
+<span class="sd">    prefix_command : str, optional</span>
+<span class="sd">        any bash prefix commands, before submitting?, by default &quot;&quot;</span>
+<span class="sd">    previous_job_ID : int, optional</span>
+<span class="sd">        ID of the prefious job, to be chained to. , by default None</span>
+<span class="sd">    work_dir : str, optional</span>
+<span class="sd">        dir to wich the work in progress will be written. if None a tmp-srcatch dir will be used with LSF!, by default None</span>
+<span class="sd">    initialize_first_run : bool, optional</span>
+<span class="sd">        should the velocities for the first run be initialized?, by default True</span>
+<span class="sd">    reinitialize_every_run : bool, optional</span>
+<span class="sd">        should in every run, the velocities be reinitialized?, by default False</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        more bla bla, by default False</span>
+<span class="sd">    verbose_lvl : int, optional</span>
+<span class="sd">        nicely define ammount of bla bla, by default 1</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[int, str, Gromos_System]</span>
+<span class="sd">        Tuple[previous_job_ID, tmp_jobname, simSystem]</span>
+<span class="sd">        will return the last job_ID, the last tmp_jobname and the final gromosSystem.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if submission fails. This can habe various reasons, always check also the present files! (*omd etc.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ChainSubmission - &quot;</span> <span class="o">+</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">30</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start_run_index &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_run_index</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;job reptitions &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">chain_job_repetitions</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">job_submission_system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">LOCAL</span><span class="p">:</span>
+        <span class="n">simSystem</span><span class="o">.</span><span class="n">_future_promise</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">ana_id</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">job_submission_system</span><span class="o">.</span><span class="n">job_duration</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">job_duration</span>
+    <span class="k">for</span> <span class="n">runID</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_run_index</span><span class="p">,</span> <span class="n">chain_job_repetitions</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> submit  &quot;</span> <span class="o">+</span> <span class="n">jobname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">runID</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">spacer3</span><span class="p">)</span>
+
+        <span class="n">tmp_outprefix</span> <span class="o">=</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">runID</span><span class="p">)</span>
+        <span class="n">tmp_jobname</span> <span class="o">=</span> <span class="n">jobname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">runID</span><span class="p">)</span>
+        <span class="n">tmp_outdir</span> <span class="o">=</span> <span class="n">out_dir_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">tmp_outprefix</span>
+        <span class="n">tmp_out_cnf</span> <span class="o">=</span> <span class="n">tmp_outdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">tmp_outprefix</span> <span class="o">+</span> <span class="s2">&quot;.cnf&quot;</span>
+
+        <span class="c1"># Checks if run should be skipped!</span>
+        <span class="n">do_skip</span><span class="p">,</span> <span class="n">previous_job_ID</span> <span class="o">=</span> <span class="n">do_skip_job</span><span class="p">(</span>
+            <span class="n">tmp_out_cnf</span><span class="o">=</span><span class="n">tmp_out_cnf</span><span class="p">,</span>
+            <span class="n">simSystem</span><span class="o">=</span><span class="n">simSystem</span><span class="p">,</span>
+            <span class="n">tmp_jobname</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">,</span>
+            <span class="n">job_submission_system</span><span class="o">=</span><span class="n">job_submission_system</span><span class="p">,</span>
+            <span class="n">previous_job</span><span class="o">=</span><span class="n">previous_job_ID</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">do_skip</span><span class="p">:</span>
+            <span class="n">bash</span><span class="o">.</span><span class="n">make_folder</span><span class="p">(</span><span class="n">tmp_outdir</span><span class="p">)</span>
+
+            <span class="c1"># build COMMANDS:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefix_command</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">prefix_command</span> <span class="o">+=</span> <span class="s2">&quot; &amp;&amp; &quot;</span>
+
+            <span class="c1"># We will write the arguments to the python script in a bash array</span>
+            <span class="c1"># to make it simpler to read in our input files.</span>
+
+            <span class="n">md_args</span> <span class="o">=</span> <span class="s2">&quot;md_args=(</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-out_dir &quot;</span> <span class="o">+</span> <span class="n">tmp_outdir</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_cnf_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_imd_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_top_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-runID &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">runID</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="c1"># OPTIONAL ARGS</span>
+            <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">disres</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_disres_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">disres</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">ptp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_perttopo_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">ptp</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">refpos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_refpos_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">refpos</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">qmmm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_qmmm_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">qmmm</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+            <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">posres</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-in_posres_path &quot;</span> <span class="o">+</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">posres</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-nmpi &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_submission_system</span><span class="o">.</span><span class="n">nmpi</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-nomp &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_submission_system</span><span class="o">.</span><span class="n">nomp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-initialize_first_run &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">initialize_first_run</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-reinitialize_every_run &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">reinitialize_every_run</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-gromosXX_bin_dir &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">simSystem</span><span class="o">.</span><span class="n">gromosXX</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-gromosXX_check_binary_paths &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">simSystem</span><span class="o">.</span><span class="n">gromosXX</span><span class="o">.</span><span class="n">_check_binary_paths</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="k">if</span> <span class="n">work_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-work_dir &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">work_dir</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="p">,</span> <span class="s2">&quot;WRITETRAJ&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWX</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-out_trc &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWE</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-out_tre &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWV</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-out_trv &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWF</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-out_trf &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">simSystem</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">WRITETRAJ</span><span class="o">.</span><span class="n">NTWG</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-out_trg &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;-zip_trajectories &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_submission_system</span><span class="o">.</span><span class="n">zip_trajectories</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="n">md_args</span> <span class="o">+=</span> <span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">&quot;</span>  <span class="c1"># closing the bash array which stores all arguments.</span>
+
+            <span class="c1"># add zip option here</span>
+
+            <span class="c1"># MAIN commands</span>
+            <span class="n">md_script_command</span> <span class="o">=</span> <span class="n">prefix_command</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">md_args</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">md_script_command</span> <span class="o">+=</span> <span class="s2">&quot;python3 &quot;</span> <span class="o">+</span> <span class="n">worker_script</span> <span class="o">+</span> <span class="s1">&#39;  &quot;$</span><span class="si">{md_args[@]}</span><span class="s1">&quot; </span><span class="se">\n</span><span class="s1">&#39;</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PREVIOUS ID: &quot;</span><span class="p">,</span> <span class="n">previous_job_ID</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;COMMAND: &quot;</span><span class="p">,</span> <span class="n">md_script_command</span><span class="p">)</span>
+
+            <span class="c1"># SCHEDULE THE COMMANDS</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">SIMULATION&quot;</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">tmp_outdir</span><span class="p">)</span>
+                <span class="n">sub_job</span> <span class="o">=</span> <span class="n">Submission_job</span><span class="p">(</span>
+                    <span class="n">command</span><span class="o">=</span><span class="n">md_script_command</span><span class="p">,</span>
+                    <span class="n">jobName</span><span class="o">=</span><span class="n">tmp_jobname</span><span class="p">,</span>
+                    <span class="n">submit_from_dir</span><span class="o">=</span><span class="n">tmp_outdir</span><span class="p">,</span>
+                    <span class="n">queue_after_jobID</span><span class="o">=</span><span class="n">previous_job_ID</span><span class="p">,</span>
+                    <span class="n">outLog</span><span class="o">=</span><span class="n">tmp_outdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_md.out&quot;</span><span class="p">,</span>
+                    <span class="n">errLog</span><span class="o">=</span><span class="n">tmp_outdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_md.err&quot;</span><span class="p">,</span>
+                    <span class="n">sumbit_from_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">previous_job_ID</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">submit_to_queue</span><span class="p">(</span><span class="n">sub_job</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SIMULATION ID: &quot;</span><span class="p">,</span> <span class="n">previous_job_ID</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>  <span class="c1"># job already in the queue</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;ERROR during submission of main job &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tmp_jobname</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="c1"># OPTIONAL schedule - analysis inbetween.</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">runID</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                <span class="ow">and</span> <span class="n">run_analysis_script_every_x_runs</span> <span class="o">!=</span> <span class="mi">0</span>
+                <span class="ow">and</span> <span class="n">runID</span> <span class="o">%</span> <span class="n">run_analysis_script_every_x_runs</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="ow">and</span> <span class="n">runID</span> <span class="o">&lt;</span> <span class="n">chain_job_repetitions</span>
+            <span class="p">):</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">INBETWEEN ANALYSIS&quot;</span><span class="p">)</span>
+                <span class="n">sub_job</span> <span class="o">=</span> <span class="n">Submission_job</span><span class="p">(</span>
+                    <span class="n">command</span><span class="o">=</span><span class="n">in_analysis_script_path</span><span class="p">,</span>
+                    <span class="n">jobName</span><span class="o">=</span><span class="n">jobname</span> <span class="o">+</span> <span class="s2">&quot;_intermediate_ana_run_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">runID</span><span class="p">),</span>
+                    <span class="n">outLog</span><span class="o">=</span><span class="n">tmp_outdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_inbetweenAna.out&quot;</span><span class="p">,</span>
+                    <span class="n">errLog</span><span class="o">=</span><span class="n">tmp_outdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">out_prefix</span> <span class="o">+</span> <span class="s2">&quot;_inbetweenAna.err&quot;</span><span class="p">,</span>
+                    <span class="n">queue_after_jobID</span><span class="o">=</span><span class="n">previous_job_ID</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ana_id</span> <span class="o">=</span> <span class="n">job_submission_system</span><span class="o">.</span><span class="n">submit_to_queue</span><span class="p">(</span><span class="n">sub_job</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>  <span class="c1"># job already in the queue</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR during submission of analysis command of &quot;</span> <span class="o">+</span> <span class="n">sub_job</span><span class="o">.</span><span class="n">jobName</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Did not submit!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;job_postprocess &quot;</span><span class="p">)</span>
+        <span class="n">prefix_command</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Resulting cnf is provided to use it in further approaches.</span>
+        <span class="n">simSystem</span><span class="o">.</span><span class="n">cnf</span> <span class="o">=</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">tmp_out_cnf</span><span class="p">,</span> <span class="n">_future_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ana_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">previous_job_ID</span> <span class="o">=</span> <span class="n">ana_id</span>
+
+    <span class="k">return</span> <span class="n">previous_job_ID</span><span class="p">,</span> <span class="n">tmp_jobname</span><span class="p">,</span> <span class="n">simSystem</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

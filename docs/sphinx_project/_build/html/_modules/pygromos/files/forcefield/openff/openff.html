@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.forcefield.openff.openff &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.files.forcefield.openff.openff</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.files.forcefield.openff.openff</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">simtk</span> <span class="kn">import</span> <span class="n">unit</span> <span class="k">as</span> <span class="n">u</span>
+
+
+<span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;openff&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+        <span class="s2">&quot;openforcefield2gromos is not enabled without openFF toolkit package! Please install openFF toolkit.&quot;</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">openff.toolkit.topology</span> <span class="kn">import</span> <span class="n">Molecule</span><span class="p">,</span> <span class="n">Topology</span>
+    <span class="kn">from</span> <span class="nn">openff.toolkit.typing.engines</span> <span class="kn">import</span> <span class="n">smirnoff</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files.coord.cnf</span> <span class="kn">import</span> <span class="n">Cnf</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.forcefield._generic_force_field</span> <span class="kn">import</span> <span class="n">_generic_force_field</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.top</span> <span class="kn">import</span> <span class="n">Top</span>
+<span class="kn">from</span> <span class="nn">pygromos.data.ff</span> <span class="kn">import</span> <span class="n">data_ff_SMIRNOFF</span>
+<span class="kn">from</span> <span class="nn">pygromos.data</span> <span class="kn">import</span> <span class="n">topology_templates</span>
+
+
+<div class="viewcode-block" id="OpenFF"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF">[docs]</a><span class="k">class</span> <span class="nc">OpenFF</span><span class="p">(</span><span class="n">_generic_force_field</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;openff&quot;</span><span class="p">,</span> <span class="n">path_to_files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">auto_import</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path_to_files</span><span class="o">=</span><span class="n">path_to_files</span><span class="p">,</span> <span class="n">auto_import</span><span class="o">=</span><span class="n">auto_import</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">auto_import</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auto_import_ff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="OpenFF.auto_import_ff"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.auto_import_ff">[docs]</a>    <span class="k">def</span> <span class="nf">auto_import_ff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">off</span> <span class="o">=</span> <span class="n">smirnoff</span><span class="o">.</span><span class="n">ForceField</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import a OpenForceField from path: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">data_ff_SMIRNOFF</span> <span class="o">+</span> <span class="s2">&quot;/*.offxml&quot;</span><span class="p">)</span>
+            <span class="n">filelist</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="n">filelist</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">off</span> <span class="o">=</span> <span class="n">smirnoff</span><span class="o">.</span><span class="n">ForceField</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span> <span class="o">=</span> <span class="n">f</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found off: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_files</span><span class="p">))</span>
+
+        <span class="c1"># set atomic_number_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;H&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;He&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Li&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Be&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;N&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;O&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;F&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Ne&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Na&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Mg&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Al&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Si&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Cl&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Ar&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;K&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Ca&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Br&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="mi">53</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;I&quot;</span></div>
+
+<div class="viewcode-block" id="OpenFF.create_cnf"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.create_cnf">[docs]</a>    <span class="k">def</span> <span class="nf">create_cnf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_cnf</span><span class="p">:</span> <span class="n">Cnf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cnf</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Cnf</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="n">mol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenFF.create_top"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.create_top">[docs]</a>    <span class="k">def</span> <span class="nf">create_top</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">in_top</span><span class="p">:</span> <span class="n">Top</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Top</span><span class="p">:</span>
+        <span class="c1"># prepare topology</span>
+        <span class="k">if</span> <span class="n">in_top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span> <span class="o">=</span> <span class="n">in_top</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span> <span class="o">=</span> <span class="n">Top</span><span class="p">(</span><span class="n">in_value</span><span class="o">=</span><span class="n">topology_templates</span><span class="o">.</span><span class="n">blank_topo_template</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">_orig_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+        <span class="c1"># create molecule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_mol_for_convert</span><span class="p">(</span><span class="n">mol</span><span class="o">=</span><span class="n">mol</span><span class="p">)</span>
+
+        <span class="c1"># convert molecule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span></div>
+
+    <span class="k">def</span> <span class="nf">_init_mol_for_convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No molecule given!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">Molecule</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span> <span class="o">=</span> <span class="n">mol</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span> <span class="o">=</span> <span class="n">Molecule</span><span class="o">.</span><span class="n">from_rdkit</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span> <span class="o">=</span> <span class="n">Molecule</span><span class="o">.</span><span class="n">from_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mol is not a supported molecule type!&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">openFFTop</span> <span class="o">=</span> <span class="n">Topology</span><span class="o">.</span><span class="n">from_molecules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="p">)</span>
+
+        <span class="c1"># create list of all forces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">label_molecules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFTop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openmm_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">off</span><span class="o">.</span><span class="n">create_openmm_system</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFTop</span><span class="p">)</span>
+
+        <span class="c1"># 1-3 / 1-4 exclusion lists</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclusionList13</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclusionList14</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="OpenFF.convert"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># print OpenFF warning in Title</span>
+        <span class="n">titleString</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">titleString</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">name: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> hill_formula: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">hill_formula</span>
+        <span class="n">titleString</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="mi">40</span> <span class="o">*</span> <span class="s2">&quot;-&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">| created from OpenForceField topology |</span><span class="se">\n\t</span><span class="s2">| use Amber Block for OpenFF topology! |</span><span class="se">\n\t</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="mi">40</span> <span class="o">*</span> <span class="s2">&quot;-&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;TITLE&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">TITLE</span><span class="o">.</span><span class="n">content</span> <span class="o">+=</span> <span class="p">[</span><span class="n">titleString</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="n">titleString</span><span class="p">])</span>
+        <span class="c1"># Do all the conversions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convertResname</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convertBonds</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convertAngles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convertTosions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convertImproper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convertVdW</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_other_stuff</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenFF.convertResname"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convertResname">[docs]</a>    <span class="k">def</span> <span class="nf">convertResname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_resname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_resname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">hill_formula</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenFF.convertBonds"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convertBonds">[docs]</a>    <span class="k">def</span> <span class="nf">convertBonds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;Bonds&quot;</span><span class="p">]:</span>
+                <span class="n">force</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;Bonds&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                <span class="c1"># hQ = topology.atom(force[0]).atomic_number == 1 or topology.atom(force[1]).atomic_number == 1</span>
+                <span class="c1"># hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841</span>
+                <span class="n">atomI</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomJ</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">kilojoule</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">mole</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">nanometer</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">b0</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">nanometer</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_bond</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">b0</span><span class="o">=</span><span class="n">b0</span><span class="p">,</span> <span class="n">atomI</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">atomJ</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">includesH</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># hQ</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;BONDSTRETCHTYPE&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDSTRETCHTYPE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;BONDH&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDH&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;BOND&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BOND&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span></div>
+
+<div class="viewcode-block" id="OpenFF.convertAngles"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convertAngles">[docs]</a>    <span class="k">def</span> <span class="nf">convertAngles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;Angles&quot;</span><span class="p">]:</span>
+                <span class="n">force</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;Angles&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                <span class="c1"># hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841</span>
+                <span class="n">atomI</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomJ</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomK</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># TODO: proper conversion to quartic</span>
+                <span class="n">kh</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">kilojoule</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">mole</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">degree</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">b0</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">angle</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_angle</span><span class="p">(</span>
+                    <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">kh</span><span class="o">=</span><span class="n">kh</span><span class="p">,</span> <span class="n">b0</span><span class="o">=</span><span class="n">b0</span><span class="p">,</span> <span class="n">atomI</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">atomJ</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">atomK</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">includesH</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">convertToQuartic</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>  <span class="c1"># hQ</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;BONDANGLEBENDTYPE&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDANGLEBENDTYPE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;BONDANGLEH&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDANGLEH&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;BONDANGLE&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;BONDANGLE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span></div>
+
+<div class="viewcode-block" id="OpenFF.convertTosions"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convertTosions">[docs]</a>    <span class="k">def</span> <span class="nf">convertTosions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;ProperTorsions&quot;</span><span class="p">]:</span>
+                <span class="n">force</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;ProperTorsions&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                <span class="c1"># hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841</span>
+                <span class="n">atomI</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomJ</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomK</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomL</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">k_list</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">k</span>
+                <span class="n">phase_list</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">phase</span>
+                <span class="n">per_list</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">periodicity</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">k_list</span><span class="p">)):</span>
+                    <span class="n">CP</span> <span class="o">=</span> <span class="n">k_list</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">kilojoule_per_mole</span><span class="p">)</span>
+                    <span class="n">PD</span> <span class="o">=</span> <span class="n">phase_list</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span>
+                    <span class="n">NP</span> <span class="o">=</span> <span class="n">per_list</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                    <span class="c1"># convert negativ CP by phase shifting</span>
+                    <span class="k">if</span> <span class="n">CP</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">CP</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">CP</span><span class="p">)</span>
+                        <span class="n">PD</span> <span class="o">+=</span> <span class="mi">180</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span>
+                        <span class="n">CP</span><span class="o">=</span><span class="n">CP</span><span class="p">,</span> <span class="n">PD</span><span class="o">=</span><span class="n">PD</span><span class="p">,</span> <span class="n">NP</span><span class="o">=</span><span class="n">NP</span><span class="p">,</span> <span class="n">atomI</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">atomJ</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">atomK</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">atomL</span><span class="o">=</span><span class="n">atomL</span><span class="p">,</span> <span class="n">includesH</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>  <span class="c1"># hQ</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;TORSDIHEDRALTYPE&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TORSDIHEDRALTYPE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;DIHEDRALH&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;DIHEDRALH&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;DIHEDRAL&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;DIHEDRAL&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span></div>
+
+<div class="viewcode-block" id="OpenFF.convertImproper"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convertImproper">[docs]</a>    <span class="k">def</span> <span class="nf">convertImproper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;ImproperTorsions&quot;</span><span class="p">]:</span>
+                <span class="n">force</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;ImproperTorsions&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                <span class="c1"># hQ = not all([self.openFFTop.atom(x).atomic_number != 1 for x in key])  # noqa: F841</span>
+                <span class="n">atomI</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomJ</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomK</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atomL</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">k_list</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">k</span>
+                <span class="n">phase_list</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">phase</span>
+                <span class="n">per_list</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">periodicity</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">k_list</span><span class="p">)):</span>
+                    <span class="n">CP</span> <span class="o">=</span> <span class="n">k_list</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">kilojoule</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">mole</span><span class="p">)</span>
+                    <span class="n">PD</span> <span class="o">=</span> <span class="n">phase_list</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span>
+                    <span class="n">NP</span> <span class="o">=</span> <span class="n">per_list</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_torsiondihedral</span><span class="p">(</span>
+                        <span class="n">CP</span><span class="o">=</span><span class="n">CP</span><span class="p">,</span> <span class="n">PD</span><span class="o">=</span><span class="n">PD</span><span class="p">,</span> <span class="n">NP</span><span class="o">=</span><span class="n">NP</span><span class="p">,</span> <span class="n">atomI</span><span class="o">=</span><span class="n">atomI</span><span class="p">,</span> <span class="n">atomJ</span><span class="o">=</span><span class="n">atomJ</span><span class="p">,</span> <span class="n">atomK</span><span class="o">=</span><span class="n">atomK</span><span class="p">,</span> <span class="n">atomL</span><span class="o">=</span><span class="n">atomL</span><span class="p">,</span> <span class="n">includesH</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>  <span class="c1"># hQ</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;IMPDIHEDRALTYPE&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;IMPDIHEDRALTYPE&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;IMPDIHEDRALH&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;IMPDIHEDRALH&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;IMPDIHEDRAL&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;IMPDIHEDRAL&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[])</span></div>
+
+<div class="viewcode-block" id="OpenFF.createVdWexclusionList"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.createVdWexclusionList">[docs]</a>    <span class="k">def</span> <span class="nf">createVdWexclusionList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bondDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">ex13</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">ex14</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="c1"># create a list of all bonds</span>
+        <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;Bonds&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="n">bondDict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">bondDict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+                <span class="n">bondDict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">in</span> <span class="n">bondDict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">bondDict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+                <span class="n">bondDict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># use bond dict to createexclusion lists</span>
+        <span class="k">for</span> <span class="n">lvl1</span> <span class="ow">in</span> <span class="n">bondDict</span><span class="p">:</span>
+            <span class="n">ex13</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bondDict</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">ex14</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bondDict</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># just init 1-3 values will be removed later</span>
+            <span class="k">for</span> <span class="n">lvl2</span> <span class="ow">in</span> <span class="n">bondDict</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]:</span>
+                <span class="n">ex13</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lvl2</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">lvl3</span> <span class="ow">in</span> <span class="n">bondDict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">lvl2</span><span class="p">)]:</span>
+                    <span class="n">ex13</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lvl3</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">lvl4</span> <span class="ow">in</span> <span class="n">bondDict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">lvl3</span><span class="p">)]:</span>
+                        <span class="n">ex14</span><span class="p">[</span><span class="n">lvl1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lvl4</span><span class="p">)</span>
+        <span class="c1"># remove 1-3 from 1-4</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ex14</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ex13</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">ex14</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># remove all smaller entries</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ex13</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">ex13</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ex14</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">ex14</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclusionList13</span> <span class="o">=</span> <span class="n">ex13</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclusionList14</span> <span class="o">=</span> <span class="n">ex14</span></div>
+
+<div class="viewcode-block" id="OpenFF.convertVdW"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convertVdW">[docs]</a>    <span class="k">def</span> <span class="nf">convertVdW</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createVdWexclusionList</span><span class="p">()</span>
+        <span class="n">moleculeItr</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">prev_atom_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_force_list</span><span class="p">:</span>
+            <span class="n">panm_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">tot_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;vdW&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;vdW&quot;</span><span class="p">]:</span>
+                <span class="n">force</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">[</span><span class="s2">&quot;vdW&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">ATNM</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">prev_atom_counter</span>
+                <span class="n">MRES</span> <span class="o">=</span> <span class="n">moleculeItr</span>
+                <span class="c1"># get element sympol:</span>
+                <span class="n">atomic_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">atomic_number</span>
+                <span class="n">element_symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atomic_number_dict</span><span class="p">[</span><span class="n">atomic_number</span><span class="p">]</span>
+                <span class="n">panm_dict</span><span class="p">[</span><span class="n">element_symbol</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">PANM</span> <span class="o">=</span> <span class="n">element_symbol</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">panm_dict</span><span class="p">[</span><span class="n">element_symbol</span><span class="p">])</span>
+                <span class="n">IAC</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">MASS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">mass</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">dalton</span><span class="p">)</span>
+                <span class="n">CG</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">openmm_system</span><span class="o">.</span><span class="n">getForce</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">getParticleParameters</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">elementary_charge</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">CGC</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">tot_len</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclusionList13</span><span class="p">:</span>
+                    <span class="n">openFFexList13</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exclusionList13</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+                    <span class="n">INE</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">openFFexList13</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">INE</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclusionList14</span><span class="p">:</span>
+                    <span class="n">openFFexList14</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exclusionList14</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+                    <span class="n">INE14</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">openFFexList14</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">INE14</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">epsilon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">force</span><span class="o">.</span><span class="n">epsilon</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">kilojoule_per_mole</span><span class="p">))</span>
+                <span class="n">rmin</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">force</span><span class="o">.</span><span class="n">rmin_half</span><span class="o">.</span><span class="n">value_in_unit</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">nanometer</span><span class="p">)</span>
+                <span class="n">C6</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="p">(</span><span class="n">rmin</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span>
+                <span class="n">C12</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="p">(</span><span class="n">rmin</span><span class="o">**</span><span class="mi">12</span><span class="p">)</span>
+                <span class="n">CS6</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">C6</span>  <span class="c1"># factor 0.5 for 1-4 interaction. Standart in GROMOS and OpenFF</span>
+                <span class="n">CS12</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">C12</span>  <span class="c1"># factor 0.5 for 1-4 interaction. Standart in GROMOS and OpenFF</span>
+                <span class="n">IACname</span> <span class="o">=</span> <span class="n">force</span><span class="o">.</span><span class="n">id</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_new_atom</span><span class="p">(</span>
+                    <span class="n">ATNM</span><span class="o">=</span><span class="n">ATNM</span><span class="p">,</span>
+                    <span class="n">MRES</span><span class="o">=</span><span class="n">MRES</span><span class="p">,</span>
+                    <span class="n">PANM</span><span class="o">=</span><span class="n">PANM</span><span class="p">,</span>
+                    <span class="n">IAC</span><span class="o">=</span><span class="n">IAC</span><span class="p">,</span>
+                    <span class="n">MASS</span><span class="o">=</span><span class="n">MASS</span><span class="p">,</span>
+                    <span class="n">CG</span><span class="o">=</span><span class="n">CG</span><span class="p">,</span>
+                    <span class="n">CGC</span><span class="o">=</span><span class="n">CGC</span><span class="p">,</span>
+                    <span class="n">INE</span><span class="o">=</span><span class="n">INE</span><span class="p">,</span>
+                    <span class="n">INE14</span><span class="o">=</span><span class="n">INE14</span><span class="p">,</span>
+                    <span class="n">C6</span><span class="o">=</span><span class="n">C6</span><span class="p">,</span>
+                    <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span>
+                    <span class="n">CS6</span><span class="o">=</span><span class="n">CS6</span><span class="p">,</span>
+                    <span class="n">CS12</span><span class="o">=</span><span class="n">CS12</span><span class="p">,</span>
+                    <span class="n">IACname</span><span class="o">=</span><span class="n">IACname</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">moleculeItr</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">prev_atom_counter</span> <span class="o">+=</span> <span class="n">tot_len</span></div>
+
+<div class="viewcode-block" id="OpenFF.convert_other_stuff"><a class="viewcode-back" href="../../../../../_source/pygromos.files.forcefield.openff.html#pygromos.files.forcefield.openff.openff.OpenFF.convert_other_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">convert_other_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;SOLUTEMOLECULES&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;SOLUTEMOLECULES&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">SOLUTEMOLECULES</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;TEMPERATUREGROUPS&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TEMPERATUREGROUPS&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">TEMPERATUREGROUPS</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;PRESSUREGROUPS&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;PRESSUREGROUPS&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">PRESSUREGROUPS</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFFmolecule</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;LJEXCEPTIONS&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;LJEXCEPTIONS&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;SOLVENTATOM&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;SOLVENTATOM&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;SOLVENTCONSTR&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;SOLVENTCONSTR&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;TOPVERSION&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;TOPVERSION&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2.0&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="p">,</span> <span class="s2">&quot;PHYSICALCONSTANTS&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gromosTop</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">blocktitle</span><span class="o">=</span><span class="s2">&quot;PHYSICALCONSTANTS&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">])</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

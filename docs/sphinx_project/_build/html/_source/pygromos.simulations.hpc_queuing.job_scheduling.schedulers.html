@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.simulations.hpc_queuing.job_scheduling.schedulers package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.simulations.hpc_queuing.job_scheduling.workers package" href="pygromos.simulations.hpc_queuing.job_scheduling.workers.html" />
+    <link rel="prev" title="pygromos.simulations.hpc_queuing.job_scheduling package" href="pygromos.simulations.hpc_queuing.job_scheduling.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.html">pygromos.simulations package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.hpc_queuing.html">pygromos.simulations.hpc_queuing package</a> &raquo;</li>
+        
+          <li><a href="pygromos.simulations.hpc_queuing.job_scheduling.html">pygromos.simulations.hpc_queuing.job_scheduling package</a> &raquo;</li>
+        
+      <li>pygromos.simulations.hpc_queuing.job_scheduling.schedulers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/pygromos.simulations.hpc_queuing.job_scheduling.schedulers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pygromos-simulations-hpc-queuing-job-scheduling-schedulers-package">
+<h1>pygromos.simulations.hpc_queuing.job_scheduling.schedulers package<a class="headerlink" href="#pygromos-simulations-hpc-queuing-job-scheduling-schedulers-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions">
+<span id="pygromos-simulations-hpc-queuing-job-scheduling-schedulers-scheduler-functions-module"></span><h2>pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions module<a class="headerlink" href="#module-pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.chain_submission">
+<span class="sig-prename descclassname"><span class="pre">pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.</span></span><span class="sig-name descname"><span class="pre">chain_submission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simSystem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System"><span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain_job_repetitions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker_script</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_submission_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pygromos.simulations.hpc_queuing.submission_systems._submission_system._SubmissionSystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_analysis_script_every_x_runs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_analysis_script_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_run_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix_command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_job_ID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize_first_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reinitialize_every_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System"><span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/scheduler_functions.html#chain_submission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.chain_submission" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>this function submits a chain of simulation steps to the queuing system and does the file managment.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simSystem</strong> (<em>Gromos_System</em>) – simulation system</p></li>
+<li><p><strong>out_dir_path</strong> (<em>str</em>) – out directory path</p></li>
+<li><p><strong>out_prefix</strong> (<em>str</em>) – out prefix for simulation files</p></li>
+<li><p><strong>chain_job_repetitions</strong> (<em>int</em>) – how often, should the simulation be repeated (in continuation)</p></li>
+<li><p><strong>worker_script</strong> (<em>str</em>) – worker, that should be submitted. This script will be executed at each scheduled job.</p></li>
+<li><p><strong>job_submission_system</strong> (<em>_SubmissionSystem</em>) – submission system, what type of submission?</p></li>
+<li><p><strong>jobname</strong> (<em>str</em>) – name of the simulation job</p></li>
+<li><p><strong>run_analysis_script_every_x_runs</strong> (<em>int, optional</em>) – run analysis in between - (careful will not be overwritten, make sure final analysis is correct.), by default 0</p></li>
+<li><p><strong>in_analysis_script_path</strong> (<em>str, optional</em>) – analysis script for simulation, that should be applied (will at least be applied after the full simulation chain.), by default “”</p></li>
+<li><p><strong>start_run_index</strong> (<em>int, optional</em>) – start index of the job chain., by default 1</p></li>
+<li><p><strong>prefix_command</strong> (<em>str, optional</em>) – any bash prefix commands, before submitting?, by default “”</p></li>
+<li><p><strong>previous_job_ID</strong> (<em>int, optional</em>) – ID of the prefious job, to be chained to. , by default None</p></li>
+<li><p><strong>work_dir</strong> (<em>str, optional</em>) – dir to wich the work in progress will be written. if None a tmp-srcatch dir will be used with LSF!, by default None</p></li>
+<li><p><strong>initialize_first_run</strong> (<em>bool, optional</em>) – should the velocities for the first run be initialized?, by default True</p></li>
+<li><p><strong>reinitialize_every_run</strong> (<em>bool, optional</em>) – should in every run, the velocities be reinitialized?, by default False</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – more bla bla, by default False</p></li>
+<li><p><strong>verbose_lvl</strong> (<em>int, optional</em>) – nicely define ammount of bla bla, by default 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple[previous_job_ID, tmp_jobname, simSystem]
+will return the last job_ID, the last tmp_jobname and the final gromosSystem.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[int, str, <a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System">Gromos_System</a>]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if submission fails. This can habe various reasons, always check also the present files! (<a href="#id1"><span class="problematic" id="id2">*</span></a>omd etc.)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.do_skip_job">
+<span class="sig-prename descclassname"><span class="pre">pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.</span></span><span class="sig-name descname"><span class="pre">do_skip_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_out_cnf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simSystem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pygromos.files.gromos_system.html#pygromos.files.gromos_system.gromos_system.Gromos_System" title="pygromos.files.gromos_system.gromos_system.Gromos_System"><span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_jobname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_submission_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pygromos.simulations.hpc_queuing.submission_systems._submission_system._SubmissionSystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/scheduler_functions.html#do_skip_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.simulations.hpc_queuing.job_scheduling.schedulers.scheduler_functions.do_skip_job" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function returns true if the job was already submitted or already finished, as well as the job id.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tmp_out_cnf</strong> (<em>str</em>) – the possible final out cnf</p></li>
+<li><p><strong>simSystem</strong> (<em>Gromos_System</em>) – the simulation system</p></li>
+<li><p><strong>tmp_jobname</strong> (<em>str</em>) – possible job-name</p></li>
+<li><p><strong>job_submission_system</strong> (<em>_SubmissionSystem</em>) – submission system</p></li>
+<li><p><strong>previous_job</strong> (<em>int</em>) – job, that was submitted before this one.</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – more bla bla, by default True</p></li>
+<li><p><strong>verbose_lvl</strong> (<em>int, optional</em>) – nicely define ammount of bla bla, by default 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the bool tells, if the job was already submitted,
+the id is the possibly found job id of the job, if it is in the queue.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[bool, int]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>IOError</strong> – if a tmp_out_cnf is present, we assume the simulation run was successfull. If it can not be parsed in, something else is a problem, but we should not continue our chain!</p></li>
+<li><p><strong>ValueError</strong> – if multiple jobs with same name were found in the queue, we assume, the search regex did not work.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler">
+<span id="pygromos-simulations-hpc-queuing-job-scheduling-schedulers-simulation-scheduler-module"></span><h2>pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler module<a class="headerlink" href="#module-pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler" title="Permalink to this headline">¶</a></h2>
+<p>Wrapper for Long simulations -  similar to repex_EDS_long_production_run.
+This script schedules Simulations ons euler into the queue.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler.do">
+<span class="sig-prename descclassname"><span class="pre">pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler.</span></span><span class="sig-name descname"><span class="pre">do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_simSystem:</span> <span class="pre">pygromos.files.gromos_system.gromos_system.Gromos_System</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_run_num:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">equilibration_run_num:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize_first_run=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reinitialize_every_run=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analysis_script_path:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submission_system:</span> <span class="pre">pygromos.simulations.hpc_queuing.submission_systems._submission_system._SubmissionSystem</span> <span class="pre">=</span> <span class="pre">&lt;pygromos.simulations.hpc_queuing.submission_systems.lsf.LSF</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_job_ID:</span> <span class="pre">typing.Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_no_double_submit_check:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_work_dir:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_lvl:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/pygromos/simulations/hpc_queuing/job_scheduling/schedulers/simulation_scheduler.html#do"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.simulations.hpc_queuing.job_scheduling.schedulers.simulation_scheduler.do" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This function schedules simulations starting from the gromos system.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_simSystem</strong> (<em>Gromos_System</em>) – system that should be submitted with the provided imd file</p></li>
+<li><p><strong>out_dir_path</strong> (<em>str</em>) – out directory  path for the simulation</p></li>
+<li><p><strong>simulation_run_num</strong> (<em>int</em>) – number of simulations</p></li>
+<li><p><strong>equilibration_run_num</strong> (<em>int, optional</em>) – number of the equilibraitons, by default 0</p></li>
+<li><p><strong>initialize_first_run</strong> (<em>bool, optional</em>) – should the velocities be initialized in the first run?, by default False</p></li>
+<li><p><strong>reinitialize_every_run</strong> (<em>bool, optional</em>) – DEAPPRECIATED! should always the velocities be initialized, by default False</p></li>
+<li><p><strong>analysis_script_path</strong> (<em>str, optional</em>) – path to the analysis script, that should be used for this simulaiton approach, by default None</p></li>
+<li><p><strong>submission_system</strong> (<em>_SubmissionSystem, optional</em>) – system, to be used to submit the jobs, by default LSF()</p></li>
+<li><p><strong>previous_job_ID</strong> (<em>int, optional</em>) – previous job ID, by default None</p></li>
+<li><p><strong>_no_double_submit_check</strong> (<em>bool, optional</em>) – don’t check if job was already submit to queue (increases performance!), by default False</p></li>
+<li><p><strong>_work_dir</strong> (<em>str, optional</em>) – directory, to write out the tmp files, by default None</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – Baeh Baeh, by default True</p></li>
+<li><p><strong>verbose_lvl</strong> (<em>int, optional</em>) – amount of Baehs, by default 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the last job id, that was submitted.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>IOError</strong> – If error happens in preperation of simulation or in the submission</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pygromos.simulations.hpc_queuing.job_scheduling.schedulers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.simulations.hpc_queuing.job_scheduling.schedulers" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pygromos.simulations.hpc_queuing.job_scheduling.workers.html" class="btn btn-neutral float-right" title="pygromos.simulations.hpc_queuing.job_scheduling.workers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pygromos.simulations.hpc_queuing.job_scheduling.html" class="btn btn-neutral float-left" title="pygromos.simulations.hpc_queuing.job_scheduling package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

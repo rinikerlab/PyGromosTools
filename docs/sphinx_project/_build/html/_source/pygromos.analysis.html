@@ -1,0 +1,990 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.analysis package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.data package" href="pygromos.data.html" />
+    <link rel="prev" title="pygromos package" href="pygromos.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pygromos.analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+      <li>pygromos.analysis package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/pygromos.analysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pygromos-analysis-package">
+<h1>pygromos.analysis package<a class="headerlink" href="#pygromos-analysis-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.analysis.coordinate_analysis">
+<span id="pygromos-analysis-coordinate-analysis-module"></span><h2>pygromos.analysis.coordinate_analysis module<a class="headerlink" href="#module-pygromos.analysis.coordinate_analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.analysis.coordinate_analysis.calculate_distance">
+<span class="sig-prename descclassname"><span class="pre">pygromos.analysis.coordinate_analysis.</span></span><span class="sig-name descname"><span class="pre">calculate_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomA</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomB</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/coordinate_analysis.html#calculate_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.coordinate_analysis.calculate_distance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.analysis.coordinate_analysis.periodic_distance">
+<span class="sig-prename descclassname"><span class="pre">pygromos.analysis.coordinate_analysis.</span></span><span class="sig-name descname"><span class="pre">periodic_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/coordinate_analysis.html#periodic_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.coordinate_analysis.periodic_distance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.analysis.coordinate_analysis.periodic_shift">
+<span class="sig-prename descclassname"><span class="pre">pygromos.analysis.coordinate_analysis.</span></span><span class="sig-name descname"><span class="pre">periodic_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/coordinate_analysis.html#periodic_shift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.coordinate_analysis.periodic_shift" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.analysis.coordinate_analysis.rms">
+<span class="sig-prename descclassname"><span class="pre">pygromos.analysis.coordinate_analysis.</span></span><span class="sig-name descname"><span class="pre">rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_values</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/coordinate_analysis.html#rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.coordinate_analysis.rms" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for RMSD. Calculates the root mean square for a array of (position/velocity) arrays</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>in_values</strong> (<em>np.array of np.arrays</em>)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>root mean square</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pygromos.analysis.energy_analysis">
+<span id="pygromos-analysis-energy-analysis-module"></span><h2>pygromos.analysis.energy_analysis module<a class="headerlink" href="#module-pygromos.analysis.energy_analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.analysis.energy_analysis.get_Hvap">
+<span class="sig-prename descclassname"><span class="pre">pygromos.analysis.energy_analysis.</span></span><span class="sig-name descname"><span class="pre">get_Hvap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">liq_totpot_energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_totpot_energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nMolecules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.008314462618</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/energy_analysis.html#get_Hvap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.energy_analysis.get_Hvap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.analysis.energy_analysis.get_density">
+<span class="sig-prename descclassname"><span class="pre">pygromos.analysis.energy_analysis.</span></span><span class="sig-name descname"><span class="pre">get_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6605390671738465</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/energy_analysis.html#get_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.energy_analysis.get_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the density</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mass</strong> (<em>np.array</em>)</p></li>
+<li><p><strong>volume</strong> (<em>np.array</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>resulting density</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pygromos.analysis.error_estimate">
+<span id="pygromos-analysis-error-estimate-module"></span><h2>pygromos.analysis.error_estimate module<a class="headerlink" href="#module-pygromos.analysis.error_estimate" title="Permalink to this headline">¶</a></h2>
+<p>File: calculation of error estimates
+Warnings: this class is WIP!</p>
+<dl class="simple">
+<dt>Description:</dt><dd><p>Implementation of functions estimating the Error for calculated values using Gromos</p>
+</dd>
+</dl>
+<p>Author: Paul Katzberger</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.error_estimate.error_estimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.error_estimate.</span></span><span class="sig-name descname"><span class="pre">error_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/error_estimate.html#error_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.error_estimate.error_estimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to calculate the Error Estimate as implemented in ene_ana</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.error_estimate.error_estimator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/error_estimate.html#error_estimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.error_estimate.error_estimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize calculation
+:Parameters: <strong>values</strong> (<em>List[float]</em>) – list of ordered values for which the error should be estimated</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.error_estimate.error_estimator.calculate_error_estimate">
+<span class="sig-name descname"><span class="pre">calculate_error_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/error_estimate.html#error_estimator.calculate_error_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.error_estimate.error_estimator.calculate_error_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of the Error Estimate as in ene_ana
+:returns: <strong>d_ee</strong> – Error Estimate for provided list
+:rtype: float</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.error_estimate.error_estimator.calculate_rmsd">
+<span class="sig-name descname"><span class="pre">calculate_rmsd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/error_estimate.html#error_estimator.calculate_rmsd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.error_estimate.error_estimator.calculate_rmsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate rmsd
+:returns: <strong>rmsd</strong> – rmsd of values
+:rtype: float</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.analysis.free_energy_calculation">
+<span id="pygromos-analysis-free-energy-calculation-module"></span><h2>pygromos.analysis.free_energy_calculation module<a class="headerlink" href="#module-pygromos.analysis.free_energy_calculation" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>Free Energy Calculations:</dt><dd><p>This module contains functions for free energy calculations
+author: Gerhard König, Benjamin Schroeder</p>
+<p>THIS file was pirated from here: <a class="reference external" href="https://github.com/rinikerlab/Ensembler/blob/master/ensembler/analysis/freeEnergyCalculation.py">https://github.com/rinikerlab/Ensembler/blob/master/ensembler/analysis/freeEnergyCalculation.py</a></p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.free_energy_calculation.</span></span><span class="sig-name descname"><span class="pre">bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio" title="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bar.convergence_radius">
+<span class="sig-name descname"><span class="pre">convergence_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bar.convergence_radius" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bar.max_iterations">
+<span class="sig-name descname"><span class="pre">max_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bar.max_iterations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bar.min_iterations">
+<span class="sig-name descname"><span class="pre">min_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bar.min_iterations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.free_energy_calculation.</span></span><span class="sig-name descname"><span class="pre">bennetAcceptanceRatio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.analysis.free_energy_calculation._FreeEnergyCalculator</span></code></p>
+<blockquote>
+<div><p>This class implements the BAR method.
+$dF = -</p>
+</div></blockquote>
+<p>rac{1}{eta} * ln(
+rac{flangle(V_j-V_i+C)
+angle_i}{flangle(V_i-V_j-C)
+angle_j})+C$</p>
+<blockquote>
+<div><p>with :
+$ f(x) =</p>
+</div></blockquote>
+<p>rac{1}{1+e^(eta x)}$ - fermi function</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.C">
+<span class="sig-name descname"><span class="pre">C</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">C</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.C" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.T">
+<span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">T</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vi_i">
+<span class="sig-name descname"><span class="pre">Vi_i</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vi_i</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vi_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vi_j">
+<span class="sig-name descname"><span class="pre">Vi_j</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vi_j</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vi_j" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vj_i">
+<span class="sig-name descname"><span class="pre">Vj_i</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vj_i</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vj_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vj_j">
+<span class="sig-name descname"><span class="pre">Vj_j</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vj_j</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.Vj_j" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Here you can set Class wide the parameters T and k for the bennet acceptance ration (BAR) Equation
+:Parameters: * <strong>C</strong> (<em>float, optional</em>) – is the initial guess of the free Energy.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>T</strong> (<em>float, optional</em>) – Temperature in Kelvin, defaults to 398</p></li>
+<li><p><strong>k</strong> (<em>float, optional</em>) – boltzmann Constant, defaults to const.k*const.Avogadro</p></li>
+<li><p><strong>kT</strong> (<em>bool, optional</em>) – overwrites T and k to set all results in units of $k_bT$</p></li>
+<li><p><strong>kJ</strong> (<em>bool, optional</em>) – overwrites k to get the Boltzman constant with units kJ/(mol*K)</p></li>
+<li><p><strong>kCal</strong> (<em>bool, optional</em>) – overwrites k to get the Boltzman constant with units kcal/(mol*K)</p></li>
+<li><p><strong>convergence_radius</strong> (<em>float, optional</em>) – when is the result converged? if the deviation of one to another iteration is below the convergence radius.</p></li>
+<li><p><strong>max_iterations</strong> (<em>int, optional</em>) – maximal number of iterations.</p></li>
+<li><p><strong>min_iterations</strong> (<em>int, optional</em>) – minimal number of iterations</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio._calc_bar">
+<span class="sig-name descname"><span class="pre">_calc_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numbers.Number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vi_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vi_j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj_j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numbers.Number</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio._calc_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio._calc_bar" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>_calc_bar</dt><dd><dl class="simple">
+<dt>this function is calculating the free energy difference of two states for one iteration of the BAR method.</dt><dd><p>It is implemented straight forwad, but therefore not very numerical stable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi_i</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateI</p></li>
+<li><p><strong>Vj_i</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateI</p></li>
+<li><p><strong>Vi_j</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateJ</p></li>
+<li><p><strong>Vj_j</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateJ</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio._calc_bar_mpmath">
+<span class="sig-name descname"><span class="pre">_calc_bar_mpmath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numbers.Number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vi_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vi_j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj_j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numbers.Number</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio._calc_bar_mpmath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio._calc_bar_mpmath" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>_calc_bar</dt><dd><dl class="simple">
+<dt>this function is calculating the free energy difference of two states for one iteration of the BAR method.</dt><dd><p>It is implemented straight forwad, but therefore not very numerical stable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi_i</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateI</p></li>
+<li><p><strong>Vj_i</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateI</p></li>
+<li><p><strong>Vi_j</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateJ</p></li>
+<li><p><strong>Vj_j</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateJ</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio._calculate_optimize">
+<span class="sig-name descname"><span class="pre">_calculate_optimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Vi_i:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vj_i:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vi_j:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vj_j:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">C0:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio._calculate_optimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio._calculate_optimize" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>this function is calculating the free energy difference of two states with the BAR method.</dt><dd><p>it iterates over the _calc_bar method and determines the convergence and the result.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi_i</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateI</p></li>
+<li><p><strong>Vj_i</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateI</p></li>
+<li><p><strong>Vi_j</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateJ</p></li>
+<li><p><strong>Vj_j</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateJ</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">beta</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.beta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vi_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">numbers.Number</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">numbers.Number</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vi_j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">numbers.Number</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj_j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">numbers.Number</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>calculate</dt><dd><p>this function is calculating the free energy difference of two states with the BAR method.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi_i</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateI</p></li>
+<li><p><strong>Vj_i</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateI</p></li>
+<li><p><strong>Vi_j</strong> (<em>np.array</em>) – potential energies of stateI while sampling stateJ</p></li>
+<li><p><strong>Vj_j</strong> (<em>np.array</em>) – potential energies of stateJ while sampling stateJ</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.constants">
+<span class="sig-name descname"><span class="pre">constants</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{T:</span> <span class="pre">298,</span> <span class="pre">k:</span> <span class="pre">8.31446261815324,</span> <span class="pre">C:</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;}</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.constants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.convergence_radius">
+<span class="sig-name descname"><span class="pre">convergence_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.convergence_radius" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.equation">
+<span class="sig-name descname"><span class="pre">equation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sympy.core.function.Function</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(-log(exp((C</span> <span class="pre">-</span> <span class="pre">Vi_i</span> <span class="pre">+</span> <span class="pre">Vj_i)/(T*k)))</span> <span class="pre">+</span> <span class="pre">log(exp((C</span> <span class="pre">+</span> <span class="pre">Vi_j</span> <span class="pre">-</span> <span class="pre">Vj_j)/(T*k))))/(T*k)</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.equation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">k</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.max_iterations">
+<span class="sig-name descname"><span class="pre">max_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.max_iterations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.min_iterations">
+<span class="sig-name descname"><span class="pre">min_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.min_iterations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.set_parameters">
+<span class="sig-name descname"><span class="pre">set_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#bennetAcceptanceRatio.set_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.bennetAcceptanceRatio.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>set_parameters setter for the parameters T and k</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> (<em>float, optional</em>) – Temperature in Kelvin, defaults to 398</p></li>
+<li><p><strong>k</strong> (<em>float, optional</em>) – boltzmann Constant, defaults to const.k*const.Avogadro</p></li>
+<li><p><strong>C</strong> (<em>float, optional</em>) – C is the initial guess of the free energy difference.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.dfEDS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.free_energy_calculation.</span></span><span class="sig-name descname"><span class="pre">dfEDS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#dfEDS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.dfEDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig" title="pygromos.analysis.free_energy_calculation.threeStateZwanzig"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.analysis.free_energy_calculation.threeStateZwanzig</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.free_energy_calculation.</span></span><span class="sig-name descname"><span class="pre">threeStateZwanzig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#threeStateZwanzig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation" title="pygromos.analysis.free_energy_calculation.zwanzigEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.analysis.free_energy_calculation.zwanzigEquation</span></code></a></p>
+<blockquote>
+<div><p>this class provides the implementation for the Free energy calculation with EDS.
+It calculates the free energy via the reference state.
+$dF = dF_{BR}-dF_{AR} =</p>
+</div></blockquote>
+<p>rac{1}{eta} * ( ln(langle e^{-eta * (V_j-V_R)}
+angle) - ln(langle e^{-eta * (V_i-V_R)}
+angle))$</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.T">
+<span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">T</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.Vi">
+<span class="sig-name descname"><span class="pre">Vi</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vi</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.Vi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.Vj">
+<span class="sig-name descname"><span class="pre">Vj</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vj</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.Vj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.Vr">
+<span class="sig-name descname"><span class="pre">Vr</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vr</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.Vr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#threeStateZwanzig.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>this class provides the implementation for the Free energy calculation with EDS.</dt><dd><p>It calculates the free energy via the reference state.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> (<em>float, optional</em>) – Temperature in Kelvin, defaults to 398</p></li>
+<li><p><strong>k</strong> (<em>float, optional</em>) – boltzmann Constant, defaults to const.k*const.Avogadro</p></li>
+<li><p><strong>kT</strong> (<em>bool, optional</em>) – overwrites T and k to set all results in units of $k_bT$</p></li>
+<li><p><strong>kJ</strong> (<em>bool, optional</em>) – overwrites k to get the Boltzman constant with units kJ/(mol*K)</p></li>
+<li><p><strong>kCal</strong> (<em>bool, optional</em>) – overwrites k to get the Boltzman constant with units kcal/(mol*K)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig._calculate_implementation_useZwanzig">
+<span class="sig-name descname"><span class="pre">_calculate_implementation_useZwanzig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable,</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vj:</span> <span class="pre">(typing.Iterable,</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vr:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#threeStateZwanzig._calculate_implementation_useZwanzig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig._calculate_implementation_useZwanzig" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>calculate</dt><dd><p>this method calculates the zwanzig equation via the intermediate reference state R using the Zwanzig equation.
+it directly accesses the zwanzig implmentation.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi</strong> (<em>np.array</em>) – the potential energy of stateI while sampling stateR</p></li>
+<li><p><strong>Vj</strong> (<em>np.array</em>) – the potential energy of stateJ while sampling stateR</p></li>
+<li><p><strong>Vr</strong> (<em>np.array</em>) – the potential energy of stateR while sampling stateR</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vj:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vr:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#threeStateZwanzig.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>calculate</dt><dd><p>this method calculates the zwanzig equation via the intermediate reference state R using the Zwanzig equation.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi</strong> (<em>np.array</em>) – the potential energy of stateI while sampling stateR</p></li>
+<li><p><strong>Vj</strong> (<em>np.array</em>) – the potential energy of stateJ while sampling stateR</p></li>
+<li><p><strong>Vr</strong> (<em>np.array</em>) – the potential energy of stateR while sampling stateR</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.equation">
+<span class="sig-name descname"><span class="pre">equation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sympy.core.function.Function</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-(log(exp(-(Vi</span> <span class="pre">-</span> <span class="pre">Vr)/(T*k)))</span> <span class="pre">-</span> <span class="pre">log(exp(-(Vj</span> <span class="pre">-</span> <span class="pre">Vr)/(T*k))))/(T*k)</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.equation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.threeStateZwanzig.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">k</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.threeStateZwanzig.k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.free_energy_calculation.</span></span><span class="sig-name descname"><span class="pre">zwanzig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation" title="pygromos.analysis.free_energy_calculation.zwanzigEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.analysis.free_energy_calculation.zwanzigEquation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzig.constants">
+<span class="sig-name descname"><span class="pre">constants</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzig.constants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.analysis.free_energy_calculation.</span></span><span class="sig-name descname"><span class="pre">zwanzigEquation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.analysis.free_energy_calculation._FreeEnergyCalculator</span></code></p>
+<dl class="simple">
+<dt>Zwanzig Equation</dt><dd><p>This class is a nice wrapper for the zwanzig Equation.
+dF = - eta ln(langle e^(-beta(V_j-V_i))</p>
+</dd>
+</dl>
+<p>angle)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.T">
+<span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">T</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.Vi">
+<span class="sig-name descname"><span class="pre">Vi</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vi</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.Vi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.Vj">
+<span class="sig-name descname"><span class="pre">Vj</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Vj</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.Vj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.31446261815324</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kCal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Here you can set Class wide the parameters T and k for the Zwanzig Equation
+:Parameters: * <strong>T</strong> (<em>float, optional</em>) – Temperature in Kelvin, defaults to 398</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>k</strong> (<em>float, optional</em>) – boltzmann Constant, defaults to const.k*const.Avogadro</p></li>
+<li><p><strong>kT</strong> (<em>bool, optional</em>) – overwrites T and k to set all results in units of $k_bT$</p></li>
+<li><p><strong>kJ</strong> (<em>bool, optional</em>) – overwrites k to get the Boltzman constant with units kJ/(mol*K)</p></li>
+<li><p><strong>kCal</strong> (<em>bool, optional</em>) – overwrites k to get the Boltzman constant with units kcal/(mol*K)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_efficient">
+<span class="sig-name descname"><span class="pre">_calculate_efficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation._calculate_efficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_efficient" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>_calculate_efficient
+Calculate a free energy difference with the Zwanzig equation (aka exponential formula or thermodynamic perturbation).
+The initial state of the free energy difference is denoted as 0, the final state is called 1.
+The function expects two arrays of size n with potential energies. The first array, u00, contains the potential energies of a set
+of Boltzmann-weighted conformations of an MD or MC trajectory of the initial state, analyzed with the Hamiltonian of the
+initial state. The second array, u01 , contains the potential energies of a trajectory of the initial state that was
+analyzed with the potential energy function of the final state. The variable kT expects the product of the Boltzmann
+constant with the temperature that was used to generate the trajectory in the respective units of the potential energies.
+This is an efficient more overflow robust implementation of the Zwanzig Equation.
+&#64;Author: Gerhard König
+See Zwanzig, R. W. J. Chem. Phys. 1954, 22, 1420-1426. doi:10.1063/1.1740409
+$dF =</p>
+</div></blockquote>
+<p>rac{1}{eta} * ln(langlee^{-eta * (V_j-V_i)}
+angle)$</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Vi<span class="classifier">np.array</span></dt><dd><p>Potential energies of state I</p>
+</dd>
+<dt>Vj<span class="classifier">np.array</span></dt><dd><p>Potential energies of state J</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>float</dt><dd><p>free energy difference</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_implementation_bruteForce">
+<span class="sig-name descname"><span class="pre">_calculate_implementation_bruteForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation._calculate_implementation_bruteForce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_implementation_bruteForce" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>_calculate_implementation_bruteForce</dt><dd><p>This is a plain implementation of the zwanzig equation. It is not very numerical robust</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi</strong></p></li>
+<li><p><strong>Vj</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Vi</strong> (<em>np.array</em>) – Potential energies of state I</p></li>
+<li><p><strong>Vj</strong> (<em>np.array</em>) – Potential energies of state J</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>free energy difference</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_meanEfficient">
+<span class="sig-name descname"><span class="pre">_calculate_meanEfficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation._calculate_meanEfficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_meanEfficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a free energy difference with the Zwanzig equation (aka exponential formula or thermodynamic perturbation).
+The initial state of the free energy difference is denoted as 0, the final state is called 1.
+The function expects two arrays of size n with potential energies. The first array, u00, contains the potential energies of a set
+of Boltzmann-weighted conformations of an MD or MC trajectory of the initial state, analyzed with the Hamiltonian of the
+initial state. The second array, u01 , contains the potential energies of a trajectory of the initial state that was
+analyzed with the potential energy function of the final state. The variable kT expects the product of the Boltzmann
+constant with the temperature that was used to generate the trajectory in the respective units of the potential energies.
+This is an efficient more overflow robust implementation of the Zwanzig Equation.
+&#64;Author: Gerhard König
+See Zwanzig, R. W. J. Chem. Phys. 1954, 22, 1420-1426. doi:10.1063/1.1740409</p>
+<blockquote>
+<div><dl class="simple">
+<dt>_calculate_implementation_bruteForce</dt><dd><p>This is a plain implementation of the zwanzig equation. It is not very numerical robust</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Vi</strong> (<em>np.array</em>) – Potential energies of state I</p></li>
+<li><p><strong>Vj</strong> (<em>np.array</em>) – Potential energies of state J</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>free energy difference</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_mpmath">
+<span class="sig-name descname"><span class="pre">_calculate_mpmath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vj:</span> <span class="pre">(typing.Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation._calculate_mpmath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation._calculate_mpmath" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>implementation of zwanzig with mpmath package, another way of having a robust variant,
+but this one is very close to the initial equation thanks to the mpmath package.
+$dF =</p>
+</div></blockquote>
+<p>rac{1}{eta} * ln(langlee^{-eta * (V_j-V_i)}
+angle)$</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Vi<span class="classifier">np.array</span></dt><dd><p>Potential energies of state I</p>
+</dd>
+<dt>Vj<span class="classifier">np.array</span></dt><dd><p>Potential energies of state J</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>float</dt><dd><p>free energy difference</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Vi:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;),</span> <span class="pre">Vj:</span> <span class="pre">(typing.Iterable[numbers.Number],</span> <span class="pre">&lt;class</span> <span class="pre">'numbers.Number'&gt;)</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>zwanzig
+Calculate a free energy difference with the Zwanzig equation (aka exponential formula or thermodynamic perturbation).
+The initial state of the free energy difference is denoted as 0, the final state is called 1.
+The function expects two arrays of size n with potential energies. The first array, u00, contains the potential energies of a set
+of Boltzmann-weighted conformations of an MD or MC trajectory of the initial state, analyzed with the Hamiltonian of the
+initial state. The second array, u01 , contains the potential energies of a trajectory of the initial state that was
+analyzed with the potential energy function of the final state. The variable kT expects the product of the Boltzmann
+constant with the temperature that was used to generate the trajectory in the respective units of the potential energies.
+See Zwanzig, R. W. J. Chem. Phys. 1954, 22, 1420-1426. doi:10.1063/1.1740409
+:Parameters: * <strong>Vi</strong> (<em>np.array</em>) – Potential energies of state I</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Vj</strong> (<em>np.array</em>) – Potential energies of state J</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>free energy difference</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.constants">
+<span class="sig-name descname"><span class="pre">constants</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.constants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.equation">
+<span class="sig-name descname"><span class="pre">equation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sympy.core.function.Function</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-log(exp(-(-Vi</span> <span class="pre">+</span> <span class="pre">Vj)/(T*k)))/(T*k)</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.equation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">k</span></em><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.analysis.free_energy_calculation.zwanzigEquation.set_parameters">
+<span class="sig-name descname"><span class="pre">set_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/analysis/free_energy_calculation.html#zwanzigEquation.set_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.analysis.free_energy_calculation.zwanzigEquation.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>set_parameters setter for the parameters T and k</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> (<em>float, optional</em>) – Temperature in Kelvin, defaults to 398</p></li>
+<li><p><strong>k</strong> (<em>float, optional</em>) – boltzmann Constant, defaults to const.k*const.Avogadro</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.analysis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.analysis" title="Permalink to this headline">¶</a></h2>
+<p>This is a future folder</p>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pygromos.data.html" class="btn btn-neutral float-right" title="pygromos.data package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pygromos.html" class="btn btn-neutral float-left" title="pygromos package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

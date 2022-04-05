@@ -1,0 +1,849 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.files.topology package &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygromos.files.trajectory package" href="pygromos.files.trajectory.html" />
+    <link rel="prev" title="pygromos.files.simulation_parameters package" href="pygromos.files.simulation_parameters.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pygromos.html">pygromos package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pygromos.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pygromos.analysis.html">pygromos.analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.data.html">pygromos.data package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pygromos.files.html">pygromos.files package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.gromos.html">pygromos.gromos package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.simulations.html">pygromos.simulations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.tests.html">pygromos.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.utils.html">pygromos.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pygromos.visualization.html">pygromos.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos.pygromos">pygromos.pygromos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pygromos.html#module-pygromos">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="pygromos.html">pygromos package</a> &raquo;</li>
+        
+          <li><a href="pygromos.files.html">pygromos.files package</a> &raquo;</li>
+        
+      <li>pygromos.files.topology package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/pygromos.files.topology.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pygromos-files-topology-package">
+<h1>pygromos.files.topology package<a class="headerlink" href="#pygromos-files-topology-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygromos.files.topology.disres">
+<span id="pygromos-files-topology-disres-module"></span><h2>pygromos.files.topology.disres module<a class="headerlink" href="#module-pygromos.files.topology.disres" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.disres.Disres">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.disres.</span></span><span class="sig-name descname"><span class="pre">Disres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/disres.html#Disres"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.disres.Disres" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.files.topology.disres.Distance_restraints" title="pygromos.files.topology.disres.Distance_restraints"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.topology.disres.Distance_restraints</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.disres.Distance_restraints">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.disres.</span></span><span class="sig-name descname"><span class="pre">Distance_restraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/disres.html#Distance_restraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.disres.Distance_restraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.disres.Distance_restraints.read_blocks">
+<span class="sig-name descname"><span class="pre">read_blocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/disres.html#Distance_restraints.read_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.disres.Distance_restraints.read_blocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.disres.Distance_restraints.required_blocks">
+<span class="sig-name descname"><span class="pre">required_blocks</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['TITLE',</span> <span class="pre">'DISTANCERESPEC']</span></em><a class="headerlink" href="#pygromos.files.topology.disres.Distance_restraints.required_blocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.files.topology.ifp">
+<span id="pygromos-files-topology-ifp-module"></span><h2>pygromos.files.topology.ifp module<a class="headerlink" href="#module-pygromos.files.topology.ifp" title="Permalink to this headline">¶</a></h2>
+<p>File:
+Description:</p>
+<p>Author:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.ifp.Ifp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.ifp.</span></span><span class="sig-name descname"><span class="pre">Ifp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/ifp.html#Ifp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.ifp.Ifp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ifp.Ifp.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.topology.ifp.Ifp.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.ifp.Ifp.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/ifp.html#Ifp.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.ifp.Ifp.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>give back the content. WARNING DEAPRECEATED.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DEAPRECEATED</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>key is the block name of the gromos file, any is the content of a block</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.files.topology.mtb">
+<span id="pygromos-files-topology-mtb-module"></span><h2>pygromos.files.topology.mtb module<a class="headerlink" href="#module-pygromos.files.topology.mtb" title="Permalink to this headline">¶</a></h2>
+<p>File:
+Description:</p>
+<p>Author: Marc Lehner</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.mtb.</span></span><span class="sig-name descname"><span class="pre">Mtb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_future_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/mtb.html#Mtb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb.all_res_names">
+<span class="sig-name descname"><span class="pre">all_res_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span></em><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb.all_res_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb.mtb_ends">
+<span class="sig-name descname"><span class="pre">mtb_ends</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.mtb_blocks.MTBUILDBLEND" title="pygromos.files.blocks.mtb_blocks.MTBUILDBLEND"><span class="pre">pygromos.files.blocks.mtb_blocks.MTBUILDBLEND</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb.mtb_ends" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb.mtb_solutes">
+<span class="sig-name descname"><span class="pre">mtb_solutes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.mtb_blocks.MTBUILDBLSOLUTE" title="pygromos.files.blocks.mtb_blocks.MTBUILDBLSOLUTE"><span class="pre">pygromos.files.blocks.mtb_blocks.MTBUILDBLSOLUTE</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb.mtb_solutes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb.mtb_solvents">
+<span class="sig-name descname"><span class="pre">mtb_solvents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.mtb_blocks.MTBUILDBLSOLVENT" title="pygromos.files.blocks.mtb_blocks.MTBUILDBLSOLVENT"><span class="pre">pygromos.files.blocks.mtb_blocks.MTBUILDBLSOLVENT</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb.mtb_solvents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/mtb.html#Mtb.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>give back the content. WARNING DEAPRECEATED.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DEAPRECEATED</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>key is the block name of the gromos file, any is the content of a block</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.mtb.Mtb.read_mtb_file">
+<span class="sig-name descname"><span class="pre">read_mtb_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pygromos/files/topology/mtb.html#Mtb.read_mtb_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.mtb.Mtb.read_mtb_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.files.topology.ptp">
+<span id="pygromos-files-topology-ptp-module"></span><h2>pygromos.files.topology.ptp module<a class="headerlink" href="#module-pygromos.files.topology.ptp" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.ptp.</span></span><span class="sig-name descname"><span class="pre">Pertubation_topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/ptp.html#Pertubation_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.MPERATOM">
+<span class="sig-name descname"><span class="pre">MPERATOM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.MPERTATOM" title="pygromos.files.blocks.pertubation_blocks.MPERTATOM"><span class="pre">pygromos.files.blocks.pertubation_blocks.MPERTATOM</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.MPERATOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.PERTATOMPARAM">
+<span class="sig-name descname"><span class="pre">PERTATOMPARAM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTATOMPARAM" title="pygromos.files.blocks.pertubation_blocks.PERTATOMPARAM"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTATOMPARAM</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.PERTATOMPARAM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.PERTBONDANGLE">
+<span class="sig-name descname"><span class="pre">PERTBONDANGLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDANGLE" title="pygromos.files.blocks.pertubation_blocks.PERTBONDANGLE"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDANGLE</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.PERTBONDANGLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.PERTBONDANGLEH">
+<span class="sig-name descname"><span class="pre">PERTBONDANGLEH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDANGLEH" title="pygromos.files.blocks.pertubation_blocks.PERTBONDANGLEH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDANGLEH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.PERTBONDANGLEH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.PERTBONDSTRETCH">
+<span class="sig-name descname"><span class="pre">PERTBONDSTRETCH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCH" title="pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.PERTBONDSTRETCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.PERTBONDSTRETCHH">
+<span class="sig-name descname"><span class="pre">PERTBONDSTRETCHH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCHH" title="pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCHH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCHH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.PERTBONDSTRETCHH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.PERTPROPERDIH">
+<span class="sig-name descname"><span class="pre">PERTPROPERDIH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTPROPERDIH" title="pygromos.files.blocks.pertubation_blocks.PERTPROPERDIH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTPROPERDIH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.PERTPROPERDIH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.TITLE">
+<span class="sig-name descname"><span class="pre">TITLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.TITLE" title="pygromos.files.blocks._general_blocks.TITLE"><span class="pre">pygromos.files.blocks._general_blocks.TITLE</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.TITLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.read_blocks">
+<span class="sig-name descname"><span class="pre">read_blocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/ptp.html#Pertubation_topology.read_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.read_blocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Pertubation_topology.required_blocks">
+<span class="sig-name descname"><span class="pre">required_blocks</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['TITLE']</span></em><a class="headerlink" href="#pygromos.files.topology.ptp.Pertubation_topology.required_blocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.ptp.</span></span><span class="sig-name descname"><span class="pre">Ptp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/ptp.html#Ptp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pygromos.files.topology.ptp.Pertubation_topology" title="pygromos.files.topology.ptp.Pertubation_topology"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files.topology.ptp.Pertubation_topology</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.MPERATOM">
+<span class="sig-name descname"><span class="pre">MPERATOM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.MPERTATOM" title="pygromos.files.blocks.pertubation_blocks.MPERTATOM"><span class="pre">pygromos.files.blocks.pertubation_blocks.MPERTATOM</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.MPERATOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.PERTATOMPARAM">
+<span class="sig-name descname"><span class="pre">PERTATOMPARAM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTATOMPARAM" title="pygromos.files.blocks.pertubation_blocks.PERTATOMPARAM"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTATOMPARAM</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.PERTATOMPARAM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.PERTBONDANGLE">
+<span class="sig-name descname"><span class="pre">PERTBONDANGLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDANGLE" title="pygromos.files.blocks.pertubation_blocks.PERTBONDANGLE"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDANGLE</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.PERTBONDANGLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.PERTBONDANGLEH">
+<span class="sig-name descname"><span class="pre">PERTBONDANGLEH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDANGLEH" title="pygromos.files.blocks.pertubation_blocks.PERTBONDANGLEH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDANGLEH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.PERTBONDANGLEH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.PERTBONDSTRETCH">
+<span class="sig-name descname"><span class="pre">PERTBONDSTRETCH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCH" title="pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.PERTBONDSTRETCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.PERTBONDSTRETCHH">
+<span class="sig-name descname"><span class="pre">PERTBONDSTRETCHH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCHH" title="pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCHH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTBONDSTRETCHH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.PERTBONDSTRETCHH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.PERTPROPERDIH">
+<span class="sig-name descname"><span class="pre">PERTPROPERDIH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.PERTPROPERDIH" title="pygromos.files.blocks.pertubation_blocks.PERTPROPERDIH"><span class="pre">pygromos.files.blocks.pertubation_blocks.PERTPROPERDIH</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.PERTPROPERDIH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.TITLE">
+<span class="sig-name descname"><span class="pre">TITLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pygromos.files.blocks.html#pygromos.files.blocks.pertubation_blocks.TITLE" title="pygromos.files.blocks._general_blocks.TITLE"><span class="pre">pygromos.files.blocks._general_blocks.TITLE</span></a></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.TITLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pygromos.files.topology.ptp.Ptp.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pygromos.files.topology.ptp.Ptp.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pygromos.files.topology.top">
+<span id="pygromos-files-topology-top-module"></span><h2>pygromos.files.topology.top module<a class="headerlink" href="#module-pygromos.files.topology.top" title="Permalink to this headline">¶</a></h2>
+<p>File:            gromos++ topo file functions
+Warnings: this CLASS IS NOT IMPLEMENTED!
+TODO:REWORK
+Description:</p>
+<blockquote>
+<div><p>in this lib, gromos topo file mainpulating functions are gathered</p>
+</div></blockquote>
+<p>Author: Marc Lehner, Benjamin Ries</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.top.</span></span><span class="sig-name descname"><span class="pre">Top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pygromos.utils.typing.Top_Type</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_future_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygromos.files._basics._general_gromos_file._general_gromos_file</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top._add_top">
+<span class="sig-name descname"><span class="pre">_add_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pygromos.utils.typing.Top_Type</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvFrom1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pygromos.utils.typing.Top_Type</span></span></span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top._add_top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top._add_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>combines two topologies. Parameters are taken from the initial topology.
+But missing parameters from the second topology will be added.
+Can be used like com_top from Gromos++</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>top</strong> (<em>TopType</em>) – second topology to add to the first topology</p></li>
+<li><p><strong>solvFrom1</strong> (<em>bool, optional</em>) – should the solvent be taken from the first topology? (else second), by default True</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – extra print statements, by default True</p></li>
+<li><p><strong>sanityCheck</strong> (<em>bool, optional</em>) – feature and compatibility check, by default True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a topology made by combing two topologies</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>TopType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_CONSTRAINT">
+<span class="sig-name descname"><span class="pre">add_new_CONSTRAINT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ICC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_CONSTRAINT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_CONSTRAINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds a CONSTRAINT entry to the topology</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IC</strong> (<em>int</em>) – atom index I</p></li>
+<li><p><strong>JC</strong> (<em>int</em>) – atom index J</p></li>
+<li><p><strong>ICC</strong> (<em>float</em>) – constraint length</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_LJparameter">
+<span class="sig-name descname"><span class="pre">add_new_LJparameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C12</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CS6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CS12</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combination_rule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'geometric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AddATOMTYPENAME</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowerBound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_LJparameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_LJparameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a LJ entry to the LJ parameter block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>C6</strong> (<em>float</em>)</p></li>
+<li><p><strong>C12</strong> (<em>float</em>)</p></li>
+<li><p><strong>CS6</strong> (<em>float, optional</em>)</p></li>
+<li><p><strong>CS12</strong> (<em>float, optional</em>)</p></li>
+<li><p><strong>combination_rule</strong> (<em>str, optional</em>) – no other options supported rigth now, by default “geometric”</p></li>
+<li><p><strong>AddATOMTYPENAME</strong> (<em>str, optional</em>) – if not None a new atomtype is made, by default None</p></li>
+<li><p><strong>lowerBound</strong> (<em>float, optional</em>) – saftey, by default 1e-100</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_PRESSUREGROUPS">
+<span class="sig-name descname"><span class="pre">add_new_PRESSUREGROUPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_PRESSUREGROUPS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_PRESSUREGROUPS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_SOLUTEMOLECULES">
+<span class="sig-name descname"><span class="pre">add_new_SOLUTEMOLECULES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_SOLUTEMOLECULES"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_SOLUTEMOLECULES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_TEMPERATUREGROUPS">
+<span class="sig-name descname"><span class="pre">add_new_TEMPERATUREGROUPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_TEMPERATUREGROUPS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_TEMPERATUREGROUPS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_angle">
+<span class="sig-name descname"><span class="pre">add_new_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomK</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includesH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convertToQuartic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a angle between atom I, J and K to the ANGLE block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – force konstant</p></li>
+<li><p><strong>kh</strong> (<em>float</em>) – force konstant harmonic</p></li>
+<li><p><strong>b0</strong> (<em>float</em>) – angle at which the force is 0</p></li>
+<li><p><strong>atomI</strong> (<em>int</em>) – atom I</p></li>
+<li><p><strong>atomJ</strong> (<em>int</em>) – atom J</p></li>
+<li><p><strong>atomK</strong> (<em>int</em>) – atom K</p></li>
+<li><p><strong>includesH</strong> (<em>bool, optional</em>) – ANGLE or ANGLEH, by default False</p></li>
+<li><p><strong>convertToQuartic</strong> (<em>bool, optional</em>) – auto convert, by default False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_atom">
+<span class="sig-name descname"><span class="pre">add_new_atom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ATNM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MRES</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PANM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IAC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MASS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CG</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CGC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">INE</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">INE14</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C12</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CS6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CS12</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IACname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_atom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a atom to a system (with creating a new atomtype if needed and adding LJ parameters if needed)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ATNM</strong> (<em>int, optional</em>) – number of the atom in the system, by default 0</p></li>
+<li><p><strong>MRES</strong> (<em>int, optional</em>) – residue number, by default 0</p></li>
+<li><p><strong>PANM</strong> (<em>str, optional</em>) – name of the atom, by default ‘_’</p></li>
+<li><p><strong>IAC</strong> (<em>int, optional</em>) – atomtype number of the atom, by default 1</p></li>
+<li><p><strong>MASS</strong> (<em>float, optional</em>) – mass of the atom, by default 1.0</p></li>
+<li><p><strong>CG</strong> (<em>int, optional</em>) – charge of the atom, by default 0</p></li>
+<li><p><strong>CGC</strong> (<em>int, optional</em>) – charge group bool, by default 1</p></li>
+<li><p><strong>INE</strong> (<em>list, optional</em>) – INE list, by default []</p></li>
+<li><p><strong>INE14</strong> (<em>list, optional</em>) – INE14 list, by default []</p></li>
+<li><p><strong>C6</strong> (<em>float, optional</em>) – C6 value, by default None</p></li>
+<li><p><strong>C12</strong> (<em>float, optional</em>) – C12 value, by default None</p></li>
+<li><p><strong>CS6</strong> (<em>float, optional</em>) – CS6 value, by default 0</p></li>
+<li><p><strong>CS12</strong> (<em>float, optional</em>) – CS12 value, by default 0</p></li>
+<li><p><strong>IACname</strong> (<em>str, optional</em>) – new IACname if NONE PANM is used, by default None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_atomtype">
+<span class="sig-name descname"><span class="pre">add_new_atomtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_atomtype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_atomtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a atomtype to ATOMTYPENAME block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – new atomtype name</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – by default False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_bond">
+<span class="sig-name descname"><span class="pre">add_new_bond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includesH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_bond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_bond" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a bond between atom I and J to the BOND block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – force konstant</p></li>
+<li><p><strong>b0</strong> (<em>float</em>) – distance at which the force is 0</p></li>
+<li><p><strong>atomI</strong> (<em>int</em>) – atom I</p></li>
+<li><p><strong>atomJ</strong> (<em>int</em>) – atom J</p></li>
+<li><p><strong>includesH</strong> (<em>bool, optional</em>) – wheter it should be added to BOND or BONDH, by default False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_crossdihedral">
+<span class="sig-name descname"><span class="pre">add_new_crossdihedral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_crossdihedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_crossdihedral" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_impdihedral">
+<span class="sig-name descname"><span class="pre">add_new_impdihedral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CQ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomK</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomL</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includesH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_impdihedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_impdihedral" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new impdihedral</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>CQ</strong> (<em>float</em>) – force constant</p></li>
+<li><p><strong>Q0</strong> (<em>float</em>) – Q0</p></li>
+<li><p><strong>atomI</strong> (<em>int</em>) – atom I</p></li>
+<li><p><strong>atomJ</strong> (<em>int</em>) – atom J</p></li>
+<li><p><strong>atomK</strong> (<em>int</em>) – atom K</p></li>
+<li><p><strong>atomL</strong> (<em>int</em>) – atom L</p></li>
+<li><p><strong>includesH</strong> (<em>bool, optional</em>) – IMPDIHEDRALH or IMPDIHEDRAL, by default False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_impdihedral_type">
+<span class="sig-name descname"><span class="pre">add_new_impdihedral_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CQ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_impdihedral_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_impdihedral_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new impodihedraltype</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>CQ</strong> (<em>float</em>) – force constant</p></li>
+<li><p><strong>Q0</strong> (<em>float</em>) – Q0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_resname">
+<span class="sig-name descname"><span class="pre">add_new_resname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_resname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_resname" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a resname to the RESNAME block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – resname name</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – by default False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_soluteatom">
+<span class="sig-name descname"><span class="pre">add_new_soluteatom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ATNM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MRES</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PANM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IAC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MASS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CG</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CGC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">INE</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">INE14</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_soluteatom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_soluteatom" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a soluteatom to the SOLUTEATOM block</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.add_new_torsiondihedral">
+<span class="sig-name descname"><span class="pre">add_new_torsiondihedral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CP</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PD</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NP</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomI</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomJ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomK</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomL</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includesH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.add_new_torsiondihedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.add_new_torsiondihedral" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a torsiondihedral between atom I, J, K and L to the TORSIONDIHEDRAL block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>CP</strong> (<em>float</em>) – force constant</p></li>
+<li><p><strong>PD</strong> (<em>float</em>) – phase</p></li>
+<li><p><strong>NP</strong> (<em>int</em>) – multiplicity</p></li>
+<li><p><strong>atomI</strong> (<em>int</em>) – atom I</p></li>
+<li><p><strong>atomJ</strong> (<em>int</em>) – atom J</p></li>
+<li><p><strong>atomK</strong> (<em>int</em>) – atom K</p></li>
+<li><p><strong>atomL</strong> (<em>int</em>) – atom L</p></li>
+<li><p><strong>includesH</strong> (<em>bool, optional</em>) – DIHEDRAL or DIHEDRALH, by default False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.find_LJparameterNumber">
+<span class="sig-name descname"><span class="pre">find_LJparameterNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C12</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.find_LJparameterNumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.find_LJparameterNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the LJ parameter number</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.get_LJparameter_from_IAC">
+<span class="sig-name descname"><span class="pre">get_LJparameter_from_IAC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IAC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.get_LJparameter_from_IAC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.get_LJparameter_from_IAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the LJ parameter from the IAC number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>IAC</strong> (<em>int</em>) – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.get_diff_to_top">
+<span class="sig-name descname"><span class="pre">get_diff_to_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pygromos.utils.typing.Top_Type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.get_diff_to_top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.get_diff_to_top" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.get_mass">
+<span class="sig-name descname"><span class="pre">get_mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.get_mass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.get_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total mass of the solute molecule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>total mass in a.u.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.get_num_atomtypes">
+<span class="sig-name descname"><span class="pre">get_num_atomtypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.get_num_atomtypes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.get_num_atomtypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.harmonic2quarticAngleConversion">
+<span class="sig-name descname"><span class="pre">harmonic2quarticAngleConversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.harmonic2quarticAngleConversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.harmonic2quarticAngleConversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>conversion of a harmonic bondanglebending force constant to a cubic in cosine/quartic one</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kh</strong> (<em>float</em>) – harmonic bondanglebending force constant (CHT)</p></li>
+<li><p><strong>b0</strong> (<em>float</em>) – bondangle 0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>cubic in cosine force constant (CT)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.make_ordered">
+<span class="sig-name descname"><span class="pre">make_ordered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orderList</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.make_ordered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.make_ordered" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.multiply_top">
+<span class="sig-name descname"><span class="pre">multiply_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_muliplication</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unifyGroups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pygromos.utils.typing.Top_Type</span></span></span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.multiply_top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.multiply_top" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.Top.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#Top.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.Top.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>give back the content. WARNING DEAPRECEATED.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DEAPRECEATED</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>key is the block name of the gromos file, any is the content of a block</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.check_top">
+<span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.top.</span></span><span class="sig-name descname"><span class="pre">check_top</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#check_top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.check_top" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.combine_topologies">
+<span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.top.</span></span><span class="sig-name descname"><span class="pre">combine_topologies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#combine_topologies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.combine_topologies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygromos.files.topology.top.make_topolog">
+<span class="sig-prename descclassname"><span class="pre">pygromos.files.topology.top.</span></span><span class="sig-name descname"><span class="pre">make_topolog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'H2O'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pygromos/files/topology/top.html#make_topolog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pygromos.files.topology.top.make_topolog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pygromos.files.topology">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pygromos.files.topology" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pygromos.files.trajectory.html" class="btn btn-neutral float-right" title="pygromos.files.trajectory package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pygromos.files.simulation_parameters.html" class="btn btn-neutral float-left" title="pygromos.files.simulation_parameters package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

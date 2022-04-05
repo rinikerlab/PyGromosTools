@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pygromos.tests.test_files.test_ptp &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Welcome to PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_source/modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../styleguide.html">Style Guide for PyGromosTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyGromosTools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pygromos.tests.test_files.test_ptp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pygromos.tests.test_files.test_ptp</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.pertubation_blocks</span> <span class="kn">import</span> <span class="n">pertubation_eds_state</span><span class="p">,</span> <span class="n">atom_eds_pertubation_state</span>
+<span class="kn">from</span> <span class="nn">pygromos.files.topology.ptp</span> <span class="kn">import</span> <span class="n">Pertubation_topology</span> <span class="k">as</span> <span class="n">ptp</span>
+<span class="kn">from</span> <span class="nn">pygromos.tests.test_files.general_file_functions</span> <span class="kn">import</span> <span class="n">general_file_tests</span>
+
+
+<span class="kn">from</span> <span class="nn">pygromos.tests.in_testfiles</span> <span class="kn">import</span> <span class="n">in_test_file_path</span>
+<span class="kn">from</span> <span class="nn">pygromos.tests.test_files</span> <span class="kn">import</span> <span class="n">out_test_root_dir</span>
+
+<span class="n">in_path</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/ptp/eds.ptp&quot;</span>
+<span class="n">in_path2</span> <span class="o">=</span> <span class="n">in_test_file_path</span> <span class="o">+</span> <span class="s2">&quot;/ptp/lam_pert.ptp&quot;</span>
+
+
+<span class="n">root_out</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">out_test_root_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;ptp_&quot;</span><span class="p">)</span>
+<span class="n">outpath</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_ptp.ptp&quot;</span>
+<span class="n">outpath_less_state</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_ptp_lessStates.ptp&quot;</span>
+<span class="n">outpath_less_atom</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_ptp_lessAtoms.ptp&quot;</span>
+<span class="n">outpath_new_atom</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_ptp_newAtoms.ptp&quot;</span>
+<span class="n">outpath_new_build</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_ptp_newBuild.ptp&quot;</span>
+<span class="n">outpath_new_build_complex</span> <span class="o">=</span> <span class="n">root_out</span> <span class="o">+</span> <span class="s2">&quot;/out_ptp_newBuild_complex.ptp&quot;</span>
+
+
+<div class="viewcode-block" id="test_ptp"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp">[docs]</a><span class="k">class</span> <span class="nc">test_ptp</span><span class="p">(</span><span class="n">general_file_tests</span><span class="p">):</span>
+    <span class="n">__test__</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">ptp</span>
+    <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">in_path</span>
+    <span class="n">root_out</span> <span class="o">=</span> <span class="n">root_out</span>
+
+<div class="viewcode-block" id="test_ptp.test_IO"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_IO">[docs]</a>    <span class="k">def</span> <span class="nf">test_IO</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ptp</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_ptp.test_get_eds_states"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_get_eds_states">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_eds_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">states</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">states</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_ptp.test_add_eds_state"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_add_eds_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_eds_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pygromos.files.blocks.pertubation_blocks</span> <span class="kn">import</span> <span class="n">atom_eds_pertubation_state</span><span class="p">,</span> <span class="n">pertubation_eds_state</span>
+
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+
+        <span class="n">on_state</span> <span class="o">=</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">new_atoms_state</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="n">NR</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="p">{</span><span class="mi">7</span><span class="p">:</span> <span class="n">on_state</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="n">on_state</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="k">else</span> <span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="n">NR</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="p">{</span><span class="mi">7</span><span class="p">:</span> <span class="n">on_state</span><span class="p">})</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">add_state_atoms</span><span class="p">(</span><span class="n">state_atoms</span><span class="o">=</span><span class="n">new_atoms_state</span><span class="p">)</span>
+
+        <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_new_atom</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_ptp.test_delete_eds_state"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_delete_eds_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_delete_eds_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">delete_state</span><span class="p">(</span><span class="n">stateIDs</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">delete_state</span><span class="p">(</span><span class="n">stateNames</span><span class="o">=</span><span class="s2">&quot;state3&quot;</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_less_state</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_ptp.test_remove_eds_atoms"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_remove_eds_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_eds_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">delete_atom</span><span class="p">(</span><span class="n">atomNR</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_less_atom</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_ptp.test_new_eds_ptp_from_scratch"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_new_eds_ptp_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">test_new_eds_ptp_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pygromos.files.blocks.pertubation_blocks</span> <span class="kn">import</span> <span class="p">(</span>
+            <span class="n">atom_eds_pertubation_state</span><span class="p">,</span>
+            <span class="n">pertubation_eds_state</span><span class="p">,</span>
+            <span class="n">MPERTATOM</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">()</span>
+        <span class="n">on_state</span> <span class="o">=</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="n">new_atoms_state</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="n">NR</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">on_state</span><span class="p">})</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+
+        <span class="n">mperatom_block</span> <span class="o">=</span> <span class="n">MPERTATOM</span><span class="p">(</span><span class="n">NJLA</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">new_atoms_state</span><span class="p">),</span> <span class="n">NPTB</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">mperatom_block</span><span class="o">.</span><span class="n">add_state_atoms</span><span class="p">(</span><span class="n">state_atoms</span><span class="o">=</span><span class="n">new_atoms_state</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span> <span class="o">=</span> <span class="n">mperatom_block</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ptp</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_new_build</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_ptp.test_eds_gen_all_states_ptp"><a class="viewcode-back" href="../../../../_source/pygromos.tests.test_files.html#pygromos.tests.test_files.test_ptp.test_ptp.test_eds_gen_all_states_ptp">[docs]</a>    <span class="k">def</span> <span class="nf">test_eds_gen_all_states_ptp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># INPUT:</span>
+        <span class="c1"># the states to use:</span>
+        <span class="n">o_state</span> <span class="o">=</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">h_state</span> <span class="o">=</span> <span class="n">pertubation_eds_state</span><span class="p">(</span><span class="n">IAC</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span> <span class="n">CHARGE</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="c1"># Map for molecule ID with Atom IDS</span>
+        <span class="c1"># First atom assumed to be O and last two Hs</span>
+        <span class="n">molecules_atoms</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="mi">4</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">]}</span>
+
+        <span class="c1"># BUILD UP STATES</span>
+        <span class="c1"># Generate active state mapping:</span>
+        <span class="n">max_active_mols_same_time</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecules_atoms</span><span class="p">)</span>
+        <span class="n">molecule_states</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">state_ID</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">active_mols</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_active_mols_same_time</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">combis</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">molecules_atoms</span><span class="p">,</span> <span class="n">active_mols</span><span class="p">))</span>
+            <span class="n">molecule_states</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">state_ID</span> <span class="o">+</span> <span class="n">ind</span><span class="p">:</span> <span class="n">x</span> <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">combis</span><span class="p">)})</span>
+            <span class="n">state_ID</span> <span class="o">=</span> <span class="n">state_ID</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">combis</span><span class="p">)</span>
+        <span class="c1"># gives the state number as key and all the active molecules in this state</span>
+
+        <span class="c1"># build state atoms for ptp</span>
+        <span class="n">new_atoms_state_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">state</span><span class="p">,</span> <span class="n">molecules</span> <span class="ow">in</span> <span class="n">molecule_states</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="n">molecules</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="n">new_atoms_state_dict</span><span class="p">:</span>
+                    <span class="n">atoms</span> <span class="o">=</span> <span class="n">new_atoms_state_dict</span><span class="p">[</span><span class="n">molecule</span><span class="p">]</span>
+                    <span class="n">atoms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">STATES</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">state</span><span class="p">:</span> <span class="n">o_state</span><span class="p">})</span>
+                    <span class="n">atoms</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">STATES</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">state</span><span class="p">:</span> <span class="n">h_state</span><span class="p">})</span>
+                    <span class="n">atoms</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">STATES</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">state</span><span class="p">:</span> <span class="n">h_state</span><span class="p">})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="n">NR</span><span class="o">=</span><span class="n">molecules_atoms</span><span class="p">[</span><span class="n">molecule</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="p">{</span><span class="n">state</span><span class="p">:</span> <span class="n">o_state</span><span class="p">}),</span>
+                        <span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="n">NR</span><span class="o">=</span><span class="n">molecules_atoms</span><span class="p">[</span><span class="n">molecule</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;H1&quot;</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="p">{</span><span class="n">state</span><span class="p">:</span> <span class="n">h_state</span><span class="p">}),</span>
+                        <span class="n">atom_eds_pertubation_state</span><span class="p">(</span><span class="n">NR</span><span class="o">=</span><span class="n">molecules_atoms</span><span class="p">[</span><span class="n">molecule</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;H2&quot;</span><span class="p">,</span> <span class="n">STATES</span><span class="o">=</span><span class="p">{</span><span class="n">state</span><span class="p">:</span> <span class="n">h_state</span><span class="p">}),</span>
+                    <span class="p">]</span>
+                    <span class="n">new_atoms_state_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">molecule</span><span class="p">:</span> <span class="n">atoms</span><span class="p">})</span>
+
+        <span class="c1"># finally make a list for our ptp file (#ThanksGromos)</span>
+        <span class="n">new_atoms_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new_atoms_state_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+        <span class="c1"># BUILD PTP</span>
+        <span class="n">ptp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="n">in_path</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">MPERTATOM</span><span class="o">.</span><span class="n">add_state_atoms</span><span class="p">(</span><span class="n">state_atoms</span><span class="o">=</span><span class="n">new_atoms_state</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ptp</span><span class="p">)</span>
+        <span class="n">ptp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outpath_new_build_complex</span><span class="p">)</span></div></div>
+
+        <span class="c1"># TADAAAAA - DONE</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
