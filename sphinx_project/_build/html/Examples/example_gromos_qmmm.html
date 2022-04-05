@@ -484,7 +484,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "50dc6fddcf114c4daa28f056e0a13f3f"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "e3e4dea1c9404a8ca40ae9b739c5aa42"}</script></div>
 </div>
 <section id="Support-for-QMMM-functionality-in-GROMOS-input-files">
 <h2>Support for QMMM functionality in <code class="docutils literal notranslate"><span class="pre">GROMOS</span></code> input files<a class="headerlink" href="#Support-for-QMMM-functionality-in-GROMOS-input-files" title="Permalink to this headline">¶</a></h2>
@@ -1194,7 +1194,7 @@ SYSTEM:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/844308420.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/844308420.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">AttributeError</span>: &#39;Cnf&#39; object has no attribute &#39;visualize&#39;
@@ -1303,7 +1303,7 @@ During handling of the above exception, another exception occurred:
 During handling of the above exception, another exception occurred:
 
 <span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/178837208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/178837208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span>
 <span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># energy minimize the system</span>
 <span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>minimized_system <span class="ansi-blue-fg">=</span> emin<span class="ansi-blue-fg">(</span>system<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
@@ -1347,7 +1347,7 @@ During handling of the above exception, another exception occurred:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/2801463477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/2801463477.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># new imd file for equilibration</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> in_imd_path  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">f&#34;example_files/QMMM_files/menthol-methanol-dmf-eq.imd&#34;</span>
 <span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> in_imd_path
@@ -1374,7 +1374,7 @@ During handling of the above exception, another exception occurred:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/2240818067.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/2240818067.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># equilibrate the system</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>equilibrated_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">,</span> step_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;eq&#34;</span><span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> equilibrated_system
@@ -1414,7 +1414,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;CONDA_SHLVL&#39;: &#39;2&#39;,
         &#39;OLDPWD&#39;: &#39;/home/mlehner/PyGromosTools&#39;,
         &#39;CC_FOR_BUILD&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-cc&#39;,
-        &#39;VSCODE_IPC_HOOK_CLI&#39;: &#39;/mnt/wslg/runtime-dir/vscode-ipc-63bf7068-58f1-4145-b923-c1d0d0d92134.sock&#39;,
+        &#39;VSCODE_IPC_HOOK_CLI&#39;: &#39;/mnt/wslg/runtime-dir/vscode-ipc-016b4eb6-d067-4cdb-9b3b-e1cf2f22eaaf.sock&#39;,
         &#39;TERM_PROGRAM_VERSION&#39;: &#39;1.66.0&#39;,
         &#39;CONDA_TOOLCHAIN_BUILD&#39;: &#39;x86_64-conda-linux-gnu&#39;,
         &#39;F90&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
@@ -1430,14 +1430,14 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;WSL_DISTRO_NAME&#39;: &#39;Ubuntu-20.04&#39;,
         &#39;F77&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gfortran&#39;,
         &#39;F95&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-f95&#39;,
-        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/6&#39;,
+        &#39;MAKE_TERMERR&#39;: &#39;/dev/pts/5&#39;,
         &#39;ELFEDIT&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-elfedit&#39;,
         &#39;STRIP&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-strip&#39;,
         &#39;WAYLAND_DISPLAY&#39;: &#39;wayland-0&#39;,
         &#39;GCC&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc&#39;,
         &#39;LOGNAME&#39;: &#39;mlehner&#39;,
         &#39;_&#39;: &#39;/usr/bin/make&#39;,
-        &#39;WSL_INTEROP&#39;: &#39;/run/WSL/1599_interop&#39;,
+        &#39;WSL_INTEROP&#39;: &#39;/run/WSL/13_interop&#39;,
         &#39;PULSE_SERVER&#39;: &#39;/mnt/wslg/PulseServer&#39;,
         &#39;NAME&#39;: &#39;MarcSurface&#39;,
         &#39;AR&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ar&#39;,
@@ -1473,7 +1473,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;CMAKE_ARGS&#39;: &#39;-DCMAKE_AR=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ar -DCMAKE_CXX_COMPILER_AR=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ar -DCMAKE_C_COMPILER_AR=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ar -DCMAKE_RANLIB=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ranlib -DCMAKE_CXX_COMPILER_RANLIB=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ranlib -DCMAKE_C_COMPILER_RANLIB=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-gcc-ranlib -DCMAKE_LINKER=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-ld -DCMAKE_STRIP=/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-strip&#39;,
         &#39;HOST&#39;: &#39;x86_64-conda-linux-gnu&#39;,
         &#39;CXX&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/bin/x86_64-conda-linux-gnu-c++&#39;,
-        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/6&#39;,
+        &#39;MAKE_TERMOUT&#39;: &#39;/dev/pts/5&#39;,
         &#39;DEBUG_CPPFLAGS&#39;: &#39;-D_DEBUG -D_FORTIFY_SOURCE=2 -Og -isystem /home/mlehner/anaconda3/envs/pygro2/include&#39;,
         &#39;LESSCLOSE&#39;: &#39;/usr/bin/lesspipe %s %s&#39;,
         &#39;CONDA_DEFAULT_ENV&#39;: &#39;pygro2&#39;,
@@ -1508,7 +1508,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
         &#39;DOCUTILSCONFIG&#39;: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/docutils.conf&#39;,
         &#39;RDBASE&#39;: &#39;/home/mlehner/anaconda3/envs/pygro2/share/RDKit&#39;,
         &#39;PYDEVD_USE_FRAME_EVAL&#39;: &#39;NO&#39;,
-        &#39;JPY_PARENT_PID&#39;: &#39;4884&#39;,
+        &#39;JPY_PARENT_PID&#39;: &#39;3972&#39;,
         &#39;CLICOLOR&#39;: &#39;1&#39;,
         &#39;PAGER&#39;: &#39;cat&#39;,
         &#39;GIT_PAGER&#39;: &#39;cat&#39;,
@@ -1545,7 +1545,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/2075562488.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/2075562488.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># new imd file for QM/MM run</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> in_imd_path  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">f&#34;example_files/QMMM_files/md.imd&#34;</span>
 <span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>equilibrated_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> in_imd_path
@@ -1571,7 +1571,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/2112366208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/2112366208.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># print the relevant QMMM block in the new imd file</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>equilibrated_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>QMMM
 
@@ -1594,7 +1594,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/3371366635.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/3371366635.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># go QM/MM!</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>production_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>equilibrated_system<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>submit<span class="ansi-blue-fg">)</span>
 
@@ -1617,7 +1617,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_8795/1050048346.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/tmp/ipykernel_8631/1050048346.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># visualize the last .cnf - you are done!</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>production_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
@@ -1633,7 +1633,7 @@ environ{&#39;LESSOPEN&#39;: &#39;| /usr/bin/lesspipe %s&#39;,
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"68b74a49191c41b498cedfe30c848851": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "50dc6fddcf114c4daa28f056e0a13f3f": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_68b74a49191c41b498cedfe30c848851"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"777f367b821c4855bdb2da0ba82e80d3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "e3e4dea1c9404a8ca40ae9b739c5aa42": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_777f367b821c4855bdb2da0ba82e80d3"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
