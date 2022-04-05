@@ -1,38 +1,74 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculation of Self Solvation Free Energy &mdash; PyGromosTools  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <title>Calculation of Self Solvation Free Energy &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Developer Examples" href="developer_examples/index.html" />
     <link rel="prev" title="OpenFF Automatic Parametrization" href="example_openff.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +76,17 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
@@ -77,31 +123,70 @@
 <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
 </ul>
 
+            
+          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">PyGromosTools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="index.html">Examples</a> &raquo;</li>
+        
       <li>Calculation of Self Solvation Free Energy</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+            
             <a href="../_sources/Examples/example_solvation_free_energy.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -373,9 +458,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Calculation-of-Self-Solvation-Free-Energy">
-<h1>Calculation of Self Solvation Free Energy<a class="headerlink" href="#Calculation-of-Self-Solvation-Free-Energy" title="Permalink to this headline"></a></h1>
+<h1>Calculation of Self Solvation Free Energy<a class="headerlink" href="#Calculation-of-Self-Solvation-Free-Energy" title="Permalink to this headline">¶</a></h1>
 <section id="Do-Imports">
-<h2>Do Imports<a class="headerlink" href="#Do-Imports" title="Permalink to this headline"></a></h2>
+<h2>Do Imports<a class="headerlink" href="#Do-Imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -395,7 +480,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-Warning: importing &#39;simtk.openmm&#39; is deprecated.  Import &#39;openmm&#39; instead.
 Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field Toolkit does not require the OpenEye Toolkits, and can use RDKit/AmberTools instead. However, if you have a valid license for the OpenEye Toolkits, consider installing them for faster performance and additional file format support: https://docs.eyesopen.com/toolkits/python/quickstart-python/linuxosx.html OpenEye offers free Toolkit licenses for academics: https://www.eyesopen.com/academic-licensing
 </pre></div></div>
 </div>
@@ -403,11 +487,11 @@ Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "252422b3f5084294b58400d85eaea07d"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "73df9684370e4b4fbee5516db4cb87a6"}</script></div>
 </div>
 </section>
 <section id="Choose-Molecule-to-run-calculation-for">
-<h2>Choose Molecule to run calculation for<a class="headerlink" href="#Choose-Molecule-to-run-calculation-for" title="Permalink to this headline"></a></h2>
+<h2>Choose Molecule to run calculation for<a class="headerlink" href="#Choose-Molecule-to-run-calculation-for" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -418,7 +502,7 @@ Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field 
 </div>
 </div>
 <section id="create-the-gromos_system-from-a-smile-and-get-the-number-of-atoms">
-<h3>create the gromos_system from a smile and get the number of atoms<a class="headerlink" href="#create-the-gromos_system-from-a-smile-and-get-the-number-of-atoms" title="Permalink to this headline"></a></h3>
+<h3>create the gromos_system from a smile and get the number of atoms<a class="headerlink" href="#create-the-gromos_system-from-a-smile-and-get-the-number-of-atoms" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -434,7 +518,7 @@ Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Found off: /home/runner/work/PyGromosTools/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
+Found off: /home/mlehner/PyGromosTools/pygromos/data/ff/SMIRNOFF/openff_unconstrained-2.0.0.offxml
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -442,7 +526,7 @@ Found off: /home/runner/work/PyGromosTools/PyGromosTools/pygromos/data/ff/SMIRNO
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/solvation_free_energy’: No such file or directory
+mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/solvation_free_energy’: No such file or directory
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -452,39 +536,34 @@ mkdir: cannot create directory ‘/home/runner/work/PyGromosTools/PyGromosTools/
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [3]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> groSys <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">Gromos_System</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">work_folder</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">workfolder</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">system_name</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">test</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">in_smiles</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">smiles</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">forcefield</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">OpenFF</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">auto_convert</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> number_of_atoms <span style="color: rgb(98,98,98)">=</span> groSys<span style="color: rgb(98,98,98)">.</span>mol<span style="color: rgb(98,98,98)">.</span>GetNumAtoms()
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Number of atoms:</span><span style="color: rgb(175,0,0)">&#34;</span>, number_of_atoms)
+<span class="ansi-green-fg">/tmp/ipykernel_17646/38711548.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>groSys <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">(</span>work_folder<span class="ansi-blue-fg">=</span>workfolder<span class="ansi-blue-fg">,</span> system_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;test&#34;</span><span class="ansi-blue-fg">,</span> in_smiles<span class="ansi-blue-fg">=</span>smiles<span class="ansi-blue-fg">,</span> forcefield<span class="ansi-blue-fg">=</span>OpenFF<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> auto_convert<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> number_of_atoms <span class="ansi-blue-fg">=</span> groSys<span class="ansi-blue-fg">.</span>mol<span class="ansi-blue-fg">.</span>GetNumAtoms<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Number of atoms:&#34;</span><span class="ansi-blue-fg">,</span> number_of_atoms<span class="ansi-blue-fg">)</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
-<span class="ansi-green-intense-fg ansi-bold">    217</span> <span style="color: rgb(95,135,135)"># import files:</span>
-<span class="ansi-green-intense-fg ansi-bold">    218</span> file_mapping <span style="color: rgb(98,98,98)">=</span> {
-<span class="ansi-green-intense-fg ansi-bold">    219</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">imd</span><span style="color: rgb(175,0,0)">&#34;</span>: in_imd_path,
-<span class="ansi-green-intense-fg ansi-bold">    220</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">top</span><span style="color: rgb(175,0,0)">&#34;</span>: in_top_path,
-<span class="ansi-green-fg">   (...)</span>
-<span class="ansi-green-intense-fg ansi-bold">    226</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">qmmm</span><span style="color: rgb(175,0,0)">&#34;</span>: in_qmmm_path,
-<span class="ansi-green-intense-fg ansi-bold">    227</span> }
-<span class="ansi-green-fg">--&gt; 228</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">parse_attribute_files</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">file_mapping</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">readIn</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">readIn</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    230</span> <span style="color: rgb(95,135,135)"># System Information:</span>
-<span class="ansi-green-intense-fg ansi-bold">    231</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_cnf<span style="color: rgb(98,98,98)">.</span>_future_file:
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
+<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    229</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    828</span> <span style="color: rgb(95,135,135)"># Check if system folder is present</span>
-<span class="ansi-green-intense-fg ansi-bold">    829</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>exists(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder):
-<span class="ansi-green-fg">--&gt; 830</span>     <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_work_folder</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    831</span> check_file_paths<span style="color: rgb(98,98,98)">.</span>append(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder)
-<span class="ansi-green-intense-fg ansi-bold">    833</span> <span style="color: rgb(95,135,135)"># Check if file- paths are valid</span>
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
+<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    832</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
-<span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
-<span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
-<span class="ansi-green-intense-fg ansi-bold">    560</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> verbose:
-<span class="ansi-green-intense-fg ansi-bold">    561</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">WARNING:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)"> Did not build already existing folder: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> in_directory_path, category<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(215,95,95)">UserWarning</span>)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
 
 <span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/solvation_free_energy
+ /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/solvation_free_energy
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -506,7 +585,7 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/uti
 </section>
 </section>
 <section id="Create-The-Solvation-free-energy-calculation-system">
-<h2>Create The Solvation free energy calculation system<a class="headerlink" href="#Create-The-Solvation-free-energy-calculation-system" title="Permalink to this headline"></a></h2>
+<h2>Create The Solvation free energy calculation system<a class="headerlink" href="#Create-The-Solvation-free-energy-calculation-system" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -531,23 +610,18 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/uti
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> sf <span style="color: rgb(98,98,98)">=</span> Solvation_free_energy_calculation(input_system<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">groSys</span>, <span style="color: rgb(95,135,135)"># Gromos_System, SMILES (str) or rdkit Mol</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span>                                        work_folder<span style="color: rgb(98,98,98)">=</span>workfolder, <span style="color: rgb(95,135,135)"># Folder to do calculations in</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                                        system_name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">test</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(95,135,135)"># Name of the system (does not need to be smiles but convenient)</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>                                        forcefield<span style="color: rgb(98,98,98)">=</span>OpenFF(), <span style="color: rgb(95,135,135)"># Force field to use</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>                                        density<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">789</span>, <span style="color: rgb(95,135,135)"># density of the liquid in kg/L</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span>                                        num_molecules<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">512</span>, <span style="color: rgb(95,135,135)"># number of molecules used for the calculation</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span>                                        num_atoms<span style="color: rgb(98,98,98)">=</span>number_of_atoms, <span style="color: rgb(95,135,135)"># number of atoms in one molecule</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span>                                        subsystem<span style="color: rgb(98,98,98)">=</span>subSys, <span style="color: rgb(95,135,135)"># Subsystem to use for calculation local or lsf</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span>                                        amberscaling<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, <span style="color: rgb(95,135,135)"># Whether to use amberscaling (for openforcefield recommended)</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span>                                        n_points<span style="color: rgb(98,98,98)">=</span>n_points)
+<span class="ansi-green-fg">/tmp/ipykernel_17646/1430996912.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> sf = Solvation_free_energy_calculation(input_system=groSys, # Gromos_System, SMILES (str) or rdkit Mol
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                                        work_folder<span class="ansi-blue-fg">=</span>workfolder<span class="ansi-blue-fg">,</span> <span class="ansi-red-fg"># Folder to do calculations in</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                                        system_name<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;test&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-red-fg"># Name of the system (does not need to be smiles but convenient)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>                                        forcefield<span class="ansi-blue-fg">=</span>OpenFF<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> <span class="ansi-red-fg"># Force field to use</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>                                        density<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">789</span><span class="ansi-blue-fg">,</span> <span class="ansi-red-fg"># density of the liquid in kg/L</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;groSys&#39; is not defined
 </pre></div></div>
 </div>
 <section id="Create-Liquid">
-<h3>Create Liquid<a class="headerlink" href="#Create-Liquid" title="Permalink to this headline"></a></h3>
+<h3>Create Liquid<a class="headerlink" href="#Create-Liquid" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -563,15 +637,15 @@ Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">sf</span><span style="color: rgb(98,98,98)">.</span>create_liq()
+<span class="ansi-green-fg">/tmp/ipykernel_17646/1955276995.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sf<span class="ansi-blue-fg">.</span>create_liq<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sf&#39; is not defined
 </pre></div></div>
 </div>
 </section>
 <section id="Minimize-Liquid">
-<h3>Minimize Liquid<a class="headerlink" href="#Minimize-Liquid" title="Permalink to this headline"></a></h3>
+<h3>Minimize Liquid<a class="headerlink" href="#Minimize-Liquid" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -587,15 +661,15 @@ Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> emin_sys, jobID <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">sf</span><span style="color: rgb(98,98,98)">.</span>minimize_liq(in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span>sf<span style="color: rgb(98,98,98)">.</span>groSys_liq,prev_JobID<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_17646/174560007.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>emin_sys<span class="ansi-blue-fg">,</span> jobID <span class="ansi-blue-fg">=</span> sf<span class="ansi-blue-fg">.</span>minimize_liq<span class="ansi-blue-fg">(</span>in_gromos_simulation_system<span class="ansi-blue-fg">=</span>sf<span class="ansi-blue-fg">.</span>groSys_liq<span class="ansi-blue-fg">,</span>prev_JobID<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sf&#39; is not defined
 </pre></div></div>
 </div>
 </section>
 <section id="Change-the-number-of-cores-for-longer-runs">
-<h3>Change the number of cores for longer runs<a class="headerlink" href="#Change-the-number-of-cores-for-longer-runs" title="Permalink to this headline"></a></h3>
+<h3>Change the number of cores for longer runs<a class="headerlink" href="#Change-the-number-of-cores-for-longer-runs" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -611,8 +685,8 @@ Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">sf</span><span style="color: rgb(98,98,98)">.</span>subsystem<span style="color: rgb(98,98,98)">.</span>nomp <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">6</span>
+<span class="ansi-green-fg">/tmp/ipykernel_17646/2906695678.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sf<span class="ansi-blue-fg">.</span>subsystem<span class="ansi-blue-fg">.</span>nomp <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">6</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sf&#39; is not defined
 </pre></div></div>
@@ -620,7 +694,7 @@ Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&
 </section>
 </section>
 <section id="Equilibrate-System">
-<h2>Equilibrate System<a class="headerlink" href="#Equilibrate-System" title="Permalink to this headline"></a></h2>
+<h2>Equilibrate System<a class="headerlink" href="#Equilibrate-System" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -636,15 +710,15 @@ Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [10]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> eq_sys, jobID <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">sf</span><span style="color: rgb(98,98,98)">.</span>eq_liq(in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span>emin_sys,prev_JobID<span style="color: rgb(98,98,98)">=</span>jobID)
+<span class="ansi-green-fg">/tmp/ipykernel_17646/1263139355.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>eq_sys<span class="ansi-blue-fg">,</span> jobID <span class="ansi-blue-fg">=</span> sf<span class="ansi-blue-fg">.</span>eq_liq<span class="ansi-blue-fg">(</span>in_gromos_simulation_system<span class="ansi-blue-fg">=</span>emin_sys<span class="ansi-blue-fg">,</span>prev_JobID<span class="ansi-blue-fg">=</span>jobID<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sf&#39; is not defined
 </pre></div></div>
 </div>
 </section>
 <section id="Do-TI-calculation">
-<h2>Do TI calculation<a class="headerlink" href="#Do-TI-calculation" title="Permalink to this headline"></a></h2>
+<h2>Do TI calculation<a class="headerlink" href="#Do-TI-calculation" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -662,17 +736,17 @@ Input <span class="ansi-green-fg">In [10]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [11]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> ti_sys, jobID <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">sf</span><span style="color: rgb(98,98,98)">.</span>ti_liq(in_gromos_simulation_system<span style="color: rgb(98,98,98)">=</span>eq_sys,
-<span class="ansi-green-intense-fg ansi-bold">      2</span>                           prev_JobID<span style="color: rgb(98,98,98)">=</span>jobID,
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                           n_points<span style="color: rgb(98,98,98)">=</span>n_points)
+<span class="ansi-green-fg">/tmp/ipykernel_17646/1773812975.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> ti_sys, jobID = sf.ti_liq(in_gromos_simulation_system=eq_sys,
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                           prev_JobID<span class="ansi-blue-fg">=</span>jobID<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                           n_points=n_points)
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sf&#39; is not defined
 </pre></div></div>
 </div>
 </section>
 <section id="Read-out-results">
-<h2>Read out results<a class="headerlink" href="#Read-out-results" title="Permalink to this headline"></a></h2>
+<h2>Read out results<a class="headerlink" href="#Read-out-results" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -688,46 +762,64 @@ Input <span class="ansi-green-fg">In [11]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [12]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">sf</span><span style="color: rgb(98,98,98)">.</span>calculate_solvation_free_energy(n_points<span style="color: rgb(98,98,98)">=</span>n_points)
+<span class="ansi-green-fg">/tmp/ipykernel_17646/1811559961.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sf<span class="ansi-blue-fg">.</span>calculate_solvation_free_energy<span class="ansi-blue-fg">(</span>n_points<span class="ansi-blue-fg">=</span>n_points<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sf&#39; is not defined
 </pre></div></div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"e62a2410ea0a49f79c548fe03a1ae520": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "252422b3f5084294b58400d85eaea07d": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_e62a2410ea0a49f79c548fe03a1ae520"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"3f22d7e69cb442a1a2b68fbd17da1560": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "73df9684370e4b4fbee5516db4cb87a6": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_3f22d7e69cb442a1a2b68fbd17da1560"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="example_openff.html" class="btn btn-neutral float-left" title="OpenFF Automatic Parametrization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="developer_examples/index.html" class="btn btn-neutral float-right" title="Developer Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="developer_examples/index.html" class="btn btn-neutral float-right" title="Developer Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="example_openff.html" class="btn btn-neutral float-left" title="OpenFF Automatic Parametrization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
-  </div>
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

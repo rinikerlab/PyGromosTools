@@ -1,38 +1,74 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage of the PyGromosTools on HPC-cluster &mdash; PyGromosTools  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <title>Usage of the PyGromosTools on HPC-cluster &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="QM/MM in Gromos" href="example_gromos_qmmm.html" />
     <link rel="prev" title="Amber2Gromos Example" href="example_amber2gromos.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +76,17 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
@@ -73,31 +119,70 @@
 <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
 </ul>
 
+            
+          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">PyGromosTools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="index.html">Examples</a> &raquo;</li>
+        
       <li>Usage of the PyGromosTools on HPC-cluster</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+            
             <a href="../_sources/Examples/example_gromos_on_HPC_Clusters.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -369,7 +454,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Usage-of-the-PyGromosTools-on-HPC-cluster">
-<h1>Usage of the PyGromosTools on HPC-cluster<a class="headerlink" href="#Usage-of-the-PyGromosTools-on-HPC-cluster" title="Permalink to this headline"></a></h1>
+<h1>Usage of the PyGromosTools on HPC-cluster<a class="headerlink" href="#Usage-of-the-PyGromosTools-on-HPC-cluster" title="Permalink to this headline">¶</a></h1>
 <p>Note that you need support for the new <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> submission system shipped with <code class="docutils literal notranslate"><span class="pre">relase3</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -385,10 +470,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "79d417b5df7b45e48afb5b6d4034daca"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "e8daa3bcc84043898fb015264a93f809"}</script></div>
 </div>
 <section id="Initialization">
-<h2>Initialization<a class="headerlink" href="#Initialization" title="Permalink to this headline"></a></h2>
+<h2>Initialization<a class="headerlink" href="#Initialization" title="Permalink to this headline">¶</a></h2>
 <p>Set up path to binaries and instantiate an initial <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -434,44 +519,33 @@ mkdir: cannot create directory ‘examples/example_files/menthol-dmf-example’:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [2]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 14&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     11</span> in_top_path <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">example_files/submission-system-files/</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>system_name<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">-all-atom_54a7.top</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span> <span style="color: rgb(95,135,135)"># system</span>
-<span class="ansi-green-fg">---&gt; 14</span> system <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">Gromos_System</span><span class="ansi-yellow-bg">(</span>
-<span class="ansi-green-intense-fg ansi-bold">     15</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">work_folder</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span>
-<span class="ansi-green-intense-fg ansi-bold">     16</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">system_name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span>
-<span class="ansi-green-intense-fg ansi-bold">     17</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">in_top_path</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">in_top_path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span>
-<span class="ansi-green-intense-fg ansi-bold">     18</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">in_cnf_path</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">in_cnf_path</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">     19</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">in_gromosPP_bin_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">gromosPP</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">     20</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">in_gromosXX_bin_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">gromosXX</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">     21</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span>
-<span class="ansi-green-intense-fg ansi-bold">     22</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">/tmp/ipykernel_16917/4017573833.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-red-fg"># system</span>
+<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg"> system = Gromos_System(
+</span><span class="ansi-green-intense-fg ansi-bold">     15</span>     work_folder<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     system_name<span class="ansi-blue-fg">,</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:228</span>, in <span class="ansi-cyan-fg">Gromos_System.__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
-<span class="ansi-green-intense-fg ansi-bold">    217</span> <span style="color: rgb(95,135,135)"># import files:</span>
-<span class="ansi-green-intense-fg ansi-bold">    218</span> file_mapping <span style="color: rgb(98,98,98)">=</span> {
-<span class="ansi-green-intense-fg ansi-bold">    219</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">imd</span><span style="color: rgb(175,0,0)">&#34;</span>: in_imd_path,
-<span class="ansi-green-intense-fg ansi-bold">    220</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">top</span><span style="color: rgb(175,0,0)">&#34;</span>: in_top_path,
-<span class="ansi-green-fg">   (...)</span>
-<span class="ansi-green-intense-fg ansi-bold">    226</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">qmmm</span><span style="color: rgb(175,0,0)">&#34;</span>: in_qmmm_path,
-<span class="ansi-green-intense-fg ansi-bold">    227</span> }
-<span class="ansi-green-fg">--&gt; 228</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">parse_attribute_files</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">file_mapping</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">readIn</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">readIn</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    230</span> <span style="color: rgb(95,135,135)"># System Information:</span>
-<span class="ansi-green-intense-fg ansi-bold">    231</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_cnf<span style="color: rgb(98,98,98)">.</span>_future_file:
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, work_folder, system_name, rdkitMol, in_mol2_file, readIn, forcefield, auto_convert, adapt_imd_automatically, verbose, in_smiles, in_residue_list, in_top_path, in_cnf_path, in_imd_path, in_disres_path, in_ptp_path, in_posres_path, in_refpos_path, in_qmmm_path, in_gromosXX_bin_dir, in_gromosPP_bin_dir)</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>             <span class="ansi-blue-fg">&#34;qmmm&#34;</span><span class="ansi-blue-fg">:</span> in_qmmm_path<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    227</span>         }
+<span class="ansi-green-fg">--&gt; 228</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>parse_attribute_files<span class="ansi-blue-fg">(</span>file_mapping<span class="ansi-blue-fg">,</span> readIn<span class="ansi-blue-fg">=</span>readIn<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    229</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span>         <span class="ansi-red-fg"># System Information:</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:830</span>, in <span class="ansi-cyan-fg">Gromos_System.parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    828</span> <span style="color: rgb(95,135,135)"># Check if system folder is present</span>
-<span class="ansi-green-intense-fg ansi-bold">    829</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>exists(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder):
-<span class="ansi-green-fg">--&gt; 830</span>     <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_work_folder</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    831</span> check_file_paths<span style="color: rgb(98,98,98)">.</span>append(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_work_folder)
-<span class="ansi-green-intense-fg ansi-bold">    833</span> <span style="color: rgb(95,135,135)"># Check if file- paths are valid</span>
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">parse_attribute_files</span><span class="ansi-blue-fg">(self, file_mapping, readIn, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         <span class="ansi-red-fg"># Check if system folder is present</span>
+<span class="ansi-green-intense-fg ansi-bold">    829</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 830</span><span class="ansi-red-fg">             </span>bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span>         check_file_paths<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_work_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    832</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
-<span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
-<span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
-<span class="ansi-green-intense-fg ansi-bold">    560</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> verbose:
-<span class="ansi-green-intense-fg ansi-bold">    561</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">WARNING:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)"> Did not build already existing folder: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> in_directory_path, category<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(215,95,95)">UserWarning</span>)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
 
 <span class="ansi-red-fg">OSError</span>: could not make folder:
  examples/example_files/menthol-dmf-example
@@ -479,7 +553,7 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/uti
 </div>
 </section>
 <section id="Energy-minimization">
-<h2>Energy minimization<a class="headerlink" href="#Energy-minimization" title="Permalink to this headline"></a></h2>
+<h2>Energy minimization<a class="headerlink" href="#Energy-minimization" title="Permalink to this headline">¶</a></h2>
 <p>Take advantage of the new submission system: convenience functions such as <code class="docutils literal notranslate"><span class="pre">emin</span></code> take in a parametrized <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object, automatically set up the calculation and return a new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object with updated file paths.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -497,15 +571,15 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/uti
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [3]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># run energy minimization</span>
-<span class="ansi-green-fg">----&gt; 2</span> minimized_system <span style="color: rgb(98,98,98)">=</span> emin(<span class="ansi-yellow-bg">system</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_16917/2866156413.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># run energy minimization</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>minimized_system <span class="ansi-blue-fg">=</span> emin<span class="ansi-blue-fg">(</span>system<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
 </pre></div></div>
 </div>
 <section id="Print-out-the-new-file-paths">
-<h3>Print out the new file paths<a class="headerlink" href="#Print-out-the-new-file-paths" title="Permalink to this headline"></a></h3>
+<h3>Print out the new file paths<a class="headerlink" href="#Print-out-the-new-file-paths" title="Permalink to this headline">¶</a></h3>
 <p>Note how the new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object has new file paths associated with it.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -524,17 +598,17 @@ Input <span class="ansi-green-fg">In [3]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [4]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span style="color: rgb(0,135,0)">print</span>(<span class="ansi-yellow-bg">minimized_system</span><span style="color: rgb(98,98,98)">.</span>imd<span style="color: rgb(98,98,98)">.</span>path)
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span style="color: rgb(0,135,0)">print</span>(minimized_system<span style="color: rgb(98,98,98)">.</span>top<span style="color: rgb(98,98,98)">.</span>path)
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span style="color: rgb(0,135,0)">print</span>(minimized_system<span style="color: rgb(98,98,98)">.</span>cnf<span style="color: rgb(98,98,98)">.</span>path)
+<span class="ansi-green-fg">/tmp/ipykernel_16917/1854406475.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
 </pre></div></div>
 </div>
 </section>
 <section id="Visualize-the-minimized-system">
-<h3>Visualize the minimized system<a class="headerlink" href="#Visualize-the-minimized-system" title="Permalink to this headline"></a></h3>
+<h3>Visualize the minimized system<a class="headerlink" href="#Visualize-the-minimized-system" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -550,8 +624,8 @@ Input <span class="ansi-green-fg">In [4]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [5]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">minimized_system</span><span style="color: rgb(98,98,98)">.</span>cnf<span style="color: rgb(98,98,98)">.</span>visualize()
+<span class="ansi-green-fg">/tmp/ipykernel_16917/2343659289.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
 </pre></div></div>
@@ -573,9 +647,9 @@ Input <span class="ansi-green-fg">In [5]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># Reset the old imd from emin </span>
-<span class="ansi-green-fg">----&gt; 2</span> <span class="ansi-yellow-bg">minimized_system</span><span style="color: rgb(98,98,98)">.</span>imd <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">/tmp/ipykernel_16917/4187209246.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Reset the old imd from emin</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
 </pre></div></div>
@@ -583,7 +657,7 @@ Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&
 </section>
 </section>
 <section id="Equilibration-followed-by-subsequent-production-runs">
-<h2>Equilibration followed by subsequent production runs<a class="headerlink" href="#Equilibration-followed-by-subsequent-production-runs" title="Permalink to this headline"></a></h2>
+<h2>Equilibration followed by subsequent production runs<a class="headerlink" href="#Equilibration-followed-by-subsequent-production-runs" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -599,8 +673,8 @@ Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> md_system <span style="color: rgb(98,98,98)">=</span> md(<span class="ansi-yellow-bg">minimized_system</span>, equilibration_runs<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>, simulation_runs<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">2</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_16917/1992461589.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>md_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">,</span> equilibration_runs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> simulation_runs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
 </pre></div></div>
@@ -623,16 +697,16 @@ Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span style="color: rgb(0,135,0)">print</span>(<span class="ansi-yellow-bg">md_system</span><span style="color: rgb(98,98,98)">.</span>imd<span style="color: rgb(98,98,98)">.</span>path)
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span style="color: rgb(0,135,0)">print</span>(md_system<span style="color: rgb(98,98,98)">.</span>top<span style="color: rgb(98,98,98)">.</span>path)
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span style="color: rgb(0,135,0)">print</span>(md_system<span style="color: rgb(98,98,98)">.</span>cnf<span style="color: rgb(98,98,98)">.</span>path)
+<span class="ansi-green-fg">/tmp/ipykernel_16917/2659777302.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>md_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>md_system<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>md_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;md_system&#39; is not defined
 </pre></div></div>
 </div>
 <section id="Visualize-the-last-configuration">
-<h3>Visualize the last configuration<a class="headerlink" href="#Visualize-the-last-configuration" title="Permalink to this headline"></a></h3>
+<h3>Visualize the last configuration<a class="headerlink" href="#Visualize-the-last-configuration" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -648,47 +722,65 @@ Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">md_system</span><span style="color: rgb(98,98,98)">.</span>cnf<span style="color: rgb(98,98,98)">.</span>visualize()
+<span class="ansi-green-fg">/tmp/ipykernel_16917/3356930432.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>md_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;md_system&#39; is not defined
 </pre></div></div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"5d466506fc9940dd983355c25c453e99": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "79d417b5df7b45e48afb5b6d4034daca": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_5d466506fc9940dd983355c25c453e99"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"592942bb1cf3409c834fddf10ee72d80": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "e8daa3bcc84043898fb015264a93f809": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_592942bb1cf3409c834fddf10ee72d80"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 </section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="example_amber2gromos.html" class="btn btn-neutral float-left" title="Amber2Gromos Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="example_gromos_qmmm.html" class="btn btn-neutral float-right" title="QM/MM in Gromos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="example_gromos_qmmm.html" class="btn btn-neutral float-right" title="QM/MM in Gromos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="example_amber2gromos.html" class="btn btn-neutral float-left" title="Amber2Gromos Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
-  </div>
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

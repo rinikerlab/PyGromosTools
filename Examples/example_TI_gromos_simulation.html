@@ -1,38 +1,74 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TI Calculation &mdash; PyGromosTools  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <title>TI Calculation &mdash; PyGromosTools  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Amber2Gromos Example" href="example_amber2gromos.html" />
     <link rel="prev" title="Examples" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> PyGromosTools
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +76,17 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Welcome to PyGromosTools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
@@ -77,31 +123,70 @@
 <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
 </ul>
 
+            
+          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">PyGromosTools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="index.html">Examples</a> &raquo;</li>
+        
       <li>TI Calculation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+            
             <a href="../_sources/Examples/example_TI_gromos_simulation.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -373,9 +458,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="TI-Calculation">
-<h1>TI Calculation<a class="headerlink" href="#TI-Calculation" title="Permalink to this headline"></a></h1>
+<h1>TI Calculation<a class="headerlink" href="#TI-Calculation" title="Permalink to this headline">¶</a></h1>
 <section id="Imports">
-<h2>Imports<a class="headerlink" href="#Imports" title="Permalink to this headline"></a></h2>
+<h2>Imports<a class="headerlink" href="#Imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -399,11 +484,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "0bdf6281bcdb46c99ccc22846b9d72f6"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "a07858eb28be42c9be9f212e0f1a830e"}</script></div>
 </div>
 </section>
 <section id="Input-files">
-<h2>Input files<a class="headerlink" href="#Input-files" title="Permalink to this headline"></a></h2>
+<h2>Input files<a class="headerlink" href="#Input-files" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -428,7 +513,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
+mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -438,32 +523,32 @@ mkdir: cannot create directory ‘/home/runner/work/PyGromosTools/PyGromosTools/
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [2]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 11&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span> sys_name <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">M030_to_6KET</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span> lam <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">0</span>
-<span class="ansi-green-fg">---&gt; 11</span> project_dir <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">root_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg">sys_name</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span> input_dir <span style="color: rgb(98,98,98)">=</span> bash<span style="color: rgb(98,98,98)">.</span>make_folder(project_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/input</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/3918150495.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> lam <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span>
+<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg"> </span>project_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/&#34;</span><span class="ansi-blue-fg">+</span>sys_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span> input_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/input&#34;</span><span class="ansi-blue-fg">)</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
-<span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
-<span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
-<span class="ansi-green-intense-fg ansi-bold">    560</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> verbose:
-<span class="ansi-green-intense-fg ansi-bold">    561</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">WARNING:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)"> Did not build already existing folder: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> in_directory_path, category<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(215,95,95)">UserWarning</span>)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
 
 <span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET
+ /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET
 </pre></div></div>
 </div>
 </section>
 <section id="Vacuum-Simulation">
-<h2>Vacuum Simulation<a class="headerlink" href="#Vacuum-Simulation" title="Permalink to this headline"></a></h2>
+<h2>Vacuum Simulation<a class="headerlink" href="#Vacuum-Simulation" title="Permalink to this headline">¶</a></h2>
 <section id="Direction-A-&gt;B">
-<h3>Direction A-&gt;B<a class="headerlink" href="#Direction-A->B" title="Permalink to this headline"></a></h3>
+<h3>Direction A-&gt;B<a class="headerlink" href="#Direction-A->B" title="Permalink to this headline">¶</a></h3>
 <section id="Setup:">
-<h4>Setup:<a class="headerlink" href="#Setup:" title="Permalink to this headline"></a></h4>
+<h4>Setup:<a class="headerlink" href="#Setup:" title="Permalink to this headline">¶</a></h4>
 <section id="Build-pertubation-file">
-<h5>Build pertubation file<a class="headerlink" href="#Build-pertubation-file" title="Permalink to this headline"></a></h5>
+<h5>Build pertubation file<a class="headerlink" href="#Build-pertubation-file" title="Permalink to this headline">¶</a></h5>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -505,14 +590,12 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/uti
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [3]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 6&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">files</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">blocks</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">topology_blocks</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> pertubation_lam_state, atom_lam_pertubation_state, PERTATOMPARAM, TITLE
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span style="color: rgb(95,135,135)">#External imd_changes:</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system <span style="color: rgb(98,98,98)">=</span> Gromos_System(in_cnf_path<span style="color: rgb(98,98,98)">=</span>cnf_path, in_top_path<span style="color: rgb(98,98,98)">=</span>top_path,
-<span class="ansi-green-intense-fg ansi-bold">      7</span>                             in_disres_path<span style="color: rgb(98,98,98)">=</span>disres_path,
-<span class="ansi-green-fg">----&gt; 8</span>                             system_name<span style="color: rgb(98,98,98)">=</span>sys_name, work_folder<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">input_dir</span>)
-<span class="ansi-green-intense-fg ansi-bold">     11</span> <span style="color: rgb(95,135,135)">#Build up lambda - States</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span> pert_atoms<span style="color: rgb(98,98,98)">=</span>[]
+<span class="ansi-green-fg">/tmp/ipykernel_16720/1349022981.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
+<span class="ansi-green-intense-fg ansi-bold">      7</span>                             in_disres_path<span class="ansi-blue-fg">=</span>disres_path<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg">                             system_name=sys_name, work_folder=input_dir)
+</span><span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;input_dir&#39; is not defined
 </pre></div></div>
@@ -537,11 +620,12 @@ Input <span class="ansi-green-fg">In [3]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [4]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)">##Write out all generated files</span>
-<span class="ansi-green-fg">----&gt; 2</span> <span class="ansi-yellow-bg">grom_system</span><span style="color: rgb(98,98,98)">.</span>rebase_files()
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span style="color: rgb(95,135,135)">##save Input System</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> grom_system<span style="color: rgb(98,98,98)">.</span>save(root_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/initial_startSys.obj</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/1350499474.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg">##Write out all generated files</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>grom_system<span class="ansi-blue-fg">.</span>rebase_files<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg">##save Input System</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> grom_system<span class="ansi-blue-fg">.</span>save<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/initial_startSys.obj&#34;</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grom_system&#39; is not defined
 </pre></div></div>
@@ -550,7 +634,7 @@ Input <span class="ansi-green-fg">In [4]</span>, in <span class="ansi-cyan-fg">&
 </section>
 </section>
 <section id="RUN-Emin">
-<h3>RUN Emin<a class="headerlink" href="#RUN-Emin" title="Permalink to this headline"></a></h3>
+<h3>RUN Emin<a class="headerlink" href="#RUN-Emin" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -581,23 +665,21 @@ Input <span class="ansi-green-fg">In [4]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [5]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 6&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">data</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">simulation_parameters_templates</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> template_emin_vac
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">simulations</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">modules</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">preset_simulation_modules</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> emin
-<span class="ansi-green-fg">----&gt; 6</span> grom_system <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">Gromos_System</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">load</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">root_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/initial_startSys.obj</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span> step_name  <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">a_emin</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(95,135,135)">#also the dir_name, out prefix etc.</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span> grom_system<span style="color: rgb(98,98,98)">.</span>imd <span style="color: rgb(98,98,98)">=</span> template_emin_vac <span style="color: rgb(95,135,135)">#read template imd</span>
+<span class="ansi-green-fg">/tmp/ipykernel_16720/2801381650.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>simulations<span class="ansi-blue-fg">.</span>modules<span class="ansi-blue-fg">.</span>preset_simulation_modules <span class="ansi-green-fg">import</span> emin
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>grom_system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/initial_startSys.obj&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> step_name  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;a_emin&#34;</span> <span class="ansi-red-fg">#also the dir_name, out prefix etc.</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> grom_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> template_emin_vac <span class="ansi-red-fg">#read template imd</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:1195</span>, in <span class="ansi-cyan-fg">Gromos_System.load</span><span class="ansi-blue-fg">(cls, path)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1191</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">   1192</span> <span style="color: rgb(175,0,0)">This method stores the Class as binary obj to a given path or fileBuffer.</span>
-<span class="ansi-green-intense-fg ansi-bold">   1193</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">   1194</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(path, <span style="color: rgb(0,135,0)">str</span>):
-<span class="ansi-green-fg">-&gt; 1195</span>     bufferedReader <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">rb</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1196</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(path, io<span style="color: rgb(98,98,98)">.</span>BufferedReader):
-<span class="ansi-green-intense-fg ansi-bold">   1197</span>     bufferedReader <span style="color: rgb(98,98,98)">=</span> path
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(cls, path)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1193</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">   1194</span>         <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> str<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1195</span><span class="ansi-red-fg">             </span>bufferedReader <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;rb&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1196</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> io<span class="ansi-blue-fg">.</span>BufferedReader<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1197</span>             bufferedReader <span class="ansi-blue-fg">=</span> path
 
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/initial_startSys.obj&#39;
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/initial_startSys.obj&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -620,12 +702,12 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/fil
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)">#EXECUTE EMIN</span>
-<span class="ansi-green-fg">----&gt; 2</span> emin_gromos_system, jobID <span style="color: rgb(98,98,98)">=</span> emin(in_gromos_system<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">grom_system</span>, project_dir<span style="color: rgb(98,98,98)">=</span>project_dir,
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                           step_name<span style="color: rgb(98,98,98)">=</span>step_name, submission_system<span style="color: rgb(98,98,98)">=</span>subSystem())
-<span class="ansi-green-intense-fg ansi-bold">      5</span> emin_gromos_system<span style="color: rgb(98,98,98)">.</span>save(step_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/emin_out.obj</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-intense-fg ansi-bold">      6</span> emin_gromos_system
+<span class="ansi-green-fg">/tmp/ipykernel_16720/2924865560.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg">#EXECUTE EMIN</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=project_dir,
+</span><span class="ansi-green-intense-fg ansi-bold">      3</span>                           step_name=step_name, submission_system=subSystem())
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> emin_gromos_system<span class="ansi-blue-fg">.</span>save<span class="ansi-blue-fg">(</span>step_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/emin_out.obj&#34;</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grom_system&#39; is not defined
 </pre></div></div>
@@ -633,7 +715,7 @@ Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&
 </section>
 </section>
 <section id="RUN-Test-SD-EQ">
-<h2>RUN Test SD EQ<a class="headerlink" href="#RUN-Test-SD-EQ" title="Permalink to this headline"></a></h2>
+<h2>RUN Test SD EQ<a class="headerlink" href="#RUN-Test-SD-EQ" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -674,23 +756,21 @@ Input <span class="ansi-green-fg">In [6]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [7]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 4&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">data</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">simulation_parameters_templates</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> template_sd
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">simulations</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">modules</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">preset_simulation_modules</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> sd
-<span class="ansi-green-fg">----&gt; 4</span> grom_system <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">Gromos_System</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">load</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">root_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/M030_to_6KET/a_emin/emin_out.obj</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> step_name  <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">b_vacuum_sd</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system<span style="color: rgb(98,98,98)">.</span>imd <span style="color: rgb(98,98,98)">=</span> template_sd
+<span class="ansi-green-fg">/tmp/ipykernel_16720/2267890137.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>simulations<span class="ansi-blue-fg">.</span>modules<span class="ansi-blue-fg">.</span>preset_simulation_modules <span class="ansi-green-fg">import</span> sd
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>grom_system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/M030_to_6KET/a_emin/emin_out.obj&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> step_name  <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;b_vacuum_sd&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> grom_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> template_sd
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/files/gromos_system/gromos_system.py:1195</span>, in <span class="ansi-cyan-fg">Gromos_System.load</span><span class="ansi-blue-fg">(cls, path)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1191</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">   1192</span> <span style="color: rgb(175,0,0)">This method stores the Class as binary obj to a given path or fileBuffer.</span>
-<span class="ansi-green-intense-fg ansi-bold">   1193</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">   1194</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(path, <span style="color: rgb(0,135,0)">str</span>):
-<span class="ansi-green-fg">-&gt; 1195</span>     bufferedReader <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">rb</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1196</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(path, io<span style="color: rgb(98,98,98)">.</span>BufferedReader):
-<span class="ansi-green-intense-fg ansi-bold">   1197</span>     bufferedReader <span style="color: rgb(98,98,98)">=</span> path
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/files/gromos_system/gromos_system.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(cls, path)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1193</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">   1194</span>         <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> str<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1195</span><span class="ansi-red-fg">             </span>bufferedReader <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;rb&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1196</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> io<span class="ansi-blue-fg">.</span>BufferedReader<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1197</span>             bufferedReader <span class="ansi-blue-fg">=</span> path
 
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET/a_emin/emin_out.obj&#39;
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET/a_emin/emin_out.obj&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -712,11 +792,11 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/fil
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> sd_gromos_system, jobID  <span style="color: rgb(98,98,98)">=</span> sd(in_gromos_system<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">grom_system</span>, project_dir<span style="color: rgb(98,98,98)">=</span>project_dir,
-<span class="ansi-green-intense-fg ansi-bold">      2</span>                               step_name<span style="color: rgb(98,98,98)">=</span>step_name, submission_system<span style="color: rgb(98,98,98)">=</span>subSystem(), in_imd_path<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>,
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                       equilibration_runs<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>, simulation_runs<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>)
-<span class="ansi-green-intense-fg ansi-bold">      4</span> sd_gromos_system<span style="color: rgb(98,98,98)">.</span>save(step_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/sd_out_system.obj</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/3904397583.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> sd_gromos_system, jobID  = sd(in_gromos_system=grom_system, project_dir=project_dir,
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                               step_name<span class="ansi-blue-fg">=</span>step_name<span class="ansi-blue-fg">,</span> submission_system<span class="ansi-blue-fg">=</span>subSystem<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> in_imd_path<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                       equilibration_runs=1, simulation_runs=1)
+<span class="ansi-green-intense-fg ansi-bold">      4</span> sd_gromos_system<span class="ansi-blue-fg">.</span>save<span class="ansi-blue-fg">(</span>step_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/sd_out_system.obj&#34;</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      5</span> sd_gromos_system
 
 <span class="ansi-red-fg">NameError</span>: name &#39;grom_system&#39; is not defined
@@ -724,7 +804,7 @@ Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&
 </div>
 </section>
 <section id="Further-Analysis:">
-<h2>Further Analysis:<a class="headerlink" href="#Further-Analysis:" title="Permalink to this headline"></a></h2>
+<h2>Further Analysis:<a class="headerlink" href="#Further-Analysis:" title="Permalink to this headline">¶</a></h2>
 <p>Transform the trc into a pdb traj to check it out with pymol :!)</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -746,12 +826,12 @@ Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 4&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)">#final analysis dir:</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">utils</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> bash
-<span class="ansi-green-fg">----&gt; 4</span> out_ana <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">project_dir</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/c_ana</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span>(<span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>exists(out_ana)):
-<span class="ansi-green-intense-fg ansi-bold">      6</span>     bash<span style="color: rgb(98,98,98)">.</span>make_folder(out_ana)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/4109605633.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>utils <span class="ansi-green-fg">import</span> bash
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>out_ana <span class="ansi-blue-fg">=</span> project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/c_ana&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">if</span><span class="ansi-blue-fg">(</span><span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>exists<span class="ansi-blue-fg">(</span>out_ana<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>     bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>out_ana<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;project_dir&#39; is not defined
 </pre></div></div>
@@ -771,8 +851,8 @@ Input <span class="ansi-green-fg">In [9]</span>, in <span class="ansi-cyan-fg">&
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [10]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">project_dir</span>
+<span class="ansi-green-fg">/tmp/ipykernel_16720/4080108349.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>project_dir
 
 <span class="ansi-red-fg">NameError</span>: name &#39;project_dir&#39; is not defined
 </pre></div></div>
@@ -795,11 +875,11 @@ Input <span class="ansi-green-fg">In [10]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [11]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">files</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">coord</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Cnf
-<span class="ansi-green-fg">----&gt; 2</span> in_path<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">project_dir</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/a_emin/analysis/data/a_emin.cnf</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> cnf_file <span style="color: rgb(98,98,98)">=</span> Cnf(in_path)
-<span class="ansi-green-intense-fg ansi-bold">      4</span> cnf_file<span style="color: rgb(98,98,98)">.</span>write_pdb(in_path<span style="color: rgb(98,98,98)">.</span>replace(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">cnf</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">pdb</span><span style="color: rgb(175,0,0)">&#34;</span>))
+<span class="ansi-green-fg">/tmp/ipykernel_16720/3863714800.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>coord <span class="ansi-green-fg">import</span> Cnf
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>in_path<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/a_emin/analysis/data/a_emin.cnf&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> cnf_file <span class="ansi-blue-fg">=</span> Cnf<span class="ansi-blue-fg">(</span>in_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> cnf_file<span class="ansi-blue-fg">.</span>write_pdb<span class="ansi-blue-fg">(</span>in_path<span class="ansi-blue-fg">.</span>replace<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;cnf&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;pdb&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;project_dir&#39; is not defined
 </pre></div></div>
@@ -819,8 +899,8 @@ Input <span class="ansi-green-fg">In [11]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [12]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">cnf_file</span><span style="color: rgb(98,98,98)">.</span>visualize()
+<span class="ansi-green-fg">/tmp/ipykernel_16720/1453570617.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cnf_file<span class="ansi-blue-fg">.</span>visualize<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;cnf_file&#39; is not defined
 </pre></div></div>
@@ -846,11 +926,12 @@ Input <span class="ansi-green-fg">In [12]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [13]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 3&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">files</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">trajectory</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">trc</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Trc
-<span class="ansi-green-fg">----&gt; 3</span> in_path<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">project_dir</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/b_vacuum_sd/analysis/data/b_vacuum_sd.trc.h5</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> trc <span style="color: rgb(98,98,98)">=</span> Trc(input_value<span style="color: rgb(98,98,98)">=</span>in_path)
-<span class="ansi-green-intense-fg ansi-bold">      6</span> trc<span style="color: rgb(98,98,98)">.</span>write_pdb(out_ana<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/sd_traj.pdb</span><span style="color: rgb(175,0,0)">&#34;</span>, cnf_file<span style="color: rgb(98,98,98)">=</span>cnf_path)<span style="color: rgb(95,135,135)">#grom_system.cnf.path)</span>
+<span class="ansi-green-fg">/tmp/ipykernel_16720/2170265952.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>trajectory<span class="ansi-blue-fg">.</span>trc <span class="ansi-green-fg">import</span> Trc
+<span class="ansi-green-intense-fg ansi-bold">      2</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>in_path<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/b_vacuum_sd/analysis/data/b_vacuum_sd.trc.h5&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> trc <span class="ansi-blue-fg">=</span> Trc<span class="ansi-blue-fg">(</span>input_value<span class="ansi-blue-fg">=</span>in_path<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;project_dir&#39; is not defined
 </pre></div></div>
@@ -875,11 +956,12 @@ Input <span class="ansi-green-fg">In [13]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [14]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 3&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">files</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">trajectory</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">tre</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Tre
-<span class="ansi-green-fg">----&gt; 3</span> in_path<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">project_dir</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/b_vacuum_sd/analysis/data/b_vacuum_sd.tre.h5</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> tre <span style="color: rgb(98,98,98)">=</span> Tre(input_value<span style="color: rgb(98,98,98)">=</span>in_path)
-<span class="ansi-green-intense-fg ansi-bold">      6</span> tre
+<span class="ansi-green-fg">/tmp/ipykernel_16720/3112055316.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>files<span class="ansi-blue-fg">.</span>trajectory<span class="ansi-blue-fg">.</span>tre <span class="ansi-green-fg">import</span> Tre
+<span class="ansi-green-intense-fg ansi-bold">      2</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>in_path<span class="ansi-blue-fg">=</span>project_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/b_vacuum_sd/analysis/data/b_vacuum_sd.tre.h5&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> tre <span class="ansi-blue-fg">=</span> Tre<span class="ansi-blue-fg">(</span>input_value<span class="ansi-blue-fg">=</span>in_path<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;project_dir&#39; is not defined
 </pre></div></div>
@@ -908,20 +990,21 @@ Input <span class="ansi-green-fg">In [14]</span>, in <span class="ansi-cyan-fg">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [15]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)">#Plot Potential Energies</span>
-<span class="ansi-green-fg">----&gt; 2</span> V_tot <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>array(<span style="color: rgb(0,135,0)">list</span>(<span style="color: rgb(0,135,0)">map</span>(<span class="ansi-bold" style="color: rgb(0,135,0)">lambda</span> x: x[<span style="color: rgb(98,98,98)">2</span>], <span class="ansi-yellow-bg">tre</span><span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>totals)))
-<span class="ansi-green-intense-fg ansi-bold">      3</span> step <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">len</span>(tre<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>TIMESTEP_time)<span style="color: rgb(98,98,98)">/</span><span style="color: rgb(98,98,98)">/</span><span style="color: rgb(98,98,98)">10</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span style="color: rgb(98,98,98)">.</span>plot(tre<span style="color: rgb(98,98,98)">.</span>database<span style="color: rgb(98,98,98)">.</span>TIMESTEP_time, V_tot)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/1933029475.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg">#Plot Potential Energies</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>V_tot <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> tre<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>totals<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> step <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>tre<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>TIMESTEP_time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">//</span><span class="ansi-cyan-fg">10</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>tre<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>TIMESTEP_time<span class="ansi-blue-fg">,</span> V_tot<span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;tre&#39; is not defined
 </pre></div></div>
 </div>
 </section>
 <section id="Lambda-Sampling">
-<h2>Lambda Sampling<a class="headerlink" href="#Lambda-Sampling" title="Permalink to this headline"></a></h2>
+<h2>Lambda Sampling<a class="headerlink" href="#Lambda-Sampling" title="Permalink to this headline">¶</a></h2>
 <section id="Setup-again">
-<h3>Setup again<a class="headerlink" href="#Setup-again" title="Permalink to this headline"></a></h3>
+<h3>Setup again<a class="headerlink" href="#Setup-again" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -951,7 +1034,7 @@ Input <span class="ansi-green-fg">In [15]</span>, in <span class="ansi-cyan-fg">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-mkdir: cannot create directory ‘/home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
+mkdir: cannot create directory ‘/home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET’: No such file or directory
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -961,28 +1044,28 @@ mkdir: cannot create directory ‘/home/runner/work/PyGromosTools/PyGromosTools/
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [16]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 10&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span> sys_name <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">M030_to_6KET</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span> root_dir <span style="color: rgb(98,98,98)">=</span> os<span style="color: rgb(98,98,98)">.</span>getcwd()<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/example_files/TI_Calculation</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-fg">---&gt; 10</span> project_dir <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">bash</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">make_folder</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">root_dir</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg">sys_name</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     11</span> sys_path <span style="color: rgb(98,98,98)">=</span> root_dir<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/M030_to_6KET/b_vacuum_sd/sd_out_system.obj</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span> sd_gromos_system <span style="color: rgb(98,98,98)">=</span> Gromos_System<span style="color: rgb(98,98,98)">.</span>load(sys_path)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/1582497655.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> root_dir <span class="ansi-blue-fg">=</span> os<span class="ansi-blue-fg">.</span>getcwd<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/example_files/TI_Calculation&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg"> </span>project_dir <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>make_folder<span class="ansi-blue-fg">(</span>root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/&#34;</span><span class="ansi-blue-fg">+</span>sys_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span> sys_path <span class="ansi-blue-fg">=</span> root_dir<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#34;/M030_to_6KET/b_vacuum_sd/sd_out_system.obj&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span> sd_gromos_system <span class="ansi-blue-fg">=</span> Gromos_System<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span>sys_path<span class="ansi-blue-fg">)</span>
 
-File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/utils/bash.py:558</span>, in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
-<span class="ansi-green-intense-fg ansi-bold">    556</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>isdir(in_directory_path):
-<span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> os<span style="color: rgb(98,98,98)">.</span>system(mk_folder):
-<span class="ansi-green-fg">--&gt; 558</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">could not make folder:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span style="color: rgb(175,0,0)"> </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(in_directory_path))
-<span class="ansi-green-intense-fg ansi-bold">    560</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> verbose:
-<span class="ansi-green-intense-fg ansi-bold">    561</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">WARNING:</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-bold" style="color: rgb(175,95,0)">\t</span><span style="color: rgb(175,0,0)"> Did not build already existing folder: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> in_directory_path, category<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(215,95,95)">UserWarning</span>)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">make_folder</span><span class="ansi-blue-fg">(in_directory_path, additional_option, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>isdir<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    557</span>         <span class="ansi-green-fg">if</span> os<span class="ansi-blue-fg">.</span>system<span class="ansi-blue-fg">(</span>mk_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 558</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OSError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;could not make folder:\n &#34;</span> <span class="ansi-blue-fg">+</span> str<span class="ansi-blue-fg">(</span>in_directory_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    559</span>
+<span class="ansi-green-intense-fg ansi-bold">    560</span>     <span class="ansi-green-fg">elif</span> verbose<span class="ansi-blue-fg">:</span>
 
 <span class="ansi-red-fg">OSError</span>: could not make folder:
- /home/runner/work/PyGromosTools/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET
+ /home/mlehner/PyGromosTools/docs/sphinx_project/Examples/example_files/TI_Calculation/M030_to_6KET
 </pre></div></div>
 </div>
 </section>
 </section>
 <section id="Submission">
-<h2>Submission<a class="headerlink" href="#Submission" title="Permalink to this headline"></a></h2>
+<h2>Submission<a class="headerlink" href="#Submission" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -1005,12 +1088,12 @@ File <span class="ansi-green-fg">~/work/PyGromosTools/PyGromosTools/pygromos/uti
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [17]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 6&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pygromos</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">simulations</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">modules</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">ti_modules</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> TI_sampling
-<span class="ansi-green-intense-fg ansi-bold">      3</span> step_name  <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">d_lambda_sampling</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-fg">----&gt; 6</span> TI_sampling(in_gromos_system <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">sd_gromos_system</span>, project_dir<span style="color: rgb(98,98,98)">=</span>project_dir, step_name  <span style="color: rgb(98,98,98)">=</span> step_name,
-<span class="ansi-green-intense-fg ansi-bold">      7</span>             lambda_values<span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>arange(<span style="color: rgb(98,98,98)">0</span>, <span style="color: rgb(98,98,98)">1.1</span>, <span style="color: rgb(98,98,98)">0.1</span>),
-<span class="ansi-green-intense-fg ansi-bold">      8</span>             subSystem<span style="color: rgb(98,98,98)">=</span>subSystem(), n_simulation_repetitions <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">3</span>, n_equilibrations <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">1</span>)
+<span class="ansi-green-fg">/tmp/ipykernel_16720/408988705.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> TI_sampling(in_gromos_system = sd_gromos_system, project_dir=project_dir, step_name  = step_name,
+</span><span class="ansi-green-intense-fg ansi-bold">      7</span>             lambda_values<span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>arange<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1.1</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">0.1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>             subSystem=subSystem(), n_simulation_repetitions = 3, n_equilibrations = 1)
 
 <span class="ansi-red-fg">NameError</span>: name &#39;sd_gromos_system&#39; is not defined
 </pre></div></div>
@@ -1024,39 +1107,57 @@ Input <span class="ansi-green-fg">In [17]</span>, in <span class="ansi-cyan-fg">
 </div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"80a2d3d8f27e4aaa8318a97b9416398c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0bdf6281bcdb46c99ccc22846b9d72f6": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_80a2d3d8f27e4aaa8318a97b9416398c"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"fe68fbe38b3d4d0aaf50a7bc78fafa7a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a07858eb28be42c9be9f212e0f1a830e": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_fe68fbe38b3d4d0aaf50a7bc78fafa7a"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="example_amber2gromos.html" class="btn btn-neutral float-right" title="Amber2Gromos Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="example_amber2gromos.html" class="btn btn-neutral float-right" title="Amber2Gromos Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3.</p>
-  </div>
+    <p>
+        &copy; Copyright 2020, Benjamin Ries, Marc Lehner, Salome Rieder. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.3
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
