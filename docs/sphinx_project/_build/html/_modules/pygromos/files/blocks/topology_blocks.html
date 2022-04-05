@@ -159,8 +159,6 @@
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-
 <span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">TITLE</span> <span class="k">as</span> <span class="n">generic_TITLE</span>
 <span class="kn">from</span> <span class="nn">pygromos.files.blocks._general_blocks</span> <span class="kn">import</span> <span class="n">_generic_gromos_block</span><span class="p">,</span> <span class="n">_iterable_gromos_block</span><span class="p">,</span> <span class="n">_generic_field</span>
 <span class="kn">from</span> <span class="nn">pygromos.utils.typing</span> <span class="kn">import</span> <span class="p">(</span>
@@ -178,6 +176,7 @@
     <span class="n">RESNAME_Type</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="kn">from</span> <span class="nn">pygromos.files.blocks.pertubation_blocks</span> <span class="kn">import</span> <span class="n">pertubation_lam_state_nonbonded</span> <span class="k">as</span> <span class="n">pertubation_lam_state</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">   ENUMS</span>
@@ -3397,9 +3396,6 @@
         <span class="n">result</span> <span class="o">+=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">block_to_string</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">result</span></div></div>
-
-
-<span class="n">pertubation_lam_state</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;pertubationLamState&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;IAC&quot;</span><span class="p">,</span> <span class="s2">&quot;MASS&quot;</span><span class="p">,</span> <span class="s2">&quot;CHARGE&quot;</span><span class="p">])</span>
 
 
 <div class="viewcode-block" id="atom_lam_pertubation_state"><a class="viewcode-back" href="../../../../_source/pygromos.files.blocks.html#pygromos.files.blocks.topology_blocks.atom_lam_pertubation_state">[docs]</a><span class="k">class</span> <span class="nc">atom_lam_pertubation_state</span><span class="p">(</span><span class="n">_generic_field</span><span class="p">):</span>

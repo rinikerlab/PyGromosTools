@@ -90,7 +90,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "cnfF.visualize()"
+    "cnfF.view"
    ]
   },
   {

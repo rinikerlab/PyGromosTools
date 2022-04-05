@@ -27,7 +27,7 @@ class gromos_2020_trg_block_names_table:
         "dHdl",
         "dKdl",
         "dVdl",
-    ] + ["WIP" for x in range(40)]
+    ] + ["WIP" for x in range(41)]
     precalclam_subblock = [
         "nr_lambdas",
         "A_e_lj",
