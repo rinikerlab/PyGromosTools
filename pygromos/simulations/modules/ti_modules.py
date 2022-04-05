@@ -19,7 +19,7 @@ from pygromos.utils.typing import List
 
 def TI_sampling(
     in_gromos_system: Gromos_System,
-    project_dir: str,
+    project_dir: str = None,
     step_name="lambda_sampling",
     lambda_values: List[float] = np.arange(0, 1.1, 0.1),
     subSystem: _SubmissionSystem = LOCAL(),
@@ -62,6 +62,9 @@ def TI_sampling(
         lam_system: Gromos_System
             Gromos system of the simulation submitted last
     """
+
+    if project_dir is None:
+        project_dir = in_gromos_system.work_folder
 
     work_dir = bash.make_folder(project_dir + "/" + step_name)
 
@@ -129,7 +132,7 @@ def _TI_lam_step(
     previous_simulation_run: int = None,
     analysis_script: callable = simulation_analysis.do,
     verbose: bool = True,
-) -> (Gromos_System, int):
+) -> Gromos_System:
     template_control_dict = OrderedDict(
         {
             "concat": {

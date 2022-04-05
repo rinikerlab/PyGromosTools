@@ -1,5 +1,6 @@
 import re
 import inspect
+import __main__
 import numpy as np
 from enum import Enum
 from collections import namedtuple
@@ -508,6 +509,14 @@ class special_atom_lj_pair_type(_generic_field):
         )
         return str_line
 
+
+"""
+    Pertubations
+"""
+
+pertubation_lam_state = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
+setattr(__main__, pertubation_lam_state.__name__, pertubation_lam_state)
+pertubation_lam_state.__module__ = "__main__"
 
 """
     NON-BONDED TERM BLOCKS
@@ -3240,9 +3249,6 @@ class CONSTRAINT(_topology_table_block):
         result += super().block_to_string()
         result += "END\n"
         return result
-
-
-pertubation_lam_state = namedtuple("pertubationLamState", ["IAC", "MASS", "CHARGE"])
 
 
 class atom_lam_pertubation_state(_generic_field):
