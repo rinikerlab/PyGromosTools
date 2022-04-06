@@ -90,15 +90,12 @@ Content
 
 
     * create topologies from a forcefield
-
-      * GROMOS 2016H66 / 54A7
-      * OpenForceField
-      * SerenityForceField
-
+    * GROMOS 2016H66 / 54A7
+    * OpenForceField
+    * SerenityForceField
     * modify topologies
-
-      * add new atoms
-      * modify force parameters
+    * add new atoms
+    * modify force parameters
 
     .. code-block:: python
 
