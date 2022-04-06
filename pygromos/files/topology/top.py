@@ -1023,25 +1023,25 @@ class Top(_general_gromos_file._general_gromos_file):
 
     def add_new_TEMPERATUREGROUPS(self, number: int, verbose: bool = False):
         if not hasattr(self, "TEMPERATUREGROUPS"):
-            defaultContent = ["0", 0]
+            defaultContent = ["0", "0"]
             self.add_block(blocktitle="TEMPERATUREGROUPS", content=defaultContent, verbose=verbose)
-            self.TEMPERATUREGROUPS.NSP.remove([0])
+            self.TEMPERATUREGROUPS.NSP.remove(0)
         self.TEMPERATUREGROUPS.NSM += 1
         self.TEMPERATUREGROUPS.NSP.append(number)
 
     def add_new_SOLUTEMOLECULES(self, number: int, verbose: bool = False):
         if not hasattr(self, "SOLUTEMOLECULES"):
-            defaultContent = ["0", "Dummy"]
+            defaultContent = ["0", "0"]
             self.add_block(blocktitle="SOLUTEMOLECULES", content=defaultContent, verbose=verbose)
-            self.SOLUTEMOLECULES.content.remove(["Dummy"])
+            self.SOLUTEMOLECULES.NSP.remove(0)
         self.SOLUTEMOLECULES.NSM += 1
         self.SOLUTEMOLECULES.NSP.append(number)
 
     def add_new_PRESSUREGROUPS(self, number: int, verbose: bool = False):
         if not hasattr(self, "PRESSUREGROUPS"):
-            defaultContent = ["0", 0]
+            defaultContent = ["0", "0"]
             self.add_block(blocktitle="PRESSUREGROUPS", content=defaultContent, verbose=verbose)
-            self.PRESSUREGROUPS.NSP.remove([0])
+            self.PRESSUREGROUPS.NSP.remove(0)
         self.PRESSUREGROUPS.NSM += 1
         self.PRESSUREGROUPS.NSP.append(number)
 
