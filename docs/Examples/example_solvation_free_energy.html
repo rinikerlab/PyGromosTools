@@ -487,7 +487,7 @@ Warning: Unable to load toolkit &#39;OpenEye Toolkit&#39;. The Open Force Field 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "e220e35c2d9b42a9a31577dbdc2b0de5"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "ba4b0be1449a4a3897d45fa201e4aad2"}</script></div>
 </div>
 </section>
 <section id="Choose-Molecule-to-run-calculation-for">
@@ -888,13 +888,6 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
       dtype=&#39;object&#39;)]
 
   self.database.to_hdf(
-/home/mlehner/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py:296: PerformanceWarning:
-your performance may suffer as PyTables will pickle object types that it cannot
-map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;lambda&#39;, &#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
-       &#39;precalclam&#39;],
-      dtype=&#39;object&#39;)]
-
-  self.database.to_hdf(
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -911,6 +904,20 @@ map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&
 Solvation Free Energy: -23.47933332028344 pm -2.056752317486494
 </pre></div></div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mlehner/PyGromosTools/pygromos/files/trajectory/_general_trajectory.py:296: PerformanceWarning:
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block2_values] [items-&gt;Index([&#39;lambda&#39;, &#39;totals&#39;, &#39;baths&#39;, &#39;bonded&#39;, &#39;nonbonded&#39;, &#39;special&#39;, &#39;eds&#39;,
+       &#39;precalclam&#39;],
+      dtype=&#39;object&#39;)]
+
+  self.database.to_hdf(
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -921,7 +928,7 @@ Solvation Free Energy: -23.47933332028344 pm -2.056752317486494
 </pre></div></div>
 </div>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"457c64af81b94823aba6fcb5519365ee": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "e220e35c2d9b42a9a31577dbdc2b0de5": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_457c64af81b94823aba6fcb5519365ee"}}}, "version_major": 2, "version_minor": 0}
+{"state": {"645ac75da439483d80e3a2e7b0e3217a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "ba4b0be1449a4a3897d45fa201e4aad2": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_645ac75da439483d80e3a2e7b0e3217a"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
