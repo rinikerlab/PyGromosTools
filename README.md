@@ -31,9 +31,9 @@ Content
 
 * File handling of all GROMOS file types for automated creation/modification/analysis :
   * coordinate files CNF:
-    * read and analyse CNF files
-    * generate CNF files from RDKit
-    * generate CNF files from SDF
+   * read and analyse CNF files
+   * generate CNF files from RDKit
+   * generate CNF files from SDF
 
     ```python
     cnf = Cnf(input_value="file_name")
@@ -41,13 +41,13 @@ Content
     ```
 
   * topology files:
-    * create topologies from a forcefield
-      * GROMOS 2016H66 / 54A7
-      * OpenForceField
-      * SerenityForceField
-    * modify topologies
-      * add new atoms
-      * modify force parameters
+   * create topologies from a forcefield
+    * GROMOS 2016H66 / 54A7
+    * OpenForceField
+    * SerenityForceField
+   * modify topologies
+    * add new atoms
+    * modify force parameters
 
     ```python
     top = Top(input_value="file_path")
@@ -56,8 +56,8 @@ Content
     ```
 
   * simulation parameter files IMD
-    * a wide option of templates provided
-    * modify IMD files to fit your simulation
+   * a wide option of templates provided
+   * modify IMD files to fit your simulation
 
     ```pythons
     imd = Imd(input_value="file_path")
@@ -66,11 +66,11 @@ Content
     ```
 
   * trajectories (tre, trc, trg, ...)
-    * analyse trajectories with Pandas data frames
-    * standard analysis like RSMD, RDF, ... for trc
-    * auto saving of results for later use as hdf5
-    * ene_ana like tools for tre
-    * easy to add costume analysis tools
+   * analyse trajectories with Pandas data frames
+   * standard analysis like RSMD, RDF, ... for trc
+   * auto saving of results for later use as hdf5
+   * ene_ana like tools for tre
+   * easy to add costume analysis tools
 
     ```python
     trc = Trc(input_value="file_path")
