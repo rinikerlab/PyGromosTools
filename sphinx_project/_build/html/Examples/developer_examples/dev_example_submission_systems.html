@@ -460,6 +460,9 @@ div.rendered_html tbody tr:hover {
 <h1>Submission Systems<a class="headerlink" href="#Submission-Systems" title="Permalink to this headline">¶</a></h1>
 <p>Submission system play an important role, if you want to develop your pygromos code. Many times, they are hidden in the Simulation_runner blocks. But maybe you want to develop something, where you need direct access on the submission system?</p>
 <p>This notebook will give you some examples, how you can use the submission systems. Note that all submission systems are write in the same ways, such you can exchange them quickly.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -554,25 +557,469 @@ END
 </div>
 <section id="Queue-Checking:">
 <h3>Queue Checking:<a class="headerlink" href="#Queue-Checking:" title="Permalink to this headline">¶</a></h3>
-sub_lsf.get_queued_jobs()
-sub_lsf.job_queue_list</section>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sub_lsf</span><span class="o">.</span><span class="n">get_queued_jobs</span><span class="p">()</span>
+<span class="n">sub_lsf</span><span class="o">.</span><span class="n">job_queue_list</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                         </span>out_process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;bjobs -w&#34;</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                     job_list_str <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;utf-8&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> out_process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_14961/3507705770.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sub_lsf<span class="ansi-blue-fg">.</span>get_queued_jobs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> sub_lsf<span class="ansi-blue-fg">.</span>job_queue_list
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span>                     self<span class="ansi-blue-fg">.</span>_job_queue_time_stamp <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    318</span>                 <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 319</span><span class="ansi-red-fg">                     </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not get job_list!\nerr:\n&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    320</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    321</span>                 job_list_str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not get job_list!
+err:
+SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+</pre></div></div>
+</div>
+</section>
 <section id="Submission:">
 <h3>Submission:<a class="headerlink" href="#Submission:" title="Permalink to this headline">¶</a></h3>
 <p>here you can submit jobs to the queue as bash commands</p>
-bash_command = "sleep 5; echo \"WUHA\"; sleep 2"
-job_name = "Test1"
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bash_command</span> <span class="o">=</span> <span class="s2">&quot;sleep 5; echo </span><span class="se">\&quot;</span><span class="s2">WUHA</span><span class="se">\&quot;</span><span class="s2">; sleep 2&quot;</span>
+<span class="n">job_name</span> <span class="o">=</span> <span class="s2">&quot;Test1&quot;</span>
 
-job_id = sub_lsf.submit_to_queue(Submission_job(bash_command, job_name))#search for the just submitted job in the queue
-sub_lsf.search_queue_for_jobid(job_id)sub_lsf.search_queue_for_jobname("Test1")</section>
+<span class="n">job_id</span> <span class="o">=</span> <span class="n">sub_lsf</span><span class="o">.</span><span class="n">submit_to_queue</span><span class="p">(</span><span class="n">Submission_job</span><span class="p">(</span><span class="n">bash_command</span><span class="p">,</span> <span class="n">job_name</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+check queue
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                         </span>out_process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;bjobs -w&#34;</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                     job_list_str <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;utf-8&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> out_process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_14961/3188711362.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> job_name <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Test1&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>job_id <span class="ansi-blue-fg">=</span> sub_lsf<span class="ansi-blue-fg">.</span>submit_to_queue<span class="ansi-blue-fg">(</span>Submission_job<span class="ansi-blue-fg">(</span>bash_command<span class="ansi-blue-fg">,</span> job_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">submit_to_queue</span><span class="ansi-blue-fg">(self, sub_job)</span>
+<span class="ansi-green-intense-fg ansi-bold">     74</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>verbose<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     75</span>                 print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;check queue&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 76</span><span class="ansi-red-fg">             </span>ids <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>search_queue_for_jobname<span class="ansi-blue-fg">(</span>sub_job<span class="ansi-blue-fg">.</span>jobName<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>index<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     77</span>
+<span class="ansi-green-intense-fg ansi-bold">     78</span>             <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>ids<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">search_queue_for_jobname</span><span class="ansi-blue-fg">(self, job_name, regex)</span>
+<span class="ansi-green-intense-fg ansi-bold">    376</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    377</span>
+<span class="ansi-green-fg">--&gt; 378</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>get_queued_jobs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    379</span>         <span class="ansi-green-fg">if</span> regex<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    380</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>where<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>JOB_NAME<span class="ansi-blue-fg">.</span>str<span class="ansi-blue-fg">.</span>match<span class="ansi-blue-fg">(</span>job_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>dropna<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span>                     self<span class="ansi-blue-fg">.</span>_job_queue_time_stamp <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    318</span>                 <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 319</span><span class="ansi-red-fg">                     </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not get job_list!\nerr:\n&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    320</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    321</span>                 job_list_str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not get job_list!
+err:
+SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#search for the just submitted job in the queue</span>
+<span class="n">sub_lsf</span><span class="o">.</span><span class="n">search_queue_for_jobid</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                         </span>out_process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;bjobs -w&#34;</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                     job_list_str <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;utf-8&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> out_process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_14961/1706125824.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg">#search for the just submitted job in the queue</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>sub_lsf<span class="ansi-blue-fg">.</span>search_queue_for_jobid<span class="ansi-blue-fg">(</span>job_id<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">search_queue_for_jobid</span><span class="ansi-blue-fg">(self, job_id)</span>
+<span class="ansi-green-intense-fg ansi-bold">    357</span>
+<span class="ansi-green-intense-fg ansi-bold">    358</span>     <span class="ansi-green-fg">def</span> search_queue_for_jobid<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> job_id<span class="ansi-blue-fg">:</span> int<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 359</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>get_queued_jobs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    360</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>where<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>JOBID <span class="ansi-blue-fg">==</span> job_id<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>dropna<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    361</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span>                     self<span class="ansi-blue-fg">.</span>_job_queue_time_stamp <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    318</span>                 <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 319</span><span class="ansi-red-fg">                     </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not get job_list!\nerr:\n&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    320</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    321</span>                 job_list_str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not get job_list!
+err:
+SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sub_lsf</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="s2">&quot;Test1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                         </span>out_process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;bjobs -w&#34;</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                     job_list_str <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;utf-8&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> out_process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_14961/1654124141.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sub_lsf<span class="ansi-blue-fg">.</span>search_queue_for_jobname<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Test1&#34;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">search_queue_for_jobname</span><span class="ansi-blue-fg">(self, job_name, regex)</span>
+<span class="ansi-green-intense-fg ansi-bold">    376</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    377</span>
+<span class="ansi-green-fg">--&gt; 378</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>get_queued_jobs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    379</span>         <span class="ansi-green-fg">if</span> regex<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    380</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>where<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>JOB_NAME<span class="ansi-blue-fg">.</span>str<span class="ansi-blue-fg">.</span>match<span class="ansi-blue-fg">(</span>job_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>dropna<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span>                     self<span class="ansi-blue-fg">.</span>_job_queue_time_stamp <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    318</span>                 <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 319</span><span class="ansi-red-fg">                     </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not get job_list!\nerr:\n&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    320</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    321</span>                 job_list_str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not get job_list!
+err:
+SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+</pre></div></div>
+</div>
+</section>
 <section id="Submitting-multiple-jobs">
 <h3>Submitting multiple jobs<a class="headerlink" href="#Submitting-multiple-jobs" title="Permalink to this headline">¶</a></h3>
-bash_command = "sleep 2; echo \"WUHA\"; sleep 2"
-job_ids = []
-for test in range(3):
-    job_name = "Test"+str(test)
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bash_command</span> <span class="o">=</span> <span class="s2">&quot;sleep 2; echo </span><span class="se">\&quot;</span><span class="s2">WUHA</span><span class="se">\&quot;</span><span class="s2">; sleep 2&quot;</span>
+<span class="n">job_ids</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">job_name</span> <span class="o">=</span> <span class="s2">&quot;Test&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
 
-    job_id = sub_lsf.submit_to_queue(Submission_job(bash_command, job_name))
-    job_ids.append(job_id)sub_lsf.search_queue_for_jobname("Te", regex=True)</section>
+    <span class="n">job_id</span> <span class="o">=</span> <span class="n">sub_lsf</span><span class="o">.</span><span class="n">submit_to_queue</span><span class="p">(</span><span class="n">Submission_job</span><span class="p">(</span><span class="n">bash_command</span><span class="p">,</span> <span class="n">job_name</span><span class="p">))</span>
+    <span class="n">job_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+check queue
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                         </span>out_process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;bjobs -w&#34;</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                     job_list_str <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;utf-8&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> out_process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_14961/422912753.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     job_name <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;Test&#34;</span><span class="ansi-blue-fg">+</span>str<span class="ansi-blue-fg">(</span>test<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg">     </span>job_id <span class="ansi-blue-fg">=</span> sub_lsf<span class="ansi-blue-fg">.</span>submit_to_queue<span class="ansi-blue-fg">(</span>Submission_job<span class="ansi-blue-fg">(</span>bash_command<span class="ansi-blue-fg">,</span> job_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span>     job_ids<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>job_id<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">submit_to_queue</span><span class="ansi-blue-fg">(self, sub_job)</span>
+<span class="ansi-green-intense-fg ansi-bold">     74</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>verbose<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     75</span>                 print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;check queue&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 76</span><span class="ansi-red-fg">             </span>ids <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>search_queue_for_jobname<span class="ansi-blue-fg">(</span>sub_job<span class="ansi-blue-fg">.</span>jobName<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>index<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     77</span>
+<span class="ansi-green-intense-fg ansi-bold">     78</span>             <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>ids<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">search_queue_for_jobname</span><span class="ansi-blue-fg">(self, job_name, regex)</span>
+<span class="ansi-green-intense-fg ansi-bold">    376</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    377</span>
+<span class="ansi-green-fg">--&gt; 378</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>get_queued_jobs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    379</span>         <span class="ansi-green-fg">if</span> regex<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    380</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>where<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>JOB_NAME<span class="ansi-blue-fg">.</span>str<span class="ansi-blue-fg">.</span>match<span class="ansi-blue-fg">(</span>job_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>dropna<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span>                     self<span class="ansi-blue-fg">.</span>_job_queue_time_stamp <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    318</span>                 <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 319</span><span class="ansi-red-fg">                     </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not get job_list!\nerr:\n&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    320</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    321</span>                 job_list_str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not get job_list!
+err:
+SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sub_lsf</span><span class="o">.</span><span class="n">search_queue_for_jobname</span><span class="p">(</span><span class="s2">&quot;Te&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ChildProcessError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    307</span>                     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 308</span><span class="ansi-red-fg">                         </span>out_process <span class="ansi-blue-fg">=</span> bash<span class="ansi-blue-fg">.</span>execute<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;bjobs -w&#34;</span><span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    309</span>                     job_list_str <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;utf-8&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> out_process<span class="ansi-blue-fg">.</span>stdout<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute</span><span class="ansi-blue-fg">(command, verbose, catch_STD, env)</span>
+<span class="ansi-green-intense-fg ansi-bold">    934</span> ):
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> execute_subprocess<span class="ansi-blue-fg">(</span>command<span class="ansi-blue-fg">=</span>command<span class="ansi-blue-fg">,</span> verbose<span class="ansi-blue-fg">=</span>verbose<span class="ansi-blue-fg">,</span> catch_STD<span class="ansi-blue-fg">=</span>catch_STD<span class="ansi-blue-fg">,</span> env<span class="ansi-blue-fg">=</span>env<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/utils/bash.py</span> in <span class="ansi-cyan-fg">execute_subprocess</span><span class="ansi-blue-fg">(command, catch_STD, env, verbose)</span>
+<span class="ansi-green-intense-fg ansi-bold">    828</span>         msg <span class="ansi-blue-fg">+=</span> <span class="ansi-blue-fg">&#34;NONE&#34;</span> <span class="ansi-green-fg">if</span> <span class="ansi-blue-fg">(</span>p<span class="ansi-blue-fg">.</span>stdout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> <span class="ansi-blue-fg">&#34;\n\t&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>map<span class="ansi-blue-fg">(</span>str<span class="ansi-blue-fg">,</span> p<span class="ansi-blue-fg">.</span>stderr<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 829</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ChildProcessError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    830</span>     <span class="ansi-green-fg">if</span> verbose<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">ChildProcessError</span>: SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_14961/722442852.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sub_lsf<span class="ansi-blue-fg">.</span>search_queue_for_jobname<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Te&#34;</span><span class="ansi-blue-fg">,</span> regex<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">search_queue_for_jobname</span><span class="ansi-blue-fg">(self, job_name, regex)</span>
+<span class="ansi-green-intense-fg ansi-bold">    376</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    377</span>
+<span class="ansi-green-fg">--&gt; 378</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>get_queued_jobs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    379</span>         <span class="ansi-green-fg">if</span> regex<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    380</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>where<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_job_queue_list<span class="ansi-blue-fg">.</span>JOB_NAME<span class="ansi-blue-fg">.</span>str<span class="ansi-blue-fg">.</span>match<span class="ansi-blue-fg">(</span>job_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>dropna<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/PyGromosTools/pygromos/simulations/hpc_queuing/submission_systems/lsf.py</span> in <span class="ansi-cyan-fg">get_queued_jobs</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span>                     self<span class="ansi-blue-fg">.</span>_job_queue_time_stamp <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    318</span>                 <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 319</span><span class="ansi-red-fg">                     </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Could not get job_list!\nerr:\n&#34;</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#34;\n&#34;</span><span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    320</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    321</span>                 job_list_str <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">Exception</span>: Could not get job_list!
+err:
+SubProcess Failed due to returncode: 127
+ COMMAND:
+        bjobs -w
+STDOUT:
+
+STDERR:
+        b&#39;/bin/sh: 1: bjobs: not found\n&#39;
+</pre></div></div>
+</div>
+</section>
 <section id="Killing-a-jobs">
 <h3>Killing a jobs<a class="headerlink" href="#Killing-a-jobs" title="Permalink to this headline">¶</a></h3>
 <p>Remove a job the job queue</p>
