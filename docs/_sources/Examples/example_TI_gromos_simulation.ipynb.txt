@@ -20,9 +20,22 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 1,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "bb7af915f1e54549a21770e380f1d64c",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": []
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
    "source": [
     "#for analysis\n",
     "from matplotlib import pyplot as plt\n",
@@ -50,7 +63,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -374,7 +387,6 @@
     "import numpy as np\n",
     "from pygromos.files.gromos_system import Gromos_System\n",
     "from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem\n",
-    "\n",
     "from pygromos.utils import bash\n",
     "sys_name = \"M030_to_6KET\"\n",
     "\n",
@@ -425,7 +437,7 @@
     "import glob\n",
     "from matplotlib import pyplot as plt\n",
     "from pygromos.files.trajectory.trg import Trg\n",
-    "\n",
+    "%matplotlib inline\n",
     "\n",
     "step_name  = \"d_lambda_sampling\"\n",
     "path = project_dir+\"/\"+step_name\n",

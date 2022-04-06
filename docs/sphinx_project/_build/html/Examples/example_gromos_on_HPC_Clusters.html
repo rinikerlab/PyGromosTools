@@ -456,6 +456,8 @@ div.rendered_html tbody tr:hover {
 <section id="Usage-of-PyGromosTools-on-HPC-cluster">
 <h1>Usage of PyGromosTools on HPC-cluster<a class="headerlink" href="#Usage-of-PyGromosTools-on-HPC-cluster" title="Permalink to this headline">¶</a></h1>
 <p>Note that you need support for the new <code class="docutils literal notranslate"><span class="pre">PyGromosTools</span></code> submission system shipped with <code class="docutils literal notranslate"><span class="pre">relase3</span></code>.</p>
+<hr class="docutils" />
+<p><strong>Note</strong>: This notebook only works, if you have the LSF submission system on the machine you are unsing it on! ***</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -465,30 +467,15 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">pygromos.files.gromos_system.gromos_system</span> <span class="kn">import</span> <span class="n">Gromos_System</span>
 <span class="kn">from</span> <span class="nn">pygromos.simulations.modules.preset_simulation_modules</span> <span class="kn">import</span> <span class="n">emin</span><span class="p">,</span> <span class="n">md</span>
 
-<span class="n">submission_system</span> <span class="o">=</span> <span class="n">lsf</span><span class="o">.</span><span class="n">Lsf</span><span class="p">(</span><span class="n">nmpi</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># this is for IBMs job queue!</span>
+<span class="n">submission_system</span> <span class="o">=</span> <span class="n">lsf</span><span class="o">.</span><span class="n">LSF</span><span class="p">(</span><span class="n">nmpi</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># this is for IBMs job queue!</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "8529989926b34da3ac6231117397020f"}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_9964/816950355.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">from</span> pygromos<span class="ansi-blue-fg">.</span>simulations<span class="ansi-blue-fg">.</span>modules<span class="ansi-blue-fg">.</span>preset_simulation_modules <span class="ansi-green-fg">import</span> emin<span class="ansi-blue-fg">,</span> md
-<span class="ansi-green-intense-fg ansi-bold">      5</span>
-<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>submission_system <span class="ansi-blue-fg">=</span> lsf<span class="ansi-blue-fg">.</span>Lsf<span class="ansi-blue-fg">(</span>nmpi<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span> <span class="ansi-red-fg"># this is for IBMs job queue!</span>
-
-<span class="ansi-red-fg">AttributeError</span>: module &#39;pygromos.simulations.hpc_queuing.submission_systems.lsf&#39; has no attribute &#39;Lsf&#39;
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "ac69e9c2d0c54216bbdebbc892889d06"}</script></div>
 </div>
 <section id="Initialization">
 <h2>Initialization<a class="headerlink" href="#Initialization" title="Permalink to this headline">¶</a></h2>
@@ -529,43 +516,196 @@ div.rendered_html tbody tr:hover {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_9964/3952356644.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     19</span>     in_gromosPP_bin_dir<span class="ansi-blue-fg">=</span>gromosPP<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">     20</span>     in_gromosXX_bin_dir<span class="ansi-blue-fg">=</span>gromosXX<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">---&gt; 21</span><span class="ansi-red-fg">     </span>submission_system<span class="ansi-blue-fg">=</span>submission_system<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">     22</span>     verbose<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
-<span class="ansi-green-intense-fg ansi-bold">     23</span> )
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/3952356644.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-red-fg"># system</span>
+<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg"> system = Gromos_System(
+</span><span class="ansi-green-intense-fg ansi-bold">     15</span>     work_folder<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     system_name<span class="ansi-blue-fg">,</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;submission_system&#39; is not defined
+<span class="ansi-red-fg">TypeError</span>: __init__() got an unexpected keyword argument &#39;submission_system&#39;
 </pre></div></div>
 </div>
 </section>
 <section id="Energy-minimization">
 <h2>Energy minimization<a class="headerlink" href="#Energy-minimization" title="Permalink to this headline">¶</a></h2>
 <p>Take advantage of the new submission system: convenience functions such as <code class="docutils literal notranslate"><span class="pre">emin</span></code> take in a parametrized <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object, automatically set up the calculation and return a new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object with updated file paths.</p>
-# run energy minimization
-minimized_system = emin(system)<section id="Print-out-the-new-file-paths">
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run energy minimization</span>
+<span class="n">minimized_system</span> <span class="o">=</span> <span class="n">emin</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/2866156413.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># run energy minimization</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>minimized_system <span class="ansi-blue-fg">=</span> emin<span class="ansi-blue-fg">(</span>system<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;system&#39; is not defined
+</pre></div></div>
+</div>
+<section id="Print-out-the-new-file-paths">
 <h3>Print out the new file paths<a class="headerlink" href="#Print-out-the-new-file-paths" title="Permalink to this headline">¶</a></h3>
 <p>Note how the new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object has new file paths associated with it.</p>
-print(minimized_system.imd.path)
-print(minimized_system.top.path)
-print(minimized_system.cnf.path)</section>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">minimized_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">minimized_system</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">minimized_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/1854406475.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
+</pre></div></div>
+</div>
+</section>
 <section id="Visualize-the-minimized-system">
 <h3>Visualize the minimized system<a class="headerlink" href="#Visualize-the-minimized-system" title="Permalink to this headline">¶</a></h3>
-minimized_system.cnf.view<p><strong>Note:</strong> The new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object has an .imd file associated (from the energy minimization). Using the object for a subsequent calculation requires the .imd to be reset (as shown below) or a new <code class="docutils literal notranslate"><span class="pre">Imd</span></code> object to be passed to the function <code class="docutils literal notranslate"><span class="pre">md</span></code>. Otherwise <code class="docutils literal notranslate"><span class="pre">md</span></code> will be based on the previous (emin) input file.</p>
-# Reset the old imd from emin
-minimized_system.imd = None</section>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">minimized_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">view</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/2322670463.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>view
+
+<span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
+</pre></div></div>
+</div>
+<p><strong>Note:</strong> The new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object has an .imd file associated (from the energy minimization). Using the object for a subsequent calculation requires the .imd to be reset (as shown below) or a new <code class="docutils literal notranslate"><span class="pre">Imd</span></code> object to be passed to the function <code class="docutils literal notranslate"><span class="pre">md</span></code>. Otherwise <code class="docutils literal notranslate"><span class="pre">md</span></code> will be based on the previous (emin) input file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the old imd from emin</span>
+<span class="n">minimized_system</span><span class="o">.</span><span class="n">imd</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/4187209246.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Reset the old imd from emin</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>minimized_system<span class="ansi-blue-fg">.</span>imd <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
+</pre></div></div>
+</div>
+</section>
 </section>
 <section id="Equilibration-followed-by-subsequent-production-runs">
 <h2>Equilibration followed by subsequent production runs<a class="headerlink" href="#Equilibration-followed-by-subsequent-production-runs" title="Permalink to this headline">¶</a></h2>
-md_system = md(minimized_system, equilibration_runs=1, simulation_runs=2)<p>Again, note how the new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object has new file paths associated with it.</p>
-print(md_system.imd.path)
-print(md_system.top.path)
-print(md_system.cnf.path)<section id="Visualize-the-last-configuration">
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md_system</span> <span class="o">=</span> <span class="n">md</span><span class="p">(</span><span class="n">minimized_system</span><span class="p">,</span> <span class="n">equilibration_runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simulation_runs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/1992461589.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>md_system <span class="ansi-blue-fg">=</span> md<span class="ansi-blue-fg">(</span>minimized_system<span class="ansi-blue-fg">,</span> equilibration_runs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> simulation_runs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;minimized_system&#39; is not defined
+</pre></div></div>
+</div>
+<p>Again, note how the new <code class="docutils literal notranslate"><span class="pre">Gromos_System</span></code> object has new file paths associated with it.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">md_system</span><span class="o">.</span><span class="n">imd</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">md_system</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">md_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/2659777302.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>md_system<span class="ansi-blue-fg">.</span>imd<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> print<span class="ansi-blue-fg">(</span>md_system<span class="ansi-blue-fg">.</span>top<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>md_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;md_system&#39; is not defined
+</pre></div></div>
+</div>
+<section id="Visualize-the-last-configuration">
 <h3>Visualize the last configuration<a class="headerlink" href="#Visualize-the-last-configuration" title="Permalink to this headline">¶</a></h3>
-md_system.cnf.visualize()<script type="application/vnd.jupyter.widget-state+json">
-{"state": {"8a523391e20b4d52ae914773b885ed40": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "8529989926b34da3ac6231117397020f": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_8a523391e20b4d52ae914773b885ed40"}}}, "version_major": 2, "version_minor": 0}
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md_system</span><span class="o">.</span><span class="n">cnf</span><span class="o">.</span><span class="n">view</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_15481/2628836130.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>md_system<span class="ansi-blue-fg">.</span>cnf<span class="ansi-blue-fg">.</span>view
+
+<span class="ansi-red-fg">NameError</span>: name &#39;md_system&#39; is not defined
+</pre></div></div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"5eeeba0ea9ea4eddb7905679ccd2ce6e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "ac69e9c2d0c54216bbdebbc892889d06": {"model_name": "ColormakerRegistryModel", "model_module": "nglview-js-widgets", "model_module_version": "3.0.1", "state": {"_dom_classes": [], "_model_module": "nglview-js-widgets", "_model_module_version": "3.0.1", "_model_name": "ColormakerRegistryModel", "_msg_ar": [], "_msg_q": [], "_ready": false, "_view_count": null, "_view_module": "nglview-js-widgets", "_view_module_version": "3.0.1", "_view_name": "ColormakerRegistryView", "layout": "IPY_MODEL_5eeeba0ea9ea4eddb7905679ccd2ce6e"}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 </section>

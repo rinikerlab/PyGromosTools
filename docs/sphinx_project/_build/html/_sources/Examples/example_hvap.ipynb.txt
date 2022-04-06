@@ -72,7 +72,30 @@
    "metadata": {},
    "outputs": [],
    "source": [
+    "# reduce number of steps for demonstration purposes\n",
+    "hvap_sys.imd_gas_eq.STEP.NSTLIM = 10\n",
+    "hvap_sys.imd_gas_sd.STEP.NSTLIM = 100"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
     "hvap_sys.run_gas()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# reduce number of steps for demonstration purposes\n",
+    "hvap_sys.imd_liq_eq.STEP.NSTLIM = 10\n",
+    "hvap_sys.imd_liq_md.STEP.NSTLIM = 100\n",
+    "hvap_sys.imd_liq_md.WRITETRAJ.NTWE = 40"
    ]
   },
   {
