@@ -58,7 +58,6 @@ class Imd(_general_gromos_file._general_gromos_file):
     INITIALISE: blocks.INITIALISE
 
     REPLICA_EDS: blocks.REPLICA_EDS
-    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS
 
     REPLICA: blocks.REPLICA
 
