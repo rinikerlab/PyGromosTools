@@ -248,12 +248,7 @@ def work(
                                                    out_trv=out_trv,
                                                    verbose=True
                                                   )
-                
-                if not multi_node:
-                    print("Waiting to find all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
-                    out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
-                    print (out_cnf_paths)
-                    for ocp in out_cnf_paths: bash.wait_for_fileSystem(ocp)
+                md_failed = False
 
             else:
                 omd_file_path = gromosXX.md_run(in_topo_path=in_top_path,
@@ -309,12 +304,12 @@ def work(
             zip_files.do(in_simulation_dir=out_dir, n_processes=n_cpu_zip)
         
         # Check for the output files:
-        if multi_node:
+        if is_repex_run or multi_node:
             try: 
                 print("Ensuring we have all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
                 out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
                 print (out_cnf_paths)
-                for ocp in out_cnf_paths: bash.wait_for_fileSystem(ocp)
+                for ocp in out_cnf_paths: bash.wait_for_fileSystem(out_dir + '/' + ocp)
             except Exception as err:
                 print("Failed! process returned: \n Err: \n" + "\n".join(err.args)) 
                 print ("Missing CNF files.")
