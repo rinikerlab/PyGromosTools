@@ -132,25 +132,25 @@ def work(
     tmp_prefix = os.path.basename(out_dir)
     tmp_imd_path = out_dir + "/" + tmp_prefix + ".imd"
     imd_file = imd.Imd(in_imd_path)
-    
+
     if hasattr(imd_file, "REPLICA") and imd_file.REPLICA is not None:
         is_repex_run = True
         num_replicas = int(imd_file.REPLICA.NRELAM * imd_file.REPLICA.NRET)
-    elif hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None: 
+    elif hasattr(imd_file, "REPLICA_EDS") and imd_file.REPLICA_EDS is not None:
         is_repex_run = True
         num_replicas = int(imd_file.REPLICA_EDS.NRES)
-    else: 
+    else:
         is_repex_run = False
-    
-    #Prepare CNF file(s):
-    
+
+    # Prepare CNF file(s):
+
     if is_repex_run:
-        tmp_path = "/".join(os.path.abspath(in_cnf_path).split('/')[:-1])
-        in_coord_paths = sorted(glob.glob(tmp_path +'/*.cnf'))
-        cnf_file = cnf.Cnf(in_coord_paths[0]) # used to make sure imd/cnf is in sync
-    else: 
+        tmp_path = "/".join(os.path.abspath(in_cnf_path).split("/")[:-1])
+        in_coord_paths = sorted(glob.glob(tmp_path + "/*.cnf"))
+        cnf_file = cnf.Cnf(in_coord_paths[0])  # used to make sure imd/cnf is in sync
+    else:
         cnf_file = cnf.Cnf(in_cnf_path)
-    
+
     # check init_block - if specified!
     # What kind of simulation
     is_stochastic_dynamics_sim = False
@@ -194,11 +194,11 @@ def work(
 
         if is_stochastic_dynamics_sim or is_vacuum:
             imd_file.INITIALISE.NTISTI = 1
-        
+
     # For RE-EDS / REPEX simulations, also change the CONT option to 1
-    if (hasattr(imd_file, "REPLICA") and runID > 1):
+    if hasattr(imd_file, "REPLICA") and runID > 1:
         imd_file.REPLICA.CONT = 1
-    if (hasattr(imd_file, "REPLICA_EDS") and runID > 1):
+    if hasattr(imd_file, "REPLICA_EDS") and runID > 1:
         imd_file.REPLICA_EDS.CONT = 1
 
     # adjust sim time if continuation:
@@ -217,8 +217,8 @@ def work(
     try:
         print(spacer + "\n start MD " + str(os.path.basename(tmp_imd_path)) + "\n")
 
-        #TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!
-        if is_repex_run: # do the workaround for each cnf one by one
+        # TODO: This is a stupid workaround as Euler tends to place nans in the euler angles, that should not be there!
+        if is_repex_run:  # do the workaround for each cnf one by one
             for tmp_cnf_path in in_coord_paths:
                 tmp_cnf = cnf.Cnf(tmp_cnf_path)
                 if hasattr(tmp_cnf, "GENBOX") and any([math.isnan(x) for x in tmp_cnf.GENBOX.euler]):
@@ -227,49 +227,52 @@ def work(
         elif hasattr(cnf_file, "GENBOX") and any([math.isnan(x) for x in cnf_file.GENBOX.euler]):
             cnf_file.GENBOX.euler = [0.0, 0.0, 0.0]
             cnf_file.write(in_cnf_path)
-        
+
         # Start the execution of the gromosXX binary
         try:
             if is_repex_run:
-                omd_file_path = gromosXX.repex_run(in_topo_path=in_top_path, 
-                                                   in_coord_path=in_cnf_path, 
-                                                   in_imd_path=tmp_imd_path,
-                                                   in_pert_topo_path=in_perttopo_path, 
-                                                   in_disres_path=in_disres_path,
-                                                   in_posresspec_path=in_posres_path, 
-                                                   in_refpos_path=in_refpos_path,
-                                                   nmpi=nmpi, nomp=nomp,
-                                                   out_prefix=tmp_prefix,
-                                                   out_tre=out_tre, 
-                                                   out_trc=out_trc,
-                                                   out_trg=out_trg, 
-                                                   out_trs=out_trs, 
-                                                   out_trf=out_trf, 
-                                                   out_trv=out_trv,
-                                                   verbose=True
-                                                  )
+                omd_file_path = gromosXX.repex_run(
+                    in_topo_path=in_top_path,
+                    in_coord_path=in_cnf_path,
+                    in_imd_path=tmp_imd_path,
+                    in_pert_topo_path=in_perttopo_path,
+                    in_disres_path=in_disres_path,
+                    in_posresspec_path=in_posres_path,
+                    in_refpos_path=in_refpos_path,
+                    nmpi=nmpi,
+                    nomp=nomp,
+                    out_prefix=tmp_prefix,
+                    out_tre=out_tre,
+                    out_trc=out_trc,
+                    out_trg=out_trg,
+                    out_trs=out_trs,
+                    out_trf=out_trf,
+                    out_trv=out_trv,
+                    verbose=True,
+                )
                 md_failed = False
 
             else:
-                omd_file_path = gromosXX.md_run(in_topo_path=in_top_path,
-                                                in_coord_path=in_cnf_path,
-                                                in_imd_path=tmp_imd_path,
-                                                in_pert_topo_path=in_perttopo_path,
-                                                in_disres_path=in_disres_path,
-                                                in_posresspec_path=in_posres_path,
-                                                in_refpos_path=in_refpos_path,
-                                                in_qmmm_path=in_qmmm_path,
-                                                nmpi=nmpi,
-                                                nomp=nomp,
-                                                out_prefix=tmp_prefix,
-                                                out_tre=out_tre,
-                                                out_trc=out_trc,
-                                                out_trg=out_trg,
-                                                out_trs=out_trs,
-                                                out_trf=out_trf,
-                                                out_trv=out_trv,
-                                                verbose=True,
-                                               )
+                omd_file_path = gromosXX.md_run(
+                    in_topo_path=in_top_path,
+                    in_coord_path=in_cnf_path,
+                    in_imd_path=tmp_imd_path,
+                    in_pert_topo_path=in_perttopo_path,
+                    in_disres_path=in_disres_path,
+                    in_posresspec_path=in_posres_path,
+                    in_refpos_path=in_refpos_path,
+                    in_qmmm_path=in_qmmm_path,
+                    nmpi=nmpi,
+                    nomp=nomp,
+                    out_prefix=tmp_prefix,
+                    out_tre=out_tre,
+                    out_trc=out_trc,
+                    out_trg=out_trg,
+                    out_trs=out_trs,
+                    out_trf=out_trf,
+                    out_trv=out_trv,
+                    verbose=True,
+                )
 
                 print("Waiting to find: ", omd_file_path.replace(".omd", ".cnf"))
                 bash.wait_for_fileSystem(omd_file_path.replace(".omd", ".cnf"))
@@ -292,7 +295,7 @@ def work(
                 bash.move_file(work_dir + "/*", out_dir)
             else:
                 for host in hosts:
-                    if host == os.environ['HOSTNAME']:
+                    if host == os.environ["HOSTNAME"]:
                         command = "mv ${TMPDIR}/* " + out_dir
                     else:
                         command = "ssh " + host + '  "mv ${TMPDIR}/* ' + out_dir + '"'
@@ -302,18 +305,19 @@ def work(
         # Note: If job is multi-node, it is simpler to zip things in out_dir after copying back
         if multi_node and zip_trajectories:
             zip_files.do(in_simulation_dir=out_dir, n_processes=n_cpu_zip)
-        
+
         # Check for the output files:
         if is_repex_run or multi_node:
-            try: 
+            try:
                 print("Ensuring we have all output cnfs: ", omd_file_path.replace(".omd", "*.cnf"))
-                out_cnf_paths = [omd_file_path.replace(".omd", "_"+str(n+1)+".cnf") for n in range(num_replicas)]
-                print (out_cnf_paths)
-                for ocp in out_cnf_paths: bash.wait_for_fileSystem(out_dir + '/' + ocp)
+                out_cnf_paths = [omd_file_path.replace(".omd", "_" + str(n + 1) + ".cnf") for n in range(num_replicas)]
+                print(out_cnf_paths)
+                for ocp in out_cnf_paths:
+                    bash.wait_for_fileSystem(out_dir + "/" + ocp)
             except Exception as err:
-                print("Failed! process returned: \n Err: \n" + "\n".join(err.args)) 
-                print ("Missing CNF files.")
-                md_failed = True 
+                print("Failed! process returned: \n Err: \n" + "\n".join(err.args))
+                print("Missing CNF files.")
+                md_failed = True
 
     except Exception as err:
         print("\nFailed during simulations: ", file=sys.stderr)

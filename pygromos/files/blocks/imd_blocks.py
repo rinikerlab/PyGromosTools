@@ -459,8 +459,8 @@ class REPLICA_EDS(_generic_imd_block):
             setattr(self, "NRES", int(content[3].split()[0]))
             setattr(self, "NUMSTATES", int(content[3].split()[1]))
             setattr(self, "NEOFF", int(content[3].split()[2]))
-            s_values =  list(map(float, content[5].split()))
-            if(len(s_values)== self.NRES):
+            s_values = list(map(float, content[5].split()))
+            if len(s_values) == self.NRES:
                 setattr(self, "RES", s_values)
             else:
                 raise IOError("REPLICA_EDS: NRES was not equal to the number of s-values in IMD!")
@@ -475,6 +475,7 @@ class REPLICA_EDS(_generic_imd_block):
 
         except Exception as err:
             raise IOError("Could not parse block from str - " + __class__.__name__ + "\n" + str(err.args))
+
 
 class BOUNDCOND(_generic_imd_block):
     """Boundary Condition Block
