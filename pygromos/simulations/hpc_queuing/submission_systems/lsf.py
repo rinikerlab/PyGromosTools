@@ -29,6 +29,7 @@ class LSF(_SubmissionSystem):
         environment=None,
         block_double_submission: bool = True,
         bjobs_only_same_host: bool = False,
+        run_single_node: bool = False,
         chain_prefix: str = "done",
         begin_mail: bool = False,
         end_mail: bool = False,
@@ -44,6 +45,7 @@ class LSF(_SubmissionSystem):
             submission=submission,
             environment=environment,
             block_double_submission=block_double_submission,
+            run_single_node = run_single_node,
             chain_prefix=chain_prefix,
             begin_mail=begin_mail,
             end_mail=end_mail,
@@ -114,6 +116,9 @@ class LSF(_SubmissionSystem):
         # add_string= "-R \"select[model==XeonGold_5118 || model==XeonGold_6150 || model==XeonE3_1585Lv5 || model==XeonE3_1284Lv4 || model==XeonE7_8867v3 || model == XeonGold_6140 || model==XeonGold_6150 ]\""
         if isinstance(self._max_storage, int):
             submission_string += " -R rusage[mem=" + str(self._max_storage) + "] "
+
+        if self.run_single_node:
+            submission_string += " -R span[ptile=" + str(nCPU) + "] "
 
         if isinstance(sub_job.queue_after_jobID, (int, str)) and (
             sub_job.queue_after_jobID != 0 or sub_job.queue_after_jobID != "0"
