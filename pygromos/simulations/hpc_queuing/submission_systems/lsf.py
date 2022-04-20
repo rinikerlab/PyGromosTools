@@ -45,7 +45,6 @@ class LSF(_SubmissionSystem):
             submission=submission,
             environment=environment,
             block_double_submission=block_double_submission,
-            run_single_node = run_single_node,
             chain_prefix=chain_prefix,
             begin_mail=begin_mail,
             end_mail=end_mail,
@@ -53,6 +52,7 @@ class LSF(_SubmissionSystem):
         )
         # Only LSF specific settings:
         self.bjobs_only_same_host = bjobs_only_same_host
+        self.run_single_node = run_single_node
 
     def submit_to_queue(self, sub_job: Submission_job) -> int:
         """
