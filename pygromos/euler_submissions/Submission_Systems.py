@@ -114,6 +114,9 @@ class LSF(_SubmissionSystem):
 
         if(isinstance(errLog, str)):
             submission_string+= " -e "+errLog
+        
+        # adding the ptile
+        submission_string += " -R span[ptile="+str(nmpi)+"] "
 
         nCPU=nmpi*nomp
         submission_string+= " -n "+str(nCPU)+" "
