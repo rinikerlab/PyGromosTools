@@ -78,8 +78,8 @@ class Imd(_general_gromos_file._general_gromos_file):
     INITIALISE: blocks.INITIALISE = None
 
     REPLICA_EDS: blocks.REPLICA_EDS = None
-    OLD_REPLICA_EDS: blocks.OLD_REPLICA_EDS = None
-    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
+    #OLD_REPLICA_EDS: blocks.OLD_REPLICA_EDS = None
+    #NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
 
     def __init__(self, input:str):
         super().__init__(input=input)

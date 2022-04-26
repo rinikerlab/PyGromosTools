@@ -129,13 +129,13 @@ class _Gromos:
         if in_pert_topo_path:
             command += ["@pttopo", str(in_pert_topo_path)]
 
-        if in_disres_path:
+        if in_disres_path is not None :
             command += ["@distrest", str(in_disres_path)]
 
-        if in_posresspec_path:
+        if in_posresspec_path is not None :
             command += ["@posresspec", str(in_posresspec_path)]
 
-        if in_refpos_path:
+        if in_refpos_path is not None:
             command += ["@refpos", str(in_refpos_path)]
 
         if out_prefix:
@@ -153,7 +153,7 @@ class _Gromos:
         log_file_path = out_prefix + ".omd"
         command_text = " ".join(command) + " > " + log_file_path + "\n"
         if verbose: print("COMMAND: ", command_text)
-
+        
         os.system("date +\"+%Y-%m-%d %H:%M:%S\" >>" + str(log_file_path))
         start_time = time.clock()
         md_run = os.system(command_text)
