@@ -1,7 +1,7 @@
 
 ![]()
-![](.img/PyGromosToolsLogo_smallerDarkModeWithBorders.png#gh-dark-mode-only)
-![PyGromosBanLight](.img/PyGromosToolsLogo_smallerWithBorders.png#gh-light-mode-only)
+![PyGromosBanLight](.img/PyGT_logo_dark_nobg_wide.png#gh-dark-mode-only)
+![PyGromosBanLight](.img/PyGT_logo_light_nobg_wide.png#gh-light-mode-only)
 
 Welcome to PyGromosTools
 ==============================
