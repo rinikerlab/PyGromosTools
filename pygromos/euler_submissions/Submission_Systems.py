@@ -116,7 +116,10 @@ class LSF(_SubmissionSystem):
             submission_string+= " -e "+errLog
         
         # adding the ptile
-        submission_string += " -R span[ptile="+str(nmpi)+"] "
+        if nmpi <= 128:
+            submission_string += " -R span[ptile="+str(nmpi)+"] "
+        else:
+            submission_string += " -R span[ptile=128] "
 
         nCPU=nmpi*nomp
         submission_string+= " -n "+str(nCPU)+" "
