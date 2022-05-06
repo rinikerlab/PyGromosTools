@@ -93,6 +93,8 @@ def check_path_dependencies(check_required_paths: Union[Dict[any, str], List[str
             if("*" in x or "?" in x):
                 if(verbose): print("Skipping regex")
                 continue
+            if x is None or x == "None":
+                continue
             if verbose: print(x)
             if (not isinstance(check_warn_paths[x], str) or (isinstance(check_required_paths[x], str) and not os.path.exists(check_required_paths[x]))):
                 found_error = True
@@ -101,6 +103,8 @@ def check_path_dependencies(check_required_paths: Union[Dict[any, str], List[str
         for x in check_required_paths:
             if("*" in x or "?" in x):
                 if(verbose): print("Skipping regex")
+                continue
+            if x is None or x == "None":
                 continue
             if verbose: print(x)
             if (not isinstance(x, str) or (isinstance(x, str) and not os.path.exists(x))):
