@@ -174,7 +174,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
             if(isinstance(EIR, (Number , Iterable))):
                 EIR_matrix = []
-                print(EIR)
+                #print(EIR)
                 # single number
                 if isinstance(EIR, Number):  # depends on SVALS and NRES
                     EIR_vector = [str(EIR) for x in range(reeds_block.NUMSTATES)]

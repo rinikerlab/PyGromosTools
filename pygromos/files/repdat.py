@@ -445,7 +445,7 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         file.write("#======================\n")
         file.writelines(map(lambda x: "#"+x+"\n", str(self.system).split("\n")))
         file.write("\n")
-        print("DATA COLS: ", self.DATA.columns)
+        #print("DATA COLS: ", self.DATA.columns)
         out_df = self.DATA.join(pd.DataFrame(self.DATA.pop('state_potentials').tolist()))
         file.write("\t".join(out_df.columns)+ "\n")
         out_df.to_csv(file, sep="\t", header=False, index=False)
