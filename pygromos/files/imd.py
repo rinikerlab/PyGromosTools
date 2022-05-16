@@ -40,7 +40,8 @@ def nice_s_vals(svals:Iterable, base10=False) ->list:
                 nicer_labels.append("")
     else:
         for val in svals:
-            nicer_labels.append(round(float(val), str(val).count("0")+2))
+            # nicer_labels.append(round(float(val), str(val).count("0")+2)) # old line
+            nicer_labels.append(round(float(val), 5))
     return nicer_labels
 
 class Imd(_general_gromos_file._general_gromos_file):
@@ -77,8 +78,8 @@ class Imd(_general_gromos_file._general_gromos_file):
     INITIALISE: blocks.INITIALISE = None
 
     REPLICA_EDS: blocks.REPLICA_EDS = None
-    OLD_REPLICA_EDS: blocks.OLD_REPLICA_EDS = None
-    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
+    #OLD_REPLICA_EDS: blocks.OLD_REPLICA_EDS = None
+    #NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
 
     def __init__(self, input:str):
         super().__init__(input=input)
@@ -99,7 +100,6 @@ class Imd(_general_gromos_file._general_gromos_file):
                 self.add_block(blocktitle=key, content=sub_content)
             except Exception as err:
                 try:
-                    print("THE NEW REEDS BLOCK?")
                     if (key == "REPLICA_EDS"):  # TODO: remove as soon as new block is established! or change to old >)
                         self.add_block(blocktitle="NEW_REPLICA_EDS", content=sub_content)
                         self.REPLICA_EDS = self.NEW_REPLICA_EDS
@@ -107,7 +107,6 @@ class Imd(_general_gromos_file._general_gromos_file):
                     else:
                         raise IOError("Could not read in imd " + key + " block!\n values: \n\t" + str(sub_content) + "\n\n" + "\n\t".join(err.args))
                 except Exception as err:
-                    print("THE OLD REEDS BLOCK?")
                     try:
                         if(key == "REPLICA_EDS"): #TODO: remove as soon as new block is established! or change to old >)
                             self.add_block(blocktitle="OLD_REPLICA_EDS", content=sub_content)
@@ -128,7 +127,6 @@ class Imd(_general_gromos_file._general_gromos_file):
             self.EDS.EIR = EIR
 
         else:
-            print("Setting new EDS_block")
             if(type(EIR) == float or type(EIR) == str or type(EIR) == int):
                 EIR = [float(EIR) for x in range(NUMSTATES)]
 
@@ -145,10 +143,8 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         # specific relations are rescued here
         reeds_block = self.REPLICA_EDS
-        print(type(reeds_block))
 
         if(isinstance(reeds_block, blocks.NEW_REPLICA_EDS)):
-            print("NEW_REPLICA_EDS")
             if(isinstance(REEDS, bool)):
                 reeds_block.REEDS = REEDS
 
@@ -178,7 +174,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
             if(isinstance(EIR, (Number , Iterable))):
                 EIR_matrix = []
-                print(EIR)
+                #print(EIR)
                 # single number
                 if isinstance(EIR, Number):  # depends on SVALS and NRES
                     EIR_vector = [str(EIR) for x in range(reeds_block.NUMSTATES)]
@@ -240,7 +236,7 @@ class Imd(_general_gromos_file._general_gromos_file):
         NamedTuple
             non_ligands
         """
-
+        
         #Build Up new list
         ##Criterium, when a ligand is considered
         if(isinstance(ligand_resn_prefix, str)):
@@ -248,7 +244,6 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         #print(ligand_resn_prefix)
         ligand_residue = lambda res: ((res != "SOLV" and (res not in aa.three_letter_aa_lib and res != "prot")) and not res in not_ligand_residues ) or (type(ligand_resn_prefix) != type(None) and res in ligand_resn_prefix)
-        #print(ligand_residue)
 
         ##get ligand parameters
         ###Avoid multi ligands with same resi name!

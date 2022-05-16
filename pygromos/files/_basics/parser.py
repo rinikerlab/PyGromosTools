@@ -562,7 +562,7 @@ def read_repdat(path: str,  Vj_header=False) ->(Dict, List[blocks.repdat.replica
                 system_options.update({key:value})
 
     if(new_repdat): ### TODO: NEW PARSER for actual gromos version!
-        print("new_repdat")
+        #print("new_repdat")
         file.close()
 
         eir = {}

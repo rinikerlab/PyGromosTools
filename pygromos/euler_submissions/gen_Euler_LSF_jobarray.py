@@ -1,3 +1,4 @@
+import os
 from pygromos.euler_submissions.FileManager import Simulation_System as sys
 
 
@@ -51,7 +52,7 @@ def build_jobarray(script_out_path:str, output_dir:str, run_script:str, array_le
         script_text += (
             "\necho \"start ANA\"\n"
             "ANASCRIPT=\""+analysis_script+"\"\n"
-            "jobID=$(bsub  -w \""+chaining_prefix+"(${jobID})\" -n "+str(analysis_processors)+" -W "+analysis_duration+" -e ${BASEDIR}/${JOBNAME}_ana.err -o ${BASEDIR}/${JOBNAME}_ana.out -J \"${JOBNAME}_ana\" < ${ANASCRIPT} | cut -d \"<\" -f2 | cut -d \">\" -f1)\n"
+            "jobID=$(bsub  -w \""+chaining_prefix+"(${jobID})\" -n "+str(analysis_processors)+" -W "+analysis_duration+" -e ${BASEDIR}/../${JOBNAME}_ana.err -o ${BASEDIR}/../${JOBNAME}_ana.out -J \"${JOBNAME}_ana\" < ${ANASCRIPT} | cut -d \"<\" -f2 | cut -d \">\" -f1)\n"
             "echo \"$jobID\"\n"
         )
 
@@ -96,19 +97,19 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     in_cnf=in_system.coordinates
     in_top = in_system.top.top_path
     in_ptp = in_system.top.pertubation_path
+    
+    restraint_text = " "
+    gromos_res = " "
+    
+    if in_system.top.disres_path is not None:
+        restraint_text += "DISRES=" + in_system.top.disres_path +"\n"
+        gromos_res += "        @distrest    ${DISRES}\\\n"
+    if in_system.top.posres_path is not None:
+        restraint_text += "POSRES="+in_system.top.posres_path+"\n"
+        restraint_text += "REFPOS="+in_system.top.refpos_path+"\n"
 
-    if(not in_system.top.disres_path is None):
-        in_disres = in_system.top.disres_path
-        rest_text = "DISRES=" + in_disres +"\n"
-        gromos_res = "        @distrest    ${DISRES}"
-
-    else:
-        in_posres = in_system.top.posres_path
-        in_refpos = in_system.top.refpos_path
-        
-        rest_text = "POSRES="+in_posres+"\nREFPOS="+in_refpos+"\n"
-        gromos_res  = "        @posresspec    ${POSRES}\\\n"
-        gromos_res += "        @refpos    ${REFPOS}"
+        gromos_res += "        @posresspec    ${POSRES}\\\n"
+        gromos_res += "        @refpos    ${REFPOS}\\\n"
 
     if(gromosXX_bin== None):
         gromosXX_bin="md_mpi"
@@ -116,13 +117,13 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
         gromosXX_bin+="/md_mpi"
 
     script_text = (
-    "# !/usr/bin/env bash"
+    "# !/usr/bin/env bash\n"
     "#RUN this script only with arry submission!\n"
     "\n"
     "SPACE=\"/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\"\n"
     "echo -e \"$SPACE \n START Script index.rst: ${LSB_JOBINDEX}\"\n"
-    "# first we set svome variables\n"
-    "NAME=\"benjamin\"\n"
+    "# first we set some variables\n"
+    "NAME=\""+os.environ['USER']+"\"\n"
     "OUTPREFIX=" + job_name +"\n"
     "CORES=" + str(cores) +"\n"
     "RUNID=$LSB_JOBINDEX"
@@ -132,10 +133,9 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "PROGRAM=" + str(gromosXX_bin) + "\n"
     "OUTDIR=${PWD}\n"
     "\n"
-
     "#INPUT FILES\n"
     "TOPO=" + in_top +"\n"
-    ""+rest_text+"\n"
+    ""+restraint_text+"\n"
     "PTTOPO=" + in_ptp +"\n"
     "INIMD=" + in_imd +"_${RUNID}.imd\n"
     "INPUTCRD=" + in_cnf +"\n"
@@ -151,7 +151,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     
     "#RUN:\n"
     "echo -e \"OUTPUT PREFIX: $OUTPREFIX\"\n" 
-    "echo -e \"$SPACE\n STARTING SImulation executed by $NAME \n $(date)\"\n"
+    "echo -e \"$SPACE\n STARTING Simulation executed by $NAME \n $(date)\"\n"
     "TMPOUTPREFIXEQ=${OUTPREFIX}_1_${RUNID}\n"
     "\n"
     
@@ -163,6 +163,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "        @pttopo      ${PTTOPO} \\\n"
     ""+gromos_res+"\\\n"
     "        @fin         ${TMPOUTPREFIXEQ}.cnf \\\n"
+
     "        @trc         ${TMPOUTPREFIXEQ}.trc \\\n"
     "        @tre         ${TMPOUTPREFIXEQ}.tre \\\n"
     "         >  ${TMPOUTPREFIXEQ}.omd\n"
