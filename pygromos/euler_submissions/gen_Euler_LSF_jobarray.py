@@ -97,7 +97,19 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     in_cnf=in_system.coordinates
     in_top = in_system.top.top_path
     in_ptp = in_system.top.pertubation_path
-    in_disres = in_system.top.disres_path
+    
+    restraint_text = " "
+    gromos_res = " "
+    
+    if in_system.top.disres_path is not None:
+        restraint_text += "DISRES=" + in_system.top.disres_path +"\n"
+        gromos_res += "        @distrest    ${DISRES}\\\n"
+    if in_system.top.posres_path is not None:
+        restraint_text += "POSRES="+in_system.top.posres_path+"\n"
+        restraint_text += "REFPOS="+in_system.top.refpos_path+"\n"
+
+        gromos_res += "        @posresspec    ${POSRES}\\\n"
+        gromos_res += "        @refpos    ${REFPOS}\\\n"
 
     if(gromosXX_bin== None):
         gromosXX_bin="md_mpi"
@@ -105,7 +117,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
         gromosXX_bin+="/md_mpi"
 
     script_text = (
-    "# !/usr/bin/env bash"
+    "# !/usr/bin/env bash\n"
     "#RUN this script only with arry submission!\n"
     "\n"
     "SPACE=\"/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\"\n"
@@ -121,14 +133,10 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "PROGRAM=" + str(gromosXX_bin) + "\n"
     "OUTDIR=${PWD}\n"
     "\n"
-
     "#INPUT FILES\n"
-    "TOPO=" + in_top +"\n")
-    
-    if in_disres is not None:
-        script_text += "DISRES=" + in_disres +"\n"
-    
-    script_text+=("PTTOPO=" + in_ptp +"\n"
+    "TOPO=" + in_top +"\n"
+    ""+restraint_text+"\n"
+    "PTTOPO=" + in_ptp +"\n"
     "INIMD=" + in_imd +"_${RUNID}.imd\n"
     "INPUTCRD=" + in_cnf +"\n"
     "\n"
@@ -152,10 +160,10 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     "        @topo        ${TOPO} \\\n"
     "        @conf        ${INPUTCRD} \\\n"
     "        @input       ${INIMD} \\\n"
-    "        @pttopo      ${PTTOPO} \\\n")
-    if in_disres is not None:
-        script_text += "        @distrest    ${DISRES} \\\n"
-    script_text +=("        @fin         ${TMPOUTPREFIXEQ}.cnf \\\n"
+    "        @pttopo      ${PTTOPO} \\\n"
+    ""+gromos_res+"\\\n"
+    "        @fin         ${TMPOUTPREFIXEQ}.cnf \\\n"
+
     "        @trc         ${TMPOUTPREFIXEQ}.trc \\\n"
     "        @tre         ${TMPOUTPREFIXEQ}.tre \\\n"
     "         >  ${TMPOUTPREFIXEQ}.omd\n"

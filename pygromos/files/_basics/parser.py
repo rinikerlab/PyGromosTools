@@ -475,7 +475,7 @@ def read_cnf(in_file_path:str, verbose:bool=False)->Dict[str, str]:
                     data.update({"GENBOX": _parse_GENBOX_block(subblock)})
                 elif (block == "TIMESTEP"):
                     time_step = subblock[0].strip().split()
-                    step = int(time_step[0])
+                    step = int(float(time_step[0]))
                     time = float(time_step[1])
                     if(step not in data):
                         data.update({"TIMESTEP": blocks.TIMESTEP(step=step, t=time)})
