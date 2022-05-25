@@ -377,7 +377,7 @@ class ROTTRANS(_generic_imd_block):
         self.RTCLAST = RTCLAST
 
 class PERTURBATION(_generic_imd_block):
-    """Pertubation Block
+    """perturbation Block
 
         This block is for Thermodynamic integration
 
