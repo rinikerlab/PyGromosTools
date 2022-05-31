@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from itertools import combinations
 from pygromos.files.blocks.topology_blocks import atom_perturbation_state, perturbation_state
-from pygromos.files.topology.top import perturbation_topology as ptp
+from pygromos.files.topology.top import Perturbation_topology as ptp
 
 import os
 path= os.path.dirname(__file__) +"/testfiles/ptp/eds.ptp"
