@@ -408,7 +408,7 @@ class distance_restraints(_general_gromos_file._general_gromos_file):
 class disres(distance_restraints):
     pass
 
-class perturbation_topology(_general_gromos_file._general_gromos_file):
+class Perturbation_topology(_general_gromos_file._general_gromos_file):
     required_blocks = ["TITLE", "MPERTATOM"]
 
     def __init__(self, path:(str or dict)=None):
@@ -424,7 +424,7 @@ class perturbation_topology(_general_gromos_file._general_gromos_file):
             self.MPERTATOM = blocks.MPERTATOM(NJLA=0, NPTB=0)
 
         else:
-            raise IOError("perturbation_topology class got "+str(type(path))+" as input. Unknown input type for disres.")
+            raise IOError("Perturbation_topology class got "+str(type(path))+" as input. Unknown input type for disres.")
 
     def read_ptp(self, path:str):
         #parse file into dicts
@@ -435,5 +435,5 @@ class perturbation_topology(_general_gromos_file._general_gromos_file):
         for key, sub_content in data.items():
             self.add_block(blocktitle=key, content=sub_content)
 
-class Ptp(perturbation_topology):
+class Ptp(Perturbation_topology):
     pass
