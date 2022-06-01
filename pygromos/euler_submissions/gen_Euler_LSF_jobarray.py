@@ -96,7 +96,7 @@ def build_worker_script_multImds(out_script_path:str, in_system:sys.System, in_i
     in_imd = in_imd_prefix
     in_cnf=in_system.coordinates
     in_top = in_system.top.top_path
-    in_ptp = in_system.top.pertubation_path
+    in_ptp = in_system.top.perturbation_path
     
     restraint_text = " "
     gromos_res = " "

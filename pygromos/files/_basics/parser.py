@@ -330,7 +330,7 @@ def read_ptp(in_path:str)->Dict:
                             state_line = {key:value for key, value in zip(header, line.split())}
                             final_state_line = {key: state_line[key] for key in state_line if(not "IAC" in key and not "CHARGE" in key)}
 
-                            states = {x:tb.pertubation_state(IAC=int(state_line["IAC"+str(x)]), CHARGE=float(state_line["CHARGE"+str(x)])) for x in range(1, 1+subcontent["NPTB"])}
+                            states = {x:tb.perturbation_state(IAC=int(state_line["IAC"+str(x)]), CHARGE=float(state_line["CHARGE"+str(x)])) for x in range(1, 1+subcontent["NPTB"])}
 
                             final_state_line.update({"STATES":states})
 

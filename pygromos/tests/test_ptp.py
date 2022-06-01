@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
 from itertools import combinations
-from pygromos.files.blocks.topology_blocks import atom_pertubation_state, pertubation_state
-from pygromos.files.topology.top import Pertubation_topology as ptp
+from pygromos.files.blocks.topology_blocks import atom_perturbation_state, perturbation_state
+from pygromos.files.topology.top import Perturbation_topology as ptp
 
 import os
 path= os.path.dirname(__file__) +"/testfiles/ptp/eds.ptp"
@@ -28,11 +28,11 @@ class test_ptp(unittest.TestCase):
 
 
     def test_add_state(self):
-        from pygromos.files.blocks.topology_blocks import  atom_pertubation_state, pertubation_state
+        from pygromos.files.blocks.topology_blocks import  atom_perturbation_state, perturbation_state
         ptp = self.file_class(path)
 
-        on_state = pertubation_state(IAC=16, CHARGE=-1.0)
-        new_atoms_state = [atom_pertubation_state(NR=x, NAME="H", STATES={7:on_state, 13:on_state}) if x==1 else atom_pertubation_state(NR=x, NAME="H", STATES={7:on_state})  for x in range(1, 4)]
+        on_state = perturbation_state(IAC=16, CHARGE=-1.0)
+        new_atoms_state = [atom_perturbation_state(NR=x, NAME="H", STATES={7:on_state, 13:on_state}) if x==1 else atom_perturbation_state(NR=x, NAME="H", STATES={7:on_state})  for x in range(1, 4)]
 
         ptp.MPERTATOM.add_state_atoms(state_atoms=new_atoms_state)
 
@@ -51,11 +51,11 @@ class test_ptp(unittest.TestCase):
         ptp.write(outpath_less_atom)
 
     def test_new_ptp_from_scratch(self):
-        from pygromos.files.blocks.topology_blocks import atom_pertubation_state, pertubation_state
+        from pygromos.files.blocks.topology_blocks import atom_perturbation_state, perturbation_state
         ptp = self.file_class()
-        on_state = pertubation_state(IAC=16, CHARGE=-1.0)
+        on_state = perturbation_state(IAC=16, CHARGE=-1.0)
 
-        new_atoms_state = [atom_pertubation_state(NR=x, NAME="H", STATES={x: on_state}) for x in range(1, 4)]
+        new_atoms_state = [atom_perturbation_state(NR=x, NAME="H", STATES={x: on_state}) for x in range(1, 4)]
 
         ptp.MPERTATOM.add_state_atoms(state_atoms=new_atoms_state)
         print(ptp)
@@ -64,8 +64,8 @@ class test_ptp(unittest.TestCase):
     def test_gen_all_states_ptp(self):
         # INPUT:
         ## the states to use:
-        o_state = pertubation_state(IAC=16, CHARGE=-1.0)
-        h_state = pertubation_state(IAC=33, CHARGE=-2.0)
+        o_state = perturbation_state(IAC=16, CHARGE=-1.0)
+        h_state = perturbation_state(IAC=33, CHARGE=-2.0)
 
         ## Map for molecule ID with Atom IDS
         ### First atom assumed to be O and last two Hs
@@ -95,10 +95,10 @@ class test_ptp(unittest.TestCase):
                     atoms[1].STATES.update({state: h_state})
                     atoms[2].STATES.update({state: h_state})
                 else:
-                    atoms = [atom_pertubation_state(NR=molecules_atoms[molecule][0], NAME="O", STATES={state: o_state}),
-                             atom_pertubation_state(NR=molecules_atoms[molecule][1], NAME="H1",
+                    atoms = [atom_perturbation_state(NR=molecules_atoms[molecule][0], NAME="O", STATES={state: o_state}),
+                             atom_perturbation_state(NR=molecules_atoms[molecule][1], NAME="H1",
                                                     STATES={state: h_state}),
-                             atom_pertubation_state(NR=molecules_atoms[molecule][2], NAME="H2",
+                             atom_perturbation_state(NR=molecules_atoms[molecule][2], NAME="H2",
                                                     STATES={state: h_state})]
                     new_atoms_state_dict.update({molecule: atoms})
 

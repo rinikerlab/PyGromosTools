@@ -76,7 +76,7 @@ class _Gromos:
                     This prefix, define the output name.
 
         in_pert_topo_path : str, optional
-                    This is the path to the pertubation file (x.ptp)
+                    This is the path to the perturbation file (x.ptp)
 
         in_disres_path :    str, optional
                     This is the path to the distance restraint file (x.dat)
@@ -207,7 +207,7 @@ class _Gromos:
                     This prefix, define the output name.
 
         in_pert_topo_path : str, optional
-                    This is the path to the pertubation file (x.ptp)
+                    This is the path to the perturbation file (x.ptp)
 
         in_disres_path :    str, optional
                     This is the path to the distance restraint file (x.dat)
@@ -349,7 +349,7 @@ class _Gromos:
                     This prefix, define the output name.
 
         in_pert_topo_path : str, optional
-                    This is the path to the pertubation file (x.ptp)
+                    This is the path to the perturbation file (x.ptp)
 
         in_disres_path :    str, optional
                     This is the path to the distance restraint file (x.dat)

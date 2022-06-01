@@ -652,7 +652,7 @@ print(template_emin_imd_file.FORCE)
 eq_imd.MULTIBATH.LAST = atomGroup_indices
 print(eq_imd.MULTIBATH)
 
-#Move Pertubation to state 1
+#Move perturbation to state 1
 eq_imd.PERTURBATION.RLAM = 1.0
 print(eq_imd.PERTURBATION)
 
@@ -785,7 +785,7 @@ bash.copy_file(t_ptp_path, ptp_path)</div>
 
 
 
-<span class="n">topology</span> <span class="o">=</span> <span class="n">fM</span><span class="o">.</span><span class="n">Topology</span><span class="p">(</span><span class="n">top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span> <span class="n">pertubation_path</span><span class="o">=</span><span class="n">ptp_path</span><span class="p">)</span>
+<span class="n">topology</span> <span class="o">=</span> <span class="n">fM</span><span class="o">.</span><span class="n">Topology</span><span class="p">(</span><span class="n">top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span> <span class="n">perturbation_path</span><span class="o">=</span><span class="n">ptp_path</span><span class="p">)</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">fM</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="n">cnf_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;TI_KL17_KL19_start_KL17_water&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 </pre></div>
@@ -802,7 +802,7 @@ System
                 Topology
                         top_path:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/single_topo_KL19_KL17_water.top
                         disres_path:  None
-                        pertubation_path:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/single_topo_KL19_KL17_water.ptp
+                        perturbation_path:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/single_topo_KL19_KL17_water.ptp
 
         coordinates:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/equilibrated_start_kl17.cnf
         solvent:  None
@@ -2188,7 +2188,7 @@ DONE
     <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">sim_root_dir</span><span class="p">)</span>
 
 
-<span class="n">topology</span> <span class="o">=</span> <span class="n">fM</span><span class="o">.</span><span class="n">Topology</span><span class="p">(</span><span class="n">top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span> <span class="n">pertubation_path</span><span class="o">=</span><span class="n">ptp_path</span><span class="p">)</span>
+<span class="n">topology</span> <span class="o">=</span> <span class="n">fM</span><span class="o">.</span><span class="n">Topology</span><span class="p">(</span><span class="n">top_path</span><span class="o">=</span><span class="n">top_path</span><span class="p">,</span> <span class="n">perturbation_path</span><span class="o">=</span><span class="n">ptp_path</span><span class="p">)</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">fM</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="n">cnf_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;TI_KL17_KL19_start_KL19_water&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 </pre></div>
@@ -2205,7 +2205,7 @@ System
                 Topology
                         top_path:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/single_topo_KL19_KL17_water.top
                         disres_path:  None
-                        pertubation_path:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/single_topo_KL19_KL17_water.ptp
+                        perturbation_path:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/single_topo_KL19_KL17_water.ptp
 
         coordinates:  /cluster/work/igc/bschroed/REEDS/CHK1/TI_water/input/equilibrated_start_kl19.cnf
         solvent:  None

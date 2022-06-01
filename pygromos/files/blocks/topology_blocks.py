@@ -38,9 +38,9 @@ class geometric_code(Enum):
 """
    FIELDS
 """
-pertubation_state = namedtuple("pertubationState", ["IAC", "CHARGE"])
+perturbation_state = namedtuple("perturbationState", ["IAC", "CHARGE"])
 
-class atom_pertubation_state(_generic_field):
+class atom_perturbation_state(_generic_field):
     def __init__(self, NR:int, NAME:str, STATES:dict, ALPHLJ:float=1.0, ALPHCRF:float=1.0):
         self.NR = int(NR)
         self.NAME = NAME
@@ -532,7 +532,7 @@ class DISTANCERESSPEC(_generic_gromos_block):
         return result
 
 class MPERTATOM(_generic_gromos_block):
-    def __init__(self, NJLA: int, NPTB: int, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: List[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_pertubation_state]=[],
+    def __init__(self, NJLA: int, NPTB: int, STATEIDENTIFIERS:List[str]=[], STATEATOMHEADER: List[str]= ['NR', 'NAME', 'ALPHLJ', 'ALPHCRF'], STATEATOMS:List[atom_perturbation_state]=[],
                  dummy_IAC = 22, dummy_CHARGE=0.0):
         super().__init__(used=True, name=__class__.__name__)
         self.NJLA = NJLA
@@ -558,7 +558,7 @@ class MPERTATOM(_generic_gromos_block):
     """
     ADD FUNCTIONS
     """
-    def add_state_atoms(self, state_atoms: List[atom_pertubation_state]):
+    def add_state_atoms(self, state_atoms: List[atom_perturbation_state]):
         """
         This function can add states and atoms, but also overwrite state values of existing atoms.
         If a new state is defined only for a subset of atoms, all other atoms are set to the default dummy.
@@ -567,12 +567,12 @@ class MPERTATOM(_generic_gromos_block):
 
         Parameters
         ----------
-        state_atoms: List[atom_pertubation_state]
+        state_atoms: List[atom_perturbation_state]
 
         """
 
         #some preperations:
-        dummy_state = pertubation_state(IAC=self.dummy_IAC, CHARGE=self.dummy_CHARGE)
+        dummy_state = perturbation_state(IAC=self.dummy_IAC, CHARGE=self.dummy_CHARGE)
         insert_id = self.STATEATOMHEADER.index("ALPHLJ")
 
         #find all new states

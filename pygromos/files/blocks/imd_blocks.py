@@ -377,7 +377,7 @@ class ROTTRANS(_generic_imd_block):
         self.RTCLAST = RTCLAST
 
 class PERTURBATION(_generic_imd_block):
-    """Pertubation Block
+    """perturbation Block
 
         This block is for Thermodynamic integration
 
@@ -735,8 +735,8 @@ class FORCE(_generic_imd_block):
 
         print(residues)
 
-        # set Energy Group ammount
-        self.NEGR = len(residues)  # total ammount of Engergy groups
+        # set Energy Group amount
+        self.NEGR = len(residues)  # total amount of Energy groups
         if("SOLV" in residues and residues["SOLV"] == 0):
             self.NEGR -= 1
         # if("WAT" in residues):
@@ -750,7 +750,10 @@ class FORCE(_generic_imd_block):
         dict_m = {}
         for x in sorted(residues):
             if (type(residues[x]) == dict and not x in dict_m and not x =="WAT"):
-                dict_m.update(residues[x])
+                if len(residues[x]) > 1: # If multiple residues have same name in a row (typically, counter-ions)
+                    dict_m.update({min(residues[x].keys()):len(residues[x])}) # Set them in a single energy group
+                else:
+                    dict_m.update(residues[x])
             elif (x in dict_m and not x == "SOLV" and not x == "SOL"):
                 raise Exception("Found mutliple residues for the same residue id!")
 
