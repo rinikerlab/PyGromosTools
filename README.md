@@ -105,7 +105,7 @@ Content
   from pygromos.simulations.hpc_queuing.submission_systems.local import LOCAL as subSystem
   from pygromos.simulations.modules.preset_simulation_modules import emin
 
-  # define file paths
+  # define file paths (or use absolute file paths)
   root_dir = "./example_files/SD_Simulation"
   root_in_dir = root_dir+"/SD_input"
   cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
@@ -116,8 +116,7 @@ Content
   grom_system = Gromos_System(in_cnf_path=cnf_path, in_top_path=top_path,
                               system_name=sys_name, work_folder=root_in_dir)
   # Run Emin
-  emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
-                          step_name=step_name, submission_system=subSystem())
+  emin_gromos_system = emin(in_gromos_system=grom_system, submission_system=subSystem())
 
   ```
 
@@ -127,7 +126,7 @@ Content
   from pygromos.simulations.hpc_queuing.submission_systems.lsf import LSF as subSystem
   from pygromos.simulations.modules.preset_simulation_modules import emin
 
-  # define file paths
+  # define file paths (or use absolute file paths)
   root_dir = "./example_files/SD_Simulation"
   root_in_dir = root_dir+"/SD_input"
   cnf_path = root_in_dir+"/6J29_unitedatom_optimised_geometry.cnf"
@@ -140,8 +139,7 @@ Content
 
   # Run Emin
   sub_system = subSystem(nmpi=4) # allows parallelization
-  emin_gromos_system, jobID = emin(in_gromos_system=grom_system, project_dir=root_dir,
-                          step_name=step_name, submission_system=sub_system)
+  emin_gromos_system, jobID = emin(in_gromos_system=grom_system, submission_system=sub_system)
 
   ```
 
@@ -156,8 +154,8 @@ Quick Setup
 Quick Start - move to the root folder of this repository:
   ```bash
     # build environment
-    conda env create -f conda_env.yml
-    conda develop -n pygromos ${PWD}
+    conda env create -f conda_env.yaml
+    python -m pip install -e .
 
     # activate environment
     conda activate pygromos
