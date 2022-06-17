@@ -168,8 +168,8 @@ class Gromos_System:
             path to input mol2 file, by default None
         readIn : bool, optional
             readIn all provided files?, by default True
-        Forcefield : forcefield_system, optional
-            input PyGromos - forcefield Class , by default forcefield_system()
+        forcefield : _generic_force_field, optional
+            input PyGromos - generic_force_field Class , by default _generic_force_field()
         auto_convert : bool, optional
             automatically convert rdkit MOL and smiles to gromos files, by default False
         adapt_imd_automatically : bool, optional
