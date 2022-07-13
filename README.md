@@ -155,13 +155,13 @@ Quick Start - move to the root folder of this repository:
   ```bash
     # build environment
     conda env create -f conda_env.yaml
-    python -m pip install -e .
+    conda develop -n pygromos ${PWD}
 
     # activate environment
     conda activate pygromos
   ```
 
-Please make sure, that you have GROMOS (www.gromos.net) binaries around, if you want to use the MD-Package. We sadly can not provide the source code for this package, as it is currently not open-source.
+In case the `conda develop` command does not work for you, you can also use `python -m pip install -e .` to install `PyGromosTools` in a development environment. Please make sure, that you have GROMOS (www.gromos.net) binaries around, if you want to use the MD-Package. We sadly can not provide the source code for this package, as it is currently not open-source.
 
 If you find a bug or have an feature request, please raise an Issue on GitHub.
 
