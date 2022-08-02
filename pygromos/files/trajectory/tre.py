@@ -137,6 +137,13 @@ class Tre(traj._General_Trajectory):
         """
         self.totpot = self.get_totals()["totpot"]
         return self.totpot
+    
+    def get_totqm(self) -> pd.DataFrame:
+        """
+        get the total QM Energy / per time
+        """
+        self.totqm = self.get_totals()["totqm"]
+        return self.totqm
 
     def get_totcov(self) -> pd.DataFrame:
         """
