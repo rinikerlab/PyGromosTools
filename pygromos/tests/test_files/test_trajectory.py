@@ -137,18 +137,66 @@ class test_trc(unittest.TestCase):
 class test_tre(traj_standard_tests):
     class_name = tre.Tre
     in_file_path = in_test_file_path + "/tre/in_tre1.tre"
-    in_file2_path = in_test_file_path + "/tre/in_tre2.tre"
+    in_file_qmmm_path = in_test_file_path + "/tre/md_qmmm.tre"
     in_file_eds_path = in_test_file_path + "/tre/in_eds.tre"
     in_file_lam_path = in_test_file_path + "/tre/in_lam.tre"
     in_file_h5_path = in_test_file_path + "/tre/in_tre1.tre.h5"
     outpath = root_out + "/out_tre1.tre.h5"
 
     def test_get_totals(self):
-        t = self.class_name(input_value=self.in_file_path, auto_save=False)
-        t.tre_block_name_table = ene_fields.gromos_2015_tre_block_names_table
-        tots_ene = t.get_totals()
-        print(tots_ene)
-        pass
+        traj_ene_1 = self.class_name(input_value=self.in_file_path, auto_save=False)
+        traj_ene_1.tre_block_name_table = ene_fields.gromos_2015_tre_block_names_table
+        # test if energies are read in correctly
+        traj_ene_2 = self.class_name(input_value=self.in_file_qmmm_path, auto_save=False)
+        # collection of all total energies
+        all_totals_df = traj_ene_2.get_totals()
+        # energies split up by type
+        totene_df = traj_ene_2.get_totene()
+        totkin_df = traj_ene_2.get_totkin()
+        totpot_df = traj_ene_2.get_totpot()
+        totqm_df = traj_ene_2.get_totqm()
+        totcov_df = traj_ene_2.get_totcov()
+        totbonded_df = traj_ene_2.get_totbonded()
+        totangle_df = traj_ene_2.get_totangle()
+        totdihedral_df = traj_ene_2.get_totdihedral()
+        totnonbonded_df = traj_ene_2.get_totnonbonded()
+        totlj_df = traj_ene_2.get_totlj()
+        totcrf_df = traj_ene_2.get_totcrf()
+        # asserts that energies are split up correctly
+        assert all_totals_df["totene"].equals(totene_df)
+        assert all_totals_df["totkin"].equals(totkin_df)
+        assert all_totals_df["totpot"].equals(totpot_df)
+        assert all_totals_df["totcov"].equals(totcov_df)
+        assert all_totals_df["totbond"].equals(totbonded_df)
+        assert all_totals_df["totangle"].equals(totangle_df)
+        assert all_totals_df["totdihedral"].equals(totdihedral_df)
+        assert all_totals_df["totnonbonded"].equals(totnonbonded_df)
+        assert all_totals_df["totlj"].equals(totlj_df)
+        assert all_totals_df["totcrf"].equals(totcrf_df)
+        assert all_totals_df["totqm"].equals(totqm_df)
+        # asserts that energies actually match .tre file (first and last)
+        self.assertAlmostEqual(totene_df.iloc[0], -3.368417117e05)
+        self.assertAlmostEqual(totene_df.iloc[-1], -3.368385042e05)
+        self.assertAlmostEqual(totkin_df.iloc[0], 7.663207616e03)
+        self.assertAlmostEqual(totkin_df.iloc[-1], 7.480658953e03)
+        self.assertAlmostEqual(totpot_df.iloc[0], -3.445049193e05)
+        self.assertAlmostEqual(totpot_df.iloc[-1], -3.443191632e05)
+        self.assertAlmostEqual(totcov_df.iloc[0], 4.696570800e03)
+        self.assertAlmostEqual(totcov_df.iloc[-1], 4.872126370e03)
+        self.assertAlmostEqual(totbonded_df.iloc[0], 0.000000000e00)
+        self.assertAlmostEqual(totbonded_df.iloc[-1], 0.000000000e00)
+        self.assertAlmostEqual(totangle_df.iloc[0], 2.755025945e03)
+        self.assertAlmostEqual(totangle_df.iloc[-1], 2.916805310e03)
+        self.assertAlmostEqual(totdihedral_df.iloc[0], 6.869770273e02)
+        self.assertAlmostEqual(totdihedral_df.iloc[-1], 7.156858598e02)
+        self.assertAlmostEqual(totnonbonded_df.iloc[0], -3.060356733e04)
+        self.assertAlmostEqual(totnonbonded_df.iloc[-1], -3.061204322e04)
+        self.assertAlmostEqual(totlj_df.iloc[0], -5.008636218e03)
+        self.assertAlmostEqual(totlj_df.iloc[-1], -5.011198132e03)
+        self.assertAlmostEqual(totcrf_df.iloc[0], -2.559493111e04)
+        self.assertAlmostEqual(totcrf_df.iloc[-1], -2.560084509e04)
+        self.assertAlmostEqual(totqm_df.iloc[0], -3.185979228e05)
+        self.assertAlmostEqual(totqm_df.iloc[-1], -3.185792463e05)
 
     def test_get_eds(self):
         t = self.class_name(input_value=self.in_file_eds_path, auto_save=False)
