@@ -1,6 +1,6 @@
 """
 PyGromos
-The aim of the module is to bring romos to the Python3 World!
+The aim of the module is to bring Gromos to the Python3 World!
 """
 import sys
 from setuptools import setup, find_packages

@@ -5,7 +5,7 @@
 To use PyGromosTools, you need an environment setup, like specified in the conda_env.yml.
 You simply can build such an environment with conda from the provided yml enviroment file shipped with the package:
 ```bash
-conda env create -f conda_env.yml
+conda env create -f conda_env.yaml
 ```
 This will build an envrionment named pygromos.
 

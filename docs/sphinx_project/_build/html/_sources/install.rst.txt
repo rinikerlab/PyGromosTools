@@ -5,12 +5,12 @@ Installation guide
 Environment Setup
 -----------------
 
-To use PyGromosTools, you need an environment setup, like specified in the conda_env.yml.
+To use PyGromosTools, you need an environment setup, like specified in the conda_env.yaml.
 You simply can build such an environment with conda from the provided yml enviroment file shipped with the package:
 
 .. code-block:: bash
 
-   conda env create -f conda_env.yml
+   conda env create -f conda_env.yaml
 
 This will build an envrionment named pygromos.
 
