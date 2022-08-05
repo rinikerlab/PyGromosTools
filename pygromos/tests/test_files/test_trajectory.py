@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+import pytest
 from numpy import testing
 from pygromos.files.trajectory import _general_trajectory as gt
 from pygromos.files.trajectory import trc, tre, trg
@@ -58,12 +59,15 @@ class test_trc(unittest.TestCase):
     class_name = trc.Trc
     help_class = Cnf(in_test_file_path + "/trc/in_test.cnf")
     in_file_path = in_test_file_path + "/trc/in_test.trc"
+    in_file_path_2 = in_test_file_path + "/trc/mdtraj-geometry-tests/menthol.trc"
     in_file_path_h5 = in_test_file_path + "/trc/in_test_trc.h5"
     in_file_w_genbox_path = in_test_file_path + "/trc/in_test_genbox.trc"
     in_file_w_genbox_cnf_path = in_test_file_path + "/trc/in_test_genbox.cnf"
 
     outpath = root_out + "/out_trc1.h5"
     trc_outpath = root_out + "/out_.trc.gz"
+
+    EPSILON = 0.00001
 
     # Constructors
     def test_constructor_empty(self):
@@ -132,6 +136,56 @@ class test_trc(unittest.TestCase):
         conf_60 = t.to_cnf(60, base_cnf=self.help_class)
         conf_60_None = t[60].to_cnf(base_cnf=self.help_class)
         assert conf_60 == conf_60_None
+
+    def test_distances(self):
+        t = self.class_name(traj_path=self.in_file_path)
+        df = t.distances(atom_pairs=[[0, 1]])
+        assert df[df.columns[0]].iloc[0] == pytest.approx(0.163328, test_trc.EPSILON)
+        assert df[df.columns[0]].iloc[5] == pytest.approx(0.162331, test_trc.EPSILON)
+        assert df[df.columns[0]].iloc[-1] == pytest.approx(0.162882, test_trc.EPSILON)
+
+    def test_angles(self):
+        t = self.class_name(traj_path=self.in_file_path)
+        # angle in radians
+        df = t.angles(atom_pairs=[[0, 1, 2]], degrees=False)
+        assert df[df.columns[0]].iloc[0] == pytest.approx(0.615227, test_trc.EPSILON)
+        assert df[df.columns[0]].iloc[5] == pytest.approx(0.623861, test_trc.EPSILON)
+        assert df[df.columns[0]].iloc[-1] == pytest.approx(0.619185, test_trc.EPSILON)
+        # angle in degrees
+        df = t.angles(atom_pairs=[[0, 1, 2]], degrees=True)
+        assert df[df.columns[0]].iloc[0] == pytest.approx(35.249934, test_trc.EPSILON)
+        assert df[df.columns[0]].iloc[5] == pytest.approx(35.744624, test_trc.EPSILON)
+        assert df[df.columns[0]].iloc[-1] == pytest.approx(35.476703, test_trc.EPSILON)
+
+    def test_dihedrals(self):
+        traj_1 = self.class_name(traj_path=self.in_file_path)
+        # dihedral in radians
+        df_1 = traj_1.dihedrals(atom_pairs=[[0, 1, 2, 3]], degrees=False)
+        assert df_1[df_1.columns[0]].iloc[0] == pytest.approx(-2.093781, test_trc.EPSILON)
+        assert df_1[df_1.columns[0]].iloc[5] == pytest.approx(-2.095215, test_trc.EPSILON)
+        assert df_1[df_1.columns[0]].iloc[-1] == pytest.approx(-2.097288, test_trc.EPSILON)
+        # dihedral in degrees
+        df_1 = traj_1.dihedrals(atom_pairs=[[0, 1, 2, 3]], degrees=True)
+        assert df_1[df_1.columns[0]].iloc[0] == pytest.approx(-119.964814, test_trc.EPSILON)
+        assert df_1[df_1.columns[0]].iloc[5] == pytest.approx(-120.046995, test_trc.EPSILON)
+        assert df_1[df_1.columns[0]].iloc[-1] == pytest.approx(-120.165731, test_trc.EPSILON)
+        # test for more dihedrals (check files in mdtraj-geometry-tests for menthol test system)
+        traj_2 = self.class_name(traj_path=self.in_file_path_2)
+        df_2_0 = traj_2.dihedrals(atom_pairs=[[29, 27, 10, 12]])
+        assert df_2_0[df_2_0.columns[0]].iloc[0] == pytest.approx(
+            175.092774, test_trc.EPSILON
+        )  # for comparison: pymol = 175.0; chemcraft: 175.031
+        assert df_2_0[df_2_0.columns[0]].iloc[-1] == pytest.approx(171.815143, test_trc.EPSILON)
+        df_2_1 = traj_2.dihedrals(atom_pairs=[[4, 10, 12, 15]])
+        assert df_2_1[df_2_1.columns[0]].iloc[0] == pytest.approx(
+            177.649136, test_trc.EPSILON
+        )  # for comparison: pymol = 177.6; chemcraft: 177.613
+        assert df_2_1[df_2_1.columns[0]].iloc[-1] == pytest.approx(178.239073, test_trc.EPSILON)
+        df_3 = traj_2.dihedrals(atom_pairs=[[29, 27, 10, 12], [4, 10, 12, 15]])
+        assert df_3[df_3.columns[0]].iloc[0] == pytest.approx(175.092774, test_trc.EPSILON)
+        assert df_3[df_3.columns[0]].iloc[-1] == pytest.approx(171.815143, test_trc.EPSILON)
+        assert df_3[df_3.columns[1]].iloc[0] == pytest.approx(177.649136, test_trc.EPSILON)
+        assert df_3[df_3.columns[1]].iloc[-1] == pytest.approx(178.239073, test_trc.EPSILON)
 
 
 class test_tre(traj_standard_tests):

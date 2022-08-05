@@ -260,11 +260,72 @@ class Trc(mdtraj.Trajectory):
         periodic: bool = True,
         opt: bool = True,
     ) -> pd.DataFrame:
+        """Computes the distance between two atoms using mdtraj. Hint: atoms are 0 indexed.
+
+        Args:
+            atom_pairs (List[Tuple[int, int]]): Indices of atoms.
+            periodic (bool, optional): If periodic is True and the trajectory contains unitcell information, we will treat angles that cross periodic images using the minimum image convention. Defaults to True.
+            opt (bool, optional): Use an optimized native library to calculate distances. Our optimized SSE angle calculation implementation is 10-20x faster than the (itself optimized) numpy implementation. Defaults to True.
+
+        Returns:
+            pd.DataFrame: Distances of the two atoms over the trajectory.
+        """
         arr = mdtraj.compute_distances(self, atom_pairs=atom_pairs, periodic=periodic, opt=opt)
         time_scale = pd.Series(data=self.time, name="time")
         return pd.DataFrame(
             {str(key[0]) + "-" + str(key[1]): val for key, val in zip(atom_pairs, arr.T)}, index=time_scale
         )
+
+    def angles(
+        self, atom_pairs: List[Tuple[int, int, int]], degrees: bool = True, periodic: bool = True, opt: bool = True
+    ) -> pd.DataFrame:
+        """Computes the angle between two three using mdtraj. Hint: atoms are 0 indexed.
+
+        Args:
+            atom_pairs (List[Tuple[int, int, int]]): Indices of atoms.
+            degrees (bool, optional): convert to degrees or return radians
+            periodic (bool, optional): If periodic is True and the trajectory contains unitcell information, we will treat angles that cross periodic images using the minimum image convention. Defaults to True.
+            opt (bool, optional): Use an optimized native library to calculate distances. Our optimized SSE angle calculation implementation is 10-20x faster than the (itself optimized) numpy implementation. Defaults to True.
+
+        Returns:
+            pd.DataFrame: Angles of the two atoms over the trajectory.
+        """
+        arr = mdtraj.compute_angles(self, angle_indices=atom_pairs, periodic=periodic, opt=opt)
+        time_scale = pd.Series(data=self.time, name="time")
+        df = pd.DataFrame(
+            {str(key[0]) + "-" + str(key[1]) + "-" + str(key[2]): val for key, val in zip(atom_pairs, arr.T)},
+            index=time_scale,
+        )
+        if degrees:
+            df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
+        return df
+
+    def dihedrals(
+        self, atom_pairs: List[Tuple[int, int, int, int]], degrees: bool = True, periodic: bool = True, opt: bool = True
+    ) -> pd.DataFrame:
+        """Computes the dihedrals between four atoms using mdtraj. Hint: atoms are 0 indexed.
+
+        Args:
+            atom_pairs (List[Tuple[int, int, int, int]]): Indices of atoms.
+            degrees (bool, optional): convert to degrees or return radians
+            periodic (bool, optional): If periodic is True and the trajectory contains unitcell information, we will treat angles that cross periodic images using the minimum image convention. Defaults to True.
+            opt (bool, optional): Use an optimized native library to calculate distances. Our optimized SSE angle calculation implementation is 10-20x faster than the (itself optimized) numpy implementation. Defaults to True.
+
+        Returns:
+            pd.DataFrame: Dihedrals of the two atoms over the trajectory.
+        """
+        arr = mdtraj.compute_dihedrals(self, indices=atom_pairs, periodic=periodic, opt=opt)
+        time_scale = pd.Series(data=self.time, name="time")
+        df = pd.DataFrame(
+            {
+                str(key[0]) + "-" + str(key[1]) + "-" + str(key[2]) + "-" + str(key[3]): val
+                for key, val in zip(atom_pairs, arr.T)
+            },
+            index=time_scale,
+        )
+        if degrees:
+            df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
+        return df
 
     def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
         block_map = {}
