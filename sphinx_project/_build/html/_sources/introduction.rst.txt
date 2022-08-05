@@ -224,7 +224,7 @@ Quick Start - move to the root folder of this repository:
 .. code-block:: bash
 
        # build environment
-       conda env create -f conda_env.yml
+       conda env create -f conda_env.yaml
        conda develop -n pygromos ${PWD}
 
        # activate environment
