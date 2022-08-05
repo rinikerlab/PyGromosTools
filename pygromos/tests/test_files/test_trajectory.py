@@ -181,6 +181,11 @@ class test_trc(unittest.TestCase):
             177.649136, test_trc.EPSILON
         )  # for comparison: pymol = 177.6; chemcraft: 177.613
         assert df_2_1[df_2_1.columns[0]].iloc[-1] == pytest.approx(178.239073, test_trc.EPSILON)
+        df_3 = traj_2.dihedrals(atom_pairs=[[29, 27, 10, 12], [4, 10, 12, 15]])
+        assert df_3[df_3.columns[0]].iloc[0] == pytest.approx(175.092774, test_trc.EPSILON)
+        assert df_3[df_3.columns[0]].iloc[-1] == pytest.approx(171.815143, test_trc.EPSILON)
+        assert df_3[df_3.columns[1]].iloc[0] == pytest.approx(177.649136, test_trc.EPSILON)
+        assert df_3[df_3.columns[1]].iloc[-1] == pytest.approx(178.239073, test_trc.EPSILON)
 
 
 class test_tre(traj_standard_tests):

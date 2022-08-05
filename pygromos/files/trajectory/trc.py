@@ -297,7 +297,7 @@ class Trc(mdtraj.Trajectory):
             index=time_scale,
         )
         if degrees:
-            df[df.columns[0]] = df[df.columns[0]].apply(lambda x: np.rad2deg(x))
+            df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
         return df
 
     def dihedrals(
@@ -324,7 +324,7 @@ class Trc(mdtraj.Trajectory):
             index=time_scale,
         )
         if degrees:
-            df[df.columns[0]] = df[df.columns[0]].apply(lambda x: np.rad2deg(x))
+            df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
         return df
 
     def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
