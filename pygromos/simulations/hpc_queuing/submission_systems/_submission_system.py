@@ -82,10 +82,10 @@ class _SubmissionSystem:
         self._zip_trajectories = zip_trajectories
 
     def __repr__(self) -> str:
-        msg = self.__class__.__name__ +"("
+        msg = self.__class__.__name__ + "("
         for var in vars(self):
-            msg+=" "+var+"="+str(getattr(self, var))+","
-        msg+=")"
+            msg += " " + var + "=" + str(getattr(self, var)) + ","
+        msg += ")"
         return msg
     
     def submit_to_queue(self, sub_job: Submission_job) -> int:
