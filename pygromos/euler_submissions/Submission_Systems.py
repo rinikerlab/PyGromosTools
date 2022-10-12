@@ -10,6 +10,219 @@ class _SubmissionSystem:
     def submit_to_queue(self):
         raise ValueError("Do is not implemented for: "+self.__class__.__name__)
 
+class SLURM(_SubmissionSystem):
+    """
+    This class is a wrapper for the Slurm free queueing system, used on Euler and many other clusters.
+    """
+    
+    def __init__(self):
+            super().__init__()
+
+    def submit_to_queue(self, command:str, jobName:str, duration:str="4:00:00",
+             outLog=None, errLog=None, submit_from_dir:str=None,
+             nmpi:int=1, nomp:int=1,
+             maxStorage:int=1000,
+             queue_after_jobID:int=None, force_queue_start_after:bool=False,
+             projectName: str = None, jobGroup:str=None, priority=None,
+             begin_mail:bool =False, end_mail:bool=False, post_execution_command:str=None,
+             verbose:bool=True, noSubmission:bool=False, do_not_doubly_submit_to_queue:bool=False, stupid_mode=False, no_queueing=True, sumbit_from_file:bool=True) -> int:
+    
+        """submit_to_queue
+                This function submits a job to the submission queue.
+        Parameters
+        ----------
+        command :   str
+        jobName :   str
+        duration :  str, optional
+            time for the job as a string (e.g.: 4:00 - HH:MM)
+        submit_from_dir:    str, optional
+            from which dir shall the jobs be submitted? (def. current)
+        outLog :    str, optional
+            path to out.log location
+        errLog :
+            path to error.log location
+        nmpi :  int, optional
+            integer number of mpi cores (default: 1)
+        nomp :  int, optional
+            integer number of omp cores (default: 1) - WARNING DOES NOT WORK STABLE AT THE MOMENT!
+        maxStorage : int, optional
+            Max memory per core.
+        projectName :  NOT IMPLEMENTED AT THE MOMENT
+        jobGroup :  NOT IMPLEMENTED AT THE MOMENT
+        priority :  NOT IMPLEMENTED AT THE MOMENT
+        queue_after_jobID: int, optional
+            shall this job be queued after another one?
+        force_queue_start_after: bool, optional
+            shall this job start after another job, no matter the exit state?
+        begin_mail :    bool, optional
+            send a mail when job starts
+        end_mail :  bool, optional
+            send a mail, when job is finished
+        verbose:    bool, optional
+            print out some messages
+        noSubmission:   bool, optional
+            do not submit the job to the queue.
+        do_not_doubly_submit_to_queue:  bool, optional
+            if True: script checks the submission queue and looks for an identical job_name. than raises ValueError if it is already submitted. (default: True)
+        Returns
+        -------
+        int
+            return job ID
+        Raises
+        ------
+        ValueError
+            if job already submitted a Value Error is raised
+        ChildProcessError
+            if submission to queue via bash fails an Child Process Error is raised.
+        """
+            
+        orig_dir = os.getcwd()
+
+        #generate submission_string:
+        submission_string = ""
+
+        #QUEUE checking to not double submit
+        if(not stupid_mode and do_not_doubly_submit_to_queue):
+            if(verbose): print('check queue')
+            ids = self.get_jobs_from_queue(jobName)
+            
+            if(len(ids) > 0):
+                if(verbose): print("\tSKIP - FOUND JOB: \t\t"+"\n\t\t".join(map(str, ids))+"\n\t\t with jobname: "+jobName)
+                return ids[0]
+
+        if(isinstance(submit_from_dir, str) and os.path.isdir(submit_from_dir)):
+            os.chdir(submit_from_dir)
+            command_file_path = submit_from_dir+"/job_"+str(jobName)+".sh"
+        else:
+            command_file_path = "./job_" + str(jobName) + ".sh"
+
+        
+        submission_string += "sbatch "
+        submission_string += " -J " + jobName + " "
+        submission_string += " --time " + str(duration) + " "
+        
+        #if(not isinstance(post_execution_command, type(None))):
+        #    submission_string += "-Ep \""+post_execution_command+"\" "
+        
+        if(not isinstance(outLog, str) and not isinstance(errLog, str)):
+            outLog=jobName+".out"
+            submission_string+= " -o "+outLog
+        elif(isinstance(outLog, str)):
+            submission_string+= " -o "+outLog
+
+        if(isinstance(errLog, str)):
+            submission_string+= " -e "+errLog
+        
+        submission_string+= " -n "+str(nmpi*nomp)+" "
+
+        # Determine how to split the computation over nodes:
+        # (Idea is to maximize single job nodes)
+        
+        # adding the ptile
+        if nmpi <= 128:
+            submission_string += f' --ntasks-per-node={nmpi} '
+        else:
+            submission_string += f' --ntasks-per-node=128 '
+        
+        if(isinstance(maxStorage, int)):
+            submission_string += f' --mem-per-cpu={maxStorage} '
+        
+        # 
+        if(isinstance(queue_after_jobID, (int, str))):
+            prefix = 'afterok'
+            if(force_queue_start_after):
+                prefix = 'afterany'
+            submission_string += f' -d {prefix}:{queue_after_jobID}'
+        
+        if(begin_mail and end_mail):
+            submission_string += ' --mail-type=BEGIN,END,FAIL '
+        elif begin_mail:
+            submission_string += ' --mail-type=BEGIN '
+        elif end_mail:
+            submission_string += ' --mail-type=END,FAIL '      
+        
+        if (nomp > 1):
+            command = "\"export OMP_NUM_THREADS=" + str(nomp) + ";\n " + command + "\""
+        else:
+            command = " " + command.strip() + ""
+        
+        # note code bellow led to error, but 
+        # commenting out led to normal submission
+
+        #if(sumbit_from_file):
+        #    command_file = open(command_file_path, "w")
+        #    command_file.write("#!/bin/bash\n")
+        #    command_file.write(command+";\n")
+        #    command_file.close()
+        #    command = command_file_path
+
+        #    bash.execute("chmod +x "+command_file_path)
+        
+        ##finalize string
+        submission_string = list(map(lambda x: x.strip(), submission_string.split()))+[command]
+
+        if(verbose): print("Submission Command: \t", " ".join(submission_string))
+        if(not noSubmission and not stupid_mode):
+            try:
+                std_out_buff = bash.execute(command=submission_string)
+                std_out = "\n".join(std_out_buff.readlines())
+                
+                job_id = std_out.split()[-1]
+                if verbose: print("process returned id: " + str(job_id))
+                if(job_id == "" and job_id.isalnum()):
+                    raise ValueError("Did not get at job ID!")
+            except:
+                raise ChildProcessError("could not submit this command: \n" +
+                str(submission_string))
+        elif(not noSubmission and stupid_mode):
+            os.system(submission_string)
+            job_id = -1
+        else:
+            job_id = -1
+
+        os.chdir(orig_dir)
+        return int(job_id)
+
+    def get_jobs_from_queue(self, job_name:str , regex:bool=False)->List[int]:
+        """search_queue_for_jobname
+            this jobs searches the job queue for .ny job matching exactly the query job_name.
+            it will return a list of job_ids of exact matches
+        Parameters
+        ----------
+        job_name :  str
+        regex:  bool, optional
+            if the string is a Regular Expression
+        Returns
+        -------
+        List[int]
+            output contains all ids of fitting jobs to the querry
+        """
+        # This allows to define the maximum number of fields to dedicate to display the info.
+        # Increase %.75j if job names are very long
+
+        squeue_format = "'%.18i %.75j'"
+
+        job_ids = []
+        job_names = []
+        try:
+            if(not regex):
+                job_name = " "+job_name+" "
+            out_queue_lines = bash.execute(f'squeue -o {squeue_format}  ' , wait_fail=True)
+            lines = out_queue_lines.read().split('\n')
+
+            for line in lines:
+                vec = [elem.replace('\'', '') for elem in line.split()]
+                if len(vec) != 3:
+                    continue
+                if vec[2] == job_name.strip(): # Append matches to query
+                    job_names.append(vec[2])
+                    job_ids.append(vec[1])
+        
+        except TimeoutError:
+            return []
+        return job_ids
+        
+
 class LSF(_SubmissionSystem):
     """LSF
         This class is a wrapper for the LSF queueing system by IBM, like it is used on Euler.
@@ -352,6 +565,10 @@ class LSF(_SubmissionSystem):
         except TimeoutError:
             return []
         return out_job_lines
+
+
+
+
 
 class LOCAL(_SubmissionSystem):
     def __init__(self):

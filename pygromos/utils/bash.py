@@ -9,6 +9,7 @@ Description
 """
 
 import io, os, glob, time, warnings
+import shlex
 
 import subprocess as sub
 from typing import List, Dict, Union
@@ -716,8 +717,8 @@ def execute(command: (str or List[str]), verbose: bool = False, ignore_return_co
     """
 
     if(isinstance(command, str)):
-        command = command.split()
-
+        command = shlex.split(command, posix=False)
+    
     #TODO: maybe pass path directly?
     # This block overwrites the pipe of the sub process
     std_out = sub.PIPE
