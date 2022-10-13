@@ -149,14 +149,14 @@ class SLURM(_SubmissionSystem):
         # note code bellow led to error, but 
         # commenting out led to normal submission
 
-        #if(sumbit_from_file):
-        #    command_file = open(command_file_path, "w")
-        #    command_file.write("#!/bin/bash\n")
-        #    command_file.write(command+";\n")
-        #    command_file.close()
-        #    command = command_file_path
+        if(sumbit_from_file):
+            command_file = open(command_file_path, "w")
+            command_file.write("#!/bin/bash\n")
+            command_file.write(command+";\n")
+            command_file.close()
+            command = command_file_path
 
-        #    bash.execute("chmod +x "+command_file_path)
+            bash.execute("chmod +x "+command_file_path)
         
         ##finalize string
         submission_string = list(map(lambda x: x.strip(), submission_string.split()))+[command]
