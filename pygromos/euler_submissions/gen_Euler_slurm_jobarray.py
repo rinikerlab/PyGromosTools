@@ -47,7 +47,7 @@ def build_jobarray(script_out_path:str, output_dir:str, run_script:str, array_le
         script_text += (
             "\necho \"start ANA\"\n"
             "ANASCRIPT=\""+analysis_script+"\"\n"
-            f'jobID=$(sbatch  -d "{chaining_prefix}:' + "${jobID}" + f' -n {analysis_processors} --time {analysis_duration}' + " -e ${BASEDIR}/../${JOBNAME}_ana.err -o ${BASEDIR}/../${JOBNAME}_ana.out -J \"${JOBNAME}_ana\" < ${ANASCRIPT} | awk \'{print $NF}\')\n"
+            f'jobID=$(sbatch  -d "{chaining_prefix}:' + "${jobID}\"" + f' -n {analysis_processors} --time {analysis_duration}' + " -e ${BASEDIR}/../${JOBNAME}_ana.err -o ${BASEDIR}/../${JOBNAME}_ana.out -J \"${JOBNAME}_ana\" < ${ANASCRIPT} | awk \'{print $NF}\')\n"
             "echo \"$jobID\"\n"
         )
 
