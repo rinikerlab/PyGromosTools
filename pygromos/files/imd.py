@@ -78,8 +78,6 @@ class Imd(_general_gromos_file._general_gromos_file):
     INITIALISE: blocks.INITIALISE = None
 
     REPLICA_EDS: blocks.REPLICA_EDS = None
-    #OLD_REPLICA_EDS: blocks.OLD_REPLICA_EDS = None
-    #NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS = None
 
     def __init__(self, input:str):
         super().__init__(input=input)
@@ -99,28 +97,12 @@ class Imd(_general_gromos_file._general_gromos_file):
             try:
                 self.add_block(blocktitle=key, content=sub_content)
             except Exception as err:
-                try:
-                    if (key == "REPLICA_EDS"):  # TODO: remove as soon as new block is established! or change to old >)
-                        self.add_block(blocktitle="NEW_REPLICA_EDS", content=sub_content)
-                        self.REPLICA_EDS = self.NEW_REPLICA_EDS
-                        self.NEW_REPLICA_EDS = ""
-                    else:
-                        raise IOError("Could not read in imd " + key + " block!\n values: \n\t" + str(sub_content) + "\n\n" + "\n\t".join(err.args))
-                except Exception as err:
-                    try:
-                        if(key == "REPLICA_EDS"): #TODO: remove as soon as new block is established! or change to old >)
-                            self.add_block(blocktitle="OLD_REPLICA_EDS", content=sub_content)
-                            self.REPLICA_EDS = self.OLD_REPLICA_EDS
-                        else:
-                            raise IOError("Could not read in imd "+key+" block!\n values: \n\t"+str(sub_content)+"\n\n"+"\n\t".join(err.args))
-                    except Exception as err:
-                        raise IOError("could not read in reeds_imd "+key+" block!\n values: \n\t"+str(sub_content)+"\n\n"+"\n\t".join(err.args))
+                raise IOError("Could not read in imd " + key + " block!\n values: \n\t" + str(sub_content) + "\n\n" + "\n\t".join(err.args))
+        
         return {}
 
-    def edit_EDS(self, NUMSTATES:int, S:float, EIR:list, EDS:int=1, ALPHLJ:float=0.0, ALPHC:float=0.0, FUNCTIONAL:int=1):
+    def edit_EDS(self, NUMSTATES:int, S:float, EIR:list, EDS:int=1, FUNCTIONAL:int=1):
         if(hasattr(self, "eds_block")):
-            self.EDS.ALPHLJ = ALPHLJ
-            self.EDS.ALPHC = ALPHC
             self.EDS.FUNCTIONAL = FUNCTIONAL
             self.EDS.NUMSTATES = NUMSTATES
             self.EDS.S = S
@@ -131,7 +113,7 @@ class Imd(_general_gromos_file._general_gromos_file):
                 EIR = [float(EIR) for x in range(NUMSTATES)]
 
             gromos_name = "EDS"
-            setattr(self, gromos_name, blocks.EDS(NUMSTATES, S, EIR, EDS, ALPHLJ, ALPHC, FUNCTIONAL))
+            setattr(self, gromos_name, blocks.EDS(NUMSTATES, S, EIR, EDS, FUNCTIONAL))
 
 
     def randomize_seed(self):
