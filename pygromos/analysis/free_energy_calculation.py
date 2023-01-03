@@ -27,6 +27,9 @@ class _FreeEnergyCalculator:
     k, T, Vi, Vj = sp.symbols("k T, Vi, Vj")
 
     def __init__(self):
+        """
+          Construct calculator Base class
+        """
         pass
 
     def __str__(self):
@@ -45,10 +48,16 @@ class _FreeEnergyCalculator:
         raise NotImplementedError("This Function needs to be Implemented")
 
     def _update_function(self):
+        """ 
+        replace variables with already given constants
+        """
         self.simplified_equation = self.equation.subs(self.constants)
 
     @classmethod
     def _prepare_type(self, *arrays):
+        """
+        necessary function to standardize the input types.
+        """
         return tuple(map(lambda arr: np.array(list(map(lambda x: np.float32(x), arr)), ndmin=1), arrays))
 
     @classmethod
@@ -62,6 +71,9 @@ class _FreeEnergyCalculator:
 
     @classmethod
     def get_equation_simplified(cls) -> sp.Function:
+        """
+            Returns a automatically simplified symbolic equation for the Free Energy calculation.
+        """
         cls._update_function()
         return cls.simplified_equation
 
