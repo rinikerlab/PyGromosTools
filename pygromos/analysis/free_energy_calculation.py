@@ -28,7 +28,7 @@ class _FreeEnergyCalculator:
 
     def __init__(self):
         """
-          Construct calculator Base class
+        Construct calculator Base class
         """
         pass
 
@@ -48,7 +48,7 @@ class _FreeEnergyCalculator:
         raise NotImplementedError("This Function needs to be Implemented")
 
     def _update_function(self):
-        """ 
+        """
         replace variables with already given constants
         """
         self.simplified_equation = self.equation.subs(self.constants)
@@ -72,7 +72,7 @@ class _FreeEnergyCalculator:
     @classmethod
     def get_equation_simplified(cls) -> sp.Function:
         """
-            Returns a automatically simplified symbolic equation for the Free Energy calculation.
+        Returns a automatically simplified symbolic equation for the Free Energy calculation.
         """
         cls._update_function()
         return cls.simplified_equation
