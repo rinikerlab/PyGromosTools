@@ -838,7 +838,7 @@ class _gromosPPbase(_gromosClass):
         gathering_method: str = None,
         minwall: float = 0.8,
         threshold: float = None,
-        rotate: str = None,
+        rotate: bool = False,
         boxsize: bool = False,
         _binary_name: str = "sim_box",
         verbose: bool = False,
@@ -870,8 +870,8 @@ class _gromosPPbase(_gromosClass):
             minimum solute to wall distance, by default 0.8
         threshold : float, optional
             minimum solvent-solute distance, by default None ->  0.23 nm
-        rotate : str, optional
-            rotate solute: biggest axis along z, second along y, by default None
+        rotate : bool, optional
+            rotate solute: biggest axis along z, second along y, by default False
         boxsize : bool, optional
             use boxsize specified in solute coordinate file, by default False
         _binary_name : str, optional
@@ -893,7 +893,7 @@ class _gromosPPbase(_gromosClass):
                 + str(os.path.splitext(os.path.basename(in_cnf_path))[0])
                 + "_solvent.cnf"
             )
-        if rotate is not None:
+        if rotate:
             command_suffix += " @rotate "
         if gathering_method is not None:
             command_suffix += " @gather " + str(gathering_method)
