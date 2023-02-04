@@ -27,6 +27,9 @@ class _FreeEnergyCalculator:
     k, T, Vi, Vj = sp.symbols("k T, Vi, Vj")
 
     def __init__(self):
+        """
+        Construct calculator Base class
+        """
         pass
 
     def __str__(self):
@@ -45,11 +48,17 @@ class _FreeEnergyCalculator:
         raise NotImplementedError("This Function needs to be Implemented")
 
     def _update_function(self):
+        """
+        replace variables with already given constants
+        """
         self.simplified_equation = self.equation.subs(self.constants)
 
     @classmethod
     def _prepare_type(self, *arrays):
-        return tuple(map(lambda arr: np.array(list(map(lambda x: np.float(x), arr)), ndmin=1), arrays))
+        """
+        necessary function to standardize the input types.
+        """
+        return tuple(map(lambda arr: np.array(list(map(lambda x: np.float32(x), arr)), ndmin=1), arrays))
 
     @classmethod
     def get_equation(cls) -> sp.Function:
@@ -62,6 +71,9 @@ class _FreeEnergyCalculator:
 
     @classmethod
     def get_equation_simplified(cls) -> sp.Function:
+        """
+        Returns a automatically simplified symbolic equation for the Free Energy calculation.
+        """
         cls._update_function()
         return cls.simplified_equation
 
@@ -301,7 +313,7 @@ class zwanzigEquation(_FreeEnergyCalculator):
         # Return free energy difference
         from scipy import special as s
 
-        dF = -np.float(1 / beta) * s.logsumexp(np.array(dVij, dtype=np.float), b=1 / len(dVij))
+        dF = -np.float32(1 / beta) * s.logsumexp(np.array(dVij, dtype=np.float), b=1 / len(dVij))
         return dF
 
     def _calculate_mpmath(self, Vi: (Iterable, Number), Vj: (Iterable, Number)) -> float:
@@ -320,9 +332,9 @@ class zwanzigEquation(_FreeEnergyCalculator):
         float
             free energy difference
         """
-        beta = np.float(1 / (self.constants[self.k] * self.constants[self.T]))
+        beta = np.float32(1 / (self.constants[self.k] * self.constants[self.T]))
 
-        return -(1 / beta) * np.float(
+        return -(1 / beta) * np.float32(
             mp.ln(np.mean(list(map(mp.exp, -beta * (np.array(Vj, ndmin=1) - np.array(Vi, ndmin=1))))))
         )
 
@@ -655,7 +667,7 @@ class bennetAcceptanceRatio(_FreeEnergyCalculator):
                 + str(err.args)
             )
 
-        return np.float(ddF + C)
+        return np.float32(ddF + C)
 
     def _calculate_optimize(
         self,
