@@ -87,7 +87,7 @@ class _SubmissionSystem:
             msg += " " + var + "=" + str(getattr(self, var)) + ","
         msg += ")"
         return msg
-    
+
     def submit_to_queue(self, sub_job: Submission_job) -> int:
         return -1
 

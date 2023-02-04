@@ -49,7 +49,7 @@ class Submission_job:
             msg += " " + var + "=" + str(getattr(self, var)) + ","
         msg += ")"
         return msg
-    
+
     @property
     def command(self) -> str:
         if self._command is None:
