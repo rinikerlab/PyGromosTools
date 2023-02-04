@@ -43,6 +43,13 @@ class Submission_job:
         self._jobGroup = jobGroup
         self._jobID = jobID
 
+    def __repr__(self) -> str:
+        msg = self.__class__.__name__ + "("
+        for var in vars(self):
+            msg += " " + var + "=" + str(getattr(self, var)) + ","
+        msg += ")"
+        return msg
+
     @property
     def command(self) -> str:
         if self._command is None:
