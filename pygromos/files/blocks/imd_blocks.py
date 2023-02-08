@@ -120,7 +120,7 @@ class STEP(_generic_imd_block):
         self.T = T
         self.DT = DT
 
-class NEW_REPLICA_EDS(_generic_imd_block):
+class REPLICA_EDS(_generic_imd_block):
     """REPLICA_EDS Block
 
         This block is controlling the REPLICA_EDS settings in  gromos and is basically a mixture of EDS and RE block. (Don't use them when using this block!)
@@ -184,98 +184,6 @@ class NEW_REPLICA_EDS(_generic_imd_block):
         self.CONT = CONT
         self.EDS_STAT_OUT = EDS_STAT_OUT
         self.PERIODIC = PERIODIC
-
-
-class REPLICA_EDS(_generic_imd_block):
-    name: str = "REPLICA_EDS"
-
-    REEDS: bool
-
-    NRES: int
-    NUMSTATES: int
-
-    RES: List[float]
-    EIR: List[float]
-
-    NRETRIAL: int
-    NREQUIL: int
-    EDS_STAT_OUT: int
-    CONT: bool
-
-    _order = [[["REEDS"], ["NRES", "NUMSTATES"], ["RES(1 ... NRES)"],
-               ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT", "EDS_STAT_OUT"]]]
-
-    def __init__(self, REEDS: bool, NRES: int, NUMSTATES: int, RES: List[float], EIR: List[List[float]], NRETRIAL: int, NREQUIL: int,
-                 EDS_STAT_OUT: int, CONT: bool):
-        """REPLICA_EDS Block
-
-            This block is controlling the REPLICA_EDS settings in  gromos and is basically a mixture of EDS and RE block. (Don't use them when using this block!)
-
-        Attributes
-        ----------
-        REEDS:  bool
-            Shall REEDS be activated?
-        NRES:   int
-            Number of s-Values
-        NUMSTATES:  int
-            Number of EDS-states
-
-        RES:    List[float]
-            s_values for all replicas
-        EIR:    List[List[float]]
-            energy offsets for all replicas and all states  List[List[float]] = REPLICA[EDS_STATE[EIR]]
-        NERTRIAL: int
-            How many replica exchanges trials should be executed? (NRETRIAL*STEP.NSTLIM == total simulation time)
-        NREQUIL: int
-            How many equilibration runs shall be exectured? (NREQUIL*STEP.NSTLIM == total simulation time)
-        EDS_STAT_OUT: int
-            Shall the replica exchange information be outputted? (__future__ frequency of output.)
-        CONT: bool
-            Is this a continuation run?
-        """
-        super().__init__(used=True)
-        self.REEDS = REEDS
-
-        self.NRES = NRES
-        self.NUMSTATES = NUMSTATES
-
-        self.RES = RES
-        self.EIR = EIR
-
-        self.NRETRIAL = NRETRIAL
-        self.NREQUIL = NREQUIL
-        self.CONT = CONT
-        self.EDS_STAT_OUT = EDS_STAT_OUT
-
-
-class OLD_REPLICA_EDS(_generic_imd_block):
-    """REEDS Block
-
-        This is the old REPLICA_EDS BLOCK, it is only here to guarantee compatability!
-
-        Warnings: DEAPREACIATED - WILL BE REMOVED!
-    """
-
-    _order = [[["NATOM(TOTAL NUMBER OF ATOMS)"], ["NRES"], ["RET"], ["ALPHLJ", "ALPHCRF"], ["NUMSTATES"],
-               ["RES(1 ... NRES)"], ["RETS(1 ... NRES)"], ["EIR(NUMSTATES x NRES)"], ["NRETRIAL", "NREQUIL", "CONT"]]]
-
-    def __init__(self, NATOM, NRES, RET, ALPHLJ, ALPHCRF, NUMSTATES, RES, RETS, EIR, NRETRIAL, NREQUIL, CONT):
-
-        super().__init__(used=True)
-        self.name = "REPLICA_EDS"
-        self.NATOM = NATOM
-        self.NRES = NRES
-        self.RET = RET
-        self.ALPHLJ = ALPHLJ
-        self.ALPHCRF = ALPHCRF
-        self.NUMSTATES = NUMSTATES
-        self.RES = RES
-        self.RETS = RETS
-        self.EIR = EIR
-        self.NRETRIAL = NRETRIAL
-        self.NREQUIL = NREQUIL
-        self.CONT = CONT
-
 
 class BOUNDCOND(_generic_imd_block):
     """Boundary Condition Block
@@ -891,6 +799,8 @@ class NONBONDED(_generic_imd_block):
         1 : reaction-field
         2 : Ewald method
         3 : P3M method
+        4 : reaction-field with cutoff
+        5 : reaction-field with cutoff + extra output
     APPAK: float
         >= 0.0 reaction-field inverse Debye screening length
     RCRF: float
@@ -1183,22 +1093,18 @@ class EDS(_generic_imd_block):
             energy offsets
         EDS:    bool, optional
             turn on EDS_simulation
-        ALPHLJ: float, optional
-        ALPHC:  float, optional
         FUNCTIONAL: int, optional
             1: Single s Hamiltonian (default)
             2: Hamiltonian with NUMSTATES*(NUMSTATES-1)/2 (pairwise) S parameters ==> changes type of S
             3: Hamiltonian with (NUMSTATES-1) S parameters ==> changes type of S
     """
 
-    _order = [[["EDS"], ["ALPHLJ", "ALPHC"], ["FUNCTIONAL FORM"], ["NUMSTATES"], ["S"], ["EIR"]]]
+    _order = [[["EDS"], ["FUNCTIONAL FORM"], ["NUMSTATES"], ["S"], ["EIR"]]]
 
-    def __init__(self, NUMSTATES: int, S: float, EIR: List[float], EDS: bool = 1, ALPHLJ: float = 0.0, ALPHC: float = 0.0, FUNCTIONAL: int = 1):
+    def __init__(self, NUMSTATES: int, S: float, EIR: List[float], EDS: bool = 1, FUNCTIONAL: int = 1):
         super().__init__(used=True)
         self.name = "EDS"
         self.EDS = EDS
-        self.ALPHLJ = ALPHLJ
-        self.ALPHC = ALPHC
         self.FUNCTIONAL = FUNCTIONAL
         self.NUMSTATES = NUMSTATES
         self.S = S
