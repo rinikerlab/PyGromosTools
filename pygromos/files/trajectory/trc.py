@@ -60,13 +60,15 @@ class Trc(mdtraj.Trajectory):
         elif traj_path is not None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
 
             # Parse TRC
-            compress = traj_path.endswith('.gz')
+            compress = traj_path.endswith(".gz")
 
             unitcell_angles = None
             unitcell_lengths = None
 
             if isinstance(traj_path, str):
-                xyz, step, time, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path, gzipped=compress)
+                xyz, step, time, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(
+                    traj_path, gzipped=compress
+                )
 
             # Topology from Cnf
             if isinstance(in_cnf, str):
