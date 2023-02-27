@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+import os.path
 import pytest
 from numpy import testing
 from pygromos.files.trajectory import _general_trajectory as gt
@@ -105,6 +106,13 @@ class test_trc(unittest.TestCase):
         assert t_origin._unitcell_lengths[0][0] != c.GENBOX.length[0]
         assert t_origin._unitcell_lengths[0][1] != c.GENBOX.length[1]
         assert t_origin._unitcell_lengths[0][2] != c.GENBOX.length[2]
+
+    def test_to_trc_without_box_info(self):
+        c = self.class_name(traj_path=self.in_file_path)
+        gzipped_filename = os.path.join(root_out, "in_traj.trc.gz")
+        c.save(gzipped_filename)
+        gzipped_c = self.class_name(traj_path=gzipped_filename)
+        testing.assert_allclose(gzipped_c.xyz, c.xyz)
 
     def test_to_trc_file(self):
         # Read in trc

@@ -14,6 +14,7 @@ TODO: add support for rdkit conformers
 """
 
 # imports
+import gzip
 import tempfile
 import mdtraj
 import pandas as pd
@@ -25,7 +26,7 @@ from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.blocks.coord_blocks import POSITION
-from pygromos.utils.typing import Dict, List, Tuple
+from pygromos.utils.typing import Dict, List, Tuple, Union
 from pygromos.visualization.coordinates_visualization import visualize_system
 
 
@@ -44,7 +45,7 @@ class Trc(mdtraj.Trajectory):
         unitcell_lengths=None,
         unitcell_angles=None,
         traj_path=None,
-        in_cnf: [str, Cnf] = None,
+        in_cnf: Union[str, Cnf] = None,
         timestep_duration: float = 0.002,
         _future_file: bool = False,
     ):
@@ -60,19 +61,13 @@ class Trc(mdtraj.Trajectory):
         elif traj_path is not None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
 
             # Parse TRC
-            compress = False
-            if traj_path.endswith(".gz"):
-                traj_path = bash.compress_gzip(in_path=traj_path, extract=True)
-                compress = True
+            compress = traj_path.endswith('.gz')
 
             unitcell_angles = None
             unitcell_lengths = None
 
             if isinstance(traj_path, str):
-                xyz, step, time, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path)
-
-            if compress:
-                traj_path = bash.compress_gzip(in_path=traj_path)
+                xyz, step, time, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(traj_path, gzipped=compress)
 
             # Topology from Cnf
             if isinstance(in_cnf, str):
@@ -173,8 +168,8 @@ class Trc(mdtraj.Trajectory):
         )
         return new_Cnf
 
-    def parse_trc_efficiently(self, traj_path: str) -> Tuple[np.array, np.array, np.array]:
-        self._block_map = self._generate_blockMap(in_trc_path=traj_path)
+    def parse_trc_efficiently(self, traj_path: str, gzipped: bool) -> Tuple[np.array, np.array, np.array]:
+        self._block_map = self._generate_blockMap(in_trc_path=traj_path, gzipped=gzipped)
         # build block mapping
         rep_time = 1
         start = self._block_map["TIMESTEP"]
@@ -327,9 +322,10 @@ class Trc(mdtraj.Trajectory):
             df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
         return df
 
-    def _generate_blockMap(self, in_trc_path: str) -> Dict[str, int]:
+    def _generate_blockMap(self, in_trc_path: str, gzipped: bool) -> Dict[str, int]:
         block_map = {}
-        with open(in_trc_path, "r") as file_handle:
+        open_fun = gzip.open if gzipped else open
+        with open_fun(in_trc_path, "rt") as file_handle:
             inBlock = False
             inTitleBlock = False
             blockKey = None
@@ -413,7 +409,8 @@ class Trc(mdtraj.Trajectory):
         # Add comments
         length += self.xyz[0].shape[0] // 10
 
-        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
+        has_unitcells = self.unitcell_lengths is not None and len(self.unitcell_lengths) > 0
+        if has_unitcells:
             length += 7
 
         array = np.empty((length, 4), dtype=object)
@@ -438,7 +435,7 @@ class Trc(mdtraj.Trajectory):
 
         last = self.xyz[frame_id].shape[0] % 10
 
-        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
+        if has_unitcells:
             array_last = last + 7
         else:
             array_last = last
@@ -448,7 +445,7 @@ class Trc(mdtraj.Trajectory):
         )
         array[-(array_last - last) - 1, 0] = "END"
 
-        if not (self.unitcell_lengths is None and len(self.unitcell_lengths) > 0):
+        if has_unitcells:
             array[-(array_last - last), 0] = "GENBOX"
             array[-(array_last - last) + 1, 1] = 1
             array[-(array_last - last) + 2, 1:] = self._formatting(
