@@ -22,7 +22,6 @@ import numpy as np
 import nglview as nj
 from copy import deepcopy
 
-from pygromos.utils import bash
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.blocks.coord_blocks import POSITION
