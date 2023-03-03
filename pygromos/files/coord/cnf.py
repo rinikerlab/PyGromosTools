@@ -1170,9 +1170,6 @@ class Cnf(_general_gromos_file):
         tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
         self.write_pdb(tmpFile.name)
         self._mdtraj = mdtraj.load_pdb(tmpFile.name)
-        if hasattr(self, "GENBOX"):
-            self._mdtraj.unitcell_lengths = self.GENBOX.length
-            self._mdtraj.unitcell_angles = self.GENBOX.angles
 
         # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
         tmpFile.close()
