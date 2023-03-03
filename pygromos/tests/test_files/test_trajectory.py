@@ -64,6 +64,7 @@ class test_trc(unittest.TestCase):
     in_file_path_h5 = in_test_file_path + "/trc/in_test_trc.h5"
     in_file_w_genbox_path = in_test_file_path + "/trc/in_test_genbox.trc"
     in_file_w_genbox_cnf_path = in_test_file_path + "/trc/in_test_genbox.cnf"
+    in_file_minimal_path = in_test_file_path + "/trc/in_test_minimal.trc"
 
     outpath = root_out + "/out_trc1.h5"
     trc_outpath = root_out + "/out_.trc.gz"
@@ -81,6 +82,10 @@ class test_trc(unittest.TestCase):
         assert isinstance(t, self.class_name)
         # print(t)
 
+    def test_unknown_file_type_raises(self):
+        with self.assertRaises(ValueError):
+            self.class_name(traj_path="trajectory.unknown")
+
     def test_constructor_trc_file_noTop_path(self):
         t = self.class_name(traj_path=self.in_file_path)
         assert isinstance(t, self.class_name)
@@ -95,12 +100,25 @@ class test_trc(unittest.TestCase):
         t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
         t.save(self.outpath)
 
+    def test_read_without_box_info(self):
+        # if the trc does not have box info, it is set from the cnf file for all frames.
+        t = self.class_name(traj_path=self.in_file_path, in_cnf=self.help_class)
+        testing.assert_allclose(t.unitcell_lengths, [[5, 6, 7]]*t.n_frames)
+
+    def test_title(self):
+        t = self.class_name(traj_path=self.in_file_minimal_path)
+        assert t.TITLE.content == [
+            "Generic Title... to be changed by YOU!",
+            "And a second line"
+        ]
+
     def test_trc_with_boxes_traj(self):
         c = Cnf(self.in_file_w_genbox_cnf_path)
         t_origin = self.class_name(traj_path=self.in_file_w_genbox_path, in_cnf=self.in_file_w_genbox_cnf_path)
 
         # CNF was the last frame:
         testing.assert_allclose(actual=t_origin._unitcell_lengths[-1], desired=c.GENBOX.length)
+        testing.assert_allclose(actual=t_origin._unitcell_angles[-1], desired=[90., 90., 90.])
 
         # these should not be equal! as the box changes in NPT over time
         assert t_origin._unitcell_lengths[0][0] != c.GENBOX.length[0]

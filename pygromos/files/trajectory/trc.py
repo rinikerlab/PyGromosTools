@@ -50,57 +50,54 @@ class Trc(mdtraj.Trajectory):
     ):
 
         self._future_file = _future_file
-        if xyz is None and topology is None and traj_path is None and in_cnf is None:
-            self._future_file = None
 
-        if traj_path is not None and (traj_path.endswith(".h5") or traj_path.endswith(".hf5")):
-            trj = self.load(traj_path)
-            self.__dict__.update(vars(trj))
+        if traj_path is not None:
+            if traj_path.endswith(".h5") or traj_path.endswith(".hf5"):
+                trj = self.load(traj_path)
+                self.__dict__.update(vars(trj))
 
-        elif traj_path is not None and (traj_path.endswith(".trc") or traj_path.endswith(".trc.gz")):
+            elif traj_path.endswith(".trc") or traj_path.endswith(".trc.gz"):
 
-            # Parse TRC
-            compress = traj_path.endswith(".gz")
+                parser = TrcParser()
+                # Parse TRC
+                if traj_path.endswith(".gz"):
+                    parser.load_gzipped(traj_path)
+                else:
+                    parser.load_filename(traj_path)
 
-            unitcell_angles = None
-            unitcell_lengths = None
+                xyz = parser.positions
 
-            if isinstance(traj_path, str):
-                xyz, step, time, unitcell_lengths, unitcell_angles = self.parse_trc_efficiently(
-                    traj_path, gzipped=compress
+                # Topology from Cnf
+                if isinstance(in_cnf, str):
+                    in_cnf = Cnf(in_cnf)
+                elif not (isinstance(in_cnf, Cnf) and hasattr(in_cnf, "POSITION")):
+                    in_cnf = self.get_dummy_cnf(xyz)
+
+                unitcell_angles = parser.unitcell_angles
+                unitcell_lengths = parser.unitcell_lengths
+                # get cnf boxDims
+                if hasattr(in_cnf, "GENBOX") and len(unitcell_angles) == 0:
+                    unitcell_angles = np.full((len(xyz), 3), in_cnf.GENBOX.angles)
+                if hasattr(in_cnf, "GENBOX") and len(parser.unitcell_lengths) == 0:
+                    unitcell_lengths = np.full((len(xyz), 3), in_cnf.GENBOX.length)
+
+                # Topo tmp file
+                tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
+                in_cnf.write_pdb(tmpFile.name)
+                single = mdtraj.load_pdb(tmpFile.name)
+                tmpFile.close()
+
+                self._step = np.array(parser.step)
+                self.TITLE = TITLE("\n".join(parser.title))
+                super().__init__(
+                    xyz=xyz,
+                    topology=single.topology,
+                    time=time or parser.time or None,
+                    unitcell_lengths=unitcell_lengths if np.size(unitcell_lengths) else None,
+                    unitcell_angles=unitcell_angles if np.size(unitcell_angles) else None,
                 )
-
-            # Topology from Cnf
-            if isinstance(in_cnf, str):
-                in_cnf = Cnf(in_cnf)
-            elif isinstance(in_cnf, Cnf) and hasattr(in_cnf, "POSITION"):
-                pass
             else:
-                in_cnf = self.get_dummy_cnf(xyz)
-
-            # get cnf boxDims
-            if hasattr(in_cnf, "GENBOX") and (unitcell_lengths is None and unitcell_angles is None):
-                unitcell_angles = np.array(list(in_cnf.GENBOX.angles) * len(xyz)).reshape(
-                    len(xyz), len(in_cnf.GENBOX.length)
-                )
-                unitcell_lengths = np.array(list(in_cnf.GENBOX.length) * len(xyz)).reshape(
-                    len(xyz), len(in_cnf.GENBOX.length)
-                )
-
-            # Topo tmp file
-            tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
-            in_cnf.write_pdb(tmpFile.name)
-            single = mdtraj.load_pdb(tmpFile.name)
-            tmpFile.close()
-
-            super().__init__(
-                xyz=xyz,
-                topology=single.topology,
-                time=time,
-                unitcell_lengths=unitcell_lengths,
-                unitcell_angles=unitcell_angles,
-            )
-            self._step = step
+                raise ValueError("Unknown file extension for file: " + str(traj_path))
 
         elif not (xyz is None and topology is None):
             super().__init__(
@@ -168,76 +165,6 @@ class Trc(mdtraj.Trajectory):
             ],
         )
         return new_Cnf
-
-    def parse_trc_efficiently(self, traj_path: str, gzipped: bool) -> Tuple[np.array, np.array, np.array]:
-        self._block_map = self._generate_blockMap(in_trc_path=traj_path, gzipped=gzipped)
-        # build block mapping
-        rep_time = 1
-        start = self._block_map["TIMESTEP"]
-        title = self._block_map["TITLE"]
-        end = start + self._block_map["POSITIONRED"] - 1
-        timestep_block_length = sum(
-            [self._block_map[key] for key in self._block_map if (key not in ["TITLE", "commentLines"])]
-        )
-        chunk = self._block_map["POSITIONRED"] - self._block_map["commentLines"] - 2 + 1
-
-        # block mapping logic
-        base_rows = (
-            lambda x: not (
-                (((x - title) % timestep_block_length > start) and ((x - title) % timestep_block_length < end))
-                or (x - title) % timestep_block_length == rep_time
-            )
-            if x > title
-            else True
-        )
-
-        unitcell_length = None
-        unitcell_angles = None
-        genbox_present = False
-        if "GENBOX" in self._block_map:
-            genbox_present = True
-            chunk += 2
-            # timestep_block_length += 7
-            skip_rows1 = lambda x: (
-                base_rows(x)
-                and not ((x - title) % timestep_block_length == end + 3)
-                and not ((x - title) % timestep_block_length == end + 4)
-            )
-
-            skip_rows = lambda x: (x < title) or skip_rows1(x)
-
-            unitcell_length = []
-            unitcell_angles = []
-        else:
-            skip_rows = lambda x: (x < title) or base_rows(x)
-
-        # parsing
-        data = []
-        time = []
-        step = []
-        for b in pd.read_table(
-            traj_path, delim_whitespace=True, skiprows=skip_rows, names=["x", "y", "z"], chunksize=chunk, comment="#"
-        ):
-            if genbox_present:
-                data.append(b.values[1:-2, :])
-                time.append(b.values[0, 1])
-                step.append(b.values[0, 0])
-                unitcell_length.append(b.values[-2, :])
-                unitcell_angles.append(b.values[-1, :])
-            else:
-                data.append(b.values[1:, :])
-                time.append(b.values[0, 1])
-                step.append(b.values[0, 0])
-
-        # make np.Arrays
-        xyz = np.array(data)
-        time = np.array(time)
-        step = np.array(step)
-        if genbox_present:
-            unitcell_length = np.array(unitcell_length)
-            unitcell_angles = np.array(unitcell_angles)
-
-        return xyz, step, time, unitcell_length, unitcell_angles
 
     @property
     def step(self) -> np.array:
@@ -323,53 +250,6 @@ class Trc(mdtraj.Trajectory):
             df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
         return df
 
-    def _generate_blockMap(self, in_trc_path: str, gzipped: bool) -> Dict[str, int]:
-        block_map = {}
-        open_fun = gzip.open if gzipped else open
-        with open_fun(in_trc_path, "rt") as file_handle:
-            inBlock = False
-            inTitleBlock = False
-            blockKey = None
-            nLines = 0
-            nCommentLines = 0
-            titleStr = []
-
-            max_it = 1000000
-            i = 0
-            while max_it > i:
-                line = file_handle.readline().strip()
-
-                if line.startswith("#"):
-                    nCommentLines += 1
-
-                if "END" == line.strip():
-                    block_map.update({blockKey: nLines})
-                    if blockKey == TITLE.__name__:
-                        inTitleBlock = False
-                        self.TITLE = TITLE(content="\n".join(titleStr))
-                    inBlock = False
-
-                elif not inBlock:
-                    blockKey = line.strip()
-                    if blockKey in block_map:
-                        break
-                    elif blockKey == TITLE.__name__:
-                        inTitleBlock = True
-                    inBlock = True
-                    nLines = 1
-
-                elif inTitleBlock:
-                    titleStr.append(line)
-
-                i += 1  # this is a potential danger
-                nLines += 1
-
-        if not hasattr(self, TITLE.__name__):
-            self.TITLE = TITLE(content="Empty TITLE")
-
-        block_map.update({"commentLines": nCommentLines})
-
-        return block_map
 
     # Visualizaton
     @property
@@ -565,3 +445,71 @@ class Trc(mdtraj.Trajectory):
             )
 
         return o
+
+
+class TrcParser:
+    def __init__(self):
+        self.title = []
+        self.step = []
+        self.time = []
+        self.positions = []
+        self.unitcell_lengths = []
+        self.unitcell_angles = []
+
+    def load_filename(self, fname):
+        with open(fname) as f:
+            return self.load(f)
+
+    def load_gzipped(self, fname):
+        with gzip.open(fname, mode='rt') as f:
+            return self.load(f)
+
+    def load(self, fh):
+        parsers = {
+            'TITLE': self.parse_title,
+            'TIMESTEP': self.parse_timestep,
+            'POSITIONRED': self.parse_positions,
+            'GENBOX': self.parse_genbox,
+            '': lambda x: None  # just skip the line
+        }
+        for line in fh:
+            blocktype = line.strip()
+            parsers[blocktype](fh)
+
+    def parse_positions(self, fh):
+        positions = []
+        for line in fh:
+            if line[0] == '#':
+                continue
+            entries = line.split()
+            if len(entries) == 1 and entries[0] == "END":
+                break
+            assert len(entries) == 3, "Wrong number of entries in a coordinate line: " + line
+            positions.append((float(entries[0]), float(entries[1]), float(entries[2])))
+        self.positions.append(positions)
+
+    def parse_timestep(self, fh):
+        entries = next(fh).split()
+        if len(entries) != 2:
+            raise ValueError("Invalid number of entries in timestep: " + len(entries))
+        self.step.append(int(entries[0]))
+        self.time.append(float(entries[1]))
+        if next(fh).strip() != "END":
+            raise ValueError("More than 1 line in TIMESTEP entry")
+
+    def parse_genbox(self, fh):
+        next(fh)
+        lengths = tuple(float(l) for l in next(fh).split())
+        angles = tuple(float(a) for a in next(fh).split())
+        next(fh)
+        next(fh)
+        if next(fh).strip() != "END":
+            raise ValueError("Wrong number of lines in GENBOX entry")
+        self.unitcell_lengths.append(lengths)
+        self.unitcell_angles.append(angles)
+
+    def parse_title(self, fh):
+        for line in fh:
+            if line.strip() == "END":
+                break
+            self.title.append(line.strip())
