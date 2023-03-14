@@ -266,98 +266,12 @@ class Trc(mdtraj.Trajectory):
 
     # io
 
-    _formatting = np.vectorize(np.format_float_positional)
-
-    def write_trc(self, out_path: str) -> str:
-
-        first_entry = self.generate_TITLE_entry()
-        array_list = [first_entry]
-
-        for i in range(len(self.time)):
-            array_list.append(self.generate_entry_for_frame(i))
-
-        array = np.concatenate(array_list, axis=0)
-        array = np.array(array, dtype=str)
-        array[array == "None"] = ""
-
-        np.savetxt(out_path, array, fmt="%s", delimiter="\t")
-
-    def generate_entry_for_frame(self, frame_id: int):
-        length = 3  # TIMESTEP
-        length += 2  # Positionred
-        length += self.xyz[0].shape[0]
-
-        # Add comments
-        length += self.xyz[0].shape[0] // 10
-
-        has_unitcells = self.unitcell_lengths is not None and len(self.unitcell_lengths) > 0
-        if has_unitcells:
-            length += 7
-
-        array = np.empty((length, 4), dtype=object)
-
-        # Add TIMESTEP
-        array[0, 0] = "TIMESTEP"
-        array[1, 1] = self.step[frame_id]
-        array[1, 2] = self._formatting(self.time[frame_id], precision=9, unique=False, pad_left=2)
-        array[2, 0] = "END"
-
-        # Add POSITIONRED
-        array[3, 0] = "POSITIONRED"
-        start = 4
-
-        for block in range(self.xyz[frame_id].shape[0] // 10):
-            array[start + block * 10 : start + (block + 1) * 10, 1:] = self._formatting(
-                self.xyz[frame_id][block * 10 : (block + 1) * 10, :], precision=9, unique=False, pad_left=2
-            )
-            array[start + (block + 1) * 10, 0] = "#"
-            array[start + (block + 1) * 10, 1] = (block + 1) * 10
-            start += 1
-
-        last = self.xyz[frame_id].shape[0] % 10
-
-        if has_unitcells:
-            array_last = last + 7
+    def write_trc(self, out_path: str) -> None:
+        writer = TrcWriter(self)
+        if out_path.endswith(".gz"):
+            writer.write_gzipped(out_path)
         else:
-            array_last = last
-
-        array[-(array_last + 1) : -(array_last - last) - 1, 1:] = self._formatting(
-            self.xyz[frame_id][-last:, :], precision=9, unique=False, pad_left=2
-        )
-        array[-(array_last - last) - 1, 0] = "END"
-
-        if has_unitcells:
-            array[-(array_last - last), 0] = "GENBOX"
-            array[-(array_last - last) + 1, 1] = 1
-            array[-(array_last - last) + 2, 1:] = self._formatting(
-                self.unitcell_lengths[frame_id], precision=9, unique=False, pad_left=2
-            )
-            array[-(array_last - last) + 3, 1:] = self._formatting(
-                self.unitcell_angles[frame_id], precision=9, unique=False, pad_left=2
-            )
-            array[-(array_last - last) + 4, 1:] = self._formatting(0, precision=9, unique=False, pad_left=2)
-            array[-(array_last - last) + 5, 1:] = self._formatting(0, precision=9, unique=False, pad_left=2)
-            array[-(array_last - last) + 6, 0] = "END"
-
-        return array
-
-    def generate_TITLE_entry(self):
-        length = 3  # TITLE will only be one line
-
-        # Add comments
-        array = np.empty((length, 4), dtype=object)
-
-        # Add Title
-        array[0, 0] = "TITLE"
-
-        titlestring = ""
-        for t in self.TITLE.content:
-            titlestring += t
-
-        array[1, 0] = titlestring
-        array[2, 0] = "END"
-
-        return array
+            writer.write_filename(out_path)
 
     def to_cnf(self, frame_id: int = None, base_cnf: Cnf = None):
         from pygromos.files.blocks import coords
@@ -416,10 +330,10 @@ class Trc(mdtraj.Trajectory):
         return new_Cnf
 
     def save(self, out_path: str) -> str:
-
+        "Write to out_path, using TrcWriter for .trc and .trc.gz, mdtraj otherwise."
         # write out
         if out_path.endswith(".trc") or out_path.endswith(".trc.gz"):
-            out_path = self.write_trc(out_path)
+            self.write_trc(out_path)
             return out_path
         else:
             super().save(out_path)
@@ -449,37 +363,41 @@ class Trc(mdtraj.Trajectory):
 
 class TrcParser:
     def __init__(self):
-        self.title = []
-        self.step = []
-        self.time = []
-        self.positions = []
-        self.unitcell_lengths = []
-        self.unitcell_angles = []
+        self.title: List[str] = []
+        self.step: List[int] = []
+        self.time: List[float] = []
+        self.positions: List[List[Tuple]] = []
+        self.unitcell_lengths: List[Tuple] = []
+        self.unitcell_angles: List[Tuple] = []
 
     def load_filename(self, fname):
+        "Open and read a trc file"
         with open(fname) as f:
             return self.load(f)
 
     def load_gzipped(self, fname):
-        with gzip.open(fname, mode='rt') as f:
+        "Open and read a trc.gz file"
+        with gzip.open(fname, mode="rt") as f:
             return self.load(f)
 
     def load(self, fh):
+        "Read a trc file from an open file handle"
         parsers = {
-            'TITLE': self.parse_title,
-            'TIMESTEP': self.parse_timestep,
-            'POSITIONRED': self.parse_positions,
-            'GENBOX': self.parse_genbox,
-            '': lambda x: None  # just skip the line
+            "TITLE": self.parse_title,
+            "TIMESTEP": self.parse_timestep,
+            "POSITIONRED": self.parse_positions,
+            "GENBOX": self.parse_genbox,
+            "": lambda _x: None,  # just skip the line
         }
         for line in fh:
             blocktype = line.strip()
             parsers[blocktype](fh)
 
     def parse_positions(self, fh):
+        "Parse a positions block from an iterator yielding lines (i.e., an open file)"
         positions = []
         for line in fh:
-            if line[0] == '#':
+            if line[0] == "#":
                 continue
             entries = line.split()
             if len(entries) == 1 and entries[0] == "END":
@@ -489,6 +407,7 @@ class TrcParser:
         self.positions.append(positions)
 
     def parse_timestep(self, fh):
+        "Parse a timestep block from an iterator yielding lines (i.e., an open file)"
         entries = next(fh).split()
         if len(entries) != 2:
             raise ValueError("Invalid number of entries in timestep: " + len(entries))
@@ -498,6 +417,7 @@ class TrcParser:
             raise ValueError("More than 1 line in TIMESTEP entry")
 
     def parse_genbox(self, fh):
+        "Parse a genbox block from an iterator yielding lines (i.e., an open file)"
         next(fh)
         lengths = tuple(float(l) for l in next(fh).split())
         angles = tuple(float(a) for a in next(fh).split())
@@ -509,7 +429,83 @@ class TrcParser:
         self.unitcell_angles.append(angles)
 
     def parse_title(self, fh):
+        "Parse a title block from an iterator yielding lines (i.e., an open file)"
         for line in fh:
             if line.strip() == "END":
                 break
             self.title.append(line.strip())
+
+
+class TrcWriter:
+    """Class to write basic Trc trajectory info to a file.
+
+    Supported blocks:
+    * TITLE
+    * POSITIONRED
+    * TIMESTEP
+    * GENBOX
+    """
+    def __init__(self, traj: Trc, float_format="{:>14.9f}"):
+        self.traj = traj
+        self.float_format = float_format
+        self.three_float_fmt = " {} {} {}\n".format(float_format, float_format, float_format)
+        self.int_and_float_fmt = " {:>14d} " + float_format + "\n"
+
+    def write(self, fh):
+        "Write all frames to an open file handle"
+        self.write_title(fh)
+        for frame_number in range(self.traj.n_frames):
+            self.write_timestep(fh, frame_number)
+            self.write_positions(fh, frame_number)
+            if self.has_unitcells():
+                self.write_unitcells(fh, frame_number)
+
+    def write_timestep(self, fh, frame_number: int):
+        "Write TIMESTEP for frame *frame_number* to an open file handle"
+        fh.write("TIMESTEP\n")
+        time = self.traj.time[frame_number]
+        step = self.traj.step[frame_number]
+        fh.write(self.int_and_float_fmt.format(step, time))
+        fh.write("END\n")
+
+    def write_positions(self, fh, frame_number: int):
+        "Write POSITIONRED for frame *frame_number* to an open file handle"
+        fh.write("POSITIONRED\n")
+        positions = self.traj.xyz[frame_number].tolist()
+        for atom_number in range(self.traj.n_atoms):
+            fh.write(self.three_float_fmt.format(*positions[atom_number]))
+            if (atom_number + 1) % 10 == 0:
+                fh.write("#{:>10d}\n".format(atom_number + 1))
+        fh.write("END\n")
+
+    def write_title(self, fh):
+        "Write TITLE entry to an open file handle"
+        fh.write("TITLE\n")
+        for line in self.traj.TITLE.content:
+            fh.write("\t" + line + "\n")
+        fh.write("END\n")
+
+    def write_unitcells(self, fh, frame_number):
+        "Write GENBOX entry for frame *frame_number* to an open file handle"
+        fh.write("GENBOX\n")
+        fh.write("    1\n")
+        lengths = self.traj.unitcell_lengths[frame_number]
+        angles = self.traj.unitcell_angles[frame_number]
+        fh.write(self.three_float_fmt.format(*lengths))
+        fh.write(self.three_float_fmt.format(*angles))
+        fh.write(self.three_float_fmt.format(0.0, 0.0, 0.0))
+        fh.write(self.three_float_fmt.format(0.0, 0.0, 0.0))
+        fh.write("END\n")
+
+    def write_filename(self, filename):
+        "Open a file and write to it"
+        with open(filename, 'wt') as f:
+            self.write(f)
+
+    def write_gzipped(self, filename):
+        "Open a gzipped file and write to it"
+        with gzip.open(filename, 'wt') as f:
+            self.write(f)
+
+    def has_unitcells(self) -> bool:
+        return self.traj.unitcell_lengths is not None and np.size(self.traj.unitcell_lengths) > 0
