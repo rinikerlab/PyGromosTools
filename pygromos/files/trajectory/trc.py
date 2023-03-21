@@ -418,8 +418,8 @@ class TrcParser:
     def parse_genbox(self, fh):
         "Parse a genbox block from an iterator yielding lines (i.e., an open file)"
         next(fh)
-        lengths = tuple(float(l) for l in next(fh).split())
-        angles = tuple(float(a) for a in next(fh).split())
+        lengths = tuple(float(length) for length in next(fh).split())
+        angles = tuple(float(angle) for angle in next(fh).split())
         next(fh)
         next(fh)
         if next(fh).strip() != "END":

@@ -1058,7 +1058,7 @@ class Cnf(_general_gromos_file):
 
         output_lines = ["TITLE " + str(self.TITLE).replace("END", "")]
         if hasattr(self, "GENBOX"):
-            lengths = [l * 10 for l in self.GENBOX.length]
+            lengths = [length * 10 for length in self.GENBOX.length]
             angles = self.GENBOX.angles
             output_lines.append(
                 "CRYST1{:>9.3f}{:>9.3f}{:>9.3f}{:>7.2f}{:>7.2f}{:>7.2f} P 1           1".format(*lengths, *angles)
