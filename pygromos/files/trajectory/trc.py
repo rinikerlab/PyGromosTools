@@ -250,7 +250,6 @@ class Trc(mdtraj.Trajectory):
             df[df.columns[0:]] = df[df.columns[0:]].apply(lambda x: np.rad2deg(x))
         return df
 
-
     # Visualizaton
     @property
     def view(self, re_create: bool = False) -> nj.NGLWidget:
@@ -445,6 +444,7 @@ class TrcWriter:
     * TIMESTEP
     * GENBOX
     """
+
     def __init__(self, traj: Trc, float_format="{:>14.9f}"):
         self.traj = traj
         self.float_format = float_format
@@ -499,12 +499,12 @@ class TrcWriter:
 
     def write_filename(self, filename):
         "Open a file and write to it"
-        with open(filename, 'wt') as f:
+        with open(filename, "wt") as f:
             self.write(f)
 
     def write_gzipped(self, filename):
         "Open a gzipped file and write to it"
-        with gzip.open(filename, 'wt') as f:
+        with gzip.open(filename, "wt") as f:
             self.write(f)
 
     def has_unitcells(self) -> bool:

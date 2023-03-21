@@ -1065,9 +1065,7 @@ class Cnf(_general_gromos_file):
             )
         # CONSTUCT PDB BLOCKS
         # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-        pdb_format = (
-            "ATOM  {:>5d} {:>4} {:<3} {:1}{:>4d}   {:>8.3f}{:>8.3f}{:>8.3f}  {:>3.2f} {:>5}      {:>4}{:>2}"
-        )
+        pdb_format = "ATOM  {:>5d} {:>4} {:<3} {:1}{:>4d}   {:>8.3f}{:>8.3f}{:>8.3f}  {:>3.2f} {:>5}      {:>4}{:>2}"
 
         for atom in self.POSITION:
             output_lines.append(
