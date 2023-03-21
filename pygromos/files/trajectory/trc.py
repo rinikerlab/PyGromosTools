@@ -25,7 +25,7 @@ from copy import deepcopy
 from pygromos.files.blocks._general_blocks import TITLE
 from pygromos.files.coord.cnf import Cnf
 from pygromos.files.blocks.coord_blocks import POSITION
-from pygromos.utils.typing import Dict, List, Tuple, Union
+from pygromos.utils.typing import List, Tuple, Union
 from pygromos.visualization.coordinates_visualization import visualize_system
 
 
