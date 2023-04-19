@@ -35,19 +35,25 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
     # count_state_per_position[replica]
     replica_round_trips: Dict[int, int] = None
 
-    def __init__(self, input_path: str):
+    def __init__(self, input_path: str, trim_equil=0.0):
         """ Repdat_Constructor
 
         Parameters
         ----------
         input_path :    str
              path to gromos repdadat file
+        trim_equil : float between 0 and 1.
+                     corresponds to the fraction of data to remove for equilibration
+
         """
 
         if type(input_path) is str:
             system, data = parser.read_repdat(input_path, Vj_header=True)
             self.system = system
-            self.DATA = data
+            
+            n = int(data.shape[0] * trim_equil)
+            self.DATA = data.iloc[n:].reset_index(drop=True)
+            
             self.path = input_path
 
         else:
