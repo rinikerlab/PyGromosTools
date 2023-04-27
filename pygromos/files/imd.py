@@ -125,7 +125,7 @@ class Imd(_general_gromos_file._general_gromos_file):
         # specific relations are rescued here
         reeds_block = self.REPLICA_EDS
 
-        if(isinstance(reeds_block, blocks.NEW_REPLICA_EDS)):
+        if(isinstance(reeds_block, blocks.REPLICA_EDS)):
             if(isinstance(REEDS, bool)):
                 reeds_block.REEDS = REEDS
 
