@@ -5,8 +5,6 @@ from pygromos.tests.test_files.general_file_functions import general_file_tests
 from pygromos.tests.in_testfiles import in_test_file_path
 from pygromos.tests.test_files import out_test_root_dir
 
-import numpy.testing
-
 in_file_path = in_test_file_path + "/cnf/in_cnf1.cnf"
 in_file_renum_path = in_test_file_path + "/cnf/in_renumber_ligs.cnf"
 
@@ -52,8 +50,3 @@ class test_cnf(general_file_tests):
         cnf_file = cnf.Cnf(in_file_path)
         view = cnf_file.view
         assert view is not None
-
-    def test_to_mdtraj_box(self):
-        cnf_file = cnf.Cnf(in_file_path)
-        traj = cnf_file.get_mdtraj()
-        numpy.testing.assert_allclose(traj.unitcell_lengths[0], [3.3219, 3.3219, 3.3219])

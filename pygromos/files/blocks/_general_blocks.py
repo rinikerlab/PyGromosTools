@@ -186,7 +186,7 @@ class TIMESTEP(_generic_gromos_block):
 
 
 class TITLE(_generic_gromos_block):
-    content: List
+    content: str
     field_seperator: str = "\t"
     line_seperator: str = "\n"
     order = [[["content"]]]
