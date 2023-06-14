@@ -1038,14 +1038,12 @@ class Cnf(_general_gromos_file):
         # Defaults set for GENBOX - for liquid sim adjust manually
         self.__setattr__("GENBOX", blocks.GENBOX(pbc=1, length=[4, 4, 4], angles=[90, 90, 90]))
 
-    def get_pdb(self, rdkit_ready: bool = False, connectivity_top=None) -> str:
+    def get_pdb(self, connectivity_top=None) -> str:
         """
             translate cnf to pdb.
 
         Parameters
         ----------
-        rdkit_ready: bool, optional
-            str output was tested with RDKIT (default: False)
         connectivity_top: top.Top, optional
             if the pygromos top class is provided (containing a BOND block), then the pdb gets a connect block.
 
@@ -1055,64 +1053,37 @@ class Cnf(_general_gromos_file):
             pdb str.
 
         """
-        dummy_occupancy = dummy_bfactor = dummy_charge = dummy_mass = 0.0
+        dummy_occupancy = dummy_bfactor = dummy_charge = 0.0
         dummy_chain = ""
 
-        if rdkit_ready:
-            format_str = (
-                "HETATM {:>4} {:>4} {:>3}   {:>3}      {:>6.3f}  {:>6.3f}  {:>6.3f}  {:>2.2f}  {:>2.2f}          {:>2}"
+        output_lines = ["TITLE " + str(self.TITLE).replace("END", "")]
+        if hasattr(self, "GENBOX"):
+            lengths = [length * 10 for length in self.GENBOX.length]
+            angles = self.GENBOX.angles
+            output_lines.append(
+                "CRYST1{:>9.3f}{:>9.3f}{:>9.3f}{:>7.2f}{:>7.2f}{:>7.2f} P 1           1".format(*lengths, *angles)
             )
+        # CONSTUCT PDB BLOCKS
+        # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
+        pdb_format = "ATOM  {:>5d} {:>4} {:<3} {:1}{:>4d}   {:>8.3f}{:>8.3f}{:>8.3f}  {:>3.2f} {:>5}      {:>4}{:>2}"
 
-            frame_positions = []
-            for pos in self.POSITION:
-                frame_positions.append(
-                    format_str.format(
-                        pos.atomID,
-                        pos.atomType,
-                        pos.resName[:3],
-                        pos.resID,
-                        pos.xp * 10,
-                        pos.yp * 10,
-                        pos.zp * 10,
-                        dummy_mass,
-                        int(dummy_charge),
-                        pos.atomType[0],
-                    )
+        for atom in self.POSITION:
+            output_lines.append(
+                pdb_format.format(
+                    atom.atomID % 100000,
+                    atom.atomType[:4],
+                    atom.resName[:3],
+                    dummy_chain,
+                    atom.resID % 10000,
+                    atom.xp * 10,
+                    atom.yp * 10,
+                    atom.zp * 10,
+                    dummy_occupancy,
+                    dummy_bfactor,
+                    int(dummy_charge),
+                    atom.atomType[0],
                 )
-
-            pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
-            pdb_str += "\n".join(frame_positions)
-
-        else:
-            # 2) CONSTUCT PDB BLOCKS
-            # ref: https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html
-            pdb_format = (
-                "ATOM  {:>5d} {:>4} {:<3} {:1}{:>4d}   {:>8.3f}{:>8.3f}{:>8.3f}  {:>3.2f} {:>5}      {:>4}{:>2}"
-            )
-
-            # pdb_format =  "ATOM  %5d %-4s %3s %1s%4d   %s%s%s  1.00 %5s      %-4s%2s  "
-
-            frame_positions = []
-            for ind, atom in enumerate(self.POSITION):
-                frame_positions.append(
-                    pdb_format.format(
-                        atom.atomID % 100000,
-                        atom.atomType,
-                        atom.resName,
-                        dummy_chain,
-                        atom.resID % 10000,
-                        atom.xp * 10,
-                        atom.yp * 10,
-                        atom.zp * 10,
-                        dummy_occupancy,
-                        dummy_bfactor,
-                        int(dummy_charge),
-                        atom.atomType[0],
-                    )
-                )  # times *10 because pdb is in A
-
-            pdb_str = "TITLE " + str(self.TITLE).replace("END", "") + "\n"
-            pdb_str += "\n".join(frame_positions)
+            )  # times *10 because pdb is in A
 
         # future:
         # add bond block with top optionally
@@ -1121,16 +1092,13 @@ class Cnf(_general_gromos_file):
             for bond in connectivity_top.BOND:
                 connection_block[bond.IB].append(bond.JB)
 
-            out_str = ""
             for atomI in sorted(connection_block):
                 connections = connection_block[atomI]
                 substr = "".join([" {:>4}" for i in range(len(connections))])
-                out_str += ("CONECT {:>4}" + substr).format(atomI, *connections) + "\n"
-            pdb_str += out_str
+                output_lines.append(("CONECT {:>4}" + substr).format(atomI, *connections))
 
-        pdb_str += "\nEND"
-
-        return pdb_str
+        output_lines.append("END")
+        return "\n".join(output_lines)
 
     def get_xyz(self) -> str:
         """
@@ -1200,9 +1168,6 @@ class Cnf(_general_gromos_file):
         tmpFile = tempfile.NamedTemporaryFile(suffix="_tmp.pdb")
         self.write_pdb(tmpFile.name)
         self._mdtraj = mdtraj.load_pdb(tmpFile.name)
-        if hasattr(self, "GENBOX"):
-            self._mdtraj.unitcell_lengths = self.GENBOX.length
-            self._mdtraj.unitcell_angles = self.GENBOX.angles
 
         # print(tmpFile.name) #for debbuging and checking if temp file is really deleted.
         tmpFile.close()
