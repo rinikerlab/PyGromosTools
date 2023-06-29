@@ -58,7 +58,6 @@ class Imd(_general_gromos_file._general_gromos_file):
     INITIALISE: blocks.INITIALISE
 
     REPLICA_EDS: blocks.REPLICA_EDS
-    NEW_REPLICA_EDS: blocks.NEW_REPLICA_EDS
 
     REPLICA: blocks.REPLICA
 
@@ -109,7 +108,7 @@ class Imd(_general_gromos_file._general_gromos_file):
             self.EDS.EIR = EIR
 
         else:
-            print("Setting new EDS_block")
+            # print("Setting new EDS_block")
             if type(EIR) == float or type(EIR) == str or type(EIR) == int:
                 EIR = [float(EIR) for x in range(NUMSTATES)]
 
@@ -133,7 +132,7 @@ class Imd(_general_gromos_file._general_gromos_file):
 
         # specific relations are rescued here
         reeds_block = self.REPLICA_EDS
-        print(type(reeds_block))
+        # print(type(reeds_block))
 
         if isinstance(REEDS, bool):
             reeds_block.REEDS = REEDS
