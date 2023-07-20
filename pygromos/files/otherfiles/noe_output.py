@@ -65,70 +65,48 @@ class NOE(_general_gromos_file._general_gromos_file):
         # NOE - VIOLATIONS
         # read header info
         # NOE Restraint
-        header = [s.replace("#", "") for s in noe_states[0]["NOE VIOLATIONS"] if (s.startswith("#"))]
+        violations_header = [s.replace("#", "") for s in noe_states[0]["NOE VIOLATIONS"] if (s.startswith("#"))]
 
         t_legend = []
-        for i, line in enumerate(header):
+        for line in violations_header:
             if "\n" == line:
                 break
-            else:
-                t_legend.append(line)
+            legend_entry = [int(line.split()[0])] + line.split()[1:5]
+            if len(legend_entry) < 5:
+                raise ValueError("Too few columns in line: " + line)
+            t_legend.append(legend_entry)
 
-        t_legend = [
-            [int(x.strip().split(" ")[0])] + [y for y in x.strip().split(" ")[1:] if (y != "")] for x in t_legend
-        ]
-        for legend_entry in t_legend:
-            if len(legend_entry) == 5:
-                continue
-            elif len(legend_entry) > 5:
-                t_ind = t_legend.index(legend_entry)
-                t_legend.remove(legend_entry)
-                t_legend.insert(t_ind, legend_entry[:5])
-
-            else:
-                raise Exception("WHAT SHALL I DO WITH THAT? " + str(legend_entry))
         restraint_legend = pd.DataFrame(t_legend, columns=["Nr.", "resI", "atomI", "resJ", "atomJ"])
 
         # data Header
-        column_header_nviols = [x for x in header[-1].strip().split("  ") if (x != "")]
+        column_header_nviols = [x for x in violations_header[-1].strip().split("  ") if (x != "")]
 
         header = [s.replace("#", "") for s in noe_states[0]["AVERAGE NOE"] if (s.startswith("#"))]
         column_header_avgnoe = [x for x in header[-1].strip().split("  ") if (x != "")]
 
         # DATA
         # Remove header Info & pandafy data
-        NOE_violations = None
-        average_NOE = None
+        NOE_violations = []
+        average_NOE = []
 
         for state, noe_data in noe_states.items():
             noe_viol = noe_data["NOE VIOLATIONS"]
             av_noe = noe_data["AVERAGE NOE"]
-            no_header = list(
-                map(lambda x: map(float, x.strip().split()), filter(lambda y: not y.startswith("#"), noe_viol))
-            )
-            nvi = pd.DataFrame(no_header, columns=column_header_nviols)
+            viol_data = [[float(x) for x in line.split()] for line in noe_viol if not line.startswith("#")]
+            nvi = pd.DataFrame(viol_data, columns=column_header_nviols)
             nvi["state"] = state
 
-            no_header = list(
-                map(lambda x: map(float, x.strip().split()), filter(lambda y: not y.startswith("#"), av_noe))
-            )
-            av_n = pd.DataFrame(no_header, columns=column_header_avgnoe)
+            av_data = [[float(x) for x in line.split()] for line in av_noe if not line.startswith("#")]
+            av_n = pd.DataFrame(av_data, columns=column_header_avgnoe)
             av_n["state"] = state
 
-            if not isinstance(NOE_violations, pd.DataFrame):
-                NOE_violations = pd.DataFrame(nvi, columns=column_header_nviols + ["state"])
-            else:
-                NOE_violations = NOE_violations.append(nvi, ignore_index=True)
-
-            if not isinstance(average_NOE, pd.DataFrame):
-                average_NOE = pd.DataFrame(av_n, columns=column_header_avgnoe + ["state"])
-            else:
-                average_NOE = NOE_violations.append(av_n, ignore_index=True)
+            NOE_violations.append(pd.DataFrame(nvi, columns=column_header_nviols + ["state"]))
+            average_NOE.append(pd.DataFrame(av_n, columns=column_header_avgnoe + ["state"]))
 
         return {
             "TITLE": title,
-            "AVERAGE_NOE": average_NOE,
-            "NOE_VIOLATIONS": NOE_violations,
+            "AVERAGE_NOE": pd.concat(average_NOE, ignore_index=True),
+            "NOE_VIOLATIONS": pd.concat(NOE_violations, ignore_index=True),
             "RESTRAINT_LEGEND": restraint_legend,
         }
 
