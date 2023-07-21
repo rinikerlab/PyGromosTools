@@ -177,7 +177,7 @@ class _General_Trajectory:
 
         # create output trajectory (copy of first traj) and combine trajectories
         new_traj = self.__class__(input_value=self)
-        new_traj.database = self.database.append(new_data, ignore_index=True)
+        new_traj.database = pandas.concat([self.database, new_data], ignore_index=True)
         del new_data
         return new_traj
 
