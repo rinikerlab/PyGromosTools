@@ -26,7 +26,9 @@ class test_noe_output(unittest.TestCase):
         assert avg_noe.shape == (179, 11)
         print(avg_noe.iloc[-1])
         assert np.all(avg_noe.iloc[0].values == (1, 0.321, 0.296, 0.275, 0.052, 0.074, 0.075, 0.010, 0.014, 0.013, 0))
-        assert np.all(avg_noe.iloc[-1].values == (179, 0.469, 0.465, 0.462, 0.030, 0.031, 0.032, 0.001, 0.001, 0.001, 0))
+        assert np.all(
+            avg_noe.iloc[-1].values == (179, 0.469, 0.465, 0.462, 0.030, 0.031, 0.032, 0.001, 0.001, 0.001, 0)
+        )
 
     def test_noe_violations(self):
         t = self.class_name(self.in_file_path)
@@ -41,15 +43,15 @@ class test_noe_output(unittest.TestCase):
         t = self.class_name(self.in_file_path_duplicated)
         content = t.read_file()
         avg_noe = content["AVERAGE_NOE"]
-        assert avg_noe.shape == (2*179, 11)
-        assert avg_noe.iloc[-1].name == 2*179 - 1  # test that index is continous
+        assert avg_noe.shape == (2 * 179, 11)
+        assert avg_noe.iloc[-1].name == 2 * 179 - 1  # test that index is continous
 
     def test_noe_violations_2_frames(self):
         t = self.class_name(self.in_file_path_duplicated)
         content = t.read_file()
         avg_noe = content["NOE_VIOLATIONS"]
-        assert avg_noe.shape == (2*179, 6)
-        assert avg_noe.iloc[-1].name == 2*179 - 1
+        assert avg_noe.shape == (2 * 179, 6)
+        assert avg_noe.iloc[-1].name == 2 * 179 - 1
 
     def test_noe_restraint_legend(self):
         expected = []

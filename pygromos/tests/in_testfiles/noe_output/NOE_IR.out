@@ -1,191 +1,191 @@
 ###### GATHER WARNING ######
-# NO Gathering method specified ! 
-# Thus : if the system is requested to be gathered, 
+# NO Gathering method specified !
+# Thus : if the system is requested to be gathered,
 # the gathering will be done using the COG gather method
 TITLE
 NOE analysis according to: ../../prep_noe/prep_noe.out
 NOE specification file for: GCN4p16-31 54A7
 END
 AVERAGE NOE
-#    1    16GLY  H       15VAL  HA   
-#    2    16GLY  H       15VAL  H    
-#    3    15VAL  H       14LEU  HA   
-#    4    15VAL  H       14LEU  H    
-#    5    15VAL  H       13LYSH H    
-#    6    14LEU  H       13LYSH HA   
-#    7    14LEU  H       11LEU  HA   
-#    8    14LEU  H       10ARG  HA   
-#    9    14LEU  H       13LYSH H    
-#   10    13LYSH H       12LYSH HA   
-#   11    13LYSH H       10ARG  HA   
-#   12    13LYSH H       12LYSH H    
-#   13    13LYSH H       11LEU  H    
-#   14    12LYSH H       11LEU  H    
-#   15    12LYSH H       10ARG  H    
-#   16    11LEU  H       10ARG  HA   
-#   17    11LEU  H        8VAL  HA   
-#   18    11LEU  H        7GLU  HA   
-#   19    11LEU  H       10ARG  H    
-#   20    11LEU  H        9ALA  H    
-#   21    10ARG  H        9ALA  HA   
-#   22    10ARG  H        7GLU  HA   
-#   23    10ARG  H        6ASN  HA   
-#   24    10ARG  H        9ALA  H    
-#   25     9ALA  H        8VAL  HA   
-#   26     9ALA  H        7GLU  HA   
-#   27     9ALA  H        6ASN  HA   
-#   28     9ALA  H        8VAL  H    
-#   29     9ALA  H        7GLU  H    
-#   30     8VAL  H        7GLU  HA   
-#   31     8VAL  H        6ASN  HA   
-#   32     8VAL  H        5GLU  HA   
-#   33     8VAL  H        4LEU  HA   
-#   34     8VAL  H        7GLU  H    
-#   35     8VAL  H        6ASN  H    
-#   36     7GLU  H        6ASN  HA   
-#   37     7GLU  H        4LEU  HA   
-#   38     7GLU  H        5GLU  HA   
-#   39     7GLU  H        6ASN  H    
-#   40     7GLU  H        5GLU  H    
-#   41     6ASN  H        5GLU  HA   
-#   42     6ASN  H        3HISB HA   
-#   43     6ASN  H        2TYR  HA   
-#   44     6ASN  H        5GLU  H    
-#   45     6ASN  H        4LEU  H    
-#   46     5GLU  H        4LEU  HA   
-#   47     5GLU  H        3HISB HA   
-#   48     5GLU  H        2TYR  HA   
-#   49     5GLU  H        3HISB H    
-#   50     5GLU  H        4LEU  H    
-#   51     4LEU  H        3HISB HA   
-#   52     4LEU  H        3HISB H    
-#   53     3HISB H        2TYR  H    
-#   54     3HISB H        1ASN  H    
-#   55     2TYR  H        1ASN  HA   
-#   56     2TYR  H        1ASN  H    
+#    1    16GLY  H       15VAL  HA
+#    2    16GLY  H       15VAL  H
+#    3    15VAL  H       14LEU  HA
+#    4    15VAL  H       14LEU  H
+#    5    15VAL  H       13LYSH H
+#    6    14LEU  H       13LYSH HA
+#    7    14LEU  H       11LEU  HA
+#    8    14LEU  H       10ARG  HA
+#    9    14LEU  H       13LYSH H
+#   10    13LYSH H       12LYSH HA
+#   11    13LYSH H       10ARG  HA
+#   12    13LYSH H       12LYSH H
+#   13    13LYSH H       11LEU  H
+#   14    12LYSH H       11LEU  H
+#   15    12LYSH H       10ARG  H
+#   16    11LEU  H       10ARG  HA
+#   17    11LEU  H        8VAL  HA
+#   18    11LEU  H        7GLU  HA
+#   19    11LEU  H       10ARG  H
+#   20    11LEU  H        9ALA  H
+#   21    10ARG  H        9ALA  HA
+#   22    10ARG  H        7GLU  HA
+#   23    10ARG  H        6ASN  HA
+#   24    10ARG  H        9ALA  H
+#   25     9ALA  H        8VAL  HA
+#   26     9ALA  H        7GLU  HA
+#   27     9ALA  H        6ASN  HA
+#   28     9ALA  H        8VAL  H
+#   29     9ALA  H        7GLU  H
+#   30     8VAL  H        7GLU  HA
+#   31     8VAL  H        6ASN  HA
+#   32     8VAL  H        5GLU  HA
+#   33     8VAL  H        4LEU  HA
+#   34     8VAL  H        7GLU  H
+#   35     8VAL  H        6ASN  H
+#   36     7GLU  H        6ASN  HA
+#   37     7GLU  H        4LEU  HA
+#   38     7GLU  H        5GLU  HA
+#   39     7GLU  H        6ASN  H
+#   40     7GLU  H        5GLU  H
+#   41     6ASN  H        5GLU  HA
+#   42     6ASN  H        3HISB HA
+#   43     6ASN  H        2TYR  HA
+#   44     6ASN  H        5GLU  H
+#   45     6ASN  H        4LEU  H
+#   46     5GLU  H        4LEU  HA
+#   47     5GLU  H        3HISB HA
+#   48     5GLU  H        2TYR  HA
+#   49     5GLU  H        3HISB H
+#   50     5GLU  H        4LEU  H
+#   51     4LEU  H        3HISB HA
+#   52     4LEU  H        3HISB H
+#   53     3HISB H        2TYR  H
+#   54     3HISB H        1ASN  H
+#   55     2TYR  H        1ASN  HA
+#   56     2TYR  H        1ASN  H
 #   57     1ASN  HA       4LEU  HB Type 4 Noe! Atoms: 50 49 51
 #   58     1ASN  HA       4LEU  HB Type 4 Noe! Atoms: 50 51 49
-#   59     2TYR  HA       5GLU  QB   
-#   60     3HISB HA       6ASN  QB   
-#   61     4LEU  HA       7GLU  QB   
-#   62     4LEU  HA       7GLU  QG   
-#   63     5GLU  HA       8VAL  HB   
-#   64     6ASN  HA       9ALA  QB   
+#   59     2TYR  HA       5GLU  QB
+#   60     3HISB HA       6ASN  QB
+#   61     4LEU  HA       7GLU  QB
+#   62     4LEU  HA       7GLU  QG
+#   63     5GLU  HA       8VAL  HB
+#   64     6ASN  HA       9ALA  QB
 #   65     7GLU  HA      10ARG  HB Type 4 Noe! Atoms: 104 103 105
 #   66     7GLU  HA      10ARG  HB Type 4 Noe! Atoms: 104 105 103
-#   67     8VAL  HA      11LEU  QB   
+#   67     8VAL  HA      11LEU  QB
 #   68     9ALA  HA      12LYSH HB Type 4 Noe! Atoms: 130 129 131
 #   69     9ALA  HA      12LYSH HB Type 4 Noe! Atoms: 130 131 129
-#   70    11LEU  HA      14LEU  QB   
-#   71    12LYSH HA      15VAL  HB   
-#   72     5GLU  H        5GLU  QB   
-#   73     5GLU  H        5GLU  QG   
+#   70    11LEU  HA      14LEU  QB
+#   71    12LYSH HA      15VAL  HB
+#   72     5GLU  H        5GLU  QB
+#   73     5GLU  H        5GLU  QG
 #   74     5GLU  H        4LEU  HB Type 4 Noe! Atoms: 50 49 51
 #   75     5GLU  H        4LEU  HB Type 4 Noe! Atoms: 50 51 49
-#   76     5GLU  H        4LEU  QG   
-#   77     6ASN  H        6ASN  QB   
-#   78     6ASN  H        5GLU  QB   
-#   79     6ASN  H        5GLU  QG   
-#   80     6ASN  H       10ARG  QG   
-#   81     7GLU  H        7GLU  QB   
-#   82     7GLU  H        7GLU  QG   
-#   83     7GLU  H        6ASN  QB   
-#   84     7GLU  H        8VAL  QB   
-#   85     2TYR  H        2TYR  CG   
-#   86     6ASN  H        6ASN  HD21 
-#   87    14LEU  H       14LEU  QB   
-#   88    14LEU  H       14LEU  HG   
-#   89     9ALA  H        8VAL  HB   
-#   90     9ALA  H        9ALA  QB   
-#   91     9ALA  H        8VAL  QG1  
-#   92     9ALA  H        8VAL  QG2  
-#   93     9ALA  H       10ARG  QB   
+#   76     5GLU  H        4LEU  QG
+#   77     6ASN  H        6ASN  QB
+#   78     6ASN  H        5GLU  QB
+#   79     6ASN  H        5GLU  QG
+#   80     6ASN  H       10ARG  QG
+#   81     7GLU  H        7GLU  QB
+#   82     7GLU  H        7GLU  QG
+#   83     7GLU  H        6ASN  QB
+#   84     7GLU  H        8VAL  QB
+#   85     2TYR  H        2TYR  CG
+#   86     6ASN  H        6ASN  HD21
+#   87    14LEU  H       14LEU  QB
+#   88    14LEU  H       14LEU  HG
+#   89     9ALA  H        8VAL  HB
+#   90     9ALA  H        9ALA  QB
+#   91     9ALA  H        8VAL  QG1
+#   92     9ALA  H        8VAL  QG2
+#   93     9ALA  H       10ARG  QB
 #   94     4LEU  H        3HISB HB Type 4 Noe! Atoms: 36 35 37
 #   95     4LEU  H        3HISB HB Type 4 Noe! Atoms: 36 37 35
-#   96    15VAL  H       15VAL  HB   
-#   97    15VAL  H       14LEU  QB   
-#   98    15VAL  H       14LEU  HG   
-#   99    15VAL  H       15VAL  QB   
-#  100     4LEU  H        4LEU  QB   
-#  101     8VAL  H        8VAL  HB   
-#  102     8VAL  H        7GLU  QG   
-#  103     8VAL  H        7GLU  QB   
-#  104     8VAL  H        8VAL  QB   
-#  105    10ARG  H        7GLU  QB   
+#   96    15VAL  H       15VAL  HB
+#   97    15VAL  H       14LEU  QB
+#   98    15VAL  H       14LEU  HG
+#   99    15VAL  H       15VAL  QB
+#  100     4LEU  H        4LEU  QB
+#  101     8VAL  H        8VAL  HB
+#  102     8VAL  H        7GLU  QG
+#  103     8VAL  H        7GLU  QB
+#  104     8VAL  H        8VAL  QB
+#  105    10ARG  H        7GLU  QB
 #  106    10ARG  H       10ARG  HB Type 4 Noe! Atoms: 104 105 103
 #  107    10ARG  H       10ARG  HB Type 4 Noe! Atoms: 104 103 105
 #  108    10ARG  H       10ARG  HG Type 4 Noe! Atoms: 105 106 104
 #  109    10ARG  H       10ARG  HG Type 4 Noe! Atoms: 105 104 106
-#  110    10ARG  H        9ALA  QB   
+#  110    10ARG  H        9ALA  QB
 #  111    11LEU  H       10ARG  HB Type 4 Noe! Atoms: 104 103 105
 #  112    11LEU  H       10ARG  HB Type 4 Noe! Atoms: 104 105 103
 #  113    11LEU  H       10ARG  HG Type 4 Noe! Atoms: 105 106 104
 #  114    11LEU  H       10ARG  HG Type 4 Noe! Atoms: 105 104 106
 #  115    11LEU  H       11LEU  HB Type 4 Noe! Atoms: 121 120 122
 #  116    11LEU  H       11LEU  HB Type 4 Noe! Atoms: 121 122 120
-#  117    11LEU  H       11LEU  QD1  
-#  118    11LEU  H       11LEU  QD2  
-#  119     3HISB HE1      3HISB QB   
-#  120     3HISB HE1      4LEU  QD1  
-#  121     3HISB HE1      4LEU  QD2  
-#  122     3HISB HE1      2TYR  CZ   
-#  123     3HISB HE1      2TYR  CG   
+#  117    11LEU  H       11LEU  QD1
+#  118    11LEU  H       11LEU  QD2
+#  119     3HISB HE1      3HISB QB
+#  120     3HISB HE1      4LEU  QD1
+#  121     3HISB HE1      4LEU  QD2
+#  122     3HISB HE1      2TYR  CZ
+#  123     3HISB HE1      2TYR  CG
 #  124     2TYR  CG       2TYR  HB Type 4 Noe! Atoms: 18 17 19
 #  125     2TYR  CG       2TYR  HB Type 4 Noe! Atoms: 18 19 17
-#  126     2TYR  CG       4LEU  QD1  
-#  127     2TYR  CG       4LEU  QD2  
-#  128     2TYR  CG       2TYR  HA   
-#  129     2TYR  CZ       2TYR  HA   
+#  126     2TYR  CG       4LEU  QD1
+#  127     2TYR  CG       4LEU  QD2
+#  128     2TYR  CG       2TYR  HA
+#  129     2TYR  CZ       2TYR  HA
 #  130     2TYR  CZ       2TYR  HB Type 4 Noe! Atoms: 18 17 19
 #  131     2TYR  CZ       2TYR  HB Type 4 Noe! Atoms: 18 19 17
-#  132     2TYR  CZ       4LEU  QD1  
-#  133     2TYR  CZ       4LEU  QD2  
-#  134     3HISB HD2      3HISB QB   
-#  135     3HISB HD2      4LEU  QD1  
-#  136     3HISB HD2      4LEU  QD2  
-#  137     3HISB HD2      3HISB HA   
-#  138     3HISB HE1      7GLU  QG   
-#  139     3HISB HD2      5GLU  QB   
-#  140     3HISB HD2      5GLU  QG   
-#  141     3HISB HD2      7GLU  QG   
-#  142     2TYR  CG       5GLU  QB   
-#  143     2TYR  CZ       7GLU  QB   
-#  144     2TYR  CG       5GLU  QG   
-#  145     2TYR  CG       7GLU  QG   
-#  146     2TYR  CZ       5GLU  QG   
-#  147     2TYR  CZ       7GLU  QG   
+#  132     2TYR  CZ       4LEU  QD1
+#  133     2TYR  CZ       4LEU  QD2
+#  134     3HISB HD2      3HISB QB
+#  135     3HISB HD2      4LEU  QD1
+#  136     3HISB HD2      4LEU  QD2
+#  137     3HISB HD2      3HISB HA
+#  138     3HISB HE1      7GLU  QG
+#  139     3HISB HD2      5GLU  QB
+#  140     3HISB HD2      5GLU  QG
+#  141     3HISB HD2      7GLU  QG
+#  142     2TYR  CG       5GLU  QB
+#  143     2TYR  CZ       7GLU  QB
+#  144     2TYR  CG       5GLU  QG
+#  145     2TYR  CG       7GLU  QG
+#  146     2TYR  CZ       5GLU  QG
+#  147     2TYR  CZ       7GLU  QG
 #  148     7GLU  QG      10ARG  HD Type 4 Noe! Atoms: 106 105 107
 #  149     7GLU  QG      10ARG  HD Type 4 Noe! Atoms: 106 107 105
-#  150    10ARG  HD Type 4 Noe! Atoms: 106 105 107    6ASN  QB   
-#  151    10ARG  HD Type 4 Noe! Atoms: 106 105 107   10ARG  HA   
-#  152    10ARG  HD Type 4 Noe! Atoms: 106 105 107    7GLU  HA   
-#  153    10ARG  HD Type 4 Noe! Atoms: 106 107 105    6ASN  QB   
-#  154    10ARG  HD Type 4 Noe! Atoms: 106 107 105   10ARG  HA   
-#  155    10ARG  HD Type 4 Noe! Atoms: 106 107 105    7GLU  HA   
-#  156    11LEU  QD1     10ARG  QB   
-#  157    11LEU  QD2     10ARG  QB   
-#  158     7GLU  HA      10ARG  QG   
-#  159     7GLU  QG       4LEU  QB   
-#  160     7GLU  QG       8VAL  QB   
-#  161     7GLU  QG       4LEU  QG   
-#  162     7GLU  QB       4LEU  QB   
-#  163     7GLU  QB      11LEU  QB   
-#  164     7GLU  QB      10ARG  QD   
-#  165     7GLU  QB       4LEU  HA   
-#  166     9ALA  QB       6ASN  QB   
-#  167     6ASN  HA       5GLU  QB   
-#  168     6ASN  HA       5GLU  QG   
+#  150    10ARG  HD Type 4 Noe! Atoms: 106 105 107    6ASN  QB
+#  151    10ARG  HD Type 4 Noe! Atoms: 106 105 107   10ARG  HA
+#  152    10ARG  HD Type 4 Noe! Atoms: 106 105 107    7GLU  HA
+#  153    10ARG  HD Type 4 Noe! Atoms: 106 107 105    6ASN  QB
+#  154    10ARG  HD Type 4 Noe! Atoms: 106 107 105   10ARG  HA
+#  155    10ARG  HD Type 4 Noe! Atoms: 106 107 105    7GLU  HA
+#  156    11LEU  QD1     10ARG  QB
+#  157    11LEU  QD2     10ARG  QB
+#  158     7GLU  HA      10ARG  QG
+#  159     7GLU  QG       4LEU  QB
+#  160     7GLU  QG       8VAL  QB
+#  161     7GLU  QG       4LEU  QG
+#  162     7GLU  QB       4LEU  QB
+#  163     7GLU  QB      11LEU  QB
+#  164     7GLU  QB      10ARG  QD
+#  165     7GLU  QB       4LEU  HA
+#  166     9ALA  QB       6ASN  QB
+#  167     6ASN  HA       5GLU  QB
+#  168     6ASN  HA       5GLU  QG
 #  169     3HISB HA       4LEU  HB Type 4 Noe! Atoms: 50 49 51
 #  170     3HISB HA       4LEU  HB Type 4 Noe! Atoms: 50 51 49
-#  171     2TYR  HA       5GLU  QG   
-#  172     2TYR  QB       4LEU  QG   
-#  173     2TYR  QB       4LEU  QB   
-#  174     1ASN  HA       4LEU  QG   
-#  175     8VAL  HA      11LEU  QB   
-#  176     8VAL  HA      11LEU  HG   
-#  177     8VAL  HA       7GLU  QG   
-#  178     8VAL  QB       7GLU  QG   
-#  179     8VAL  QB       5GLU  HA   
+#  171     2TYR  HA       5GLU  QG
+#  172     2TYR  QB       4LEU  QG
+#  173     2TYR  QB       4LEU  QB
+#  174     1ASN  HA       4LEU  QG
+#  175     8VAL  HA      11LEU  QB
+#  176     8VAL  HA      11LEU  HG
+#  177     8VAL  HA       7GLU  QG
+#  178     8VAL  QB       7GLU  QG
+#  179     8VAL  QB       5GLU  HA
 #  Nr.        av       av3       av6      rmsd     rmsd3     rmsd6        ee       ee3       ee6
      1     0.321     0.296     0.275     0.052     0.074     0.075     0.010     0.014     0.013
      2     0.307     0.282     0.270     0.074     0.050     0.045     0.014     0.008     0.005
@@ -368,185 +368,185 @@ AVERAGE NOE
    179     0.469     0.465     0.462     0.030     0.031     0.032     0.001     0.001     0.001
 END
 NOE VIOLATIONS
-#    1    16GLY  H       15VAL  HA   
-#    2    16GLY  H       15VAL  H    
-#    3    15VAL  H       14LEU  HA   
-#    4    15VAL  H       14LEU  H    
-#    5    15VAL  H       13LYSH H    
-#    6    14LEU  H       13LYSH HA   
-#    7    14LEU  H       11LEU  HA   
-#    8    14LEU  H       10ARG  HA   
-#    9    14LEU  H       13LYSH H    
-#   10    13LYSH H       12LYSH HA   
-#   11    13LYSH H       10ARG  HA   
-#   12    13LYSH H       12LYSH H    
-#   13    13LYSH H       11LEU  H    
-#   14    12LYSH H       11LEU  H    
-#   15    12LYSH H       10ARG  H    
-#   16    11LEU  H       10ARG  HA   
-#   17    11LEU  H        8VAL  HA   
-#   18    11LEU  H        7GLU  HA   
-#   19    11LEU  H       10ARG  H    
-#   20    11LEU  H        9ALA  H    
-#   21    10ARG  H        9ALA  HA   
-#   22    10ARG  H        7GLU  HA   
-#   23    10ARG  H        6ASN  HA   
-#   24    10ARG  H        9ALA  H    
-#   25     9ALA  H        8VAL  HA   
-#   26     9ALA  H        7GLU  HA   
-#   27     9ALA  H        6ASN  HA   
-#   28     9ALA  H        8VAL  H    
-#   29     9ALA  H        7GLU  H    
-#   30     8VAL  H        7GLU  HA   
-#   31     8VAL  H        6ASN  HA   
-#   32     8VAL  H        5GLU  HA   
-#   33     8VAL  H        4LEU  HA   
-#   34     8VAL  H        7GLU  H    
-#   35     8VAL  H        6ASN  H    
-#   36     7GLU  H        6ASN  HA   
-#   37     7GLU  H        4LEU  HA   
-#   38     7GLU  H        5GLU  HA   
-#   39     7GLU  H        6ASN  H    
-#   40     7GLU  H        5GLU  H    
-#   41     6ASN  H        5GLU  HA   
-#   42     6ASN  H        3HISB HA   
-#   43     6ASN  H        2TYR  HA   
-#   44     6ASN  H        5GLU  H    
-#   45     6ASN  H        4LEU  H    
-#   46     5GLU  H        4LEU  HA   
-#   47     5GLU  H        3HISB HA   
-#   48     5GLU  H        2TYR  HA   
-#   49     5GLU  H        3HISB H    
-#   50     5GLU  H        4LEU  H    
-#   51     4LEU  H        3HISB HA   
-#   52     4LEU  H        3HISB H    
-#   53     3HISB H        2TYR  H    
-#   54     3HISB H        1ASN  H    
-#   55     2TYR  H        1ASN  HA   
-#   56     2TYR  H        1ASN  H    
+#    1    16GLY  H       15VAL  HA
+#    2    16GLY  H       15VAL  H
+#    3    15VAL  H       14LEU  HA
+#    4    15VAL  H       14LEU  H
+#    5    15VAL  H       13LYSH H
+#    6    14LEU  H       13LYSH HA
+#    7    14LEU  H       11LEU  HA
+#    8    14LEU  H       10ARG  HA
+#    9    14LEU  H       13LYSH H
+#   10    13LYSH H       12LYSH HA
+#   11    13LYSH H       10ARG  HA
+#   12    13LYSH H       12LYSH H
+#   13    13LYSH H       11LEU  H
+#   14    12LYSH H       11LEU  H
+#   15    12LYSH H       10ARG  H
+#   16    11LEU  H       10ARG  HA
+#   17    11LEU  H        8VAL  HA
+#   18    11LEU  H        7GLU  HA
+#   19    11LEU  H       10ARG  H
+#   20    11LEU  H        9ALA  H
+#   21    10ARG  H        9ALA  HA
+#   22    10ARG  H        7GLU  HA
+#   23    10ARG  H        6ASN  HA
+#   24    10ARG  H        9ALA  H
+#   25     9ALA  H        8VAL  HA
+#   26     9ALA  H        7GLU  HA
+#   27     9ALA  H        6ASN  HA
+#   28     9ALA  H        8VAL  H
+#   29     9ALA  H        7GLU  H
+#   30     8VAL  H        7GLU  HA
+#   31     8VAL  H        6ASN  HA
+#   32     8VAL  H        5GLU  HA
+#   33     8VAL  H        4LEU  HA
+#   34     8VAL  H        7GLU  H
+#   35     8VAL  H        6ASN  H
+#   36     7GLU  H        6ASN  HA
+#   37     7GLU  H        4LEU  HA
+#   38     7GLU  H        5GLU  HA
+#   39     7GLU  H        6ASN  H
+#   40     7GLU  H        5GLU  H
+#   41     6ASN  H        5GLU  HA
+#   42     6ASN  H        3HISB HA
+#   43     6ASN  H        2TYR  HA
+#   44     6ASN  H        5GLU  H
+#   45     6ASN  H        4LEU  H
+#   46     5GLU  H        4LEU  HA
+#   47     5GLU  H        3HISB HA
+#   48     5GLU  H        2TYR  HA
+#   49     5GLU  H        3HISB H
+#   50     5GLU  H        4LEU  H
+#   51     4LEU  H        3HISB HA
+#   52     4LEU  H        3HISB H
+#   53     3HISB H        2TYR  H
+#   54     3HISB H        1ASN  H
+#   55     2TYR  H        1ASN  HA
+#   56     2TYR  H        1ASN  H
 #   57     1ASN  HA       4LEU  HB Type 4 Noe! Atoms: 50 49 51
 #   58     1ASN  HA       4LEU  HB Type 4 Noe! Atoms: 50 51 49
-#   59     2TYR  HA       5GLU  QB   
-#   60     3HISB HA       6ASN  QB   
-#   61     4LEU  HA       7GLU  QB   
-#   62     4LEU  HA       7GLU  QG   
-#   63     5GLU  HA       8VAL  HB   
-#   64     6ASN  HA       9ALA  QB   
+#   59     2TYR  HA       5GLU  QB
+#   60     3HISB HA       6ASN  QB
+#   61     4LEU  HA       7GLU  QB
+#   62     4LEU  HA       7GLU  QG
+#   63     5GLU  HA       8VAL  HB
+#   64     6ASN  HA       9ALA  QB
 #   65     7GLU  HA      10ARG  HB Type 4 Noe! Atoms: 104 103 105
 #   66     7GLU  HA      10ARG  HB Type 4 Noe! Atoms: 104 105 103
-#   67     8VAL  HA      11LEU  QB   
+#   67     8VAL  HA      11LEU  QB
 #   68     9ALA  HA      12LYSH HB Type 4 Noe! Atoms: 130 129 131
 #   69     9ALA  HA      12LYSH HB Type 4 Noe! Atoms: 130 131 129
-#   70    11LEU  HA      14LEU  QB   
-#   71    12LYSH HA      15VAL  HB   
-#   72     5GLU  H        5GLU  QB   
-#   73     5GLU  H        5GLU  QG   
+#   70    11LEU  HA      14LEU  QB
+#   71    12LYSH HA      15VAL  HB
+#   72     5GLU  H        5GLU  QB
+#   73     5GLU  H        5GLU  QG
 #   74     5GLU  H        4LEU  HB Type 4 Noe! Atoms: 50 49 51
 #   75     5GLU  H        4LEU  HB Type 4 Noe! Atoms: 50 51 49
-#   76     5GLU  H        4LEU  QG   
-#   77     6ASN  H        6ASN  QB   
-#   78     6ASN  H        5GLU  QB   
-#   79     6ASN  H        5GLU  QG   
-#   80     6ASN  H       10ARG  QG   
-#   81     7GLU  H        7GLU  QB   
-#   82     7GLU  H        7GLU  QG   
-#   83     7GLU  H        6ASN  QB   
-#   84     7GLU  H        8VAL  QB   
-#   85     2TYR  H        2TYR  CG   
-#   86     6ASN  H        6ASN  HD21 
-#   87    14LEU  H       14LEU  QB   
-#   88    14LEU  H       14LEU  HG   
-#   89     9ALA  H        8VAL  HB   
-#   90     9ALA  H        9ALA  QB   
-#   91     9ALA  H        8VAL  QG1  
-#   92     9ALA  H        8VAL  QG2  
-#   93     9ALA  H       10ARG  QB   
+#   76     5GLU  H        4LEU  QG
+#   77     6ASN  H        6ASN  QB
+#   78     6ASN  H        5GLU  QB
+#   79     6ASN  H        5GLU  QG
+#   80     6ASN  H       10ARG  QG
+#   81     7GLU  H        7GLU  QB
+#   82     7GLU  H        7GLU  QG
+#   83     7GLU  H        6ASN  QB
+#   84     7GLU  H        8VAL  QB
+#   85     2TYR  H        2TYR  CG
+#   86     6ASN  H        6ASN  HD21
+#   87    14LEU  H       14LEU  QB
+#   88    14LEU  H       14LEU  HG
+#   89     9ALA  H        8VAL  HB
+#   90     9ALA  H        9ALA  QB
+#   91     9ALA  H        8VAL  QG1
+#   92     9ALA  H        8VAL  QG2
+#   93     9ALA  H       10ARG  QB
 #   94     4LEU  H        3HISB HB Type 4 Noe! Atoms: 36 35 37
 #   95     4LEU  H        3HISB HB Type 4 Noe! Atoms: 36 37 35
-#   96    15VAL  H       15VAL  HB   
-#   97    15VAL  H       14LEU  QB   
-#   98    15VAL  H       14LEU  HG   
-#   99    15VAL  H       15VAL  QB   
-#  100     4LEU  H        4LEU  QB   
-#  101     8VAL  H        8VAL  HB   
-#  102     8VAL  H        7GLU  QG   
-#  103     8VAL  H        7GLU  QB   
-#  104     8VAL  H        8VAL  QB   
-#  105    10ARG  H        7GLU  QB   
+#   96    15VAL  H       15VAL  HB
+#   97    15VAL  H       14LEU  QB
+#   98    15VAL  H       14LEU  HG
+#   99    15VAL  H       15VAL  QB
+#  100     4LEU  H        4LEU  QB
+#  101     8VAL  H        8VAL  HB
+#  102     8VAL  H        7GLU  QG
+#  103     8VAL  H        7GLU  QB
+#  104     8VAL  H        8VAL  QB
+#  105    10ARG  H        7GLU  QB
 #  106    10ARG  H       10ARG  HB Type 4 Noe! Atoms: 104 105 103
 #  107    10ARG  H       10ARG  HB Type 4 Noe! Atoms: 104 103 105
 #  108    10ARG  H       10ARG  HG Type 4 Noe! Atoms: 105 106 104
 #  109    10ARG  H       10ARG  HG Type 4 Noe! Atoms: 105 104 106
-#  110    10ARG  H        9ALA  QB   
+#  110    10ARG  H        9ALA  QB
 #  111    11LEU  H       10ARG  HB Type 4 Noe! Atoms: 104 103 105
 #  112    11LEU  H       10ARG  HB Type 4 Noe! Atoms: 104 105 103
 #  113    11LEU  H       10ARG  HG Type 4 Noe! Atoms: 105 106 104
 #  114    11LEU  H       10ARG  HG Type 4 Noe! Atoms: 105 104 106
 #  115    11LEU  H       11LEU  HB Type 4 Noe! Atoms: 121 120 122
 #  116    11LEU  H       11LEU  HB Type 4 Noe! Atoms: 121 122 120
-#  117    11LEU  H       11LEU  QD1  
-#  118    11LEU  H       11LEU  QD2  
-#  119     3HISB HE1      3HISB QB   
-#  120     3HISB HE1      4LEU  QD1  
-#  121     3HISB HE1      4LEU  QD2  
-#  122     3HISB HE1      2TYR  CZ   
-#  123     3HISB HE1      2TYR  CG   
+#  117    11LEU  H       11LEU  QD1
+#  118    11LEU  H       11LEU  QD2
+#  119     3HISB HE1      3HISB QB
+#  120     3HISB HE1      4LEU  QD1
+#  121     3HISB HE1      4LEU  QD2
+#  122     3HISB HE1      2TYR  CZ
+#  123     3HISB HE1      2TYR  CG
 #  124     2TYR  CG       2TYR  HB Type 4 Noe! Atoms: 18 17 19
 #  125     2TYR  CG       2TYR  HB Type 4 Noe! Atoms: 18 19 17
-#  126     2TYR  CG       4LEU  QD1  
-#  127     2TYR  CG       4LEU  QD2  
-#  128     2TYR  CG       2TYR  HA   
-#  129     2TYR  CZ       2TYR  HA   
+#  126     2TYR  CG       4LEU  QD1
+#  127     2TYR  CG       4LEU  QD2
+#  128     2TYR  CG       2TYR  HA
+#  129     2TYR  CZ       2TYR  HA
 #  130     2TYR  CZ       2TYR  HB Type 4 Noe! Atoms: 18 17 19
 #  131     2TYR  CZ       2TYR  HB Type 4 Noe! Atoms: 18 19 17
-#  132     2TYR  CZ       4LEU  QD1  
-#  133     2TYR  CZ       4LEU  QD2  
-#  134     3HISB HD2      3HISB QB   
-#  135     3HISB HD2      4LEU  QD1  
-#  136     3HISB HD2      4LEU  QD2  
-#  137     3HISB HD2      3HISB HA   
-#  138     3HISB HE1      7GLU  QG   
-#  139     3HISB HD2      5GLU  QB   
-#  140     3HISB HD2      5GLU  QG   
-#  141     3HISB HD2      7GLU  QG   
-#  142     2TYR  CG       5GLU  QB   
-#  143     2TYR  CZ       7GLU  QB   
-#  144     2TYR  CG       5GLU  QG   
-#  145     2TYR  CG       7GLU  QG   
-#  146     2TYR  CZ       5GLU  QG   
-#  147     2TYR  CZ       7GLU  QG   
+#  132     2TYR  CZ       4LEU  QD1
+#  133     2TYR  CZ       4LEU  QD2
+#  134     3HISB HD2      3HISB QB
+#  135     3HISB HD2      4LEU  QD1
+#  136     3HISB HD2      4LEU  QD2
+#  137     3HISB HD2      3HISB HA
+#  138     3HISB HE1      7GLU  QG
+#  139     3HISB HD2      5GLU  QB
+#  140     3HISB HD2      5GLU  QG
+#  141     3HISB HD2      7GLU  QG
+#  142     2TYR  CG       5GLU  QB
+#  143     2TYR  CZ       7GLU  QB
+#  144     2TYR  CG       5GLU  QG
+#  145     2TYR  CG       7GLU  QG
+#  146     2TYR  CZ       5GLU  QG
+#  147     2TYR  CZ       7GLU  QG
 #  148     7GLU  QG      10ARG  HD Type 4 Noe! Atoms: 106 105 107
 #  149     7GLU  QG      10ARG  HD Type 4 Noe! Atoms: 106 107 105
-#  150    10ARG  HD Type 4 Noe! Atoms: 106 105 107    6ASN  QB   
-#  151    10ARG  HD Type 4 Noe! Atoms: 106 105 107   10ARG  HA   
-#  152    10ARG  HD Type 4 Noe! Atoms: 106 105 107    7GLU  HA   
-#  153    10ARG  HD Type 4 Noe! Atoms: 106 107 105    6ASN  QB   
-#  154    10ARG  HD Type 4 Noe! Atoms: 106 107 105   10ARG  HA   
-#  155    10ARG  HD Type 4 Noe! Atoms: 106 107 105    7GLU  HA   
-#  156    11LEU  QD1     10ARG  QB   
-#  157    11LEU  QD2     10ARG  QB   
-#  158     7GLU  HA      10ARG  QG   
-#  159     7GLU  QG       4LEU  QB   
-#  160     7GLU  QG       8VAL  QB   
-#  161     7GLU  QG       4LEU  QG   
-#  162     7GLU  QB       4LEU  QB   
-#  163     7GLU  QB      11LEU  QB   
-#  164     7GLU  QB      10ARG  QD   
-#  165     7GLU  QB       4LEU  HA   
-#  166     9ALA  QB       6ASN  QB   
-#  167     6ASN  HA       5GLU  QB   
-#  168     6ASN  HA       5GLU  QG   
+#  150    10ARG  HD Type 4 Noe! Atoms: 106 105 107    6ASN  QB
+#  151    10ARG  HD Type 4 Noe! Atoms: 106 105 107   10ARG  HA
+#  152    10ARG  HD Type 4 Noe! Atoms: 106 105 107    7GLU  HA
+#  153    10ARG  HD Type 4 Noe! Atoms: 106 107 105    6ASN  QB
+#  154    10ARG  HD Type 4 Noe! Atoms: 106 107 105   10ARG  HA
+#  155    10ARG  HD Type 4 Noe! Atoms: 106 107 105    7GLU  HA
+#  156    11LEU  QD1     10ARG  QB
+#  157    11LEU  QD2     10ARG  QB
+#  158     7GLU  HA      10ARG  QG
+#  159     7GLU  QG       4LEU  QB
+#  160     7GLU  QG       8VAL  QB
+#  161     7GLU  QG       4LEU  QG
+#  162     7GLU  QB       4LEU  QB
+#  163     7GLU  QB      11LEU  QB
+#  164     7GLU  QB      10ARG  QD
+#  165     7GLU  QB       4LEU  HA
+#  166     9ALA  QB       6ASN  QB
+#  167     6ASN  HA       5GLU  QB
+#  168     6ASN  HA       5GLU  QG
 #  169     3HISB HA       4LEU  HB Type 4 Noe! Atoms: 50 49 51
 #  170     3HISB HA       4LEU  HB Type 4 Noe! Atoms: 50 51 49
-#  171     2TYR  HA       5GLU  QG   
-#  172     2TYR  QB       4LEU  QG   
-#  173     2TYR  QB       4LEU  QB   
-#  174     1ASN  HA       4LEU  QG   
-#  175     8VAL  HA      11LEU  QB   
-#  176     8VAL  HA      11LEU  HG   
-#  177     8VAL  HA       7GLU  QG   
-#  178     8VAL  QB       7GLU  QG   
-#  179     8VAL  QB       5GLU  HA   
+#  171     2TYR  HA       5GLU  QG
+#  172     2TYR  QB       4LEU  QG
+#  173     2TYR  QB       4LEU  QB
+#  174     1ASN  HA       4LEU  QG
+#  175     8VAL  HA      11LEU  QB
+#  176     8VAL  HA      11LEU  HG
+#  177     8VAL  HA       7GLU  QG
+#  178     8VAL  QB       7GLU  QG
+#  179     8VAL  QB       5GLU  HA
 #
 # r0 = reference length according to specification file
 #  Nr.        r0  <r> - r0    <r^-3>^-1/3 - r0    <r^-6>^-1/6 - r0
