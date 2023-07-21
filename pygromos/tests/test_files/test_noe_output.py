@@ -39,7 +39,7 @@ class test_noe_output(unittest.TestCase):
         assert np.all(avg_noe.iloc[0].values == (1, 0.350, -0.029, -0.054, -0.075, 0))
         assert np.all(avg_noe.iloc[-1].values == (179, 0.720, -0.251, -0.255, -0.258, 0))
 
-    def test_average_noe(self):
+    def test_average_noe_2_frames(self):
         t = self.class_name(self.in_file_path_duplicated)
         content = t.read_file()
         avg_noe = content["AVERAGE_NOE"]
