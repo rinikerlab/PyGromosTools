@@ -5,6 +5,7 @@ from pygromos.files.otherfiles import noe_output
 
 from pygromos.tests.in_testfiles import in_test_file_path
 
+
 class test_noe_output(unittest.TestCase):
     class_name: type = noe_output.NOE
     in_file_path = in_test_file_path + "/noe_output/NOE_IR.out"
@@ -21,7 +22,7 @@ class test_noe_output(unittest.TestCase):
     def test_average_noe(self):
         t = self.class_name(self.in_file_path)
         content = t.read_file()
-        avg_noe = content['AVERAGE_NOE']
+        avg_noe = content["AVERAGE_NOE"]
         assert avg_noe.shape == (179, 11)
         print(avg_noe.iloc[-1])
         assert np.all(avg_noe.iloc[0].values == (1, 0.321, 0.296, 0.275, 0.052, 0.074, 0.075, 0.010, 0.014, 0.013, 0))
@@ -30,7 +31,7 @@ class test_noe_output(unittest.TestCase):
     def test_noe_violations(self):
         t = self.class_name(self.in_file_path)
         content = t.read_file()
-        avg_noe = content['NOE_VIOLATIONS']
+        avg_noe = content["NOE_VIOLATIONS"]
         assert avg_noe.shape == (179, 6)
         print(avg_noe.iloc[-1])
         assert np.all(avg_noe.iloc[0].values == (1, 0.350, -0.029, -0.054, -0.075, 0))
@@ -39,14 +40,14 @@ class test_noe_output(unittest.TestCase):
     def test_average_noe(self):
         t = self.class_name(self.in_file_path_duplicated)
         content = t.read_file()
-        avg_noe = content['AVERAGE_NOE']
+        avg_noe = content["AVERAGE_NOE"]
         assert avg_noe.shape == (2*179, 11)
         assert avg_noe.iloc[-1].name == 2*179 - 1  # test that index is continous
 
     def test_noe_violations_2_frames(self):
         t = self.class_name(self.in_file_path_duplicated)
         content = t.read_file()
-        avg_noe = content['NOE_VIOLATIONS']
+        avg_noe = content["NOE_VIOLATIONS"]
         assert avg_noe.shape == (2*179, 6)
         assert avg_noe.iloc[-1].name == 2*179 - 1
 
@@ -61,5 +62,5 @@ class test_noe_output(unittest.TestCase):
                 expected.append(elements)
         t = self.class_name(self.in_file_path)
         content = t.read_file()
-        output = content['RESTRAINT_LEGEND']
+        output = content["RESTRAINT_LEGEND"]
         assert np.all(output == pd.DataFrame(expected, columns=["Nr.", "resI", "atomI", "resJ", "atomJ"]))
