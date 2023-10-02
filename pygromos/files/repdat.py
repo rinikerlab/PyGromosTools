@@ -6,7 +6,9 @@ Author: Benjamin Schroeder
 """
 
 import pandas as pd
+import numpy as np
 from typing import Dict, List, Union
+from copy import deepcopy
 from pygromos.files._basics import _general_gromos_file, parser
 
 from pygromos.files.blocks import replica_exchange_blocks as blocks
@@ -458,3 +460,37 @@ class Repdat(_general_gromos_file._general_gromos_file):  #
         file.close()
 
         return out_path
+
+
+class ExpandedRepdat(Repdat):
+    """
+    Adds the end-state potentials of a RE-EDS simulation as DATA columns, corrected with the
+    energy offsets, as well as the maximally contributing state. 
+    """
+    
+    def __init__(self, repdat: Repdat):
+        """
+        Deep-copy all attributes from the Repdat parent class instance and extract the
+        end-states columns from the "state_potentials" field
+
+        Parameters
+        ----------
+        repdat: Repdat
+            the original repdat object that should be expanded
+        """
+        for key, value in vars(repdat).items():
+            setattr(self, key, deepcopy(value))
+        
+        repdat_eoffs = self.system.state_eir
+        num_states = len(repdat_eoffs)
+        
+        eoffs = [[repdat_eoffs[state][s] for state in repdat_eoffs] for s in range(len(repdat_eoffs[1]))]
+        Vi = pd.DataFrame(list(self.DATA["state_potentials"])).values
+        values_to_subtract = np.array([eoffs[int(s_val_index-1)] for s_val_index in self.DATA['ID'].values])
+        
+        corrected_Vi_array = Vi - values_to_subtract
+        corrected_Vi = pd.DataFrame(corrected_Vi_array, columns=[f"Vr{i+1}" for i in range(num_states)])
+        
+        max_contrib = corrected_Vi.idxmin(axis=1)
+        max_contrib.name = "Vmin"
+        self.DATA = pd.concat([self.DATA, corrected_Vi, max_contrib], axis=1)
