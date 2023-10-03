@@ -467,12 +467,11 @@ class ExpandedRepdat(Repdat):
     Adds the end-state potentials of a RE-EDS simulation as DATA columns, corrected with the
     energy offsets, as well as the maximally contributing state. 
     """
-    
+
     def __init__(self, repdat: Repdat):
         """
         Deep-copy all attributes from the Repdat parent class instance and extract the
         end-states columns from the "state_potentials" field
-
         Parameters
         ----------
         repdat: Repdat
@@ -480,17 +479,31 @@ class ExpandedRepdat(Repdat):
         """
         for key, value in vars(repdat).items():
             setattr(self, key, deepcopy(value))
-        
+
         repdat_eoffs = self.system.state_eir
         num_states = len(repdat_eoffs)
-        
-        eoffs = [[repdat_eoffs[state][s] for state in repdat_eoffs] for s in range(len(repdat_eoffs[1]))]
+        num_svalues = len(repdat_eoffs[1])
+
+        eoffs = [[repdat_eoffs[state][s] for state in repdat_eoffs] for s in range(num_svalues)]
         Vi = pd.DataFrame(list(self.DATA["state_potentials"])).values
         values_to_subtract = np.array([eoffs[int(s_val_index-1)] for s_val_index in self.DATA['ID'].values])
-        
+
         corrected_Vi_array = Vi - values_to_subtract
-        corrected_Vi = pd.DataFrame(corrected_Vi_array, columns=[f"Vr{i+1}" for i in range(num_states)])
         
-        max_contrib = corrected_Vi.idxmin(axis=1)
+        # Match the potentials to the coord_ID (in the repdat the coord_ID is printed after the exchange,
+        # but the potentials are printed before)
+        new_pot_rows = []
+        for row in self.DATA[["ID", "partner", "run", "s"]].values:
+            curr_step = row[2]-1
+            if row[3] == 1: # exchange is accepted
+                prev_pots_row = row[1] # the row of the partner has the previous potentials of the coord_ID
+                new_pot_rows.append(curr_step*num_svalues + prev_pots_row-1) 
+            else: # exchange is denied
+                new_pot_rows.append(curr_step*num_svalues + row[0]-1) # the current potentials correspond to the coord_ID
+        
+        matched_corrected_Vi_array = corrected_Vi_array[new_pot_rows]
+        new_Vi = pd.DataFrame(matched_corrected_Vi_array, columns=[f"Vr{i+1}" for i in range(num_states)])
+
+        max_contrib = new_Vi.idxmin(axis=1)
         max_contrib.name = "Vmin"
-        self.DATA = pd.concat([self.DATA, corrected_Vi, max_contrib], axis=1)
+        self.DATA = pd.concat([self.DATA, new_Vi, max_contrib], axis=1)
