@@ -487,23 +487,26 @@ class ExpandedRepdat(Repdat):
         eoffs = [[repdat_eoffs[state][s] for state in repdat_eoffs] for s in range(num_svalues)]
         Vi = pd.DataFrame(list(self.DATA["state_potentials"])).values
         values_to_subtract = np.array([eoffs[int(s_val_index-1)] for s_val_index in self.DATA['ID'].values])
-
         corrected_Vi_array = Vi - values_to_subtract
+        corrected_Vi = pd.DataFrame(corrected_Vi_array, columns=[f"Vr{i+1}" for i in range(num_states)])
         
-        # Match the potentials to the coord_ID (in the repdat the coord_ID is printed after the exchange,
-        # but the potentials are printed before)
-        new_pot_rows = []
-        for row in self.DATA[["ID", "partner", "run", "s"]].values:
-            curr_step = row[2]-1
-            if row[3] == 1: # exchange is accepted
-                prev_pots_row = row[1] # the row of the partner has the previous potentials of the coord_ID
-                new_pot_rows.append(curr_step*num_svalues + prev_pots_row-1) 
-            else: # exchange is denied
-                new_pot_rows.append(curr_step*num_svalues + row[0]-1) # the current potentials correspond to the coord_ID
-        
-        matched_corrected_Vi_array = corrected_Vi_array[new_pot_rows]
-        new_Vi = pd.DataFrame(matched_corrected_Vi_array, columns=[f"Vr{i+1}" for i in range(num_states)])
-
-        max_contrib = new_Vi.idxmin(axis=1)
+        max_contrib = corrected_Vi.idxmin(axis=1)
         max_contrib.name = "Vmin"
-        self.DATA = pd.concat([self.DATA, new_Vi, max_contrib], axis=1)
+        
+        self.DATA = pd.concat([self.DATA, corrected_Vi, max_contrib], axis=1)
+        
+        # Get the coord_IDs per row BEFORE the exchange
+        n_rows = len(repdat.DATA)
+        t0_coord_ids = {"coord_ID": np.zeros(n_rows), "partner_coord_ID": np.zeros(n_rows)}
+
+        for i, row in enumerate(repdat.DATA[["coord_ID", "partner_coord_ID", "s"]].values): # in numpy because faster
+            if row[2] == 1: # exchange is accepted --> swap
+                t0_coord_ids["coord_ID"][i] = row[1]
+                t0_coord_ids["partner_coord_ID"][i] = row[0]
+            else: # exchange is denied --> don't swap
+                t0_coord_ids["coord_ID"][i] = row[0]
+                t0_coord_ids["partner_coord_ID"][i] = row[1]
+        
+        self.DATA.drop(["coord_ID", "partner_coord_ID"], axis="columns", inplace=True)
+        self.DATA.insert(2, "coord_ID", t0_coord_ids["coord_ID"])
+        self.DATA.insert(5, "partner_coord_ID", t0_coord_ids["partner_coord_ID"])
