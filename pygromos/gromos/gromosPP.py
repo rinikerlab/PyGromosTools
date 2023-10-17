@@ -931,7 +931,7 @@ class _gromosPPbase(_gromosClass):
         in_cnf_path: str,
         out_cnf_path: str = "",
         periodic_boundary_condition: str = "r",
-        nmolecule: int = 1,
+        nmolecule: str = "1",
         dens: float = 1.0,
         threshold: float = None,
         layer: bool = False,
@@ -972,21 +972,21 @@ class _gromosPPbase(_gromosClass):
             + " @pos "
             + in_cnf_path
             + " @nsm "
-            + str(nmolecule)
+            + nmolecule
             + " @dens "
             + str(dens)
             + " "
             + command_suffix
             + " > "
             + out_cnf_path
-            + " \n"
         )
-        if not return_command_only:
-            print(command)
-            bash.execute(command, verbose=verbose)
-            return out_cnf_path
-        else:
-            return command
+
+
+        p = bash.execute(command, verbose=verbose)
+        if verbose:
+            print(p.stdout)
+            print(p.stderr)
+        return out_cnf_path
 
     @_gromosClass._gromosTypeConverter
     def build_box(
@@ -1131,6 +1131,7 @@ class _gromosPPbase(_gromosClass):
             "> " + out_top_path + " \n",
         ]
         bash.execute(command)
+
         return out_top_path
 
     @_gromosClass._gromosTypeConverter

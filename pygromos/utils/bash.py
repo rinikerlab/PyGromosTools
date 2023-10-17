@@ -810,6 +810,7 @@ def execute_subprocess(
         env = os.environ.copy()
 
     p = sub.Popen(args=command, shell=True, stderr=sub.PIPE, env=env, **kwargs)
+    out, err = p.communicate()
 
     # print(p, vars(p))
     try:
