@@ -1,6 +1,6 @@
 """
 pygromos.py
-The aim of the module is to bring romos to the Python3 World!
+The aim of the module is to bring GROMOS to the Python3 World!
 
 Handles the primary functions
 """
